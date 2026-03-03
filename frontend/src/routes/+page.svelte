@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/state';
+	import { replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { SvelteSet } from 'svelte/reactivity';
 	import client from '$lib/api/client';
 	import { createAsyncLoader } from '$lib/async-loader.svelte';
@@ -58,7 +59,9 @@
 		return data ?? [];
 	}, []);
 
-	// Sync query to URL
+	// Sync query to URL via SvelteKit's shallow routing.
+	// replaceState keeps the router aware of the URL so back/forward just works —
+	// navigating back re-creates this component, which initializes searchQuery from page.url.
 	$effect(() => {
 		const q = searchQuery.trim();
 		const currentQ = page.url.searchParams.get('q') ?? '';
@@ -69,7 +72,8 @@
 			} else {
 				url.searchParams.delete('q');
 			}
-			history.replaceState(null, '', `${resolve('/')}${url.search}`);
+			// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() is used in the template literal
+			replaceState(`${resolve('/')}${url.search}`, {});
 		}
 	});
 
