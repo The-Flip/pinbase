@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import MachineCard from '$lib/components/MachineCard.svelte';
 
 	let { data } = $props();
 	let model = $derived(data.model);
@@ -8,6 +9,20 @@
 <section class="specs">
 	<h2>Specifications</h2>
 	<dl>
+		{#if model.technology_generation_slug}
+			<dt>Generation</dt>
+			<dd>
+				<a href={resolve(`/technology-generations/${model.technology_generation_slug}`)}
+					>{model.technology_generation_name}</a
+				>
+			</dd>
+		{/if}
+		{#if model.display_type_slug}
+			<dt>Display Type</dt>
+			<dd>
+				<a href={resolve(`/display-types/${model.display_type_slug}`)}>{model.display_type_name}</a>
+			</dd>
+		{/if}
 		{#if model.player_count}
 			<dt>Players</dt>
 			<dd>{model.player_count}</dd>
@@ -85,6 +100,23 @@
 	</section>
 {/if}
 
+{#if model.title_models && model.title_models.length > 0}
+	<section class="title-models">
+		<h2>Other Models in This Title</h2>
+		<div class="title-models-grid">
+			{#each model.title_models as sibling (sibling.slug)}
+				<MachineCard
+					slug={sibling.slug}
+					name={sibling.name}
+					year={sibling.year}
+					manufacturerName={sibling.manufacturer_name}
+					thumbnailUrl={sibling.thumbnail_url}
+				/>
+			{/each}
+		</div>
+	</section>
+{/if}
+
 {#if model.ipdb_rating || model.pinside_rating}
 	<section class="ratings">
 		<h2>Ratings</h2>
@@ -156,6 +188,7 @@
 		display: grid;
 		grid-template-columns: auto 1fr;
 		gap: var(--size-1) var(--size-4);
+		align-items: baseline;
 	}
 
 	dt {
@@ -231,6 +264,12 @@
 	.role {
 		color: var(--color-text-muted);
 		font-size: var(--font-size-0);
+	}
+
+	.title-models-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+		gap: var(--size-4);
 	}
 
 	.notes p,

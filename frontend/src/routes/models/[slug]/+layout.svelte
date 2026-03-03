@@ -42,27 +42,10 @@
 			{/if}
 			{#if model.year}
 				<span
-					>{model.year}{#if model.month}/{String(model.month).padStart(2, '0')}{/if}</span
+					>{#if model.month}{new Date(model.year, model.month - 1).toLocaleString('en', {
+							month: 'long'
+						}) + ' '}{/if}{model.year}</span
 				>
-			{/if}
-			{#if model.technology_generation_slug}
-				<span>
-					<a href={resolve(`/technology-generations/${model.technology_generation_slug}`)}>
-						{model.technology_generation_name}
-					</a>
-				</span>
-			{/if}
-			{#if model.display_type_slug}
-				<span>
-					<a href={resolve(`/display-types/${model.display_type_slug}`)}>
-						{model.display_type_name}
-					</a>
-				</span>
-			{/if}
-			{#if model.title_slug}
-				<span>
-					<a href={resolve(`/titles/${model.title_slug}`)}>{model.title_name}</a>
-				</span>
 			{/if}
 			{#if model.franchise}
 				<span>{model.franchise.name}</span>

@@ -20,6 +20,7 @@ from .helpers import (
     _claims_prefetch,
     _extract_image_urls,
     _extract_variant_features,
+    _serialize_title_machine,
 )
 from .schemas import (
     ClaimPatchSchema,
@@ -28,6 +29,7 @@ from .schemas import (
     GameplayFeatureSchema,
     SeriesRefSchema,
     ThemeSchema,
+    TitleMachineSchema,
 )
 
 # ---------------------------------------------------------------------------
@@ -119,6 +121,7 @@ class MachineModelDetailSchema(Schema):
     gameplay_features: list[GameplayFeatureSchema] = []
     franchise: Optional[FranchiseRefSchema] = None
     series: list[SeriesRefSchema] = []
+    title_models: list[TitleMachineSchema] = []
 
 
 # ---------------------------------------------------------------------------
@@ -308,6 +311,11 @@ def _serialize_model_detail(pm) -> dict:
             {"name": s.name, "slug": s.slug}
             for s in (pm.title.series.all() if pm.title else [])
         ],
+        "title_models": [
+            _serialize_title_machine(sibling)
+            for sibling in (pm.title.machine_models.all() if pm.title else [])
+            if sibling.alias_of_id is None and sibling.pk != pm.pk
+        ],
     }
 
 
@@ -330,6 +338,12 @@ def _model_detail_qs():
         "themes",
         "gameplay_features",
         "title__series",
+        Prefetch(
+            "title__machine_models",
+            queryset=MachineModel.objects.filter(alias_of__isnull=True)
+            .select_related("manufacturer", "technology_generation")
+            .order_by("year", "name"),
+        ),
         Prefetch(
             "credits",
             queryset=DesignCredit.objects.filter(model__isnull=False).select_related(
