@@ -15,9 +15,6 @@
 <article>
 	<header>
 		<h1>{title.name}</h1>
-		{#if title.short_name && title.short_name !== title.name}
-			<p class="short_name">{title.short_name}</p>
-		{/if}
 		{#if title.series.length > 0}
 			<p class="series-list">
 				Series:
@@ -63,11 +60,6 @@
 		font-weight: 700;
 		color: var(--color-text-primary);
 		margin-bottom: var(--size-2);
-	}
-
-	.short_name {
-		font-size: var(--font-size-2);
-		color: var(--color-text-muted);
 	}
 
 	.series-list {
