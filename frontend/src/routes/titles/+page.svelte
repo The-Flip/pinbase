@@ -258,11 +258,6 @@
 			transform: translateX(0);
 		}
 
-		.sidebar-drawer :global(.sidebar) {
-			position: static;
-			max-height: none;
-		}
-
 		.drawer-backdrop {
 			display: block;
 			position: fixed;

@@ -188,50 +188,45 @@
 		/>
 	</div>
 
-	<details class="more-filters">
-		<summary>More filters</summary>
-		<div class="filter-section">
-			<SearchableSelect
-				label="Franchise"
-				options={franchiseOptions}
-				bind:selected={filters.franchise}
-				placeholder="Search franchises..."
-			/>
-		</div>
-		<div class="filter-section">
-			<SearchableSelect
-				label="Series"
-				options={seriesOptions}
-				bind:selected={filters.series}
-				placeholder="Search series..."
-			/>
-		</div>
-		<div class="filter-section">
-			<span class="filter-label">Min IPDB rating</span>
-			<input
-				type="number"
-				step="0.1"
-				min="0"
-				max="10"
-				placeholder="e.g. 7.0"
-				aria-label="Minimum IPDB rating"
-				class="rating-input"
-				value={filters.ratingMin ?? ''}
-				onchange={(e) => {
-					const v = e.currentTarget.value;
-					filters.ratingMin = v ? Number(v) : null;
-				}}
-			/>
-		</div>
-	</details>
+	<div class="filter-section">
+		<SearchableSelect
+			label="Franchise"
+			options={franchiseOptions}
+			bind:selected={filters.franchise}
+			placeholder="Search franchises..."
+		/>
+	</div>
+
+	<div class="filter-section">
+		<SearchableSelect
+			label="Series"
+			options={seriesOptions}
+			bind:selected={filters.series}
+			placeholder="Search series..."
+		/>
+	</div>
+
+	<div class="filter-section">
+		<span class="filter-label">Min IPDB rating</span>
+		<input
+			type="number"
+			step="0.1"
+			min="0"
+			max="10"
+			placeholder="e.g. 7.0"
+			aria-label="Minimum IPDB rating"
+			class="rating-input"
+			value={filters.ratingMin ?? ''}
+			onchange={(e) => {
+				const v = e.currentTarget.value;
+				filters.ratingMin = v ? Number(v) : null;
+			}}
+		/>
+	</div>
 </aside>
 
 <style>
 	.sidebar {
-		position: sticky;
-		top: var(--size-4);
-		max-height: calc(100vh - var(--size-8));
-		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
 		gap: var(--size-3);
@@ -315,21 +310,5 @@
 		outline: none;
 		border-color: var(--color-input-focus);
 		box-shadow: 0 0 0 3px var(--color-input-focus-ring);
-	}
-
-	.more-filters {
-		border-top: 1px solid var(--color-border-soft);
-		padding-top: var(--size-2);
-	}
-
-	.more-filters summary {
-		cursor: pointer;
-		font-size: var(--font-size-1);
-		color: var(--color-text-muted);
-		margin-bottom: var(--size-2);
-	}
-
-	.more-filters .filter-section {
-		margin-top: var(--size-3);
 	}
 </style>
