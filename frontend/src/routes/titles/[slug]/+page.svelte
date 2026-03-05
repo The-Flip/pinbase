@@ -45,53 +45,55 @@
 			</aside>
 		{/if}
 
-		{#if md.hero_image_url}
-			<div class="hero-image">
-				<img src={md.hero_image_url} alt="{title.name} backglass" />
-			</div>
-		{/if}
-
-		<header>
-			<h1>{title.name}</h1>
-			<div class="meta">
-				{#if md.manufacturer_name}
-					<span>
-						<a href={resolve(`/manufacturers/${md.manufacturer_slug}`)}>
-							{md.manufacturer_name}
-						</a>
-					</span>
-				{/if}
-				{#if md.year}
-					<span
-						>{#if md.month}{new Date(md.year, md.month - 1).toLocaleString('en', {
-								month: 'long'
-							}) + ' '}{/if}{md.year}</span
-					>
-				{/if}
-				{#if md.franchise}
-					<span>{md.franchise.name}</span>
-				{/if}
-			</div>
-			{#if title.series.length > 0}
-				<p class="series-list">
-					Series:
-					{#each title.series as s, i (s.slug)}
-						{#if i > 0},{/if}
-						<a href={resolve(`/series/${s.slug}`)}>{s.name}</a>
-					{/each}
-				</p>
-			{/if}
-			{#if md.variant_features.length > 0}
-				<div class="features">
-					{#each md.variant_features as feature (feature)}
-						<span class="chip">{feature}</span>
-					{/each}
+		<div class="hero-header">
+			{#if md.hero_image_url}
+				<div class="hero-image">
+					<img src={md.hero_image_url} alt="{title.name} backglass" />
 				</div>
 			{/if}
-		</header>
+
+			<header>
+				<h1>{title.name}</h1>
+				<div class="meta">
+					{#if md.manufacturer_name}
+						<span>
+							<a href={resolve(`/manufacturers/${md.manufacturer_slug}`)}>
+								{md.manufacturer_name}
+							</a>
+						</span>
+					{/if}
+					{#if md.year}
+						<span
+							>{#if md.month}{new Date(md.year, md.month - 1).toLocaleString('en', {
+									month: 'long'
+								}) + ' '}{/if}{md.year}</span
+						>
+					{/if}
+					{#if md.franchise}
+						<span>{md.franchise.name}</span>
+					{/if}
+				</div>
+				{#if title.series.length > 0}
+					<p class="series-list">
+						Series:
+						{#each title.series as s, i (s.slug)}
+							{#if i > 0},{/if}
+							<a href={resolve(`/series/${s.slug}`)}>{s.name}</a>
+						{/each}
+					</p>
+				{/if}
+				{#if md.variant_features.length > 0}
+					<div class="features">
+						{#each md.variant_features as feature (feature)}
+							<span class="chip">{feature}</span>
+						{/each}
+					</div>
+				{/if}
+			</header>
+		</div>
 
 		<nav class="tabs" aria-label="Page sections">
-			<span class="tab active">Detail</span>
+			<span class="tab active">People</span>
 			{#if auth.isAuthenticated}
 				<a class="tab" href={resolve(`/models/${md.slug}/edit`)}>Edit</a>
 			{/if}
@@ -209,6 +211,10 @@
 		margin-bottom: var(--size-5);
 	}
 
+	.hero-header header {
+		margin-bottom: 0;
+	}
+
 	h1 {
 		font-size: var(--font-size-7);
 		font-weight: 700;
@@ -245,21 +251,45 @@
 		text-align: center;
 	}
 
-	/* Single-model layout (matches model detail page) */
+	/* Single-model layout */
 	.single-model {
-		max-width: 48rem;
+		max-width: 56rem;
 	}
 
-	.hero-image {
+	.hero-header {
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-5);
 		margin-bottom: var(--size-5);
 	}
 
 	.hero-image img {
 		width: 100%;
-		max-height: 24rem;
+		max-height: 20rem;
 		object-fit: contain;
 		border-radius: var(--radius-2);
 		background-color: var(--color-surface);
+	}
+
+	@media (min-width: 640px) {
+		.hero-header {
+			flex-direction: row;
+			align-items: flex-start;
+		}
+
+		.hero-image {
+			flex: 0 0 40%;
+			max-width: 40%;
+		}
+
+		.hero-image img {
+			max-height: 18rem;
+		}
+
+		.hero-header header {
+			flex: 1;
+			min-width: 0;
+		}
 	}
 
 	.meta {

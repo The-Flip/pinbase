@@ -38,7 +38,7 @@
 	</header>
 
 	<nav class="tabs" aria-label="Page sections">
-		<a class="tab" class:active={isDetail} href={resolve(`/manufacturers/${slug}`)}>Detail</a>
+		<a class="tab" class:active={isDetail} href={resolve(`/manufacturers/${slug}`)}>Titles</a>
 		{#if mfr.systems.length > 0}
 			<a class="tab" class:active={isSystems} href={resolve(`/manufacturers/${slug}/systems`)}>
 				Systems
