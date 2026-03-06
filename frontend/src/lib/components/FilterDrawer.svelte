@@ -46,7 +46,7 @@
 </script>
 
 <button class="filter-toggle" bind:this={toggleEl} onclick={openDrawer}>
-	<FaIcon icon={faSliders} class="filter-icon" />
+	<FaIcon icon={faSliders} />
 	Filters
 </button>
 
@@ -65,7 +65,7 @@
 >
 	<div class="drawer-header">
 		<button class="drawer-close" onclick={closeDrawer} aria-label="Close filters">
-			<FaIcon icon={faXmark} class="close-icon" />
+			<FaIcon icon={faXmark} />
 		</button>
 	</div>
 	{@render children()}
@@ -91,7 +91,7 @@
 		border-color: var(--color-accent);
 	}
 
-	:global(.filter-icon) {
+	.filter-toggle :global(svg) {
 		width: 0.9rem;
 		height: 0.9rem;
 	}
@@ -113,7 +113,7 @@
 		color: var(--color-text-primary);
 	}
 
-	:global(.close-icon) {
+	.drawer-close :global(svg) {
 		width: 1.25rem;
 		height: 1.25rem;
 	}
