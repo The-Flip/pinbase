@@ -68,10 +68,10 @@ def _has_images(extra_data: dict) -> bool:
 
 
 def _try_group_sibling(pm: MachineModel) -> list[str] | None:
-    """Copy image URLs from a sibling in the same group."""
-    if not pm.group:
+    """Copy image URLs from a sibling in the same title."""
+    if not pm.title:
         return None
-    for sib in pm.group.machine_models.exclude(pk=pm.pk):
+    for sib in pm.title.machine_models.exclude(pk=pm.pk):
         ed = sib.extra_data or {}
 
         images = ed.get("images")

@@ -4,13 +4,18 @@ Pinbase is populated from several external data sources via Django management co
 
 ## Data sources
 
-| Source           | File                        | Command                |
-| ---------------- | --------------------------- | ---------------------- |
-| IPDB             | `ipdbdatabase.json`         | `ingest_ipdb`          |
-| OPDB machines    | `opdb_export_machines.json` | `ingest_opdb`          |
-| OPDB groups      | `opdb_export_groups.json`   | `ingest_opdb`          |
-| OPDB changelog   | `opdb_changelog.json`       | `ingest_opdb`          |
-| Museum sign copy | `machine_sign_copy.csv`     | `ingest_pinbase_signs` |
+| Source               | File                             | Command                |
+| -------------------- | -------------------------------- | ---------------------- |
+| IPDB                 | `ipdbdatabase.json`              | `ingest_ipdb`          |
+| OPDB machines        | `opdb_export_machines.json`      | `ingest_opdb`          |
+| OPDB groups          | `opdb_export_groups.json`        | `ingest_opdb`          |
+| OPDB changelog       | `opdb_changelog.json`            | `ingest_opdb`          |
+| Museum sign copy     | `machine_sign_copy.csv`          | `ingest_pinbase_signs` |
+| Fandom games         | `fandom_games.json`              | `ingest_fandom`        |
+| Fandom manufacturers | `fandom_manufacturers.json`      | `ingest_fandom`        |
+| Fandom persons       | `fandom_persons.json`            | `ingest_fandom`        |
+| Pinball Map machines | `pinballmap_machines.json`       | —                      |
+| Pinball Map groups   | `pinballmap_machine_groups.json` | —                      |
 
 All source files live in `data/dump1/` and are **not committed** to the repo.
 They are stored in a private GitHub Gist:
@@ -53,6 +58,11 @@ files = [
     'opdb_export_groups.json',
     'opdb_changelog.json',
     'machine_sign_copy.csv',
+    'fandom_games.json',
+    'fandom_manufacturers.json',
+    'fandom_persons.json',
+    'pinballmap_machines.json',
+    'pinballmap_machine_groups.json',
 ]
 [urllib.request.urlretrieve(base + f, '/tmp/dump1/' + f) or print('Downloaded', f) for f in files]
 "
