@@ -183,6 +183,7 @@ class TestIngestOpdbChangelog:
             "ingest_opdb",
             opdb=f"{FIXTURES}/opdb_sample.json",
             changelog=f"{FIXTURES}/opdb_changelog_sample.json",
+            groups="",
         )
         pm = MachineModel.objects.get(name="Stale Machine")
         assert pm.opdb_id == "GFRESH-MNew1"
@@ -193,6 +194,7 @@ class TestIngestOpdbChangelog:
             "ingest_opdb",
             opdb=f"{FIXTURES}/opdb_sample.json",
             changelog=f"{FIXTURES}/opdb_changelog_sample.json",
+            groups="",
         )
         assert MachineModel.objects.filter(name="Dead Machine").exists()
 
@@ -203,6 +205,7 @@ class TestIngestOpdbChangelog:
             "ingest_opdb",
             opdb=f"{FIXTURES}/opdb_sample.json",
             changelog=f"{FIXTURES}/opdb_changelog_sample.json",
+            groups="",
         )
         stale = MachineModel.objects.get(name="Stale Machine")
         assert stale.opdb_id == "GSTALE-MOld1"
