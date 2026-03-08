@@ -1,0 +1,165 @@
+from apps.catalog.models import (
+    DesignCredit,
+    MachineModel,
+    Title,
+)
+from apps.provenance.models import Claim
+
+from .conftest import SAMPLE_IMAGES
+
+
+class TestModelsAPI:
+    def test_list_models(self, client, machine_model):
+        resp = client.get("/api/models/")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["count"] == 1
+        assert data["items"][0]["name"] == "Medieval Madness"
+
+    def test_list_models_filter_manufacturer(
+        self, client, machine_model, another_model
+    ):
+        resp = client.get("/api/models/?manufacturer=williams")
+        data = resp.json()
+        assert data["count"] == 1
+        assert data["items"][0]["name"] == "Medieval Madness"
+
+    def test_list_models_filter_type(self, client, machine_model):
+        resp = client.get("/api/models/?type=solid-state")
+        data = resp.json()
+        assert data["count"] == 1
+
+        resp = client.get("/api/models/?type=electromechanical")
+        data = resp.json()
+        assert data["count"] == 0
+
+    def test_list_models_filter_year_range(self, client, machine_model, another_model):
+        resp = client.get("/api/models/?year_min=2000&year_max=2025")
+        data = resp.json()
+        assert data["count"] == 1
+        assert data["items"][0]["name"] == "The Mandalorian"
+
+    def test_list_models_filter_person(self, client, machine_model, person):
+        DesignCredit.objects.create(model=machine_model, person=person, role="design")
+        resp = client.get("/api/models/?person=pat-lawlor")
+        data = resp.json()
+        assert data["count"] == 1
+
+    def test_list_models_ordering(self, client, machine_model, another_model):
+        resp = client.get("/api/models/?ordering=-year")
+        data = resp.json()
+        assert data["items"][0]["name"] == "The Mandalorian"
+
+    def test_list_models_ordering_nulls_last(self, client, machine_model, db):
+        """Models with no year sort after models with a year."""
+        MachineModel.objects.create(name="Unknown Year Game")
+        resp = client.get("/api/models/?ordering=-year")
+        data = resp.json()
+        names = [m["name"] for m in data["items"]]
+        assert names[-1] == "Unknown Year Game"
+
+    def test_list_models_ordering_stable(self, client, manufacturer, db):
+        """Models with the same year are sorted by name for stability."""
+        MachineModel.objects.create(name="Zeta", manufacturer=manufacturer, year=2000)
+        MachineModel.objects.create(name="Alpha", manufacturer=manufacturer, year=2000)
+        resp = client.get("/api/models/?ordering=-year")
+        data = resp.json()
+        names = [m["name"] for m in data["items"]]
+        assert names == ["Alpha", "Zeta"]
+
+    def test_list_models_excludes_aliases(self, client, machine_model):
+        MachineModel.objects.create(
+            name="Medieval Madness (LE)",
+            alias_of=machine_model,
+        )
+        resp = client.get("/api/models/")
+        data = resp.json()
+        assert data["count"] == 1
+        assert data["items"][0]["name"] == "Medieval Madness"
+
+    def test_list_models_thumbnail(self, client, manufacturer, db):
+        MachineModel.objects.create(
+            name="With Image",
+            manufacturer=manufacturer,
+            extra_data={"images": SAMPLE_IMAGES},
+        )
+        resp = client.get("/api/models/")
+        data = resp.json()
+        assert data["items"][0]["thumbnail_url"] == "https://img.opdb.org/md.jpg"
+
+    def test_get_model_detail(self, client, machine_model, person, source):
+        DesignCredit.objects.create(model=machine_model, person=person, role="design")
+        Claim.objects.assert_claim(
+            machine_model, "year", 1997, "IPDB entry", source=source
+        )
+
+        resp = client.get(f"/api/models/{machine_model.slug}")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["name"] == "Medieval Madness"
+        assert len(data["credits"]) == 1
+        assert data["credits"][0]["person_name"] == "Pat Lawlor"
+        year_claims = [c for c in data["activity"] if c["field_name"] == "year"]
+        assert len(year_claims) == 1
+        assert year_claims[0]["source_name"] == "IPDB"
+        assert year_claims[0]["is_winner"] is True
+
+    def test_get_model_detail_images(self, client, manufacturer, db):
+        pm = MachineModel.objects.create(
+            name="With Image",
+            manufacturer=manufacturer,
+            extra_data={"images": SAMPLE_IMAGES},
+        )
+        resp = client.get(f"/api/models/{pm.slug}")
+        data = resp.json()
+        assert data["thumbnail_url"] == "https://img.opdb.org/md.jpg"
+        assert data["hero_image_url"] == "https://img.opdb.org/lg.jpg"
+
+    def test_get_model_detail_no_images(self, client, machine_model):
+        resp = client.get(f"/api/models/{machine_model.slug}")
+        data = resp.json()
+        assert data["thumbnail_url"] is None
+        assert data["hero_image_url"] is None
+
+    def test_get_model_detail_variant_features(self, client, manufacturer, db):
+        pm = MachineModel.objects.create(
+            name="With Features",
+            manufacturer=manufacturer,
+            extra_data={"variant_features": ["Castle attack", "Gold trim"]},
+        )
+        resp = client.get(f"/api/models/{pm.slug}")
+        data = resp.json()
+        assert data["variant_features"] == ["Castle attack", "Gold trim"]
+
+    def test_get_model_detail_aliases(self, client, machine_model):
+        MachineModel.objects.create(
+            name="Medieval Madness (LE)",
+            alias_of=machine_model,
+            extra_data={"variant_features": ["Gold trim"]},
+        )
+        resp = client.get(f"/api/models/{machine_model.slug}")
+        data = resp.json()
+        assert len(data["aliases"]) == 1
+        assert data["aliases"][0]["name"] == "Medieval Madness (LE)"
+        assert data["aliases"][0]["variant_features"] == ["Gold trim"]
+
+    def test_get_model_detail_title(self, client, machine_model, db):
+        title = Title.objects.create(
+            name="Medieval Madness", opdb_id="G5pe4", short_name="MM"
+        )
+        machine_model.title = title
+        machine_model.save()
+        resp = client.get(f"/api/models/{machine_model.slug}")
+        data = resp.json()
+        assert data["title_name"] == "Medieval Madness"
+        assert data["title_slug"] == title.slug
+
+    def test_get_model_detail_no_title(self, client, machine_model):
+        resp = client.get(f"/api/models/{machine_model.slug}")
+        data = resp.json()
+        assert data["title_name"] is None
+        assert data["title_slug"] is None
+
+    def test_get_model_404(self, client, db):
+        resp = client.get("/api/models/nonexistent")
+        assert resp.status_code == 404
