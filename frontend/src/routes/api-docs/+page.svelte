@@ -18,12 +18,7 @@
 		}
 	`;
 
-	/** Tags to hide from the public API docs (endpoints still work). */
-	const PRIVATE_TAGS = new Set(['auth', 'sources', 'review', 'health']);
-
-	/** Tags whose PATCH endpoints should be hidden (internal editing). */
-	const HIDE_PATCH_TAGS = new Set(['models', 'manufacturers', 'people']);
-
+	/** Remove endpoints tagged "private" from the OpenAPI spec before display. */
 	function filterSchema(schema: Record<string, unknown>): Record<string, unknown> {
 		const paths = schema.paths as Record<string, Record<string, Record<string, unknown>>>;
 		const filtered: typeof paths = {};
@@ -31,9 +26,7 @@
 			const kept: Record<string, Record<string, unknown>> = {};
 			for (const [method, details] of Object.entries(methods)) {
 				const tags = (details.tags as string[]) ?? [];
-				const isPrivate = tags.length > 0 && tags.every((t) => PRIVATE_TAGS.has(t));
-				const isHiddenPatch = method === 'patch' && tags.some((t) => HIDE_PATCH_TAGS.has(t));
-				if (!isPrivate && !isHiddenPatch) {
+				if (!tags.includes('private')) {
 					kept[method] = details;
 				}
 			}
