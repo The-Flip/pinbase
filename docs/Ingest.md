@@ -16,7 +16,7 @@ enrichment commands (Fandom, Wikidata) run separately.
 | `ingest_pinbase_systems`            | Seeds System records from curated JSON          |
 | `ingest_ipdb`                       | Imports IPDB machine data                       |
 | `ingest_opdb`                       | Imports OPDB machines, groups, and changelog    |
-| `generate_ipdb_titles`              | Creates Title records for IPDB-only machines    |
+| `ingest_ipdb_titles`                | Creates Title records for IPDB-only machines    |
 | `ingest_pinbase_series`             | Seeds Series and credits from curated JSON      |
 | `ingest_pinbase_titles`             | Sets Title franchise and Series memberships     |
 | `ingest_pinbase_signs`              | Imports museum sign copy from CSV               |

@@ -372,9 +372,8 @@ class Title(TimeStampedModel):
 
     OPDB calls this a "group" (e.g., "Medieval Madness" spans the 1997 original,
     the 2015 remake, and LE/SE variants). We use "Title" as it is the natural
-    pinball-world term. Like Manufacturer, this is a direct reference entity —
-    no source contests the title's identity itself. Assignment of machine models
-    to titles goes through the claims system.
+    pinball-world term. Title fields (name, short_name, description, franchise)
+    are resolved from claims, just like MachineModel and Manufacturer.
     """
 
     opdb_id = models.CharField(
@@ -406,6 +405,9 @@ class Title(TimeStampedModel):
         blank=True,
         help_text="Context for reviewers about why this title needs attention.",
     )
+
+    # Reverse access to provenance claims for this title.
+    claims = GenericRelation("provenance.Claim")
 
     class Meta:
         ordering = ["name"]
@@ -656,10 +658,6 @@ class MachineModel(TimeStampedModel):
     pinside_rating = models.DecimalField(
         max_digits=4, decimal_places=2, null=True, blank=True
     )
-
-    # Museum content
-    educational_text = models.TextField(blank=True)
-    sources_notes = models.TextField(blank=True)
 
     # Catch-all for fields without dedicated columns
     extra_data = models.JSONField(default=dict, blank=True)

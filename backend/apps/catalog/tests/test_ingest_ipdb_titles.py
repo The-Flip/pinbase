@@ -1,4 +1,4 @@
-"""Tests for the generate_ipdb_titles management command."""
+"""Tests for the ingest_ipdb_titles management command."""
 
 import pytest
 from django.core.management import call_command
@@ -73,7 +73,7 @@ def opdb_model(db, manufacturer):
 @pytest.mark.django_db
 class TestGenerateIpdbTitles:
     def test_creates_title_for_ipdb_only_model(self, ipdb_only_model, ipdb_source):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         title = Title.objects.get(opdb_id="ipdb:20")
         assert title.name == "Alien Poker"
@@ -82,7 +82,7 @@ class TestGenerateIpdbTitles:
         assert title.needs_review_notes == ""
 
     def test_creates_group_claim(self, ipdb_only_model, ipdb_source):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         source = Source.objects.get(slug="ipdb")
         claim = ipdb_only_model.claims.get(
@@ -92,7 +92,7 @@ class TestGenerateIpdbTitles:
         assert claim.needs_review is False
 
     def test_skips_opdb_models(self, opdb_model, ipdb_source):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         assert not Title.objects.filter(opdb_id__startswith="ipdb:").exists()
 
@@ -110,15 +110,15 @@ class TestGenerateIpdbTitles:
             value="G9999",
         )
 
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         assert not Title.objects.filter(opdb_id="ipdb:20").exists()
 
     def test_idempotent(self, ipdb_only_model, ipdb_source):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
         first_count = Title.objects.filter(opdb_id__startswith="ipdb:").count()
 
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
         second_count = Title.objects.filter(opdb_id__startswith="ipdb:").count()
 
         assert first_count == second_count == 1
@@ -126,7 +126,7 @@ class TestGenerateIpdbTitles:
     def test_flags_exact_name_match(
         self, ipdb_model_matching_opdb, opdb_title, ipdb_source
     ):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         title = Title.objects.get(opdb_id="ipdb:1100")
         assert title.needs_review is True
@@ -143,7 +143,7 @@ class TestGenerateIpdbTitles:
     def test_flags_base_name_match(
         self, ipdb_model_base_name_match, opdb_title, ipdb_source
     ):
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         title = Title.objects.get(opdb_id="ipdb:1101")
         assert title.needs_review is True
@@ -157,7 +157,7 @@ class TestGenerateIpdbTitles:
         Title.objects.create(opdb_id="GxYz1", name="Aloha", slug="aloha-2")
         MachineModel.objects.create(name="Aloha", ipdb_id=50, manufacturer=manufacturer)
 
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         title = Title.objects.get(opdb_id="ipdb:50")
         assert title.needs_review is True
@@ -167,7 +167,7 @@ class TestGenerateIpdbTitles:
 
     def test_no_review_for_unmatched(self, ipdb_only_model, ipdb_source):
         """Models with no name match should not be flagged."""
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
 
         title = Title.objects.get(opdb_id="ipdb:20")
         assert title.needs_review is False
@@ -175,7 +175,7 @@ class TestGenerateIpdbTitles:
 
     def test_resolve_claims_links_title(self, ipdb_only_model, ipdb_source):
         """After generate + resolve, the model's title FK should be set."""
-        call_command("generate_ipdb_titles")
+        call_command("ingest_ipdb_titles")
         call_command("resolve_claims")
 
         ipdb_only_model.refresh_from_db()

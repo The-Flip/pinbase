@@ -437,13 +437,6 @@ class MachineModelAdmin(ProvenanceSaveMixin, admin.ModelAdmin):
             },
         ),
         (
-            "Museum Content",
-            {
-                "fields": ("educational_text", "sources_notes"),
-                "classes": ("collapse",),
-            },
-        ),
-        (
             "Extra Data",
             {
                 "fields": ("extra_data",),

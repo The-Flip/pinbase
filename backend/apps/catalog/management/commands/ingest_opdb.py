@@ -119,7 +119,7 @@ class Command(BaseCommand):
         # --- Titles pre-loading ---
         groups_by_id: dict[str, dict] = {}
         if groups_path:
-            groups_by_id = self._load_titles(groups_path)
+            groups_by_id = self._load_titles(groups_path, source)
 
         # --- Supplemental ipdb_id cross-references from models.json ---
         ipdb_id_supplement: dict[str, int] = {}
@@ -494,13 +494,19 @@ class Command(BaseCommand):
     # Groups
     # ------------------------------------------------------------------
 
-    def _load_titles(self, path: str) -> dict[str, dict]:
-        """Load groups JSON and bulk create/update Title records.
+    def _load_titles(self, path: str, source: Source) -> dict[str, dict]:
+        """Load groups JSON, create Title records, and assert name/short_name claims.
 
         Returns a dict mapping group opdb_id → group record for later lookup.
         """
+        from django.contrib.contenttypes.models import ContentType
+
+        from apps.catalog.resolve import TITLE_DIRECT_FIELDS, _resolve_bulk
+
         with open(path) as f:
             data = json.load(f)
+
+        ct_id = ContentType.objects.get_for_model(Title).pk
 
         # Build lookup of raw group data.
         groups_by_id: dict[str, dict] = {}
@@ -514,7 +520,6 @@ class Command(BaseCommand):
         existing_slugs: set[str] = set(Title.objects.values_list("slug", flat=True))
 
         new_titles: list[Title] = []
-        updated_titles: list[Title] = []
         unchanged = 0
 
         for opdb_id, rec in groups_by_id.items():
@@ -523,13 +528,7 @@ class Command(BaseCommand):
 
             existing = existing_titles.get(opdb_id)
             if existing:
-                # Check if update is needed.
-                if existing.name != name or existing.short_name != short_name:
-                    existing.name = name
-                    existing.short_name = short_name
-                    updated_titles.append(existing)
-                else:
-                    unchanged += 1
+                unchanged += 1
             else:
                 slug = generate_unique_slug(name, existing_slugs)
                 new_titles.append(
@@ -542,16 +541,61 @@ class Command(BaseCommand):
                 )
 
         titles_created = len(new_titles)
-        titles_updated = len(updated_titles)
-
         if new_titles:
             Title.objects.bulk_create(new_titles)
-        if updated_titles:
-            Title.objects.bulk_update(updated_titles, ["name", "short_name"])
 
+        # Re-fetch all titles so we have PKs for claim assertions.
+        all_titles: dict[str, Title] = {t.opdb_id: t for t in Title.objects.all()}
+
+        # Collect name and short_name claims for all titles from this source.
+        pending_claims: list[Claim] = []
+        touched_ids: set[int] = set()
+
+        for opdb_id, rec in groups_by_id.items():
+            title = all_titles.get(opdb_id)
+            if not title:
+                continue
+
+            name = rec.get("name", "")
+            short_name = rec.get("shortname") or ""
+            touched_ids.add(title.pk)
+
+            if name:
+                pending_claims.append(
+                    Claim(
+                        content_type_id=ct_id,
+                        object_id=title.pk,
+                        field_name="name",
+                        value=name,
+                    )
+                )
+            if short_name:
+                pending_claims.append(
+                    Claim(
+                        content_type_id=ct_id,
+                        object_id=title.pk,
+                        field_name="short_name",
+                        value=short_name,
+                    )
+                )
+
+        claim_stats = Claim.objects.bulk_assert_claims(source, pending_claims)
+
+        # Resolve touched titles so fields reflect winning claims.
+        from apps.catalog.models import Franchise
+
+        franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
+        _resolve_bulk(
+            Title,
+            TITLE_DIRECT_FIELDS,
+            fk_handlers={"franchise": ("franchise", franchise_lookup)},
+            object_ids=touched_ids,
+        )
+
+        self.stdout.write(f"  Titles: {titles_created} created, {unchanged} unchanged")
         self.stdout.write(
-            f"  Titles: {titles_created} created, {titles_updated} updated, "
-            f"{unchanged} unchanged"
+            f"  Title claims: {claim_stats['created']} created, "
+            f"{claim_stats['unchanged']} unchanged"
         )
         return groups_by_id
 

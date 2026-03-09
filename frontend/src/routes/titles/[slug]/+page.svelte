@@ -100,13 +100,6 @@
 		{/if}
 
 		{#if md}
-			{#if md.educational_text}
-				<section class="prose">
-					<h2>About</h2>
-					<p>{md.educational_text}</p>
-				</section>
-			{/if}
-
 			{#if md.extra_data.notes}
 				<section class="prose">
 					<h2>Notes</h2>

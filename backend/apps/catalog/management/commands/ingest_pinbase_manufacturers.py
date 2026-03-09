@@ -18,7 +18,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
 from apps.catalog.models import Manufacturer
-from apps.catalog.resolve import resolve_manufacturer
+from apps.catalog.resolve import (
+    MANUFACTURER_DIRECT_FIELDS,
+    _MANUFACTURER_INT_FIELDS,
+    _resolve_bulk,
+)
 from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
@@ -98,7 +102,12 @@ class Command(BaseCommand):
                 f"  Claims: {stats['unchanged']} unchanged, "
                 f"{stats['created']} created, {stats['superseded']} superseded"
             )
-            for obj in objs:
-                resolve_manufacturer(obj)
+            touched_ids = {o.pk for o in objs}
+            _resolve_bulk(
+                Manufacturer,
+                MANUFACTURER_DIRECT_FIELDS,
+                int_fields=_MANUFACTURER_INT_FIELDS,
+                object_ids=touched_ids,
+            )
 
         self.stdout.write(self.style.SUCCESS("Manufacturer seed ingestion complete."))

@@ -1,8 +1,10 @@
 """Ingest museum sign copy from machine_sign_copy.csv.
 
-Asserts Claims for editorial fields (name, year, month, manufacturer,
-manufacturer address, production quantity, educational text, sources/notes)
-and creates DesignCredit records from the Heading/Info columns.
+Asserts Claims for editorial fields on MachineModel (name, year, month,
+manufacturer, manufacturer address, production quantity) and description
+on Title (hoisted from educational text).
+
+Creates DesignCredit records from the Heading/Info columns.
 
 Matches MachineModels by IPDB ID. Rows without an IPDB ID are skipped.
 """
@@ -16,7 +18,7 @@ from django.core.management.base import BaseCommand
 
 from apps.catalog.ingestion.bulk_utils import generate_unique_slug
 from apps.catalog.ingestion.parsers import parse_credit_string
-from apps.catalog.models import DesignCredit, MachineModel, Person
+from apps.catalog.models import DesignCredit, MachineModel, Person, Title
 from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
@@ -80,7 +82,11 @@ class Command(BaseCommand):
 
         from django.contrib.contenttypes.models import ContentType
 
-        ct_id = ContentType.objects.get_for_model(MachineModel).pk
+        from apps.catalog.models import Franchise
+        from apps.catalog.resolve import TITLE_DIRECT_FIELDS, _resolve_bulk
+
+        model_ct_id = ContentType.objects.get_for_model(MachineModel).pk
+        title_ct_id = ContentType.objects.get_for_model(Title).pk
 
         source, _ = Source.objects.update_or_create(
             slug="flip-signs",
@@ -101,8 +107,26 @@ class Command(BaseCommand):
             pm.ipdb_id: pm for pm in MachineModel.objects.filter(ipdb_id__isnull=False)
         }
 
-        pending_claims: list[Claim] = []
+        # Build model PK → Title lookup from active group claims.
+        # The title FK may not be populated yet (resolve_claims runs later),
+        # so we resolve the mapping from group claim values → Title opdb_ids.
+        titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
+        model_title: dict[int, Title] = {}
+        group_claims = Claim.objects.filter(
+            content_type_id=model_ct_id,
+            field_name="group",
+            is_active=True,
+        ).values_list("object_id", "value")
+        for obj_id, group_value in group_claims:
+            if group_value:
+                title = titles_by_opdb_id.get(str(group_value))
+                if title:
+                    model_title[obj_id] = title
+
+        model_claims: list[Claim] = []
+        title_claims: list[Claim] = []
         credit_queue: list[tuple[int, str, str]] = []
+        touched_title_ids: set[int] = set()
         matched = 0
         skipped = 0
 
@@ -128,17 +152,45 @@ class Command(BaseCommand):
                 continue
 
             matched += 1
-            self._collect_claims(pm, row, ct_id, pending_claims, credit_queue)
+            self._collect_claims(
+                pm,
+                row,
+                model_ct_id,
+                title_ct_id,
+                model_title,
+                model_claims,
+                title_claims,
+                touched_title_ids,
+                credit_queue,
+            )
 
         self.stdout.write(f"  Matched: {matched}, Skipped: {skipped}")
 
-        claim_stats = Claim.objects.bulk_assert_claims(source, pending_claims)
+        # Assert model-level claims.
+        claim_stats = Claim.objects.bulk_assert_claims(source, model_claims)
         self.stdout.write(
-            f"  Claims: {claim_stats['unchanged']} unchanged, "
+            f"  Model claims: {claim_stats['unchanged']} unchanged, "
             f"{claim_stats['created']} created, "
             f"{claim_stats['superseded']} superseded, "
             f"{claim_stats['duplicates_removed']} duplicates removed"
         )
+
+        # Assert title-level claims (description).
+        if title_claims:
+            title_claim_stats = Claim.objects.bulk_assert_claims(source, title_claims)
+            self.stdout.write(
+                f"  Title claims: {title_claim_stats['created']} created, "
+                f"{title_claim_stats['unchanged']} unchanged"
+            )
+
+            # Resolve touched titles.
+            franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
+            _resolve_bulk(
+                Title,
+                TITLE_DIRECT_FIELDS,
+                fk_handlers={"franchise": ("franchise", franchise_lookup)},
+                object_ids=touched_title_ids,
+            )
 
         self._bulk_create_persons_and_credits(credit_queue)
 
@@ -148,14 +200,18 @@ class Command(BaseCommand):
         self,
         pm: MachineModel,
         row: dict,
-        ct_id: int,
-        pending_claims: list[Claim],
+        model_ct_id: int,
+        title_ct_id: int,
+        model_title: dict[int, Title],
+        model_claims: list[Claim],
+        title_claims: list[Claim],
+        touched_title_ids: set[int],
         credit_queue: list[tuple[int, str, str]],
     ) -> None:
-        def _add(field_name: str, value) -> None:
-            pending_claims.append(
+        def _add_model(field_name: str, value) -> None:
+            model_claims.append(
                 Claim(
-                    content_type_id=ct_id,
+                    content_type_id=model_ct_id,
                     object_id=pm.pk,
                     field_name=field_name,
                     value=value,
@@ -164,38 +220,51 @@ class Command(BaseCommand):
 
         title = row.get("Title", "").strip()
         if title:
-            _add("name", title)
+            _add_model("name", title)
 
         year_str = row.get("Year", "").strip()
         if year_str:
             try:
-                _add("year", int(year_str))
+                _add_model("year", int(year_str))
             except ValueError:
                 logger.warning("Invalid year %r for IPDB %s", year_str, pm.ipdb_id)
 
         month = _parse_month(row.get("Month"))
         if month is not None:
-            _add("month", month)
+            _add_model("month", month)
 
         manufacturer = row.get("Manufacturer", "").strip()
         if manufacturer:
-            _add("manufacturer", manufacturer)
+            _add_model("manufacturer", manufacturer)
 
         address = row.get("Address", "").strip()
         if address:
-            _add("manufacturer_address", address)
+            _add_model("manufacturer_address", address)
 
         produced = row.get("Produced", "").strip()
         if produced:
-            _add("production_quantity", produced)
+            _add_model("production_quantity", produced)
 
+        # MainText → Title.description claim (hoisted from model to title).
         main_text = row.get("MainText", "").strip()
-        if main_text:
-            _add("educational_text", main_text)
-
         sources = row.get("Sources/Notes", "").strip()
-        if sources:
-            _add("sources_notes", sources)
+        title = model_title.get(pm.pk)
+        if main_text and title:
+            touched_title_ids.add(title.pk)
+            title_claims.append(
+                Claim(
+                    content_type_id=title_ct_id,
+                    object_id=title.pk,
+                    field_name="description",
+                    value=main_text,
+                    citation=sources,
+                )
+            )
+        elif main_text:
+            logger.warning(
+                "IPDB %s has MainText but no title — cannot hoist description",
+                pm.ipdb_id,
+            )
 
         for i in ("1", "2", "3"):
             heading = row.get(f"Heading{i}", "").strip()

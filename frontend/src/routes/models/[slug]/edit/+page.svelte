@@ -19,9 +19,7 @@
 			opdb_id: m.opdb_id ?? '',
 			pinside_id: m.pinside_id ?? '',
 			ipdb_rating: m.ipdb_rating ?? '',
-			pinside_rating: m.pinside_rating ?? '',
-			educational_text: m.educational_text,
-			sources_notes: m.sources_notes
+			pinside_rating: m.pinside_rating ?? ''
 		};
 	}
 
@@ -170,16 +168,6 @@
 					</div>
 				</div>
 			</fieldset>
-
-			<div class="field-group">
-				<label for="ef-educational">About / educational text</label>
-				<textarea id="ef-educational" rows="6" bind:value={editFields.educational_text}></textarea>
-			</div>
-
-			<div class="field-group">
-				<label for="ef-sources-notes">Sources notes</label>
-				<textarea id="ef-sources-notes" rows="4" bind:value={editFields.sources_notes}></textarea>
-			</div>
 
 			<div class="form-actions">
 				<button type="submit" class="btn-save" disabled={saveStatus === 'saving'}>
