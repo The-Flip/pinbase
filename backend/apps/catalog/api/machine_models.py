@@ -101,8 +101,7 @@ class MachineModelDetailSchema(Schema):
     pinside_id: Optional[int] = None
     ipdb_rating: Optional[float] = None
     pinside_rating: Optional[float] = None
-    educational_text: str
-    sources_notes: str
+    title_description: str = ""
     extra_data: dict
     credits: list[DesignCreditSchema]
     activity: list[ClaimSchema]
@@ -294,8 +293,7 @@ def _serialize_model_detail(pm) -> dict:
         "pinside_rating": float(pm.pinside_rating)
         if pm.pinside_rating is not None
         else None,
-        "educational_text": pm.educational_text,
-        "sources_notes": pm.sources_notes,
+        "title_description": pm.title.description if pm.title else "",
         "extra_data": pm.extra_data or {},
         "credits": credits,
         "activity": activity,

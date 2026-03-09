@@ -29,7 +29,11 @@ from apps.catalog.ingestion.wikidata_sparql import (
     parse_manufacturer_sparql_results,
 )
 from apps.catalog.models import Manufacturer
-from apps.catalog.resolve import resolve_manufacturer
+from apps.catalog.resolve import (
+    MANUFACTURER_DIRECT_FIELDS,
+    _MANUFACTURER_INT_FIELDS,
+    _resolve_bulk,
+)
 from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
@@ -183,14 +187,22 @@ class Command(BaseCommand):
         else:
             self.stdout.write("\n  Claims: 0 (no matches)")
 
-        # 8. Set wikidata_id + resolve each matched manufacturer.
+        # 8. Set wikidata_id on matched manufacturers.
         for wm, mfr in matched_pairs:
             if mfr.wikidata_id != wm.qid:
                 mfr.wikidata_id = wm.qid
                 mfr.save(update_fields=["wikidata_id", "updated_at"])
-            resolve_manufacturer(mfr)
 
-        # 9. Summary.
+        # 9. Bulk-resolve claims into Manufacturer fields.
+        matched_mfr_ids = {mfr.pk for _wm, mfr in matched_pairs}
+        _resolve_bulk(
+            Manufacturer,
+            MANUFACTURER_DIRECT_FIELDS,
+            int_fields=_MANUFACTURER_INT_FIELDS,
+            object_ids=matched_mfr_ids,
+        )
+
+        # 10. Summary.
         self.stdout.write(f"\n  Matched: {matched_count}, Unmatched: {unmatched_count}")
         self.stdout.write(
             self.style.SUCCESS("Wikidata manufacturer ingestion complete.")

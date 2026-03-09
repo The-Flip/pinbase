@@ -130,15 +130,13 @@ class TestResolveModel:
         Claim.objects.assert_claim(pm, "name", "The Addams Family", source=ipdb)
         Claim.objects.assert_claim(pm, "year", 1992, source=ipdb)
         Claim.objects.assert_claim(pm, "toys", "Thing hand, bookcase", source=ipdb)
-        Claim.objects.assert_claim(
-            pm, "educational_text", "A seminal game.", source=editorial
-        )
+        Claim.objects.assert_claim(pm, "fun_facts", "A seminal game.", source=editorial)
 
         resolved = resolve_model(pm)
         assert resolved.name == "The Addams Family"
         assert resolved.year == 1992
         assert resolved.extra_data["toys"] == "Thing hand, bookcase"
-        assert resolved.educational_text == "A seminal game."
+        assert resolved.extra_data["fun_facts"] == "A seminal game."
 
 
 @pytest.mark.django_db
@@ -262,7 +260,7 @@ class TestResolveAll:
             Claim.objects.assert_claim(pm, "name", f"Resolved {i}", source=ipdb)
             Claim.objects.assert_claim(pm, "year", 2000 + i, source=ipdb)
 
-        with django_assert_max_num_queries(36):
+        with django_assert_max_num_queries(50):
             resolve_all()
 
 

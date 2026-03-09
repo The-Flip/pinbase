@@ -14,6 +14,7 @@
 		auth.load();
 	});
 
+	let isOnlyModelInTitle = $derived(model.title_models.length <= 1);
 	let isDetail = $derived(
 		!page.url.pathname.endsWith('/edit') && !page.url.pathname.endsWith('/activity')
 	);
@@ -62,10 +63,10 @@
 	{/snippet}
 
 	{#snippet main()}
-		{#if model.educational_text}
+		{#if model.title_description && isOnlyModelInTitle}
 			<section class="prose">
 				<h2>About</h2>
-				<p>{model.educational_text}</p>
+				<p>{model.title_description}</p>
 			</section>
 		{/if}
 

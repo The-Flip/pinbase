@@ -29,7 +29,12 @@ from apps.catalog.ingestion.wikidata_sparql import (
 )
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
 from apps.catalog.models import MachineModel, Person
-from apps.catalog.resolve import resolve_all_credits, resolve_person
+from apps.catalog.resolve import (
+    PERSON_DIRECT_FIELDS,
+    _PERSON_INT_FIELDS,
+    _resolve_bulk,
+    resolve_all_credits,
+)
 from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
@@ -134,12 +139,20 @@ class Command(BaseCommand):
         else:
             self.stdout.write("\n  Claims: 0 (no matches)")
 
-        # 9. Set wikidata_id + resolve each matched person.
+        # 9. Set wikidata_id on matched persons.
         for wp, person in matched_pairs:
             if person.wikidata_id != wp.qid:
                 person.wikidata_id = wp.qid
                 person.save(update_fields=["wikidata_id", "updated_at"])
-            resolve_person(person)
+
+        # Bulk-resolve claims into Person fields.
+        matched_person_ids = {person.pk for _wp, person in matched_pairs}
+        _resolve_bulk(
+            Person,
+            PERSON_DIRECT_FIELDS,
+            int_fields=_PERSON_INT_FIELDS,
+            object_ids=matched_person_ids,
+        )
 
         # 10. Assert credit relationship claims for matched (machine, person) pairs.
         existing_machines: dict[str, MachineModel] = {

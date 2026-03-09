@@ -2,7 +2,7 @@
 
 For each IPDB-only model (ipdb_id set, opdb_id NULL) without an active "group"
 claim, creates a Title with synthetic opdb_id ``ipdb:{ipdb_id}`` and asserts a
-"group" claim linking the model to it.
+"group" claim linking the model to it, plus a "name" claim on the Title.
 
 Models whose names match existing OPDB-backed Titles are flagged with
 ``needs_review=True`` and contextual notes for human curation.
@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.core.management.base import BaseCommand
 
 from apps.catalog.ingestion.bulk_utils import format_names, generate_unique_slug
-from apps.catalog.models import MachineModel, Title
+from apps.catalog.models import Franchise, MachineModel, Title
 from apps.provenance.models import Claim, Source
 
 
@@ -27,10 +27,13 @@ def _strip_parenthetical(name: str) -> str:
 
 
 class Command(BaseCommand):
-    help = "Generate Title records for IPDB-only MachineModels without titles."
+    help = "Create Title records for IPDB-only MachineModels without titles."
 
     def handle(self, *args, **options):
-        ct_id = ContentType.objects.get_for_model(MachineModel).pk
+        from apps.catalog.resolve import TITLE_DIRECT_FIELDS, _resolve_bulk
+
+        model_ct_id = ContentType.objects.get_for_model(MachineModel).pk
+        title_ct_id = ContentType.objects.get_for_model(Title).pk
 
         source, _ = Source.objects.update_or_create(
             slug="ipdb",
@@ -50,7 +53,7 @@ class Command(BaseCommand):
         # Find which of those already have an active "group" claim.
         has_group_claim = set(
             Claim.objects.filter(
-                content_type_id=ct_id,
+                content_type_id=model_ct_id,
                 field_name="group",
                 is_active=True,
                 source=source,
@@ -80,7 +83,10 @@ class Command(BaseCommand):
         )
 
         new_titles: list[Title] = []
-        pending_claims: list[Claim] = []
+        # Group claims on MachineModel linking to the synthetic title.
+        model_claims: list[Claim] = []
+        # Name claims on the Title itself.
+        title_name_map: list[tuple[str, str]] = []  # (synthetic_id, name)
         skipped = 0
         flagged = 0
 
@@ -151,9 +157,9 @@ class Command(BaseCommand):
                 )
             )
 
-            pending_claims.append(
+            model_claims.append(
                 Claim(
-                    content_type_id=ct_id,
+                    content_type_id=model_ct_id,
                     object_id=model.pk,
                     field_name="group",
                     claim_key="group",
@@ -163,15 +169,59 @@ class Command(BaseCommand):
                 )
             )
 
+            title_name_map.append((synthetic_id, model.name))
+
         if new_titles:
             Title.objects.bulk_create(new_titles)
 
-        if pending_claims:
-            claim_stats = Claim.objects.bulk_assert_claims(source, pending_claims)
+        # Build name claims on the newly created Titles (need PKs from bulk_create).
+        title_claims: list[Claim] = []
+        touched_title_ids: set[int] = set()
+        if title_name_map:
+            titles_by_opdb_id = {
+                t.opdb_id: t
+                for t in Title.objects.filter(
+                    opdb_id__in=[sid for sid, _ in title_name_map]
+                )
+            }
+            for synthetic_id, name in title_name_map:
+                title = titles_by_opdb_id.get(synthetic_id)
+                if title:
+                    touched_title_ids.add(title.pk)
+                    title_claims.append(
+                        Claim(
+                            content_type_id=title_ct_id,
+                            object_id=title.pk,
+                            field_name="name",
+                            value=name,
+                        )
+                    )
+
+        # Assert model-level group claims.
+        if model_claims:
+            claim_stats = Claim.objects.bulk_assert_claims(source, model_claims)
             self.stdout.write(
-                f"  Claims: {claim_stats.get('created', 0)} created, "
+                f"  Model claims: {claim_stats.get('created', 0)} created, "
                 f"{claim_stats.get('deactivated', 0)} superseded, "
                 f"{claim_stats.get('unchanged', 0)} unchanged"
+            )
+
+        # Assert title-level name claims.
+        if title_claims:
+            title_claim_stats = Claim.objects.bulk_assert_claims(source, title_claims)
+            self.stdout.write(
+                f"  Title claims: {title_claim_stats.get('created', 0)} created, "
+                f"{title_claim_stats.get('unchanged', 0)} unchanged"
+            )
+
+        # Resolve touched titles.
+        if touched_title_ids:
+            franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
+            _resolve_bulk(
+                Title,
+                TITLE_DIRECT_FIELDS,
+                fk_handlers={"franchise": ("franchise", franchise_lookup)},
+                object_ids=touched_title_ids,
             )
 
         created_names = [t.name for t in new_titles]

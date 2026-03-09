@@ -1,5 +1,9 @@
 """Set Title franchise FK and Series memberships from data/titles.json.
 
+Asserts name and franchise claims on Title records, then resolves them.
+Slug overrides and Series M2M memberships are applied directly (not
+claim-controlled).
+
 Runs after:
   - ingest_pinbase_taxonomy (for Franchise records)
   - ingest_opdb (for Title records)
@@ -14,9 +18,9 @@ from collections import defaultdict
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
 from apps.catalog.models import Franchise, Series, Title
+from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
 
@@ -34,20 +38,36 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        from django.contrib.contenttypes.models import ContentType
+
+        from apps.catalog.resolve import TITLE_DIRECT_FIELDS, _resolve_bulk
+
         path = options["path"]
         with open(path) as f:
             entries = json.load(f)
+
+        source, _ = Source.objects.update_or_create(
+            slug="pinbase-titles",
+            defaults={
+                "name": "Pinbase Titles Seed",
+                "source_type": "editorial",
+                "priority": 300,
+                "url": "",
+            },
+        )
+
+        ct_id = ContentType.objects.get_for_model(Title).pk
 
         # Build lookups.
         titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
         franchises_by_slug = {f.slug: f for f in Franchise.objects.all()}
         series_by_slug = {s.slug: s for s in Series.objects.all()}
 
-        franchise_set = membership_set = name_set = slug_set = skipped = 0
-        franchise_changed: list[Title] = []
-        name_changed: list[Title] = []
+        membership_set = slug_set = skipped = 0
+        pending_claims: list[Claim] = []
         pending_slugs: dict[int, str] = {}  # title.pk → desired slug
         series_memberships: dict[Series, list[Title]] = defaultdict(list)
+        touched_ids: set[int] = set()
 
         for entry in entries:
             opdb_group_id = entry["opdb_group_id"]
@@ -60,19 +80,25 @@ class Command(BaseCommand):
                 skipped += 1
                 continue
 
-            # Override slug if provided.
+            # Override slug if provided (direct write, not claim-controlled).
             slug = entry.get("slug")
             if slug and title.slug != slug:
                 pending_slugs[title.pk] = slug
 
-            # Override name if provided.
+            # Assert name claim if override provided.
             name = entry.get("name")
-            if name and title.name != name:
-                title.name = name
-                name_changed.append(title)
-                name_set += 1
+            if name:
+                touched_ids.add(title.pk)
+                pending_claims.append(
+                    Claim(
+                        content_type_id=ct_id,
+                        object_id=title.pk,
+                        field_name="name",
+                        value=name,
+                    )
+                )
 
-            # Set franchise FK.
+            # Assert franchise claim.
             franchise_slug = entry.get("franchise_slug")
             if franchise_slug:
                 franchise = franchises_by_slug.get(franchise_slug)
@@ -81,12 +107,17 @@ class Command(BaseCommand):
                         "Franchise slug %r not found — skipping", franchise_slug
                     )
                 else:
-                    if title.franchise_id != franchise.pk:
-                        title.franchise = franchise
-                        franchise_changed.append(title)
-                    franchise_set += 1
+                    touched_ids.add(title.pk)
+                    pending_claims.append(
+                        Claim(
+                            content_type_id=ct_id,
+                            object_id=title.pk,
+                            field_name="franchise",
+                            value=franchise_slug,
+                        )
+                    )
 
-            # Collect series membership.
+            # Collect series membership (M2M, not claim-controlled).
             series_slug = entry.get("series_slug")
             if series_slug:
                 series = series_by_slug.get(series_slug)
@@ -96,12 +127,20 @@ class Command(BaseCommand):
                     series_memberships[series].append(title)
                     membership_set += 1
 
-        # Bulk update franchise FK changes.
-        if franchise_changed:
-            now = timezone.now()
-            for t in franchise_changed:
-                t.updated_at = now
-            Title.objects.bulk_update(franchise_changed, ["franchise", "updated_at"])
+        # Assert all collected claims in bulk.
+        claim_stats: dict = {}
+        if pending_claims:
+            claim_stats = Claim.objects.bulk_assert_claims(source, pending_claims)
+
+        # Resolve touched titles so fields reflect winning claims.
+        if touched_ids:
+            franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
+            _resolve_bulk(
+                Title,
+                TITLE_DIRECT_FIELDS,
+                fk_handlers={"franchise": ("franchise", franchise_lookup)},
+                object_ids=touched_ids,
+            )
 
         # Update slugs in two passes to handle swaps (e.g. A→B and B→C).
         # Filter out slugs that would conflict with titles not being renamed.
@@ -122,6 +161,8 @@ class Command(BaseCommand):
                 logger.warning("Slug %r already taken — skipping rename", slug)
 
             if safe_slugs:
+                from django.utils import timezone
+
                 now = timezone.now()
                 # Pass 1: move to temporary slugs.
                 for pk, slug in safe_slugs.items():
@@ -133,21 +174,17 @@ class Command(BaseCommand):
                     Title.objects.filter(pk=pk).update(slug=slug)
                 slug_set = len(safe_slugs)
 
-        # Bulk update name changes.
-        if name_changed:
-            now = timezone.now()
-            for t in name_changed:
-                t.updated_at = now
-            Title.objects.bulk_update(name_changed, ["name", "updated_at"])
-
         # Batch M2M adds per series.
         for series, titles in series_memberships.items():
             series.titles.add(*titles)
 
         self.stdout.write(
-            f"  Titles: {franchise_set} franchise links, "
-            f"{membership_set} series memberships, "
-            f"{name_set} name overrides, {slug_set} slug overrides, "
-            f"{skipped} skipped"
+            f"  Titles: {membership_set} series memberships, "
+            f"{slug_set} slug overrides, {skipped} skipped"
         )
+        if claim_stats:
+            self.stdout.write(
+                f"  Claims: {claim_stats.get('created', 0)} created, "
+                f"{claim_stats.get('unchanged', 0)} unchanged"
+            )
         self.stdout.write(self.style.SUCCESS("Titles seed ingestion complete."))
