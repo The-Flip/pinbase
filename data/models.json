@@ -20,8 +20,14 @@
   {
     "slug": "ac-dc-limited-edition",
     "name": "AC/DC (Limited Edition)",
+    "variant_of": "ac-dc-premium",
     "opdb_id": "G43W4-MrRpw",
     "ipdb_id": 5777
+  },
+  {
+    "slug": "ac-dc-premium",
+    "opdb_id": "G43W4-MXrPx",
+    "ipdb_id": 5775
   },
   {
     "slug": "aerosmith-limited-edition",
@@ -92,8 +98,14 @@
   {
     "slug": "batman-66-limited-edition",
     "name": "Batman 66 (Limited Edition)",
+    "variant_of": "batman-66-premium",
     "opdb_id": "GRoz4-MrRPw",
     "ipdb_id": 6355
+  },
+  {
+    "slug": "batman-66-premium",
+    "opdb_id": "GRoz4-MjBV6",
+    "ipdb_id": 6354
   },
   {
     "slug": "big-dryvers",
@@ -293,8 +305,14 @@
   {
     "slug": "deadpool-limited-edition",
     "name": "Deadpool (Limited Edition)",
+    "variant_of": "deadpool-premium",
     "opdb_id": "G6lnq-M6153",
     "ipdb_id": 6560
+  },
+  {
+    "slug": "deadpool-premium",
+    "opdb_id": "G6lnq-MRj7Z",
+    "ipdb_id": 6559
   },
   {
     "slug": "demolition-man",
@@ -533,8 +551,14 @@
   {
     "slug": "game-of-thrones-limited-edition",
     "name": "Game of Thrones (Limited Edition)",
+    "variant_of": "game-of-thrones-premium",
     "opdb_id": "G41d5-M9REd",
     "ipdb_id": 6309
+  },
+  {
+    "slug": "game-of-thrones-premium",
+    "opdb_id": "G41d5-M0ovk",
+    "ipdb_id": 6308
   },
   {
     "slug": "genie",
@@ -545,8 +569,14 @@
   {
     "slug": "ghostbusters-limited-edition",
     "name": "Ghostbusters (Limited Edition)",
+    "variant_of": "ghostbusters-premium",
     "opdb_id": "GR9Nr-MVKol",
     "ipdb_id": 6334
+  },
+  {
+    "slug": "ghostbusters-premium",
+    "opdb_id": "GR9Nr-M5RxE",
+    "ipdb_id": 6333
   },
   {
     "slug": "godzilla-70th-anniversary",
@@ -582,8 +612,14 @@
   {
     "slug": "guardians-of-the-galaxy-limited-edition",
     "name": "Guardians of the Galaxy (Limited Edition)",
+    "variant_of": "guardians-of-the-galaxy-premium",
     "opdb_id": "GRWvz-MP37P",
     "ipdb_id": 6476
+  },
+  {
+    "slug": "guardians-of-the-galaxy-premium",
+    "opdb_id": "GRWvz-Mx0eb",
+    "ipdb_id": 6475
   },
   {
     "slug": "guardians-of-the-galaxy-pro",
@@ -684,8 +720,14 @@
   {
     "slug": "iron-maiden-legacy-of-the-beast-limited-edition",
     "name": "Iron Maiden: Legacy of the Beast (Limited Edition)",
+    "variant_of": "iron-maiden-legacy-of-the-beast-premium",
     "opdb_id": "G4dOQ-MW970",
     "ipdb_id": 6557
+  },
+  {
+    "slug": "iron-maiden-legacy-of-the-beast-premium",
+    "opdb_id": "G4dOQ-MkPxr",
+    "ipdb_id": 6556
   },
   {
     "slug": "iron-maiden-legacy-of-the-beast-pro",
@@ -786,8 +828,14 @@
   {
     "slug": "kiss-limited-edition",
     "name": "KISS (Limited Edition)",
+    "variant_of": "kiss-premium",
     "opdb_id": "G4qX5-Ml9jb",
     "ipdb_id": 6267
+  },
+  {
+    "slug": "kiss-premium",
+    "opdb_id": "G4qX5-MJN17",
+    "ipdb_id": 6266
   },
   {
     "slug": "la-retata",
@@ -931,8 +979,14 @@
   {
     "slug": "metallica-master-of-puppets-limited-edition",
     "name": "Metallica Master of Puppets (Limited Edition)",
+    "variant_of": "metallica-premium",
     "opdb_id": "GRBE4-MOE4l",
     "ipdb_id": 6031
+  },
+  {
+    "slug": "metallica-premium",
+    "opdb_id": "GRBE4-MJ9rE",
+    "ipdb_id": 6029
   },
   {
     "slug": "metallica-remastered-limited-edition",
@@ -956,8 +1010,14 @@
   {
     "slug": "mustang-limited-edition",
     "name": "Mustang (Limited Edition)",
+    "variant_of": "mustang-premium",
     "opdb_id": "GrPOR-MLq5x",
     "ipdb_id": 6100
+  },
+  {
+    "slug": "mustang-premium",
+    "opdb_id": "GrPOR-M61Pw",
+    "ipdb_id": 6099
   },
   {
     "slug": "new-wave",
@@ -1307,8 +1367,14 @@
   {
     "slug": "star-trek-limited-edition",
     "name": "Star Trek (Limited Edition)",
+    "variant_of": "star-trek-premium",
     "opdb_id": "Gryw4-MNEKn",
     "ipdb_id": 6046
+  },
+  {
+    "slug": "star-trek-premium",
+    "opdb_id": "Gryw4-MRj4O",
+    "ipdb_id": 6045
   },
   {
     "slug": "star-wars-fall-of-the-empire-limited-edition",
@@ -1324,8 +1390,14 @@
   {
     "slug": "star-wars-limited-edition",
     "name": "Star Wars (Limited Edition)",
+    "variant_of": "star-wars-premium",
     "opdb_id": "G5vLR-MZebq",
     "ipdb_id": 6430
+  },
+  {
+    "slug": "star-wars-premium",
+    "opdb_id": "G5vLR-ME049",
+    "ipdb_id": 6429
   },
   {
     "slug": "stellar-airship",
@@ -1418,8 +1490,14 @@
   {
     "slug": "the-avengers-limited-edition",
     "name": "The Avengers (Limited Edition)",
+    "variant_of": "the-avengers-premium",
     "opdb_id": "GRzNR-MyNq8",
     "ipdb_id": 5940
+  },
+  {
+    "slug": "the-avengers-premium",
+    "opdb_id": "GRzNR-Mz2WY",
+    "ipdb_id": 5939
   },
   {
     "slug": "the-avengers-pro",
@@ -1522,8 +1600,14 @@
   {
     "slug": "the-walking-dead-limited-edition",
     "name": "The Walking Dead (Limited Edition)",
+    "variant_of": "the-walking-dead-premium",
     "opdb_id": "G5nz5-MP3r1",
     "ipdb_id": 6156
+  },
+  {
+    "slug": "the-walking-dead-premium",
+    "opdb_id": "G5nz5-M7Z94",
+    "ipdb_id": 6201
   },
   {
     "slug": "the-walking-dead-remastered-limited-edition",
