@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { pageTitle } from '$lib/constants';
 	import { auth } from '$lib/auth.svelte';
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import TabNav from '$lib/components/TabNav.svelte';
 	import Tab from '$lib/components/Tab.svelte';
@@ -31,6 +32,7 @@
 
 <article>
 	<header>
+		<Breadcrumb crumbs={[{ label: 'Manufacturers', href: '/manufacturers' }]} current={mfr.name} />
 		<h1>{mfr.name}</h1>
 		{#if mfr.trade_name && mfr.trade_name !== mfr.name}
 			<p class="trade-name">Trade name: {mfr.trade_name}</p>

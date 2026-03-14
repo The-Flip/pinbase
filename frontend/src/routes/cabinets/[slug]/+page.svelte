@@ -1,37 +1,35 @@
 <script lang="ts">
-	import Markdown from '$lib/components/Markdown.svelte';
-	import { pageTitle } from '$lib/constants';
+	import client from '$lib/api/client';
+	import { createPaginatedLoader } from '$lib/paginated-loader.svelte';
+	import EntityDetailLayout from '$lib/components/EntityDetailLayout.svelte';
+	import PaginatedSection from '$lib/components/grid/PaginatedSection.svelte';
+	import MachineCard from '$lib/components/cards/MachineCard.svelte';
 
 	let { data } = $props();
 	let profile = $derived(data.profile);
+
+	const machines = createPaginatedLoader(async (page) => {
+		const { data: result } = await client.GET('/api/models/', {
+			params: { query: { cabinet: profile.slug, page } }
+		});
+		return result ?? { items: [], count: 0 };
+	});
 </script>
 
-<svelte:head>
-	<title>{pageTitle(profile.name)}</title>
-</svelte:head>
-
-<article>
-	<header>
-		<h1>{profile.name}</h1>
-		{#if profile.description_html}
-			<Markdown html={profile.description_html} />
-		{/if}
-	</header>
-</article>
-
-<style>
-	article {
-		max-width: 64rem;
-	}
-
-	header {
-		margin-bottom: var(--size-6);
-	}
-
-	h1 {
-		font-size: var(--font-size-7);
-		font-weight: 700;
-		color: var(--color-text-primary);
-		margin-bottom: var(--size-4);
-	}
-</style>
+<EntityDetailLayout name={profile.name} descriptionHtml={profile.description_html}>
+	<PaginatedSection
+		loader={machines}
+		heading="Machines"
+		emptyMessage="No machines with this cabinet type."
+	>
+		{#snippet children(machine)}
+			<MachineCard
+				slug={machine.slug}
+				name={machine.name}
+				thumbnailUrl={machine.thumbnail_url}
+				manufacturerName={machine.manufacturer_name}
+				year={machine.year}
+			/>
+		{/snippet}
+	</PaginatedSection>
+</EntityDetailLayout>

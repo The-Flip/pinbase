@@ -75,20 +75,6 @@
 				</section>
 			{/if}
 
-			{#if model.extra_data.notes}
-				<section class="prose">
-					<h2>Notes</h2>
-					<p>{model.extra_data.notes}</p>
-				</section>
-			{/if}
-
-			{#if model.extra_data.Notes}
-				<section class="prose">
-					<h2>Notes</h2>
-					<p>{model.extra_data.Notes}</p>
-				</section>
-			{/if}
-
 			<TabNav>
 				<Tab active={isDetail} href={resolve(`/models/${slug}`)}>People</Tab>
 				{#if auth.isAuthenticated}
@@ -108,6 +94,14 @@
 						<dd>
 							<a href={resolve(`/technology-generations/${model.technology_generation_slug}`)}
 								>{model.technology_generation_name}</a
+							>
+						</dd>
+					{/if}
+					{#if model.technology_subgeneration_slug}
+						<dt>Subgeneration</dt>
+						<dd>
+							<a href={resolve(`/technology-subgenerations/${model.technology_subgeneration_slug}`)}
+								>{model.technology_subgeneration_name}</a
 							>
 						</dd>
 					{/if}
@@ -156,24 +150,34 @@
 						<dt>Abbrs</dt>
 						<dd>{model.abbreviations.join(', ')}</dd>
 					{/if}
-					{#if model.cabinet_name}
+					{#if model.cabinet_slug}
 						<dt>Cabinet</dt>
-						<dd>{model.cabinet_name}</dd>
+						<dd>
+							<a href={resolve(`/cabinets/${model.cabinet_slug}`)}>{model.cabinet_name}</a>
+						</dd>
 					{/if}
-					{#if model.game_format_name}
+					{#if model.game_format_slug}
 						<dt>Format</dt>
-						<dd>{model.game_format_name}</dd>
+						<dd>
+							<a href={resolve(`/game-formats/${model.game_format_slug}`)}
+								>{model.game_format_name}</a
+							>
+						</dd>
 					{/if}
-					{#if model.display_subtype_name}
+					{#if model.display_subtype_slug}
 						<dt>Display</dt>
-						<dd>{model.display_subtype_name}</dd>
+						<dd>
+							<a href={resolve(`/display-subtypes/${model.display_subtype_slug}`)}
+								>{model.display_subtype_name}</a
+							>
+						</dd>
 					{/if}
 					{#if model.gameplay_features.length > 0}
 						<dt>Features</dt>
 						<dd>
 							{#each model.gameplay_features as feature, i (feature.slug)}
 								{#if i > 0},{/if}
-								{feature.name}
+								<a href={resolve(`/gameplay-features/${feature.slug}`)}>{feature.name}</a>
 							{/each}
 						</dd>
 					{/if}

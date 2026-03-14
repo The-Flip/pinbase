@@ -5,7 +5,7 @@ from __future__ import annotations
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
-from apps.core.models import Linkable, TimeStampedModel, unique_slug
+from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
 
 __all__ = ["MachineModel", "ModelAbbreviation"]
 
@@ -17,7 +17,7 @@ class MachineModel(Linkable, TimeStampedModel):
     winning claim per field (highest priority source, most recent if tied).
     """
 
-    link_url_pattern = "/machines/{slug}"
+    link_url_pattern = "/models/{slug}"
 
     # Identity
     name = models.CharField(max_length=300)
@@ -64,6 +64,8 @@ class MachineModel(Linkable, TimeStampedModel):
         help_text="True if this machine is a conversion/retheme (resolved from claims).",
     )
 
+    description = MarkdownField(blank=True)
+
     # Core filterable fields
     manufacturer = models.ForeignKey(
         "Manufacturer",
@@ -81,6 +83,14 @@ class MachineModel(Linkable, TimeStampedModel):
         null=True,
         blank=True,
         help_text="Technology generation (resolved from claims).",
+    )
+    technology_subgeneration = models.ForeignKey(
+        "TechnologySubgeneration",
+        on_delete=models.SET_NULL,
+        related_name="machine_models",
+        null=True,
+        blank=True,
+        help_text="Technology subgeneration (resolved from claims).",
     )
     display_type = models.ForeignKey(
         "DisplayType",

@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { pageTitle } from '$lib/constants';
 	import { auth } from '$lib/auth.svelte';
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import TabNav from '$lib/components/TabNav.svelte';
 	import Tab from '$lib/components/Tab.svelte';
 
@@ -27,6 +28,7 @@
 
 <article>
 	<header>
+		<Breadcrumb crumbs={[{ label: 'People', href: '/people' }]} current={person.name} />
 		<h1>{person.name}</h1>
 	</header>
 
