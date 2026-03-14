@@ -1,6 +1,7 @@
 <script lang="ts">
 	import client from '$lib/api/client';
 	import { createAsyncLoader } from '$lib/async-loader.svelte';
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import CardGrid from '$lib/components/grid/CardGrid.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import TitleCard from '$lib/components/cards/TitleCard.svelte';
@@ -23,6 +24,10 @@
 
 <article>
 	<header>
+		<Breadcrumb
+			crumbs={[{ label: 'Display Types', href: '/display-types' }]}
+			current={profile.name}
+		/>
 		<h1>{profile.name}</h1>
 		{#if profile.description_html}
 			<Markdown html={profile.description_html} />

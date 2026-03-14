@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import CardGrid from '$lib/components/grid/CardGrid.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import TitleCard from '$lib/components/cards/TitleCard.svelte';
@@ -14,6 +15,7 @@
 
 <article>
 	<header>
+		<Breadcrumb crumbs={[{ label: 'Franchises', href: '/franchises' }]} current={franchise.name} />
 		<h1>{franchise.name}</h1>
 		{#if franchise.description_html}
 			<Markdown html={franchise.description_html} />

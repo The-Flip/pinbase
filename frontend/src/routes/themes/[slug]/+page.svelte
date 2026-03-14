@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import CardGrid from '$lib/components/grid/CardGrid.svelte';
 	import MachineCard from '$lib/components/cards/MachineCard.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -14,6 +15,7 @@
 
 <article>
 	<header>
+		<Breadcrumb crumbs={[{ label: 'Themes', href: '/themes' }]} current={theme.name} />
 		<h1>{theme.name}</h1>
 		{#if theme.description_html}
 			<Markdown html={theme.description_html} />
