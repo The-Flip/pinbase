@@ -1,7 +1,6 @@
 ---
 slug: carom
 name: Carom
-opdb_group_id: ipdb:458
 model_slugs:
 - carom
 ---

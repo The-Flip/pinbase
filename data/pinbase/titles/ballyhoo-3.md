@@ -1,7 +1,6 @@
 ---
 slug: ballyhoo-3
 name: Ballyhoo
-opdb_group_id: ipdb:4817
 model_slugs:
 - ballyhoo-3
 ---

@@ -1,7 +1,6 @@
 ---
 slug: hyperball-2
 name: Hyperball
-opdb_group_id: ipdb:3169
 model_slugs:
 - hyperball
 ---
