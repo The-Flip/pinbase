@@ -2,8 +2,6 @@
 slug: derby-day-2
 name: Derby Day
 opdb_group_id: G5vyY
-model_slugs:
-- derby-day
 ---
 
 Derby Day's gambling theme extends to its gameplay—there is far less control than in more modern pinball machines. The flippers are spaced far apart, the player is at the mercy of a pop bumper beneath them, and a "gobble hole" in the middle of the board will quickly end a ball, though it rewards some points in the process as compensation.

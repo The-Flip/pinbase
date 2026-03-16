@@ -1,6 +1,4 @@
 ---
 slug: the-100-yards
 name: The 100 Yards
-model_slugs:
-- the-100-yards
 ---

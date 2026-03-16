@@ -1,8 +1,6 @@
 ---
 slug: carom
 name: Carom
-model_slugs:
-- carom
 ---
 
 After Bally's success with Ballyhoo, their business exploded. Between Ballyhoo and Carom, they made more than 120 different models. As you can see, in just five years they became larger, more complex, and more automated. The window on the backbox shows the score, an exciting innovation called a totalizer.

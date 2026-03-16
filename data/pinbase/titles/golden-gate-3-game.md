@@ -1,6 +1,4 @@
 ---
 slug: golden-gate-3-game
 name: Golden Gate (3-game)
-model_slugs:
-- golden-gate-3-game
 ---

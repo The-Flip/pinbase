@@ -5,7 +5,4 @@ opdb_group_id: G41d5
 franchise_slug: game-of-thrones
 abbreviations:
 - GOT
-model_slugs:
-- game-of-thrones-limited-edition
-- game-of-thrones-premium
 ---

@@ -1,8 +1,6 @@
 ---
 slug: ballyhoo-3
 name: Ballyhoo
-model_slugs:
-- ballyhoo-3
 ---
 
 Coin-operated pin bagatelle machines were made at a breakneck pace. At the height of the Great Depression these games were produced cheaply and quickly, offering new distractions, and ideas had to come just as fast. It was easiest to simply copy them.

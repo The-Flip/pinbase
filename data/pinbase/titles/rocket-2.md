@@ -1,6 +1,4 @@
 ---
 slug: rocket-2
 name: Rocket
-model_slugs:
-- rocket
 ---

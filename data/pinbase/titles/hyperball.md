@@ -1,8 +1,6 @@
 ---
 slug: hyperball
 name: Hyperball
-model_slugs:
-- hyperball
 ---
 
 During this time, the pinball industry was under threat from video games like Space Invaders (1978), Asteroids (1979), Battlezone (1980) and Pac Man (1980). They responded by trying to innovate. Williams hoped that Hyperball would sell 50,000 units. But operators complained about the difficulty maintaining it and players found it confusing, so it flopped, selling only 5,000.
