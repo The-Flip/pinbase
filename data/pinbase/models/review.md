@@ -3,7 +3,7 @@ slug: review
 name: Review
 title_slug: review
 ipdb_id: 1954
-manufacturer_slug: exhibit
+manufacturer_slug: esco
 year: 1938
 month: 8
 player_count: 1

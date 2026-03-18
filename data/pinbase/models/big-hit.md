@@ -3,7 +3,7 @@ slug: big-hit
 name: Big Hit
 title_slug: big-hit-3
 ipdb_id: 251
-manufacturer_slug: exhibit
+manufacturer_slug: esco
 year: 1946
 month: 2
 player_count: 1

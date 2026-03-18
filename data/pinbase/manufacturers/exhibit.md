@@ -1,4 +1,0 @@
----
-slug: exhibit
-name: Exhibit
----

@@ -3,7 +3,7 @@ slug: conquest
 name: Conquest
 title_slug: conquest
 ipdb_id: 556
-manufacturer_slug: exhibit
+manufacturer_slug: esco
 year: 1939
 month: 11
 player_count: 1

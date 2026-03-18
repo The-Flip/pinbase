@@ -3,7 +3,7 @@ slug: speedy
 name: Speedy
 title_slug: speedy
 ipdb_id: 2283
-manufacturer_slug: exhibit
+manufacturer_slug: esco
 year: 1939
 month: 3
 player_count: 1
