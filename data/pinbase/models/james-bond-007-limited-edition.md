@@ -6,4 +6,9 @@ corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GQKyP-MP3OK-A1KoX
 ipdb_id: 6898
 variant_of: james-bond-007-premium
+credit_refs:
+- person_slug: george-gomez
+  role: Design
+- person_slug: kevin-oconnor
+  role: Art
 ---

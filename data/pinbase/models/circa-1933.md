@@ -7,4 +7,7 @@ opdb_id: G4XD3-MJdVN
 ipdb_id: 514
 cabinet_slug: cocktail
 variant_of: roy-clark-the-entertainer
+credit_refs:
+- person_slug: r-michael-torrey
+  role: Art
 ---

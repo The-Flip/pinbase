@@ -5,4 +5,9 @@ title_slug: aerosmith
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: Gr16e-Mq1k3
 ipdb_id: 6371
+credit_refs:
+- person_slug: john-borg
+  role: Design
+- person_slug: donny-gillies
+  role: Art
 ---

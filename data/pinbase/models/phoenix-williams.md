@@ -5,4 +5,15 @@ title_slug: phoenix-williams
 corporate_entity_slug: williams-electronics-incorporated
 opdb_id: GRQp6-MJ5Wq
 ipdb_id: 1780
+credit_refs:
+- person_slug: barry-oursler
+  role: Design
+- person_slug: constantino-mitchell
+  role: Art
+- person_slug: jeanine-mitchell
+  role: Art
+- person_slug: paul-dussault
+  role: Sound
+- person_slug: paul-dussault
+  role: Software
 ---

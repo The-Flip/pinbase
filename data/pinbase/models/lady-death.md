@@ -7,4 +7,7 @@ opdb_id: G417e-MJkoe
 ipdb_id: 3972
 converted_from: mata-hari-em
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

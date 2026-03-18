@@ -7,4 +7,7 @@ opdb_id: G4xlK-MJp6z
 ipdb_id: 4112
 converted_from: sky-dive
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

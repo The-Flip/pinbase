@@ -6,4 +6,7 @@ corporate_entity_slug: bell-coin-matics
 opdb_id: G4Od9-MDlpK
 ipdb_id: 3733
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

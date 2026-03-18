@@ -7,4 +7,7 @@ opdb_id: G59wx-MXrdl
 ipdb_id: 4015
 converted_from: evel-knievel-em
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

@@ -7,4 +7,7 @@ opdb_id: GrN7J-MQj62
 ipdb_id: 4016
 converted_from: eight-ball
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

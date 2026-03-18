@@ -13,7 +13,7 @@ display_type_slug: dot-matrix
 technology_generation_slug: solid-state
 system_slug: williams-wpc-s
 credit_refs:
-- person_slug: linda-deal-2
+- person_slug: linda-deal
   role: Art
 - person_slug: paul-barker
   role: Art

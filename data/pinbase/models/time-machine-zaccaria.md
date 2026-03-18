@@ -5,4 +5,7 @@ title_slug: time-machine-zaccaria
 corporate_entity_slug: zaccaria
 opdb_id: GRnoY-MQVwx
 ipdb_id: 3494
+credit_refs:
+- person_slug: lorenzo-rimondini
+  role: Art
 ---

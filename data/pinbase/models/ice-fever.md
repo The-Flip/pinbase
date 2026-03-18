@@ -5,4 +5,11 @@ title_slug: ice-fever
 corporate_entity_slug: premier-technology
 opdb_id: G43DV-MQYKB
 ipdb_id: 1260
+credit_refs:
+- person_slug: john-trudeau
+  role: Design
+- person_slug: larry-day
+  role: Art
+- person_slug: john-buras
+  role: Software
 ---

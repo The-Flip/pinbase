@@ -6,4 +6,7 @@ corporate_entity_slug: allied-leisure-industries-incorporated
 opdb_id: G5LOx-MDlR2
 ipdb_id: 3100
 cabinet_slug: cocktail
+credit_refs:
+- person_slug: r-michael-torrey
+  role: Art
 ---

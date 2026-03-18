@@ -6,4 +6,19 @@ corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GRzNR-MyNq8
 ipdb_id: 5940
 variant_of: the-avengers-premium
+credit_refs:
+- person_slug: george-gomez
+  role: Design
+- person_slug: mark-galvez
+  role: Dots/Animation
+- person_slug: tom-kyzivat
+  role: Dots/Animation
+- person_slug: david-thiel
+  role: Sound
+- person_slug: lonnie-d-ropp
+  role: Software
+- person_slug: mike-kyzivat
+  role: Software
+- person_slug: waison-cheng
+  role: Software
 ---

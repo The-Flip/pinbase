@@ -7,4 +7,7 @@ opdb_id: G43WO-MJYYV
 ipdb_id: 4110
 converted_from: space-orbit
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

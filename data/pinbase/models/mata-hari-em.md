@@ -5,4 +5,9 @@ title_slug: mata-hari-em
 corporate_entity_slug: bally-manufacturing-corporation
 opdb_id: G417e-Ml9ZE
 ipdb_id: 1557
+credit_refs:
+- person_slug: jim-patla
+  role: Design
+- person_slug: dave-christensen
+  role: Art
 ---

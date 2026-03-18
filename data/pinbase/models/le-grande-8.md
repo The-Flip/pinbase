@@ -7,4 +7,7 @@ opdb_id: G5bQq-MkPW7
 ipdb_id: 3916
 converted_from: panthera
 is_conversion: true
+credit_refs:
+- person_slug: agns-g-dusaugey
+  role: Art
 ---

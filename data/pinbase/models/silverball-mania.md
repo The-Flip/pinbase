@@ -5,4 +5,9 @@ title_slug: silverball-mania
 corporate_entity_slug: bally-manufacturing-corporation
 opdb_id: GRD2P-MDX5b
 ipdb_id: 2156
+credit_refs:
+- person_slug: jim-patla
+  role: Design
+- person_slug: kevin-oconnor
+  role: Art
 ---

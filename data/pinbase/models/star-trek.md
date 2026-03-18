@@ -5,4 +5,9 @@ title_slug: star-trek-bally
 corporate_entity_slug: bally-manufacturing-corporation
 opdb_id: GRVnd-MQZzx
 ipdb_id: 2355
+credit_refs:
+- person_slug: gary-gayton
+  role: Design
+- person_slug: kevin-oconnor
+  role: Art
 ---

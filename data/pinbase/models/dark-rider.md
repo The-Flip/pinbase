@@ -7,4 +7,7 @@ opdb_id: GRVnd-MLbOx
 ipdb_id: 3968
 converted_from: star-trek
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

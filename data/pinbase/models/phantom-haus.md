@@ -10,7 +10,7 @@ production_quantity: '50'
 technology_generation_slug: solid-state
 system_slug: wpc-95
 credit_refs:
-- person_slug: linda-deal-2
+- person_slug: linda-deal
   role: Art
 - person_slug: pete-piotrowski
   role: Design

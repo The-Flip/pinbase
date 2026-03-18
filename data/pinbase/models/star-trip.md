@@ -7,4 +7,9 @@ opdb_id: GRoW6-ME0Ro
 ipdb_id: 3605
 cabinet_slug: cocktail
 variant_of: family-fun
+credit_refs:
+- person_slug: ed-cebula
+  role: Design
+- person_slug: dick-white
+  role: Art
 ---

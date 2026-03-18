@@ -7,4 +7,7 @@ opdb_id: GRvzd-MD0r9
 ipdb_id: 4440
 converted_from: high-speed
 is_conversion: true
+credit_refs:
+- person_slug: michele-mike-martinelli
+  role: Art
 ---

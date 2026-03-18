@@ -13,7 +13,7 @@ display_type_slug: alphanumeric
 technology_generation_slug: solid-state
 system_slug: williams-system-11c
 credit_refs:
-- person_slug: linda-deal-2
+- person_slug: linda-deal
   role: Art
 - person_slug: pat-mcmahon
   role: Art

@@ -6,4 +6,9 @@ corporate_entity_slug: allied-leisure-industries-incorporated
 opdb_id: Gr83Y-MDlW2
 ipdb_id: 3823
 cabinet_slug: cocktail
+credit_refs:
+- person_slug: bob-betor
+  role: Design
+- person_slug: r-michael-torrey
+  role: Art
 ---

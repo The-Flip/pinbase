@@ -5,4 +5,7 @@ title_slug: pinball-champ
 corporate_entity_slug: zaccaria
 opdb_id: GrPdq-M9RRe
 ipdb_id: 1793
+credit_refs:
+- person_slug: lorenzo-rimondini
+  role: Art
 ---

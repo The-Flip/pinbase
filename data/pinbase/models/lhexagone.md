@@ -7,4 +7,7 @@ opdb_id: GRBKZ-MyNN8
 ipdb_id: 3903
 converted_from: genie
 is_conversion: true
+credit_refs:
+- person_slug: agns-g-dusaugey
+  role: Art
 ---

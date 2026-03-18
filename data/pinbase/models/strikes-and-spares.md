@@ -5,4 +5,9 @@ title_slug: strikes-and-spares
 corporate_entity_slug: bally-manufacturing-corporation
 opdb_id: GrleW-MYeod
 ipdb_id: 2406
+credit_refs:
+- person_slug: gary-gayton
+  role: Design
+- person_slug: kevin-oconnor
+  role: Art
 ---

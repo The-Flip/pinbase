@@ -5,4 +5,9 @@ title_slug: led-zeppelin
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: Gweel-ME0pP-ARqVK
 ipdb_id: 6761
+credit_refs:
+- person_slug: steve-ritchie
+  role: Design
+- person_slug: led-zeppelin
+  role: Music
 ---

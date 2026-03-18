@@ -5,4 +5,9 @@ title_slug: eight-ball
 corporate_entity_slug: bally-manufacturing-corporation
 opdb_id: GrN7J-MJ78q
 ipdb_id: 760
+credit_refs:
+- person_slug: george-christian
+  role: Design
+- person_slug: paul-faris
+  role: Art
 ---
