@@ -92,7 +92,7 @@ def _check_cross_references(records: list[PinbaseRecord]) -> list[str]:
     ref_checks: list[tuple[str, str, str]] = [
         # (source_entity_type, frontmatter_field, target_entity_type)
         ("model", "title_slug", "title"),
-        ("model", "manufacturer_slug", "manufacturer"),
+        ("model", "corporate_entity_slug", "corporate_entity"),
         ("model", "variant_of", "model"),
         ("model", "converted_from", "model"),
         ("model", "remake_of", "model"),

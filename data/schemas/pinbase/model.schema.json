@@ -5,7 +5,6 @@
   "description": "Frontmatter for a Pinbase-authored machine model record",
   "type": "object",
   "properties": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
     "title_slug": {
       "type": "string",
@@ -13,7 +12,7 @@
     },
     "opdb_id": { "type": ["string", "null"] },
     "ipdb_id": { "type": ["integer", "null"] },
-    "manufacturer_slug": {
+    "corporate_entity_slug": {
       "type": ["string", "null"],
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
@@ -87,6 +86,6 @@
       "default": []
     }
   },
-  "required": ["slug", "name", "title_slug"],
+  "required": ["name", "title_slug"],
   "additionalProperties": false
 }

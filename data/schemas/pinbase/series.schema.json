@@ -5,7 +5,6 @@
   "description": "Frontmatter for a Pinbase-authored series record",
   "type": "object",
   "properties": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
     "credit_refs": {
       "type": "array",
@@ -24,6 +23,6 @@
       "default": []
     }
   },
-  "required": ["slug", "name"],
+  "required": ["name"],
   "additionalProperties": false
 }

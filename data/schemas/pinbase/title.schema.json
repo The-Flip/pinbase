@@ -5,7 +5,6 @@
   "description": "Frontmatter for a Pinbase-authored title record",
   "type": "object",
   "properties": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
     "opdb_group_id": { "type": ["string", "null"] },
     "franchise_slug": {
@@ -27,6 +26,6 @@
       "description": "OPDB group ID this title was intentionally split from"
     }
   },
-  "required": ["slug", "name"],
+  "required": ["name"],
   "additionalProperties": false
 }

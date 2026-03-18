@@ -29,7 +29,7 @@ def main() -> int:
     # Group records by entity type.
     by_type: dict[str, list[dict]] = {}
     for r in iter_all(validate=False):
-        entry = dict(r.frontmatter)
+        entry = {"slug": r.slug, **r.frontmatter}
         if r.description:
             entry["description"] = r.description
         by_type.setdefault(r.entity_type, []).append(entry)

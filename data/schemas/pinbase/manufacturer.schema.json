@@ -5,8 +5,8 @@
   "description": "Frontmatter for a Pinbase-authored manufacturer record",
   "type": "object",
   "properties": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
+    "opdb_manufacturer_id": { "type": ["integer", "null"] },
     "aliases": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
@@ -14,6 +14,6 @@
       "default": []
     }
   },
-  "required": ["slug", "name"],
+  "required": ["name"],
   "additionalProperties": false
 }

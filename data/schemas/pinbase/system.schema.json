@@ -5,10 +5,9 @@
   "description": "Frontmatter for a Pinbase-authored system record",
   "type": "object",
   "properties": {
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
     "manufacturer_slug": {
-      "type": ["string", "null"],
+      "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "technology_subgeneration_slug": {
@@ -21,6 +20,6 @@
       "default": []
     }
   },
-  "required": ["slug", "name"],
+  "required": ["name", "manufacturer_slug"],
   "additionalProperties": false
 }
