@@ -273,6 +273,38 @@ LEFT JOIN (
 ) model_years ON model_years.ManufacturerId = h.ipdb_manufacturer_id;
 
 ------------------------------------------------------------
+-- Fandom staged
+------------------------------------------------------------
+
+-- Fandom games: extract structured fields from wikitext infobox
+CREATE OR REPLACE VIEW fandom_games_staged AS
+SELECT
+  page_id,
+  title AS fandom_name,
+  regexp_extract(wikitext, '\|manufacturer\s*=\s*\[\[([^\]]+)', 1) AS manufacturer,
+  regexp_extract(wikitext, '\|system\s*=\s*\[\[([^\]]+)', 1) AS system,
+  TRY_CAST(regexp_extract(wikitext, '\|release\s*=\s*.*?\[\[(\d{4})', 1) AS INTEGER) AS year,
+  TRY_CAST(replace(regexp_extract(wikitext, '\|production\s*=\s*([\d,]+)', 1), ',', '') AS INTEGER) AS production,
+  wikitext
+FROM fandom_games;
+
+-- Fandom manufacturers: extract fields from wikitext infobox
+CREATE OR REPLACE VIEW fandom_manufacturers_staged AS
+SELECT
+  page_id,
+  title AS fandom_name,
+  wikitext
+FROM fandom_manufacturers;
+
+-- Fandom persons: extract fields from wikitext
+CREATE OR REPLACE VIEW fandom_persons_staged AS
+SELECT
+  page_id,
+  title AS fandom_name,
+  wikitext
+FROM fandom_persons;
+
+------------------------------------------------------------
 -- Pinbase staged
 ------------------------------------------------------------
 
