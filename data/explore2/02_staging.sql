@@ -59,6 +59,33 @@ FROM opdb_machines AS om
 WHERE om.manufacturer IS NOT NULL
 ORDER BY "name";
 
+-- OPDB manufacturers mapped to pinbase manufacturer slugs.
+-- Uses exact name match, normalized match, or alias table.
+CREATE OR REPLACE VIEW opdb_manufacturers_mapped AS
+SELECT
+  om.opdb_manufacturer_id,
+  om.name AS opdb_name,
+  om.full_name AS opdb_full_name,
+  COALESCE(
+    m_exact.slug,
+    m_norm.slug,
+    alias.manufacturer_slug
+  ) AS manufacturer_slug
+FROM opdb_manufacturers om
+LEFT JOIN manufacturers m_exact
+  ON lower(m_exact.name) = lower(om.name)
+LEFT JOIN (
+  SELECT slug, normalize_mfr_name(name) AS norm_name
+  FROM manufacturers
+  WHERE normalize_mfr_name(name) != ''
+  QUALIFY count(*) OVER (PARTITION BY normalize_mfr_name(name)) = 1
+) m_norm
+  ON m_norm.norm_name = normalize_mfr_name(om.name)
+  AND m_exact.slug IS NULL
+LEFT JOIN ref_opdb_manufacturer_aliases alias
+  ON alias.opdb_manufacturer_id = om.opdb_manufacturer_id
+  AND m_exact.slug IS NULL AND m_norm.slug IS NULL;
+
 -- Unnested keywords per machine
 CREATE OR REPLACE VIEW opdb_keywords AS
 SELECT opdb_id, "name", unnest(keywords) AS keyword
@@ -218,16 +245,17 @@ LEFT JOIN (
     CASE WHEN h.trade_name != '' THEN h.trade_name ELSE h.company_name END
   )
   AND mfr_exact.slug IS NULL
--- Priority 3: majority vote from models
+-- Priority 3: majority vote from models (via corporate_entity → manufacturer)
 LEFT JOIN (
   SELECT
     im.ManufacturerId,
-    mod.manufacturer_slug,
+    ce.manufacturer_slug,
     count(*) AS cnt
   FROM ipdb_machines im
   JOIN models mod ON mod.ipdb_id = im.IpdbId
-  WHERE mod.manufacturer_slug IS NOT NULL
-  GROUP BY im.ManufacturerId, mod.manufacturer_slug
+  JOIN corporate_entities ce ON ce.slug = mod.corporate_entity_slug
+  WHERE ce.manufacturer_slug IS NOT NULL
+  GROUP BY im.ManufacturerId, ce.manufacturer_slug
   QUALIFY row_number() OVER (PARTITION BY im.ManufacturerId ORDER BY count(*) DESC) = 1
 ) mfr_from_models
   ON mfr_from_models.ManufacturerId = h.ipdb_manufacturer_id

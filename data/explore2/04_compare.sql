@@ -11,7 +11,8 @@ SELECT
   m.name AS pinbase_name,
   o.name AS opdb_name,
   m.name <> o.name AS name_differs,
-  m.manufacturer_slug AS pinbase_manufacturer,
+  m.corporate_entity_slug AS pinbase_corporate_entity,
+  ce.manufacturer_slug AS pinbase_manufacturer,
   o.manufacturer_name AS opdb_manufacturer,
   m.year AS pinbase_year,
   year(o.manufacture_date) AS opdb_year,
@@ -26,7 +27,8 @@ SELECT
   o.player_count AS opdb_players,
   m.opdb_id
 FROM models AS m
-INNER JOIN opdb_machines_staged AS o ON m.opdb_id = o.opdb_id;
+INNER JOIN opdb_machines_staged AS o ON m.opdb_id = o.opdb_id
+LEFT JOIN corporate_entities AS ce ON ce.slug = m.corporate_entity_slug;
 
 ------------------------------------------------------------
 -- Cross-source: models vs IPDB (by ipdb_id)
@@ -38,7 +40,8 @@ SELECT
   m.name AS pinbase_name,
   i.Title AS ipdb_name,
   m.name <> i.Title AS name_differs,
-  m.manufacturer_slug AS pinbase_manufacturer,
+  m.corporate_entity_slug AS pinbase_corporate_entity,
+  ce.manufacturer_slug AS pinbase_manufacturer,
   i.ManufacturerShortName AS ipdb_manufacturer,
   m.year AS pinbase_year,
   TRY_CAST(i.DateOfManufacture AS INTEGER) AS ipdb_year,
@@ -51,7 +54,8 @@ SELECT
   i.ProductionNumber AS ipdb_production,
   m.ipdb_id
 FROM models AS m
-INNER JOIN ipdb_machines_staged AS i ON m.ipdb_id = i.IpdbId;
+INNER JOIN ipdb_machines_staged AS i ON m.ipdb_id = i.IpdbId
+LEFT JOIN corporate_entities AS ce ON ce.slug = m.corporate_entity_slug;
 
 ------------------------------------------------------------
 -- Cross-source: titles vs OPDB groups (by opdb_group_id)
@@ -66,41 +70,6 @@ SELECT
   t.opdb_group_id
 FROM titles AS t
 INNER JOIN opdb_groups AS g ON t.opdb_group_id = g.opdb_id;
-
-------------------------------------------------------------
--- Model → Corporate Entity resolution
--- Derives the corporate_entity_slug each model should have.
--- 1. IPDB models: match via ManufacturerId → corporate_entity.ipdb_manufacturer_id
--- 2. OPDB-only models: match via manufacturer_slug → corporate_entity with same manufacturer_slug
---    (picks the one with no ipdb_manufacturer_id if multiple exist, else arbitrary)
-------------------------------------------------------------
-
-CREATE OR REPLACE VIEW model_corporate_entity AS
-SELECT
-  m.slug AS model_slug,
-  m.manufacturer_slug,
-  COALESCE(
-    ce_ipdb.slug,
-    ce_mfr.slug
-  ) AS corporate_entity_slug,
-  CASE
-    WHEN ce_ipdb.slug IS NOT NULL THEN 'ipdb'
-    WHEN ce_mfr.slug IS NOT NULL THEN 'manufacturer'
-    ELSE 'unresolved'
-  END AS resolution_method
-FROM models m
--- For IPDB models: model → ipdb_id → ipdb_machines.ManufacturerId → corporate_entity
-LEFT JOIN ipdb_machines im ON m.ipdb_id = im.IpdbId
-LEFT JOIN corporate_entities ce_ipdb
-  ON ce_ipdb.ipdb_manufacturer_id = im.ManufacturerId
--- Fallback: match via manufacturer_slug (for non-IPDB models or IPDB "Unknown Manufacturer")
-LEFT JOIN (
-  SELECT DISTINCT ON (manufacturer_slug) slug, manufacturer_slug
-  FROM corporate_entities
-  ORDER BY manufacturer_slug, ipdb_manufacturer_id NULLS FIRST
-) ce_mfr
-  ON ce_mfr.manufacturer_slug = m.manufacturer_slug
-  AND ce_ipdb.slug IS NULL;
 
 ------------------------------------------------------------
 -- Slug quality: name faithfulness
@@ -146,7 +115,7 @@ WITH
       m.name AS model_name,
       m.title_slug,
       m.ipdb_id,
-      m.manufacturer_slug,
+      m.corporate_entity_slug,
       m.year
     FROM models AS m
     WHERE m.slug <> m.title_slug
@@ -159,7 +128,7 @@ WITH
       m.name AS model_name,
       m.title_slug,
       m.ipdb_id,
-      m.manufacturer_slug,
+      m.corporate_entity_slug,
       m.year
     FROM models AS m
     WHERE m.slug = m.title_slug
@@ -169,14 +138,14 @@ SELECT
   -- The displaced (potentially popular) model
   d.model_slug AS displaced_slug,
   d.model_name AS displaced_name,
-  d.manufacturer_slug AS displaced_manufacturer,
+  d.corporate_entity_slug AS displaced_corporate_entity,
   d.year AS displaced_year,
   di.ProductionNumber AS displaced_production,
   di.AverageFunRating AS displaced_rating,
   -- The model holding the prime slug
   p.model_slug AS prime_slug,
   p.model_name AS prime_name,
-  p.manufacturer_slug AS prime_manufacturer,
+  p.corporate_entity_slug AS prime_corporate_entity,
   p.year AS prime_year,
   pi.ProductionNumber AS prime_production,
   pi.AverageFunRating AS prime_rating

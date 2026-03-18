@@ -172,6 +172,73 @@ SELECT * FROM (VALUES
   (135, 'Avenza',            NULL,        'Italy')
 ) AS t(ipdb_manufacturer_id, headquarters_city, headquarters_state, headquarters_country);
 
+-- OPDB manufacturer ID → pinbase manufacturer slug mapping.
+-- For OPDB manufacturers whose name doesn't match a pinbase manufacturer
+-- (renames, merges, different brand names).
+CREATE OR REPLACE VIEW ref_opdb_manufacturer_aliases AS
+SELECT * FROM (VALUES
+  (25,  'alvin-g'),                -- Alvin G. & Co → Alvin G.
+  (37,  'bell-coin-matics'),       -- Bell Coin Matic → Bell Coin Matics
+  (149, 'bem'),                    -- Bigliardini Elettronici Milano → BEM
+  (82,  'century-consolidated-industries-company'), -- Cisco
+  (71,  'coffee-mat'),             -- Coffee Mat → Coffee-Mat
+  (19,  'esco'),                   -- Exhibit → ESCO
+  (65,  'fascination-int-incorporated'), -- Fascination Game
+  (50,  'komplett-flipper'),       -- Geiger → Komplett Flipper
+  (63,  'giorgio-massiero'),       -- Giorgio Massiniero → Giorgio Massiero
+  (138, 'ice'),                    -- Innovative Concepts (ICE) → ICE
+  (31,  'international-concepts'), -- International → International Concepts
+  (104, 'christian-tabart'),       -- K.C. Tabart → Christian Tabart
+  (55,  'komplett-flipper'),       -- Komplett → Komplett Flipper
+  (44,  'mac-sa'),                 -- Maguinas / Mac Pinball → MAC S.A.
+  (108, 'marsaplay'),              -- Marsa Play → MarsaPlay
+  (28,  'mr-game'),                -- Mr Game → Mr. Game
+  (113, 'pmi'),                    -- Pinball Manufacturing Inc. → PMI
+  (66,  'playmec'),                -- Playmec Flippers → Playmec
+  (56,  'the-valley-company-subsidiary-of-walter-kidde-company-incorporated'), -- Valley
+  (94,  'viza-mfg-inc')           -- Viza Manufacturing → Viza Mfg., Inc.
+) AS t(opdb_manufacturer_id, manufacturer_slug);
+
+-- Approved OPDB↔pinbase manufacturer disagreements.
+-- Cases where OPDB attributes a model to one manufacturer but pinbase
+-- correctly uses a different one (verified by research).
+-- (opdb_manufacturer_id, pinbase_manufacturer_slug, reason)
+CREATE OR REPLACE VIEW ref_opdb_manufacturer_exceptions AS
+SELECT * FROM (VALUES
+  -- Segasa (15) vs Sonic: OPDB uses "Segasa" for post-rebrand games that
+  -- were actually branded "Sonic" (Segasa d.b.a. Sonic). IPDB is correct.
+  (15, 'sonic', 'OPDB uses parent name Segasa for Sonic-branded games'),
+  -- Geiger (50) vs Komplett Flipper: Geiger-Automatenbau GmbH = A.H. Geiger Co.
+  -- = Komplett Flipper brand. OPDB uses company name, pinbase uses brand.
+  (50, 'komplett-flipper', 'OPDB uses Geiger for Komplett Flipper brand'),
+  -- Geiger (50) vs Professional Pinball: OPDB misattributes Challenger to Geiger
+  (50, 'professional-pinball', 'OPDB misattributes to Geiger; IPDB says Professional Pinball'),
+  -- Spooky Pinball (95) vs The Pinball Company: Jetsons was designed by
+  -- The Pinball Company and manufactured by Spooky. IPDB credits designer.
+  (95, 'the-pinball-company', 'Collaboration: designed by TPC, manufactured by Spooky'),
+  -- Brunswick (40) vs Briarwood: Briarwood was a division of Brunswick.
+  -- OPDB uses parent company name.
+  (40, 'briarwood', 'OPDB uses parent Brunswick for Briarwood division games'),
+  -- Midway (14) vs Bally: some Bally games manufactured by Midway.
+  -- OPDB uses Midway, IPDB credits Bally.
+  (14, 'bally', 'OPDB uses Midway for Bally-branded game'),
+  -- Gottlieb (2) vs Alben: Alben was a French manufacturer/licensee.
+  -- OPDB uses Gottlieb, IPDB credits Alben.
+  (2, 'alben', 'OPDB uses Gottlieb for Alben-manufactured game'),
+  -- Bell Games (20) vs Bell Coin Matics: related companies.
+  (20, 'bell-coin-matics', 'OPDB uses Bell Games for Bell Coin Matics game'),
+  -- Chicago Coin (3) vs Chicago Gaming: different eras of Chicago-based companies.
+  (3, 'chicago-gaming', 'OPDB uses Chicago Coin for Chicago Gaming game'),
+  -- Cic Play (4) vs Sentinel: related companies.
+  (4, 'sentinel', 'OPDB uses Cic Play for Sentinel game'),
+  -- Allied Leisure (49) vs LAI: LAI = Leisure & Allied Industries (Australian).
+  (49, 'lai', 'OPDB uses Allied Leisure for LAI game'),
+  -- Joctronic (90) vs Jocmatic: related Spanish companies.
+  (90, 'jocmatic-sa', 'OPDB uses Joctronic for Jocmatic game'),
+  -- Taito (73) vs Mecatronics: Brazilian Taito division.
+  (73, 'mecatronics-aka-taito-brazil-a-division-of-taito', 'OPDB uses Taito for Brazilian division')
+) AS t(opdb_manufacturer_id, manufacturer_slug, reason);
+
 ------------------------------------------------------------
 -- External source dumps (data/dump1/)
 ------------------------------------------------------------

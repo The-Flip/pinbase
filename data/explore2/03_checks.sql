@@ -59,12 +59,12 @@ FROM titles AS t
 WHERE t.series_slug IS NOT NULL
   AND NOT EXISTS (SELECT 1 FROM series AS s WHERE s.slug = t.series_slug);
 
--- Orphan references: model -> manufacturer
+-- Orphan references: model -> corporate entity
 INSERT INTO _violations
-SELECT 'orphan_model_manufacturer', m.slug || ' -> ' || m.manufacturer_slug
+SELECT 'orphan_model_corporate_entity', m.slug || ' -> ' || m.corporate_entity_slug
 FROM models AS m
-WHERE m.manufacturer_slug IS NOT NULL
-  AND NOT EXISTS (SELECT 1 FROM manufacturers AS mfr WHERE mfr.slug = m.manufacturer_slug);
+WHERE m.corporate_entity_slug IS NOT NULL
+  AND NOT EXISTS (SELECT 1 FROM corporate_entities AS ce WHERE ce.slug = m.corporate_entity_slug);
 
 -- Orphan references: model -> cabinet
 INSERT INTO _violations
@@ -277,6 +277,41 @@ WHERE m.ipdb_id IS NOT NULL
   AND om.ipdb_id IS NOT NULL
   AND m.ipdb_id != om.ipdb_id;
 
+-- If IPDB has a manufacturer ID for a model, the model's CE must have the
+-- same ipdb_manufacturer_id (i.e. pinbase and IPDB agree on the corporate entity)
+INSERT INTO _violations
+SELECT 'ce_ipdb_disagreement',
+  m.slug || ' pinbase_ce=' || m.corporate_entity_slug
+  || ' ipdb_mfr_id=' || im.ManufacturerId
+  || ' ce_ipdb_id=' || COALESCE(CAST(ce.ipdb_manufacturer_id AS VARCHAR), 'NULL')
+FROM models AS m
+JOIN ipdb_machines AS im ON m.ipdb_id = im.IpdbId
+LEFT JOIN corporate_entities AS ce ON ce.slug = m.corporate_entity_slug
+WHERE m.corporate_entity_slug IS NOT NULL
+  AND im.ManufacturerId != 328  -- exclude Unknown Manufacturer
+  AND (ce.ipdb_manufacturer_id IS NULL OR ce.ipdb_manufacturer_id != im.ManufacturerId);
+
+-- If OPDB has a manufacturer ID for a model, the model's CE must point at
+-- a manufacturer whose opdb_manufacturer_id matches OPDB's manufacturer ID
+INSERT INTO _violations
+SELECT 'ce_opdb_manufacturer_disagreement',
+  m.slug || ' opdb_mfr_id=' || (om.manufacturer ->> 'manufacturer_id')
+  || ' pinbase_mfr=' || mfr.slug
+  || ' mfr_opdb_id=' || COALESCE(CAST(mfr.opdb_manufacturer_id AS VARCHAR), 'NULL')
+FROM models AS m
+JOIN opdb_machines AS om ON m.opdb_id = om.opdb_id
+LEFT JOIN corporate_entities AS ce ON ce.slug = m.corporate_entity_slug
+LEFT JOIN manufacturers AS mfr ON mfr.slug = ce.manufacturer_slug
+WHERE m.corporate_entity_slug IS NOT NULL
+  AND om.manufacturer IS NOT NULL
+  AND (mfr.opdb_manufacturer_id IS NULL
+    OR mfr.opdb_manufacturer_id != (om.manufacturer ->> 'manufacturer_id')::INT)
+  AND NOT EXISTS (
+    SELECT 1 FROM ref_opdb_manufacturer_exceptions ex
+    WHERE ex.opdb_manufacturer_id = (om.manufacturer ->> 'manufacturer_id')::INT
+      AND ex.manufacturer_slug = mfr.slug
+  );
+
 -- Source dump integrity: every OPDB record must have an opdb_id
 INSERT INTO _violations
 SELECT 'opdb_record_missing_id', name
@@ -305,8 +340,8 @@ WHERE m.ipdb_id IS NOT NULL
   AND NOT EXISTS (SELECT 1 FROM ipdb_machines AS i WHERE i.IpdbId = m.ipdb_id);
 
 INSERT INTO _warnings
-SELECT 'models_missing_manufacturer', count(*)
-FROM models WHERE manufacturer_slug IS NULL;
+SELECT 'models_missing_corporate_entity', count(*)
+FROM models WHERE corporate_entity_slug IS NULL;
 
 INSERT INTO _warnings
 SELECT 'titles_missing_opdb_group', count(*)
