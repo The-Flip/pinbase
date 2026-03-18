@@ -1,5 +1,4 @@
 ---
-slug: wizard-ball-game
 name: Wizard Ball Game
 title_slug: wizard-ball-game
 ipdb_id: 4690

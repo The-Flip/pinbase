@@ -1,5 +1,4 @@
 ---
-slug: aspen-2
 name: Aspen
 title_slug: aspen-2
 ipdb_id: 6653

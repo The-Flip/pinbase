@@ -1,5 +1,4 @@
 ---
-slug: sinbad-adventures
 name: Sinbad Adventures
 title_slug: sinbad
 opdb_id: G4xqN-MJ5bK

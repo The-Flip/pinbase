@@ -1,5 +1,4 @@
 ---
-slug: high-flyer
 name: High Flyer
 title_slug: high-flyer
 ipdb_id: 3145

@@ -1,5 +1,4 @@
 ---
-slug: alaska-3
 name: Alaska (EM)
 title_slug: alaska
 opdb_id: G42zD-M85KY-A1BWl

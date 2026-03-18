@@ -1,4 +1,3 @@
 ---
-slug: hypergamy
 name: Hypergamy
 ---

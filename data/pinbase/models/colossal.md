@@ -1,5 +1,4 @@
 ---
-slug: colossal
 name: Colossal
 title_slug: colossal
 ipdb_id: 4164

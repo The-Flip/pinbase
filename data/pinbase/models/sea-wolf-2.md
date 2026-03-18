@@ -1,5 +1,4 @@
 ---
-slug: sea-wolf-2
 name: Sea Wolf
 title_slug: sea-wolf-2
 ipdb_id: 6283

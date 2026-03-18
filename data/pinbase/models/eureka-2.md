@@ -1,5 +1,4 @@
 ---
-slug: eureka-2
 name: Eureka
 title_slug: eureka-2
 ipdb_id: 792

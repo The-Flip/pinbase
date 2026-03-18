@@ -1,4 +1,3 @@
 ---
-slug: zoom
 name: Zoom
 ---

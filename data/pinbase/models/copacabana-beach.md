@@ -1,5 +1,4 @@
 ---
-slug: copacabana-beach
 name: Copacabana Beach
 title_slug: copacabana-beach
 ipdb_id: 6305

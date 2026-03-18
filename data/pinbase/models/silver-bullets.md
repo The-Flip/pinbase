@@ -1,5 +1,4 @@
 ---
-slug: silver-bullets
 name: Silver Bullets
 title_slug: silver-bullets
 ipdb_id: 6388

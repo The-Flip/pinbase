@@ -1,5 +1,4 @@
 ---
-slug: captain-kidd-3
 name: Captain Kidd
 title_slug: captain-kidd
 opdb_id: G41YP-MJ6Op

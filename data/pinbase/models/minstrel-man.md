@@ -1,5 +1,4 @@
 ---
-slug: minstrel-man
 name: Minstrel Man
 title_slug: minstrel-man
 opdb_id: G4xx7-MDOpj

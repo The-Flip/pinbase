@@ -1,5 +1,4 @@
 ---
-slug: caravan-2
 name: Caravan
 title_slug: caravan-2
 opdb_id: G5W2D-MePB0

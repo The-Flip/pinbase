@@ -1,5 +1,4 @@
 ---
-slug: betcha-ball-2
 name: Betcha-Ball
 title_slug: betcha-ball
 ipdb_id: 6925

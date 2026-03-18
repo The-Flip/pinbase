@@ -1,5 +1,4 @@
 ---
-slug: title-fight
 name: Title Fight
 title_slug: title-fight
 opdb_id: G4Xw9-MQ7K4

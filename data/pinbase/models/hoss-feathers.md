@@ -1,5 +1,4 @@
 ---
-slug: hoss-feathers
 name: Hoss-Feathers
 title_slug: hoss-feathers
 ipdb_id: 6286

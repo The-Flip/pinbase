@@ -1,5 +1,4 @@
 ---
-slug: split-second
 name: Split Second
 title_slug: split-second
 opdb_id: GRLbz-MDnxo

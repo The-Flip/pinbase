@@ -1,5 +1,4 @@
 ---
-slug: les-etoiles
 name: Les Étoiles
 title_slug: les-etoiles
 ipdb_id: 6147

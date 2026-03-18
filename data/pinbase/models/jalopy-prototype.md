@@ -1,5 +1,4 @@
 ---
-slug: jalopy-prototype
 name: Jalopy (Prototype)
 title_slug: jalopy-prototype
 ipdb_id: 6777

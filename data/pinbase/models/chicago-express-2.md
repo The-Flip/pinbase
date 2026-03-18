@@ -1,5 +1,4 @@
 ---
-slug: chicago-express-2
 name: Chicago Express
 title_slug: chicago-express-2
 ipdb_id: 3013

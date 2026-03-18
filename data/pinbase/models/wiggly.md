@@ -1,5 +1,4 @@
 ---
-slug: wiggly
 name: Wiggly
 title_slug: wiggly
 ipdb_id: 4659

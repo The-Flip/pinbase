@@ -1,4 +1,3 @@
 ---
-slug: centennial
 name: Centennial
 ---

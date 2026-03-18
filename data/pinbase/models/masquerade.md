@@ -1,5 +1,4 @@
 ---
-slug: masquerade
 name: Masquerade
 title_slug: masquerade
 opdb_id: GrjYo-MBRqZ

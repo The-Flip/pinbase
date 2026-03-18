@@ -1,5 +1,4 @@
 ---
-slug: shuffle
 name: Shuffle
 display_order: 3
 ---

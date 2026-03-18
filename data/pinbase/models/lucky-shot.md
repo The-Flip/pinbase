@@ -1,5 +1,4 @@
 ---
-slug: lucky-shot
 name: Lucky Shot
 title_slug: lucky-shot
 opdb_id: Gr2oD-MZell

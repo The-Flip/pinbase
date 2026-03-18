@@ -1,5 +1,4 @@
 ---
-slug: skeet-shoot
 name: Skeet Shoot
 title_slug: skeet-shoot
 ipdb_id: 6992

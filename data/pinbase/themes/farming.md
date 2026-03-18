@@ -1,4 +1,3 @@
 ---
-slug: farming
 name: Farming
 ---

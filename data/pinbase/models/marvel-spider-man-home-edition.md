@@ -1,5 +1,4 @@
 ---
-slug: marvel-spider-man-home-edition
 name: Spider-Man (Home Edition)
 title_slug: spider-man-home-edition
 opdb_id: G2Ld3-MnKE5

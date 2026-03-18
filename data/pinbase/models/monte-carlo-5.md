@@ -1,5 +1,4 @@
 ---
-slug: monte-carlo-5
 name: Monte Carlo
 title_slug: lucky-man-monte-carlo
 opdb_id: G5wLN-MQo7X

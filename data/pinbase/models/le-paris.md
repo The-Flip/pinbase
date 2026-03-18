@@ -1,5 +1,4 @@
 ---
-slug: le-paris
 name: Le Paris
 title_slug: le-paris
 ipdb_id: 6174

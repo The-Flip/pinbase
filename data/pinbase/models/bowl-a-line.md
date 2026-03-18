@@ -1,5 +1,4 @@
 ---
-slug: bowl-a-line
 name: Bowl-A-Line
 title_slug: bowl-a-line-2
 ipdb_id: 4529

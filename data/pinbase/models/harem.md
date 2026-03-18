@@ -1,5 +1,4 @@
 ---
-slug: harem
 name: Harem
 title_slug: harem-2
 ipdb_id: 1123

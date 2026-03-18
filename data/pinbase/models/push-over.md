@@ -1,5 +1,4 @@
 ---
-slug: push-over
 name: Push-Over
 title_slug: push-over
 ipdb_id: 1878

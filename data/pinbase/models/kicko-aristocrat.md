@@ -1,5 +1,4 @@
 ---
-slug: kicko-aristocrat
 name: Kicko Aristocrat
 title_slug: kicko-aristocrat
 ipdb_id: 6984

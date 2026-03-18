@@ -1,5 +1,4 @@
 ---
-slug: lite-o-card
 name: Lite-O-Card
 title_slug: lite-o-card
 ipdb_id: 1457

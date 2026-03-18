@@ -1,5 +1,4 @@
 ---
-slug: master-stroke-2
 name: Master Stroke
 title_slug: master-stroke-2
 ipdb_id: 5928

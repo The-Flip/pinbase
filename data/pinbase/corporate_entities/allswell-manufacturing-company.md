@@ -1,5 +1,4 @@
 ---
-slug: allswell-manufacturing-company
 name: Allswell Manufacturing Company
 manufacturer_slug: allswell-manufacturing-company
 ipdb_manufacturer_id: 19

@@ -1,5 +1,4 @@
 ---
-slug: having-fun
 name: Having Fun
 title_slug: having-fun
 ipdb_id: 6329

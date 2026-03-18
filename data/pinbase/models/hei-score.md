@@ -1,5 +1,4 @@
 ---
-slug: hei-score
 name: Hei-Score
 title_slug: hei-score
 ipdb_id: 6708

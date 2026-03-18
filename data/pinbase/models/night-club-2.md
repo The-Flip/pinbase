@@ -1,5 +1,4 @@
 ---
-slug: night-club-2
 name: Night Club
 title_slug: night-club-2
 ipdb_id: 5003

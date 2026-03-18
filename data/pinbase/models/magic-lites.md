@@ -1,5 +1,4 @@
 ---
-slug: magic-lites
 name: Magic Lites
 title_slug: magic-lites
 ipdb_id: 3447

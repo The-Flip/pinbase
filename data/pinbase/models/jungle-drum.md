@@ -1,5 +1,4 @@
 ---
-slug: jungle-drum
 name: Jungle Drum
 title_slug: jungle-drum
 ipdb_id: 5959

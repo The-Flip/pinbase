@@ -1,5 +1,4 @@
 ---
-slug: sharp-shooter-ii
 name: Sharp Shooter II
 title_slug: sharp-shooter-ii
 opdb_id: Gr8KB-MLqYW

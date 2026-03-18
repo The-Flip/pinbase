@@ -1,5 +1,4 @@
 ---
-slug: gold-wings-2
 name: Gold Wings
 title_slug: gold-wings-2
 ipdb_id: 6689

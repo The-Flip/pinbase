@@ -1,5 +1,4 @@
 ---
-slug: target-gallery-2
 name: Target Gallery
 title_slug: target-gallery
 ipdb_id: 5087

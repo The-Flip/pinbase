@@ -1,5 +1,4 @@
 ---
-slug: prospector
 name: Prospector
 title_slug: prospector
 opdb_id: Grlzn-MLxnK

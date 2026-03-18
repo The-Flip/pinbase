@@ -1,5 +1,4 @@
 ---
-slug: alert
 name: Alert
 title_slug: alert
 ipdb_id: 3830

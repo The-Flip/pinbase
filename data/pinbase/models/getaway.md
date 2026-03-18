@@ -1,5 +1,4 @@
 ---
-slug: getaway
 name: Getaway
 title_slug: getaway
 opdb_id: G4jzK-MRjN0

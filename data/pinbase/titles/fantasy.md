@@ -1,4 +1,3 @@
 ---
-slug: fantasy
 name: Fantasy
 ---

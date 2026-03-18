@@ -1,5 +1,4 @@
 ---
-slug: one-ball-bonus-multiplier
 name: One Ball Bonus Multiplier
 title_slug: one-ball-bonus-multiplier
 ipdb_id: 6091

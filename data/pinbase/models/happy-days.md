@@ -1,5 +1,4 @@
 ---
-slug: happy-days
 name: Happy Days
 title_slug: happy-days
 opdb_id: Grl1L-MJZyq

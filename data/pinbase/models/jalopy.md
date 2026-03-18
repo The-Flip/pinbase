@@ -1,5 +1,4 @@
 ---
-slug: jalopy
 name: Jalopy
 title_slug: hayburners-jalopy
 opdb_id: GRojj-MeP3R

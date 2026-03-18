@@ -1,5 +1,4 @@
 ---
-slug: play-boy-sr
 name: Play-Boy, Sr.
 title_slug: play-boy-sr
 ipdb_id: 1825

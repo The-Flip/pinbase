@@ -1,4 +1,3 @@
 ---
-slug: nuclear
 name: Nuclear
 ---

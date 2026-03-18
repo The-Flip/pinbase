@@ -1,5 +1,4 @@
 ---
-slug: quintuplet
 name: Quintuplet
 title_slug: quintuplet
 ipdb_id: 3528

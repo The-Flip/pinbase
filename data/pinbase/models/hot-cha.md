@@ -1,5 +1,4 @@
 ---
-slug: hot-cha
 name: Hot Cha!
 title_slug: hot-cha
 ipdb_id: 1241

@@ -1,4 +1,3 @@
 ---
-slug: futurity
 name: Futurity
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bali
 name: Bali
 title_slug: bali
 ipdb_id: 134

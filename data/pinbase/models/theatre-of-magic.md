@@ -1,5 +1,4 @@
 ---
-slug: theatre-of-magic
 name: Theatre of Magic
 title_slug: theatre-of-magic
 opdb_id: G5BLE-MQ75Y

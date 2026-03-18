@@ -1,5 +1,4 @@
 ---
-slug: cherokee-rose
 name: Cherokee Rose
 title_slug: cherokee-rose
 ipdb_id: 5530

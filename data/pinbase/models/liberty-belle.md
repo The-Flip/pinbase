@@ -1,5 +1,4 @@
 ---
-slug: liberty-belle
 name: Liberty Belle
 title_slug: liberty-belle
 opdb_id: G4Xbk-MQ6d3

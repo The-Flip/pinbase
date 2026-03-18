@@ -1,5 +1,4 @@
 ---
-slug: magnotron
 name: Magnotron
 title_slug: magnotron-duotron
 opdb_id: G57OL-MDqr7

@@ -1,5 +1,4 @@
 ---
-slug: american-keen-ball-game
 name: American Keen Ball Game
 title_slug: american-keen-ball-game
 ipdb_id: 4821

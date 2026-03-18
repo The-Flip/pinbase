@@ -1,5 +1,4 @@
 ---
-slug: the-six-million-dollar-man
 name: Six Million Dollar Man
 title_slug: six-million-dollar-man
 opdb_id: GrEke-ML8qN

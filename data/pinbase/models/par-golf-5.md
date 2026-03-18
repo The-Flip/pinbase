@@ -1,5 +1,4 @@
 ---
-slug: par-golf-5
 name: Par Golf
 title_slug: par-golf-4
 ipdb_id: 6783

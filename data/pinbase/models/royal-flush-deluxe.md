@@ -1,5 +1,4 @@
 ---
-slug: royal-flush-deluxe
 name: Royal Flush Deluxe
 title_slug: royal-flush-deluxe
 opdb_id: GRwlz-MQYZN

@@ -1,5 +1,4 @@
 ---
-slug: happy-go-lucky
 name: Happy-Go-Lucky
 title_slug: happy-go-lucky
 opdb_id: GRVJw-MJprP

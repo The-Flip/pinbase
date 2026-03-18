@@ -1,5 +1,4 @@
 ---
-slug: lets-go-moon
 name: Let's Go Moon!
 title_slug: lets-go-moon
 ipdb_id: 6773

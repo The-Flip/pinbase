@@ -1,5 +1,4 @@
 ---
-slug: triple-action-3
 name: Triple Action
 title_slug: triple-action
 opdb_id: GO0bK-M9Rep

@@ -1,5 +1,4 @@
 ---
-slug: deuces-wild
 name: Deuces Wild
 title_slug: deuces-wild
 ipdb_id: 671

@@ -1,5 +1,4 @@
 ---
-slug: polo
 name: Polo
 title_slug: polo-mini-cycle
 opdb_id: G59j7-MDE8v

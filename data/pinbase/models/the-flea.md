@@ -1,5 +1,4 @@
 ---
-slug: the-flea
 name: The Flea
 title_slug: the-flea
 ipdb_id: 3102

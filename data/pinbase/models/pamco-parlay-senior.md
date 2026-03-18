@@ -1,5 +1,4 @@
 ---
-slug: pamco-parlay-senior
 name: Pamco Parlay Senior
 title_slug: pamco-parlay-senior
 ipdb_id: 5597

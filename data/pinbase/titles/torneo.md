@@ -1,4 +1,3 @@
 ---
-slug: torneo
 name: Torneo
 ---

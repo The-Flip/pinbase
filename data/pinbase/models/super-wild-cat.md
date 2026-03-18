@@ -1,5 +1,4 @@
 ---
-slug: super-wild-cat
 name: Super Wild Cat
 title_slug: super-wild-cat
 ipdb_id: 6968

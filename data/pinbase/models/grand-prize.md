@@ -1,5 +1,4 @@
 ---
-slug: grand-prize
 name: Grand Prize
 title_slug: grand-prize
 ipdb_id: 1073

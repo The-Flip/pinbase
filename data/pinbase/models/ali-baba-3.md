@@ -1,5 +1,4 @@
 ---
-slug: ali-baba-3
 name: Ali-Baba
 title_slug: ali-baba-3
 ipdb_id: 46

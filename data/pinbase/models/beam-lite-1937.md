@@ -1,5 +1,4 @@
 ---
-slug: beam-lite-1937
 name: Beam-Lite 1937
 title_slug: beam-lite-1937
 ipdb_id: 2850

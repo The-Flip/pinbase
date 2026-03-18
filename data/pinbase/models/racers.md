@@ -1,5 +1,4 @@
 ---
-slug: racers
 name: Racers
 title_slug: racers
 opdb_id: G41XE-MQ57V

@@ -1,5 +1,4 @@
 ---
-slug: las-vegas-5
 name: Las Vegas
 title_slug: las-vegas-5
 ipdb_id: 5499

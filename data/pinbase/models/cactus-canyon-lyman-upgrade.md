@@ -1,5 +1,4 @@
 ---
-slug: cactus-canyon-lyman-upgrade
 name: Cactus Canyon (Lyman Upgrade)
 title_slug: cactus-canyon-remake
 opdb_id: G4835-M2YPK-ARkb7

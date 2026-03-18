@@ -1,5 +1,4 @@
 ---
-slug: high-hand-2
 name: High Hand
 title_slug: high-hand-capt-card
 opdb_id: GRYbJ-MnKex

@@ -1,5 +1,4 @@
 ---
-slug: dealer-3
 name: Dealer
 title_slug: dealer-3
 ipdb_id: 4230

@@ -1,5 +1,4 @@
 ---
-slug: mills-pay-table
 name: Mills Pay Table
 title_slug: mills-pay-table
 ipdb_id: 1600

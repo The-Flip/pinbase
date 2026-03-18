@@ -1,5 +1,4 @@
 ---
-slug: barrel-roll
 name: Barrel Roll
 title_slug: barrel-roll
 ipdb_id: 179

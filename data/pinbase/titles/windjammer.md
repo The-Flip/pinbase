@@ -1,4 +1,3 @@
 ---
-slug: windjammer
 name: Windjammer
 ---

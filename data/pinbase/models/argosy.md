@@ -1,5 +1,4 @@
 ---
-slug: argosy
 name: Argosy
 title_slug: argosy
 opdb_id: Gr31Y-MQ9bZ

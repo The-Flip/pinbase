@@ -1,5 +1,4 @@
 ---
-slug: spring-ball
 name: Spring Ball
 title_slug: spring-ball
 ipdb_id: 4208

@@ -1,5 +1,4 @@
 ---
-slug: dixie-music-co
 name: Dixie Music Co.
 manufacturer_slug: shayne-dixie-music-co
 ipdb_manufacturer_id: 105

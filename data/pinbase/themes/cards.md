@@ -1,4 +1,3 @@
 ---
-slug: cards
 name: Cards
 ---

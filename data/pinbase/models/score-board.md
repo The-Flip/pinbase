@@ -1,5 +1,4 @@
 ---
-slug: score-board
 name: Score Board
 title_slug: score-board-2
 ipdb_id: 2062

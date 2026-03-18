@@ -1,5 +1,4 @@
 ---
-slug: pioneer
 name: Pioneer
 title_slug: spirit-of-76-pioneer-new-york
 opdb_id: GrlPK-MXrXw

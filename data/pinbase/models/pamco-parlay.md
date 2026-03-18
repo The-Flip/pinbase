@@ -1,5 +1,4 @@
 ---
-slug: pamco-parlay
 name: Pamco Parlay
 title_slug: pamco-parlay
 ipdb_id: 1760

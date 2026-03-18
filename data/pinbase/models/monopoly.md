@@ -1,5 +1,4 @@
 ---
-slug: monopoly
 name: Monopoly
 title_slug: monopoly
 opdb_id: G48w3-Mq1Zk

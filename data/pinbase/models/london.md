@@ -1,5 +1,4 @@
 ---
-slug: london
 name: London
 title_slug: london
 ipdb_id: 3218

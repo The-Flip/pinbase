@@ -1,5 +1,4 @@
 ---
-slug: transcontinental-2
 name: Transcontinental
 title_slug: transcontinental-2
 ipdb_id: 4834

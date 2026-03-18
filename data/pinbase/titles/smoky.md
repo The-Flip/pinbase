@@ -1,4 +1,3 @@
 ---
-slug: smoky
 name: Smoky
 ---

@@ -1,5 +1,4 @@
 ---
-slug: airway
 name: Airway
 title_slug: airway
 ipdb_id: 37

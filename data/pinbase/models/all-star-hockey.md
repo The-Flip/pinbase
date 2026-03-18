@@ -1,5 +1,4 @@
 ---
-slug: all-star-hockey
 name: All Star Hockey
 title_slug: all-star-hockey
 ipdb_id: 3152

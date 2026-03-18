@@ -1,5 +1,4 @@
 ---
-slug: bad-cats
 name: Bad Cats
 title_slug: bad-cats
 opdb_id: GrEBz-MBR3N

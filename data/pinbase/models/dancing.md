@@ -1,5 +1,4 @@
 ---
-slug: dancing
 name: Dancing
 title_slug: dancing
 ipdb_id: 4630

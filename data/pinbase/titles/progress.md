@@ -1,4 +1,3 @@
 ---
-slug: progress
 name: Progress
 ---

@@ -1,5 +1,4 @@
 ---
-slug: kasandra
 name: Kasandra
 title_slug: kasandra
 ipdb_id: 5529

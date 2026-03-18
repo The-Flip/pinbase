@@ -1,5 +1,4 @@
 ---
-slug: bonus
 name: Bonus
 title_slug: bonus
 ipdb_id: 4223

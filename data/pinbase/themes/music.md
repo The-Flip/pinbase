@@ -1,4 +1,3 @@
 ---
-slug: music
 name: Music
 ---

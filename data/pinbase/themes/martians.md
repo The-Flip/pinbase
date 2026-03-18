@@ -1,4 +1,3 @@
 ---
-slug: martians
 name: Martians
 ---

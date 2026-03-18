@@ -1,5 +1,4 @@
 ---
-slug: sega-pinball-incorporated
 name: Sega Pinball, Incorporated
 manufacturer_slug: sega
 ipdb_manufacturer_id: 280

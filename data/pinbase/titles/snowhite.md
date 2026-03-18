@@ -1,4 +1,3 @@
 ---
-slug: snowhite
 name: Snowhite
 ---

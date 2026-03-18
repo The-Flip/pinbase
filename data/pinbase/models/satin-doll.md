@@ -1,5 +1,4 @@
 ---
-slug: satin-doll
 name: Satin Doll
 title_slug: pat-hand-satin-doll
 opdb_id: G48YQ-MDxbK

@@ -1,5 +1,4 @@
 ---
-slug: prototype
 name: Prototype
 display_order: 2
 ---

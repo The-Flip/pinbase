@@ -1,5 +1,4 @@
 ---
-slug: treasure
 name: Treasure
 title_slug: treasure
 ipdb_id: 5284

@@ -1,5 +1,4 @@
 ---
-slug: dale-jr
 name: Dale Jr.
 title_slug: nascar
 opdb_id: G5YWX-MQj9k

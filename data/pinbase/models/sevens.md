@@ -1,5 +1,4 @@
 ---
-slug: sevens
 name: Sevens
 title_slug: sevens
 ipdb_id: 5345

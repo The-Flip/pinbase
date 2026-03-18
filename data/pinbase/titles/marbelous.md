@@ -1,4 +1,3 @@
 ---
-slug: marbelous
 name: Marbelous
 ---

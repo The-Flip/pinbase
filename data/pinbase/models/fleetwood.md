@@ -1,5 +1,4 @@
 ---
-slug: fleetwood
 name: Fleetwood
 title_slug: fleetwood
 ipdb_id: 882

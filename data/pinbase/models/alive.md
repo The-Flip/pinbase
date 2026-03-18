@@ -1,5 +1,4 @@
 ---
-slug: alive
 name: Alive
 title_slug: alive
 opdb_id: G5zjW-MLe7k

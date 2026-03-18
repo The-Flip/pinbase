@@ -1,5 +1,4 @@
 ---
-slug: new-improved-rocket
 name: New Improved Rocket
 title_slug: new-improved-rocket
 ipdb_id: 4145

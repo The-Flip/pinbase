@@ -1,5 +1,4 @@
 ---
-slug: que-bueno
 name: Que Bueno
 title_slug: que-bueno
 ipdb_id: 4372

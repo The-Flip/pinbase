@@ -1,4 +1,3 @@
 ---
-slug: goalee
 name: Goalee
 ---

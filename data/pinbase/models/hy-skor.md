@@ -1,5 +1,4 @@
 ---
-slug: hy-skor
 name: Hy-Skor
 title_slug: hy-skor
 ipdb_id: 3918

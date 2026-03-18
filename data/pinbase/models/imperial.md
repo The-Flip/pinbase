@@ -1,5 +1,4 @@
 ---
-slug: imperial
 name: Imperial
 title_slug: imperial
 ipdb_id: 4280

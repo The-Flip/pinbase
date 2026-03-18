@@ -1,5 +1,4 @@
 ---
-slug: dragster
 name: Dragster
 title_slug: dragster
 ipdb_id: 4933

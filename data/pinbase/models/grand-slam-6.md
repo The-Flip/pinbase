@@ -1,5 +1,4 @@
 ---
-slug: grand-slam-6
 name: Grand Slam
 title_slug: grand-slam
 opdb_id: G4PL3-MLeBP

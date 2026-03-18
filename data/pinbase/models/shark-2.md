@@ -1,5 +1,4 @@
 ---
-slug: shark-2
 name: Shark
 title_slug: shark-2
 opdb_id: GX29B-MP32P

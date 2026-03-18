@@ -1,5 +1,4 @@
 ---
-slug: world-star
 name: World Star
 title_slug: world-star
 ipdb_id: 4405

@@ -1,5 +1,4 @@
 ---
-slug: hotdoggin
 name: Hotdoggin'
 title_slug: hotdoggin
 opdb_id: GrENE-MD0dz

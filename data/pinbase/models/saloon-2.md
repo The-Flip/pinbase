@@ -1,5 +1,4 @@
 ---
-slug: saloon-2
 name: Saloon
 title_slug: saloon
 opdb_id: GrEqX-MLbvZ

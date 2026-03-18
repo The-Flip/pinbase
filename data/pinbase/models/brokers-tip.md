@@ -1,5 +1,4 @@
 ---
-slug: brokers-tip
 name: Brokers Tip
 title_slug: brokers-tip
 ipdb_id: 383

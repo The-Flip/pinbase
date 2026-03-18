@@ -1,5 +1,4 @@
 ---
-slug: king-pin-6
 name: King Pin
 title_slug: king-pin-5
 ipdb_id: 6175

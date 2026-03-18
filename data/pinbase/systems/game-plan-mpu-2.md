@@ -1,5 +1,4 @@
 ---
-slug: game-plan-mpu-2
 name: Game Plan MPU-2
 manufacturer_slug: game-plan
 technology_subgeneration_slug: ss-discrete

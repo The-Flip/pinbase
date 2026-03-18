@@ -1,5 +1,4 @@
 ---
-slug: cross-town
 name: Cross Town
 title_slug: cross-town
 ipdb_id: 600

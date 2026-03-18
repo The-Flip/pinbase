@@ -1,5 +1,4 @@
 ---
-slug: cipriano-martinez-cembrano
 name: Cipriano Martinez Cembrano
 manufacturer_slug: cmc
 ipdb_manufacturer_id: 709

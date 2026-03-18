@@ -1,5 +1,4 @@
 ---
-slug: wipe-out
 name: Wipe Out
 title_slug: wipe-out
 opdb_id: G5w3q-MQYr0

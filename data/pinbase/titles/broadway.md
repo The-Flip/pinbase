@@ -1,4 +1,3 @@
 ---
-slug: broadway
 name: Broadway
 ---

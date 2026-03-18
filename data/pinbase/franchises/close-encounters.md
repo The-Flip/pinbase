@@ -1,5 +1,4 @@
 ---
-slug: close-encounters
 name: Close Encounters of the Third Kind
 ---
 

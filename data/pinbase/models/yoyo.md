@@ -1,5 +1,4 @@
 ---
-slug: yoyo
 name: YoYo
 title_slug: yoyo
 ipdb_id: 2828

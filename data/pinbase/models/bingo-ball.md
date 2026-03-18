@@ -1,5 +1,4 @@
 ---
-slug: bingo-ball
 name: Bingo Ball
 title_slug: bingo-ball
 ipdb_id: 296

@@ -1,5 +1,4 @@
 ---
-slug: south-seas-2
 name: South Seas
 title_slug: south-seas-2
 ipdb_id: 2247

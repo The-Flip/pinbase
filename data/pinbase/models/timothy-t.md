@@ -1,5 +1,4 @@
 ---
-slug: timothy-t
 name: Timothyt
 title_slug: timothyt
 opdb_id: GRBv3-MJ9xx

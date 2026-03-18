@@ -1,5 +1,4 @@
 ---
-slug: g-e-t
 name: G-E-T
 title_slug: g-e-t
 ipdb_id: 4240

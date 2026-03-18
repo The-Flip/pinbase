@@ -1,5 +1,4 @@
 ---
-slug: atlantis-3
 name: Atlantis
 title_slug: atlantis-2
 opdb_id: G5w1Z-MDb8x

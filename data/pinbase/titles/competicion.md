@@ -1,4 +1,3 @@
 ---
-slug: competicion
 name: Competición
 ---

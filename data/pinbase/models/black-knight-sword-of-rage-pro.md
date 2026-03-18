@@ -1,5 +1,4 @@
 ---
-slug: black-knight-sword-of-rage-pro
 name: 'Black Knight: Sword of Rage (Pro)'
 title_slug: black-knight-sword-of-rage
 opdb_id: GD7Ld-ME0BP

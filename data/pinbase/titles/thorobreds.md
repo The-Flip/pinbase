@@ -1,4 +1,3 @@
 ---
-slug: thorobreds
 name: Thorobreds
 ---

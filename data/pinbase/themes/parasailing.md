@@ -1,4 +1,3 @@
 ---
-slug: parasailing
 name: Parasailing
 ---

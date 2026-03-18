@@ -1,5 +1,4 @@
 ---
-slug: star-gazer
 name: Star Gazer
 title_slug: star-gazer
 opdb_id: GrZY2-ML0Rb

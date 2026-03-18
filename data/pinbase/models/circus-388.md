@@ -1,5 +1,4 @@
 ---
-slug: circus-388
 name: Circus 388
 title_slug: circus-388
 ipdb_id: 5839

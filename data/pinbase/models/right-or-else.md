@@ -1,5 +1,4 @@
 ---
-slug: right-or-else
 name: Right or Else
 title_slug: right-or-else
 ipdb_id: 3560

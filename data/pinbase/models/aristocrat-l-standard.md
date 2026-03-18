@@ -1,5 +1,4 @@
 ---
-slug: aristocrat-l-standard
 name: Aristocrat L Standard
 title_slug: aristocrat-l-standard
 ipdb_id: 1400

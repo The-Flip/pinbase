@@ -1,5 +1,4 @@
 ---
-slug: checkers
 name: Checkers
 title_slug: checkers
 ipdb_id: 497

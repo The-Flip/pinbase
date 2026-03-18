@@ -1,5 +1,4 @@
 ---
-slug: lucky-hole
 name: Lucky Hole
 title_slug: lucky-hole
 ipdb_id: 6809

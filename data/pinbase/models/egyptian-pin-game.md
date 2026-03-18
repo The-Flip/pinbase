@@ -1,5 +1,4 @@
 ---
-slug: egyptian-pin-game
 name: Egyptian Pin Game
 title_slug: egyptian-pin-game
 ipdb_id: 6521

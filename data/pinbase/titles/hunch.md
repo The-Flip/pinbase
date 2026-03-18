@@ -1,4 +1,3 @@
 ---
-slug: hunch
 name: Hunch
 ---

@@ -1,5 +1,4 @@
 ---
-slug: twin-bill
 name: Twin Bill
 title_slug: twin-bill
 opdb_id: GrN1B-MJd4V

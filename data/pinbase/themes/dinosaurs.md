@@ -1,4 +1,3 @@
 ---
-slug: dinosaurs
 name: Dinosaurs
 ---

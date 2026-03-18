@@ -1,5 +1,4 @@
 ---
-slug: sega
 name: Sega
 opdb_manufacturer_id: 16
 ---

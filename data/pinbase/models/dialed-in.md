@@ -1,10 +1,11 @@
 ---
-slug: dialed-in
 name: Dialed In!
 title_slug: dialed-in
 corporate_entity_slug: jersey-jack-pinball-inc-lakewood-nj
 opdb_id: G4X2l-MYepl
 ipdb_id: 6350
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: pat-lawlor
   role: Design

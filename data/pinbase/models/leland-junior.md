@@ -1,5 +1,4 @@
 ---
-slug: leland-junior
 name: Leland (Junior)
 title_slug: leland-junior
 ipdb_id: 6745

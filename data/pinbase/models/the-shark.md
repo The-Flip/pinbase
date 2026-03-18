@@ -1,5 +1,4 @@
 ---
-slug: the-shark
 name: The Shark
 title_slug: the-shark
 opdb_id: GxvZB-MrRze

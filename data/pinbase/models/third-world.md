@@ -1,5 +1,4 @@
 ---
-slug: third-world
 name: Third World
 title_slug: third-world
 ipdb_id: 3388

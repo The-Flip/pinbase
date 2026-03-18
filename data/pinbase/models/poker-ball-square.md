@@ -1,5 +1,4 @@
 ---
-slug: poker-ball-square
 name: Poker Ball Square
 title_slug: poker-ball-square
 ipdb_id: 5522

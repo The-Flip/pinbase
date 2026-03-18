@@ -1,5 +1,4 @@
 ---
-slug: twin-hockey
 name: Twin Hockey
 title_slug: twin-hockey
 ipdb_id: 3762

@@ -1,5 +1,4 @@
 ---
-slug: knockout-3
 name: Knockout
 title_slug: knockout-3
 ipdb_id: 3200

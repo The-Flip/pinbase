@@ -1,5 +1,4 @@
 ---
-slug: forward-march
 name: Forward March
 title_slug: forward-march
 ipdb_id: 924

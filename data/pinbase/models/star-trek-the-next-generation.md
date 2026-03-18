@@ -1,5 +1,4 @@
 ---
-slug: star-trek-the-next-generation
 name: 'Star Trek: The Next Generation'
 title_slug: star-trek-the-next-generation
 opdb_id: GR6d8-M1rZd

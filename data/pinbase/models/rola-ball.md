@@ -1,5 +1,4 @@
 ---
-slug: rola-ball
 name: Rola-Ball
 title_slug: rola-ball
 ipdb_id: 5243

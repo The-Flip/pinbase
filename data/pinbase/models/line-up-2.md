@@ -1,5 +1,4 @@
 ---
-slug: line-up-2
 name: Line-Up
 title_slug: line-up-3
 ipdb_id: 1449

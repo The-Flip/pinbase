@@ -1,5 +1,4 @@
 ---
-slug: strip-tease-2
 name: Strip Tease
 title_slug: strip-tease-2
 ipdb_id: 6414

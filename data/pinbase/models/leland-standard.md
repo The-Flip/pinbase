@@ -1,5 +1,4 @@
 ---
-slug: leland-standard
 name: Leland (Standard)
 title_slug: leland-standard
 ipdb_id: 1432

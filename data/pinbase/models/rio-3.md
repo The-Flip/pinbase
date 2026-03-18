@@ -1,5 +1,4 @@
 ---
-slug: rio-3
 name: Rio
 title_slug: rio-2
 opdb_id: GRw9Z-MLbl4

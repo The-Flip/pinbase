@@ -1,5 +1,4 @@
 ---
-slug: red-man
 name: Red Man
 title_slug: red-man
 ipdb_id: 1934

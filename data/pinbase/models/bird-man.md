@@ -1,5 +1,4 @@
 ---
-slug: bird-man
 name: Bird Man
 title_slug: bird-man
 opdb_id: G5QP6-MDREd

@@ -1,5 +1,4 @@
 ---
-slug: green-lights-2
 name: Green Lights
 title_slug: green-lights-2
 ipdb_id: 5291

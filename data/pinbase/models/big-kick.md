@@ -1,5 +1,4 @@
 ---
-slug: big-kick
 name: Big Kick
 title_slug: big-kick
 opdb_id: GrX80-MJdnv

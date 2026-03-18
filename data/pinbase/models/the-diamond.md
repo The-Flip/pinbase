@@ -1,5 +1,4 @@
 ---
-slug: the-diamond
 name: The Diamond
 title_slug: the-diamond
 ipdb_id: 4693

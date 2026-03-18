@@ -1,5 +1,4 @@
 ---
-slug: long-range-bulls-eye-gallery
 name: Long Range Bulls Eye Gallery
 title_slug: long-range-bulls-eye-gallery
 ipdb_id: 6541

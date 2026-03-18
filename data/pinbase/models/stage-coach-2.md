@@ -1,5 +1,4 @@
 ---
-slug: stage-coach-2
 name: Stage Coach
 title_slug: stage-coach-2
 opdb_id: GRLE7-MQdk0

@@ -1,5 +1,4 @@
 ---
-slug: comodin
 name: Comodin
 title_slug: comodin
 opdb_id: Grlvk-MJwnq

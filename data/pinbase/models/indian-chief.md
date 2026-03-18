@@ -1,5 +1,4 @@
 ---
-slug: indian-chief
 name: Indian Chief
 title_slug: indian-chief
 ipdb_id: 5521

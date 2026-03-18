@@ -1,5 +1,4 @@
 ---
-slug: holiday-2
 name: Holiday
 title_slug: holiday
 opdb_id: GPBov-Mx0KK

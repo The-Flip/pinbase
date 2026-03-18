@@ -1,5 +1,4 @@
 ---
-slug: impact-2
 name: Impact
 title_slug: impact
 opdb_id: G4xnz-M619P

@@ -1,5 +1,4 @@
 ---
-slug: utah
 name: Utah
 title_slug: utah
 opdb_id: G3Ey3-M4onw

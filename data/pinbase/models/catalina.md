@@ -1,5 +1,4 @@
 ---
-slug: catalina
 name: Catalina
 title_slug: catalina-2
 ipdb_id: 470

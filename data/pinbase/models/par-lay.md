@@ -1,5 +1,4 @@
 ---
-slug: par-lay
 name: Par-Lay
 title_slug: par-lay
 ipdb_id: 1759

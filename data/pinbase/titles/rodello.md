@@ -1,4 +1,3 @@
 ---
-slug: rodello
 name: '''Rodello'''
 ---

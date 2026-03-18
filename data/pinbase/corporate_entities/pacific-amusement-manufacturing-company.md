@@ -1,5 +1,4 @@
 ---
-slug: pacific-amusement-manufacturing-company
 name: Pacific Amusement Manufacturing Company
 manufacturer_slug: pamco
 ipdb_manufacturer_id: 242

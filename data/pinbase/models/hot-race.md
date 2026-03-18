@@ -1,5 +1,4 @@
 ---
-slug: hot-race
 name: Hot Race
 title_slug: hot-race
 opdb_id: GRVby-MJpdx

@@ -1,4 +1,3 @@
 ---
-slug: croquet
 name: Croquet
 ---

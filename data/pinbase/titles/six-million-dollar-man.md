@@ -1,5 +1,4 @@
 ---
-slug: six-million-dollar-man
 name: Six Million Dollar Man
 opdb_group_id: GrEke
 abbreviations:

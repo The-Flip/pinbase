@@ -1,5 +1,4 @@
 ---
-slug: metro-2
 name: Metro
 title_slug: metro-2
 ipdb_id: 1582

@@ -1,5 +1,4 @@
 ---
-slug: grand-central
 name: Grand Central
 title_slug: grand-central
 ipdb_id: 1067

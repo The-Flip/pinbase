@@ -1,5 +1,4 @@
 ---
-slug: contact
 name: Contact
 title_slug: contact
 opdb_id: G5v02-MDnyO

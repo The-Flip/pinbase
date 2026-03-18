@@ -1,5 +1,4 @@
 ---
-slug: smarty
 name: Smarty
 title_slug: smarty
 ipdb_id: 2216

@@ -1,5 +1,4 @@
 ---
-slug: poseidon
 name: Poseidon
 title_slug: hit-the-deck-neptune
 opdb_id: GRoWo-MDl6j

@@ -1,5 +1,4 @@
 ---
-slug: orbit-2
 name: Orbit
 title_slug: orbit
 ipdb_id: 6228

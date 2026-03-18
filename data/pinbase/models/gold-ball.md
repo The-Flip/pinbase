@@ -1,5 +1,4 @@
 ---
-slug: gold-ball
 name: Gold Ball
 title_slug: gold-ball-2
 ipdb_id: 1023

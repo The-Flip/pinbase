@@ -1,5 +1,4 @@
 ---
-slug: 4-score
 name: 4-Score
 title_slug: 4-score
 ipdb_id: 3771

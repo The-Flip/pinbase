@@ -1,5 +1,4 @@
 ---
-slug: big-ben-4
 name: Big Ben
 title_slug: big-ben-2
 opdb_id: G5QBX-MQd1L

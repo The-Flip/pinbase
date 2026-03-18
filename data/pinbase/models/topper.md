@@ -1,5 +1,4 @@
 ---
-slug: topper
 name: Topper
 title_slug: topper
 ipdb_id: 2593

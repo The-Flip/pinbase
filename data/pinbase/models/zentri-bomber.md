@@ -1,5 +1,4 @@
 ---
-slug: zentri-bomber
 name: Zentri Bomber
 title_slug: zentri-bomber
 ipdb_id: 5974

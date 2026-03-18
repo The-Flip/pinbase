@@ -1,5 +1,4 @@
 ---
-slug: schuss
 name: Schuss
 title_slug: schuss
 opdb_id: GRBDx-MQwOY

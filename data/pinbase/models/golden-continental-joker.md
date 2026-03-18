@@ -1,5 +1,4 @@
 ---
-slug: golden-continental-joker
 name: Golden Continental Joker
 title_slug: golden-continental-joker
 ipdb_id: 4680

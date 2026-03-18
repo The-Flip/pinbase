@@ -1,5 +1,4 @@
 ---
-slug: deluxe-batting-champ
 name: Deluxe Batting Champ
 title_slug: deluxe-batting-champ
 ipdb_id: 657

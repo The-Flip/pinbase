@@ -1,4 +1,3 @@
 ---
-slug: hit
 name: Hit
 ---

@@ -1,5 +1,4 @@
 ---
-slug: zankor
 name: Zankor
 title_slug: zankor
 opdb_id: G5z71-MBRXz

@@ -1,5 +1,4 @@
 ---
-slug: swing
 name: Swing
 title_slug: swing
 ipdb_id: 2481

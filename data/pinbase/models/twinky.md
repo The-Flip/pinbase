@@ -1,5 +1,4 @@
 ---
-slug: twinky
 name: Twinky
 title_slug: twinky
 opdb_id: GrND1-MQ770

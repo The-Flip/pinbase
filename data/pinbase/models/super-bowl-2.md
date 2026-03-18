@@ -1,5 +1,4 @@
 ---
-slug: super-bowl-2
 name: Super Bowl
 title_slug: super-bowl
 ipdb_id: 2428

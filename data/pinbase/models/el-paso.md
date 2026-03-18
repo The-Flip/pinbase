@@ -1,5 +1,4 @@
 ---
-slug: el-paso
 name: El Paso
 title_slug: el-paso
 opdb_id: GN6dW-M3d6q

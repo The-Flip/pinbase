@@ -1,4 +1,3 @@
 ---
-slug: gambling
 name: Gambling
 ---

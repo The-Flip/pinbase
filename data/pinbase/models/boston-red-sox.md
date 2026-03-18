@@ -1,5 +1,4 @@
 ---
-slug: boston-red-sox
 name: Boston Red Sox
 title_slug: boston-red-sox
 ipdb_id: 5534

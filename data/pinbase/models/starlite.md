@@ -1,5 +1,4 @@
 ---
-slug: starlite
 name: Starlite
 title_slug: starlite
 opdb_id: GR0vY-MJV3p

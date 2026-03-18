@@ -1,5 +1,4 @@
 ---
-slug: crown-jewels
 name: Crown Jewels
 title_slug: crown-jewels
 ipdb_id: 3940

@@ -1,5 +1,4 @@
 ---
-slug: vacation-america
 name: Vacation America
 title_slug: vacation-america
 opdb_id: G5nbz-MLeY1

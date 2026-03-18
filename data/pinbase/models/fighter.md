@@ -1,5 +1,4 @@
 ---
-slug: fighter
 name: Fighter
 title_slug: fighter
 ipdb_id: 6159

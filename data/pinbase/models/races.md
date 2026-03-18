@@ -1,5 +1,4 @@
 ---
-slug: races
 name: Races
 title_slug: races
 ipdb_id: 1900

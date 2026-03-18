@@ -1,5 +1,4 @@
 ---
-slug: lead-off
 name: Lead Off
 title_slug: lead-off
 ipdb_id: 3208

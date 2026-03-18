@@ -1,5 +1,4 @@
 ---
-slug: bowie
 name: Bowie
 title_slug: bowie
 ipdb_id: 4297

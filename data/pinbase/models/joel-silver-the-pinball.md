@@ -1,5 +1,4 @@
 ---
-slug: joel-silver-the-pinball
 name: Joel Silver, The Pinball
 title_slug: joel-silver-the-pinball
 ipdb_id: 4348

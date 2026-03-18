@@ -1,5 +1,4 @@
 ---
-slug: miss-bowling-turbo
 name: Miss Bowling Turbo
 title_slug: miss-bowling-turbo
 ipdb_id: 4534

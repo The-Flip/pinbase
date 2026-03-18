@@ -1,5 +1,4 @@
 ---
-slug: rat-race
 name: Rat Race
 title_slug: rat-race
 ipdb_id: 3718

@@ -1,5 +1,4 @@
 ---
-slug: flamenco-show
 name: Flamenco Show
 title_slug: flamenco-show
 ipdb_id: 5272

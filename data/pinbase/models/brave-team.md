@@ -1,5 +1,4 @@
 ---
-slug: brave-team
 name: Brave Team
 title_slug: brave-team
 opdb_id: G5vxV-MDlzX

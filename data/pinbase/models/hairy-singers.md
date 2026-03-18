@@ -1,5 +1,4 @@
 ---
-slug: hairy-singers
 name: Hairy Singers
 title_slug: hairy-singers
 opdb_id: G5VeQ-MLObw

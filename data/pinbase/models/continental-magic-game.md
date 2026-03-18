@@ -1,5 +1,4 @@
 ---
-slug: continental-magic-game
 name: Continental Magic Game
 title_slug: continental-magic-game
 ipdb_id: 5658

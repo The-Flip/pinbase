@@ -1,5 +1,4 @@
 ---
-slug: big-dick
 name: Big Dick
 title_slug: big-dick
 ipdb_id: 4539

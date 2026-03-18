@@ -1,5 +1,4 @@
 ---
-slug: snickerette-deluxe
 name: Snickerette (Deluxe)
 title_slug: snickerette-deluxe
 ipdb_id: 3289

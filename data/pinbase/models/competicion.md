@@ -1,5 +1,4 @@
 ---
-slug: competicion
 name: Competición
 title_slug: competicion
 ipdb_id: 5881

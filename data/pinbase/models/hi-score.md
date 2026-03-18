@@ -1,5 +1,4 @@
 ---
-slug: hi-score
 name: Hi-Score
 title_slug: hi-score-super-score
 opdb_id: GR6XE-MQ9eE

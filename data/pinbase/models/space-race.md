@@ -1,5 +1,4 @@
 ---
-slug: space-race
 name: Space Race
 title_slug: space-race
 opdb_id: G4qz6-MkP9V

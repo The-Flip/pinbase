@@ -1,5 +1,4 @@
 ---
-slug: riot-pinball
 name: Riot Pinball
 opdb_manufacturer_id: 88
 ---

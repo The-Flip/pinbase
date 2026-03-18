@@ -1,5 +1,4 @@
 ---
-slug: d-quijote-2
 name: Don Quijote
 title_slug: don-quijote
 opdb_id: G5WP2-MjBZB

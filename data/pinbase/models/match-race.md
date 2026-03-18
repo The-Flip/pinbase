@@ -1,5 +1,4 @@
 ---
-slug: match-race
 name: Match Race
 title_slug: match-race
 ipdb_id: 3715

@@ -1,5 +1,4 @@
 ---
-slug: james-camerons-avatar
 name: James Cameron's Avatar
 title_slug: avatar
 opdb_id: GrZBr-MDbx7

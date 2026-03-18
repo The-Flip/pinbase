@@ -1,4 +1,3 @@
 ---
-slug: kasandra
 name: Kasandra
 ---

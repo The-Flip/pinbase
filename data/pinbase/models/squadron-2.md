@@ -1,5 +1,4 @@
 ---
-slug: squadron-2
 name: Squadron
 title_slug: squadron-2
 ipdb_id: 4655

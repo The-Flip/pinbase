@@ -1,5 +1,4 @@
 ---
-slug: pirates-of-the-caribbean-at-worlds-end
 name: Pirates of the Caribbean At World's End
 title_slug: pirates-of-the-caribbean-at-worlds-end
 ipdb_id: 5645

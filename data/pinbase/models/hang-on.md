@@ -1,5 +1,4 @@
 ---
-slug: hang-on
 name: Hang-On
 title_slug: hang-on
 opdb_id: GRVOY-ML1e8

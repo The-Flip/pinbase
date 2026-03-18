@@ -1,5 +1,4 @@
 ---
-slug: cadet
 name: Cadet
 title_slug: cadet
 ipdb_id: 418

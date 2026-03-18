@@ -1,5 +1,4 @@
 ---
-slug: lightning-ball
 name: Lightning Ball
 title_slug: lightning-ball
 opdb_id: GR66d-M5Rw0

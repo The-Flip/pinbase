@@ -1,5 +1,4 @@
 ---
-slug: spacelab-conversion-model-443
 name: Spacelab
 title_slug: skylab-spacelab
 opdb_id: G5DOx-MP3Ey

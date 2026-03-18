@@ -1,5 +1,4 @@
 ---
-slug: football-improved
 name: Football (Improved)
 title_slug: football-improved
 ipdb_id: 6295

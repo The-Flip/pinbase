@@ -1,5 +1,4 @@
 ---
-slug: english
 name: English
 title_slug: english
 ipdb_id: 784

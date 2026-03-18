@@ -1,5 +1,4 @@
 ---
-slug: lucky-joker
 name: Lucky Joker
 title_slug: lucky-joker
 ipdb_id: 6180

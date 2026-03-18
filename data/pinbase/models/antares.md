@@ -1,5 +1,4 @@
 ---
-slug: antares
 name: Antares
 title_slug: antares
 opdb_id: GRVyP-MW9ON

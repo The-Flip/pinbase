@@ -1,5 +1,4 @@
 ---
-slug: universal-monsters
 name: Universal Monsters
 ---
 

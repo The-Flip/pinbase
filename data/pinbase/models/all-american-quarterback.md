@@ -1,5 +1,4 @@
 ---
-slug: all-american-quarterback
 name: All-American Quarterback
 title_slug: all-american-quarterback
 ipdb_id: 1886

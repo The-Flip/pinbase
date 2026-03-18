@@ -1,5 +1,4 @@
 ---
-slug: double-shuffle-senior
 name: Double-Shuffle (Senior)
 title_slug: double-shuffle-senior
 ipdb_id: 6676

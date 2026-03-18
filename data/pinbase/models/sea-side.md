@@ -1,5 +1,4 @@
 ---
-slug: sea-side
 name: Sea Side
 title_slug: sea-side
 opdb_id: GRVkQ-MP33q

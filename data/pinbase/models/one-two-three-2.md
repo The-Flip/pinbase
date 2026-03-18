@@ -1,5 +1,4 @@
 ---
-slug: one-two-three-2
 name: One-Two-Three
 title_slug: one-two-three
 opdb_id: Gzybj-ME0V0

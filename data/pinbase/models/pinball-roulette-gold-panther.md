@@ -1,5 +1,4 @@
 ---
-slug: pinball-roulette-gold-panther
 name: Pinball Roulette (Gold Panther)
 title_slug: pinball-roulette-gold-panther
 ipdb_id: 6187

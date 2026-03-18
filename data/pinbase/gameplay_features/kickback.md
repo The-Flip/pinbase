@@ -1,5 +1,4 @@
 ---
-slug: kickback
 name: Kickback
 display_order: 12
 ---

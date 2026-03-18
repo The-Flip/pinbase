@@ -1,5 +1,4 @@
 ---
-slug: keen-ball-jackpot
 name: Keen Ball Jackpot
 title_slug: keen-ball-jackpot
 ipdb_id: 3189

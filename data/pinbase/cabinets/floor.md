@@ -1,5 +1,4 @@
 ---
-slug: floor
 name: Floor
 display_order: 1
 ---

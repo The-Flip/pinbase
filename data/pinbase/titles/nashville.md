@@ -1,4 +1,3 @@
 ---
-slug: nashville
 name: Nashville
 ---

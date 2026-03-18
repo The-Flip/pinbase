@@ -1,4 +1,3 @@
 ---
-slug: knokout
 name: KnoKOut
 ---

@@ -1,4 +1,3 @@
 ---
-slug: stampede
 name: Stampede
 ---

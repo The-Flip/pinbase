@@ -1,5 +1,4 @@
 ---
-slug: super-big-tent
 name: Super Big Tent
 title_slug: super-big-tent
 ipdb_id: 6963

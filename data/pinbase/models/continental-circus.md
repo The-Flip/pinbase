@@ -1,5 +1,4 @@
 ---
-slug: continental-circus
 name: Continental Circus
 title_slug: continental-circus
 ipdb_id: 5834

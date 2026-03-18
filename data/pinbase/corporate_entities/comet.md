@@ -1,5 +1,4 @@
 ---
-slug: comet
 name: Comet
 manufacturer_slug: comet
 ipdb_manufacturer_id: 663

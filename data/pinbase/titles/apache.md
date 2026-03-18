@@ -1,4 +1,3 @@
 ---
-slug: apache
 name: Apache
 ---

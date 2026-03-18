@@ -1,5 +1,4 @@
 ---
-slug: wow
 name: Wow
 title_slug: wow-2
 ipdb_id: 2818

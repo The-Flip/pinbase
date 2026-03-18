@@ -1,5 +1,4 @@
 ---
-slug: polo-2
 name: Polo
 title_slug: polo
 ipdb_id: 1844

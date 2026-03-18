@@ -1,5 +1,4 @@
 ---
-slug: charleston
 name: Charleston
 title_slug: charleston
 ipdb_id: 6673

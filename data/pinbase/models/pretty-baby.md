@@ -1,5 +1,4 @@
 ---
-slug: pretty-baby
 name: Pretty Baby
 title_slug: pretty-baby
 opdb_id: G5zDw-MQ2Vb

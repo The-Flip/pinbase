@@ -1,10 +1,11 @@
 ---
-slug: ac-dc-limited-edition
 name: AC/DC (Limited Edition)
 title_slug: ac-dc
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G43W4-MrRpw
 ipdb_id: 5777
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: ac-dc-premium
 credit_refs:
 - person_slug: steve-ritchie

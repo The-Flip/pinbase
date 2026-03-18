@@ -1,5 +1,4 @@
 ---
-slug: academia
 name: Academia
 title_slug: academia
 ipdb_id: 7056

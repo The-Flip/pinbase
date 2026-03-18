@@ -1,5 +1,4 @@
 ---
-slug: rancho-2
 name: Rancho
 title_slug: buckaroo-cow-poke
 opdb_id: GRzow-MQjZX

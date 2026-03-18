@@ -1,5 +1,4 @@
 ---
-slug: silver-runway
 name: Silver Runway
 title_slug: silver-runway
 ipdb_id: 3247

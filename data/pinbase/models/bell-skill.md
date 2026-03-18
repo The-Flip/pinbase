@@ -1,5 +1,4 @@
 ---
-slug: bell-skill
 name: Bell Skill
 title_slug: bell-skill
 ipdb_id: 4134

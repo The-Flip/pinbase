@@ -1,4 +1,3 @@
 ---
-slug: wizardsmagic
 name: Wizardsmagic
 ---

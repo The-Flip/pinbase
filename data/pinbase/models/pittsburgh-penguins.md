@@ -1,5 +1,4 @@
 ---
-slug: pittsburgh-penguins
 name: Pittsburgh Penguins
 title_slug: pittsburgh-penguins
 ipdb_id: 6017

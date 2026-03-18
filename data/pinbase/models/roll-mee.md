@@ -1,5 +1,4 @@
 ---
-slug: roll-mee
 name: Roll-Mee
 title_slug: roll-mee
 ipdb_id: 4841

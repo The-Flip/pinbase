@@ -1,5 +1,4 @@
 ---
-slug: electra-mfg-co
 name: Electra Mfg. Co.
 manufacturer_slug: electra-mfg-co
 ipdb_manufacturer_id: 693

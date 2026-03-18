@@ -1,5 +1,4 @@
 ---
-slug: fair-fight-2
 name: Fair Fight
 title_slug: fair-fight-2
 ipdb_id: 6405

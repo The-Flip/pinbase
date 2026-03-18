@@ -1,5 +1,4 @@
 ---
-slug: donald-e-hooker
 name: Donald E Hooker
 manufacturer_slug: donald-e-hooker
 ipdb_manufacturer_id: 395

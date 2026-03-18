@@ -1,5 +1,4 @@
 ---
-slug: safari-de-luxe
 name: Safari De Luxe
 title_slug: safari-de-luxe
 ipdb_id: 6248

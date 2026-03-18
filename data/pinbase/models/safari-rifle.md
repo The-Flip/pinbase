@@ -1,5 +1,4 @@
 ---
-slug: safari-rifle
 name: Safari Rifle
 title_slug: safari-rifle
 ipdb_id: 6483

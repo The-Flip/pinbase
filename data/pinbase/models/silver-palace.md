@@ -1,5 +1,4 @@
 ---
-slug: silver-palace
 name: Silver Palace
 title_slug: silver-palace
 ipdb_id: 6514

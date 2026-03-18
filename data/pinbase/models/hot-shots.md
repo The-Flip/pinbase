@@ -1,5 +1,4 @@
 ---
-slug: hot-shots
 name: Hot Shots
 title_slug: hot-shots
 opdb_id: GrEVz-MOEzv

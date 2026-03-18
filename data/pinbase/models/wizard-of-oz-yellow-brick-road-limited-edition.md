@@ -1,5 +1,4 @@
 ---
-slug: wizard-of-oz-yellow-brick-road-limited-edition
 name: Wizard of Oz Yellow Brick Road Limited Edition
 title_slug: wizard-of-oz-yellow-brick-road-limited-edition
 ipdb_id: 6854

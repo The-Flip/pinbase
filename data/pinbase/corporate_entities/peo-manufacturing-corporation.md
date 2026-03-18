@@ -1,5 +1,4 @@
 ---
-slug: peo-manufacturing-corporation
 name: Peo Manufacturing Corporation
 manufacturer_slug: peo-manufacturing-corporation
 ipdb_manufacturer_id: 247

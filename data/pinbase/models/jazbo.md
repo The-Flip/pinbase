@@ -1,5 +1,4 @@
 ---
-slug: jazbo
 name: Jazbo
 title_slug: jazbo
 ipdb_id: 6796

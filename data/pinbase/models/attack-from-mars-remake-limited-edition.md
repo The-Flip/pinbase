@@ -1,5 +1,4 @@
 ---
-slug: attack-from-mars-remake-limited-edition
 name: Attack From Mars (Remake Limited Edition)
 title_slug: attack-from-mars
 opdb_id: G4do5-MW9z8

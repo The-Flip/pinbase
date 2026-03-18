@@ -1,5 +1,4 @@
 ---
-slug: frisco
 name: Frisco
 title_slug: frisco
 ipdb_id: 956

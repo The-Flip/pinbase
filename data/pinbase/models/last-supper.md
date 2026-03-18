@@ -1,5 +1,4 @@
 ---
-slug: last-supper
 name: Last Supper
 title_slug: last-supper
 ipdb_id: 4562

@@ -1,5 +1,4 @@
 ---
-slug: zombie-league-all-stars
 name: Zombie League All Stars
 title_slug: zombie-league-all-stars
 ipdb_id: 6503

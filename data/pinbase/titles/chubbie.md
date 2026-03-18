@@ -1,4 +1,3 @@
 ---
-slug: chubbie
 name: Chubbie
 ---

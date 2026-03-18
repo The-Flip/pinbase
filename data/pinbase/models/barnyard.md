@@ -1,5 +1,4 @@
 ---
-slug: barnyard
 name: Barnyard
 title_slug: barnyard
 opdb_id: Glllz-M2Ypn

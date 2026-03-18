@@ -1,5 +1,4 @@
 ---
-slug: tales-from-the-crypt
 name: Tales from the Crypt
 ---
 

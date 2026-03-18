@@ -1,5 +1,4 @@
 ---
-slug: broadcast
 name: Broadcast
 title_slug: broadcast
 ipdb_id: 379

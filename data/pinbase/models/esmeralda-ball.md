@@ -1,5 +1,4 @@
 ---
-slug: esmeralda-ball
 name: Esmeralda Ball
 title_slug: esmeralda-ball
 ipdb_id: 5899

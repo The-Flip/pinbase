@@ -1,5 +1,4 @@
 ---
-slug: pot-shot
 name: Pot Shot
 title_slug: pot-shot
 ipdb_id: 1856

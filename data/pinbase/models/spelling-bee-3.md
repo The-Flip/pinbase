@@ -1,5 +1,4 @@
 ---
-slug: spelling-bee-3
 name: Spelling Bee
 title_slug: spelling-bee-2
 ipdb_id: 6299

@@ -1,5 +1,4 @@
 ---
-slug: cgc-pinball-controller-os
 name: CGC Pinball Controller/OS
 manufacturer_slug: chicago-gaming
 technology_subgeneration_slug: ss-pc

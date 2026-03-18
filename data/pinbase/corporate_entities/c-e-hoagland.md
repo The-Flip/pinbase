@@ -1,5 +1,4 @@
 ---
-slug: c-e-hoagland
 name: C. E. Hoagland
 manufacturer_slug: c-e-hoagland
 ipdb_manufacturer_id: 396

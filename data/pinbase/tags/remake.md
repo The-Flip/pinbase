@@ -1,5 +1,4 @@
 ---
-slug: remake
 name: Remake
 display_order: 4
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bally-royal
 name: Bally Royal
 title_slug: bally-royal
 ipdb_id: 154

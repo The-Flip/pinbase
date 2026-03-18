@@ -1,5 +1,4 @@
 ---
-slug: spring-fever
 name: Spring Fever
 title_slug: spring-fever
 ipdb_id: 5019

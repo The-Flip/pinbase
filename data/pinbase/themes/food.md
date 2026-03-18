@@ -1,4 +1,3 @@
 ---
-slug: food
 name: Food
 ---

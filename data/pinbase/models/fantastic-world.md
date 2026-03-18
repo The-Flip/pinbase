@@ -1,5 +1,4 @@
 ---
-slug: fantastic-world
 name: Fantastic World
 title_slug: fantastic-world
 ipdb_id: 5593

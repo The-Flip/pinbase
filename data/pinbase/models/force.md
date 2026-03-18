@@ -1,5 +1,4 @@
 ---
-slug: force
 name: Force
 title_slug: force
 ipdb_id: 5893

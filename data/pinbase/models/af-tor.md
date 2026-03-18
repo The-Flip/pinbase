@@ -1,5 +1,4 @@
 ---
-slug: af-tor
 name: Af-Tor
 title_slug: af-tor
 opdb_id: GRY7E-MLbEo

@@ -1,5 +1,4 @@
 ---
-slug: cabaret
 name: Cabaret
 title_slug: cabaret
 opdb_id: G5nx7-MD10r

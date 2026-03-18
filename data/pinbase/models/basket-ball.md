@@ -1,5 +1,4 @@
 ---
-slug: basket-ball
 name: Basket Ball
 title_slug: basket-ball
 ipdb_id: 4373

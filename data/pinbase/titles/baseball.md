@@ -1,5 +1,4 @@
 ---
-slug: baseball
 name: Baseball
 opdb_group_id: GoEB8
 ---

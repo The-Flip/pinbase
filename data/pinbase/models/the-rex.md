@@ -1,5 +1,4 @@
 ---
-slug: the-rex
 name: The Rex
 title_slug: the-rex
 ipdb_id: 5453

@@ -1,5 +1,4 @@
 ---
-slug: north-star
 name: North Star
 title_slug: north-star
 opdb_id: GRV7Q-MJNez

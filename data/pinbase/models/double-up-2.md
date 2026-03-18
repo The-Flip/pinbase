@@ -1,5 +1,4 @@
 ---
-slug: double-up-2
 name: Double-Up
 title_slug: double-up
 opdb_id: GrZZv-MDn2W

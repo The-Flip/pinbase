@@ -1,5 +1,4 @@
 ---
-slug: batman
 name: Batman
 ---
 

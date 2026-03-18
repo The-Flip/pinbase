@@ -1,5 +1,4 @@
 ---
-slug: rond-point
 name: Rond-Point
 title_slug: rond-point
 ipdb_id: 4995

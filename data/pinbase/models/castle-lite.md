@@ -1,5 +1,4 @@
 ---
-slug: castle-lite
 name: Castle Lite
 title_slug: castle-lite
 ipdb_id: 468

@@ -1,5 +1,4 @@
 ---
-slug: hot-bullet
 name: Hot Bullet
 title_slug: hot-bullet
 ipdb_id: 6421

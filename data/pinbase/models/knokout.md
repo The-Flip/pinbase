@@ -1,5 +1,4 @@
 ---
-slug: knokout
 name: KnoKOut
 title_slug: knokout
 ipdb_id: 5270

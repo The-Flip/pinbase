@@ -1,5 +1,4 @@
 ---
-slug: mustang-3
 name: Mustang
 title_slug: mustang-2
 opdb_id: GRVXD-MJN2n

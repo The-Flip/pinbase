@@ -1,5 +1,4 @@
 ---
-slug: lot-o-smoke
 name: Lot-O-Smoke
 title_slug: lot-o-smoke
 ipdb_id: 1478

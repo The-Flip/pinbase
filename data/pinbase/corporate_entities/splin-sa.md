@@ -1,5 +1,4 @@
 ---
-slug: splin-sa
 name: Splin S.A.
 manufacturer_slug: splin-sa
 ipdb_manufacturer_id: 405

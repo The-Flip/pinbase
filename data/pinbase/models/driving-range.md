@@ -1,5 +1,4 @@
 ---
-slug: driving-range
 name: Driving Range
 title_slug: driving-range
 ipdb_id: 3074

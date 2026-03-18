@@ -1,5 +1,4 @@
 ---
-slug: birdie
 name: Birdie
 title_slug: birdie
 ipdb_id: 3890

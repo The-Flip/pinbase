@@ -1,5 +1,4 @@
 ---
-slug: discovery-2
 name: Discovery
 title_slug: discovery-2
 ipdb_id: 4155

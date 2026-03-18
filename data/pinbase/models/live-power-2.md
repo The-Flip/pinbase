@@ -1,5 +1,4 @@
 ---
-slug: live-power-2
 name: Live Power
 title_slug: live-power-2
 ipdb_id: 3215

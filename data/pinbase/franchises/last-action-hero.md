@@ -1,5 +1,4 @@
 ---
-slug: last-action-hero
 name: Last Action Hero
 ---
 

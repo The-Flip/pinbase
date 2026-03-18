@@ -1,5 +1,4 @@
 ---
-slug: magic-screen
 name: Magic Screen
 title_slug: magic-screen
 ipdb_id: 6079

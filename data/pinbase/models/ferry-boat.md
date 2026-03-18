@@ -1,5 +1,4 @@
 ---
-slug: ferry-boat
 name: Ferry-Boat
 title_slug: ferry-boat
 ipdb_id: 5638

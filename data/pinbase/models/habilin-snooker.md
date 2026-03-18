@@ -1,5 +1,4 @@
 ---
-slug: habilin-snooker
 name: Habilin-Snooker
 title_slug: habilin-snooker
 ipdb_id: 5295

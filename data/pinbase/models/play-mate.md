@@ -1,5 +1,4 @@
 ---
-slug: play-mate
 name: Play-Mate
 title_slug: play-mate
 ipdb_id: 1827

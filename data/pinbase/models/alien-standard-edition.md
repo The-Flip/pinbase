@@ -1,5 +1,4 @@
 ---
-slug: alien-standard-edition
 name: Alien (Pro)
 title_slug: alien
 opdb_id: G4PBO-MLbr3

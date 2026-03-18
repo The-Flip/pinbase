@@ -1,5 +1,4 @@
 ---
-slug: oxford-st
 name: Oxford St.
 title_slug: oxford-st
 ipdb_id: 5303

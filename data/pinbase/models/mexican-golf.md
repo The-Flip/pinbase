@@ -1,5 +1,4 @@
 ---
-slug: mexican-golf
 name: Mexican Golf
 title_slug: mexican-golf
 ipdb_id: 6258

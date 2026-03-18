@@ -1,5 +1,4 @@
 ---
-slug: the-king
 name: The King
 title_slug: the-king
 ipdb_id: 3636

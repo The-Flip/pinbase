@@ -1,4 +1,3 @@
 ---
-slug: women
 name: Women
 ---

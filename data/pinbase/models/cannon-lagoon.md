@@ -1,5 +1,4 @@
 ---
-slug: cannon-lagoon
 name: Cannon Lagoon
 title_slug: cannon-lagoon
 opdb_id: G6llq-MwNOZ

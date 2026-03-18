@@ -1,5 +1,4 @@
 ---
-slug: picnic-2
 name: Picnic
 title_slug: picnic-2
 ipdb_id: 4366

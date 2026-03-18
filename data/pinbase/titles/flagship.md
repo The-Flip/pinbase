@@ -1,4 +1,3 @@
 ---
-slug: flagship
 name: Flagship
 ---

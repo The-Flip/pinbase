@@ -1,4 +1,3 @@
 ---
-slug: deluxe
 name: Deluxe
 ---

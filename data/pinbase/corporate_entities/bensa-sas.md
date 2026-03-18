@@ -1,5 +1,4 @@
 ---
-slug: bensa-sas
 name: Bensa s.a.s.
 manufacturer_slug: bensa-sas
 ipdb_manufacturer_id: 55

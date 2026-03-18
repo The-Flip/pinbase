@@ -1,5 +1,4 @@
 ---
-slug: whiffle-game
 name: Whiffle Game
 title_slug: whiffle-game
 ipdb_id: 5397

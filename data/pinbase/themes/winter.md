@@ -1,4 +1,3 @@
 ---
-slug: winter
 name: Winter
 ---

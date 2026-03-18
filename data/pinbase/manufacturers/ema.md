@@ -1,4 +1,3 @@
 ---
-slug: ema
 name: EMA
 ---

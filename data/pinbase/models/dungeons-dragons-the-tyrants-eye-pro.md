@@ -1,5 +1,4 @@
 ---
-slug: dungeons-dragons-the-tyrants-eye-pro
 name: 'Dungeons & Dragons: The Tyrant''s Eye (Pro)'
 title_slug: dungeons-dragons-the-tyrants-eye
 opdb_id: GK1Ej-MwNZr

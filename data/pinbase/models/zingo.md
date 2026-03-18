@@ -1,5 +1,4 @@
 ---
-slug: zingo
 name: Zingo
 title_slug: zingo
 ipdb_id: 2836

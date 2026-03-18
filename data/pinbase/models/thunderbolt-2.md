@@ -1,5 +1,4 @@
 ---
-slug: thunderbolt-2
 name: Thunderbolt
 title_slug: thunderbolt-2
 ipdb_id: 2557

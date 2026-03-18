@@ -1,5 +1,4 @@
 ---
-slug: cherry-bell
 name: Cherry Bell
 title_slug: cherry-bell
 opdb_id: GRKWZ-MQYWB

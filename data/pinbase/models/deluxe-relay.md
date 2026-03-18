@@ -1,5 +1,4 @@
 ---
-slug: deluxe-relay
 name: Deluxe Relay
 title_slug: deluxe-relay
 ipdb_id: 6176

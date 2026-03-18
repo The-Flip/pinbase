@@ -1,5 +1,4 @@
 ---
-slug: roman-victory
 name: Roman Victory
 title_slug: roman-victory
 opdb_id: G2L2p-M4oY4

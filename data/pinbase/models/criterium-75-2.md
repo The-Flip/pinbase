@@ -1,5 +1,4 @@
 ---
-slug: criterium-75-2
 name: Criterium 75
 title_slug: criterium-75
 opdb_id: G4Plz-MDz6D

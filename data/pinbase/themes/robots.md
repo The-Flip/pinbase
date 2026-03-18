@@ -1,4 +1,3 @@
 ---
-slug: robots
 name: Robots
 ---

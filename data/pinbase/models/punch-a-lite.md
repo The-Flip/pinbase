@@ -1,5 +1,4 @@
 ---
-slug: punch-a-lite
 name: Punch-A-Lite
 title_slug: punch-a-lite
 ipdb_id: 4277

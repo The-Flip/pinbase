@@ -1,4 +1,3 @@
 ---
-slug: tyrannosaurus
 name: Tyrannosaurus
 ---

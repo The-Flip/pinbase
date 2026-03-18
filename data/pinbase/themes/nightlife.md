@@ -1,4 +1,3 @@
 ---
-slug: nightlife
 name: Nightlife
 ---

@@ -1,5 +1,4 @@
 ---
-slug: crazy-15-15
 name: Crazy 15 (クレイジー15)
 title_slug: crazy-15-15
 ipdb_id: 6775

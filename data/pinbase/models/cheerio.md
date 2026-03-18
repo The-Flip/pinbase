@@ -1,5 +1,4 @@
 ---
-slug: cheerio
 name: Cheerio
 title_slug: cheerio
 ipdb_id: 5517

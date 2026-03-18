@@ -1,5 +1,4 @@
 ---
-slug: sea-belles
 name: Sea Belles
 title_slug: sea-belles-fair-lady
 opdb_id: G41OP-MDyk0

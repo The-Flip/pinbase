@@ -1,4 +1,3 @@
 ---
-slug: classic
 name: Classic
 ---

@@ -1,4 +1,3 @@
 ---
-slug: komet
 name: Komet
 ---

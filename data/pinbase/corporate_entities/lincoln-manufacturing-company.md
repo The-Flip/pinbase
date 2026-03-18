@@ -1,5 +1,4 @@
 ---
-slug: lincoln-manufacturing-company
 name: Lincoln Manufacturing Company
 manufacturer_slug: lincoln-manufacturing-company
 ipdb_manufacturer_id: 185

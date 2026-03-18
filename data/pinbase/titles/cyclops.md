@@ -1,4 +1,3 @@
 ---
-slug: cyclops
 name: Cyclops
 ---

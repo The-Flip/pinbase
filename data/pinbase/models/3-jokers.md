@@ -1,5 +1,4 @@
 ---
-slug: 3-jokers
 name: 3 Jokers
 title_slug: straight-flush-3-jokers
 opdb_id: GrkK0-MDXxZ

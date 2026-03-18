@@ -1,5 +1,4 @@
 ---
-slug: formula-1-2
 name: Formula 1
 title_slug: formula-1
 ipdb_id: 4941

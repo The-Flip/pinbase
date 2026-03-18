@@ -1,4 +1,3 @@
 ---
-slug: nevada
 name: Nevada
 ---

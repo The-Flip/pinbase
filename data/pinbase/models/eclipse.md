@@ -1,5 +1,4 @@
 ---
-slug: eclipse
 name: Eclipse
 title_slug: eclipse
 opdb_id: G4ddn-MLX3E

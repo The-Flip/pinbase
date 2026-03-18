@@ -1,5 +1,4 @@
 ---
-slug: lucky-card
 name: Lucky Card
 title_slug: jacks-open-lucky-hand
 opdb_id: GrPpb-MLEk7

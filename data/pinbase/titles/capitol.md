@@ -1,4 +1,3 @@
 ---
-slug: capitol
 name: Capitol
 ---

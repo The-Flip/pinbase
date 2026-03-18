@@ -1,5 +1,4 @@
 ---
-slug: jitter-bug
 name: Jitter-Bug
 title_slug: jitter-bug
 ipdb_id: 1296

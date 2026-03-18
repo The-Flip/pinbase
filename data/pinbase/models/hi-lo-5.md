@@ -1,5 +1,4 @@
 ---
-slug: hi-lo-5
 name: HI-LO
 title_slug: hi-lo-2
 ipdb_id: 6801

@@ -1,5 +1,4 @@
 ---
-slug: space-poker
 name: Space Poker
 title_slug: alien-poker
 opdb_id: G4yen-MXrYj

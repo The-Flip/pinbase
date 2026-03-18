@@ -1,5 +1,4 @@
 ---
-slug: wizard-of-oz-rescue-edition
 name: Wizard of Oz (Rescue Edition)
 title_slug: wizard-of-oz-rescue-edition
 ipdb_id: 6853

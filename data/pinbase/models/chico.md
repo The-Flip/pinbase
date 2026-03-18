@@ -1,5 +1,4 @@
 ---
-slug: chico
 name: Chico
 title_slug: chico
 opdb_id: GWyvZ-M0oBe

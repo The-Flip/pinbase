@@ -1,5 +1,4 @@
 ---
-slug: shuffle-pool-rotation
 name: Shuffle Pool Rotation
 title_slug: shuffle-pool-rotation
 ipdb_id: 6820

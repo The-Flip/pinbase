@@ -1,5 +1,4 @@
 ---
-slug: super-hoop
 name: Super Hoop
 title_slug: super-canasta
 opdb_id: GLWLl-MRjee-A1BYb

@@ -1,5 +1,4 @@
 ---
-slug: flying-trapeze-junior
 name: Flying Trapeze (Junior)
 title_slug: flying-trapeze-junior
 ipdb_id: 5025

@@ -1,5 +1,4 @@
 ---
-slug: stingray
 name: Stingray
 title_slug: stingray
 opdb_id: G57lj-MJwxY

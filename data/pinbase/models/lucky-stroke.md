@@ -1,5 +1,4 @@
 ---
-slug: lucky-stroke
 name: Lucky Stroke
 title_slug: lucky-stroke
 ipdb_id: 1499

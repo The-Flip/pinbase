@@ -1,5 +1,4 @@
 ---
-slug: warlok
 name: Warlok
 title_slug: warlok
 opdb_id: G5z2e-MJ2lR

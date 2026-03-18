@@ -1,5 +1,4 @@
 ---
-slug: h-derouin
 name: H. Derouin
 manufacturer_slug: h-derouin
 ipdb_manufacturer_id: 766

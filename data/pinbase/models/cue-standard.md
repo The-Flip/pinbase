@@ -1,5 +1,4 @@
 ---
-slug: cue-standard
 name: Cue Standard
 title_slug: cue-standard
 ipdb_id: 608

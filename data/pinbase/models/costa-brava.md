@@ -1,5 +1,4 @@
 ---
-slug: costa-brava
 name: Costa Brava
 title_slug: costa-brava
 ipdb_id: 5740

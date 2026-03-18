@@ -1,5 +1,4 @@
 ---
-slug: the-silver-king-twins
 name: The Silver King Twins
 title_slug: the-silver-king-twins
 ipdb_id: 3477

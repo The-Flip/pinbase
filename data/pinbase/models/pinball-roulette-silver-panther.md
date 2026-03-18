@@ -1,5 +1,4 @@
 ---
-slug: pinball-roulette-silver-panther
 name: Pinball Roulette (Silver Panther)
 title_slug: pinball-roulette-silver-panther
 ipdb_id: 6188

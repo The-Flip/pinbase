@@ -1,5 +1,4 @@
 ---
-slug: dogs-race
 name: Dogs Race
 title_slug: dogs-race
 ipdb_id: 5632

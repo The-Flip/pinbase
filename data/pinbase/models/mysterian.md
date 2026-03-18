@@ -1,5 +1,4 @@
 ---
-slug: mysterian
 name: Mysterian
 title_slug: mysterian
 ipdb_id: 4351

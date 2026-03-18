@@ -1,5 +1,4 @@
 ---
-slug: flying-high
 name: Flying High
 title_slug: flying-high-2
 ipdb_id: 904

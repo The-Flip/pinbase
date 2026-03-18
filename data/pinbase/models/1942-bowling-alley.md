@@ -1,5 +1,4 @@
 ---
-slug: 1942-bowling-alley
 name: 1942 Bowling Alley
 title_slug: 1942-bowling-alley
 ipdb_id: 6003

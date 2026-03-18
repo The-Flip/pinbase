@@ -1,5 +1,4 @@
 ---
-slug: night-fighter
 name: Night Fighter
 title_slug: night-fighter
 ipdb_id: 6678

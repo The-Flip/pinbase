@@ -1,5 +1,4 @@
 ---
-slug: board-of-trade
 name: Board of Trade
 title_slug: board-of-trade
 ipdb_id: 4262

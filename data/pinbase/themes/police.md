@@ -1,4 +1,3 @@
 ---
-slug: police
 name: Police
 ---

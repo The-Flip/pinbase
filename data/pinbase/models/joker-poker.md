@@ -1,5 +1,4 @@
 ---
-slug: joker-poker
 name: Joker Poker
 title_slug: joker-poker
 opdb_id: GR9o1-MQjj8

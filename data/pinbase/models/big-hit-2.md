@@ -1,5 +1,4 @@
 ---
-slug: big-hit-2
 name: Big Hit
 title_slug: big-hit-2
 opdb_id: G41xy-MLBPx

@@ -1,5 +1,4 @@
 ---
-slug: flight-2000
 name: Flight 2000
 title_slug: flight-2000
 opdb_id: G48kY-MDxRV

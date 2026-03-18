@@ -1,5 +1,4 @@
 ---
-slug: tecnoplay-2-2c-8008-ls-68000-cpu
 name: Tecnoplay "2-2C 8008 LS" (68000 CPU)
 manufacturer_slug: tecnoplay
 technology_subgeneration_slug: ss-discrete

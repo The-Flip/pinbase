@@ -1,5 +1,4 @@
 ---
-slug: harvest-moon-2
 name: Harvest Moon
 title_slug: harvest-moon-2
 ipdb_id: 1130

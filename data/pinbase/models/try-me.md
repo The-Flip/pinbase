@@ -1,5 +1,4 @@
 ---
-slug: try-me
 name: Try Me
 title_slug: try-me
 ipdb_id: 2668

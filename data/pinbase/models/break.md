@@ -1,5 +1,4 @@
 ---
-slug: break
 name: Break
 title_slug: break
 ipdb_id: 5569

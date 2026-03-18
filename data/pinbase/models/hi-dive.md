@@ -1,5 +1,4 @@
 ---
-slug: hi-dive
 name: Hi-Dive
 title_slug: hi-dive
 ipdb_id: 1171

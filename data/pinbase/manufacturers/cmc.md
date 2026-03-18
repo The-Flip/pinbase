@@ -1,4 +1,3 @@
 ---
-slug: cmc
 name: CMC
 ---

@@ -1,5 +1,4 @@
 ---
-slug: eleven-belles
 name: Eleven Belles
 title_slug: eleven-belles
 opdb_id: GrxEZ-MjB1n

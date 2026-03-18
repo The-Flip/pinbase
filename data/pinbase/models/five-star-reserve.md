@@ -1,5 +1,4 @@
 ---
-slug: five-star-reserve
 name: Five Star Reserve
 title_slug: five-star-reserve
 ipdb_id: 866

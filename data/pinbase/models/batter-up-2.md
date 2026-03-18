@@ -1,5 +1,4 @@
 ---
-slug: batter-up-2
 name: Batter Up
 title_slug: baseball-batter-up
 opdb_id: G4E2y-MQ9Px

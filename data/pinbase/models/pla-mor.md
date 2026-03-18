@@ -1,5 +1,4 @@
 ---
-slug: pla-mor
 name: Pla-Mor
 title_slug: pla-mor
 ipdb_id: 4197

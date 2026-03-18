@@ -1,5 +1,4 @@
 ---
-slug: ricochet-3
 name: Ricochet
 title_slug: ricochet-3
 ipdb_id: 5998

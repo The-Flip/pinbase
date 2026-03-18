@@ -1,5 +1,4 @@
 ---
-slug: airport-2
 name: Airport
 title_slug: airport
 ipdb_id: 36

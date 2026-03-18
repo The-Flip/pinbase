@@ -1,5 +1,4 @@
 ---
-slug: bronco-busters
 name: Bronco Busters
 title_slug: bronco-busters
 ipdb_id: 4861

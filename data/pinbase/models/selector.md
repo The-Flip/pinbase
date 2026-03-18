@@ -1,5 +1,4 @@
 ---
-slug: selector
 name: Selector
 title_slug: selector
 ipdb_id: 4178

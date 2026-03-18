@@ -1,5 +1,4 @@
 ---
-slug: poker-face-2
 name: Poker Face
 title_slug: poker-face-2
 opdb_id: Grx69-MJ5zd

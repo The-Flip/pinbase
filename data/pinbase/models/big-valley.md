@@ -1,5 +1,4 @@
 ---
-slug: big-valley
 name: Big Valley
 title_slug: big-valley
 opdb_id: Gr1lY-MJ55W

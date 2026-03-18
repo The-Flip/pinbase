@@ -1,5 +1,4 @@
 ---
-slug: shoot-at-the-moon-with-mar-ball
 name: Shoot at the Moon with Mar-Ball
 title_slug: shoot-at-the-moon-with-mar-ball
 ipdb_id: 6185

@@ -1,5 +1,4 @@
 ---
-slug: review
 name: Review
 title_slug: review
 ipdb_id: 1954

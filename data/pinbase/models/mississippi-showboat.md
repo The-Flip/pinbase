@@ -1,5 +1,4 @@
 ---
-slug: mississippi-showboat
 name: Mississippi Showboat
 title_slug: mississippi-showboat
 ipdb_id: 6275

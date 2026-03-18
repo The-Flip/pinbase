@@ -1,5 +1,4 @@
 ---
-slug: melody-lane
 name: Melody Lane
 title_slug: melody-lane
 opdb_id: G5plO-MDzVY

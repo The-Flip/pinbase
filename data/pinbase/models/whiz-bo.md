@@ -1,5 +1,4 @@
 ---
-slug: whiz-bo
 name: Whiz-Bo
 title_slug: whiz-bo
 ipdb_id: 6220

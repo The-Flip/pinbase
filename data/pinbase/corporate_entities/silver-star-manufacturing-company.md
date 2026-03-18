@@ -1,5 +1,4 @@
 ---
-slug: silver-star-manufacturing-company
 name: Silver Star Manufacturing Company
 manufacturer_slug: silver-star-manufacturing-company
 ipdb_manufacturer_id: 286

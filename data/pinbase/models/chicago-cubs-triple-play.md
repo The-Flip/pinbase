@@ -1,5 +1,4 @@
 ---
-slug: chicago-cubs-triple-play
 name: Chicago Cubs 'Triple Play'
 title_slug: chicago-cubs-triple-play
 opdb_id: G5nZJ-MLxrp

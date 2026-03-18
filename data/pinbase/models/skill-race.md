@@ -1,5 +1,4 @@
 ---
-slug: skill-race
 name: Skill Race
 title_slug: skill-race
 ipdb_id: 5038

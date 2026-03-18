@@ -1,5 +1,4 @@
 ---
-slug: wild-texas
 name: Wild Texas
 title_slug: wild-texas
 ipdb_id: 5500

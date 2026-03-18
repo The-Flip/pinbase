@@ -1,4 +1,3 @@
 ---
-slug: spellbinder
 name: Spellbinder
 ---

@@ -1,5 +1,4 @@
 ---
-slug: victory-derby
 name: Victory Derby
 title_slug: victory-derby
 ipdb_id: 2735

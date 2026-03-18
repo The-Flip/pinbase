@@ -1,5 +1,4 @@
 ---
-slug: cherry-reel-football-board
 name: Cherry Reel Football Board
 title_slug: cherry-reel-football-board
 ipdb_id: 6000

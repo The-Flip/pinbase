@@ -1,5 +1,4 @@
 ---
-slug: panbridge
 name: Panbridge
 title_slug: panbridge
 ipdb_id: 6747

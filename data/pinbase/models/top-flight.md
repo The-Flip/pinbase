@@ -1,5 +1,4 @@
 ---
-slug: top-flight
 name: Top Flight
 title_slug: top-flight
 ipdb_id: 4218

@@ -1,5 +1,4 @@
 ---
-slug: tip-top
 name: Tip-Top
 title_slug: tip-top
 ipdb_id: 2571

@@ -1,5 +1,4 @@
 ---
-slug: pyramid-peg
 name: Pyramid Peg
 title_slug: pyramid-peg
 ipdb_id: 3589

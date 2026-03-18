@@ -1,5 +1,4 @@
 ---
-slug: nashville
 name: Nashville
 title_slug: nashville
 ipdb_id: 3369

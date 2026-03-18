@@ -1,5 +1,4 @@
 ---
-slug: galaxy-3
 name: Galaxy
 title_slug: galaxy-3
 ipdb_id: 5405

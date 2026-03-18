@@ -1,5 +1,4 @@
 ---
-slug: shangri-la
 name: Shangri-La
 title_slug: shangri-la
 opdb_id: G50XN-MKNVX

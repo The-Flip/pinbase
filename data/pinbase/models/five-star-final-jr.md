@@ -1,5 +1,4 @@
 ---
-slug: five-star-final-jr
 name: Five Star Final Jr.
 title_slug: five-star-final-jr
 ipdb_id: 865

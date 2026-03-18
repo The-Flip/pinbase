@@ -1,5 +1,4 @@
 ---
-slug: red-heads-of-1942
 name: Red Heads of 1942
 title_slug: red-heads-of-1942
 ipdb_id: 3866

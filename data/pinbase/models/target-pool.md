@@ -1,5 +1,4 @@
 ---
-slug: target-pool
 name: Target Pool
 title_slug: target-pool-mini-pool
 opdb_id: GRbWj-MD3RJ

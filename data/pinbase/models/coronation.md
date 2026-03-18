@@ -1,5 +1,4 @@
 ---
-slug: coronation
 name: Coronation
 title_slug: coronation
 opdb_id: G4ZLy-Mb54O

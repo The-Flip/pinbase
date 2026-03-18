@@ -1,5 +1,4 @@
 ---
-slug: moon-flight
 name: Moon Flight
 title_slug: moon-flight
 opdb_id: GreN3-MJ7wJ

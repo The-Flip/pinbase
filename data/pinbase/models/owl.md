@@ -1,5 +1,4 @@
 ---
-slug: owl
 name: Owl
 title_slug: owl
 ipdb_id: 1732

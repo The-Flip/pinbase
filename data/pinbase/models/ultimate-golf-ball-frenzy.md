@@ -1,5 +1,4 @@
 ---
-slug: ultimate-golf-ball-frenzy
 name: Ultimate Golf Ball Frenzy
 title_slug: ultimate-golf-ball-frenzy
 ipdb_id: 6173

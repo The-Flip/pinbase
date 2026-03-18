@@ -1,5 +1,4 @@
 ---
-slug: super-orbit
 name: Super Orbit
 title_slug: super-orbit
 opdb_id: G4EPE-ML14r

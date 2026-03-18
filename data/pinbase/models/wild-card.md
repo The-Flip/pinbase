@@ -1,5 +1,4 @@
 ---
-slug: wild-card
 name: Wild Card
 title_slug: wild-card
 opdb_id: G4jzL-MwN5n

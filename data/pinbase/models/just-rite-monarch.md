@@ -1,5 +1,4 @@
 ---
-slug: just-rite-monarch
 name: Just-Rite Monarch
 title_slug: just-rite-monarch
 ipdb_id: 4772

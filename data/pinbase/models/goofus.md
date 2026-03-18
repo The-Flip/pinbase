@@ -1,5 +1,4 @@
 ---
-slug: goofus
 name: Goofus
 title_slug: goofus
 ipdb_id: 1060

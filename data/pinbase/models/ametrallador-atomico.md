@@ -1,5 +1,4 @@
 ---
-slug: ametrallador-atomico
 name: Ametrallador Atomico
 title_slug: ametrallador-atomico
 ipdb_id: 7041

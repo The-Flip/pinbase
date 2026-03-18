@@ -1,5 +1,4 @@
 ---
-slug: poker-face
 name: Poker Face
 title_slug: poker-face
 opdb_id: G5bzW-MDWbx

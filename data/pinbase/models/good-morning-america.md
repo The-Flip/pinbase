@@ -1,5 +1,4 @@
 ---
-slug: good-morning-america
 name: Good Morning America
 title_slug: good-morning-america
 ipdb_id: 5274

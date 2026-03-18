@@ -1,5 +1,4 @@
 ---
-slug: richie-rich
 name: Richie Rich
 title_slug: richie-rich
 ipdb_id: 4344

@@ -1,4 +1,3 @@
 ---
-slug: battle
 name: Battle
 ---

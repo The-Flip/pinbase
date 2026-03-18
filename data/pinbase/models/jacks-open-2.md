@@ -1,5 +1,4 @@
 ---
-slug: jacks-open-2
 name: Jacks Open
 title_slug: jacks-open
 ipdb_id: 4643

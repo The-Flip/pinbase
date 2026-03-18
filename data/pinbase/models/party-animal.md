@@ -1,5 +1,4 @@
 ---
-slug: party-animal
 name: Party Animal
 title_slug: party-animal
 opdb_id: G42Zz-MeP7R

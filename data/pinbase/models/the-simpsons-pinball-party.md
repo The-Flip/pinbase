@@ -1,5 +1,4 @@
 ---
-slug: the-simpsons-pinball-party
 name: The Simpsons Pinball Party
 title_slug: the-simpsons-pinball-party
 opdb_id: GRvBL-MP3Ev

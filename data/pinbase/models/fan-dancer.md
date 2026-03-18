@@ -1,5 +1,4 @@
 ---
-slug: fan-dancer
 name: Fan Dancer
 title_slug: fan-dancer
 ipdb_id: 3860

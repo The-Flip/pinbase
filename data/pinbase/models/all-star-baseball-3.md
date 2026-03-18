@@ -1,5 +1,4 @@
 ---
-slug: all-star-baseball-3
 name: All Star Baseball
 title_slug: all-star-baseball-3
 ipdb_id: 6504

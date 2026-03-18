@@ -1,5 +1,4 @@
 ---
-slug: rollergames
 name: Rollergames
 title_slug: rollergames
 opdb_id: Gr1Ko-MnKyx

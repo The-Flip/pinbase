@@ -1,5 +1,4 @@
 ---
-slug: new-york
 name: New York
 title_slug: spirit-of-76-pioneer-new-york
 opdb_id: GrlPK-MJkEl

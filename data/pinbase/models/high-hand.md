@@ -1,5 +1,4 @@
 ---
-slug: high-hand
 name: High Hand
 title_slug: high-hand
 ipdb_id: 1172

@@ -1,5 +1,4 @@
 ---
-slug: zig-zag-4
 name: Zig Zag
 title_slug: zig-zag-2
 ipdb_id: 4802

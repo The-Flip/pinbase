@@ -1,5 +1,4 @@
 ---
-slug: harmony
 name: Harmony
 title_slug: sing-along-melody
 opdb_id: GrPkZ-MW9K8

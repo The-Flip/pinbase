@@ -1,5 +1,4 @@
 ---
-slug: motordome-2
 name: Motordome
 title_slug: motordome-2
 ipdb_id: 4551

@@ -1,4 +1,3 @@
 ---
-slug: wiggly
 name: Wiggly
 ---

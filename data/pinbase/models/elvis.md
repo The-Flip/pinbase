@@ -1,5 +1,4 @@
 ---
-slug: elvis
 name: Elvis
 title_slug: elvis
 opdb_id: G4qbX-MJw5r

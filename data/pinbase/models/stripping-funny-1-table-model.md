@@ -1,5 +1,4 @@
 ---
-slug: stripping-funny-1-table-model
 name: Stripping Funny
 title_slug: stripping-funny
 opdb_id: Grq2n-MDR4Z

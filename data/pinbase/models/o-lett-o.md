@@ -1,5 +1,4 @@
 ---
-slug: o-lett-o
 name: O-Lett-O
 title_slug: o-lett-o
 ipdb_id: 3953

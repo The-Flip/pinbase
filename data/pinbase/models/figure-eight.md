@@ -1,5 +1,4 @@
 ---
-slug: figure-eight
 name: Figure Eight
 title_slug: figure-eight
 ipdb_id: 5728

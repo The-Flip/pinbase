@@ -1,5 +1,4 @@
 ---
-slug: the-world-series
 name: The World Series
 title_slug: the-world-series
 opdb_id: G2LL3-MOEdP

@@ -1,4 +1,3 @@
 ---
-slug: snappy
 name: Snappy
 ---

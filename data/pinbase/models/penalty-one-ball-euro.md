@@ -1,5 +1,4 @@
 ---
-slug: penalty-one-ball-euro
 name: Penalty One Ball Euro
 title_slug: penalty-one-ball-euro
 ipdb_id: 6094

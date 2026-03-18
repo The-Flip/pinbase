@@ -1,5 +1,4 @@
 ---
-slug: pheasant
 name: Pheasant
 title_slug: pheasant
 ipdb_id: 1779

@@ -1,5 +1,4 @@
 ---
-slug: rose-bowl-2
 name: Rose-Bowl
 title_slug: rose-bowl
 opdb_id: G4dkb-Mb57V

@@ -1,5 +1,4 @@
 ---
-slug: do-re-mi
 name: Do-Re-Mi
 title_slug: do-re-mi
 ipdb_id: 694

@@ -1,5 +1,4 @@
 ---
-slug: moon-hi
 name: Moon-Hi
 title_slug: moon-hi
 ipdb_id: 5673

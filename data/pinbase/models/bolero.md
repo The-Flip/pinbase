@@ -1,5 +1,4 @@
 ---
-slug: bolero
 name: Bolero
 title_slug: bolero
 ipdb_id: 338

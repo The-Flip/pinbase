@@ -1,5 +1,4 @@
 ---
-slug: wwf
 name: WWF
 ---
 

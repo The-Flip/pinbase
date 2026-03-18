@@ -1,4 +1,3 @@
 ---
-slug: whifflette
 name: Whifflette
 ---

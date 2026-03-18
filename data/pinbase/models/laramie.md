@@ -1,5 +1,4 @@
 ---
-slug: laramie
 name: Laramie
 title_slug: laramie
 ipdb_id: 4647

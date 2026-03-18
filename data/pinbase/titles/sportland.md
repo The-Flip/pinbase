@@ -1,4 +1,3 @@
 ---
-slug: sportland
 name: Sportland
 ---

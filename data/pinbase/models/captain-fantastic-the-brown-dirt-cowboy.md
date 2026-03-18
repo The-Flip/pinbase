@@ -1,5 +1,4 @@
 ---
-slug: captain-fantastic-the-brown-dirt-cowboy
 name: Captain Fantastic and the Brown Dirt Cowboy (Home Model)
 title_slug: captain-fantastic-and-the-brown-dirt-cowboy
 opdb_id: GRveZ-M4oyo

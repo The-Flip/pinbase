@@ -1,5 +1,4 @@
 ---
-slug: the-midget
 name: The Midget
 title_slug: the-midget
 ipdb_id: 1591

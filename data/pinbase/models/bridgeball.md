@@ -1,5 +1,4 @@
 ---
-slug: bridgeball
 name: Bridgeball
 title_slug: bridgeball
 ipdb_id: 6658

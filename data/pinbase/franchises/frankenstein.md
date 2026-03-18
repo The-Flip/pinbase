@@ -1,5 +1,4 @@
 ---
-slug: frankenstein
 name: Frankenstein
 ---
 

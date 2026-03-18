@@ -1,5 +1,4 @@
 ---
-slug: sportsman-roll
 name: Sportsman Roll
 title_slug: sportsman-roll
 ipdb_id: 5436

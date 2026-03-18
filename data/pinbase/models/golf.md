@@ -1,5 +1,4 @@
 ---
-slug: golf
 name: Golf
 title_slug: golf
 ipdb_id: 6169

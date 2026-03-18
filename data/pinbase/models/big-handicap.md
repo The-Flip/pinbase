@@ -1,5 +1,4 @@
 ---
-slug: big-handicap
 name: Big Handicap
 title_slug: big-handicap
 ipdb_id: 4829

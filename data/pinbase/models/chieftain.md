@@ -1,5 +1,4 @@
 ---
-slug: chieftain
 name: Chieftain
 title_slug: chieftain
 ipdb_id: 508

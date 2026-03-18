@@ -1,5 +1,4 @@
 ---
-slug: thrills
 name: Thrills
 title_slug: thrills
 ipdb_id: 5381

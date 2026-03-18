@@ -1,5 +1,4 @@
 ---
-slug: single-coin
 name: Single Coin
 title_slug: single-coin
 ipdb_id: 4021

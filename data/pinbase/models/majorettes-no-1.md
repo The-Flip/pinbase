@@ -1,5 +1,4 @@
 ---
-slug: majorettes-no-1
 name: Majorettes
 title_slug: majorettes-2
 opdb_id: GryxL-MJV7j

@@ -1,5 +1,4 @@
 ---
-slug: top-notcher
 name: Top Notcher
 title_slug: top-notcher
 ipdb_id: 3472

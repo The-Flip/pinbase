@@ -1,5 +1,4 @@
 ---
-slug: falling-suns
 name: Falling Suns
 title_slug: falling-suns
 ipdb_id: 3853

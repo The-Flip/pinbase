@@ -1,5 +1,4 @@
 ---
-slug: fireball-classic
 name: Fireball Classic
 title_slug: fireball
 opdb_id: G48ZN-MLONl

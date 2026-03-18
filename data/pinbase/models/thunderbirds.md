@@ -1,5 +1,4 @@
 ---
-slug: thunderbirds
 name: Thunderbirds
 title_slug: thunderbirds
 opdb_id: GN6Lq-MrRWB

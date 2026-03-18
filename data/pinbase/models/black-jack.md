@@ -1,5 +1,4 @@
 ---
-slug: black-jack
 name: Black Jack
 title_slug: black-jack-2
 opdb_id: G5vWo-MjBkB

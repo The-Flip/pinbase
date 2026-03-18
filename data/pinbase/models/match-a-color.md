@@ -1,5 +1,4 @@
 ---
-slug: match-a-color
 name: Match-A-Color
 title_slug: match-a-color
 ipdb_id: 4266

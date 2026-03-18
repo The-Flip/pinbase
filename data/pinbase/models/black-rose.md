@@ -1,5 +1,4 @@
 ---
-slug: black-rose
 name: Black Rose
 title_slug: black-rose
 opdb_id: G5vZd-MQpWZ

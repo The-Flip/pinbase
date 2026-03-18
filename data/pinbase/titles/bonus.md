@@ -1,4 +1,3 @@
 ---
-slug: bonus
 name: Bonus
 ---

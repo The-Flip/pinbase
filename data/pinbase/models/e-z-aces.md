@@ -1,5 +1,4 @@
 ---
-slug: e-z-aces
 name: E-Z Aces
 title_slug: e-z-aces
 ipdb_id: 803

@@ -1,5 +1,4 @@
 ---
-slug: bronco
 name: Bronco
 title_slug: bronco
 opdb_id: G42eb-MQo9Z

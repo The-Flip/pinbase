@@ -1,5 +1,4 @@
 ---
-slug: belmont
 name: Belmont
 title_slug: belmont
 ipdb_id: 224

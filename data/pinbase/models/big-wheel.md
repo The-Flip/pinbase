@@ -1,5 +1,4 @@
 ---
-slug: big-wheel
 name: Big Wheel
 title_slug: big-wheel
 ipdb_id: 3608

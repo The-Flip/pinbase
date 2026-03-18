@@ -1,5 +1,4 @@
 ---
-slug: miss-spy
 name: Miss Spy
 title_slug: miss-spy
 ipdb_id: 4374

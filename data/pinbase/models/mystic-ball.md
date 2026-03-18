@@ -1,5 +1,4 @@
 ---
-slug: mystic-ball
 name: Mystic Ball
 title_slug: mystic-ball
 ipdb_id: 1651

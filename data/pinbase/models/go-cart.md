@@ -1,5 +1,4 @@
 ---
-slug: go-cart
 name: Go-Cart
 title_slug: go-cart
 opdb_id: GrZE0-MW99v

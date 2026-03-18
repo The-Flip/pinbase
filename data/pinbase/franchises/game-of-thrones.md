@@ -1,5 +1,4 @@
 ---
-slug: game-of-thrones
 name: Game of Thrones
 ---
 

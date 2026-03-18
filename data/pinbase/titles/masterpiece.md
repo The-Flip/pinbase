@@ -1,4 +1,3 @@
 ---
-slug: masterpiece
 name: Masterpiece
 ---

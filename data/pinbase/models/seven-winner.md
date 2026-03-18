@@ -1,5 +1,4 @@
 ---
-slug: seven-winner
 name: Seven Winner
 title_slug: seven-winner
 opdb_id: G5YxJ-MNEbl

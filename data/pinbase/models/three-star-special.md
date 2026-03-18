@@ -1,5 +1,4 @@
 ---
-slug: three-star-special
 name: Three Star Special
 title_slug: three-star-special
 ipdb_id: 2545

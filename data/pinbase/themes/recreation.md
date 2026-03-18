@@ -1,4 +1,3 @@
 ---
-slug: recreation
 name: Recreation
 ---

@@ -1,5 +1,4 @@
 ---
-slug: big-five
 name: Big Five
 title_slug: big-five
 ipdb_id: 246

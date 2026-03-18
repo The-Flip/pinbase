@@ -1,5 +1,4 @@
 ---
-slug: sterling-novelty-manufacturing-company
 name: Sterling Novelty Manufacturing Company
 manufacturer_slug: sterling-novelty-manufacturing-company
 ipdb_manufacturer_id: 537

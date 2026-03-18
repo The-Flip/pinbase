@@ -1,5 +1,4 @@
 ---
-slug: turret
 name: Turret
 title_slug: turret
 ipdb_id: 2677

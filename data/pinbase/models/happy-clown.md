@@ -1,5 +1,4 @@
 ---
-slug: happy-clown
 name: Happy Clown
 title_slug: happy-clown
 opdb_id: G5WbJ-MQVn8

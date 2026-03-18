@@ -1,5 +1,4 @@
 ---
-slug: el-toro-shoot-the-bull
 name: El Toro Shoot the Bull
 title_slug: el-toro-shoot-the-bull
 ipdb_id: 5945

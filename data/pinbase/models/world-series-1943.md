@@ -1,5 +1,4 @@
 ---
-slug: world-series-1943
 name: World Series 1943
 title_slug: world-series-1943
 ipdb_id: 5180

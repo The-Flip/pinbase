@@ -1,5 +1,4 @@
 ---
-slug: millionaire-2
 name: Millionaire
 title_slug: millionaire-2
 ipdb_id: 4561

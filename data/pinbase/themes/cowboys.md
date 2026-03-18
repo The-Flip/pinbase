@@ -1,4 +1,3 @@
 ---
-slug: cowboys
 name: Cowboys
 ---

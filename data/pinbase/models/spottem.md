@@ -1,5 +1,4 @@
 ---
-slug: spottem
 name: Spottem
 title_slug: spottem
 ipdb_id: 2323

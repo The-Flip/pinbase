@@ -1,5 +1,4 @@
 ---
-slug: dew-wa-ditty
 name: Dew-Wa-Ditty
 title_slug: dew-wa-ditty
 opdb_id: GrlvP-MXroy

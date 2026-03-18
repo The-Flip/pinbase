@@ -1,5 +1,4 @@
 ---
-slug: the-mafia
 name: The Mafia
 title_slug: the-mafia
 opdb_id: GJ2YO-M7ZlR

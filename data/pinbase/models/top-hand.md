@@ -1,5 +1,4 @@
 ---
-slug: top-hand
 name: Top Hand
 title_slug: full-house-top-hand
 opdb_id: G4EeX-MLzRl

@@ -1,5 +1,4 @@
 ---
-slug: rolling-agate
 name: Rolling Agate
 title_slug: rolling-agate
 ipdb_id: 2009

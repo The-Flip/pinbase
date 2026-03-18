@@ -1,5 +1,4 @@
 ---
-slug: super-score-2
 name: Super Score
 title_slug: super-score
 opdb_id: G43lX-MJ4B2

@@ -1,5 +1,4 @@
 ---
-slug: county-fair
 name: County Fair
 title_slug: county-fair
 ipdb_id: 576

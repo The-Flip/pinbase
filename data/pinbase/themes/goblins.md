@@ -1,4 +1,3 @@
 ---
-slug: goblins
 name: Goblins
 ---

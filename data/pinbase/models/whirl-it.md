@@ -1,5 +1,4 @@
 ---
-slug: whirl-it
 name: Whirl-It
 title_slug: whirl-it
 ipdb_id: 6122

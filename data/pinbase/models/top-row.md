@@ -1,5 +1,4 @@
 ---
-slug: top-row
 name: Top Row
 title_slug: top-row
 ipdb_id: 2588

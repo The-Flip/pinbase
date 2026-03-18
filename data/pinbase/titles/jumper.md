@@ -1,4 +1,3 @@
 ---
-slug: jumper
 name: Jumper
 ---

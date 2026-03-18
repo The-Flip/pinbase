@@ -1,5 +1,4 @@
 ---
-slug: indiana-jones-the-pinball-adventure
 name: 'Indiana Jones: The Pinball Adventure'
 title_slug: indiana-jones-the-pinball-adventure
 opdb_id: G4xZy-MLno6

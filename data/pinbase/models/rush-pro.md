@@ -1,5 +1,4 @@
 ---
-slug: rush-pro
 name: Rush (Pro)
 title_slug: rush
 opdb_id: G2Lkd-MNEdK

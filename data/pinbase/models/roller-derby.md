@@ -1,5 +1,4 @@
 ---
-slug: roller-derby
 name: Roller Derby
 title_slug: roller-derby
 ipdb_id: 2003

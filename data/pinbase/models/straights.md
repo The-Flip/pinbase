@@ -1,5 +1,4 @@
 ---
-slug: straights
 name: Straights
 title_slug: straights
 ipdb_id: 3365

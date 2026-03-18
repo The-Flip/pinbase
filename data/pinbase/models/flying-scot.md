@@ -1,5 +1,4 @@
 ---
-slug: flying-scot
 name: Flying Scot
 title_slug: flying-scot
 ipdb_id: 3787

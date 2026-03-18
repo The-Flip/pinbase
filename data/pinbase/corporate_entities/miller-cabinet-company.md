@@ -1,5 +1,4 @@
 ---
-slug: miller-cabinet-company
 name: Miller Cabinet Company
 manufacturer_slug: miller-cabinet-company
 ipdb_manufacturer_id: 217

@@ -1,4 +1,3 @@
 ---
-slug: frontier
 name: Frontier
 ---

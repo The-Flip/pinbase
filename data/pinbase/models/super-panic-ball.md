@@ -1,5 +1,4 @@
 ---
-slug: super-panic-ball
 name: Super Panic Ball
 title_slug: super-panic-ball
 opdb_id: G7Zjz-Mx0jK

@@ -1,5 +1,4 @@
 ---
-slug: underwater
 name: Underwater
 title_slug: underwater
 opdb_id: GRWVw-MQkYB

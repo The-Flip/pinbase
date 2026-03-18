@@ -1,5 +1,4 @@
 ---
-slug: beisbol
 name: Beisbol
 title_slug: beisbol
 ipdb_id: 5320

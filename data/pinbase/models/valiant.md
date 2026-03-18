@@ -1,5 +1,4 @@
 ---
-slug: valiant
 name: Valiant
 title_slug: valiant
 opdb_id: G5B1X-MQd9p

@@ -1,5 +1,4 @@
 ---
-slug: guns-n-roses
 name: Guns N' Roses
 title_slug: guns-n-roses
 opdb_id: GrPKV-MyNoP

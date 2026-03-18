@@ -1,5 +1,4 @@
 ---
-slug: super-score-3
 name: Super Score
 title_slug: hi-score-super-score
 opdb_id: GR6XE-MJ436

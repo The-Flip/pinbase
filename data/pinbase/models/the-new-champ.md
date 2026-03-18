@@ -1,5 +1,4 @@
 ---
-slug: the-new-champ
 name: The New Champ
 title_slug: the-new-champ
 ipdb_id: 1668

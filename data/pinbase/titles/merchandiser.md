@@ -1,4 +1,3 @@
 ---
-slug: merchandiser
 name: Merchandiser
 ---

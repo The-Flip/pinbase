@@ -1,4 +1,3 @@
 ---
-slug: bushwack
 name: Bushwack
 ---

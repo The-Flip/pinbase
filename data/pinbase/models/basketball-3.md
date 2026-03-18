@@ -1,5 +1,4 @@
 ---
-slug: basketball-3
 name: Basketball
 title_slug: basketball
 opdb_id: GYWzL-Mx0x4

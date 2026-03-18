@@ -1,5 +1,4 @@
 ---
-slug: poker-game
 name: Poker Game
 title_slug: poker-game
 ipdb_id: 4596

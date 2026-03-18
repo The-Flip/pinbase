@@ -1,5 +1,4 @@
 ---
-slug: silver-king
 name: Silver King
 title_slug: silver-king
 ipdb_id: 4474

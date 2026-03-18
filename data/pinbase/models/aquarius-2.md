@@ -1,5 +1,4 @@
 ---
-slug: aquarius-2
 name: Aquarius
 title_slug: aquarius-2
 ipdb_id: 6015

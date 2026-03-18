@@ -1,5 +1,4 @@
 ---
-slug: whirligig-2
 name: Whirligig
 title_slug: whirligig-2
 ipdb_id: 5363

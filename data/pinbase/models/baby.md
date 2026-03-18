@@ -1,5 +1,4 @@
 ---
-slug: baby
 name: Baby
 title_slug: baby
 ipdb_id: 6239

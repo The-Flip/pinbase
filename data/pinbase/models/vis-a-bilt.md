@@ -1,5 +1,4 @@
 ---
-slug: vis-a-bilt
 name: Vis-A-Bilt
 title_slug: vis-a-bilt
 ipdb_id: 4204

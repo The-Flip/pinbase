@@ -1,5 +1,4 @@
 ---
-slug: farwest
 name: Farwest
 title_slug: bronco-mustang
 opdb_id: GR6bk-MyN6E

@@ -1,5 +1,4 @@
 ---
-slug: f1-grand-prix
 name: F1 Grand Prix
 title_slug: f1-grand-prix
 opdb_id: G4Oye-MQPw8

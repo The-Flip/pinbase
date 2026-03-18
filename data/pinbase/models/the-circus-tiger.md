@@ -1,5 +1,4 @@
 ---
-slug: the-circus-tiger
 name: The Circus Tiger
 title_slug: the-circus-tiger
 ipdb_id: 5215

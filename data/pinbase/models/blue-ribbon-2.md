@@ -1,5 +1,4 @@
 ---
-slug: blue-ribbon-2
 name: Blue Ribbon
 title_slug: blue-ribbon
 opdb_id: Gr388-MD1On

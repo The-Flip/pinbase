@@ -1,5 +1,4 @@
 ---
-slug: sky-blazer
 name: Sky Blazer
 title_slug: sky-blazer
 ipdb_id: 2190

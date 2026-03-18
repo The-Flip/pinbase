@@ -1,5 +1,4 @@
 ---
-slug: oboy
 name: O'Boy
 title_slug: oboy
 ipdb_id: 1689

@@ -1,5 +1,4 @@
 ---
-slug: lights-out-2
 name: Lights Out
 title_slug: lights-out-2
 ipdb_id: 1444

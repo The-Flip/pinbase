@@ -1,5 +1,4 @@
 ---
-slug: fairway
 name: Fairway
 title_slug: fairway-2
 ipdb_id: 813

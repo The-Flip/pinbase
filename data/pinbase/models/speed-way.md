@@ -1,5 +1,4 @@
 ---
-slug: speed-way
 name: Speed Way
 title_slug: speed-way
 opdb_id: G41WL-MQKn5

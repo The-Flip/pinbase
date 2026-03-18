@@ -1,5 +1,4 @@
 ---
-slug: el-gran-chaparral
 name: El Gran Chaparral
 title_slug: el-gran-chaparral
 ipdb_id: 6025

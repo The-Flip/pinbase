@@ -1,5 +1,4 @@
 ---
-slug: form-a-word
 name: Form-A-Word
 title_slug: form-a-word
 ipdb_id: 4225

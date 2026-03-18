@@ -1,5 +1,4 @@
 ---
-slug: lincoln-fields
 name: Lincoln Fields
 title_slug: lincoln-fields
 ipdb_id: 6940

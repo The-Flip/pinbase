@@ -1,4 +1,3 @@
 ---
-slug: lawco
 name: LAWCO
 ---

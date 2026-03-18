@@ -1,5 +1,4 @@
 ---
-slug: pass-kick
 name: Pass Kick
 title_slug: pass-kick
 ipdb_id: 3327

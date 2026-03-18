@@ -1,5 +1,4 @@
 ---
-slug: supercharger
 name: Supercharger
 title_slug: supercharger
 ipdb_id: 3420

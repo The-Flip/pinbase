@@ -1,5 +1,4 @@
 ---
-slug: joly-captain
 name: Joly Captain
 title_slug: joly-captain
 opdb_id: G4eVQ-MQKkB

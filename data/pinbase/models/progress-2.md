@@ -1,5 +1,4 @@
 ---
-slug: progress-2
 name: Progress
 title_slug: progress-2
 ipdb_id: 1870

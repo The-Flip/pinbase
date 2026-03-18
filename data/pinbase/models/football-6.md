@@ -1,5 +1,4 @@
 ---
-slug: football-6
 name: Football
 title_slug: world-cup
 opdb_id: GrNqO-MRjzl-A9pwZ

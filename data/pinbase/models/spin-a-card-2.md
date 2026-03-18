@@ -1,5 +1,4 @@
 ---
-slug: spin-a-card-2
 name: Spin-a-Card
 title_slug: spin-a-card-hearts-and-spades
 opdb_id: G4ZQv-MQ7ER

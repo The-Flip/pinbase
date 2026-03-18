@@ -1,5 +1,4 @@
 ---
-slug: apollo-moon
 name: Apollo Moon (アポロムーン)
 title_slug: apollo-moon
 ipdb_id: 6812

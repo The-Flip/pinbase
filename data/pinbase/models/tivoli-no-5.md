@@ -1,5 +1,4 @@
 ---
-slug: tivoli-no-5
 name: Tivoli No. 5
 title_slug: tivoli-no-5
 ipdb_id: 6330

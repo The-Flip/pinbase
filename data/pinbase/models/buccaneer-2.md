@@ -1,5 +1,4 @@
 ---
-slug: buccaneer-2
 name: Buccaneer
 title_slug: buccaneer-ship-ahoy-high-seas
 opdb_id: G4lNn-ML1l5

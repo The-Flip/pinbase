@@ -1,5 +1,4 @@
 ---
-slug: silver-dollar-saloon
 name: Silver Dollar Saloon
 title_slug: silver-dollar-saloon
 ipdb_id: 6657

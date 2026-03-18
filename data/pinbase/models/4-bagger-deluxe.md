@@ -1,5 +1,4 @@
 ---
-slug: 4-bagger-deluxe
 name: 4 Bagger Deluxe
 title_slug: 4-bagger-deluxe
 ipdb_id: 930

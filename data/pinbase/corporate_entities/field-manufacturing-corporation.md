@@ -1,5 +1,4 @@
 ---
-slug: field-manufacturing-corporation
 name: Field Manufacturing Corporation
 manufacturer_slug: field-manufacturing-corporation
 ipdb_manufacturer_id: 315

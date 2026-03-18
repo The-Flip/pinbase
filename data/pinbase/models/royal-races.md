@@ -1,5 +1,4 @@
 ---
-slug: royal-races
 name: Royal Races
 title_slug: royal-races
 ipdb_id: 2039

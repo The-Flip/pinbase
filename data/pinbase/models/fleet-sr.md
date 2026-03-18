@@ -1,5 +1,4 @@
 ---
-slug: fleet-sr
 name: Fleet Sr.
 title_slug: fleet-sr
 ipdb_id: 881

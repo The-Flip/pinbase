@@ -1,5 +1,4 @@
 ---
-slug: derby-2
 name: Derby
 title_slug: derby
 opdb_id: G43O1-MJ51E

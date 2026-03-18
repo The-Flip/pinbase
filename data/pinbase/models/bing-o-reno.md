@@ -1,5 +1,4 @@
 ---
-slug: bing-o-reno
 name: Bing O Reno
 title_slug: bing-o-reno
 ipdb_id: 5684

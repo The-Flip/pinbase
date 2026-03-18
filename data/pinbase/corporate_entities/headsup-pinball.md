@@ -1,5 +1,4 @@
 ---
-slug: headsup-pinball
 name: Headsup Pinball
 manufacturer_slug: headsup-pinball
 ipdb_manufacturer_id: 806

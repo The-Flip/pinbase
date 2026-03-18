@@ -1,5 +1,4 @@
 ---
-slug: les-fleches
 name: Les Flèches
 title_slug: les-fleches
 ipdb_id: 5260

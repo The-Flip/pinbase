@@ -1,5 +1,4 @@
 ---
-slug: zorro
 name: Zorro
 title_slug: zorro
 ipdb_id: 6412

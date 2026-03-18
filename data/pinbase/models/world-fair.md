@@ -1,5 +1,4 @@
 ---
-slug: world-fair
 name: World Fair
 title_slug: world-fair
 opdb_id: GrEyL-MLqy1

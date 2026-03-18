@@ -1,5 +1,4 @@
 ---
-slug: tropic
 name: Tropic
 title_slug: tropic
 ipdb_id: 3871

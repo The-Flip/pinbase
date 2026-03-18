@@ -1,5 +1,4 @@
 ---
-slug: united-specialty-company
 name: United Specialty Company
 manufacturer_slug: united-specialty-company
 ipdb_manufacturer_id: 384

@@ -1,5 +1,4 @@
 ---
-slug: hi-score-pool-3
 name: Hi-Score Pool
 title_slug: hi-score-pool-3
 ipdb_id: 6381

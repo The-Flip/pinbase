@@ -1,5 +1,4 @@
 ---
-slug: pin-wheel
 name: Pin Wheel
 title_slug: pin-wheel
 opdb_id: Gr8b7-MNERp

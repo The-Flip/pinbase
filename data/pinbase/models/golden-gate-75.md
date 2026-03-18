@@ -1,5 +1,4 @@
 ---
-slug: golden-gate-75
 name: Golden Gate 75
 title_slug: golden-gate-75
 ipdb_id: 3126

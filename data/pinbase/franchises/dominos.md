@@ -1,5 +1,4 @@
 ---
-slug: dominos
 name: Domino's
 ---
 

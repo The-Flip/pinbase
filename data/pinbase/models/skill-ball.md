@@ -1,5 +1,4 @@
 ---
-slug: skill-ball
 name: Skill-Ball
 title_slug: skill-ball
 opdb_id: G5zpL-ME02b

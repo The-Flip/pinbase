@@ -1,5 +1,4 @@
 ---
-slug: the-games
 name: The Games
 title_slug: the-games
 opdb_id: GR9NZ-Ml99O

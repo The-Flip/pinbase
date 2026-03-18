@@ -1,5 +1,4 @@
 ---
-slug: tri-a-lite
 name: Tri-A-Lite
 title_slug: tri-a-lite
 ipdb_id: 2642

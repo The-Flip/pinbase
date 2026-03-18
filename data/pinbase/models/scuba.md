@@ -1,5 +1,4 @@
 ---
-slug: scuba
 name: Scuba
 title_slug: scuba
 opdb_id: G43dw-Mq1XY

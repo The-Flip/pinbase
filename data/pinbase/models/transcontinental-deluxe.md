@@ -1,5 +1,4 @@
 ---
-slug: transcontinental-deluxe
 name: Transcontinental Deluxe
 title_slug: transcontinental-deluxe
 ipdb_id: 4049

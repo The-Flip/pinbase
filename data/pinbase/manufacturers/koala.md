@@ -1,4 +1,3 @@
 ---
-slug: koala
 name: KOALA
 ---

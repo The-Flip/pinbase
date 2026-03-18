@@ -1,4 +1,3 @@
 ---
-slug: secav
 name: Secav
 ---

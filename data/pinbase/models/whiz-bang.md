@@ -1,5 +1,4 @@
 ---
-slug: whiz-bang
 name: Whiz Bang
 title_slug: whiz-bang
 ipdb_id: 4382

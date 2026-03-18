@@ -1,5 +1,4 @@
 ---
-slug: black-hole-2
 name: Black Hole
 title_slug: blackout
 opdb_id: GRwYo-MQ2RR

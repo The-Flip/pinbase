@@ -1,5 +1,4 @@
 ---
-slug: fireball
 name: Fireball
 title_slug: fireball
 opdb_id: G48ZN-Mb58O

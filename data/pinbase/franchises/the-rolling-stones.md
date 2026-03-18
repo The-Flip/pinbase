@@ -1,5 +1,4 @@
 ---
-slug: the-rolling-stones
 name: The Rolling Stones
 ---
 

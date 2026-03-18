@@ -1,5 +1,4 @@
 ---
-slug: avalanche-2
 name: Avalanche
 title_slug: avalanche-2
 ipdb_id: 5512

@@ -1,5 +1,4 @@
 ---
-slug: treasure-hunt
 name: Treasure Hunt
 title_slug: treasure-hunt
 ipdb_id: 5222

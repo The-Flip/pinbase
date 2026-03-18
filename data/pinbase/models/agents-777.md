@@ -1,5 +1,4 @@
 ---
-slug: agents-777
 name: Agents 777
 title_slug: agents-777
 opdb_id: Grkpd-MQrjj

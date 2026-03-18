@@ -1,5 +1,4 @@
 ---
-slug: liberty-bell-2
 name: Liberty Bell
 title_slug: liberty-bell-2
 ipdb_id: 1437

@@ -1,5 +1,4 @@
 ---
-slug: flash-dragon
 name: Flash Dragon
 title_slug: flash-dragon
 opdb_id: G4ZPD-MD8rV

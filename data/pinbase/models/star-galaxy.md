@@ -1,5 +1,4 @@
 ---
-slug: star-galaxy
 name: Star Galaxy
 title_slug: star-galaxy
 ipdb_id: 5646

@@ -1,5 +1,4 @@
 ---
-slug: capcom
 name: Capcom
 opdb_manufacturer_id: 43
 ---

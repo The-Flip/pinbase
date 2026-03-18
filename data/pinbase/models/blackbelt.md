@@ -1,5 +1,4 @@
 ---
-slug: blackbelt
 name: Blackbelt
 title_slug: blackbelt
 opdb_id: G5Ljd-MLWj0

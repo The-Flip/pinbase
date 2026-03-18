@@ -1,5 +1,4 @@
 ---
-slug: formation
 name: Formation
 title_slug: formation
 ipdb_id: 918

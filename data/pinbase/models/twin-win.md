@@ -1,5 +1,4 @@
 ---
-slug: twin-win
 name: Twin Win
 title_slug: twin-win
 opdb_id: G5Q9b-MJ5Zq

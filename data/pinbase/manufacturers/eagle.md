@@ -1,4 +1,3 @@
 ---
-slug: eagle
 name: Eagle
 ---

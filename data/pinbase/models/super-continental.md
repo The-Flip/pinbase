@@ -1,5 +1,4 @@
 ---
-slug: super-continental
 name: Super Continental
 title_slug: super-continental
 ipdb_id: 5605

@@ -1,5 +1,4 @@
 ---
-slug: dixieland-3
 name: Dixieland
 title_slug: dixieland-3
 ipdb_id: 5847

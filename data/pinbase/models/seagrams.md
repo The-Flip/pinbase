@@ -1,5 +1,4 @@
 ---
-slug: seagrams
 name: Seagrams
 title_slug: seagrams
 ipdb_id: 4215

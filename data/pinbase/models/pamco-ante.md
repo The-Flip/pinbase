@@ -1,5 +1,4 @@
 ---
-slug: pamco-ante
 name: Pamco Ante
 title_slug: pamco-ante
 ipdb_id: 75

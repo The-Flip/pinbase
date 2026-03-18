@@ -1,5 +1,4 @@
 ---
-slug: speedway-2
 name: Speedway
 title_slug: speedway-2
 ipdb_id: 3438

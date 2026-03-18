@@ -1,5 +1,4 @@
 ---
-slug: space-hunt
 name: Space Hunt
 title_slug: space-hunt
 opdb_id: GV8j1-M0oZe

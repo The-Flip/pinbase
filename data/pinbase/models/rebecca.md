@@ -1,5 +1,4 @@
 ---
-slug: rebecca
 name: Rebecca
 title_slug: rebecca
 ipdb_id: 5532

@@ -1,5 +1,4 @@
 ---
-slug: nertz
 name: Nertz
 title_slug: nertz
 ipdb_id: 1663

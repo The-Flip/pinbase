@@ -1,5 +1,4 @@
 ---
-slug: 4-roses
 name: 4 Roses
 title_slug: 4-roses
 opdb_id: GRWz0-MLOxd

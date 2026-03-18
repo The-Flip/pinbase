@@ -1,5 +1,4 @@
 ---
-slug: diamond-jim
 name: Diamond Jim
 title_slug: diamond-jim
 opdb_id: GR6bZ-Mp4W4

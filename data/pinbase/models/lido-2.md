@@ -1,5 +1,4 @@
 ---
-slug: lido-2
 name: Lido
 title_slug: lido-2
 ipdb_id: 5135

@@ -1,4 +1,3 @@
 ---
-slug: trebol
 name: Trebol
 ---

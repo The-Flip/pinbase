@@ -1,5 +1,4 @@
 ---
-slug: buzzer
 name: Buzzer
 title_slug: buzzer
 ipdb_id: 3673

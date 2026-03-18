@@ -1,5 +1,4 @@
 ---
-slug: quijote
 name: Quijote
 title_slug: quijote
 opdb_id: Gd26q-MP3lX

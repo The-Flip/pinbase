@@ -1,4 +1,3 @@
 ---
-slug: whirligig
 name: Whirligig
 ---

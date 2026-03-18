@@ -1,5 +1,4 @@
 ---
-slug: jungle
 name: Jungle
 title_slug: jungle
 opdb_id: GRL7N-Mq1dY

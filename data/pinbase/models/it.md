@@ -1,5 +1,4 @@
 ---
-slug: it
 name: IT
 title_slug: it
 ipdb_id: 6886

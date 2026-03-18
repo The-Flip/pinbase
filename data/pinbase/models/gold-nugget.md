@@ -1,5 +1,4 @@
 ---
-slug: gold-nugget
 name: Gold Nugget
 title_slug: gold-nugget
 ipdb_id: 4387

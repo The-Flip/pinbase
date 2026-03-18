@@ -1,10 +1,11 @@
 ---
-slug: the-atarians
 name: The Atarians
 title_slug: the-atarians
 corporate_entity_slug: atari-incorporated
 opdb_id: Gry9N-MQYVj
 ipdb_id: 102
+display_type_slug: alphanumeric
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: bob-jonesi
   role: Design

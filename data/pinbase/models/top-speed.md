@@ -1,5 +1,4 @@
 ---
-slug: top-speed
 name: Top Speed
 title_slug: top-speed-top-racer
 opdb_id: G5Yn9-ML09X

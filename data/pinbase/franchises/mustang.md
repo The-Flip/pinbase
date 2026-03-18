@@ -1,5 +1,4 @@
 ---
-slug: mustang
 name: Mustang
 ---
 

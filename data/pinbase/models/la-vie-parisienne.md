@@ -1,5 +1,4 @@
 ---
-slug: la-vie-parisienne
 name: La Vie Parisienne
 title_slug: la-vie-parisienne
 ipdb_id: 5196

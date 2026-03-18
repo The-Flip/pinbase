@@ -1,5 +1,4 @@
 ---
-slug: imperator
 name: Imperator
 title_slug: imperator
 ipdb_id: 3170

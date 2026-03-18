@@ -1,4 +1,3 @@
 ---
-slug: zeus
 name: Zeus
 ---

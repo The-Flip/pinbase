@@ -1,5 +1,4 @@
 ---
-slug: diner
 name: Diner
 title_slug: diner
 opdb_id: GRWBd-MLy5p

@@ -1,5 +1,4 @@
 ---
-slug: hot-shotz
 name: Hot Shotz
 title_slug: hot-shotz
 ipdb_id: 3161

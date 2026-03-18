@@ -1,5 +1,4 @@
 ---
-slug: tanforan
 name: Tanforan
 title_slug: tanforan
 ipdb_id: 5115

@@ -1,5 +1,4 @@
 ---
-slug: six-sticks
 name: Six Sticks
 title_slug: six-sticks
 opdb_id: GRWeJ-MJZ68

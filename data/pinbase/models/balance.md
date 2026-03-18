@@ -1,5 +1,4 @@
 ---
-slug: balance
 name: Balance
 title_slug: balance
 ipdb_id: 133

@@ -1,5 +1,4 @@
 ---
-slug: surf-rider
 name: Surf Rider
 title_slug: surf-rider
 opdb_id: GRwPV-MLO58

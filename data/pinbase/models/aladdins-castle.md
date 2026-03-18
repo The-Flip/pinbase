@@ -1,5 +1,4 @@
 ---
-slug: aladdins-castle
 name: Aladdin's Castle
 title_slug: aladdins-castle
 opdb_id: G5oXq-MD82e

@@ -1,5 +1,4 @@
 ---
-slug: montana
 name: Montana
 title_slug: montana
 ipdb_id: 5470

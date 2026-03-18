@@ -1,4 +1,3 @@
 ---
-slug: sparky
 name: Sparky
 ---

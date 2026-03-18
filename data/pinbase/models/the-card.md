@@ -1,5 +1,4 @@
 ---
-slug: the-card
 name: The Card
 title_slug: the-card
 ipdb_id: 5964

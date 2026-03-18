@@ -1,4 +1,3 @@
 ---
-slug: alligators
 name: Alligators
 ---

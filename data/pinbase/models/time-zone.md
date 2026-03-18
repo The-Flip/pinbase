@@ -1,5 +1,4 @@
 ---
-slug: time-zone
 name: Time Zone
 title_slug: space-time-time-zone
 opdb_id: GRvE1-MLnBx

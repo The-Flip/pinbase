@@ -1,4 +1,3 @@
 ---
-slug: topic
 name: Topic
 ---

@@ -1,5 +1,4 @@
 ---
-slug: gold-top-army-and-navy
 name: Gold Top Army and Navy
 title_slug: gold-top-army-and-navy
 ipdb_id: 5124

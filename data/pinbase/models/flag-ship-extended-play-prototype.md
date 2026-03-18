@@ -1,5 +1,4 @@
 ---
-slug: flag-ship-extended-play-prototype
 name: Flag-Ship (Extended Play Prototype)
 title_slug: flag-ship-extended-play-prototype
 ipdb_id: 7033

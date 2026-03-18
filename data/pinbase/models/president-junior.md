@@ -1,5 +1,4 @@
 ---
-slug: president-junior
 name: President Junior
 title_slug: president-junior
 ipdb_id: 3316

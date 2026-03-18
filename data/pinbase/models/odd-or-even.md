@@ -1,5 +1,4 @@
 ---
-slug: odd-or-even
 name: Odd or Even
 title_slug: odd-or-even
 ipdb_id: 4235

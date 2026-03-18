@@ -1,5 +1,4 @@
 ---
-slug: arena-2
 name: Arena
 title_slug: arena-2
 ipdb_id: 6692

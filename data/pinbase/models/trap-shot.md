@@ -1,5 +1,4 @@
 ---
-slug: trap-shot
 name: Trap Shot
 title_slug: trap-shot
 ipdb_id: 2632

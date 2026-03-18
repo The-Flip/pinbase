@@ -1,5 +1,4 @@
 ---
-slug: skill-shot
 name: Skill Shot
 display_order: 15
 ---

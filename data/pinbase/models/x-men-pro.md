@@ -1,10 +1,11 @@
 ---
-slug: x-men-pro
 name: X-Men (Pro)
 title_slug: x-men
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: Grj6X-MJwj5
 ipdb_id: 5822
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: john-borg
   role: Design

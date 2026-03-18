@@ -1,5 +1,4 @@
 ---
-slug: bumper-shuffle
 name: Bumper Shuffle
 title_slug: bumper-shuffle
 ipdb_id: 6714

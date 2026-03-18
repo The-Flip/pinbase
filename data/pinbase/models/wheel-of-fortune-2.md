@@ -1,5 +1,4 @@
 ---
-slug: wheel-of-fortune-2
 name: Wheel of Fortune
 title_slug: wheel-of-fortune
 opdb_id: G417d-MJkXV

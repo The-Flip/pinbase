@@ -1,5 +1,4 @@
 ---
-slug: sport-ball-automat
 name: Sport-Ball-Automat
 title_slug: sport-ball-automat
 ipdb_id: 6241

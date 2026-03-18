@@ -1,5 +1,4 @@
 ---
-slug: mystery-score-extra-ball-model
 name: Mystery Score (Extra Ball Model)
 title_slug: mystery-score-extra-ball-model
 ipdb_id: 6506

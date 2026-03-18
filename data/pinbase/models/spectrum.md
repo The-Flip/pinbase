@@ -1,5 +1,4 @@
 ---
-slug: spectrum
 name: Spectrum
 title_slug: spectrum
 opdb_id: GRw7z-MJN9l

@@ -1,5 +1,4 @@
 ---
-slug: abra-ca-dabra
 name: Abra Ca Dabra
 title_slug: abra-ca-dabra-team-one
 opdb_id: GRpZ2-MkPyb

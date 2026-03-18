@@ -1,5 +1,4 @@
 ---
-slug: flying-carpet
 name: Flying Carpet
 title_slug: flying-carpet
 opdb_id: GrNPZ-MJNd0

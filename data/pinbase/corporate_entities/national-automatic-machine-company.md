@@ -1,5 +1,4 @@
 ---
-slug: national-automatic-machine-company
 name: National Automatic Machine Company
 manufacturer_slug: national-automatic-machine-company
 ipdb_manufacturer_id: 227

@@ -1,5 +1,4 @@
 ---
-slug: cannon-fire-big
 name: Cannon Fire (Big)
 title_slug: cannon-fire-big
 ipdb_id: 6346

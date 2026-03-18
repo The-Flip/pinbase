@@ -1,5 +1,4 @@
 ---
-slug: widget
 name: Widget
 title_slug: widget
 ipdb_id: 3548

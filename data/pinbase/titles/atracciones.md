@@ -1,4 +1,3 @@
 ---
-slug: atracciones
 name: Atracciones
 ---

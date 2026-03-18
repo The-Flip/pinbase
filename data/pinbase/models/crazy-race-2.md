@@ -1,5 +1,4 @@
 ---
-slug: crazy-race-2
 name: Crazy Race
 title_slug: crazy-race-2
 ipdb_id: 6172

@@ -1,5 +1,4 @@
 ---
-slug: cod-3
 name: C.O.D.
 title_slug: cod
 opdb_id: G5w2K-MRjky

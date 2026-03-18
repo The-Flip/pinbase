@@ -1,5 +1,4 @@
 ---
-slug: kung-fu
 name: Kung Fu
 title_slug: kung-fu
 ipdb_id: 6425

@@ -1,5 +1,4 @@
 ---
-slug: the-mystery-six
 name: The Mystery Six
 title_slug: the-mystery-six
 ipdb_id: 5008

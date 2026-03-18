@@ -1,5 +1,4 @@
 ---
-slug: stripping-funny-2-table-model
 name: Stripping Funny (2-Table Model)
 title_slug: stripping-funny-2-table-model
 ipdb_id: 6138

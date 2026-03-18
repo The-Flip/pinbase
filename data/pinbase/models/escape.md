@@ -1,5 +1,4 @@
 ---
-slug: escape
 name: Escape
 title_slug: escape
 opdb_id: G5v9V-MLvyV

@@ -1,4 +1,3 @@
 ---
-slug: convention
 name: Convention
 ---

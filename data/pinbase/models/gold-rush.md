@@ -1,5 +1,4 @@
 ---
-slug: gold-rush
 name: Gold Rush
 title_slug: gold-rush
 opdb_id: Gr1PE-MDz9j

@@ -1,5 +1,4 @@
 ---
-slug: central-manufacturing-co
 name: Central Manufacturing Co.
 manufacturer_slug: central-manufacturing-co
 ipdb_manufacturer_id: 579

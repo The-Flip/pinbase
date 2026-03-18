@@ -1,5 +1,4 @@
 ---
-slug: gaucho
 name: Gaucho
 title_slug: gaucho
 opdb_id: GrdqX-MLW81

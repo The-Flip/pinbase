@@ -1,5 +1,4 @@
 ---
-slug: century-manufacturing-company
 name: Century Manufacturing Company
 manufacturer_slug: century-manufacturing-company
 ipdb_manufacturer_id: 80

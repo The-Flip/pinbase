@@ -1,5 +1,4 @@
 ---
-slug: bagatelle
 name: Bagatelle
 display_order: 2
 ---

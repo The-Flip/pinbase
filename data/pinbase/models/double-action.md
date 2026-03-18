@@ -1,5 +1,4 @@
 ---
-slug: double-action
 name: Double Action
 title_slug: double-action-2
 opdb_id: G4xB9-MQ28O

@@ -1,4 +1,3 @@
 ---
-slug: prosperity
 name: Prosperity
 ---

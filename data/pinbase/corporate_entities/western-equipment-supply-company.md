@@ -1,5 +1,4 @@
 ---
-slug: western-equipment-supply-company
 name: Western Equipment & Supply Company
 manufacturer_slug: stern-electronics
 ipdb_manufacturer_id: 342

@@ -1,5 +1,4 @@
 ---
-slug: the-sopranos
 name: The Sopranos
 title_slug: the-sopranos
 opdb_id: G5WoB-MDyNZ

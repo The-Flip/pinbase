@@ -1,5 +1,4 @@
 ---
-slug: multiple
 name: Multiple
 title_slug: multiple
 ipdb_id: 1641

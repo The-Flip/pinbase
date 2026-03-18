@@ -1,5 +1,4 @@
 ---
-slug: oxford
 name: Oxford
 title_slug: oxford
 ipdb_id: 5758

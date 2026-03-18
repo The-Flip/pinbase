@@ -1,5 +1,4 @@
 ---
-slug: man-o-war
 name: Man-O-War
 title_slug: man-o-war
 ipdb_id: 1539

@@ -1,5 +1,4 @@
 ---
-slug: tru-form
 name: Tru-Form
 title_slug: tru-form
 ipdb_id: 5076

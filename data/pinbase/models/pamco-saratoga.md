@@ -1,5 +1,4 @@
 ---
-slug: pamco-saratoga
 name: Pamco Saratoga
 title_slug: pamco-saratoga
 ipdb_id: 2054

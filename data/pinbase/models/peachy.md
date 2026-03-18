@@ -1,5 +1,4 @@
 ---
-slug: peachy
 name: Peachy
 title_slug: peachy
 ipdb_id: 3332

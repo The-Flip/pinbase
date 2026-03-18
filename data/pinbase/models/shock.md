@@ -1,5 +1,4 @@
 ---
-slug: shock
 name: Shock
 title_slug: flash
 opdb_id: Grypn-MQdbe-A947p

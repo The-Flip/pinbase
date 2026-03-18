@@ -1,5 +1,4 @@
 ---
-slug: discomania
 name: Discomania
 title_slug: discomania
 ipdb_id: 6704

@@ -1,5 +1,4 @@
 ---
-slug: lucky-draw-2
 name: Lucky Draw
 title_slug: lucky-draw-2
 ipdb_id: 7019

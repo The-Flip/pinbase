@@ -1,5 +1,4 @@
 ---
-slug: air-raid
 name: Air Raid
 title_slug: air-raid
 ipdb_id: 4929

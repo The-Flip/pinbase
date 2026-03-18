@@ -1,5 +1,4 @@
 ---
-slug: hi-straight
 name: Hi Straight
 title_slug: hi-straight
 opdb_id: G43pX-MYe68

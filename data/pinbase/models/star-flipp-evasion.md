@@ -1,5 +1,4 @@
 ---
-slug: star-flipp-evasion
 name: Star FLIPP evasion
 title_slug: star-flipp-evasion
 ipdb_id: 5200

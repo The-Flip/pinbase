@@ -1,5 +1,4 @@
 ---
-slug: request
 name: Request
 title_slug: request
 ipdb_id: 1950

@@ -1,4 +1,3 @@
 ---
-slug: sentry
 name: Sentry
 ---

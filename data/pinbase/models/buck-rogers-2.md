@@ -1,5 +1,4 @@
 ---
-slug: buck-rogers-2
 name: Buck Rogers
 title_slug: buck-rogers
 opdb_id: GRKx7-MJ49e

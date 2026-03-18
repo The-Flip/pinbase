@@ -1,5 +1,4 @@
 ---
-slug: faces
 name: Faces
 title_slug: faces
 opdb_id: GRQvx-MLv18

@@ -1,5 +1,4 @@
 ---
-slug: spry-ball
 name: Spry-Ball
 title_slug: spry-ball
 ipdb_id: 5479

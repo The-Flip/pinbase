@@ -1,5 +1,4 @@
 ---
-slug: louis-vuitton
 name: Louis Vuitton
 title_slug: space-hunt
 opdb_id: GV8j1-M0oZe-A1r2W

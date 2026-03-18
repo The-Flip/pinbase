@@ -1,5 +1,4 @@
 ---
-slug: ski-jump
 name: Ski Jump
 title_slug: ski-jump-2
 opdb_id: G59y1-MQ2VY

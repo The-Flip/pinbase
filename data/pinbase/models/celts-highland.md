@@ -1,5 +1,4 @@
 ---
-slug: celts-highland
 name: Celts (Highland)
 title_slug: celts
 opdb_id: G9zzB-MvBKz-A1WX8

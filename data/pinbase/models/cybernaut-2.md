@@ -1,5 +1,4 @@
 ---
-slug: cybernaut-2
 name: Cybernaut
 title_slug: cybernaut-2
 ipdb_id: 4545

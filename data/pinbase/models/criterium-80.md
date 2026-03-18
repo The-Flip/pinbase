@@ -1,5 +1,4 @@
 ---
-slug: criterium-80
 name: Criterium 80
 title_slug: criterium-80
 opdb_id: GRo0B-MQdpe

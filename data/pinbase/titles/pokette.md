@@ -1,4 +1,3 @@
 ---
-slug: pokette
 name: Pokette
 ---

@@ -1,5 +1,4 @@
 ---
-slug: camel
 name: Camel
 ---
 

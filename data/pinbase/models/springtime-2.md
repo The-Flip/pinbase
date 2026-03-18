@@ -1,5 +1,4 @@
 ---
-slug: springtime-2
 name: Springtime
 title_slug: springtime
 opdb_id: GRVvb-MLz26

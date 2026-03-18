@@ -1,5 +1,4 @@
 ---
-slug: trail-blazer
 name: Trail Blazer
 title_slug: trail-blazer
 ipdb_id: 6971

@@ -1,5 +1,4 @@
 ---
-slug: galaxy
 name: Galaxy
 title_slug: galaxy
 opdb_id: GrxJV-MDOXX

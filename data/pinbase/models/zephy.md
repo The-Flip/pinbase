@@ -1,5 +1,4 @@
 ---
-slug: zephy
 name: Zephy
 title_slug: xenon
 opdb_id: G42Pk-MZe2e-A976b

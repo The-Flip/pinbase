@@ -1,4 +1,3 @@
 ---
-slug: autodromo
 name: Autodromo
 ---

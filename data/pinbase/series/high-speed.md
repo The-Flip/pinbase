@@ -1,5 +1,4 @@
 ---
-slug: high-speed
 name: High Speed
 credit_refs:
 - person_slug: steve-ritchie

@@ -1,5 +1,4 @@
 ---
-slug: master-play-boy
 name: Master-Play-Boy
 title_slug: master-play-boy
 ipdb_id: 6399

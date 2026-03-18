@@ -1,5 +1,4 @@
 ---
-slug: ice-castle
 name: Ice Castle
 title_slug: ice-castle
 ipdb_id: 3711

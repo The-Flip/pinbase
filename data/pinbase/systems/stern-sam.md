@@ -1,5 +1,4 @@
 ---
-slug: stern-sam
 name: Stern SAM
 manufacturer_slug: stern-pinball
 technology_subgeneration_slug: ss-integrated

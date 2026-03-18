@@ -1,4 +1,3 @@
 ---
-slug: pinboard
 name: Pinboard
 ---

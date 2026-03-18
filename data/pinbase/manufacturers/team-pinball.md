@@ -1,5 +1,4 @@
 ---
-slug: team-pinball
 name: Team Pinball
 opdb_manufacturer_id: 117
 ---

@@ -1,5 +1,4 @@
 ---
-slug: casba
 name: Casba
 title_slug: casba
 ipdb_id: 461

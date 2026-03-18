@@ -1,5 +1,4 @@
 ---
-slug: one-ball-circus
 name: One Ball Circus
 title_slug: one-ball-circus
 ipdb_id: 5845

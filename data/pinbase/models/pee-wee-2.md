@@ -1,5 +1,4 @@
 ---
-slug: pee-wee-2
 name: Pee-Wee
 title_slug: pee-wee-2
 ipdb_id: 5527

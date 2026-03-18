@@ -1,5 +1,4 @@
 ---
-slug: pan-american
 name: Pan-American
 title_slug: pan-american
 ipdb_id: 1744

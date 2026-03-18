@@ -1,5 +1,4 @@
 ---
-slug: beano
 name: Beano
 title_slug: beano
 ipdb_id: 210

@@ -1,4 +1,3 @@
 ---
-slug: skippy
 name: Skippy
 ---

@@ -1,5 +1,4 @@
 ---
-slug: berlin-or-bust
 name: Berlin Or Bust
 title_slug: berlin-or-bust
 ipdb_id: 5681

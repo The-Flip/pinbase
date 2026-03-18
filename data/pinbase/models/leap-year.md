@@ -1,5 +1,4 @@
 ---
-slug: leap-year
 name: Leap-Year
 title_slug: leap-year
 opdb_id: G9zBb-MRjBv

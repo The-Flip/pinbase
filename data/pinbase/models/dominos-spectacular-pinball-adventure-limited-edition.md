@@ -1,5 +1,4 @@
 ---
-slug: dominos-spectacular-pinball-adventure-limited-edition
 name: Domino's Spectacular Pinball Adventure (Limited Edition)
 title_slug: dominos-spectacular-pinball-adventure-limited-edition
 ipdb_id: 6586

@@ -1,5 +1,4 @@
 ---
-slug: pony-derby
 name: Pony Derby
 title_slug: pony-derby
 ipdb_id: 7022

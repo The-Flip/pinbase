@@ -1,5 +1,4 @@
 ---
-slug: flipper
 name: Flipper
 title_slug: flipper
 opdb_id: GrNXw-MLOYP

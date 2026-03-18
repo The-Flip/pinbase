@@ -1,4 +1,3 @@
 ---
-slug: millenium
 name: Millenium
 ---

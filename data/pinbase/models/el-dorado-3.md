@@ -1,5 +1,4 @@
 ---
-slug: el-dorado-3
 name: El Dorado
 title_slug: el-dorado
 opdb_id: GrEZ5-MDWv8

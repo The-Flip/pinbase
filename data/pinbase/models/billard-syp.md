@@ -1,5 +1,4 @@
 ---
-slug: billard-syp
 name: Billard "SYP"
 title_slug: billard-syp
 ipdb_id: 5986

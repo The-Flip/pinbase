@@ -1,5 +1,4 @@
 ---
-slug: barracuda
 name: Barracuda
 title_slug: barracuda
 ipdb_id: 7013

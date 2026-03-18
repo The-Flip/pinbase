@@ -1,4 +1,3 @@
 ---
-slug: sequence
 name: Sequence
 ---

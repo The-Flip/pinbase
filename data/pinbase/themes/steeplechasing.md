@@ -1,4 +1,3 @@
 ---
-slug: steeplechasing
 name: Steeplechasing
 ---

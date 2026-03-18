@@ -1,5 +1,4 @@
 ---
-slug: discotek
 name: Discotek
 title_slug: discotek
 opdb_id: GRvlW-MLeXK

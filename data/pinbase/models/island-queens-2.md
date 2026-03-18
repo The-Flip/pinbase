@@ -1,5 +1,4 @@
 ---
-slug: island-queens-2
 name: Island Queens
 title_slug: island-queens-2
 ipdb_id: 6525

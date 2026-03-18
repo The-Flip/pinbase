@@ -1,5 +1,4 @@
 ---
-slug: superior-products-co
 name: Superior Products Co.
 manufacturer_slug: superior-products-co
 ipdb_manufacturer_id: 490

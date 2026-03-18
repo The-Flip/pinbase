@@ -1,5 +1,4 @@
 ---
-slug: teenage-mutant-ninja-turtles-pro
 name: Teenage Mutant Ninja Turtles (Pro)
 title_slug: teenage-mutant-ninja-turtles
 opdb_id: Gd2Xb-Mq1qv

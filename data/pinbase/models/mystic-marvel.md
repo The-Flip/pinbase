@@ -1,5 +1,4 @@
 ---
-slug: mystic-marvel
 name: Mystic Marvel
 title_slug: mystic-marvel
 opdb_id: Grdpe-MLbK2

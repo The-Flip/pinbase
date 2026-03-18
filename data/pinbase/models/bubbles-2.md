@@ -1,5 +1,4 @@
 ---
-slug: bubbles-2
 name: Bubbles
 title_slug: bubbles-2
 ipdb_id: 5325

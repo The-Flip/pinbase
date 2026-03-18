@@ -1,5 +1,4 @@
 ---
-slug: wonder-woman
 name: Wonder Woman
 title_slug: wonder-woman
 ipdb_id: 6472

@@ -1,5 +1,4 @@
 ---
-slug: moon-shot
 name: Moon Shot
 title_slug: moon-shot
 opdb_id: GRp0d-MDE1v

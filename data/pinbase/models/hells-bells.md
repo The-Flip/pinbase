@@ -1,5 +1,4 @@
 ---
-slug: hells-bells
 name: Hell's Bells
 title_slug: hells-bells
 ipdb_id: 1153

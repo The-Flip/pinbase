@@ -1,5 +1,4 @@
 ---
-slug: carlson-manufacturing-company
 name: Carlson Manufacturing Company
 manufacturer_slug: carlson-manufacturing-company
 ipdb_manufacturer_id: 388

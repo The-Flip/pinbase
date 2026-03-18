@@ -1,5 +1,4 @@
 ---
-slug: elvira-and-the-party-monsters
 name: Elvira and the Party Monsters
 title_slug: elvira-and-the-party-monsters
 opdb_id: Grlxp-MVKBW

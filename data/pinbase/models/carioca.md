@@ -1,5 +1,4 @@
 ---
-slug: carioca
 name: Carioca
 title_slug: carioca
 ipdb_id: 3678

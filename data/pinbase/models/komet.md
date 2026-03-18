@@ -1,5 +1,4 @@
 ---
-slug: komet
 name: Komet
 title_slug: komet
 ipdb_id: 4103

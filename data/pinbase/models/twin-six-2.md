@@ -1,5 +1,4 @@
 ---
-slug: twin-six-2
 name: Twin Six
 title_slug: twin-six-2
 ipdb_id: 3355

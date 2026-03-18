@@ -1,5 +1,4 @@
 ---
-slug: fireball-classic-2
 name: Fireball Classic
 title_slug: fireball-classic
 ipdb_id: 4544

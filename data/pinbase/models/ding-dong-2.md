@@ -1,5 +1,4 @@
 ---
-slug: ding-dong-2
 name: Ding Dong
 title_slug: ding-dong
 ipdb_id: 6652

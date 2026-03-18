@@ -1,5 +1,4 @@
 ---
-slug: army-navy
 name: Army Navy
 title_slug: army-navy
 opdb_id: G5VNb-MQoZ7

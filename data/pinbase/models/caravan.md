@@ -1,5 +1,4 @@
 ---
-slug: caravan
 name: Caravan
 title_slug: caravan-3
 ipdb_id: 441

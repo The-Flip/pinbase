@@ -1,5 +1,4 @@
 ---
-slug: veb-luckenwalder-metallwarenfabrik
 name: VEB Luckenwalder Metallwarenfabrik
 manufacturer_slug: lumet
 ipdb_manufacturer_id: 633

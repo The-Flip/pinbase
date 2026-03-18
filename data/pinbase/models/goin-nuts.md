@@ -1,5 +1,4 @@
 ---
-slug: goin-nuts
 name: Goin' Nuts
 title_slug: goin-nuts
 opdb_id: GnPPP-M7ZBR

@@ -1,5 +1,4 @@
 ---
-slug: stampede-2
 name: Stampede
 title_slug: stampede
 ipdb_id: 2340

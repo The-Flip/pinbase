@@ -1,5 +1,4 @@
 ---
-slug: wizard-jackpot
 name: Wizard Jackpot
 title_slug: wizard-jackpot
 ipdb_id: 6056

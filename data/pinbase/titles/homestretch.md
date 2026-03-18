@@ -1,4 +1,3 @@
 ---
-slug: homestretch
 name: Homestretch
 ---

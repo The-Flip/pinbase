@@ -1,4 +1,3 @@
 ---
-slug: kickboxing
 name: Kickboxing
 ---

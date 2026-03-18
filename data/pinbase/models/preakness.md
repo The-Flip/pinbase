@@ -1,5 +1,4 @@
 ---
-slug: preakness
 name: Preakness
 title_slug: preakness
 ipdb_id: 1860

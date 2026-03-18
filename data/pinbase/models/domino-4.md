@@ -1,5 +1,4 @@
 ---
-slug: domino-4
 name: Domino
 title_slug: domino-3
 ipdb_id: 4637

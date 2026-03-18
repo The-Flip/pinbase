@@ -1,5 +1,4 @@
 ---
-slug: universal-novelty-manufacturing-company
 name: Universal Novelty Manufacturing Company
 manufacturer_slug: universal-novelty-manufacturing-company
 ipdb_manufacturer_id: 327

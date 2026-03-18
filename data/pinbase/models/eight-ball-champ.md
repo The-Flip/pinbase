@@ -1,5 +1,4 @@
 ---
-slug: eight-ball-champ
 name: Eight Ball Champ
 title_slug: eight-ball-champ
 opdb_id: G439V-MDvWZ

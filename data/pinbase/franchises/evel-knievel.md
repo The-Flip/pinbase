@@ -1,5 +1,4 @@
 ---
-slug: evel-knievel
 name: Evel Knievel
 ---
 

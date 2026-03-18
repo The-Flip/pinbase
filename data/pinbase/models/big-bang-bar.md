@@ -1,5 +1,4 @@
 ---
-slug: big-bang-bar
 name: Big Bang Bar
 title_slug: big-bang-bar
 opdb_id: G56vo-MLl1Z

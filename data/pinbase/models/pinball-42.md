@@ -1,5 +1,4 @@
 ---
-slug: pinball-42
 name: Pinball-42
 title_slug: pinball-42
 ipdb_id: 6109

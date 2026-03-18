@@ -1,5 +1,4 @@
 ---
-slug: flipper-2
 name: Flipper
 title_slug: flipper-2
 ipdb_id: 5121

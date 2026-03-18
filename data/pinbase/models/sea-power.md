@@ -1,5 +1,4 @@
 ---
-slug: sea-power
 name: Sea Power
 title_slug: sea-power
 ipdb_id: 4794

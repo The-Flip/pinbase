@@ -1,5 +1,4 @@
 ---
-slug: turfe
 name: Turfe
 title_slug: turfe
 ipdb_id: 6734

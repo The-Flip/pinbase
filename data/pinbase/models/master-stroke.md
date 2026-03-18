@@ -1,5 +1,4 @@
 ---
-slug: master-stroke
 name: Master Stroke
 title_slug: master-stroke
 opdb_id: G50Pk-MvB0n

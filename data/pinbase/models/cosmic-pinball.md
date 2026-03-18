@@ -1,5 +1,4 @@
 ---
-slug: cosmic-pinball
 name: Cosmic Pinball
 title_slug: cosmic-pinball
 opdb_id: GrE68-MJozw

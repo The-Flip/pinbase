@@ -1,5 +1,4 @@
 ---
-slug: one-ball-conti
 name: One Ball Conti
 title_slug: one-ball-conti
 ipdb_id: 6090

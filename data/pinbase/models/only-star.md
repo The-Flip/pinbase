@@ -1,5 +1,4 @@
 ---
-slug: only-star
 name: Only Star
 title_slug: only-star
 ipdb_id: 4782

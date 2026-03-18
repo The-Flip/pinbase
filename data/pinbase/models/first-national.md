@@ -1,5 +1,4 @@
 ---
-slug: first-national
 name: First National
 title_slug: first-national
 ipdb_id: 4171

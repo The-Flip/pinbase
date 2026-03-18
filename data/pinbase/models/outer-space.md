@@ -1,5 +1,4 @@
 ---
-slug: outer-space
 name: Outer Space
 title_slug: orbit-outer-space
 opdb_id: G5o1K-MLeEZ

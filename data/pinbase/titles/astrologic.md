@@ -1,4 +1,3 @@
 ---
-slug: astrologic
 name: Astrologic
 ---

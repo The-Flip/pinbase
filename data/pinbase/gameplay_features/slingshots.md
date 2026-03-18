@@ -1,5 +1,4 @@
 ---
-slug: slingshots
 name: Slingshots
 display_order: 3
 ---

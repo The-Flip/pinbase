@@ -1,5 +1,4 @@
 ---
-slug: pentacup
 name: Pentacup
 title_slug: pentacup
 ipdb_id: 3821

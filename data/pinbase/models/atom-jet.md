@@ -1,5 +1,4 @@
 ---
-slug: atom-jet
 name: Atom-Jet
 title_slug: atom-jet
 ipdb_id: 5146

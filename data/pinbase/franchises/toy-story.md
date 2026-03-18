@@ -1,5 +1,4 @@
 ---
-slug: toy-story
 name: Toy Story
 ---
 

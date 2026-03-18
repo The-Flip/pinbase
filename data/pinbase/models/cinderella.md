@@ -1,5 +1,4 @@
 ---
-slug: cinderella
 name: Cinderella
 title_slug: cinderella
 opdb_id: GRoNB-MP357

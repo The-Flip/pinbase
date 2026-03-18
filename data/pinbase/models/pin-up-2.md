@@ -1,5 +1,4 @@
 ---
-slug: pin-up-2
 name: Pin Up
 title_slug: pin-up
 ipdb_id: 6495

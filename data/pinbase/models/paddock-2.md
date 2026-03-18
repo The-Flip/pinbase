@@ -1,5 +1,4 @@
 ---
-slug: paddock-2
 name: Paddock
 title_slug: paddock
 ipdb_id: 1736

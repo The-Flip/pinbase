@@ -1,5 +1,4 @@
 ---
-slug: superior-manufacturing-company
 name: Superior Manufacturing Company
 manufacturer_slug: superior-manufacturing-company
 ipdb_manufacturer_id: 573

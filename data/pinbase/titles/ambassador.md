@@ -1,4 +1,3 @@
 ---
-slug: ambassador
 name: Ambassador
 ---

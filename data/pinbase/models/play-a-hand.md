@@ -1,5 +1,4 @@
 ---
-slug: play-a-hand
 name: Play a Hand
 title_slug: play-a-hand
 ipdb_id: 5238

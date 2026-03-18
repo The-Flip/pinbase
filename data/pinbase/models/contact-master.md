@@ -1,5 +1,4 @@
 ---
-slug: contact-master
 name: Contact (Master)
 title_slug: contact-master
 ipdb_id: 4457

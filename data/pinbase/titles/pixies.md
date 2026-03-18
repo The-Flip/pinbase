@@ -1,4 +1,3 @@
 ---
-slug: pixies
 name: Pixies
 ---

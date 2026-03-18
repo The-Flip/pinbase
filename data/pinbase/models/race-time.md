@@ -1,5 +1,4 @@
 ---
-slug: race-time
 name: Race Time
 title_slug: race-time
 opdb_id: G4O8o-MJ4Wp

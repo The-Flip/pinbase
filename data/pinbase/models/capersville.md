@@ -1,5 +1,4 @@
 ---
-slug: capersville
 name: Capersville
 title_slug: capersville
 opdb_id: GrXex-MQk7l

@@ -1,5 +1,4 @@
 ---
-slug: lovely-lucy
 name: Lovely Lucy
 title_slug: lovely-lucy
 opdb_id: G5oP7-MvBbr

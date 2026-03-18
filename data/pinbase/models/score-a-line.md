@@ -1,5 +1,4 @@
 ---
-slug: score-a-line
 name: Score-A-Line
 title_slug: score-a-line
 ipdb_id: 2066

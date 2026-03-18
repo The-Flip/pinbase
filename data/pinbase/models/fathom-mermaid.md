@@ -1,5 +1,4 @@
 ---
-slug: fathom-mermaid
 name: Fathom (Mermaid)
 title_slug: fathom
 opdb_id: GrPO3-M7Zkd

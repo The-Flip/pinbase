@@ -1,5 +1,4 @@
 ---
-slug: challenger-2
 name: Challenger
 title_slug: challenger
 opdb_id: G50L9-MDxXD

@@ -1,5 +1,4 @@
 ---
-slug: baffle-ball-sr-home-game
 name: Baffle Ball Sr. Home Game
 title_slug: baffle-ball-sr-home-game
 ipdb_id: 4890

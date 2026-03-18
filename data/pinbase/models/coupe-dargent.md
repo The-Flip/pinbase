@@ -1,5 +1,4 @@
 ---
-slug: coupe-dargent
 name: Coupe D'Argent
 title_slug: coupe-dargent
 ipdb_id: 4924

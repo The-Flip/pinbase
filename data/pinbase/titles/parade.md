@@ -1,4 +1,3 @@
 ---
-slug: parade
 name: Parade
 ---

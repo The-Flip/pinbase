@@ -1,5 +1,4 @@
 ---
-slug: hit-the-deck-play-cards
 name: Hit The Deck Play Cards
 title_slug: hit-the-deck-play-cards
 ipdb_id: 4923

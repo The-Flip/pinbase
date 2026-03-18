@@ -1,5 +1,4 @@
 ---
-slug: vernes-world
 name: Verne's World
 title_slug: vernes-world
 opdb_id: G5vYZ-MDlOb

@@ -1,5 +1,4 @@
 ---
-slug: spot-pool-2
 name: Spot Pool
 title_slug: bank-shot-sure-shot
 opdb_id: GrqL6-MyNxP

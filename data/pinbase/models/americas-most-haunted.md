@@ -1,5 +1,4 @@
 ---
-slug: americas-most-haunted
 name: America's Most Haunted
 title_slug: americas-most-haunted
 opdb_id: G4ELZ-MQ27w

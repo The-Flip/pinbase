@@ -1,5 +1,4 @@
 ---
-slug: yanks-2
 name: Yanks
 title_slug: yanks-2
 ipdb_id: 3532

@@ -1,5 +1,4 @@
 ---
-slug: rip-snorter
 name: Rip Snorter
 title_slug: rip-snorter
 opdb_id: G9zqb-M61B9

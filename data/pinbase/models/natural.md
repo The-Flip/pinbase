@@ -1,5 +1,4 @@
 ---
-slug: natural
 name: Natural
 title_slug: natural
 ipdb_id: 1656

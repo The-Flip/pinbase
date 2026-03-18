@@ -1,4 +1,3 @@
 ---
-slug: beisbol
 name: Beisbol
 ---

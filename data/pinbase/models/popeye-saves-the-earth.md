@@ -1,5 +1,4 @@
 ---
-slug: popeye-saves-the-earth
 name: Popeye Saves the Earth
 title_slug: popeye
 opdb_id: GR0lW-MJPVV

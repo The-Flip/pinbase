@@ -1,5 +1,4 @@
 ---
-slug: black-magic-2
 name: Black Magic
 title_slug: black-magic
 opdb_id: GryXn-MQkl5

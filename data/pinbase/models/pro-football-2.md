@@ -1,5 +1,4 @@
 ---
-slug: pro-football-2
 name: Pro-Football
 title_slug: pro-football
 ipdb_id: 5155

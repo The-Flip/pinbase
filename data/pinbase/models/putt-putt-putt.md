@@ -1,5 +1,4 @@
 ---
-slug: putt-putt-putt
 name: Putt-Putt-Putt
 title_slug: putt-putt-putt
 ipdb_id: 6798

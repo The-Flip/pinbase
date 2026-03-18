@@ -1,5 +1,4 @@
 ---
-slug: joker-wild
 name: Joker Wild
 title_slug: joker-wild
 ipdb_id: 3573

@@ -1,5 +1,4 @@
 ---
-slug: bell-products-company
 name: Bell Products Company
 manufacturer_slug: bell-products-company
 ipdb_manufacturer_id: 46

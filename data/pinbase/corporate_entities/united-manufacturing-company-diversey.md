@@ -1,5 +1,4 @@
 ---
-slug: united-manufacturing-company-diversey
 name: United Manufacturing Company (Diversey)
 manufacturer_slug: united
 ipdb_manufacturer_id: 532

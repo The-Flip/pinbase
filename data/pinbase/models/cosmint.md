@@ -1,5 +1,4 @@
 ---
-slug: cosmint
 name: Cosmint
 title_slug: cosmos
 opdb_id: G5p2Y-MDqKz-AO7XX

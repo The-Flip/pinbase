@@ -1,5 +1,4 @@
 ---
-slug: pylon
 name: Pylon
 title_slug: pylon
 ipdb_id: 1880

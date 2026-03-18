@@ -1,5 +1,4 @@
 ---
-slug: long-beach
 name: Long Beach
 title_slug: long-beach
 ipdb_id: 1469

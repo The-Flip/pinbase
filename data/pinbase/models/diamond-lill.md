@@ -1,5 +1,4 @@
 ---
-slug: diamond-lill
 name: Diamond Lill
 title_slug: diamond-lill
 opdb_id: G4Jpq-MLz43

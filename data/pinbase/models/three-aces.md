@@ -1,5 +1,4 @@
 ---
-slug: three-aces
 name: Three Aces
 title_slug: three-aces
 ipdb_id: 3734

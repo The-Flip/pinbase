@@ -1,5 +1,4 @@
 ---
-slug: outer-space-remote
 name: Outer Space (Remote)
 title_slug: outer-space-remote
 ipdb_id: 6530

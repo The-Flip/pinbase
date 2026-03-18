@@ -1,5 +1,4 @@
 ---
-slug: radio-station
 name: Radio Station
 title_slug: radio-station
 ipdb_id: 3525

@@ -1,5 +1,4 @@
 ---
-slug: latonia
 name: Latonia
 title_slug: latonia
 ipdb_id: 1417

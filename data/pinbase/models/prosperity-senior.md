@@ -1,5 +1,4 @@
 ---
-slug: prosperity-senior
 name: Prosperity Senior
 title_slug: prosperity-senior
 ipdb_id: 5577

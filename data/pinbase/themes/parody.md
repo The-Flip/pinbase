@@ -1,4 +1,3 @@
 ---
-slug: parody
 name: Parody
 ---

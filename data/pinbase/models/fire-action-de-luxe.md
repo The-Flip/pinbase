@@ -1,5 +1,4 @@
 ---
-slug: fire-action-de-luxe
 name: Fire Action De Luxe
 title_slug: firepower-ii
 opdb_id: GRWYk-Mb5OV-ARXp5

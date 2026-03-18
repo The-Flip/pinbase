@@ -1,5 +1,4 @@
 ---
-slug: touchdown-3
 name: Touchdown
 title_slug: touchdown
 opdb_id: G4ldW-MQPNv

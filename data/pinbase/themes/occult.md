@@ -1,4 +1,3 @@
 ---
-slug: occult
 name: Occult
 ---

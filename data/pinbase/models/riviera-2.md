@@ -1,5 +1,4 @@
 ---
-slug: riviera-2
 name: Riviera
 title_slug: riviera
 opdb_id: G5wo9-MDn7l

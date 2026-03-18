@@ -1,5 +1,4 @@
 ---
-slug: knock-out
 name: Knock Out
 title_slug: knock-out
 opdb_id: GR6Zq-MJ6nw

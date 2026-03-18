@@ -1,4 +1,3 @@
 ---
-slug: licensed
 name: Licensed
 ---

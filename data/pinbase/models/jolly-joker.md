@@ -1,5 +1,4 @@
 ---
-slug: jolly-joker
 name: Jolly Joker
 title_slug: jolly-joker-2
 ipdb_id: 1310

@@ -1,5 +1,4 @@
 ---
-slug: medusa
 name: Medusa
 title_slug: medusa
 opdb_id: G4xXQ-MDWW1

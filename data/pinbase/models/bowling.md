@@ -1,5 +1,4 @@
 ---
-slug: bowling
 name: Bowling
 title_slug: bowling
 ipdb_id: 5380

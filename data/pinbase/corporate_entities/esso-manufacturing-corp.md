@@ -1,5 +1,4 @@
 ---
-slug: esso-manufacturing-corp
 name: Esso Manufacturing Corp.
 manufacturer_slug: esso-manufacturing-corp
 ipdb_manufacturer_id: 666

@@ -1,5 +1,4 @@
 ---
-slug: black-rider
 name: Black Rider
 title_slug: black-knight
 opdb_id: GrO7w-Mo1Zl

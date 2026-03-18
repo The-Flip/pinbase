@@ -1,5 +1,4 @@
 ---
-slug: caravelle
 name: Caravelle
 title_slug: caravelle
 opdb_id: Gryq6-MDl0b

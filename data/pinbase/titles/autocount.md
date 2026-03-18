@@ -1,4 +1,3 @@
 ---
-slug: autocount
 name: Autocount
 ---

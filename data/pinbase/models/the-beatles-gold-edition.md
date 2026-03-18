@@ -1,5 +1,4 @@
 ---
-slug: the-beatles-gold-edition
 name: The Beatles (Gold)
 title_slug: the-beatles
 opdb_id: G0l8P-M85d9

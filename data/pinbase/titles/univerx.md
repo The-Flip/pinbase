@@ -1,4 +1,3 @@
 ---
-slug: univerx
 name: Univerx
 ---

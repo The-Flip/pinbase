@@ -1,5 +1,4 @@
 ---
-slug: straight-shooter
 name: Straight Shooter
 title_slug: straight-shooter
 opdb_id: Grk9J-MQ4qp

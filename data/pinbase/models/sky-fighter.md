@@ -1,5 +1,4 @@
 ---
-slug: sky-fighter
 name: Sky Fighter
 title_slug: sky-fighter
 ipdb_id: 6728

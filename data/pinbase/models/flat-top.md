@@ -1,5 +1,4 @@
 ---
-slug: flat-top
 name: Flat-Top
 title_slug: flat-top
 ipdb_id: 876

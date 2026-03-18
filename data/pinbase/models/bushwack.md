@@ -1,5 +1,4 @@
 ---
-slug: bushwack
 name: Bushwack
 title_slug: bushwack
 ipdb_id: 5101

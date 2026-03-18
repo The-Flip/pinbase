@@ -1,5 +1,4 @@
 ---
-slug: tropic-queens
 name: Tropic Queens
 title_slug: tropic-queens
 ipdb_id: 2662

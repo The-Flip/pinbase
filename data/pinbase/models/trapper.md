@@ -1,5 +1,4 @@
 ---
-slug: trapper
 name: Trapper
 title_slug: trapper
 ipdb_id: 2634

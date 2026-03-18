@@ -1,5 +1,4 @@
 ---
-slug: jurassic-park
 name: Jurassic Park
 title_slug: jurassic-park
 opdb_id: G4ZVB-MJ5lE

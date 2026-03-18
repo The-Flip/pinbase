@@ -1,5 +1,4 @@
 ---
-slug: senior-deluxe-bank-pool
 name: Senior Deluxe Bank-Pool
 title_slug: senior-deluxe-bank-pool
 ipdb_id: 6344

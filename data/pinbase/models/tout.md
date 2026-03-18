@@ -1,5 +1,4 @@
 ---
-slug: tout
 name: Tout
 title_slug: tout
 ipdb_id: 2614

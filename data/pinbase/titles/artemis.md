@@ -1,4 +1,3 @@
 ---
-slug: artemis
 name: Artemis
 ---

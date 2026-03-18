@@ -1,5 +1,4 @@
 ---
-slug: the-perfect-skittle-alley
 name: The Perfect Skittle-Alley
 title_slug: the-perfect-skittle-alley
 ipdb_id: 5971

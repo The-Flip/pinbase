@@ -1,5 +1,4 @@
 ---
-slug: bombardier-3
 name: Bombardier
 title_slug: bombardier-3
 ipdb_id: 3872

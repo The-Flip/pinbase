@@ -1,5 +1,4 @@
 ---
-slug: tic-toc
 name: Tic & Toc
 title_slug: tic-toc
 opdb_id: GRWwO-Mz2B6

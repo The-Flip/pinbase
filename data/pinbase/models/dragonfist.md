@@ -1,5 +1,4 @@
 ---
-slug: dragonfist
 name: Dragonfist
 title_slug: dragonfist
 opdb_id: GRQkJ-MDxpK

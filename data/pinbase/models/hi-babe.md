@@ -1,5 +1,4 @@
 ---
-slug: hi-babe
 name: Hi Babe
 title_slug: hi-babe
 ipdb_id: 5064

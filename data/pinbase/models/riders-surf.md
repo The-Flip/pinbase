@@ -1,5 +1,4 @@
 ---
-slug: riders-surf
 name: Rider's Surf
 title_slug: riders-surf
 opdb_id: G5Kn3-MW9vE

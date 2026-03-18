@@ -1,5 +1,4 @@
 ---
-slug: combat
 name: Combat
 title_slug: combat
 opdb_id: GryPZ-ML07x

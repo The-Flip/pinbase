@@ -1,5 +1,4 @@
 ---
-slug: supersonic
 name: Supersonic
 title_slug: star-ship
 opdb_id: GRLXd-ME07p

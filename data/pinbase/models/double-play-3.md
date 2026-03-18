@@ -1,5 +1,4 @@
 ---
-slug: double-play-3
 name: Double Play
 title_slug: double-play-3
 ipdb_id: 3067

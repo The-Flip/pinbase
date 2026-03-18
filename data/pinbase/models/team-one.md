@@ -1,5 +1,4 @@
 ---
-slug: team-one
 name: Team One
 title_slug: abra-ca-dabra-team-one
 opdb_id: GRpZ2-MDO9d

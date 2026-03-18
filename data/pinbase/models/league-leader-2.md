@@ -1,5 +1,4 @@
 ---
-slug: league-leader-2
 name: League Leader
 title_slug: league-leader-2
 ipdb_id: 3209

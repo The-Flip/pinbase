@@ -1,4 +1,3 @@
 ---
-slug: laramie
 name: Laramie
 ---

@@ -1,5 +1,4 @@
 ---
-slug: dauphin
 name: Dauphin
 title_slug: dauphin
 ipdb_id: 6096

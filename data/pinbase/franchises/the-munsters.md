@@ -1,5 +1,4 @@
 ---
-slug: the-munsters
 name: The Munsters
 ---
 

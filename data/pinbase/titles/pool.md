@@ -1,4 +1,3 @@
 ---
-slug: pool
 name: Pool
 ---

@@ -1,5 +1,4 @@
 ---
-slug: argosy-2
 name: Argosy
 title_slug: argosy-2
 ipdb_id: 6274

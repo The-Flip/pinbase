@@ -1,5 +1,4 @@
 ---
-slug: fast-draw-2
 name: Fast Draw
 title_slug: fast-draw
 ipdb_id: 5441

@@ -1,5 +1,4 @@
 ---
-slug: magic-lamp
 name: Magic Lamp
 title_slug: magic-lamp
 ipdb_id: 3439

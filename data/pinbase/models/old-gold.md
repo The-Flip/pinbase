@@ -1,5 +1,4 @@
 ---
-slug: old-gold
 name: Old Gold
 title_slug: old-gold
 ipdb_id: 5948

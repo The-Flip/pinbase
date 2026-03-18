@@ -1,5 +1,4 @@
 ---
-slug: stormy-2
 name: Stormy
 title_slug: stormy
 opdb_id: GbPo6-MXrpN

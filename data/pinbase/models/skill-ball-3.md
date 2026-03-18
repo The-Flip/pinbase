@@ -1,5 +1,4 @@
 ---
-slug: skill-ball-3
 name: Skill Ball
 title_slug: skill-ball-3
 ipdb_id: 5149

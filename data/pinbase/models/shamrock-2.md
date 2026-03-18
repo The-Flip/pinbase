@@ -1,5 +1,4 @@
 ---
-slug: shamrock-2
 name: Shamrock
 title_slug: shamrock-3
 ipdb_id: 2108

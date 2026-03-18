@@ -1,5 +1,4 @@
 ---
-slug: super-zeus
 name: Super Zeus
 title_slug: super-zeus
 ipdb_id: 5251

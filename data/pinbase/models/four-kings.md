@@ -1,5 +1,4 @@
 ---
-slug: four-kings
 name: Four Kings
 title_slug: four-kings
 ipdb_id: 6855

@@ -1,5 +1,4 @@
 ---
-slug: pacent-novelty-manufacturing-company
 name: Pacent Novelty Manufacturing Company
 manufacturer_slug: pacent-novelty-manufacturing-company
 ipdb_manufacturer_id: 241

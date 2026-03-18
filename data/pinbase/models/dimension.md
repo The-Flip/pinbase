@@ -1,5 +1,4 @@
 ---
-slug: dimension
 name: Dimension
 title_slug: 2001-dimension-galaxie
 opdb_id: G48nw-MQ5V4

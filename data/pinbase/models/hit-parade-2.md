@@ -1,5 +1,4 @@
 ---
-slug: hit-parade-2
 name: Hit Parade
 title_slug: hit-parade
 opdb_id: GqZdQ-Mq1wW

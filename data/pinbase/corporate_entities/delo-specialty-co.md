@@ -1,5 +1,4 @@
 ---
-slug: delo-specialty-co
 name: DeLo Specialty Co.
 manufacturer_slug: delo-specialty-co
 ipdb_manufacturer_id: 625

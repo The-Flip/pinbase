@@ -1,10 +1,11 @@
 ---
-slug: mustang-limited-edition
 name: Mustang (Limited Edition)
 title_slug: mustang
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GrPOR-MLq5x
 ipdb_id: 6100
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: mustang-premium
 credit_refs:
 - person_slug: john-trudeau

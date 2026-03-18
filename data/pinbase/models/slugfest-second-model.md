@@ -1,5 +1,4 @@
 ---
-slug: slugfest-second-model
 name: SlugFest (Second Model)
 title_slug: slugfest-second-model
 ipdb_id: 5949

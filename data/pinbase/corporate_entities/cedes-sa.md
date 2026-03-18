@@ -1,5 +1,4 @@
 ---
-slug: cedes-sa
 name: Cedes S.A.
 manufacturer_slug: cedes-sa
 ipdb_manufacturer_id: 378

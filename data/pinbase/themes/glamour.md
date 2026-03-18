@@ -1,4 +1,3 @@
 ---
-slug: glamour
 name: Glamour
 ---

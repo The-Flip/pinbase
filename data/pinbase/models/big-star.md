@@ -1,5 +1,4 @@
 ---
-slug: big-star
 name: Big Star
 title_slug: super-star-big-star
 opdb_id: GRV2y-MQPdw

@@ -1,5 +1,4 @@
 ---
-slug: blue-seal
 name: Blue Seal
 title_slug: blue-seal
 ipdb_id: 331

@@ -1,5 +1,4 @@
 ---
-slug: hurdle-hop
 name: Hurdle Hop
 title_slug: hurdle-hop
 ipdb_id: 3166

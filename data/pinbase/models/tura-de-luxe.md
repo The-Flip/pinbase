@@ -1,5 +1,4 @@
 ---
-slug: tura-de-luxe
 name: Tura De Luxe
 title_slug: tura-de-luxe
 ipdb_id: 6213

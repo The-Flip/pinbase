@@ -1,5 +1,4 @@
 ---
-slug: pinball-action
 name: Pinball Action
 title_slug: pinball-action
 ipdb_id: 5252

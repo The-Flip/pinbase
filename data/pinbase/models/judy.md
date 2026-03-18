@@ -1,5 +1,4 @@
 ---
-slug: judy
 name: Judy
 title_slug: judy
 opdb_id: Grd3b-MXre1

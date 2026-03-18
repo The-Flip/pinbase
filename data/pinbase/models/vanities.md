@@ -1,5 +1,4 @@
 ---
-slug: vanities
 name: Vanities
 title_slug: vanities
 ipdb_id: 2717

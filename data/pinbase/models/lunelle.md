@@ -1,5 +1,4 @@
 ---
-slug: lunelle
 name: Lunelle
 title_slug: alien-poker
 opdb_id: G4yen-MD12Y-AOEew

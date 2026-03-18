@@ -1,4 +1,3 @@
 ---
-slug: whizz
 name: Whizz
 ---

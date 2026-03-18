@@ -1,5 +1,4 @@
 ---
-slug: casino-golf
 name: Casino Golf
 title_slug: casino-golf
 ipdb_id: 6297

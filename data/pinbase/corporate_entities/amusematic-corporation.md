@@ -1,5 +1,4 @@
 ---
-slug: amusematic-corporation
 name: Amusematic Corporation
 manufacturer_slug: amusematic-corporation
 ipdb_manufacturer_id: 475

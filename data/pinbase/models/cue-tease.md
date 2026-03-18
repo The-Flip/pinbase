@@ -1,5 +1,4 @@
 ---
-slug: cue-tease
 name: Cue-Tease
 title_slug: cue-tease
 opdb_id: GRYdp-ML0KP

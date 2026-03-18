@@ -1,5 +1,4 @@
 ---
-slug: full
 name: Full
 title_slug: full
 opdb_id: Gj6Dj-MOE0d-AO6Dp

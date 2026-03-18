@@ -1,5 +1,4 @@
 ---
-slug: tivoli
 name: Tivoli
 title_slug: fun-land-fun-park
 opdb_id: GRwqx-M8598-A9PkQ

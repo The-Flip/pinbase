@@ -1,5 +1,4 @@
 ---
-slug: pearls-of-east
 name: Pearls Of East
 title_slug: pearls-of-east
 ipdb_id: 6072

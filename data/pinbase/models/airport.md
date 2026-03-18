@@ -1,5 +1,4 @@
 ---
-slug: airport
 name: Airport
 title_slug: college-queens-airport
 opdb_id: GrOQ1-MQPje

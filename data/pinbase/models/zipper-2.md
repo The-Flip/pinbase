@@ -1,5 +1,4 @@
 ---
-slug: zipper-2
 name: Zipper
 title_slug: zipper-2
 ipdb_id: 4653

@@ -1,4 +1,3 @@
 ---
-slug: ellson
 name: Ellson
 ---

@@ -1,5 +1,4 @@
 ---
-slug: hit-or-miss-2
 name: Hit or Miss
 title_slug: hit-or-miss-2
 ipdb_id: 6181

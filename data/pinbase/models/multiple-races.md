@@ -1,5 +1,4 @@
 ---
-slug: multiple-races
 name: Multiple Races
 title_slug: multiple-races
 ipdb_id: 1642

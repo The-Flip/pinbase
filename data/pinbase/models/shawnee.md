@@ -1,5 +1,4 @@
 ---
-slug: shawnee
 name: Shawnee
 title_slug: shawnee
 ipdb_id: 6938

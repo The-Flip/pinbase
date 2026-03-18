@@ -1,5 +1,4 @@
 ---
-slug: liberty
 name: Liberty
 title_slug: liberty
 ipdb_id: 1435

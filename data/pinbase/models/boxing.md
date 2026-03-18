@@ -1,5 +1,4 @@
 ---
-slug: boxing
 name: Boxing
 title_slug: boxing
 ipdb_id: 4367

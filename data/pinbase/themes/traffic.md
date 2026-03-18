@@ -1,4 +1,3 @@
 ---
-slug: traffic
 name: Traffic
 ---

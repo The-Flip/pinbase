@@ -1,5 +1,4 @@
 ---
-slug: sorcerer
 name: Sorcerer
 title_slug: sorcerer
 opdb_id: G4qxv-MJPyv

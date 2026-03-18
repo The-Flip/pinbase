@@ -1,5 +1,4 @@
 ---
-slug: sky-rider-2
 name: Sky Rider
 title_slug: sky-rider
 ipdb_id: 3855

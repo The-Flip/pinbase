@@ -1,5 +1,4 @@
 ---
-slug: whirls-fair
 name: Whirls Fair
 title_slug: whirls-fair
 ipdb_id: 2764

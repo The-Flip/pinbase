@@ -1,5 +1,4 @@
 ---
-slug: marvel-manufacturing-company
 name: Marvel Manufacturing Company
 manufacturer_slug: marvel
 ipdb_manufacturer_id: 206

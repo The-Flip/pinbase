@@ -1,5 +1,4 @@
 ---
-slug: fairmont
 name: Fairmont
 title_slug: fairmont
 ipdb_id: 4038

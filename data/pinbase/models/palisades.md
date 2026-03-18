@@ -1,5 +1,4 @@
 ---
-slug: palisades
 name: Palisades
 title_slug: palisades
 opdb_id: GRvvl-MLBzn

@@ -1,5 +1,4 @@
 ---
-slug: ambassador-de-luxe-sr
 name: Ambassador De Luxe Sr.
 title_slug: ambassador-de-luxe-sr
 ipdb_id: 5821

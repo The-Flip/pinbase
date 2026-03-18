@@ -1,5 +1,4 @@
 ---
-slug: swords-of-fury
 name: Swords of Fury
 title_slug: swords-of-fury
 opdb_id: GrPzV-MDxj7

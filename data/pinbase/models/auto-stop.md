@@ -1,5 +1,4 @@
 ---
-slug: auto-stop
 name: Auto Stop
 title_slug: auto-stop
 ipdb_id: 5935

@@ -1,5 +1,4 @@
 ---
-slug: gemini-2000
 name: Gemini 2000
 title_slug: centaur
 opdb_id: GrX7q-Mx0Z8

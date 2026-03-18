@@ -1,4 +1,3 @@
 ---
-slug: tropical
 name: Tropical
 ---

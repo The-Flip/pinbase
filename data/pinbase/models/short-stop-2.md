@@ -1,5 +1,4 @@
 ---
-slug: short-stop-2
 name: Short Stop
 title_slug: short-stop-2
 ipdb_id: 2129

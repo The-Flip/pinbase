@@ -1,5 +1,4 @@
 ---
-slug: party-2
 name: Party
 title_slug: party-2
 ipdb_id: 5778

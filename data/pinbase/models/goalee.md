@@ -1,5 +1,4 @@
 ---
-slug: goalee
 name: Goalee
 title_slug: goalee
 ipdb_id: 5879

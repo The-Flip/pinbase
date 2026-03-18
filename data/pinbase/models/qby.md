@@ -1,5 +1,4 @@
 ---
-slug: qby
 name: Q*by
 title_slug: qby
 ipdb_id: 5335

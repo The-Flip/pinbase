@@ -1,5 +1,4 @@
 ---
-slug: hi-lo-2
 name: Hi-Lo
 title_slug: spin-a-card-hearts-and-spades
 opdb_id: G4ZQv-MOEE1

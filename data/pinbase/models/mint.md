@@ -1,5 +1,4 @@
 ---
-slug: mint
 name: Mint
 title_slug: mint
 ipdb_id: 6039

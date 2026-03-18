@@ -1,5 +1,4 @@
 ---
-slug: erbu-ball-2
 name: ERBU-BALL
 title_slug: erbu-ball-2
 ipdb_id: 5154

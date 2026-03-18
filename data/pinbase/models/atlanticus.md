@@ -1,5 +1,4 @@
 ---
-slug: atlanticus
 name: Atlanticus
 title_slug: atlanticus
 opdb_id: G0lpe-ME0jl

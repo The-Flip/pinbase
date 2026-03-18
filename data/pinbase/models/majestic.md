@@ -1,5 +1,4 @@
 ---
-slug: majestic
 name: Majestic
 title_slug: majestic
 opdb_id: GRQYv-MLn15

@@ -1,5 +1,4 @@
 ---
-slug: hi-score-2
 name: Hi Score
 title_slug: hi-score
 ipdb_id: 6989

@@ -1,5 +1,4 @@
 ---
-slug: charleston-turbo
 name: Charleston Turbo
 title_slug: charleston-turbo
 ipdb_id: 6116

@@ -1,5 +1,4 @@
 ---
-slug: ballota-rekord
 name: Ballota-Rekord
 title_slug: ballota-rekord
 ipdb_id: 5374

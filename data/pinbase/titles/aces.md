@@ -1,4 +1,3 @@
 ---
-slug: aces
 name: Aces
 ---

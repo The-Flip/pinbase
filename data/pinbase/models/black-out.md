@@ -1,5 +1,4 @@
 ---
-slug: black-out
 name: Black Out
 title_slug: black-out
 ipdb_id: 4966

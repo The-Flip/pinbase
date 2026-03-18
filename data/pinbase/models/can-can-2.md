@@ -1,5 +1,4 @@
 ---
-slug: can-can-2
 name: Can Can
 title_slug: can-can
 opdb_id: G4jk1-MDEKP

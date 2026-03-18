@@ -1,4 +1,3 @@
 ---
-slug: galaxie
 name: Galaxie
 ---

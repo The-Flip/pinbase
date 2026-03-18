@@ -1,5 +1,4 @@
 ---
-slug: backglass-lights
 name: Backglass Lights
 display_order: 2
 ---

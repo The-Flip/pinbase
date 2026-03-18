@@ -1,5 +1,4 @@
 ---
-slug: creature-from-the-black-lagoon
 name: Creature from the Black Lagoon
 title_slug: creature-from-the-black-lagoon
 opdb_id: GrNWn-MQdqZ

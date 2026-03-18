@@ -1,5 +1,4 @@
 ---
-slug: the-brain
 name: The Brain
 title_slug: the-brain
 ipdb_id: 5233

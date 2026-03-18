@@ -1,5 +1,4 @@
 ---
-slug: greyhound-3
 name: Greyhound
 title_slug: greyhound-3
 ipdb_id: 4360

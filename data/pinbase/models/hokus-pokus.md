@@ -1,5 +1,4 @@
 ---
-slug: hokus-pokus
 name: Hokus Pokus
 title_slug: hokus-pokus
 opdb_id: GRwBN-MJ5ln

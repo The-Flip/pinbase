@@ -1,5 +1,4 @@
 ---
-slug: penny-play
 name: Penny Play
 title_slug: penny-play
 ipdb_id: 6539

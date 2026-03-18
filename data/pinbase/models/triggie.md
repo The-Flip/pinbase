@@ -1,5 +1,4 @@
 ---
-slug: triggie
 name: Triggie
 title_slug: triggie
 ipdb_id: 5016

@@ -1,5 +1,4 @@
 ---
-slug: valencia
 name: Valencia
 title_slug: valencia-toledo
 opdb_id: G5nj6-MLnwY

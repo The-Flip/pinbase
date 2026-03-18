@@ -1,5 +1,4 @@
 ---
-slug: gotcha
 name: Gotcha
 title_slug: gotcha
 ipdb_id: 5151

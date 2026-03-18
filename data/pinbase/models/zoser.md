@@ -1,5 +1,4 @@
 ---
-slug: zoser
 name: Zoser
 title_slug: zoser
 ipdb_id: 4086

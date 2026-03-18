@@ -1,5 +1,4 @@
 ---
-slug: hoop-er-doo
 name: Hoop-Er-Doo
 title_slug: hoop-er-doo
 ipdb_id: 1234

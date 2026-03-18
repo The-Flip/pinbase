@@ -1,5 +1,4 @@
 ---
-slug: knock-out-junior
 name: Knock-Out Junior
 title_slug: knock-out-junior
 ipdb_id: 5590

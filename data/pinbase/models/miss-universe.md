@@ -1,5 +1,4 @@
 ---
-slug: miss-universe
 name: Miss Universe
 title_slug: miss-universe
 ipdb_id: 3411

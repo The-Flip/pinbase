@@ -1,10 +1,11 @@
 ---
-slug: pirates-of-the-caribbean-collectors-edition
 name: Pirates of the Caribbean (Collector's Edition)
 title_slug: pirates-of-the-caribbean-jersey-jack-pinball
 corporate_entity_slug: jersey-jack-pinball-inc-lakewood-nj
 opdb_id: GRbPY-MBR24
 ipdb_id: 6494
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: eric-meunier
   role: Design

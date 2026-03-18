@@ -1,5 +1,4 @@
 ---
-slug: bowl-a-ray
 name: Bowl-A-Ray
 title_slug: bowl-a-ray
 ipdb_id: 6390

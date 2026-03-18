@@ -1,5 +1,4 @@
 ---
-slug: beat-spark
 name: Beat & Spark (ビート＆スパーク)
 title_slug: beat-spark
 ipdb_id: 6771

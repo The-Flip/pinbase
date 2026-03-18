@@ -1,4 +1,3 @@
 ---
-slug: tailspin
 name: Tailspin
 ---

@@ -1,5 +1,4 @@
 ---
-slug: double-shuffle-2
 name: Double Shuffle
 title_slug: double-shuffle-2
 ipdb_id: 5293

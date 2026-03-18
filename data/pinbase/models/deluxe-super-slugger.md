@@ -1,5 +1,4 @@
 ---
-slug: deluxe-super-slugger
 name: Deluxe Super Slugger
 title_slug: deluxe-super-slugger
 ipdb_id: 2442

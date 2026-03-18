@@ -1,4 +1,3 @@
 ---
-slug: torero
 name: Torero
 ---

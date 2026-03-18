@@ -1,5 +1,4 @@
 ---
-slug: kilroy
 name: Kilroy
 title_slug: kilroy
 ipdb_id: 1366

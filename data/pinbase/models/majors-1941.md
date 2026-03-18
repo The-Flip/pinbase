@@ -1,5 +1,4 @@
 ---
-slug: majors-1941
 name: Majors - 1941
 title_slug: majors-1941
 ipdb_id: 1531

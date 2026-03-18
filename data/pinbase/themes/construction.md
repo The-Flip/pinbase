@@ -1,4 +1,3 @@
 ---
-slug: construction
 name: Construction
 ---

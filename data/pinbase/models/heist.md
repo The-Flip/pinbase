@@ -1,5 +1,4 @@
 ---
-slug: heist
 name: Heist
 title_slug: heist
 opdb_id: G18pJ-Mz2bl

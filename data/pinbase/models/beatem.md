@@ -1,5 +1,4 @@
 ---
-slug: beatem
 name: Beatem
 title_slug: beatem
 ipdb_id: 5061

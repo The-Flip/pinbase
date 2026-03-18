@@ -1,5 +1,4 @@
 ---
-slug: zig-zag
 name: Zig Zag
 title_slug: zig-zag-wing-ding
 opdb_id: GRoL9-MDEwn

@@ -1,5 +1,4 @@
 ---
-slug: wizard-2
 name: Wizard!
 title_slug: wizard
 opdb_id: G4l8K-MJwXy

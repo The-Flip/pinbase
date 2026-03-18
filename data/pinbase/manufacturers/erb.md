@@ -1,4 +1,3 @@
 ---
-slug: erb
 name: ERB�
 ---

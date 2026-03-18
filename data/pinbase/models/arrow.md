@@ -1,5 +1,4 @@
 ---
-slug: arrow
 name: Arrow
 title_slug: arrow
 ipdb_id: 3876

@@ -1,5 +1,4 @@
 ---
-slug: parlor-bagatelle-one-star-two-bell
 name: Parlor Bagatelle (One Star / Two Bell)
 title_slug: parlor-bagatelle-one-star-two-bell
 ipdb_id: 1761

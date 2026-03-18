@@ -1,5 +1,4 @@
 ---
-slug: rekord-golf
 name: Rekord-Golf
 title_slug: rekord-golf
 ipdb_id: 4717

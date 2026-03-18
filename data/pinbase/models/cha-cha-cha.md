@@ -1,5 +1,4 @@
 ---
-slug: cha-cha-cha
 name: Cha Cha Cha
 title_slug: cha-cha-cha
 opdb_id: Grl7B-MYee8

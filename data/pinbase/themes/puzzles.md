@@ -1,4 +1,3 @@
 ---
-slug: puzzles
 name: Puzzles
 ---

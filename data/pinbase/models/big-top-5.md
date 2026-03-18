@@ -1,5 +1,4 @@
 ---
-slug: big-top-5
 name: Big Top
 title_slug: big-top-5
 ipdb_id: 5062

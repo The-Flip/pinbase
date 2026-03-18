@@ -1,4 +1,3 @@
 ---
-slug: opportunity
 name: Opportunity
 ---

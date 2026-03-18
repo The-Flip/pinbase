@@ -1,5 +1,4 @@
 ---
-slug: galahad
 name: Galahad
 title_slug: camelot-galahad
 opdb_id: G4yY2-MQpPw

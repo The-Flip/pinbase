@@ -1,5 +1,4 @@
 ---
-slug: mac-sa
 name: MAC S.A.
 opdb_manufacturer_id: 44
 ---

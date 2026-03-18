@@ -1,5 +1,4 @@
 ---
-slug: retro-pinball-llc
 name: Retro Pinball LLC
 manufacturer_slug: retro-pinball
 ipdb_manufacturer_id: 610

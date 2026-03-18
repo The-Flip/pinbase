@@ -1,5 +1,4 @@
 ---
-slug: roughriders
 name: Roughriders
 title_slug: roughriders
 ipdb_id: 3284

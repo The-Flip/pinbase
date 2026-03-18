@@ -1,4 +1,3 @@
 ---
-slug: legend
 name: Legend
 ---

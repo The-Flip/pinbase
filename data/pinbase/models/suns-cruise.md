@@ -1,5 +1,4 @@
 ---
-slug: suns-cruise
 name: Sun's Cruise
 title_slug: suns-cruise
 ipdb_id: 4107

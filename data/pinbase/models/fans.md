@@ -1,5 +1,4 @@
 ---
-slug: fans
 name: Fans
 title_slug: doozie-daffie
 opdb_id: GRVk8-MVKb4

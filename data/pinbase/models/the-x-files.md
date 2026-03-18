@@ -1,5 +1,4 @@
 ---
-slug: the-x-files
 name: The X Files
 title_slug: the-x-files
 opdb_id: G4jPq-MQdlK

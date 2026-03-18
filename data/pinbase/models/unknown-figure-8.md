@@ -1,5 +1,4 @@
 ---
-slug: unknown-figure-8
 name: Unknown ("Figure 8")
 title_slug: unknown-figure-8
 ipdb_id: 6659

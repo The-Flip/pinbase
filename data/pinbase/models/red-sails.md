@@ -1,5 +1,4 @@
 ---
-slug: red-sails
 name: Red Sails
 title_slug: red-sails
 ipdb_id: 1937

@@ -1,5 +1,4 @@
 ---
-slug: star-lite-3
 name: Star Lite
 title_slug: star-lite-3
 ipdb_id: 3480

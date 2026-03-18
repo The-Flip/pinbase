@@ -1,5 +1,4 @@
 ---
-slug: letoile
 name: L'Etoile
 title_slug: letoile
 ipdb_id: 5309

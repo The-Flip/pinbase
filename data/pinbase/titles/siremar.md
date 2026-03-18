@@ -1,4 +1,3 @@
 ---
-slug: siremar
 name: Siremar
 ---

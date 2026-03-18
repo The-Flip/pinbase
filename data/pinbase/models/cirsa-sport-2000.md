@@ -1,5 +1,4 @@
 ---
-slug: cirsa-sport-2000
 name: Cirsa Sport 2000
 title_slug: cirsa-sport-2000
 opdb_id: G5p8W-M9RwK

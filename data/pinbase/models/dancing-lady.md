@@ -1,5 +1,4 @@
 ---
-slug: dancing-lady
 name: Dancing Lady
 title_slug: dancing-lady
 opdb_id: G5DeY-MNEXX

@@ -1,5 +1,4 @@
 ---
-slug: great-guns
 name: Great Guns
 title_slug: great-guns
 ipdb_id: 1084

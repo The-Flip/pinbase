@@ -1,5 +1,4 @@
 ---
-slug: circus-5
 name: Circus
 title_slug: circus-7
 ipdb_id: 519

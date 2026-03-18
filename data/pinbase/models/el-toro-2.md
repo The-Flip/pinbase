@@ -1,5 +1,4 @@
 ---
-slug: el-toro-2
 name: El Toro
 title_slug: el-toro-3
 ipdb_id: 771

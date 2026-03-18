@@ -1,5 +1,4 @@
 ---
-slug: bowling-flipper
 name: Bowling Flipper
 title_slug: bowling-flipper
 opdb_id: GRwnJ-MQjrV

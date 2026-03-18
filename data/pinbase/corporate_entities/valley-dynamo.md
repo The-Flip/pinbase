@@ -1,5 +1,4 @@
 ---
-slug: valley-dynamo
 name: Valley Dynamo
 manufacturer_slug: valley-dynamo
 ipdb_manufacturer_id: 734

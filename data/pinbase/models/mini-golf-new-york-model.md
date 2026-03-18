@@ -1,5 +1,4 @@
 ---
-slug: mini-golf-new-york-model
 name: Mini Golf (New York Model)
 title_slug: mini-golf-new-york-model
 ipdb_id: 6255

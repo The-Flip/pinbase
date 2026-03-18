@@ -1,5 +1,4 @@
 ---
-slug: royal-aces
 name: Royal Aces
 title_slug: royal-aces
 ipdb_id: 3791

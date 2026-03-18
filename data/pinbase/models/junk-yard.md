@@ -1,5 +1,4 @@
 ---
-slug: junk-yard
 name: Junk Yard
 title_slug: junk-yard
 opdb_id: GRLlj-MQZN8

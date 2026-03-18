@@ -1,5 +1,4 @@
 ---
-slug: roller-coaster
 name: Roller Coaster
 title_slug: roller-coaster
 opdb_id: G42pZ-ML171

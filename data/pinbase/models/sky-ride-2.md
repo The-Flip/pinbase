@@ -1,5 +1,4 @@
 ---
-slug: sky-ride-2
 name: Sky Ride
 title_slug: sky-ride-2
 ipdb_id: 4229

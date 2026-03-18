@@ -1,5 +1,4 @@
 ---
-slug: las-vegas-3
 name: Las Vegas
 title_slug: las-vegas-3
 ipdb_id: 4068

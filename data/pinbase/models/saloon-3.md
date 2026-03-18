@@ -1,5 +1,4 @@
 ---
-slug: saloon-3
 name: Saloon
 title_slug: saloon-3
 ipdb_id: 6195

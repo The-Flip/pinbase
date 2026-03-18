@@ -1,5 +1,4 @@
 ---
-slug: miss-universo-5-ladies
 name: Miss Universo (5 Ladies)
 title_slug: miss-universo-5-ladies
 ipdb_id: 6243

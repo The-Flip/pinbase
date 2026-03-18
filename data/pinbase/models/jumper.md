@@ -1,5 +1,4 @@
 ---
-slug: jumper
 name: Jumper
 title_slug: jumper
 ipdb_id: 1327

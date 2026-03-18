@@ -1,5 +1,4 @@
 ---
-slug: fifth-inning
 name: Fifth Inning
 title_slug: fifth-inning
 ipdb_id: 839

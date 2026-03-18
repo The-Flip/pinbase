@@ -1,5 +1,4 @@
 ---
-slug: whoopee-ball
 name: Whoopee Ball
 title_slug: whoopee-ball
 ipdb_id: 5726

@@ -1,5 +1,4 @@
 ---
-slug: robo-war
 name: Robo-War
 title_slug: robo-war
 opdb_id: GryK3-MQrWk

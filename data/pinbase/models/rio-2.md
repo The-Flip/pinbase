@@ -1,5 +1,4 @@
 ---
-slug: rio-2
 name: Rio
 title_slug: rio-4
 ipdb_id: 1960

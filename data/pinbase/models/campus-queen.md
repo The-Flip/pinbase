@@ -1,5 +1,4 @@
 ---
-slug: campus-queen
 name: Campus Queen
 title_slug: gator-sheba-campus-queen
 opdb_id: GRDQ1-MQYrl

@@ -1,5 +1,4 @@
 ---
-slug: carom
 name: Carom
 title_slug: carom
 ipdb_id: 458

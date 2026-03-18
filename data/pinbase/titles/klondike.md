@@ -1,4 +1,3 @@
 ---
-slug: klondike
 name: Klondike
 ---

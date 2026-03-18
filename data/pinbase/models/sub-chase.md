@@ -1,5 +1,4 @@
 ---
-slug: sub-chase
 name: Sub Chase
 title_slug: sub-chase
 ipdb_id: 5342

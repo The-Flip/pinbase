@@ -1,5 +1,4 @@
 ---
-slug: beat-aces
 name: Beat Aces
 title_slug: beat-aces
 ipdb_id: 4895

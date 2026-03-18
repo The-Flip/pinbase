@@ -1,5 +1,4 @@
 ---
-slug: zep
 name: Zep
 title_slug: zep
 ipdb_id: 4286

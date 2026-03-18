@@ -1,5 +1,4 @@
 ---
-slug: metallica
 name: Metallica
 opdb_group_id: GRBE4
 franchise_slug: metallica

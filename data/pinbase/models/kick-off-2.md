@@ -1,5 +1,4 @@
 ---
-slug: kick-off-2
 name: Kick-Off
 title_slug: kick-off
 opdb_id: Gr8L0-MLRdY

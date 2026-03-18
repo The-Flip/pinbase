@@ -1,4 +1,3 @@
 ---
-slug: synchro
 name: Synchro
 ---

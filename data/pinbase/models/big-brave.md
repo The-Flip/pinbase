@@ -1,5 +1,4 @@
 ---
-slug: big-brave
 name: Big Brave
 title_slug: big-indian-big-brave
 opdb_id: GrXKb-MQ4OY

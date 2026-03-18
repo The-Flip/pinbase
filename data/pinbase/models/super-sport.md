@@ -1,5 +1,4 @@
 ---
-slug: super-sport
 name: Super Sport
 title_slug: super-sport
 ipdb_id: 6105

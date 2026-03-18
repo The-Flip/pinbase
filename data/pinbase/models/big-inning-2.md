@@ -1,5 +1,4 @@
 ---
-slug: big-inning-2
 name: Big Inning
 title_slug: big-inning-2
 ipdb_id: 5083

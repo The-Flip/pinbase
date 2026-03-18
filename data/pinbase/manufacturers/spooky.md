@@ -1,5 +1,4 @@
 ---
-slug: spooky
 name: Spooky Pinball
 opdb_manufacturer_id: 95
 ---

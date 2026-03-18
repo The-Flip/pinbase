@@ -1,5 +1,4 @@
 ---
-slug: 10th-inning
 name: 10th Inning
 title_slug: 10th-inning-2
 ipdb_id: 3367

@@ -1,5 +1,4 @@
 ---
-slug: sporty
 name: Sporty
 title_slug: sporty
 ipdb_id: 2310

@@ -1,5 +1,4 @@
 ---
-slug: pamco-parlay-junior
 name: Pamco Parlay Junior
 title_slug: pamco-parlay-junior
 ipdb_id: 5598

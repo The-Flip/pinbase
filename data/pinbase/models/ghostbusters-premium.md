@@ -1,10 +1,11 @@
 ---
-slug: ghostbusters-premium
 name: Ghostbusters (Premium)
 title_slug: ghostbusters
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GR9Nr-M5RxE
 ipdb_id: 6333
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: john-trudeau
   role: Design

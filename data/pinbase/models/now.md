@@ -1,5 +1,4 @@
 ---
-slug: now
 name: Now
 title_slug: now
 opdb_id: G4JZv-MDlK5

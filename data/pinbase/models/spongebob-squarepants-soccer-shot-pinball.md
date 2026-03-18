@@ -1,5 +1,4 @@
 ---
-slug: spongebob-squarepants-soccer-shot-pinball
 name: SpongeBob SquarePants Soccer Shot Pinball
 title_slug: spongebob-squarepants-soccer-shot-pinball
 ipdb_id: 5509

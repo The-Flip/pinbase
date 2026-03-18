@@ -1,4 +1,3 @@
 ---
-slug: avalon
 name: Avalon
 ---

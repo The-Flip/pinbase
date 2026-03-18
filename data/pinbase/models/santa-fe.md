@@ -1,5 +1,4 @@
 ---
-slug: santa-fe
 name: Santa Fe
 title_slug: santa-fe
 ipdb_id: 2051

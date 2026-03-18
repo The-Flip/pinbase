@@ -1,5 +1,4 @@
 ---
-slug: time
 name: Time
 title_slug: time
 ipdb_id: 2562

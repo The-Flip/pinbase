@@ -1,5 +1,4 @@
 ---
-slug: silver-extended-play-prototype
 name: Silver (Extended Play Prototype)
 title_slug: silver-extended-play-prototype
 ipdb_id: 6907

@@ -1,5 +1,4 @@
 ---
-slug: trailways
 name: Trailways
 title_slug: trailways
 ipdb_id: 2626

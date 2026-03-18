@@ -1,5 +1,4 @@
 ---
-slug: soccer-champ
 name: Soccer Champ
 title_slug: soccer-champ
 ipdb_id: 5600

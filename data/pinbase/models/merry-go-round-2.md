@@ -1,5 +1,4 @@
 ---
-slug: merry-go-round-2
 name: Merry-Go-Round
 title_slug: merry-go-round-2
 ipdb_id: 1579

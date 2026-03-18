@@ -1,5 +1,4 @@
 ---
-slug: big-buck-hunter-pro
 name: Big Buck Hunter Pro
 title_slug: big-buck-hunter
 opdb_id: G4N6n-MLxER

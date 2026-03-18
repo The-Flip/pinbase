@@ -1,5 +1,4 @@
 ---
-slug: gold-star-4
 name: Gold Star
 title_slug: gold-star-4
 ipdb_id: 3707

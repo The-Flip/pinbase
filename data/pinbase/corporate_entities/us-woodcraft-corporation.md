@@ -1,5 +1,4 @@
 ---
-slug: us-woodcraft-corporation
 name: U.S. Woodcraft Corporation
 manufacturer_slug: us-woodcraft-corporation
 ipdb_manufacturer_id: 781

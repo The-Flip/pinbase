@@ -1,5 +1,4 @@
 ---
-slug: clown-2
 name: Clown
 title_slug: clown-2
 opdb_id: G9zz0-MP3VK

@@ -1,4 +1,3 @@
 ---
-slug: canasta
 name: Canasta
 ---

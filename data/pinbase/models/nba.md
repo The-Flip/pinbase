@@ -1,5 +1,4 @@
 ---
-slug: nba
 name: NBA
 title_slug: nba
 opdb_id: G5K19-MBRlz

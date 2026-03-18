@@ -1,5 +1,4 @@
 ---
-slug: broadway-4
 name: Broadway
 title_slug: broadway-4
 ipdb_id: 3917

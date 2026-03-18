@@ -1,5 +1,4 @@
 ---
-slug: batter-up-4
 name: Batter Up
 title_slug: batter-up-3
 ipdb_id: 4238

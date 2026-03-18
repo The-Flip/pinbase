@@ -1,5 +1,4 @@
 ---
-slug: scram-2
 name: Scram!
 title_slug: scram-3
 ipdb_id: 2070

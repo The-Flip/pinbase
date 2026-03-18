@@ -1,5 +1,4 @@
 ---
-slug: the-wizard-of-oz-75th-anniversary-edition
 name: The Wizard of Oz (75th Anniversary)
 title_slug: the-wizard-of-oz
 opdb_id: G4xyR-MJ2v0-A1BY7

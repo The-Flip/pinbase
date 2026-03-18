@@ -1,5 +1,4 @@
 ---
-slug: carolina
 name: Carolina
 title_slug: carolina
 opdb_id: GkBzD-MW9dn

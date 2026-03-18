@@ -1,5 +1,4 @@
 ---
-slug: freefall
 name: Freefall
 title_slug: freefall
 opdb_id: G5W9p-MJw0B

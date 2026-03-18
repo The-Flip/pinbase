@@ -1,5 +1,4 @@
 ---
-slug: skooky
 name: Skooky
 title_slug: skooky
 ipdb_id: 3236

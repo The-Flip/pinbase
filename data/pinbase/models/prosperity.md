@@ -1,5 +1,4 @@
 ---
-slug: prosperity
 name: Prosperity
 title_slug: prosperity
 ipdb_id: 5950

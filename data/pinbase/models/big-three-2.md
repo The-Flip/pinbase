@@ -1,5 +1,4 @@
 ---
-slug: big-three-2
 name: Big Three
 title_slug: big-three-2
 ipdb_id: 3875

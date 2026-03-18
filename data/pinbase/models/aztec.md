@@ -1,5 +1,4 @@
 ---
-slug: aztec
 name: Aztec
 title_slug: aztec
 opdb_id: GRpLk-MQdOY

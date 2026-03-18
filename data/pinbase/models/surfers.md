@@ -1,5 +1,4 @@
 ---
-slug: surfers
 name: Surfers
 title_slug: surfers
 opdb_id: GryyO-MJw7z

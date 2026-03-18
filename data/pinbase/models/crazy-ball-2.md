@@ -1,5 +1,4 @@
 ---
-slug: crazy-ball-2
 name: Crazy Ball
 title_slug: crazy-ball-2
 ipdb_id: 5198

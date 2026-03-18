@@ -1,5 +1,4 @@
 ---
-slug: bank-a-ball-2
 name: Bank-A-Ball
 title_slug: bank-a-ball
 opdb_id: G9zpB-MLRzv

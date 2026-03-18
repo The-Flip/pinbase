@@ -1,5 +1,4 @@
 ---
-slug: glamour
 name: Glamour
 title_slug: glamour
 ipdb_id: 1013

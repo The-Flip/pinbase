@@ -1,5 +1,4 @@
 ---
-slug: cannes
 name: Cannes
 title_slug: monaco-cannes
 opdb_id: GRVzL-MZeEB

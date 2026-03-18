@@ -1,5 +1,4 @@
 ---
-slug: american-beauty-4
 name: American Beauty
 title_slug: american-beauty-4
 ipdb_id: 5451

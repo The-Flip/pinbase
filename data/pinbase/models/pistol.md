@@ -1,5 +1,4 @@
 ---
-slug: pistol
 name: Pistol
 title_slug: pistol
 ipdb_id: 6740

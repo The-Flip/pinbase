@@ -1,5 +1,4 @@
 ---
-slug: sub-marine
 name: Sub-Marine
 title_slug: sub-marine
 ipdb_id: 4967

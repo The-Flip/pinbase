@@ -1,5 +1,4 @@
 ---
-slug: rainbow-belle
 name: Rainbow Belle
 title_slug: rainbow-belle
 ipdb_id: 6977

@@ -1,5 +1,4 @@
 ---
-slug: juggle-ball
 name: Juggle Ball
 title_slug: juggle-ball
 ipdb_id: 1323

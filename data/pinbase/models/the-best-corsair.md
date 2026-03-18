@@ -1,5 +1,4 @@
 ---
-slug: the-best-corsair
 name: The Best Corsair
 title_slug: the-best-corsair
 opdb_id: G5L8W-MQ6Yp

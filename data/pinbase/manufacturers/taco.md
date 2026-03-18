@@ -1,4 +1,3 @@
 ---
-slug: taco
 name: TACO
 ---

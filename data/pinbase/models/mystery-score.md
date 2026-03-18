@@ -1,5 +1,4 @@
 ---
-slug: mystery-score
 name: Mystery Score
 title_slug: mystery-score
 ipdb_id: 1648

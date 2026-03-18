@@ -1,5 +1,4 @@
 ---
-slug: ko-2
 name: K.O.
 title_slug: ko-2
 ipdb_id: 5588

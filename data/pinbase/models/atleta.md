@@ -1,5 +1,4 @@
 ---
-slug: atleta
 name: Atleta
 title_slug: atleta
 opdb_id: GRn9J-MDOeO

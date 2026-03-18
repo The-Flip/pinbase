@@ -1,5 +1,4 @@
 ---
-slug: game-plan
 name: Game Plan
 opdb_manufacturer_id: 29
 ---

@@ -1,5 +1,4 @@
 ---
-slug: profit-sharing-pin-game
 name: Profit Sharing Pin Game
 title_slug: profit-sharing-pin-game
 ipdb_id: 1868

@@ -1,5 +1,4 @@
 ---
-slug: surfer-2
 name: Surfer
 title_slug: surfer
 ipdb_id: 5305

@@ -1,4 +1,3 @@
 ---
-slug: hillbillies
 name: Hillbillies
 ---

@@ -1,5 +1,4 @@
 ---
-slug: president-one-ball
 name: President One Ball
 title_slug: president-one-ball
 ipdb_id: 6262

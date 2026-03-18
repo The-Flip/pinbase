@@ -1,5 +1,4 @@
 ---
-slug: derby-king
 name: Derby King
 title_slug: derby-king
 ipdb_id: 668

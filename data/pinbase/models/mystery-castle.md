@@ -1,5 +1,4 @@
 ---
-slug: mystery-castle
 name: Mystery Castle
 title_slug: mystery-castle
 opdb_id: G5vZZ-MQNNo

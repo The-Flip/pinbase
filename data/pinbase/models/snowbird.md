@@ -1,5 +1,4 @@
 ---
-slug: snowbird
 name: Snowbird
 title_slug: snowbird
 ipdb_id: 2231

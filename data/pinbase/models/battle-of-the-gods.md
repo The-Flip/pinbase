@@ -1,5 +1,4 @@
 ---
-slug: battle-of-the-gods
 name: Battle of the Gods
 title_slug: battle-of-the-gods
 ipdb_id: 6153

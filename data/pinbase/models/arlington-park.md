@@ -1,5 +1,4 @@
 ---
-slug: arlington-park
 name: Arlington Park
 title_slug: arlington-park
 ipdb_id: 3652

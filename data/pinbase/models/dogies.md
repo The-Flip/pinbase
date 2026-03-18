@@ -1,5 +1,4 @@
 ---
-slug: dogies
 name: Dogies
 title_slug: dogies
 opdb_id: G4jZo-MLBbn

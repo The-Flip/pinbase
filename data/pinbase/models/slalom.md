@@ -1,5 +1,4 @@
 ---
-slug: slalom
 name: Slalom
 title_slug: slalom
 ipdb_id: 6312

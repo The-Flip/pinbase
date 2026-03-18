@@ -1,5 +1,4 @@
 ---
-slug: policy
 name: Policy
 title_slug: policy
 ipdb_id: 3320

@@ -1,4 +1,3 @@
 ---
-slug: aliens
 name: Aliens
 ---

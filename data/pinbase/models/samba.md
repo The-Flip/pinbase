@@ -1,5 +1,4 @@
 ---
-slug: samba
 name: Samba
 title_slug: samba-2
 opdb_id: GLWYl-MOEe8

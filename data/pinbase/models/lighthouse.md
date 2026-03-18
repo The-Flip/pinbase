@@ -1,5 +1,4 @@
 ---
-slug: lighthouse
 name: Lighthouse
 title_slug: lighthouse
 ipdb_id: 4320

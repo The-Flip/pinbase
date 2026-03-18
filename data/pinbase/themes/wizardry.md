@@ -1,4 +1,3 @@
 ---
-slug: wizardry
 name: Wizardry
 ---

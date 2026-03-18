@@ -1,5 +1,4 @@
 ---
-slug: hi-stepper
 name: Hi-Stepper
 title_slug: hi-stepper
 ipdb_id: 1162

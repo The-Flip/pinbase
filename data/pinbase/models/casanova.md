@@ -1,5 +1,4 @@
 ---
-slug: casanova
 name: Casanova
 title_slug: casanova
 opdb_id: GRYey-MJ5od

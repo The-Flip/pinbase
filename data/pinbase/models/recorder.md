@@ -1,5 +1,4 @@
 ---
-slug: recorder
 name: Recorder
 title_slug: recorder
 ipdb_id: 3553

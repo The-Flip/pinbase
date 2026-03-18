@@ -1,5 +1,4 @@
 ---
-slug: movie
 name: Movie
 title_slug: movie
 ipdb_id: 4813

@@ -1,5 +1,4 @@
 ---
-slug: star-ball
 name: Star Ball
 title_slug: star-ball
 ipdb_id: 5665

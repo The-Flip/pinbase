@@ -1,5 +1,4 @@
 ---
-slug: official-pin-table
 name: Official (Pin Table)
 title_slug: official-pin-table
 ipdb_id: 4963

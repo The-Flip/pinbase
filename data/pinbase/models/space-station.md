@@ -1,5 +1,4 @@
 ---
-slug: space-station
 name: Space Station
 title_slug: space-station
 opdb_id: G5QXO-MQowd

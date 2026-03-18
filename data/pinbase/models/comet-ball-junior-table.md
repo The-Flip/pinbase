@@ -1,5 +1,4 @@
 ---
-slug: comet-ball-junior-table
 name: Comet Ball Junior Table
 title_slug: comet-ball-junior-table
 ipdb_id: 549

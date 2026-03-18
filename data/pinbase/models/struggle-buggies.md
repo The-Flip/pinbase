@@ -1,5 +1,4 @@
 ---
-slug: struggle-buggies
 name: Struggle Buggies
 title_slug: struggle-buggies
 opdb_id: G4yNL-MJVOY

@@ -1,5 +1,4 @@
 ---
-slug: torch
 name: Torch
 title_slug: torch
 opdb_id: G4JbV-M5Rqn

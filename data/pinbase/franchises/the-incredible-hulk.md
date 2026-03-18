@@ -1,5 +1,4 @@
 ---
-slug: the-incredible-hulk
 name: The Incredible Hulk
 ---
 

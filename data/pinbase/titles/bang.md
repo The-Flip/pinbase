@@ -1,4 +1,3 @@
 ---
-slug: bang
 name: Bang
 ---

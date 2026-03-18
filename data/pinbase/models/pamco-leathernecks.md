@@ -1,5 +1,4 @@
 ---
-slug: pamco-leathernecks
 name: Pamco Leathernecks
 title_slug: pamco-leathernecks
 ipdb_id: 1428

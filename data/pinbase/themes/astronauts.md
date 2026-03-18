@@ -1,4 +1,3 @@
 ---
-slug: astronauts
 name: Astronauts
 ---

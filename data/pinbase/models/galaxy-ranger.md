@@ -1,5 +1,4 @@
 ---
-slug: galaxy-ranger
 name: Galaxy Ranger
 title_slug: galaxy-ranger
 opdb_id: G4ynZ-MLyZb

@@ -1,5 +1,4 @@
 ---
-slug: black-pyramid
 name: Black Pyramid
 title_slug: black-pyramid
 opdb_id: GRVnY-MDz0l

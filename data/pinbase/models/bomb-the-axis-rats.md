@@ -1,5 +1,4 @@
 ---
-slug: bomb-the-axis-rats
 name: Bomb The Axis Rats
 title_slug: bomb-the-axis-rats
 ipdb_id: 3641

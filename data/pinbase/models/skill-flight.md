@@ -1,5 +1,4 @@
 ---
-slug: skill-flight
 name: Skill Flight
 title_slug: skill-flight
 opdb_id: GRb7q-MDEn7

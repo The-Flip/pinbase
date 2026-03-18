@@ -1,5 +1,4 @@
 ---
-slug: outboard
 name: Outboard
 title_slug: outboard
 ipdb_id: 4654

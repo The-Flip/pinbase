@@ -1,5 +1,4 @@
 ---
-slug: cosmos
 name: Cosmos
 title_slug: cosmos
 opdb_id: G5p2Y-MDqKz

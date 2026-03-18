@@ -1,5 +1,4 @@
 ---
-slug: birmingham-vending-company
 name: Birmingham Vending Company
 manufacturer_slug: birmingham-vending-company
 ipdb_manufacturer_id: 595

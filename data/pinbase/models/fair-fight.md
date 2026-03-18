@@ -1,5 +1,4 @@
 ---
-slug: fair-fight
 name: Fair Fight
 title_slug: fair-fight
 opdb_id: GRLnp-M3dZR

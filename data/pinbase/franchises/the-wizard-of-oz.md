@@ -1,5 +1,4 @@
 ---
-slug: the-wizard-of-oz
 name: The Wizard of Oz
 ---
 

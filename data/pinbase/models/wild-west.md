@@ -1,5 +1,4 @@
 ---
-slug: wild-west
 name: Wild West
 title_slug: wild-west
 opdb_id: G41xJ-MQPzP

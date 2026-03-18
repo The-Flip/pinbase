@@ -1,5 +1,4 @@
 ---
-slug: spinball
 name: Spinball
 title_slug: spinball
 opdb_id: GEL7V-M2Yko

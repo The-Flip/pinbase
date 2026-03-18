@@ -1,5 +1,4 @@
 ---
-slug: diamond-flash
 name: Diamond-Flash
 title_slug: diamond-flash
 ipdb_id: 3982

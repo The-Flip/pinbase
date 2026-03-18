@@ -1,5 +1,4 @@
 ---
-slug: big-horse
 name: Big Horse
 title_slug: big-horse
 opdb_id: GnP9o-MKNbK

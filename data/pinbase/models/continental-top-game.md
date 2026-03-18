@@ -1,5 +1,4 @@
 ---
-slug: continental-top-game
 name: Continental Top Game
 title_slug: continental-top-game
 ipdb_id: 5113

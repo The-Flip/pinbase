@@ -1,5 +1,4 @@
 ---
-slug: moderne
 name: Moderne
 title_slug: moderne
 ipdb_id: 6752

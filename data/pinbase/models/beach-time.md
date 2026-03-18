@@ -1,5 +1,4 @@
 ---
-slug: beach-time
 name: Beach Time
 title_slug: beach-time
 ipdb_id: 207

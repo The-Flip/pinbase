@@ -1,5 +1,4 @@
 ---
-slug: who-dunnit
 name: WHO dunnit
 title_slug: who-dunnit
 opdb_id: G50kj-MDqpv

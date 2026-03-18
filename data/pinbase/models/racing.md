@@ -1,5 +1,4 @@
 ---
-slug: racing
 name: Racing
 title_slug: racing
 ipdb_id: 6291

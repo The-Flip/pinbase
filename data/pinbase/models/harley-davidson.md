@@ -1,5 +1,4 @@
 ---
-slug: harley-davidson
 name: Harley Davidson
 title_slug: harley-davidson
 opdb_id: G56lO-Mx00O

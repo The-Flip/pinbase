@@ -1,5 +1,4 @@
 ---
-slug: the-pitchers-battle
 name: The Pitcher's Battle
 title_slug: the-pitchers-battle
 ipdb_id: 5923

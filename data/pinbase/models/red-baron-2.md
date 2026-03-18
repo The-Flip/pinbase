@@ -1,5 +1,4 @@
 ---
-slug: red-baron-2
 name: Red Baron
 title_slug: red-baron
 opdb_id: G41Nn-MRjxo

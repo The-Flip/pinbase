@@ -1,5 +1,4 @@
 ---
-slug: california
 name: California
 title_slug: california
 ipdb_id: 6163

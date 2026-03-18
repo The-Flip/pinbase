@@ -1,5 +1,4 @@
 ---
-slug: official-counter
 name: Official (Counter)
 title_slug: official-counter
 ipdb_id: 1694

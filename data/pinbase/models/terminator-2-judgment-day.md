@@ -1,5 +1,4 @@
 ---
-slug: terminator-2-judgment-day
 name: 'Terminator 2: Judgment Day'
 title_slug: terminator-2-judgment-day
 opdb_id: GR9Bx-MQkd5

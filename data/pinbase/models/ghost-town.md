@@ -1,5 +1,4 @@
 ---
-slug: ghost-town
 name: Ghost Town
 title_slug: ghost-town
 ipdb_id: 6955

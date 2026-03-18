@@ -1,5 +1,4 @@
 ---
-slug: corsair
 name: Corsair
 title_slug: corsair
 ipdb_id: 6873

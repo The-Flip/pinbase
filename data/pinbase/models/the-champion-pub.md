@@ -1,5 +1,4 @@
 ---
-slug: the-champion-pub
 name: Champion Pub
 title_slug: champion-pub
 opdb_id: G42k0-MQ6w9

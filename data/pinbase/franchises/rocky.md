@@ -1,5 +1,4 @@
 ---
-slug: rocky
 name: Rocky
 ---
 

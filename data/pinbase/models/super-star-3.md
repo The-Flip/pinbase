@@ -1,5 +1,4 @@
 ---
-slug: super-star-3
 name: Super Star
 title_slug: super-star-2
 ipdb_id: 2448

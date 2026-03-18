@@ -1,5 +1,4 @@
 ---
-slug: sky-line
 name: Sky Line
 title_slug: sky-line
 ipdb_id: 6047

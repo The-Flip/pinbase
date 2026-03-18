@@ -1,4 +1,3 @@
 ---
-slug: volcan
 name: Volcan
 ---

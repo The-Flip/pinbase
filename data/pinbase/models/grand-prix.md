@@ -1,5 +1,4 @@
 ---
-slug: grand-prix
 name: Grand Prix
 title_slug: grand-prix
 opdb_id: G4O1L-MDW47

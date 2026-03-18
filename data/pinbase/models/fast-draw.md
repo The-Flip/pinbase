@@ -1,5 +1,4 @@
 ---
-slug: fast-draw
 name: Fast Draw
 title_slug: fast-draw-quick-draw
 opdb_id: GRVoX-MLE7l

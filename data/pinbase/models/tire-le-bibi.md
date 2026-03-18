@@ -1,5 +1,4 @@
 ---
-slug: tire-le-bibi
 name: Tire le Bibi
 title_slug: tire-le-bibi
 ipdb_id: 5637

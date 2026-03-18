@@ -1,5 +1,4 @@
 ---
-slug: hollywood-heat
 name: Hollywood Heat
 title_slug: hollywood-heat
 opdb_id: G5B9Z-MLBjW

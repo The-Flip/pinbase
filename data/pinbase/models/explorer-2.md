@@ -1,5 +1,4 @@
 ---
-slug: explorer-2
 name: Explorer
 title_slug: explorer
 opdb_id: G5VPX-MQjXJ

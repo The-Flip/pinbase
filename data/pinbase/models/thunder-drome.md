@@ -1,5 +1,4 @@
 ---
-slug: thunder-drome
 name: Thunder Drome
 title_slug: thunder-drome
 ipdb_id: 6856

@@ -1,5 +1,4 @@
 ---
-slug: mr-mrs-pac-man-pinball
 name: Mr. & Mrs. Pac-Man
 title_slug: mr-mrs-pac-man
 opdb_id: Gr2Dk-MQNy7

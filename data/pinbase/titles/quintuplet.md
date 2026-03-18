@@ -1,4 +1,3 @@
 ---
-slug: quintuplet
 name: Quintuplet
 ---

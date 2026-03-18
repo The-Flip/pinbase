@@ -1,5 +1,4 @@
 ---
-slug: lortium-2
 name: Lortium
 title_slug: lortium-2
 ipdb_id: 5952

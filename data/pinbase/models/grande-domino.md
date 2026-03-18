@@ -1,5 +1,4 @@
 ---
-slug: grande-domino
 name: Grande Domino
 title_slug: domino-playmates
 opdb_id: G4j8k-M9Ry2

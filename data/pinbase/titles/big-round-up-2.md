@@ -1,4 +1,3 @@
 ---
-slug: big-round-up-2
 name: Big Round-Up
 ---

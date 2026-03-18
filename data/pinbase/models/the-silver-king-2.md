@@ -1,5 +1,4 @@
 ---
-slug: the-silver-king-2
 name: The Silver King
 title_slug: the-silver-king-2
 ipdb_id: 6933

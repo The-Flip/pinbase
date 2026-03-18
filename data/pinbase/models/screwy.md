@@ -1,5 +1,4 @@
 ---
-slug: screwy
 name: Screwy
 title_slug: screwy
 ipdb_id: 2075

@@ -1,5 +1,4 @@
 ---
-slug: picnic
 name: Picnic
 title_slug: picnic
 opdb_id: G4yJo-MDnVq

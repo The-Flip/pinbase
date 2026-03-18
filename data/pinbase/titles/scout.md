@@ -1,4 +1,3 @@
 ---
-slug: scout
 name: Scout
 ---

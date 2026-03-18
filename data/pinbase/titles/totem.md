@@ -1,5 +1,4 @@
 ---
-slug: totem
 name: Totem
 opdb_group_id: G5YDN
 abbreviations:

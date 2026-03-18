@@ -1,5 +1,4 @@
 ---
-slug: the-tierce
 name: The Tierce
 title_slug: the-tierce
 ipdb_id: 3503

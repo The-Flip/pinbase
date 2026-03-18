@@ -1,5 +1,4 @@
 ---
-slug: bing-a-roll
 name: Bing-A-Roll
 title_slug: bing-a-roll
 ipdb_id: 4356

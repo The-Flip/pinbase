@@ -1,5 +1,4 @@
 ---
-slug: king-kong
 name: King Kong
 title_slug: king-kong
 opdb_id: G5BNq-MDB4d

@@ -1,5 +1,4 @@
 ---
-slug: khalifa
 name: Khalifa
 title_slug: khalifa
 ipdb_id: 5667

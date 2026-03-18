@@ -1,5 +1,4 @@
 ---
-slug: master-continental
 name: Master Continental
 title_slug: master-continental
 ipdb_id: 6668

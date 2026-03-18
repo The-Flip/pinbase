@@ -1,5 +1,4 @@
 ---
-slug: 3-in-line
 name: 3-In-Line
 title_slug: 3-in-line-bongo
 opdb_id: G41e6-MLqRz

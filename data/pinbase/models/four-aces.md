@@ -1,5 +1,4 @@
 ---
-slug: four-aces
 name: Four Aces
 title_slug: four-aces
 ipdb_id: 929

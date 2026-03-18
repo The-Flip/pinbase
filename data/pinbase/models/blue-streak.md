@@ -1,5 +1,4 @@
 ---
-slug: blue-streak
 name: Blue Streak
 title_slug: blue-streak
 ipdb_id: 333

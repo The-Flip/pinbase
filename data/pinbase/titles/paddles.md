@@ -1,4 +1,3 @@
 ---
-slug: paddles
 name: Paddles
 ---

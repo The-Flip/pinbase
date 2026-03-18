@@ -1,5 +1,4 @@
 ---
-slug: automatic-pool
 name: Automatic Pool
 title_slug: automatic-pool
 ipdb_id: 5082

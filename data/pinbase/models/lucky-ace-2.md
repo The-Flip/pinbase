@@ -1,5 +1,4 @@
 ---
-slug: lucky-ace-2
 name: Lucky Ace
 title_slug: dealers-choice-lucky-ace-high-ace
 opdb_id: GRwW9-MnK17

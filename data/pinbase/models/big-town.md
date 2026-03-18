@@ -1,5 +1,4 @@
 ---
-slug: big-town
 name: Big Town
 title_slug: big-town-2
 ipdb_id: 288

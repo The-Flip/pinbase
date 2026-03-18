@@ -1,5 +1,4 @@
 ---
-slug: three-score
 name: Three Score
 title_slug: three-score
 ipdb_id: 2544

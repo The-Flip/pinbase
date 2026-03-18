@@ -1,5 +1,4 @@
 ---
-slug: air-derby
 name: Air Derby
 title_slug: air-derby
 ipdb_id: 2881

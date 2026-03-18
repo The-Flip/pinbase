@@ -1,5 +1,4 @@
 ---
-slug: fair-play
 name: Fair Play
 title_slug: fair-play
 ipdb_id: 812

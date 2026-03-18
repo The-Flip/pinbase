@@ -1,5 +1,4 @@
 ---
-slug: beat-time
 name: Beat Time
 title_slug: beat-time
 opdb_id: GRwqD-MD0wX

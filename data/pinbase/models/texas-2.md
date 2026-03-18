@@ -1,5 +1,4 @@
 ---
-slug: texas-2
 name: Texas
 title_slug: texas-2
 ipdb_id: 5816

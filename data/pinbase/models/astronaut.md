@@ -1,5 +1,4 @@
 ---
-slug: astronaut
 name: Astronaut
 title_slug: moon-shot-astronaut
 opdb_id: GR7V3-MJpjv

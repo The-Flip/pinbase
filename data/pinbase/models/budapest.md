@@ -1,5 +1,4 @@
 ---
-slug: budapest
 name: Budapest
 title_slug: budapest
 ipdb_id: 6622

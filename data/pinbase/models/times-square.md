@@ -1,5 +1,4 @@
 ---
-slug: times-square
 name: Times Square
 title_slug: times-square
 opdb_id: G5LP7-MDBBV

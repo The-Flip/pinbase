@@ -1,5 +1,4 @@
 ---
-slug: captain-kidd
 name: Captain Kidd
 title_slug: captain-kidd-2
 ipdb_id: 435

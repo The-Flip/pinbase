@@ -1,5 +1,4 @@
 ---
-slug: super-flipper-2
 name: Super Flipper
 title_slug: super-flipper-2
 ipdb_id: 5870

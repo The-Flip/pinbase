@@ -1,5 +1,4 @@
 ---
-slug: hercules
 name: Hercules
 title_slug: hercules
 opdb_id: G4NOx-MyNYZ

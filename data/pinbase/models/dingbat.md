@@ -1,5 +1,4 @@
 ---
-slug: dingbat
 name: Dingbat
 title_slug: dingbat
 ipdb_id: 5966

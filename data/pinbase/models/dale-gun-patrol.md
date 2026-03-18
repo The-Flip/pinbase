@@ -1,5 +1,4 @@
 ---
-slug: dale-gun-patrol
 name: Dale Gun Patrol
 title_slug: dale-gun-patrol
 ipdb_id: 6589

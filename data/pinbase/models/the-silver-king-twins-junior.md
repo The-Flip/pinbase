@@ -1,5 +1,4 @@
 ---
-slug: the-silver-king-twins-junior
 name: The Silver King Twins Junior
 title_slug: the-silver-king-twins-junior
 ipdb_id: 6931

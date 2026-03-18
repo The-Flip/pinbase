@@ -1,5 +1,4 @@
 ---
-slug: basketball-champ
 name: Basketball Champ
 title_slug: basketball-champ
 ipdb_id: 193

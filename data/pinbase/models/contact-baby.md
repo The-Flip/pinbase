@@ -1,5 +1,4 @@
 ---
-slug: contact-baby
 name: Contact (Baby)
 title_slug: contact-baby
 ipdb_id: 4454

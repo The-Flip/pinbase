@@ -1,5 +1,4 @@
 ---
-slug: knock-out-the-japs
 name: Knock Out The Japs
 title_slug: knock-out-the-japs
 ipdb_id: 3201

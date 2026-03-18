@@ -1,5 +1,4 @@
 ---
-slug: double-nugget
 name: Double Nugget
 title_slug: double-nugget
 ipdb_id: 718

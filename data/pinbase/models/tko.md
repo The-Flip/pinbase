@@ -1,5 +1,4 @@
 ---
-slug: tko
 name: T.K.O.
 title_slug: tko
 opdb_id: GrJxV-MJNZ2

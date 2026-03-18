@@ -1,5 +1,4 @@
 ---
-slug: bally-beauty
 name: Bally Beauty
 title_slug: bally-beauty
 ipdb_id: 216

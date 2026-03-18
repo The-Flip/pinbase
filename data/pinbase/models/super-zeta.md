@@ -1,5 +1,4 @@
 ---
-slug: super-zeta
 name: Super-Zeta
 title_slug: super-zeta
 ipdb_id: 3997

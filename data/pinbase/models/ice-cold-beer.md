@@ -1,5 +1,4 @@
 ---
-slug: ice-cold-beer
 name: Ice Cold Beer
 title_slug: ice-cold-beer
 ipdb_id: 6802

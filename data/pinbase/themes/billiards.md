@@ -1,4 +1,3 @@
 ---
-slug: billiards
 name: Billiards
 ---

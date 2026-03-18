@@ -1,5 +1,4 @@
 ---
-slug: party-games
 name: Party Games
 title_slug: party-games
 ipdb_id: 5828

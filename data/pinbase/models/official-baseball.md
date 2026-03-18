@@ -1,5 +1,4 @@
 ---
-slug: official-baseball
 name: Official Baseball
 title_slug: official-baseball
 ipdb_id: 1695

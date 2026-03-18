@@ -1,4 +1,3 @@
 ---
-slug: gridiron
 name: Gridiron
 ---

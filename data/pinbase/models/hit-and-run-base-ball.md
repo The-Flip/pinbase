@@ -1,5 +1,4 @@
 ---
-slug: hit-and-run-base-ball
 name: Hit and Run Base-Ball
 title_slug: hit-and-run-base-ball
 ipdb_id: 1193

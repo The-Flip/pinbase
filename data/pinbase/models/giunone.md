@@ -1,5 +1,4 @@
 ---
-slug: giunone
 name: Giunone
 title_slug: giunone
 ipdb_id: 5178

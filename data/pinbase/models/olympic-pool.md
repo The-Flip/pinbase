@@ -1,5 +1,4 @@
 ---
-slug: olympic-pool
 name: Olympic Pool
 title_slug: olympic-pool
 ipdb_id: 5313

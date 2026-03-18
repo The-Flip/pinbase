@@ -1,5 +1,4 @@
 ---
-slug: golden-continental-laser-2
 name: Golden Continental Laser 2
 title_slug: golden-continental-laser-2
 ipdb_id: 6115

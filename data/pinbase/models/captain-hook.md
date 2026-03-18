@@ -1,5 +1,4 @@
 ---
-slug: captain-hook
 name: Captain Hook
 title_slug: captain-hook
 opdb_id: G4jeW-MDb93

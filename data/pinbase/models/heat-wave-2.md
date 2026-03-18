@@ -1,5 +1,4 @@
 ---
-slug: heat-wave-2
 name: Heat Wave
 title_slug: heat-wave
 opdb_id: G5vDW-MJw9y

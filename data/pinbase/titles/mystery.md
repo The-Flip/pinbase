@@ -1,4 +1,3 @@
 ---
-slug: mystery
 name: Mystery
 ---

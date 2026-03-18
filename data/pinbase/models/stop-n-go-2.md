@@ -1,5 +1,4 @@
 ---
-slug: stop-n-go-2
 name: Stop 'N' Go
 title_slug: stop-n-go
 opdb_id: G43v8-MJPvw

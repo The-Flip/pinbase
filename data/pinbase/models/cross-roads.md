@@ -1,5 +1,4 @@
 ---
-slug: cross-roads
 name: Cross Roads
 title_slug: cross-roads
 ipdb_id: 4246

@@ -1,5 +1,4 @@
 ---
-slug: alien-standard-version
 name: ALIEN (Standard Version)
 title_slug: alien-standard-version
 ipdb_id: 6757

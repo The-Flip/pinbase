@@ -1,5 +1,4 @@
 ---
-slug: pirates-of-the-caribbean
 name: Pirates of the Caribbean
 title_slug: pirates-of-the-caribbean
 opdb_id: GR7ZX-MQ23b

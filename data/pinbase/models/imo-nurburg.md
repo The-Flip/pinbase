@@ -1,5 +1,4 @@
 ---
-slug: imo-nurburg
 name: Imo Nürburg
 title_slug: imo-nurburg
 ipdb_id: 4936

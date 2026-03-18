@@ -1,5 +1,4 @@
 ---
-slug: moon-light
 name: Moon Light
 title_slug: moon-light
 opdb_id: Gr3ZV-MKN56

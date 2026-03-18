@@ -1,5 +1,4 @@
 ---
-slug: the-addams-family
 name: The Addams Family
 ---
 

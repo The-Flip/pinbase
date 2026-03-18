@@ -1,4 +1,3 @@
 ---
-slug: crescendo
 name: Crescendo
 ---

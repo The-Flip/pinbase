@@ -1,5 +1,4 @@
 ---
-slug: the-wiggler
 name: The Wiggler
 title_slug: the-wiggler
 opdb_id: G4x9D-MJjE5

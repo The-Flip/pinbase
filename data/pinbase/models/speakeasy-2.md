@@ -1,5 +1,4 @@
 ---
-slug: speakeasy-2
 name: Speakeasy
 title_slug: speakeasy
 opdb_id: GRbl7-ML8EY

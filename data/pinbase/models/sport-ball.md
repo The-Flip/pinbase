@@ -1,5 +1,4 @@
 ---
-slug: sport-ball
 name: Sport Ball
 title_slug: sport-ball
 ipdb_id: 5781

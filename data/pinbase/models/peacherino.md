@@ -1,5 +1,4 @@
 ---
-slug: peacherino
 name: Peacherino
 title_slug: peacherino
 ipdb_id: 3865

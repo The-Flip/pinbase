@@ -1,5 +1,4 @@
 ---
-slug: turf-queen
 name: Turf Queen
 title_slug: turf-queen
 ipdb_id: 3336

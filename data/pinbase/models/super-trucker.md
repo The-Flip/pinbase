@@ -1,5 +1,4 @@
 ---
-slug: super-trucker
 name: Super Trucker
 title_slug: super-trucker
 ipdb_id: 5112

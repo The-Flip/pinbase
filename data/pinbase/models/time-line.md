@@ -1,5 +1,4 @@
 ---
-slug: time-line
 name: Time Line
 title_slug: time-line
 opdb_id: Gr13q-MXrjY

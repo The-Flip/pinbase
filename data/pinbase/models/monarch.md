@@ -1,5 +1,4 @@
 ---
-slug: monarch
 name: Monarch
 title_slug: monarch
 ipdb_id: 1615

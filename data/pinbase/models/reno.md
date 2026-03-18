@@ -1,5 +1,4 @@
 ---
-slug: reno
 name: Reno
 title_slug: reno-2
 ipdb_id: 1945

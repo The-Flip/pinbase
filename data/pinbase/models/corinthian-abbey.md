@@ -1,5 +1,4 @@
 ---
-slug: corinthian-abbey
 name: '"Corinthian" Abbey'
 title_slug: corinthian-abbey
 ipdb_id: 4902

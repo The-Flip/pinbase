@@ -1,5 +1,4 @@
 ---
-slug: gladiator
 name: Gladiator
 title_slug: gladiator
 opdb_id: GRLE6-MOE67

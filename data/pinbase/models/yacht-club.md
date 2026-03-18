@@ -1,5 +1,4 @@
 ---
-slug: yacht-club
 name: Yacht-Club
 title_slug: yacht-club-2
 ipdb_id: 2823

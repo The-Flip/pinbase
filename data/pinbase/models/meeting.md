@@ -1,5 +1,4 @@
 ---
-slug: meeting
 name: Meeting
 title_slug: meeting
 ipdb_id: 5263

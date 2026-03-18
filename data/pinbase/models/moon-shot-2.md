@@ -1,5 +1,4 @@
 ---
-slug: moon-shot-2
 name: Moon Shot
 title_slug: moon-shot-astronaut
 opdb_id: GR7V3-MQPyL

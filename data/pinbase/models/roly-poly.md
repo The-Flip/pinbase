@@ -1,5 +1,4 @@
 ---
-slug: roly-poly
 name: Roly Poly
 title_slug: roly-poly
 ipdb_id: 2013

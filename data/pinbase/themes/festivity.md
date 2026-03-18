@@ -1,4 +1,3 @@
 ---
-slug: festivity
 name: Festivity
 ---

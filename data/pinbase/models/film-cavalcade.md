@@ -1,5 +1,4 @@
 ---
-slug: film-cavalcade
 name: Film Cavalcade
 title_slug: film-cavalcade
 ipdb_id: 845

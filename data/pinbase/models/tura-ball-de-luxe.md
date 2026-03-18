@@ -1,5 +1,4 @@
 ---
-slug: tura-ball-de-luxe
 name: Tura-Ball De Luxe
 title_slug: tura-ball-de-luxe
 ipdb_id: 5918

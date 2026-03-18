@@ -1,5 +1,4 @@
 ---
-slug: the-royal
 name: The Royal
 title_slug: the-royal
 ipdb_id: 6422

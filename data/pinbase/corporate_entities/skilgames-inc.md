@@ -1,5 +1,4 @@
 ---
-slug: skilgames-inc
 name: Skilgames, Inc.
 manufacturer_slug: skilgames-inc
 ipdb_manufacturer_id: 512

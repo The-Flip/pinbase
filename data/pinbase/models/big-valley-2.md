@@ -1,5 +1,4 @@
 ---
-slug: big-valley-2
 name: Big Valley
 title_slug: big-valley-2
 ipdb_id: 4779

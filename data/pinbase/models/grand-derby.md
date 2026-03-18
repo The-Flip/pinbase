@@ -1,5 +1,4 @@
 ---
-slug: grand-derby
 name: Grand Derby
 title_slug: grand-derby
 ipdb_id: 3128

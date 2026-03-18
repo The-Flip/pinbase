@@ -1,5 +1,4 @@
 ---
-slug: carnaval
 name: Carnaval
 title_slug: carnaval
 ipdb_id: 3000

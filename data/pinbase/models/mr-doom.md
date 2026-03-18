@@ -1,5 +1,4 @@
 ---
-slug: mr-doom
 name: Mr. Doom
 title_slug: mr-doom
 opdb_id: GrP1J-MQ240

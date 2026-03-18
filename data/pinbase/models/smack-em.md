@@ -1,5 +1,4 @@
 ---
-slug: smack-em
 name: Smack 'Em
 title_slug: smack-em
 ipdb_id: 4149

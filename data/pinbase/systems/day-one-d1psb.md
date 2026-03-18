@@ -1,5 +1,4 @@
 ---
-slug: day-one-d1psb
 name: Day One D1PSB
 manufacturer_slug: day-one
 technology_subgeneration_slug: ss-pc

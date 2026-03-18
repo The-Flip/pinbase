@@ -1,4 +1,3 @@
 ---
-slug: trinacria
 name: Trinacria
 ---

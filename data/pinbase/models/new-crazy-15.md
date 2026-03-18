@@ -1,5 +1,4 @@
 ---
-slug: new-crazy-15
 name: New Crazy 15
 title_slug: new-crazy-15
 ipdb_id: 6786

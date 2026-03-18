@@ -1,5 +1,4 @@
 ---
-slug: serenade-2
 name: Serenade
 title_slug: serenade-2
 opdb_id: G4qpp-MLypr

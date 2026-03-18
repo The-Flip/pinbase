@@ -1,4 +1,3 @@
 ---
-slug: life
 name: Life
 ---

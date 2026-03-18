@@ -1,5 +1,4 @@
 ---
-slug: ro-go
 name: Ro Go
 opdb_group_id: G42OJ
 abbreviations:

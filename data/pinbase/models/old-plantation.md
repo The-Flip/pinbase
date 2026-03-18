@@ -1,5 +1,4 @@
 ---
-slug: old-plantation
 name: Old Plantation
 title_slug: old-plantation
 ipdb_id: 1708

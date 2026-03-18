@@ -1,5 +1,4 @@
 ---
-slug: gatter-novelty-company
 name: Gatter Novelty Company
 manufacturer_slug: gatter-novelty-company
 ipdb_manufacturer_id: 552

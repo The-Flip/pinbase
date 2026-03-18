@@ -1,5 +1,4 @@
 ---
-slug: big-ben-5
 name: Big Ben
 title_slug: big-ben
 opdb_id: GRBo3-MLv0z

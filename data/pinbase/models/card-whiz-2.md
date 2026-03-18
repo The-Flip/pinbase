@@ -1,5 +1,4 @@
 ---
-slug: card-whiz-2
 name: Card Whiz (1P)
 title_slug: royal-flush-card-whiz
 opdb_id: GrEWx-MJkP8

@@ -1,5 +1,4 @@
 ---
-slug: up-and-up
 name: Up and Up
 title_slug: up-and-up
 ipdb_id: 2707

@@ -1,5 +1,4 @@
 ---
-slug: casablanca
 name: Casablanca
 title_slug: casablanca
 ipdb_id: 3874

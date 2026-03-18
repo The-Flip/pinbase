@@ -1,5 +1,4 @@
 ---
-slug: black-dragon
 name: Black Dragon
 title_slug: black-dragon
 ipdb_id: 3643

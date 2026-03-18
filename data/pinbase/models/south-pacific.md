@@ -1,5 +1,4 @@
 ---
-slug: south-pacific
 name: South Pacific
 title_slug: south-pacific
 opdb_id: G4q0l-MJdKZ

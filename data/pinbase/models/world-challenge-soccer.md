@@ -1,5 +1,4 @@
 ---
-slug: world-challenge-soccer
 name: World Challenge Soccer
 title_slug: world-challenge-soccer
 opdb_id: GreOx-MQNv1

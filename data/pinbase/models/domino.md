@@ -1,5 +1,4 @@
 ---
-slug: domino
 name: Domino
 title_slug: domino
 opdb_id: G4q9J-M2Y55

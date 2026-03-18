@@ -1,5 +1,4 @@
 ---
-slug: invader-ball
 name: Invader Ball
 title_slug: invader-ball
 opdb_id: G5ow6-MQNYn

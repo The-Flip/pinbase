@@ -1,5 +1,4 @@
 ---
-slug: match-it
 name: Match-It
 title_slug: match-it
 ipdb_id: 4186

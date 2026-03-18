@@ -1,5 +1,4 @@
 ---
-slug: serenade-6
 name: Serenade
 title_slug: serenade-5
 ipdb_id: 6675

@@ -1,5 +1,4 @@
 ---
-slug: glider
 name: Glider
 title_slug: glider
 ipdb_id: 1014

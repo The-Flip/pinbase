@@ -1,5 +1,4 @@
 ---
-slug: mexico-3
 name: Mexico
 title_slug: mexico-3
 ipdb_id: 4074

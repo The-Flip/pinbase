@@ -1,5 +1,4 @@
 ---
-slug: odisea-paris-dakar
 name: Odisea Paris Dakar
 title_slug: odisea-paris-dakar
 opdb_id: G5DKQ-M0o3R

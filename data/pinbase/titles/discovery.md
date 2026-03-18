@@ -1,4 +1,3 @@
 ---
-slug: discovery
 name: Discovery
 ---

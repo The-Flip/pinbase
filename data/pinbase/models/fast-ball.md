@@ -1,5 +1,4 @@
 ---
-slug: fast-ball
 name: Fast Ball
 title_slug: fast-ball
 ipdb_id: 826

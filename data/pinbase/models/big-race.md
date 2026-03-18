@@ -1,5 +1,4 @@
 ---
-slug: big-race
 name: Big Race
 title_slug: big-race
 ipdb_id: 269

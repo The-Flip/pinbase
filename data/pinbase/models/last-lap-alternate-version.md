@@ -1,5 +1,4 @@
 ---
-slug: last-lap-alternate-version
 name: Last Lap (Alternate Version)
 title_slug: last-lap-alternate-version
 ipdb_id: 6075

@@ -1,5 +1,4 @@
 ---
-slug: comet-2
 name: Comet
 title_slug: comet-2
 ipdb_id: 4132

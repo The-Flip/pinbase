@@ -1,5 +1,4 @@
 ---
-slug: zira
 name: Zira
 title_slug: zira
 opdb_id: G4lDV-MJwkK

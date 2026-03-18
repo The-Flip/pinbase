@@ -1,5 +1,4 @@
 ---
-slug: the-simpsons
 name: The Simpsons
 title_slug: the-simpsons
 opdb_id: G5VBJ-MLy4l

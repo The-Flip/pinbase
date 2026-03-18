@@ -1,5 +1,4 @@
 ---
-slug: ballyview
 name: Ballyview
 title_slug: ballyview
 ipdb_id: 156

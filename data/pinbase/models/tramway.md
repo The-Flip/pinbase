@@ -1,5 +1,4 @@
 ---
-slug: tramway
 name: Tramway
 title_slug: tramway
 opdb_id: GrjVe-M3dp6

@@ -1,5 +1,4 @@
 ---
-slug: bicar
 name: BICAR
 title_slug: bicar
 ipdb_id: 6210

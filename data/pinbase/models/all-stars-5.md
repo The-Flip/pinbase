@@ -1,5 +1,4 @@
 ---
-slug: all-stars-5
 name: All Stars
 title_slug: jump-shot
 opdb_id: G4dyP-MJ2OZ

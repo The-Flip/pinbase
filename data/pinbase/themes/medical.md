@@ -1,4 +1,3 @@
 ---
-slug: medical
 name: Medical
 ---

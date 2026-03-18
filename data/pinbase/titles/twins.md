@@ -1,4 +1,3 @@
 ---
-slug: twins
 name: Twins
 ---

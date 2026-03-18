@@ -1,5 +1,4 @@
 ---
-slug: dracula-girl
 name: Dracula Girl
 title_slug: dracula-girl
 ipdb_id: 6193

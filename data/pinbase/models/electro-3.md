@@ -1,5 +1,4 @@
 ---
-slug: electro-3
 name: Electro
 title_slug: electro-3
 ipdb_id: 5123

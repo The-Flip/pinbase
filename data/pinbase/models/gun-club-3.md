@@ -1,5 +1,4 @@
 ---
-slug: gun-club-3
 name: Gun Club
 title_slug: gun-club-3
 ipdb_id: 1097

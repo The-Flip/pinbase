@@ -1,5 +1,4 @@
 ---
-slug: stop-and-go-2
 name: Stop and Go
 title_slug: stop-and-go
 opdb_id: G48pZ-MJkVB

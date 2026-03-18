@@ -1,4 +1,3 @@
 ---
-slug: prostitution
 name: Prostitution
 ---

@@ -1,5 +1,4 @@
 ---
-slug: ben-hur-2
 name: Ben-Hur
 title_slug: ben-hur
 opdb_id: GRY39-MLze0

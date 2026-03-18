@@ -1,5 +1,4 @@
 ---
-slug: gusher
 name: Gusher
 title_slug: gusher
 opdb_id: G4EoQ-MQYK2

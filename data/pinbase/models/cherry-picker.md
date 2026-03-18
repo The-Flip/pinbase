@@ -1,5 +1,4 @@
 ---
-slug: cherry-picker
 name: Cherry Picker
 title_slug: cherry-picker
 ipdb_id: 4857

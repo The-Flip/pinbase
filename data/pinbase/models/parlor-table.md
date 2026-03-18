@@ -1,5 +1,4 @@
 ---
-slug: parlor-table
 name: Parlor Table
 title_slug: parlor-table
 ipdb_id: 3595

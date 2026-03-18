@@ -1,5 +1,4 @@
 ---
-slug: hey-day
 name: Hey Day
 title_slug: hey-day
 ipdb_id: 3141

@@ -1,5 +1,4 @@
 ---
-slug: naples
 name: Naples
 title_slug: naples
 opdb_id: G5Y1D-ML3Xd

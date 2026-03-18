@@ -1,5 +1,4 @@
 ---
-slug: cisco-jackpot
 name: Cisco Jackpot
 title_slug: cisco-jackpot
 ipdb_id: 1280

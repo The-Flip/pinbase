@@ -1,5 +1,4 @@
 ---
-slug: vortex
 name: Vortex
 title_slug: blackout
 opdb_id: GRwYo-M9RK0

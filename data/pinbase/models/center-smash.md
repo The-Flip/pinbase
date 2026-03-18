@@ -1,5 +1,4 @@
 ---
-slug: center-smash
 name: Center Smash
 title_slug: center-smash
 ipdb_id: 479

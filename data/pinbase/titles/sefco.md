@@ -1,4 +1,3 @@
 ---
-slug: sefco
 name: SEFCO
 ---

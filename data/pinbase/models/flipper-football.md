@@ -1,5 +1,4 @@
 ---
-slug: flipper-football
 name: Flipper Football
 title_slug: flipper-football
 opdb_id: GRKKk-MLxwP

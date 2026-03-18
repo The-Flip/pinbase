@@ -1,5 +1,4 @@
 ---
-slug: stellar-wars
 name: Stellar Wars
 title_slug: stellar-wars
 opdb_id: G4lLp-MQ5Xy

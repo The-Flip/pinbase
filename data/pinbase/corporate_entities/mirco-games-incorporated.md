@@ -1,5 +1,4 @@
 ---
-slug: mirco-games-incorporated
 name: Mirco Games, Incorporated
 manufacturer_slug: mirco-games
 ipdb_manufacturer_id: 219

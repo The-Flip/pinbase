@@ -1,5 +1,4 @@
 ---
-slug: jumpin-jacks-2
 name: Jumpin' Jacks
 title_slug: jumpin-jacks-2
 opdb_id: GrOP0-MJZlx

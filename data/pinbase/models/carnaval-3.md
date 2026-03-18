@@ -1,5 +1,4 @@
 ---
-slug: carnaval-3
 name: Carnaval
 title_slug: carnaval-3
 ipdb_id: 6790

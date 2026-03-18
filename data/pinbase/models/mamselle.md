@@ -1,5 +1,4 @@
 ---
-slug: mamselle
 name: Mam'selle
 title_slug: mamselle
 ipdb_id: 1535

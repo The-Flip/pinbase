@@ -1,5 +1,4 @@
 ---
-slug: air-raid-defense
 name: Air Raid Defense
 title_slug: air-raid-defense
 ipdb_id: 4886

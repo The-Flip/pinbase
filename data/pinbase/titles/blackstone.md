@@ -1,4 +1,3 @@
 ---
-slug: blackstone
 name: Blackstone
 ---

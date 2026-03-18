@@ -1,5 +1,4 @@
 ---
-slug: trio-4
 name: Trio
 title_slug: trio-4
 ipdb_id: 6250

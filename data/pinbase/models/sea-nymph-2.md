@@ -1,5 +1,4 @@
 ---
-slug: sea-nymph-2
 name: Sea Nymph
 title_slug: sea-nymph-2
 ipdb_id: 6505

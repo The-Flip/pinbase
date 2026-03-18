@@ -1,4 +1,3 @@
 ---
-slug: mandalay
 name: Mandalay
 ---

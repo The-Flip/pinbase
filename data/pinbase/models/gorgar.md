@@ -1,5 +1,4 @@
 ---
-slug: gorgar
 name: Gorgar
 title_slug: gorgar
 opdb_id: G5zd6-MJVo4

@@ -1,5 +1,4 @@
 ---
-slug: globe-trotter-3
 name: Globe Trotter
 title_slug: globe-trotter-3
 ipdb_id: 1018

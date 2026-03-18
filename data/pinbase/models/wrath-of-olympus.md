@@ -1,5 +1,4 @@
 ---
-slug: wrath-of-olympus
 name: Wrath of Olympus
 title_slug: wrath-of-olympus
 opdb_id: G5zyN-MJNxr

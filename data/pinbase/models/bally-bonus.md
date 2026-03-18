@@ -1,5 +1,4 @@
 ---
-slug: bally-bonus
 name: Bally Bonus
 title_slug: bally-bonus
 ipdb_id: 146

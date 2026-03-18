@@ -1,5 +1,4 @@
 ---
-slug: maryland
 name: Maryland
 title_slug: maryland
 opdb_id: GWyxj-M0o52

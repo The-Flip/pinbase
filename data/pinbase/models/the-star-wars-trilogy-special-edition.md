@@ -1,5 +1,4 @@
 ---
-slug: the-star-wars-trilogy-special-edition
 name: Star Wars Trilogy
 title_slug: star-wars-trilogy
 opdb_id: GrybN-MLl5X

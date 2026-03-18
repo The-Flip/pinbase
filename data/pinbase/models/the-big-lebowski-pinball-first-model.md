@@ -1,5 +1,4 @@
 ---
-slug: the-big-lebowski-pinball-first-model
 name: The Big Lebowski
 title_slug: the-big-lebowski
 opdb_id: G5WBr-MvB3E

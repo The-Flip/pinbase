@@ -1,4 +1,3 @@
 ---
-slug: budapest
 name: Budapest
 ---

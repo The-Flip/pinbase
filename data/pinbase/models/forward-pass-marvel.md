@@ -1,5 +1,4 @@
 ---
-slug: forward-pass-marvel
 name: Forward Pass (Marvel)
 title_slug: forward-pass-marvel
 ipdb_id: 4961

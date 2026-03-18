@@ -1,5 +1,4 @@
 ---
-slug: pico-crown
 name: Pico Crown
 title_slug: pico-crown
 ipdb_id: 5629

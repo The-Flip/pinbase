@@ -1,5 +1,4 @@
 ---
-slug: flipper-pool
 name: Flipper Pool
 title_slug: bank-a-ball-flipper-pool
 opdb_id: GrxdD-MLOPO

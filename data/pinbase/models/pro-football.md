@@ -1,5 +1,4 @@
 ---
-slug: pro-football
 name: Pro-Football
 title_slug: gridiron-pro-football
 opdb_id: G41E2-ME00b

@@ -1,5 +1,4 @@
 ---
-slug: wine-grower
 name: Wine-Grower
 title_slug: wine-grower
 ipdb_id: 5537

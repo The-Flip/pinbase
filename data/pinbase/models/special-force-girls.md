@@ -1,5 +1,4 @@
 ---
-slug: special-force-girls
 name: Special Force Girls
 title_slug: special-force
 opdb_id: GRDkX-M61RE-A1qKR

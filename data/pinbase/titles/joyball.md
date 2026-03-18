@@ -1,4 +1,3 @@
 ---
-slug: joyball
 name: Joyball
 ---

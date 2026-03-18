@@ -1,5 +1,4 @@
 ---
-slug: joust-2
 name: Joust
 title_slug: joust-2
 opdb_id: Grxk8-MJdwl

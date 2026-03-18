@@ -1,5 +1,4 @@
 ---
-slug: out-of-sight
 name: Out of Sight
 title_slug: out-of-sight-far-out
 opdb_id: G5zQO-MdE8R

@@ -1,5 +1,4 @@
 ---
-slug: hardbody
 name: Hardbody
 title_slug: hardbody
 opdb_id: GRbX3-M7ZK3

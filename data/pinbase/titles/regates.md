@@ -1,4 +1,3 @@
 ---
-slug: regates
 name: Regates
 ---

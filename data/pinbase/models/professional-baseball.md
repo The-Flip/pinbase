@@ -1,5 +1,4 @@
 ---
-slug: professional-baseball
 name: Professional Baseball
 title_slug: professional-baseball
 ipdb_id: 1867

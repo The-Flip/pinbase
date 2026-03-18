@@ -1,5 +1,4 @@
 ---
-slug: america-1492
 name: America 1492
 title_slug: america-1492
 opdb_id: G5pjV-MwNNj

@@ -1,5 +1,4 @@
 ---
-slug: run-a-round
 name: Run-A-Round
 title_slug: run-a-round
 ipdb_id: 4656

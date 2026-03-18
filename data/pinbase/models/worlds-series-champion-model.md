@@ -1,5 +1,4 @@
 ---
-slug: worlds-series-champion-model
 name: World's Series Champion Model
 title_slug: worlds-series-champion-model
 ipdb_id: 6720

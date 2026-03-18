@@ -1,5 +1,4 @@
 ---
-slug: antar
 name: Antar
 title_slug: antar
 opdb_id: G4jpw-Mb5er

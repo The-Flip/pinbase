@@ -1,5 +1,4 @@
 ---
-slug: roll-o
 name: Roll-O
 title_slug: roll-o
 ipdb_id: 4648

@@ -1,5 +1,4 @@
 ---
-slug: star-wars-fall-of-the-empire-pro
 name: 'Star Wars: Fall of the Empire (Pro)'
 title_slug: star-wars-fall-of-the-empire
 opdb_id: Gxv81-M610r

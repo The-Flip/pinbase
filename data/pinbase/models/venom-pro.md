@@ -1,5 +1,4 @@
 ---
-slug: venom-pro
 name: Venom (Pro)
 title_slug: venom
 opdb_id: G3EBl-Mq1zy

@@ -1,4 +1,3 @@
 ---
-slug: clipper
 name: Clipper
 ---

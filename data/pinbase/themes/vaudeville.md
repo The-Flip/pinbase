@@ -1,4 +1,3 @@
 ---
-slug: vaudeville
 name: Vaudeville
 ---

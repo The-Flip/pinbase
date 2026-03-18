@@ -1,4 +1,3 @@
 ---
-slug: science
 name: Science
 ---

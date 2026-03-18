@@ -1,5 +1,4 @@
 ---
-slug: joyball
 name: Joyball
 title_slug: joyball
 ipdb_id: 1319

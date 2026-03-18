@@ -1,4 +1,3 @@
 ---
-slug: ator
 name: Ator
 ---

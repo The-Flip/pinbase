@@ -1,5 +1,4 @@
 ---
-slug: harley-davidson-3rd-edition
 name: Harley-Davidson (3rd Edition)
 title_slug: harley-davidson
 opdb_id: G56lO-Mq153

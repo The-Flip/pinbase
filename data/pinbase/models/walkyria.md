@@ -1,5 +1,4 @@
 ---
-slug: walkyria
 name: Walkyria
 title_slug: walkyria
 opdb_id: GoEB3-MkPq9

@@ -1,5 +1,4 @@
 ---
-slug: hyde-park
 name: Hyde Park
 title_slug: mayfair-hyde-park
 opdb_id: GrdYD-MQKxj

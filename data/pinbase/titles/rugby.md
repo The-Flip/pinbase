@@ -1,4 +1,3 @@
 ---
-slug: rugby
 name: Rugby
 ---

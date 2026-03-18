@@ -1,5 +1,4 @@
 ---
-slug: kentucky-derby-winners
 name: Kentucky Derby Winners
 title_slug: kentucky-derby-winners
 ipdb_id: 1355

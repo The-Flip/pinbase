@@ -1,5 +1,4 @@
 ---
-slug: cisco
 name: Cisco
 title_slug: cisco
 ipdb_id: 6814

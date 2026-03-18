@@ -1,5 +1,4 @@
 ---
-slug: spider-man-vault-edition
 name: Spider-Man (Vault Edition)
 title_slug: spider-man
 opdb_id: G5D94-M3d5w

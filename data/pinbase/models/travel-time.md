@@ -1,5 +1,4 @@
 ---
-slug: travel-time
 name: Travel Time
 title_slug: travel-time-summer-time
 opdb_id: GrJED-MJrwv

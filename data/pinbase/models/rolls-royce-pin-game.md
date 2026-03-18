@@ -1,5 +1,4 @@
 ---
-slug: rolls-royce-pin-game
 name: Rolls-Royce (Pin Game)
 title_slug: rolls-royce-pin-game
 ipdb_id: 2012

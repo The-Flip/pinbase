@@ -1,5 +1,4 @@
 ---
-slug: breakshot
 name: Breakshot
 title_slug: breakshot
 opdb_id: G43oE-M0ok5

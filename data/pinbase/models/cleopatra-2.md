@@ -1,5 +1,4 @@
 ---
-slug: cleopatra-2
 name: Cleopatra
 title_slug: cleopatra-2
 opdb_id: GxvP1-MXrKO

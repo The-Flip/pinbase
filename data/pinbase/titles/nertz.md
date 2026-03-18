@@ -1,4 +1,3 @@
 ---
-slug: nertz
 name: Nertz
 ---

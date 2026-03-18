@@ -1,5 +1,4 @@
 ---
-slug: hole-whack
 name: Hole Whack
 title_slug: hole-whack
 ipdb_id: 5819

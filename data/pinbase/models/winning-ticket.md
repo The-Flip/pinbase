@@ -1,5 +1,4 @@
 ---
-slug: winning-ticket
 name: Winning Ticket
 title_slug: winning-ticket
 ipdb_id: 2798

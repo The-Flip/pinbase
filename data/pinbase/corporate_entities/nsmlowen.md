@@ -1,5 +1,4 @@
 ---
-slug: nsmlowen
 name: NSM/Löwen
 manufacturer_slug: nsm
 ipdb_manufacturer_id: 225

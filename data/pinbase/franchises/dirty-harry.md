@@ -1,5 +1,4 @@
 ---
-slug: dirty-harry
 name: Dirty Harry
 ---
 

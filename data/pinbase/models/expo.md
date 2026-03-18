@@ -1,5 +1,4 @@
 ---
-slug: expo
 name: Expo
 title_slug: expo-roto
 opdb_id: Gr2jZ-M0olp

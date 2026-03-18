@@ -1,5 +1,4 @@
 ---
-slug: block-a-shot
 name: Block-A-Shot
 title_slug: block-a-shot
 ipdb_id: 3630

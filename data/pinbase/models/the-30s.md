@@ -1,5 +1,4 @@
 ---
-slug: the-30s
 name: The 30's
 title_slug: speakeasy-the-30s
 opdb_id: G4Xdq-MLBlD

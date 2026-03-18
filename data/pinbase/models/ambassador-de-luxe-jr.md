@@ -1,5 +1,4 @@
 ---
-slug: ambassador-de-luxe-jr
 name: Ambassador De Luxe Jr.
 title_slug: ambassador-de-luxe-jr
 ipdb_id: 5820

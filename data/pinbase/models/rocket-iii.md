@@ -1,5 +1,4 @@
 ---
-slug: rocket-iii
 name: Rocket III
 title_slug: rocket-iii
 opdb_id: G42XB-MJ93N

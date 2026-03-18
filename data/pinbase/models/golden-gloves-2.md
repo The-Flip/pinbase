@@ -1,5 +1,4 @@
 ---
-slug: golden-gloves-2
 name: Golden Gloves
 title_slug: golden-gloves-2
 opdb_id: Gd2W6-Mb5ny

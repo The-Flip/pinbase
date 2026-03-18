@@ -1,5 +1,4 @@
 ---
-slug: opportunity
 name: Opportunity
 title_slug: opportunity
 ipdb_id: 1723

@@ -1,5 +1,4 @@
 ---
-slug: turnier
 name: Turnier
 title_slug: turnier
 ipdb_id: 5635

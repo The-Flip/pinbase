@@ -1,5 +1,4 @@
 ---
-slug: old-faithful
 name: Old Faithful
 title_slug: old-faithful
 opdb_id: GD7wl-M85We

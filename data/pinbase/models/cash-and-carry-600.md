@@ -1,5 +1,4 @@
 ---
-slug: cash-and-carry-600
 name: Cash and Carry 600
 title_slug: cash-and-carry-600
 ipdb_id: 5462

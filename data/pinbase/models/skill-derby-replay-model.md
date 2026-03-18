@@ -1,5 +1,4 @@
 ---
-slug: skill-derby-replay-model
 name: Skill Derby (Replay Model)
 title_slug: skill-derby-replay-model
 ipdb_id: 2180

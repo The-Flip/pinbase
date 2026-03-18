@@ -1,5 +1,4 @@
 ---
-slug: baseball-champ
 name: Baseball Champ
 title_slug: baseball-champ
 ipdb_id: 2905

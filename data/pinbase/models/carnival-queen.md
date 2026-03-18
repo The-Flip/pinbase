@@ -1,5 +1,4 @@
 ---
-slug: carnival-queen
 name: Carnival Queen
 title_slug: carnival-queen
 ipdb_id: 456

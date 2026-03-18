@@ -1,5 +1,4 @@
 ---
-slug: 1-million-bc
 name: 1 Million B.C.
 title_slug: 1-million-bc
 ipdb_id: 6364

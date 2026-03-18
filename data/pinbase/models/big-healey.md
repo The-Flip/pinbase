@@ -1,5 +1,4 @@
 ---
-slug: big-healey
 name: Big Healey
 title_slug: big-healey
 ipdb_id: 5213

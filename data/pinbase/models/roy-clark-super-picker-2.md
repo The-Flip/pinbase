@@ -1,5 +1,4 @@
 ---
-slug: roy-clark-super-picker-2
 name: Roy Clark Super Picker
 title_slug: roy-clark-super-picker-2
 ipdb_id: 6315

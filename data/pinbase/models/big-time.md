@@ -1,5 +1,4 @@
 ---
-slug: big-time
 name: Big Time
 title_slug: big-time
 ipdb_id: 282

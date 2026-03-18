@@ -1,5 +1,4 @@
 ---
-slug: melody-roll
 name: Melody Roll
 title_slug: melody-roll
 ipdb_id: 1569

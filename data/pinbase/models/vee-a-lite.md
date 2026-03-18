@@ -1,5 +1,4 @@
 ---
-slug: vee-a-lite
 name: Vee-A-Lite
 title_slug: vee-a-lite
 ipdb_id: 6253

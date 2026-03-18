@@ -1,5 +1,4 @@
 ---
-slug: tournament-2
 name: Tournament
 title_slug: tournament
 opdb_id: G5W8D-M9R42

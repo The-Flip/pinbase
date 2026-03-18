@@ -1,5 +1,4 @@
 ---
-slug: sharp-shooter-2
 name: Sharp Shooter
 title_slug: sharp-shooter
 ipdb_id: 4964

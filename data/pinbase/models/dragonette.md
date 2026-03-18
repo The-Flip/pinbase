@@ -1,5 +1,4 @@
 ---
-slug: dragonette
 name: Dragonette
 title_slug: dragonette-4-belles
 opdb_id: G5DD0-MLynv

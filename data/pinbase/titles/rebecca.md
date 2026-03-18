@@ -1,4 +1,3 @@
 ---
-slug: rebecca
 name: Rebecca
 ---

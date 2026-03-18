@@ -1,5 +1,4 @@
 ---
-slug: guardian
 name: Guardian
 title_slug: guardian
 ipdb_id: 3708

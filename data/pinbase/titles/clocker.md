@@ -1,4 +1,3 @@
 ---
-slug: clocker
 name: Clocker
 ---

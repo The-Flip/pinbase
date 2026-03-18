@@ -1,5 +1,4 @@
 ---
-slug: monte-rosa
 name: Monte Rosa
 title_slug: monte-rosa
 opdb_id: GrNoL-MJ2by

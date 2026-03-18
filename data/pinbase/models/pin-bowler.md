@@ -1,5 +1,4 @@
 ---
-slug: pin-bowler
 name: Pin-Bowler
 title_slug: pin-bowler
 opdb_id: GpeZL-MePe1

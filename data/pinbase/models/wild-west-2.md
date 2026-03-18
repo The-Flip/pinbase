@@ -1,5 +1,4 @@
 ---
-slug: wild-west-2
 name: Wild West
 title_slug: wild-west-2
 ipdb_id: 4864

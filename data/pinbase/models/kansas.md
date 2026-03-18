@@ -1,5 +1,4 @@
 ---
-slug: kansas
 name: Kansas
 title_slug: kansas
 ipdb_id: 5916

@@ -1,5 +1,4 @@
 ---
-slug: pla-rite
 name: Pla-Rite
 title_slug: pla-rite
 ipdb_id: 3987

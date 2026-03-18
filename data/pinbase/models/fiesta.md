@@ -1,5 +1,4 @@
 ---
-slug: fiesta
 name: Fiesta
 title_slug: fiesta-2
 ipdb_id: 835

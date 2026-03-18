@@ -1,5 +1,4 @@
 ---
-slug: lancer
 name: Lancer
 title_slug: lancer
 ipdb_id: 1409

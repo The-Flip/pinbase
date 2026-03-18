@@ -1,5 +1,4 @@
 ---
-slug: pentogram
 name: Pentogram
 title_slug: pentogram
 ipdb_id: 4352

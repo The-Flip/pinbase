@@ -1,5 +1,4 @@
 ---
-slug: the-best-jump
 name: The Best Jump
 title_slug: the-best-jump
 opdb_id: G5pnl-MDWyn

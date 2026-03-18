@@ -1,5 +1,4 @@
 ---
-slug: k-c-jones
 name: K. C. Jones
 title_slug: k-c-jones
 opdb_id: GryOX-MJpZN

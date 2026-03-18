@@ -1,5 +1,4 @@
 ---
-slug: doppelt
 name: Doppelt
 title_slug: doppelt
 ipdb_id: 5611

@@ -1,5 +1,4 @@
 ---
-slug: pinball-magic
 name: Pinball Magic
 title_slug: pinball-magic
 opdb_id: GrZnn-MJj46

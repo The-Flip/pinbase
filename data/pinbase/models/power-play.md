@@ -1,5 +1,4 @@
 ---
-slug: power-play
 name: Power Play
 title_slug: power-play
 ipdb_id: 3317

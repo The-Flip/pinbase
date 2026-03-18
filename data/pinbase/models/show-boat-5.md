@@ -1,5 +1,4 @@
 ---
-slug: show-boat-5
 name: Show Boat
 title_slug: show-boat-2
 opdb_id: Gr2KY-MDzXP

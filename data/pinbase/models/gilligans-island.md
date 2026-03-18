@@ -1,5 +1,4 @@
 ---
-slug: gilligans-island
 name: Gilligan's Island
 title_slug: gilligans-island
 opdb_id: GRBxQ-MnKX7

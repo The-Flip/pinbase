@@ -1,5 +1,4 @@
 ---
-slug: flying-colors
 name: Flying Colors
 title_slug: flying-colors
 ipdb_id: 903

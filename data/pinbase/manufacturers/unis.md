@@ -1,4 +1,3 @@
 ---
-slug: unis
 name: UNIS
 ---

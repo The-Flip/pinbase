@@ -1,5 +1,4 @@
 ---
-slug: derby-winner
 name: Derby Winner
 title_slug: derby-winner
 ipdb_id: 670

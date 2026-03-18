@@ -1,5 +1,4 @@
 ---
-slug: lai-lani
 name: Lai-Lani
 title_slug: lai-lani
 ipdb_id: 5960

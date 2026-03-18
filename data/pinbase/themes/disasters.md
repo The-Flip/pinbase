@@ -1,4 +1,3 @@
 ---
-slug: disasters
 name: Disasters
 ---

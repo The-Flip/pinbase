@@ -1,5 +1,4 @@
 ---
-slug: snooky
 name: Snooky
 title_slug: snooky
 ipdb_id: 2228

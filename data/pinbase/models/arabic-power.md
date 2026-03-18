@@ -1,5 +1,4 @@
 ---
-slug: arabic-power
 name: Arabic Power
 title_slug: arabic-power
 ipdb_id: 5636

@@ -1,5 +1,4 @@
 ---
-slug: blue-note
 name: Blue Note
 title_slug: rock-star
 opdb_id: GRbD8-MLnYW

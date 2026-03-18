@@ -1,5 +1,4 @@
 ---
-slug: hot-tip-2
 name: Hot Tip
 title_slug: hot-tip-2
 ipdb_id: 1250

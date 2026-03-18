@@ -1,5 +1,4 @@
 ---
-slug: giant-movie-bank
 name: Giant Movie Bank
 title_slug: giant-movie-bank
 ipdb_id: 1002

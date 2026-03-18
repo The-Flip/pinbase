@@ -1,5 +1,4 @@
 ---
-slug: around-the-world
 name: Around the World
 title_slug: around-the-world-2
 ipdb_id: 92

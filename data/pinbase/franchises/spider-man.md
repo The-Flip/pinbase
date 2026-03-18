@@ -1,5 +1,4 @@
 ---
-slug: spider-man
 name: Spider-Man
 ---
 

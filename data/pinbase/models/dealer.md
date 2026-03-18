@@ -1,5 +1,4 @@
 ---
-slug: dealer
 name: Dealer
 title_slug: dealer
 opdb_id: Grjn1-ML1vB

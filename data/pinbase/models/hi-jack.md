@@ -1,5 +1,4 @@
 ---
-slug: hi-jack
 name: Hi Jack!
 title_slug: hi-jack
 ipdb_id: 6458

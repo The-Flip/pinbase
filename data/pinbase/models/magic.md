@@ -1,5 +1,4 @@
 ---
-slug: magic
 name: Magic
 title_slug: magic-3
 opdb_id: G8l2L-M9ReW

@@ -1,5 +1,4 @@
 ---
-slug: hang-glider
 name: Hang Glider
 title_slug: hang-glider
 opdb_id: GRKpw-M5R0E

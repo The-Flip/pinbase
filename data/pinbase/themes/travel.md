@@ -1,4 +1,3 @@
 ---
-slug: travel
 name: Travel
 ---

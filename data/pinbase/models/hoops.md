@@ -1,5 +1,4 @@
 ---
-slug: hoops
 name: Hoops
 title_slug: hoops
 opdb_id: G4j2z-MDb0Z

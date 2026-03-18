@@ -1,5 +1,4 @@
 ---
-slug: hippye
 name: Hippye
 title_slug: hippye
 ipdb_id: 4706

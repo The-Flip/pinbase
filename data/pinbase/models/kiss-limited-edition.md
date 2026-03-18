@@ -1,10 +1,11 @@
 ---
-slug: kiss-limited-edition
 name: KISS (Limited Edition)
 title_slug: kiss-stern
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G4qX5-Ml9jb
 ipdb_id: 6267
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: kiss-premium
 credit_refs:
 - person_slug: john-borg

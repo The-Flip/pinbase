@@ -1,5 +1,4 @@
 ---
-slug: cosmic-carnival
 name: Cosmic Carnival
 title_slug: cosmic-carnival-2
 ipdb_id: 6859

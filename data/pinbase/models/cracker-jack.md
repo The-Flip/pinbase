@@ -1,5 +1,4 @@
 ---
-slug: cracker-jack
 name: Cracker Jack
 title_slug: cracker-jack
 ipdb_id: 3033

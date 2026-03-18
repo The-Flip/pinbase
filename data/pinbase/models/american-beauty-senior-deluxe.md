@@ -1,5 +1,4 @@
 ---
-slug: american-beauty-senior-deluxe
 name: American Beauty Senior Deluxe
 title_slug: american-beauty-senior-deluxe
 ipdb_id: 6895

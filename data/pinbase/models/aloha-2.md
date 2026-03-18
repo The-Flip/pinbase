@@ -1,5 +1,4 @@
 ---
-slug: aloha-2
 name: Aloha
 title_slug: aloha-2
 ipdb_id: 2871

@@ -1,5 +1,4 @@
 ---
-slug: papillon
 name: Papillon
 title_slug: papillon-2
 opdb_id: GR6VW-MBRwz

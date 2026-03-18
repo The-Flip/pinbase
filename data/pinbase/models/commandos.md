@@ -1,5 +1,4 @@
 ---
-slug: commandos
 name: Commandos
 title_slug: commandos
 ipdb_id: 5564

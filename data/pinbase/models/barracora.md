@@ -1,5 +1,4 @@
 ---
-slug: barracora
 name: Barracora
 title_slug: barracora
 opdb_id: GRo7K-MQ4e3

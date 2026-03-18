@@ -1,4 +1,3 @@
 ---
-slug: magister
 name: Magister
 ---

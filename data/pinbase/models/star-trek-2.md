@@ -1,5 +1,4 @@
 ---
-slug: star-trek-2
 name: Star Trek
 title_slug: 4-square-astro
 opdb_id: GryO2-MjB39

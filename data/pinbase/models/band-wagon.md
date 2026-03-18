@@ -1,5 +1,4 @@
 ---
-slug: band-wagon
 name: Band Wagon
 title_slug: band-wagon
 opdb_id: G4kvy-MQ7pO

@@ -1,5 +1,4 @@
 ---
-slug: galaxy-play
 name: Galaxy Play
 title_slug: galaxy-play
 opdb_id: GRDlQ-MJ9yJ

@@ -1,5 +1,4 @@
 ---
-slug: in-concert
 name: In Concert
 title_slug: in-concert
 ipdb_id: 7043

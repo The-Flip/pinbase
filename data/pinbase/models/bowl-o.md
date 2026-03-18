@@ -1,5 +1,4 @@
 ---
-slug: bowl-o
 name: Bowl-O
 title_slug: bowl-o
 opdb_id: GRnK7-MQk0V

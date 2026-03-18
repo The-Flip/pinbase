@@ -1,5 +1,4 @@
 ---
-slug: slamdunk
 name: Slamdunk
 title_slug: slamdunk
 ipdb_id: 4965

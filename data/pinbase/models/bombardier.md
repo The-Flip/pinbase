@@ -1,5 +1,4 @@
 ---
-slug: bombardier
 name: Bombardier
 title_slug: bombardier
 ipdb_id: 3647

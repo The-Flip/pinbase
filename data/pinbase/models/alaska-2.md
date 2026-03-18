@@ -1,5 +1,4 @@
 ---
-slug: alaska-2
 name: Alaska
 title_slug: alaska
 opdb_id: G42zD-M85KY

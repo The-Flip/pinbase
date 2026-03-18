@@ -1,5 +1,4 @@
 ---
-slug: flash-back
 name: Flash Back
 title_slug: flash-back
 ipdb_id: 6973

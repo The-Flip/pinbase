@@ -1,5 +1,4 @@
 ---
-slug: space-city
 name: Space City
 title_slug: space-city
 opdb_id: G5Kl7-M1rzV

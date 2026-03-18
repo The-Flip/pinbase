@@ -1,5 +1,4 @@
 ---
-slug: argentine
 name: Argentine
 title_slug: argentine
 ipdb_id: 83

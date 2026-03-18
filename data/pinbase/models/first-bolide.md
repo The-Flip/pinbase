@@ -1,5 +1,4 @@
 ---
-slug: first-bolide
 name: First Bolide
 title_slug: first-bolide
 ipdb_id: 5656

@@ -1,5 +1,4 @@
 ---
-slug: college-football
 name: College Football
 title_slug: college-football
 ipdb_id: 542

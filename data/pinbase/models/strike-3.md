@@ -1,5 +1,4 @@
 ---
-slug: strike-3
 name: Strike
 title_slug: strike
 opdb_id: GRpyl-MQV9B

@@ -1,5 +1,4 @@
 ---
-slug: bally-arcade
 name: Bally Arcade
 title_slug: bally-arcade
 ipdb_id: 3650

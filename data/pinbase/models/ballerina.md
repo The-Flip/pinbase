@@ -1,5 +1,4 @@
 ---
-slug: ballerina
 name: Ballerina
 title_slug: ballerina-2
 ipdb_id: 140

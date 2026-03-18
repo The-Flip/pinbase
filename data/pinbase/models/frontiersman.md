@@ -1,5 +1,4 @@
 ---
-slug: frontiersman
 name: Frontiersman
 title_slug: frontiersman
 opdb_id: G4dbe-MQj8R

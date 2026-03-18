@@ -1,5 +1,4 @@
 ---
-slug: bumper
 name: Bumper
 title_slug: bumper
 ipdb_id: 405

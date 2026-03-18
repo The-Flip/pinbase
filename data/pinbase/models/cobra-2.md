@@ -1,5 +1,4 @@
 ---
-slug: cobra-2
 name: Cobra
 title_slug: cobra-2
 ipdb_id: 4124

@@ -1,4 +1,3 @@
 ---
-slug: samba
 name: Samba
 ---

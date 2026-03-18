@@ -1,5 +1,4 @@
 ---
-slug: trans-pacific
 name: Trans-Pacific
 title_slug: trans-pacific
 ipdb_id: 4318

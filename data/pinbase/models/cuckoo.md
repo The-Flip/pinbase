@@ -1,5 +1,4 @@
 ---
-slug: cuckoo
 name: Cuckoo
 title_slug: cuckoo
 ipdb_id: 5356

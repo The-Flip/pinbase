@@ -1,5 +1,4 @@
 ---
-slug: doctor-who
 name: Doctor Who
 ---
 

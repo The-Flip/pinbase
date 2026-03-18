@@ -1,5 +1,4 @@
 ---
-slug: domino-2
 name: Domino
 title_slug: domino-playmates
 opdb_id: G4j8k-MJK5K

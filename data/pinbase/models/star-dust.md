@@ -1,5 +1,4 @@
 ---
-slug: star-dust
 name: Star Dust
 title_slug: star-dust
 opdb_id: GLWYe-MVKlY

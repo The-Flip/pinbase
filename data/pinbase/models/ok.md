@@ -1,5 +1,4 @@
 ---
-slug: ok
 name: O.K.
 title_slug: ok
 ipdb_id: 4755

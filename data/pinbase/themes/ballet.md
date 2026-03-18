@@ -1,4 +1,3 @@
 ---
-slug: ballet
 name: Ballet
 ---

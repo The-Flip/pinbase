@@ -1,5 +1,4 @@
 ---
-slug: flag-ship
 name: Flag-Ship
 title_slug: flag-ship
 opdb_id: G5pXO-MJ2eo

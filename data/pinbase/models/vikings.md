@@ -1,5 +1,4 @@
 ---
-slug: vikings
 name: Vikings
 title_slug: vikings
 ipdb_id: 5352

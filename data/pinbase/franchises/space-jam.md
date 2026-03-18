@@ -1,5 +1,4 @@
 ---
-slug: space-jam
 name: Space Jam
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: stop-and-sock-2
 name: Stop and Sock
 title_slug: stop-and-sock-2
 ipdb_id: 3394

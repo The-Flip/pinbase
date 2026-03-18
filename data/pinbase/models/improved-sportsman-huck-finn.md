@@ -1,5 +1,4 @@
 ---
-slug: improved-sportsman-huck-finn
 name: Improved Sportsman ("Huck Finn")
 title_slug: improved-sportsman-huck-finn
 ipdb_id: 6918

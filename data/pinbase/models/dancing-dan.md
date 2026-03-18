@@ -1,5 +1,4 @@
 ---
-slug: dancing-dan
 name: Dancing Dan
 title_slug: dancing-dan
 ipdb_id: 5484

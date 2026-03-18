@@ -1,5 +1,4 @@
 ---
-slug: tecnoplay
 name: Tecnoplay
 opdb_manufacturer_id: 22
 ---

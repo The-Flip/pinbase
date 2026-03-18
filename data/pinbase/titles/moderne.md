@@ -1,4 +1,3 @@
 ---
-slug: moderne
 name: Moderne
 ---

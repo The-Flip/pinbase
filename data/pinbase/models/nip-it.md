@@ -1,5 +1,4 @@
 ---
-slug: nip-it
 name: Nip-It
 title_slug: nip-it
 opdb_id: Gre0B-MYewk

@@ -1,5 +1,4 @@
 ---
-slug: crosswords
 name: Crosswords
 title_slug: crosswords
 ipdb_id: 606

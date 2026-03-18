@@ -1,5 +1,4 @@
 ---
-slug: big-buck-hunter
 name: Big Buck Hunter
 ---
 

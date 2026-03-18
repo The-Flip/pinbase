@@ -1,5 +1,4 @@
 ---
-slug: euro-star
 name: Euro Star
 title_slug: euro-star
 ipdb_id: 6281

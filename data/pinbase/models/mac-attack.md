@@ -1,5 +1,4 @@
 ---
-slug: mac-attack
 name: Mac Attack
 title_slug: mac-attack
 opdb_id: GrJ07-MjB7X

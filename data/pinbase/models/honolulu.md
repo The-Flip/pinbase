@@ -1,5 +1,4 @@
 ---
-slug: honolulu
 name: Honolulu
 title_slug: honolulu
 ipdb_id: 4672

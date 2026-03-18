@@ -1,5 +1,4 @@
 ---
-slug: star-series
 name: Star Series
 title_slug: star-series
 ipdb_id: 3497

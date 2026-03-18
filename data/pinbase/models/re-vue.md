@@ -1,5 +1,4 @@
 ---
-slug: re-vue
 name: Re-Vue
 title_slug: re-vue
 ipdb_id: 5071

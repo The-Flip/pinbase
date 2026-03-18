@@ -1,5 +1,4 @@
 ---
-slug: super-jumping
 name: Super Jumping
 title_slug: super-jumping
 ipdb_id: 4467

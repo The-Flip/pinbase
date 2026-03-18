@@ -1,5 +1,4 @@
 ---
-slug: silver-sails
 name: Silver Sails
 title_slug: silver-sails
 ipdb_id: 2149

@@ -1,5 +1,4 @@
 ---
-slug: beat-the-clock-3
 name: Beat the Clock
 title_slug: beat-the-clock-3
 ipdb_id: 4518

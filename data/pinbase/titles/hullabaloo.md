@@ -1,4 +1,3 @@
 ---
-slug: hullabaloo
 name: Hullabaloo
 ---

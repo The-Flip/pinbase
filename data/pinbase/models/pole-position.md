@@ -1,5 +1,4 @@
 ---
-slug: pole-position
 name: Pole Position
 title_slug: pole-position
 opdb_id: Grlop-MLy9n

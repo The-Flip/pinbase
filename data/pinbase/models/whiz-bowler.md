@@ -1,5 +1,4 @@
 ---
-slug: whiz-bowler
 name: Whiz-Bowler
 title_slug: whiz-bowler
 ipdb_id: 5702

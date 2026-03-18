@@ -1,5 +1,4 @@
 ---
-slug: relay-senior
 name: Relay (Senior)
 title_slug: relay-senior
 ipdb_id: 4988

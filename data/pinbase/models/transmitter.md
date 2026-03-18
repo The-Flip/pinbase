@@ -1,5 +1,4 @@
 ---
-slug: transmitter
 name: Transmitter
 title_slug: transmitter
 ipdb_id: 2629

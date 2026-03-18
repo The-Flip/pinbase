@@ -1,5 +1,4 @@
 ---
-slug: card-king
 name: Card King
 title_slug: drop-a-card-pop-a-card
 opdb_id: GRL9Q-MJpKr

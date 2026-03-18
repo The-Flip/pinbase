@@ -1,5 +1,4 @@
 ---
-slug: 1939-baseball-free-game-model
 name: 1939 Baseball (Free Game Model)
 title_slug: 1939-baseball-free-game-model
 ipdb_id: 6600

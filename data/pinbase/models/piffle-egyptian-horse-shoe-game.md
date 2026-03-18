@@ -1,5 +1,4 @@
 ---
-slug: piffle-egyptian-horse-shoe-game
 name: Piffle Egyptian Horse Shoe Game
 title_slug: piffle-egyptian-horse-shoe-game
 ipdb_id: 5679

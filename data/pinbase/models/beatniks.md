@@ -1,5 +1,4 @@
 ---
-slug: beatniks
 name: Beatniks
 title_slug: beatniks
 opdb_id: G5bYP-MQV6l

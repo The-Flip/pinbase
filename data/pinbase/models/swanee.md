@@ -1,5 +1,4 @@
 ---
-slug: swanee
 name: Swanee
 title_slug: swanee
 opdb_id: GV8LW-Mz21P

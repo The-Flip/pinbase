@@ -1,5 +1,4 @@
 ---
-slug: red-ball
 name: Red Ball
 title_slug: red-ball
 ipdb_id: 1932

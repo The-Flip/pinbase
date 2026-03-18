@@ -1,5 +1,4 @@
 ---
-slug: global-warfare
 name: Global Warfare
 title_slug: global-warfare
 opdb_id: G436N-MQw3K

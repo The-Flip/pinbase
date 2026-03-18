@@ -1,4 +1,3 @@
 ---
-slug: fair
 name: Fair
 ---

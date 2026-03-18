@@ -1,5 +1,4 @@
 ---
-slug: miss-belgium-turbo
 name: Miss Belgium Turbo
 title_slug: miss-belgium-turbo
 ipdb_id: 5370

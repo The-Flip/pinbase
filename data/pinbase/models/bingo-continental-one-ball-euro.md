@@ -1,5 +1,4 @@
 ---
-slug: bingo-continental-one-ball-euro
 name: Bingo Continental One Ball Euro
 title_slug: bingo-continental-one-ball-euro
 ipdb_id: 6083

@@ -1,4 +1,3 @@
 ---
-slug: soccer
 name: Soccer
 ---

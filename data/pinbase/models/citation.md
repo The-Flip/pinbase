@@ -1,5 +1,4 @@
 ---
-slug: citation
 name: Citation
 title_slug: citation
 ipdb_id: 526

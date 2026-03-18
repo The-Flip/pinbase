@@ -1,5 +1,4 @@
 ---
-slug: flash-senior
 name: Flash (Senior)
 title_slug: flash-senior
 ipdb_id: 4013

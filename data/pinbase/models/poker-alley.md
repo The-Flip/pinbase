@@ -1,5 +1,4 @@
 ---
-slug: poker-alley
 name: Poker Alley
 title_slug: poker-alley
 opdb_id: GRBbJ-MJY12

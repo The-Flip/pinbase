@@ -1,5 +1,4 @@
 ---
-slug: rallye
 name: Rallye'
 title_slug: rallye-2
 ipdb_id: 5455

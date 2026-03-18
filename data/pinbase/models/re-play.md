@@ -1,5 +1,4 @@
 ---
-slug: re-play
 name: Re-Play
 title_slug: re-play
 ipdb_id: 1949

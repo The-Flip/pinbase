@@ -1,5 +1,4 @@
 ---
-slug: airliner
 name: Airliner
 title_slug: airliner
 ipdb_id: 34

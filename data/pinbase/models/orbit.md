@@ -1,5 +1,4 @@
 ---
-slug: orbit
 name: Orbit
 title_slug: orbit-outer-space
 opdb_id: G5o1K-MQZby

@@ -1,5 +1,4 @@
 ---
-slug: spirit-of-76-3
 name: Spirit of '76
 title_slug: spirit-of-76-2
 ipdb_id: 6510

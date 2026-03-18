@@ -1,5 +1,4 @@
 ---
-slug: four-corners
 name: Four Corners
 title_slug: four-corners
 opdb_id: G5pqj-MQov6

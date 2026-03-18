@@ -1,5 +1,4 @@
 ---
-slug: hippy
 name: Hippy
 title_slug: hippy
 ipdb_id: 4400

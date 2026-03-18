@@ -1,5 +1,4 @@
 ---
-slug: odd-ball-junior
 name: Odd Ball Junior
 title_slug: odd-ball-junior
 ipdb_id: 3441

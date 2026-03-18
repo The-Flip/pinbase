@@ -1,5 +1,4 @@
 ---
-slug: submarine-gun
 name: Submarine Gun
 title_slug: submarine-gun
 ipdb_id: 6721

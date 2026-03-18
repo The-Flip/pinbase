@@ -1,5 +1,4 @@
 ---
-slug: one-two-three
 name: One-Two-Three
 title_slug: one-two-three-2
 ipdb_id: 1719

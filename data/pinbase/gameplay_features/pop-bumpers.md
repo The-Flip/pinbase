@@ -1,5 +1,4 @@
 ---
-slug: pop-bumpers
 name: Pop Bumpers
 display_order: 2
 ---

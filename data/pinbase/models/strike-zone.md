@@ -1,5 +1,4 @@
 ---
-slug: strike-zone
 name: Strike Zone
 title_slug: strike-zone
 opdb_id: GRzYk-MDXRj

@@ -1,5 +1,4 @@
 ---
-slug: super-score-4
 name: Super Score
 title_slug: super-score-3
 ipdb_id: 6593

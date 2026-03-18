@@ -1,5 +1,4 @@
 ---
-slug: shoot-the-chutes
 name: Shoot the Chutes
 title_slug: shoot-the-chutes
 ipdb_id: 3292

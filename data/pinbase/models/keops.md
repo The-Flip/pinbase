@@ -1,5 +1,4 @@
 ---
-slug: keops
 name: Keops
 title_slug: keops
 opdb_id: GR70j-MDyVW

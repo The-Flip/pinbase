@@ -1,5 +1,4 @@
 ---
-slug: kow-tow
 name: Kow Tow
 title_slug: kow-tow
 ipdb_id: 3594

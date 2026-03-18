@@ -1,4 +1,3 @@
 ---
-slug: multiplay
 name: Multiplay
 ---

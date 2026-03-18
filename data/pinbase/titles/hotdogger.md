@@ -1,4 +1,3 @@
 ---
-slug: hotdogger
 name: Hotdogger
 ---

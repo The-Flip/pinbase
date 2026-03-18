@@ -1,5 +1,4 @@
 ---
-slug: phoenix
 name: Phoenix
 title_slug: rainbow-2
 opdb_id: GPBKv-MnKol

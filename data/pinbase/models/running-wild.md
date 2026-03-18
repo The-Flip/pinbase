@@ -1,5 +1,4 @@
 ---
-slug: running-wild
 name: Running Wild
 title_slug: running-wild
 ipdb_id: 2042

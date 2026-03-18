@@ -1,4 +1,3 @@
 ---
-slug: ambush
 name: Ambush
 ---

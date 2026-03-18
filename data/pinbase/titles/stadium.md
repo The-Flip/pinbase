@@ -1,4 +1,3 @@
 ---
-slug: stadium
 name: Stadium
 ---

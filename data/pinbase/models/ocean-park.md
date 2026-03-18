@@ -1,5 +1,4 @@
 ---
-slug: ocean-park
 name: Ocean Park
 title_slug: ocean-park
 ipdb_id: 1690

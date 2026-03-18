@@ -1,5 +1,4 @@
 ---
-slug: sea-island
 name: Sea Island
 title_slug: sea-island
 ipdb_id: 2082

@@ -1,5 +1,4 @@
 ---
-slug: star-pool-2
 name: Star Pool
 title_slug: star-pool
 opdb_id: GR6Oy-M4o8b

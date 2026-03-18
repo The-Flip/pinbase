@@ -1,5 +1,4 @@
 ---
-slug: space-game-1-card
 name: Space Game (1 card)
 title_slug: space-game-1-card
 ipdb_id: 5979

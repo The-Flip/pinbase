@@ -1,5 +1,4 @@
 ---
-slug: valkyrie
 name: Valkyrie
 title_slug: valkyrie
 opdb_id: GrOkd-Ml9OE

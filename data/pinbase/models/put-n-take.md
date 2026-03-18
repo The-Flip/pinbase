@@ -1,5 +1,4 @@
 ---
-slug: put-n-take
 name: Put 'N' Take
 title_slug: put-n-take
 ipdb_id: 1879

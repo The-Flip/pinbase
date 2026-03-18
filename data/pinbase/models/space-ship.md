@@ -1,5 +1,4 @@
 ---
-slug: space-ship
 name: Space Ship
 title_slug: space-ship-2
 opdb_id: G5YXp-MJ4RW

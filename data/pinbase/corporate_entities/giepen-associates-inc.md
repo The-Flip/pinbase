@@ -1,5 +1,4 @@
 ---
-slug: giepen-associates-inc
 name: Giepen Associates, Inc.
 manufacturer_slug: giepen-associates-inc
 ipdb_manufacturer_id: 615

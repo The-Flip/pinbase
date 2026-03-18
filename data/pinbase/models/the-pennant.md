@@ -1,5 +1,4 @@
 ---
-slug: the-pennant
 name: The Pennant
 title_slug: the-pennant
 ipdb_id: 1773

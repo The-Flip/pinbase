@@ -1,5 +1,4 @@
 ---
-slug: superman
 name: Superman
 ---
 

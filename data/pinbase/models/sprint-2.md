@@ -1,5 +1,4 @@
 ---
-slug: sprint-2
 name: Sprint
 title_slug: sprint-2
 ipdb_id: 5814

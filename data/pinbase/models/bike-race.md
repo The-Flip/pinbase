@@ -1,5 +1,4 @@
 ---
-slug: bike-race
 name: Bike Race
 title_slug: bike-race
 opdb_id: G4NzV-MLxYz

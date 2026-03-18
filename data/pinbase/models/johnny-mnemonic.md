@@ -1,5 +1,4 @@
 ---
-slug: johnny-mnemonic
 name: Johnny Mnemonic
 title_slug: johnny-mnemonic
 opdb_id: GR6W8-Mb55B

@@ -1,5 +1,4 @@
 ---
-slug: big-game
 name: Big Game
 title_slug: big-game-2
 ipdb_id: 248

@@ -1,5 +1,4 @@
 ---
-slug: impact
 name: Impact
 title_slug: impact-2
 ipdb_id: 1265

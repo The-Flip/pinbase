@@ -1,5 +1,4 @@
 ---
-slug: odin
 name: Odin
 title_slug: odin
 opdb_id: GJ2d8-M9RWW

@@ -1,5 +1,4 @@
 ---
-slug: lincoln-novelty-manufacturing-company
 name: Lincoln Novelty Manufacturing Company
 manufacturer_slug: lincoln-novelty-manufacturing-company
 ipdb_manufacturer_id: 186

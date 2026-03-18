@@ -1,5 +1,4 @@
 ---
-slug: wild-horse-saloon
 name: Wild Horse Saloon
 title_slug: wild-horse-saloon
 ipdb_id: 4918

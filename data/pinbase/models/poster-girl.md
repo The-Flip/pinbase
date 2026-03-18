@@ -1,5 +1,4 @@
 ---
-slug: poster-girl
 name: Poster Girl
 title_slug: poster-girl
 ipdb_id: 5860

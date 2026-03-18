@@ -1,4 +1,3 @@
 ---
-slug: nudgy
 name: Nudgy
 ---

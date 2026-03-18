@@ -1,4 +1,3 @@
 ---
-slug: trojan
 name: Trojan
 ---

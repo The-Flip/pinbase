@@ -1,4 +1,3 @@
 ---
-slug: pastime
 name: Pastime
 ---

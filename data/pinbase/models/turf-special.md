@@ -1,5 +1,4 @@
 ---
-slug: turf-special
 name: Turf Special
 title_slug: turf-special
 ipdb_id: 2675

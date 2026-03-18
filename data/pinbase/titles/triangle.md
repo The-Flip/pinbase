@@ -1,4 +1,3 @@
 ---
-slug: triangle
 name: Triangle
 ---

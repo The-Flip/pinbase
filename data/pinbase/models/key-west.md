@@ -1,5 +1,4 @@
 ---
-slug: key-west
 name: Key West
 title_slug: key-west
 ipdb_id: 1360

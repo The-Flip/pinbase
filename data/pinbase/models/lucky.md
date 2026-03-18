@@ -1,5 +1,4 @@
 ---
-slug: lucky
 name: Lucky
 title_slug: lucky
 ipdb_id: 1482

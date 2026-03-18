@@ -1,5 +1,4 @@
 ---
-slug: corinthian-twinity
 name: Corinthian Twinity
 title_slug: corinthian-twinity
 ipdb_id: 5375

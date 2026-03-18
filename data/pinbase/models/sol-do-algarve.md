@@ -1,5 +1,4 @@
 ---
-slug: sol-do-algarve
 name: Sol do Algarve
 title_slug: sol-do-algarve
 ipdb_id: 5737

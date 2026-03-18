@@ -1,4 +1,3 @@
 ---
-slug: affluence
 name: Affluence
 ---

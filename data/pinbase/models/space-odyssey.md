@@ -1,5 +1,4 @@
 ---
-slug: space-odyssey
 name: Space Odyssey
 title_slug: space-mission-space-odyssey
 opdb_id: GRnX6-MJ9qb

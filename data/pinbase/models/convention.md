@@ -1,5 +1,4 @@
 ---
-slug: convention
 name: Convention
 title_slug: convention
 ipdb_id: 3031

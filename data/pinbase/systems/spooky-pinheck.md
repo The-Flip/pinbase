@@ -1,5 +1,4 @@
 ---
-slug: spooky-pinheck
 name: Spooky PinHeck
 manufacturer_slug: spooky
 technology_subgeneration_slug: ss-pc

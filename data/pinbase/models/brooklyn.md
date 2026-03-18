@@ -1,5 +1,4 @@
 ---
-slug: brooklyn
 name: Brooklyn
 title_slug: brooklyn
 ipdb_id: 6086

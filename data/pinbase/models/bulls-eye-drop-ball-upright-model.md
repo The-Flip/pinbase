@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-drop-ball-upright-model
 name: Bulls-Eye Drop Ball (Upright Model)
 title_slug: bulls-eye-drop-ball-upright-model
 ipdb_id: 5976

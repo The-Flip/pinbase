@@ -1,5 +1,4 @@
 ---
-slug: trick-shooter
 name: Trick Shooter
 title_slug: trick-shooter
 ipdb_id: 5888

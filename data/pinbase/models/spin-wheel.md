@@ -1,5 +1,4 @@
 ---
-slug: spin-wheel
 name: Spin Wheel
 title_slug: spin-wheel
 opdb_id: Grlk9-Mp4w4

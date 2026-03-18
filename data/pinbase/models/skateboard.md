@@ -1,5 +1,4 @@
 ---
-slug: skateboard
 name: Skateboard
 title_slug: skateboard
 opdb_id: Grewp-MDEOP

@@ -1,5 +1,4 @@
 ---
-slug: zeta
 name: Zeta
 title_slug: zeta
 ipdb_id: 2833

@@ -1,4 +1,3 @@
 ---
-slug: teaser
 name: Teaser
 ---

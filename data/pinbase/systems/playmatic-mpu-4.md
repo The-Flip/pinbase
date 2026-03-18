@@ -1,5 +1,4 @@
 ---
-slug: playmatic-mpu-4
 name: Playmatic MPU-4
 manufacturer_slug: playmatic
 technology_subgeneration_slug: ss-discrete

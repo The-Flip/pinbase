@@ -1,5 +1,4 @@
 ---
-slug: tournament
 name: Tournament
 title_slug: tournament-2
 ipdb_id: 2612

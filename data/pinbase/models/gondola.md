@@ -1,5 +1,4 @@
 ---
-slug: gondola
 name: Gondola
 title_slug: gondola
 opdb_id: GELBV-M2Y0o

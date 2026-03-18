@@ -1,5 +1,4 @@
 ---
-slug: elite-guard
 name: Elite Guard
 title_slug: elite-guard
 opdb_id: GrEDX-ML0We

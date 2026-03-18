@@ -1,5 +1,4 @@
 ---
-slug: el-rancho
 name: El Rancho
 title_slug: el-rancho
 ipdb_id: 769

@@ -1,5 +1,4 @@
 ---
-slug: big-inning-chicago-model
 name: Big Inning (Chicago Model)
 title_slug: big-inning-chicago-model
 ipdb_id: 6020

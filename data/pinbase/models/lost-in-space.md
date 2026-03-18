@@ -1,5 +1,4 @@
 ---
-slug: lost-in-space
 name: Lost In Space
 title_slug: lost-in-space
 opdb_id: GR91x-MLBZE

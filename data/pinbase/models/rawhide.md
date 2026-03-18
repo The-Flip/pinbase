@@ -1,5 +1,4 @@
 ---
-slug: rawhide
 name: Rawhide
 title_slug: stampede-rawhide
 opdb_id: GRQ79-MQKr5

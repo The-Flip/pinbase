@@ -1,4 +1,3 @@
 ---
-slug: sprint
 name: Sprint
 ---

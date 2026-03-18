@@ -1,5 +1,4 @@
 ---
-slug: twenty-grand
 name: Twenty Grand
 title_slug: twenty-grand
 opdb_id: G5KjL-MePPn

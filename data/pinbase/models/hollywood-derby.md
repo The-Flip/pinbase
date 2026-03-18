@@ -1,5 +1,4 @@
 ---
-slug: hollywood-derby
 name: Hollywood Derby
 title_slug: hollywood-derby
 ipdb_id: 5990

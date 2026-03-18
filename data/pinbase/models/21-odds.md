@@ -1,5 +1,4 @@
 ---
-slug: 21-odds
 name: 21 Odds
 title_slug: 21-odds
 ipdb_id: 4268

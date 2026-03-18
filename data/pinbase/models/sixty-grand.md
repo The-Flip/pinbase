@@ -1,5 +1,4 @@
 ---
-slug: sixty-grand
 name: Sixty Grand
 title_slug: sixty-grand
 ipdb_id: 3867

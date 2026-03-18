@@ -1,5 +1,4 @@
 ---
-slug: stockyard
 name: Stockyard
 title_slug: stockyard
 ipdb_id: 4994

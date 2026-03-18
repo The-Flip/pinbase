@@ -1,4 +1,3 @@
 ---
-slug: speedway
 name: Speedway
 ---

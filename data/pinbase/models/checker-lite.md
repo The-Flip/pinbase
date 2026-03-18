@@ -1,5 +1,4 @@
 ---
-slug: checker-lite
 name: Checker-Lite
 title_slug: checker-lite
 ipdb_id: 4914

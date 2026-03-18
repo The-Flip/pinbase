@@ -1,5 +1,4 @@
 ---
-slug: star-wars-the-mandalorian-pro
 name: The Mandalorian (Pro)
 title_slug: the-mandalorian
 opdb_id: GBLLP-MkPpr

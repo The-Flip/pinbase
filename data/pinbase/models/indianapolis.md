@@ -1,5 +1,4 @@
 ---
-slug: indianapolis
 name: Indianapolis
 title_slug: indianapolis
 ipdb_id: 4609

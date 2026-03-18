@@ -1,5 +1,4 @@
 ---
-slug: exhibit-supply-company
 name: Exhibit Supply Company
 manufacturer_slug: esco
 ipdb_manufacturer_id: 117

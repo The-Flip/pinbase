@@ -1,5 +1,4 @@
 ---
-slug: turn-table
 name: Turn Table
 title_slug: turn-table
 ipdb_id: 2676

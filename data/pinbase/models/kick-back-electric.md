@@ -1,5 +1,4 @@
 ---
-slug: kick-back-electric
 name: Kick-Back (Electric)
 title_slug: kick-back-electric
 ipdb_id: 4797

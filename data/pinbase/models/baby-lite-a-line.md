@@ -1,5 +1,4 @@
 ---
-slug: baby-lite-a-line
 name: Baby Lite-A-Line
 title_slug: baby-lite-a-line
 ipdb_id: 124

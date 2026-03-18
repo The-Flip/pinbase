@@ -1,5 +1,4 @@
 ---
-slug: h-m-manufacturing-company
 name: H & M Manufacturing Company
 manufacturer_slug: h-m-manufacturing-company
 ipdb_manufacturer_id: 143

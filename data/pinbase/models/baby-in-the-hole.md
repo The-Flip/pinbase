@@ -1,5 +1,4 @@
 ---
-slug: baby-in-the-hole
 name: Baby In The Hole
 title_slug: baby-in-the-hole
 ipdb_id: 4033

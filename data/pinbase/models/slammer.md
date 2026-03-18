@@ -1,5 +1,4 @@
 ---
-slug: slammer
 name: Slammer
 title_slug: slammer
 ipdb_id: 5148

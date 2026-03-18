@@ -1,4 +1,3 @@
 ---
-slug: phantom
 name: Phantom
 ---

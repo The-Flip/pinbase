@@ -1,5 +1,4 @@
 ---
-slug: flipper-parade
 name: Flipper Parade
 title_slug: flipper-parade
 opdb_id: G5nDZ-M9RoK

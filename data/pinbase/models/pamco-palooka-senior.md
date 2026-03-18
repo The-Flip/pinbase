@@ -1,5 +1,4 @@
 ---
-slug: pamco-palooka-senior
 name: Pamco Palooka (Senior)
 title_slug: pamco-palooka-senior
 ipdb_id: 1742

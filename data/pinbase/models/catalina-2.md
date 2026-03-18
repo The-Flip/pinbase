@@ -1,5 +1,4 @@
 ---
-slug: catalina-2
 name: Catalina
 title_slug: catalina
 opdb_id: G186W-MNEwK

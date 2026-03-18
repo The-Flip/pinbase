@@ -1,5 +1,4 @@
 ---
-slug: whiz-ball-jack-pot
 name: Whiz Ball Jack Pot
 title_slug: whiz-ball-jack-pot
 ipdb_id: 3550

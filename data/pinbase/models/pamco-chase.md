@@ -1,5 +1,4 @@
 ---
-slug: pamco-chase
 name: Pamco Chase
 title_slug: pamco-chase
 ipdb_id: 494

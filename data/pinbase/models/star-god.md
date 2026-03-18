@@ -1,5 +1,4 @@
 ---
-slug: star-god
 name: Star God
 title_slug: star-god
 opdb_id: G5vXk-M2Y8r

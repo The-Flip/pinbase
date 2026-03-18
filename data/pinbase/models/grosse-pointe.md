@@ -1,5 +1,4 @@
 ---
-slug: grosse-pointe
 name: Grosse Pointe
 title_slug: grosse-pointe
 ipdb_id: 5596

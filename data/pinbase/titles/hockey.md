@@ -1,4 +1,3 @@
 ---
-slug: hockey
 name: Hockey
 ---

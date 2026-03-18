@@ -1,5 +1,4 @@
 ---
-slug: jubilee
 name: Jubilee
 title_slug: jubilee
 opdb_id: GrPnx-MJpex

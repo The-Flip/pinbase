@@ -1,5 +1,4 @@
 ---
-slug: pinch-hitter-3
 name: Pinch-Hitter
 title_slug: pinch-hitter-5
 ipdb_id: 1799

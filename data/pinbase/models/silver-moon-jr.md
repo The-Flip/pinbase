@@ -1,5 +1,4 @@
 ---
-slug: silver-moon-jr
 name: Silver Moon Jr.
 title_slug: silver-moon-jr
 ipdb_id: 4974

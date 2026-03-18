@@ -1,5 +1,4 @@
 ---
-slug: cantabria
 name: Cantabria
 title_slug: cantabria
 ipdb_id: 6407

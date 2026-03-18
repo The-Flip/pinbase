@@ -1,5 +1,4 @@
 ---
-slug: sky-rocket-2
 name: Sky Rocket
 title_slug: sky-rocket
 ipdb_id: 7008

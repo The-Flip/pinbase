@@ -1,5 +1,4 @@
 ---
-slug: royal-flush-deluxe
 name: Royal Flush Deluxe
 opdb_group_id: GRwlz
 abbreviations:

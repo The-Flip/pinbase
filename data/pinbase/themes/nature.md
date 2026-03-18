@@ -1,4 +1,3 @@
 ---
-slug: nature
 name: Nature
 ---

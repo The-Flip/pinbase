@@ -1,5 +1,4 @@
 ---
-slug: lucky-stars
 name: Lucky Stars
 title_slug: lucky-stars
 ipdb_id: 1494

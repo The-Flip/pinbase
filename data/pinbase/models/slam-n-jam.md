@@ -1,5 +1,4 @@
 ---
-slug: slam-n-jam
 name: Slam 'N Jam
 title_slug: slam-n-jam
 ipdb_id: 4343

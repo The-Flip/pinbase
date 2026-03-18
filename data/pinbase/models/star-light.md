@@ -1,5 +1,4 @@
 ---
-slug: star-light
 name: Star Light
 title_slug: star-light
 opdb_id: GRB86-MJ2nw

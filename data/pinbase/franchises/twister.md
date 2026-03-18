@@ -1,5 +1,4 @@
 ---
-slug: twister
 name: Twister
 ---
 

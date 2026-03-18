@@ -1,5 +1,4 @@
 ---
-slug: commodore
 name: Commodore
 title_slug: commodore
 ipdb_id: 552

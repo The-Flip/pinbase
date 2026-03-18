@@ -1,5 +1,4 @@
 ---
-slug: west-wind
 name: West Wind
 title_slug: west-wind
 ipdb_id: 2756

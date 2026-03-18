@@ -1,5 +1,4 @@
 ---
-slug: penalty-une-bille
 name: Penalty Une Bille
 title_slug: penalty-une-bille
 ipdb_id: 5837

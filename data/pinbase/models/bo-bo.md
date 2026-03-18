@@ -1,5 +1,4 @@
 ---
-slug: bo-bo
 name: Bo Bo
 title_slug: bo-bo
 opdb_id: GrPYp-MLBNx

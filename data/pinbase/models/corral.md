@@ -1,5 +1,4 @@
 ---
-slug: corral
 name: Corral
 title_slug: corral
 opdb_id: GrlB1-MW9Nd

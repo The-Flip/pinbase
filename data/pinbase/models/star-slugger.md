@@ -1,5 +1,4 @@
 ---
-slug: star-slugger
 name: Star Slugger
 title_slug: star-slugger
 ipdb_id: 3502

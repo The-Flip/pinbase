@@ -1,5 +1,4 @@
 ---
-slug: bow-and-arrow-2
 name: Bow and Arrow
 title_slug: bow-and-arrow-2
 ipdb_id: 4770

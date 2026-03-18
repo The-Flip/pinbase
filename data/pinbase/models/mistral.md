@@ -1,5 +1,4 @@
 ---
-slug: mistral
 name: Mistral
 title_slug: mistral
 ipdb_id: 5876

@@ -1,5 +1,4 @@
 ---
-slug: specialty-manufacturing-company
 name: Specialty Manufacturing Company
 manufacturer_slug: specialty-manufacturing-company
 ipdb_manufacturer_id: 294

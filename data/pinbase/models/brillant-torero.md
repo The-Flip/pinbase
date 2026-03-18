@@ -1,5 +1,4 @@
 ---
-slug: brillant-torero
 name: Brillant Torero
 title_slug: brillant-torero
 ipdb_id: 4887

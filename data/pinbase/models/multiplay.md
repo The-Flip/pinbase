@@ -1,5 +1,4 @@
 ---
-slug: multiplay
 name: Multiplay
 title_slug: multiplay
 ipdb_id: 3431

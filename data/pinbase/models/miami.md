@@ -1,5 +1,4 @@
 ---
-slug: miami
 name: Miami
 title_slug: miami
 ipdb_id: 1586

@@ -1,5 +1,4 @@
 ---
-slug: jokers-ladders-one-ball
 name: Jokers & Ladders One Ball
 title_slug: jokers-ladders-one-ball
 ipdb_id: 5849

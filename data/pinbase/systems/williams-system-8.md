@@ -1,5 +1,4 @@
 ---
-slug: williams-system-8
 name: Williams System 8
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-discrete

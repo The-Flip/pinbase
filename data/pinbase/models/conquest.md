@@ -1,5 +1,4 @@
 ---
-slug: conquest
 name: Conquest
 title_slug: conquest
 ipdb_id: 556

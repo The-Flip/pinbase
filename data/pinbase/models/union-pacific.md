@@ -1,5 +1,4 @@
 ---
-slug: union-pacific
 name: Union Pacific
 title_slug: union-pacific
 ipdb_id: 5811

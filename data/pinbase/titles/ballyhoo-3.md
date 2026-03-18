@@ -1,5 +1,4 @@
 ---
-slug: ballyhoo-3
 name: Ballyhoo
 ---
 

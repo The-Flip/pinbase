@@ -1,4 +1,3 @@
 ---
-slug: idaho
 name: Idaho
 ---

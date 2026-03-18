@@ -1,5 +1,4 @@
 ---
-slug: automat
 name: Automat
 title_slug: automat
 ipdb_id: 4177

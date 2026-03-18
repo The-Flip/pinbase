@@ -1,5 +1,4 @@
 ---
-slug: summer-time-2
 name: Summer Time
 title_slug: travel-time-summer-time
 opdb_id: GrJED-MLOwz

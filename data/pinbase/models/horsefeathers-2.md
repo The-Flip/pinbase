@@ -1,5 +1,4 @@
 ---
-slug: horsefeathers-2
 name: Horsefeathers
 title_slug: horsefeathers-2
 ipdb_id: 5388

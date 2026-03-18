@@ -1,5 +1,4 @@
 ---
-slug: fifty-grand-2
 name: Fifty Grand
 title_slug: fifty-grand-2
 ipdb_id: 3094

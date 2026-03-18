@@ -1,5 +1,4 @@
 ---
-slug: apollo-ball-2
 name: Apollo Ball (アポロボール)
 title_slug: apollo-ball-2
 ipdb_id: 6763

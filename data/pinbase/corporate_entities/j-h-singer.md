@@ -1,5 +1,4 @@
 ---
-slug: j-h-singer
 name: J. H. Singer
 manufacturer_slug: j-h-singer
 ipdb_manufacturer_id: 418

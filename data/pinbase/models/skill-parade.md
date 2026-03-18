@@ -1,5 +1,4 @@
 ---
-slug: skill-parade
 name: Skill Parade
 title_slug: skill-parade
 ipdb_id: 2181

@@ -1,5 +1,4 @@
 ---
-slug: dragon-3
 name: Dragon (EM)
 title_slug: dragon
 opdb_id: G4qPZ-MQ404

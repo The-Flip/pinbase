@@ -1,4 +1,3 @@
 ---
-slug: kromson
 name: Kromson
 ---

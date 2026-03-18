@@ -1,5 +1,4 @@
 ---
-slug: euromat-deluxe
 name: Euromat Deluxe
 title_slug: euromat-deluxe
 ipdb_id: 5172

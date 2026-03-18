@@ -1,5 +1,4 @@
 ---
-slug: stud
 name: Stud
 title_slug: stud
 ipdb_id: 3989

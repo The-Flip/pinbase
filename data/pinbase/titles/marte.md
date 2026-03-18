@@ -1,4 +1,3 @@
 ---
-slug: marte
 name: Marte
 ---

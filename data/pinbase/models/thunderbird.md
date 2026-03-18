@@ -1,5 +1,4 @@
 ---
-slug: thunderbird
 name: Thunderbird
 title_slug: thunderbird
 opdb_id: GRWLD-MJ6Ko

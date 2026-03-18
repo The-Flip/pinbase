@@ -1,5 +1,4 @@
 ---
-slug: eagle-squadron
 name: Eagle Squadron
 title_slug: eagle-squadron
 ipdb_id: 3834

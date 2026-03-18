@@ -1,5 +1,4 @@
 ---
-slug: charm
 name: Charm
 title_slug: charm
 ipdb_id: 493

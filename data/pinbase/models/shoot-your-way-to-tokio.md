@@ -1,5 +1,4 @@
 ---
-slug: shoot-your-way-to-tokio
 name: Shoot Your Way To Tokio!
 title_slug: shoot-your-way-to-tokio
 ipdb_id: 6942

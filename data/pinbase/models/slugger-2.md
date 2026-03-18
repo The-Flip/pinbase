@@ -1,5 +1,4 @@
 ---
-slug: slugger-2
 name: Slugger
 title_slug: slugger-2
 ipdb_id: 2211

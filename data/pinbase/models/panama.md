@@ -1,5 +1,4 @@
 ---
-slug: panama
 name: Panama
 title_slug: panama
 ipdb_id: 3228

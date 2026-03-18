@@ -1,5 +1,4 @@
 ---
-slug: sky-jump-3
 name: Sky Jump
 title_slug: sky-jump-2
 ipdb_id: 5933

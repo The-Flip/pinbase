@@ -1,5 +1,4 @@
 ---
-slug: ator
 name: Ator
 title_slug: ator
 ipdb_id: 6148

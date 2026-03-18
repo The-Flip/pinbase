@@ -1,5 +1,4 @@
 ---
-slug: ten-pin
 name: Ten Pin
 title_slug: ten-pin
 ipdb_id: 2515

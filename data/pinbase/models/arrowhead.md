@@ -1,5 +1,4 @@
 ---
-slug: arrowhead
 name: Arrowhead
 title_slug: arrowhead
 opdb_id: Grj3D-M2YKO

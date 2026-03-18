@@ -1,5 +1,4 @@
 ---
-slug: badger-horseshoe
 name: Badger Horseshoe
 title_slug: badger-horseshoe
 ipdb_id: 5783

@@ -1,5 +1,4 @@
 ---
-slug: metropolitan
 name: Metropolitan
 title_slug: metropolitan
 ipdb_id: 1583

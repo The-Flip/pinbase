@@ -1,5 +1,4 @@
 ---
-slug: queen-of-diamonds
 name: Queen of Diamonds
 title_slug: world-beauties
 opdb_id: GRBpL-MLeYk-ARKrQ

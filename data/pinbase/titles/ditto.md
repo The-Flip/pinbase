@@ -1,4 +1,3 @@
 ---
-slug: ditto
 name: Ditto
 ---

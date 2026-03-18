@@ -1,5 +1,4 @@
 ---
-slug: international-playboard-company
 name: International Playboard Company
 manufacturer_slug: international-playboard-company
 ipdb_manufacturer_id: 583

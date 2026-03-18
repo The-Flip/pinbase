@@ -1,4 +1,3 @@
 ---
-slug: hialeah
 name: Hialeah
 ---

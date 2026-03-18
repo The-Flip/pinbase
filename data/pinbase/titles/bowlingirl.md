@@ -1,4 +1,3 @@
 ---
-slug: bowlingirl
 name: Bowlingirl
 ---

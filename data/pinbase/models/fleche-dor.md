@@ -1,5 +1,4 @@
 ---
-slug: fleche-dor
 name: Fleche D'Or
 title_slug: fleche-dor
 ipdb_id: 6835

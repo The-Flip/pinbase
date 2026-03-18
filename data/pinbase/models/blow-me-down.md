@@ -1,5 +1,4 @@
 ---
-slug: blow-me-down
 name: Blow Me Down
 title_slug: blow-me-down
 ipdb_id: 323

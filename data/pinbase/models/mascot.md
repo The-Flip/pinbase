@@ -1,5 +1,4 @@
 ---
-slug: mascot
 name: Mascot
 title_slug: mascot
 ipdb_id: 1552

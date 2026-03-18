@@ -1,5 +1,4 @@
 ---
-slug: big-round-up
 name: Big Round Up
 title_slug: big-round-up
 ipdb_id: 4726

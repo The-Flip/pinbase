@@ -1,5 +1,4 @@
 ---
-slug: ice-frolics
 name: Ice-Frolics
 title_slug: ice-frolics
 ipdb_id: 1261

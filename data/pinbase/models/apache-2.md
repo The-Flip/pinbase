@@ -1,5 +1,4 @@
 ---
-slug: apache-2
 name: Apache!
 title_slug: fast-draw-quick-draw
 opdb_id: GRVoX-MZe0y

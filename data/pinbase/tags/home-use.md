@@ -1,5 +1,4 @@
 ---
-slug: home-use
 name: Home Use
 display_order: 1
 ---

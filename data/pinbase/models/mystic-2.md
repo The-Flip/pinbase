@@ -1,5 +1,4 @@
 ---
-slug: mystic-2
 name: Mystic
 title_slug: mystic
 opdb_id: G5Bnl-MLnw6

@@ -1,5 +1,4 @@
 ---
-slug: operation-desert-storm
 name: Operation Desert Storm
 title_slug: operation-desert-storm
 ipdb_id: 4007

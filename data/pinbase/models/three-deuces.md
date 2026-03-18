@@ -1,5 +1,4 @@
 ---
-slug: three-deuces
 name: Three Deuces
 title_slug: three-deuces
 opdb_id: G43Pj-Ml99d

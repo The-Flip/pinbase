@@ -1,5 +1,4 @@
 ---
-slug: buckaroo-2
 name: Buckaroo
 title_slug: buckaroo
 ipdb_id: 394

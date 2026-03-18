@@ -1,5 +1,4 @@
 ---
-slug: rambler-2
 name: Rambler
 title_slug: rambler-2
 ipdb_id: 6041

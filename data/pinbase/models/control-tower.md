@@ -1,5 +1,4 @@
 ---
-slug: control-tower
 name: Control Tower
 title_slug: control-tower
 opdb_id: GrPP9-MBRol

@@ -1,5 +1,4 @@
 ---
-slug: shields
 name: Shields
 manufacturer_slug: shields
 ipdb_manufacturer_id: 435

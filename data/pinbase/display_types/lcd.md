@@ -1,5 +1,4 @@
 ---
-slug: lcd
 name: LCD Screen
 display_order: 6
 ---

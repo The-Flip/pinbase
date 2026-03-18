@@ -1,5 +1,4 @@
 ---
-slug: pinbot
 name: Pinbot
 credit_refs:
 - person_slug: python-anghelo

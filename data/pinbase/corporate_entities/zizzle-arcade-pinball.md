@@ -1,5 +1,4 @@
 ---
-slug: zizzle-arcade-pinball
 name: Zizzle Arcade Pinball
 manufacturer_slug: zizzle-arcade-pinball
 ipdb_manufacturer_id: 492

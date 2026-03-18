@@ -1,5 +1,4 @@
 ---
-slug: high-speed-2
 name: High Speed
 title_slug: high-speed-2
 ipdb_id: 4115

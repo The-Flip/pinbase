@@ -1,5 +1,4 @@
 ---
-slug: all-american-derby
 name: All American Derby
 title_slug: all-american-derby
 ipdb_id: 5418

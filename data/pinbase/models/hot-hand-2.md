@@ -1,5 +1,4 @@
 ---
-slug: hot-hand-2
 name: Hot Hand
 title_slug: hot-hand-2
 ipdb_id: 6471

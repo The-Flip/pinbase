@@ -1,5 +1,4 @@
 ---
-slug: keeney-and-sons
 name: Keeney and Sons
 manufacturer_slug: keeney
 ipdb_manufacturer_id: 175

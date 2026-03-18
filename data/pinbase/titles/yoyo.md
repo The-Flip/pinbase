@@ -1,4 +1,3 @@
 ---
-slug: yoyo
 name: YoYo
 ---

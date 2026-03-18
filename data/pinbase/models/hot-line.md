@@ -1,5 +1,4 @@
 ---
-slug: hot-line
 name: Hot Line
 title_slug: hot-line-big-strike
 opdb_id: GrZex-MLe41

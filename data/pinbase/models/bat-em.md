@@ -1,5 +1,4 @@
 ---
-slug: bat-em
 name: Bat-Em
 title_slug: bat-em
 ipdb_id: 194

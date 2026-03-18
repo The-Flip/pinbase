@@ -1,5 +1,4 @@
 ---
-slug: jungle-queen-2
 name: Jungle Queen
 title_slug: jungle-queen
 ipdb_id: 4943

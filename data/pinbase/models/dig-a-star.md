@@ -1,5 +1,4 @@
 ---
-slug: dig-a-star
 name: Dig-A-Star
 title_slug: dig-a-star
 ipdb_id: 4422

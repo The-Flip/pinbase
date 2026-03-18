@@ -1,5 +1,4 @@
 ---
-slug: strike-2
 name: Strike
 title_slug: strike-2
 ipdb_id: 3772

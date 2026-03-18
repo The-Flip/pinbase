@@ -1,5 +1,4 @@
 ---
-slug: wild-cat-double
 name: Wild Cat Double
 title_slug: wild-cat-double
 ipdb_id: 2780

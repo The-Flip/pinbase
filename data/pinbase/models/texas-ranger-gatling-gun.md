@@ -1,5 +1,4 @@
 ---
-slug: texas-ranger-gatling-gun
 name: Texas Ranger "Gatling Gun"
 title_slug: texas-ranger-gatling-gun
 ipdb_id: 6638

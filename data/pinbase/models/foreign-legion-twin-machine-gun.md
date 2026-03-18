@@ -1,5 +1,4 @@
 ---
-slug: foreign-legion-twin-machine-gun
 name: Foreign Legion Twin Machine Gun
 title_slug: foreign-legion-twin-machine-gun
 ipdb_id: 6485

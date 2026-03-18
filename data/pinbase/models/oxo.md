@@ -1,5 +1,4 @@
 ---
-slug: oxo
 name: OXO
 title_slug: oxo
 opdb_id: Gr87E-MLWBP

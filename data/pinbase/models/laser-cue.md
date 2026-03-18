@@ -1,5 +1,4 @@
 ---
-slug: laser-cue
 name: Laser Cue
 title_slug: laser-cue
 opdb_id: GRvJV-MJ4bR

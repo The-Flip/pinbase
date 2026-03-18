@@ -1,5 +1,4 @@
 ---
-slug: treasure-island
 name: Treasure Island
 title_slug: treasure-island
 ipdb_id: 3809

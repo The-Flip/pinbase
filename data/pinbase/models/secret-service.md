@@ -1,10 +1,11 @@
 ---
-slug: secret-service
 name: Secret Service
 title_slug: secret-service
 corporate_entity_slug: data-east-pinball-incorporated
 opdb_id: G4qqv-MDW0P
 ipdb_id: 2090
+display_type_slug: alphanumeric
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: joe-kaminkow
   role: Design

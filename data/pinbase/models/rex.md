@@ -1,5 +1,4 @@
 ---
-slug: rex
 name: Rex
 title_slug: rex
 ipdb_id: 1955

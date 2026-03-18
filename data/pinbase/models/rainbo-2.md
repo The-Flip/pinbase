@@ -1,5 +1,4 @@
 ---
-slug: rainbo-2
 name: Rainbo
 title_slug: rainbo-2
 ipdb_id: 4749

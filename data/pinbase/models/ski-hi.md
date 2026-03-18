@@ -1,5 +1,4 @@
 ---
-slug: ski-hi
 name: Ski-Hi
 title_slug: ski-hi
 ipdb_id: 2173

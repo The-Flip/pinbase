@@ -1,5 +1,4 @@
 ---
-slug: multiball
 name: Multiball
 display_order: 8
 ---

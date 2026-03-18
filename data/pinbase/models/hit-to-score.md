@@ -1,5 +1,4 @@
 ---
-slug: hit-to-score
 name: Hit To Score
 title_slug: hit-to-score
 ipdb_id: 3151

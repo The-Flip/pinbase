@@ -1,5 +1,4 @@
 ---
-slug: satellite-2
 name: Satellite
 title_slug: satellite
 opdb_id: GR0dd-MLXob

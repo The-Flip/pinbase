@@ -1,5 +1,4 @@
 ---
-slug: archer
 name: Archer
 title_slug: archer
 ipdb_id: 4314

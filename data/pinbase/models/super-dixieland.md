@@ -1,5 +1,4 @@
 ---
-slug: super-dixieland
 name: Super Dixieland
 title_slug: super-dixieland
 ipdb_id: 4055

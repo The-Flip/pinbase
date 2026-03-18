@@ -1,5 +1,4 @@
 ---
-slug: wwe-raw-vs-smackdown
 name: WWE Raw vs. Smackdown
 title_slug: wwe-raw-vs-smackdown
 ipdb_id: 6627

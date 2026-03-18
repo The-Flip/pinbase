@@ -1,5 +1,4 @@
 ---
-slug: pro-eleven
 name: PRO-ELEVEN
 title_slug: pro-eleven
 ipdb_id: 6948

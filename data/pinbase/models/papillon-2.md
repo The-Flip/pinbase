@@ -1,5 +1,4 @@
 ---
-slug: papillon-2
 name: Papillon
 title_slug: papillon
 opdb_id: GRQEO-MLyPy

@@ -1,5 +1,4 @@
 ---
-slug: apache
 name: Apache
 title_slug: apache
 ipdb_id: 4483

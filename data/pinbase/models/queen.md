@@ -1,5 +1,4 @@
 ---
-slug: queen
 name: Queen
 title_slug: queen-2
 ipdb_id: 6816

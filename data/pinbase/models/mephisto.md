@@ -1,5 +1,4 @@
 ---
-slug: mephisto
 name: Mephisto
 title_slug: mephisto
 opdb_id: GrqXv-MLBpw

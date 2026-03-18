@@ -1,5 +1,4 @@
 ---
-slug: daffy-derby
 name: Daffy Derby
 title_slug: daffy-derby
 opdb_id: GrZ7y-M3dY2

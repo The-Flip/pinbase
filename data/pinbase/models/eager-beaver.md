@@ -1,5 +1,4 @@
 ---
-slug: eager-beaver
 name: Eager Beaver
 title_slug: eager-beaver
 opdb_id: GrOvq-MDl2q

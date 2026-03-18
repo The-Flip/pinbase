@@ -1,5 +1,4 @@
 ---
-slug: miss-america-3
 name: Miss America
 title_slug: miss-america-3
 ipdb_id: 1610

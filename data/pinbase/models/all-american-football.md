@@ -1,5 +1,4 @@
 ---
-slug: all-american-football
 name: All American Football
 title_slug: all-american-football
 ipdb_id: 4948

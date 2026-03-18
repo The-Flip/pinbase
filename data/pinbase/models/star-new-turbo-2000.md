@@ -1,5 +1,4 @@
 ---
-slug: star-new-turbo-2000
 name: Star New Turbo 2000
 title_slug: star-new-turbo-2000
 ipdb_id: 5850

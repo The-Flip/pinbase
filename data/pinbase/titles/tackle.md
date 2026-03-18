@@ -1,4 +1,3 @@
 ---
-slug: tackle
 name: Tackle
 ---

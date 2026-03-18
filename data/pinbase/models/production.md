@@ -1,5 +1,4 @@
 ---
-slug: production
 name: Production
 title_slug: production
 ipdb_id: 3847

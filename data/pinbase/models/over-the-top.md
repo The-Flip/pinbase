@@ -1,5 +1,4 @@
 ---
-slug: over-the-top
 name: Over-The-Top
 title_slug: over-the-top
 ipdb_id: 3863

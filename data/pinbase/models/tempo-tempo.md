@@ -1,5 +1,4 @@
 ---
-slug: tempo-tempo
 name: Tempo Tempo
 title_slug: tempo-tempo
 ipdb_id: 3896

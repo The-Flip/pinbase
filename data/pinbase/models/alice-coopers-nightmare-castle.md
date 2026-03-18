@@ -1,5 +1,4 @@
 ---
-slug: alice-coopers-nightmare-castle
 name: Alice Cooper's Nightmare Castle
 title_slug: alice-cooper
 opdb_id: GrlXK-M9RV0

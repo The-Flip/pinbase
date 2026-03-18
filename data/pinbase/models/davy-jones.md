@@ -1,5 +1,4 @@
 ---
-slug: davy-jones
 name: Davy Jones
 title_slug: davy-jones
 ipdb_id: 642

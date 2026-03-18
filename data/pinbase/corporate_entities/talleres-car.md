@@ -1,5 +1,4 @@
 ---
-slug: talleres-car
 name: Talleres CAR
 manufacturer_slug: talleres-car
 ipdb_manufacturer_id: 808

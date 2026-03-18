@@ -1,4 +1,3 @@
 ---
-slug: strand
 name: Strand
 ---

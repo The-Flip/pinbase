@@ -1,4 +1,3 @@
 ---
-slug: autodart
 name: Autodart
 ---

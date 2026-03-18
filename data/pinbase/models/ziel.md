@@ -1,5 +1,4 @@
 ---
-slug: ziel
 name: Ziel
 title_slug: ziel
 ipdb_id: 4418

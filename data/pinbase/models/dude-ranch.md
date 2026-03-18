@@ -1,5 +1,4 @@
 ---
-slug: dude-ranch
 name: Dude Ranch
 title_slug: dude-ranch
 ipdb_id: 740

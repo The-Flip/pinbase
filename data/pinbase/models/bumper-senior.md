@@ -1,5 +1,4 @@
 ---
-slug: bumper-senior
 name: Bumper Senior
 title_slug: bumper-senior
 ipdb_id: 4172

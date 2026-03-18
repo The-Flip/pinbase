@@ -1,5 +1,4 @@
 ---
-slug: funtime-frankie
 name: Funtime Frankie
 title_slug: funtime-frankie
 ipdb_id: 5540

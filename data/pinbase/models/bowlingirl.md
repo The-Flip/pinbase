@@ -1,5 +1,4 @@
 ---
-slug: bowlingirl
 name: Bowlingirl
 title_slug: bowlingirl
 ipdb_id: 3978

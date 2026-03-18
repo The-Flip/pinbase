@@ -1,5 +1,4 @@
 ---
-slug: improved-sharps-shooter-baseball-bagatelle
 name: Improved Sharp's Shooter - Baseball Bagatelle
 title_slug: improved-sharps-shooter-baseball-bagatelle
 ipdb_id: 4849

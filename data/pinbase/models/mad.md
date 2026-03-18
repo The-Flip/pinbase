@@ -1,5 +1,4 @@
 ---
-slug: mad
 name: Mad
 title_slug: mad
 ipdb_id: 3440

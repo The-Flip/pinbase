@@ -1,5 +1,4 @@
 ---
-slug: marte
 name: Marte
 title_slug: marte
 ipdb_id: 5942

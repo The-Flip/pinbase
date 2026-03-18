@@ -1,5 +1,4 @@
 ---
-slug: follow-up
 name: Follow-Up
 title_slug: follow-up
 ipdb_id: 912

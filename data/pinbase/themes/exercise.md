@@ -1,4 +1,3 @@
 ---
-slug: exercise
 name: Exercise
 ---

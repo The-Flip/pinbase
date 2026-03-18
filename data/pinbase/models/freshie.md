@@ -1,5 +1,4 @@
 ---
-slug: freshie
 name: Freshie
 title_slug: freshie
 opdb_id: Gzy6x-MOEP8

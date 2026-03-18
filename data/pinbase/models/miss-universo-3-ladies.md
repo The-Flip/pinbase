@@ -1,5 +1,4 @@
 ---
-slug: miss-universo-3-ladies
 name: Miss Universo
 title_slug: miss-universo
 opdb_id: G5VQ8-MJppq

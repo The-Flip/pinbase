@@ -1,5 +1,4 @@
 ---
-slug: luck-smile-2
 name: Luck Smile
 title_slug: luck-smile
 ipdb_id: 6359

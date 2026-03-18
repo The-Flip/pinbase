@@ -1,5 +1,4 @@
 ---
-slug: double-shuffle-junior
 name: Double-Shuffle (Junior)
 title_slug: double-shuffle-junior
 ipdb_id: 723

@@ -1,5 +1,4 @@
 ---
-slug: torero
 name: Torero
 title_slug: torero
 ipdb_id: 6408

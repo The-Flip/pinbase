@@ -1,5 +1,4 @@
 ---
-slug: indiana-jones
 name: Indiana Jones
 title_slug: indiana-jones
 opdb_id: G4e1d-MJ5Bj

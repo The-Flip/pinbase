@@ -1,5 +1,4 @@
 ---
-slug: shaq
 name: Shaq
 ---
 

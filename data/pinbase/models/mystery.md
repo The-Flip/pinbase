@@ -1,5 +1,4 @@
 ---
-slug: mystery
 name: Mystery
 title_slug: mystery
 ipdb_id: 1646

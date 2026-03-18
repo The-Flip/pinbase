@@ -1,5 +1,4 @@
 ---
-slug: orange-county-choppers
 name: Orange County Choppers
 title_slug: orange-county-choppers
 ipdb_id: 5097

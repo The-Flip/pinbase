@@ -1,5 +1,4 @@
 ---
-slug: eros-ii
 name: Eros II
 title_slug: eros-ii
 ipdb_id: 788

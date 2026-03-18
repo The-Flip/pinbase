@@ -1,4 +1,3 @@
 ---
-slug: production
 name: Production
 ---

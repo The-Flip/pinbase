@@ -1,5 +1,4 @@
 ---
-slug: nba-fastbreak
 name: NBA Fastbreak
 title_slug: nba-fastbreak
 opdb_id: GrO0D-MQolo

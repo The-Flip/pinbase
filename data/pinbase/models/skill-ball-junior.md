@@ -1,5 +1,4 @@
 ---
-slug: skill-ball-junior
 name: Skill Ball Junior
 title_slug: skill-ball-junior-2
 ipdb_id: 6049

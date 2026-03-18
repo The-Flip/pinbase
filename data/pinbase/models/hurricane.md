@@ -1,5 +1,4 @@
 ---
-slug: hurricane
 name: Hurricane
 title_slug: hurricane
 opdb_id: GrX09-M85bb

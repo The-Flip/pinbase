@@ -1,5 +1,4 @@
 ---
-slug: heavy-metal
 name: Heavy Metal
 ---
 

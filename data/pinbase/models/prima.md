@@ -1,5 +1,4 @@
 ---
-slug: prima
 name: Prima
 title_slug: prima
 ipdb_id: 6294

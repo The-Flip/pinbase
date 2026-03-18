@@ -1,5 +1,4 @@
 ---
-slug: gottlieb-system-1
 name: Gottlieb System 1
 manufacturer_slug: gottlieb
 technology_subgeneration_slug: ss-discrete

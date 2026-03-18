@@ -1,5 +1,4 @@
 ---
-slug: rolls-royce-de-luxe
 name: Rolls-Royce (De Luxe)
 title_slug: rolls-royce-de-luxe
 ipdb_id: 6927

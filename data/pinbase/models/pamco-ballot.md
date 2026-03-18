@@ -1,5 +1,4 @@
 ---
-slug: pamco-ballot
 name: Pamco Ballot
 title_slug: pamco-ballot
 ipdb_id: 142

@@ -1,4 +1,3 @@
 ---
-slug: vanities
 name: Vanities
 ---

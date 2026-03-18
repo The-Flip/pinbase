@@ -1,5 +1,4 @@
 ---
-slug: close-encounters
 name: Close Encounters
 title_slug: close-encounters-2
 ipdb_id: 5699

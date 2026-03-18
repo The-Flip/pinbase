@@ -1,5 +1,4 @@
 ---
-slug: king-pin
 name: King Pin
 title_slug: king-pin-2
 opdb_id: G42vx-Mo13y

@@ -1,5 +1,4 @@
 ---
-slug: bronco-2
 name: Bronco
 title_slug: bronco-mustang
 opdb_id: GR6bk-Mz2N6

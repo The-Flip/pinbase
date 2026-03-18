@@ -1,5 +1,4 @@
 ---
-slug: hop-scotch
 name: Hop-Scotch
 title_slug: hop-scotch
 ipdb_id: 5280

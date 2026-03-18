@@ -1,5 +1,4 @@
 ---
-slug: duette-deluxe
 name: Duette Deluxe
 title_slug: duette
 opdb_id: G5vyl-MDE9Y

@@ -1,5 +1,4 @@
 ---
-slug: flowers-child
 name: Flower's Child
 title_slug: flowers-child
 opdb_id: GRov2-M5Ren

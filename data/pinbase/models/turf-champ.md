@@ -1,5 +1,4 @@
 ---
-slug: turf-champ
 name: Turf Champ
 title_slug: turf-champ
 opdb_id: Grjq3-MLXkO

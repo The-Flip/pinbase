@@ -1,4 +1,3 @@
 ---
-slug: vampires
 name: Vampires
 ---

@@ -1,5 +1,4 @@
 ---
-slug: dallas
 name: Dallas
 title_slug: dallas
 opdb_id: Ge161-MdEpd

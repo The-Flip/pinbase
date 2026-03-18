@@ -1,5 +1,4 @@
 ---
-slug: pico-baby-grand
 name: Pico Baby Grand
 title_slug: pico-baby-grand
 ipdb_id: 5628

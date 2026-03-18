@@ -1,5 +1,4 @@
 ---
-slug: whizbang-pinball
 name: Whizbang Pinball
 manufacturer_slug: whizbang-pinball
 ipdb_manufacturer_id: 619

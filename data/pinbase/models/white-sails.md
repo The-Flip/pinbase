@@ -1,5 +1,4 @@
 ---
-slug: white-sails
 name: White Sails
 title_slug: white-sails
 ipdb_id: 2767

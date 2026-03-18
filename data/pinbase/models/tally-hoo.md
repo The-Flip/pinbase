@@ -1,5 +1,4 @@
 ---
-slug: tally-hoo
 name: Tally Hoo!!
 title_slug: tally-hoo
 opdb_id: GBLYO-Mq1rN

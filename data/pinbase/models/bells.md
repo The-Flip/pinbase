@@ -1,5 +1,4 @@
 ---
-slug: bells
 name: Bells
 title_slug: bells
 ipdb_id: 223

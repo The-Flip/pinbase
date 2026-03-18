@@ -1,5 +1,4 @@
 ---
-slug: spring-break
 name: Spring Break
 title_slug: spring-break
 opdb_id: GRLKd-Mp46p

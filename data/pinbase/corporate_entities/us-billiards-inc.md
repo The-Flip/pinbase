@@ -1,5 +1,4 @@
 ---
-slug: us-billiards-inc
 name: U.S. Billiards, Inc.
 manufacturer_slug: us-billiards-inc
 ipdb_manufacturer_id: 707

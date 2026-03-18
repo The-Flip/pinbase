@@ -1,5 +1,4 @@
 ---
-slug: challenger-4
 name: Challenger
 title_slug: challenger-3
 ipdb_id: 3005

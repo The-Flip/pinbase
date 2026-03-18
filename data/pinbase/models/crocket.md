@@ -1,5 +1,4 @@
 ---
-slug: crocket
 name: Crocket
 title_slug: crocket
 opdb_id: GR00k-MLxN2

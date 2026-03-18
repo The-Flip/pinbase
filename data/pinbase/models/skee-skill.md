@@ -1,5 +1,4 @@
 ---
-slug: skee-skill
 name: Skee Skill
 title_slug: skee-skill
 ipdb_id: 3725

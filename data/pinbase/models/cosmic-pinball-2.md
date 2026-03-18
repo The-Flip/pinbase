@@ -1,5 +1,4 @@
 ---
-slug: cosmic-pinball-2
 name: Cosmic Pinball
 title_slug: cosmic-pinball-2
 ipdb_id: 5015

@@ -1,5 +1,4 @@
 ---
-slug: fighting-irish
 name: Fighting Irish
 title_slug: fighting-irish
 opdb_id: G5bye-ML0v9

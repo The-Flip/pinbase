@@ -1,5 +1,4 @@
 ---
-slug: lazer-lord-2
 name: Lazer Lord
 title_slug: lazer-lord-2
 ipdb_id: 6588

@@ -1,5 +1,4 @@
 ---
-slug: big-champ
 name: Big Champ
 title_slug: big-champ
 ipdb_id: 2860

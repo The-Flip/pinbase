@@ -1,5 +1,4 @@
 ---
-slug: whirlaway-2
 name: Whirlaway
 title_slug: whirlaway-2
 ipdb_id: 3848

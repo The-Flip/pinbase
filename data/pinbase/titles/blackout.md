@@ -1,5 +1,4 @@
 ---
-slug: blackout
 name: Blackout
 opdb_group_id: GRwYo
 abbreviations:

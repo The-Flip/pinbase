@@ -1,5 +1,4 @@
 ---
-slug: wild-cargo
 name: Wild Cargo
 title_slug: wild-cargo
 ipdb_id: 2779

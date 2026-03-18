@@ -1,4 +1,3 @@
 ---
-slug: dinosaursmovies
 name: Dinosaursmovies
 ---

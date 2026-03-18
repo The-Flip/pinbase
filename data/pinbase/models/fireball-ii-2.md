@@ -1,5 +1,4 @@
 ---
-slug: fireball-ii-2
 name: Fireball II
 title_slug: fireball-ii
 opdb_id: Gry7q-MLyvr

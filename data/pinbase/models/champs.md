@@ -1,5 +1,4 @@
 ---
-slug: champs
 name: Champs
 title_slug: champs
 ipdb_id: 6459

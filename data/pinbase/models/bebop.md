@@ -1,5 +1,4 @@
 ---
-slug: bebop
 name: Bebop
 title_slug: bebop
 ipdb_id: 3941

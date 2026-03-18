@@ -1,5 +1,4 @@
 ---
-slug: the-flipper-game
 name: The Flipper Game
 title_slug: the-flipper-game
 opdb_id: GrPEJ-MJP48

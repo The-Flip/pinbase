@@ -1,5 +1,4 @@
 ---
-slug: the-mccoy
 name: The McCoy
 title_slug: the-mccoy
 ipdb_id: 1564

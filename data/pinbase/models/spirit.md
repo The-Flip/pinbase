@@ -1,5 +1,4 @@
 ---
-slug: spirit
 name: Spirit
 title_slug: spirit
 opdb_id: Grl9W-MLvOj

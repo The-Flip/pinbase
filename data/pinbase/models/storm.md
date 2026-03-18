@@ -1,5 +1,4 @@
 ---
-slug: storm
 name: Storm
 title_slug: flash
 opdb_id: Grypn-MLEEO

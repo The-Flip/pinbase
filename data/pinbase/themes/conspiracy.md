@@ -1,4 +1,3 @@
 ---
-slug: conspiracy
 name: Conspiracy
 ---

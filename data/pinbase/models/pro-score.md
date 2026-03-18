@@ -1,5 +1,4 @@
 ---
-slug: pro-score
 name: Pro-Score
 title_slug: pro-score
 ipdb_id: 6128

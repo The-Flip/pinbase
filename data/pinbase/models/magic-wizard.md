@@ -1,5 +1,4 @@
 ---
-slug: magic-wizard
 name: Magic Wizard
 title_slug: magic-wizard
 opdb_id: G5W6N-MLe6V

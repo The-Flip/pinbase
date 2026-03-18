@@ -1,4 +1,3 @@
 ---
-slug: fireworks
 name: Fireworks
 ---

@@ -1,5 +1,4 @@
 ---
-slug: post-time-3
 name: Post Time
 title_slug: post-time-2
 ipdb_id: 4152

@@ -1,5 +1,4 @@
 ---
-slug: star-explorer
 name: Star Explorer
 title_slug: star-explorer
 opdb_id: G48DQ-MQwod

@@ -1,5 +1,4 @@
 ---
-slug: atlas
 name: Atlas
 title_slug: atlas
 opdb_id: GrXLd-MJZ3y

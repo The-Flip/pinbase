@@ -1,5 +1,4 @@
 ---
-slug: flying-aces
 name: Flying Aces
 title_slug: flying-aces
 opdb_id: G5B3L-MQYOx

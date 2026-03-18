@@ -1,5 +1,4 @@
 ---
-slug: leland-deluxe-junior
 name: Leland (Deluxe Junior)
 title_slug: leland-deluxe-junior
 ipdb_id: 6744

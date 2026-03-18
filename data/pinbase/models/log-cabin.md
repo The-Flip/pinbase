@@ -1,5 +1,4 @@
 ---
-slug: log-cabin
 name: Log Cabin
 title_slug: log-cabin
 ipdb_id: 1466

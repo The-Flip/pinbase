@@ -1,5 +1,4 @@
 ---
-slug: black-flag
 name: Black Flag
 title_slug: black-flag
 opdb_id: G430p-MJojq

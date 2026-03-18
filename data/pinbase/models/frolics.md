@@ -1,5 +1,4 @@
 ---
-slug: frolics
 name: Frolics
 title_slug: frolics
 ipdb_id: 958

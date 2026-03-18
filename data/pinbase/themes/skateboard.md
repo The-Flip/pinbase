@@ -1,4 +1,3 @@
 ---
-slug: skateboard
 name: Skateboard
 ---

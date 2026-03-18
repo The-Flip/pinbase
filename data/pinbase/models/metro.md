@@ -1,5 +1,4 @@
 ---
-slug: metro
 name: Metro
 title_slug: metro
 opdb_id: G5K88-MKNpj

@@ -1,5 +1,4 @@
 ---
-slug: hi-fly
 name: Hi Fly
 title_slug: hi-fly
 ipdb_id: 5615

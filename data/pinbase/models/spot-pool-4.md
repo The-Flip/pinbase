@@ -1,5 +1,4 @@
 ---
-slug: spot-pool-4
 name: Spot-Pool
 title_slug: spot-pool
 opdb_id: GrZ0J-ML1VK

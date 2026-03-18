@@ -1,5 +1,4 @@
 ---
-slug: whiffle-board
 name: Whiffle Board
 title_slug: whiffle-board
 ipdb_id: 3552

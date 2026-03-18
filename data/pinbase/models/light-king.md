@@ -1,5 +1,4 @@
 ---
-slug: light-king
 name: Light King
 title_slug: light-king
 ipdb_id: 5854

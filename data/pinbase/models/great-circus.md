@@ -1,5 +1,4 @@
 ---
-slug: great-circus
 name: Great Circus
 title_slug: great-circus
 ipdb_id: 3129

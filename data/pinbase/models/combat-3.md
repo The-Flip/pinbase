@@ -1,5 +1,4 @@
 ---
-slug: combat-3
 name: Combat
 title_slug: combat-3
 ipdb_id: 6682

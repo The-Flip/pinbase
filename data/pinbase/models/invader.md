@@ -1,5 +1,4 @@
 ---
-slug: invader
 name: Invader
 title_slug: invader
 ipdb_id: 1268

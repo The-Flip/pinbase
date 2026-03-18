@@ -1,5 +1,4 @@
 ---
-slug: regatta
 name: Regatta
 title_slug: regatta
 opdb_id: G419y-MNE2k

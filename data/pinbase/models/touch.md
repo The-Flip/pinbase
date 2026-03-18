@@ -1,5 +1,4 @@
 ---
-slug: touch
 name: Touch
 title_slug: touch
 opdb_id: GR7YL-MQ90z

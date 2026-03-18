@@ -1,4 +1,3 @@
 ---
-slug: wizard
 name: Wizard
 ---

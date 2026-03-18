@@ -1,5 +1,4 @@
 ---
-slug: imo-rennen
 name: Imo-Rennen
 title_slug: imo-rennen
 ipdb_id: 4714

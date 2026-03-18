@@ -1,5 +1,4 @@
 ---
-slug: route-66-2
 name: Route 66
 title_slug: route-66
 ipdb_id: 4901

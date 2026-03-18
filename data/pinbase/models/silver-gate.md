@@ -1,5 +1,4 @@
 ---
-slug: silver-gate
 name: Silver Gate
 title_slug: silver-gate
 ipdb_id: 2148

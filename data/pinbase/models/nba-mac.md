@@ -1,5 +1,4 @@
 ---
-slug: nba-mac
 name: NBA Mac
 title_slug: nba-mac
 ipdb_id: 4606

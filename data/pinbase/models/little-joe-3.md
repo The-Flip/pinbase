@@ -1,5 +1,4 @@
 ---
-slug: little-joe-3
 name: Little Joe
 title_slug: little-joe-3
 ipdb_id: 4871

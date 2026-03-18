@@ -1,5 +1,4 @@
 ---
-slug: red-shoes
 name: Red Shoes
 title_slug: red-shoes
 opdb_id: G50NP-MQp9R

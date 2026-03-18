@@ -1,5 +1,4 @@
 ---
-slug: game-of-thrones-pro
 name: Game Of Thrones (Pro)
 title_slug: game-of-thrones
 opdb_id: G41d5-MKNwX

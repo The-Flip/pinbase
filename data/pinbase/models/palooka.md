@@ -1,5 +1,4 @@
 ---
-slug: palooka
 name: Palooka
 title_slug: palooka
 opdb_id: G5pJd-MDE1Y

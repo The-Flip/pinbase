@@ -1,5 +1,4 @@
 ---
-slug: double-shot
 name: Double Shot
 title_slug: double-shot
 ipdb_id: 6979

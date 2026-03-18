@@ -1,5 +1,4 @@
 ---
-slug: harem-cat
 name: Harem Cat
 title_slug: harem-cat
 opdb_id: GR6qB-MQZxk

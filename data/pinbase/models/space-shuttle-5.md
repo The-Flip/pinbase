@@ -1,5 +1,4 @@
 ---
-slug: space-shuttle-5
 name: Space Shuttle
 title_slug: space-shuttle-3
 ipdb_id: 5542

@@ -1,5 +1,4 @@
 ---
-slug: little-chief
 name: Little Chief
 title_slug: little-chief
 opdb_id: G410D-MLX76

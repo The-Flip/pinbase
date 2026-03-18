@@ -1,5 +1,4 @@
 ---
-slug: terrific-lake
 name: Terrific Lake
 title_slug: terrific-lake
 opdb_id: GBL7d-Mo1zP

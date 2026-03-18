@@ -1,5 +1,4 @@
 ---
-slug: world-cup-soccer
 name: World Cup Soccer
 title_slug: world-cup-soccer
 opdb_id: G42E2-MQP9e

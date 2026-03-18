@@ -1,5 +1,4 @@
 ---
-slug: airborne
 name: Airborne
 title_slug: airborne
 opdb_id: G4EZe-MJ424

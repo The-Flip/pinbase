@@ -1,4 +1,3 @@
 ---
-slug: submarines
 name: Submarines
 ---

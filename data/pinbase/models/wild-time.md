@@ -1,5 +1,4 @@
 ---
-slug: wild-time
 name: Wild Time
 title_slug: wild-time
 ipdb_id: 5571

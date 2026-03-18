@@ -1,5 +1,4 @@
 ---
-slug: improved-sportsman-sportsman
 name: Improved Sportsman ("Sportsman")
 title_slug: improved-sportsman-sportsman
 ipdb_id: 2309

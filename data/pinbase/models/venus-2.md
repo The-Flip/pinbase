@@ -1,5 +1,4 @@
 ---
-slug: venus-2
 name: Venus
 title_slug: venus-2
 ipdb_id: 3300

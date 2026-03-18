@@ -1,5 +1,4 @@
 ---
-slug: multi-free-races
 name: Multi-Free-Races
 title_slug: multi-free-races
 ipdb_id: 1640

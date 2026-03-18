@@ -1,4 +1,3 @@
 ---
-slug: friendship
 name: Friendship
 ---

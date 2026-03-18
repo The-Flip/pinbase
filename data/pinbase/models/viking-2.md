@@ -1,5 +1,4 @@
 ---
-slug: viking-2
 name: Viking
 title_slug: viking-2
 opdb_id: G42lb-M7Z63

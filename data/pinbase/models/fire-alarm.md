@@ -1,5 +1,4 @@
 ---
-slug: fire-alarm
 name: Fire Alarm
 title_slug: fire-alarm
 ipdb_id: 846

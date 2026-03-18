@@ -1,5 +1,4 @@
 ---
-slug: spellbinder
 name: Spellbinder
 title_slug: spellbinder
 ipdb_id: 3727

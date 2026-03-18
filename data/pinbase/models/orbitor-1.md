@@ -1,5 +1,4 @@
 ---
-slug: orbitor-1
 name: Orbitor 1
 title_slug: orbitor-1
 opdb_id: Grx7Q-Mp45k

@@ -1,4 +1,3 @@
 ---
-slug: darts
 name: Darts
 ---

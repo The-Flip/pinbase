@@ -1,5 +1,4 @@
 ---
-slug: yankee-baseball-2
 name: Yankee Baseball
 title_slug: yankee-baseball-2
 ipdb_id: 3536

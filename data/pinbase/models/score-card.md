@@ -1,5 +1,4 @@
 ---
-slug: score-card
 name: Score Card
 title_slug: score-card
 ipdb_id: 2064

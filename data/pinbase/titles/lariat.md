@@ -1,4 +1,3 @@
 ---
-slug: lariat
 name: Lariat
 ---

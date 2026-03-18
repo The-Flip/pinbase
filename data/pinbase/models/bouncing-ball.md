@@ -1,5 +1,4 @@
 ---
-slug: bouncing-ball
 name: Bouncing Ball
 title_slug: bouncing-ball
 ipdb_id: 4837

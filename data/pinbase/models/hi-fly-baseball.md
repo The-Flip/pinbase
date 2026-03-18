@@ -1,5 +1,4 @@
 ---
-slug: hi-fly-baseball
 name: Hi-FLY Baseball
 title_slug: hi-fly-baseball
 ipdb_id: 3144

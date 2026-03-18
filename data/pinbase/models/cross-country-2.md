@@ -1,5 +1,4 @@
 ---
-slug: cross-country-2
 name: Cross-Country
 title_slug: cross-country-2
 ipdb_id: 602

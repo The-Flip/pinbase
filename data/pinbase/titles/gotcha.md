@@ -1,4 +1,3 @@
 ---
-slug: gotcha
 name: Gotcha
 ---

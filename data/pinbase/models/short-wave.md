@@ -1,5 +1,4 @@
 ---
-slug: short-wave
 name: Short Wave
 title_slug: short-wave
 ipdb_id: 4276

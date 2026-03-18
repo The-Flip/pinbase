@@ -1,5 +1,4 @@
 ---
-slug: glickman-industries
 name: Glickman Industries
 manufacturer_slug: glickman-industries
 ipdb_manufacturer_id: 680

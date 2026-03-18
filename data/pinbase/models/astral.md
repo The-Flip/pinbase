@@ -1,5 +1,4 @@
 ---
-slug: astral
 name: Astral
 title_slug: astral
 ipdb_id: 6921

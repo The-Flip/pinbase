@@ -1,5 +1,4 @@
 ---
-slug: tasty-samba
 name: Tasty Samba
 title_slug: tasty-samba
 ipdb_id: 4415

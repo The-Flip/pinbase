@@ -1,5 +1,4 @@
 ---
-slug: spooky
 name: Spooky
 title_slug: spooky
 opdb_id: Gr1j8-MDxzp

@@ -1,5 +1,4 @@
 ---
-slug: gold-wings
 name: Gold Wings
 title_slug: gold-wings
 opdb_id: G5WXd-MJrER

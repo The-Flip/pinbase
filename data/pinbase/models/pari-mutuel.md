@@ -1,5 +1,4 @@
 ---
-slug: pari-mutuel
 name: Pari-Mutuel
 title_slug: pari-mutuel
 ipdb_id: 1758

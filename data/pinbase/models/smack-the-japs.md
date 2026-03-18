@@ -1,5 +1,4 @@
 ---
-slug: smack-the-japs
 name: Smack The Japs
 title_slug: smack-the-japs
 ipdb_id: 2214

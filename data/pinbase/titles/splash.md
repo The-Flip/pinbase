@@ -1,4 +1,3 @@
 ---
-slug: splash
 name: Splash
 ---

@@ -1,5 +1,4 @@
 ---
-slug: terminator
 name: Terminator
 ---
 

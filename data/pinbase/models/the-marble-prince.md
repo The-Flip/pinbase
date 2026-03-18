@@ -1,5 +1,4 @@
 ---
-slug: the-marble-prince
 name: The Marble Prince
 title_slug: the-marble-prince
 ipdb_id: 5122

@@ -1,5 +1,4 @@
 ---
-slug: gold-standard-double
 name: Gold Standard Double
 title_slug: gold-standard-double
 ipdb_id: 4525

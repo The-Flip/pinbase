@@ -1,4 +1,3 @@
 ---
-slug: boop-a-doop
 name: Boop-A-Doop
 ---

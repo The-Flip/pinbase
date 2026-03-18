@@ -1,5 +1,4 @@
 ---
-slug: spanish-eyes-2
 name: Spanish Eyes
 title_slug: spanish-eyes
 opdb_id: GrOjX-MJook

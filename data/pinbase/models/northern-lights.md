@@ -1,5 +1,4 @@
 ---
-slug: northern-lights
 name: Northern Lights
 title_slug: northern-lights
 ipdb_id: 1684

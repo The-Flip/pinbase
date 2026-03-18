@@ -1,5 +1,4 @@
 ---
-slug: skyrocket
 name: Skyrocket
 title_slug: skyrocket
 opdb_id: GrNZ7-MDOjq

@@ -1,5 +1,4 @@
 ---
-slug: knicker-bocker
 name: Knicker Bocker
 title_slug: knicker-bocker
 ipdb_id: 1390

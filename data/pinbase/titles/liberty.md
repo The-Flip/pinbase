@@ -1,4 +1,3 @@
 ---
-slug: liberty
 name: Liberty
 ---

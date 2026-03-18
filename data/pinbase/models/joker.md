@@ -1,5 +1,4 @@
 ---
-slug: joker
 name: Joker
 title_slug: joker-3
 opdb_id: GrXXB-MP3Bn

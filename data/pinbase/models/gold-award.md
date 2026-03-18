@@ -1,5 +1,4 @@
 ---
-slug: gold-award
 name: Gold Award
 title_slug: gold-award
 ipdb_id: 5094

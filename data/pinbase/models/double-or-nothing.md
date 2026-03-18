@@ -1,5 +1,4 @@
 ---
-slug: double-or-nothing
 name: Double or Nothing
 title_slug: double-or-nothing
 ipdb_id: 4233

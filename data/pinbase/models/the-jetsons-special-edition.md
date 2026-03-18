@@ -1,5 +1,4 @@
 ---
-slug: the-jetsons-special-edition
 name: The Jetsons (Special Edition)
 title_slug: the-jetsons-special-edition
 ipdb_id: 6608

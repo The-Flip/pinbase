@@ -1,5 +1,4 @@
 ---
-slug: blue-max
 name: Blue Max
 title_slug: blue-max-red-baron
 opdb_id: GryvE-MD3E5

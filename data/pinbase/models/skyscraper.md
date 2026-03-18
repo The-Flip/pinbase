@@ -1,5 +1,4 @@
 ---
-slug: skyscraper
 name: Skyscraper
 title_slug: skyscraper
 ipdb_id: 2205

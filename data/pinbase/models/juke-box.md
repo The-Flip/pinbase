@@ -1,5 +1,4 @@
 ---
-slug: juke-box
 name: Juke Box
 title_slug: juke-box
 opdb_id: G5Qnx-MJYek

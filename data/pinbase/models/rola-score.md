@@ -1,5 +1,4 @@
 ---
-slug: rola-score
 name: Rola Score
 title_slug: rola-score
 ipdb_id: 3582

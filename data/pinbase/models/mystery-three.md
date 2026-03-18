@@ -1,5 +1,4 @@
 ---
-slug: mystery-three
 name: Mystery Three
 title_slug: mystery-three
 ipdb_id: 4228

@@ -1,5 +1,4 @@
 ---
-slug: skill-roll
 name: Skill Roll
 title_slug: skill-roll
 ipdb_id: 2184

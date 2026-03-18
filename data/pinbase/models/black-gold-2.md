@@ -1,5 +1,4 @@
 ---
-slug: black-gold-2
 name: Black Gold
 title_slug: black-gold
 opdb_id: G4qy6-MLvvd

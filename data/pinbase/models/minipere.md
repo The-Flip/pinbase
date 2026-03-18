@@ -1,5 +1,4 @@
 ---
-slug: minipere
 name: MINIPERE（ミニッパー)
 title_slug: minipere
 ipdb_id: 6811

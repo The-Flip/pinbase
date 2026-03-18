@@ -1,5 +1,4 @@
 ---
-slug: kicker-italy
 name: Kicker (Italy)
 title_slug: kicker-italy
 ipdb_id: 6296

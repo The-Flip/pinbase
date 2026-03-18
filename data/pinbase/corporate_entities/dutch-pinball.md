@@ -1,5 +1,4 @@
 ---
-slug: dutch-pinball
 name: Dutch Pinball
 manufacturer_slug: dutch-pinball
 ipdb_manufacturer_id: 687

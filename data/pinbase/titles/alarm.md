@@ -1,4 +1,3 @@
 ---
-slug: alarm
 name: Alarm
 ---

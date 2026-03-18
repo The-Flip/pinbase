@@ -1,5 +1,4 @@
 ---
-slug: sunshine
 name: Sunshine
 title_slug: sunshine
 opdb_id: G5o8p-M0oN5

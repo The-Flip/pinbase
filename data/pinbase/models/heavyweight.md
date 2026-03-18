@@ -1,5 +1,4 @@
 ---
-slug: heavyweight
 name: Heavyweight
 title_slug: heavyweight
 ipdb_id: 1151

@@ -1,5 +1,4 @@
 ---
-slug: total-recall
 name: Total Recall
 title_slug: total-recall
 ipdb_id: 4335

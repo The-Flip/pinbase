@@ -1,5 +1,4 @@
 ---
-slug: volley-2
 name: Volley
 title_slug: world-cup
 opdb_id: GrNqO-MRjzl-A9y5r

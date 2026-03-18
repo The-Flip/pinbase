@@ -1,5 +1,4 @@
 ---
-slug: 3-coins
 name: 3 Coins
 title_slug: 3-coins
 opdb_id: GR0Q1-MkPPd

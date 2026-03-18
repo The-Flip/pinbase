@@ -1,4 +1,3 @@
 ---
-slug: dakota
 name: Dakota
 ---

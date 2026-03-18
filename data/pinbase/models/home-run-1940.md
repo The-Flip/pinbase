@@ -1,5 +1,4 @@
 ---
-slug: home-run-1940
 name: Home Run 1940
 title_slug: home-run-1940
 ipdb_id: 1223

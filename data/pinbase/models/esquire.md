@@ -1,5 +1,4 @@
 ---
-slug: esquire
 name: Esquire
 title_slug: esquire
 ipdb_id: 790

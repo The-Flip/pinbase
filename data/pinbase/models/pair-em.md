@@ -1,5 +1,4 @@
 ---
-slug: pair-em
 name: Pair 'Em
 title_slug: pair-em
 ipdb_id: 4247

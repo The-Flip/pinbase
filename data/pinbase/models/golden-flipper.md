@@ -1,5 +1,4 @@
 ---
-slug: golden-flipper
 name: Golden Flipper
 title_slug: golden-flipper
 ipdb_id: 5866

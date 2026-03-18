@@ -1,5 +1,4 @@
 ---
-slug: vagabond
 name: Vagabond
 title_slug: vagabond
 opdb_id: G4Pvp-MLBO0

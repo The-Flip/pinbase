@@ -1,4 +1,3 @@
 ---
-slug: lumet
 name: Lumet
 ---

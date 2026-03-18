@@ -1,5 +1,4 @@
 ---
-slug: jimmy-valentine
 name: Jimmy Valentine
 title_slug: jimmy-valentine
 ipdb_id: 3177

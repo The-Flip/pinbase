@@ -1,5 +1,4 @@
 ---
-slug: commando-machine-gun
 name: Commando Machine Gun
 title_slug: commando-machine-gun
 ipdb_id: 6489

@@ -1,4 +1,3 @@
 ---
-slug: dynamite
 name: Dynamite
 ---

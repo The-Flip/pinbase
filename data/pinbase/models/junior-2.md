@@ -1,5 +1,4 @@
 ---
-slug: junior-2
 name: Junior
 title_slug: junior-2
 ipdb_id: 4260

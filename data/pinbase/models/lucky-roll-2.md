@@ -1,5 +1,4 @@
 ---
-slug: lucky-roll-2
 name: Lucky Roll
 title_slug: lucky-roll-2
 ipdb_id: 3222

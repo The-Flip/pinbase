@@ -1,5 +1,4 @@
 ---
-slug: pokemon-pro
 name: Pokémon (Pro)
 title_slug: pokemon
 opdb_id: GV8wB-Mq12N

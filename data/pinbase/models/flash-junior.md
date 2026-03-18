@@ -1,5 +1,4 @@
 ---
-slug: flash-junior
 name: Flash (Junior)
 title_slug: flash-junior
 ipdb_id: 5028

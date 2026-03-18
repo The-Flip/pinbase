@@ -1,5 +1,4 @@
 ---
-slug: jack-and-jill
 name: Jack and Jill
 title_slug: jack-and-jill
 ipdb_id: 1274

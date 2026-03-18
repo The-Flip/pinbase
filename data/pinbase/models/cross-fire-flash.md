@@ -1,5 +1,4 @@
 ---
-slug: cross-fire-flash
 name: Cross Fire Flash
 title_slug: cross-fire-flash
 ipdb_id: 3774

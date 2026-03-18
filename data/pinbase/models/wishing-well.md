@@ -1,5 +1,4 @@
 ---
-slug: wishing-well
 name: Wishing Well
 title_slug: wishing-well
 opdb_id: GRoo7-ML8Vo

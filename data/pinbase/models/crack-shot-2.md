@@ -1,5 +1,4 @@
 ---
-slug: crack-shot-2
 name: Crack Shot
 title_slug: crack-shot-2
 ipdb_id: 4289

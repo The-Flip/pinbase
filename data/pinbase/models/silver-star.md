@@ -1,5 +1,4 @@
 ---
-slug: silver-star
 name: Silver Star
 title_slug: silver-star
 ipdb_id: 3251

@@ -1,5 +1,4 @@
 ---
-slug: bloody-roller
 name: Bloody Roller
 title_slug: bloody-roller
 opdb_id: GrjdW-MJKd5

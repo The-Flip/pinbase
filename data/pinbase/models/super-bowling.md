@@ -1,5 +1,4 @@
 ---
-slug: super-bowling
 name: Super Bowling
 title_slug: super-bowling
 opdb_id: GRnBW-MDEBV

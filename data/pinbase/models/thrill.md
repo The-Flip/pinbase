@@ -1,5 +1,4 @@
 ---
-slug: thrill
 name: Thrill
 title_slug: thrill
 opdb_id: G181j-MNExE

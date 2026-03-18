@@ -1,5 +1,4 @@
 ---
-slug: bumper-3
 name: Bumper
 title_slug: bumper-3
 ipdb_id: 6194

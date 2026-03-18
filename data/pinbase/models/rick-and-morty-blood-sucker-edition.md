@@ -1,5 +1,4 @@
 ---
-slug: rick-and-morty-blood-sucker-edition
 name: Rick and Morty (Blood Sucker Edition)
 title_slug: rick-and-morty
 opdb_id: GQKb2-MYek0-ARKeX

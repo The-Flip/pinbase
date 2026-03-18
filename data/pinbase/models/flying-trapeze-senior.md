@@ -1,5 +1,4 @@
 ---
-slug: flying-trapeze-senior
 name: Flying Trapeze (Senior)
 title_slug: flying-trapeze-senior
 ipdb_id: 908

@@ -1,4 +1,3 @@
 ---
-slug: cisco
 name: Cisco
 ---

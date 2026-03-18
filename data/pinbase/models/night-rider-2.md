@@ -1,5 +1,4 @@
 ---
-slug: night-rider-2
 name: Night Rider (EM)
 title_slug: night-rider
 opdb_id: GryQj-MLRyd

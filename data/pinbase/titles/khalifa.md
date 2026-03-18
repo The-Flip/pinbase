@@ -1,4 +1,3 @@
 ---
-slug: khalifa
 name: Khalifa
 ---

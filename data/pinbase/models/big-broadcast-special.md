@@ -1,5 +1,4 @@
 ---
-slug: big-broadcast-special
 name: Big Broadcast (Special)
 title_slug: big-broadcast-special
 ipdb_id: 235

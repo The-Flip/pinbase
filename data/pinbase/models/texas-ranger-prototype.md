@@ -1,5 +1,4 @@
 ---
-slug: texas-ranger-prototype
 name: Texas Ranger (Prototype)
 title_slug: texas-ranger-prototype
 ipdb_id: 7042

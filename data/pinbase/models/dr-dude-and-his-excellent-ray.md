@@ -1,5 +1,4 @@
 ---
-slug: dr-dude-and-his-excellent-ray
 name: Dr. Dude And His Excellent Ray
 title_slug: dr-dude-and-his-excellent-ray
 opdb_id: GRVEJ-MDq1w

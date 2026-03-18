@@ -1,5 +1,4 @@
 ---
-slug: fun-fest
 name: Fun-Fest
 title_slug: fun-fest-swinger
 opdb_id: G5L1Q-MQ9vN

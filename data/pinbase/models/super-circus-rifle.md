@@ -1,5 +1,4 @@
 ---
-slug: super-circus-rifle
 name: Super Circus Rifle
 title_slug: super-circus-rifle
 ipdb_id: 7045

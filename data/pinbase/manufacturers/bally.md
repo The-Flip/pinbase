@@ -1,5 +1,4 @@
 ---
-slug: bally
 name: Bally
 opdb_manufacturer_id: 8
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sharpshooter
 name: Sharpshooter
 title_slug: sharpshooter-2
 opdb_id: Gll8z-MwNd5

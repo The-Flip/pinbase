@@ -1,5 +1,4 @@
 ---
-slug: kiss-3
 name: KISS
 title_slug: kiss-3
 ipdb_id: 5143

@@ -1,5 +1,4 @@
 ---
-slug: striker-xtreme
 name: Striker Xtreme
 title_slug: striker-xtreme-nfl
 opdb_id: GRVjq-MDbxp

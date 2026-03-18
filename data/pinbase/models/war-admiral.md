@@ -1,5 +1,4 @@
 ---
-slug: war-admiral
 name: War Admiral
 title_slug: war-admiral
 ipdb_id: 3851

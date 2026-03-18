@@ -1,5 +1,4 @@
 ---
-slug: cga
 name: CGA Monitor
 display_order: 4
 ---

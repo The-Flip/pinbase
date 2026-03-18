@@ -1,5 +1,4 @@
 ---
-slug: marathon
 name: Marathon
 title_slug: marathon
 opdb_id: GrEYP-MLy2K

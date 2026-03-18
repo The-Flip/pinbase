@@ -1,5 +1,4 @@
 ---
-slug: olde-king-cole
 name: Olde King Cole
 title_slug: olde-king-cole
 opdb_id: GK1Lv-MVKN8

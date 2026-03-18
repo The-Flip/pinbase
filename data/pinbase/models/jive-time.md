@@ -1,5 +1,4 @@
 ---
-slug: jive-time
 name: Jive Time
 title_slug: jive-time-rock-n-roll
 opdb_id: GrjKk-Mx09X

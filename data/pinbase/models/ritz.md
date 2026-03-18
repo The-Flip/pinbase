@@ -1,5 +1,4 @@
 ---
-slug: ritz
 name: Ritz
 title_slug: ritz
 ipdb_id: 1963

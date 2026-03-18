@@ -1,5 +1,4 @@
 ---
-slug: io-moon
 name: Io Moon
 title_slug: io-moon
 opdb_id: G42W2-MLzj5

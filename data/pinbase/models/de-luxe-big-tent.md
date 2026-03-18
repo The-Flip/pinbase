@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-big-tent
 name: De Luxe Big Tent
 title_slug: de-luxe-big-tent
 ipdb_id: 6952

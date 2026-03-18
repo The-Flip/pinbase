@@ -1,5 +1,4 @@
 ---
-slug: total-roll
 name: Total Roll
 title_slug: total-roll
 ipdb_id: 3269

@@ -1,5 +1,4 @@
 ---
-slug: south-park
 name: South Park
 title_slug: south-park
 opdb_id: G4qbD-MQpxv

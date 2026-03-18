@@ -1,5 +1,4 @@
 ---
-slug: odom-special
 name: Odom Special
 title_slug: odom-special
 ipdb_id: 1693

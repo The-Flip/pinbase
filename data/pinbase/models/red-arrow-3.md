@@ -1,5 +1,4 @@
 ---
-slug: red-arrow-3
 name: Red Arrow
 title_slug: golden-arrow
 opdb_id: G5WPp-MDbNj

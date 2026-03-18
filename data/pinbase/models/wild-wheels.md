@@ -1,5 +1,4 @@
 ---
-slug: wild-wheels
 name: Wild Wheels
 title_slug: wild-wheels
 opdb_id: GrqYl-MLeBV

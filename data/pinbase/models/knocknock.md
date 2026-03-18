@@ -1,5 +1,4 @@
 ---
-slug: knocknock
 name: KnocKnock
 title_slug: knocknock
 ipdb_id: 5654

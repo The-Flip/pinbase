@@ -1,5 +1,4 @@
 ---
-slug: flash-3
 name: Flash
 title_slug: flash-3
 ipdb_id: 872

@@ -1,5 +1,4 @@
 ---
-slug: perky
 name: Perky
 title_slug: perky
 opdb_id: G4jN3-MQPRK

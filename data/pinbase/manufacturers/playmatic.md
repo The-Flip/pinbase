@@ -1,5 +1,4 @@
 ---
-slug: playmatic
 name: Playmatic
 opdb_manufacturer_id: 5
 ---

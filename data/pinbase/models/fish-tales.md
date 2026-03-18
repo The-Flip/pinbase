@@ -1,5 +1,4 @@
 ---
-slug: fish-tales
 name: Fish Tales
 title_slug: fish-tales
 opdb_id: G5Wxd-MLxl3

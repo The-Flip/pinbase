@@ -1,4 +1,3 @@
 ---
-slug: keno
 name: Keno
 ---

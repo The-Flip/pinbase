@@ -1,5 +1,4 @@
 ---
-slug: bonanza
 name: Bonanza
 title_slug: bonanza-2
 ipdb_id: 344

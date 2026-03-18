@@ -1,5 +1,4 @@
 ---
-slug: sunday-on-ice
 name: Sunday on Ice
 title_slug: sunday-on-ice
 opdb_id: G48W6-MJw6V

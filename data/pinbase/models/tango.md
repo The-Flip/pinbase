@@ -1,5 +1,4 @@
 ---
-slug: tango
 name: Tango
 title_slug: tango
 ipdb_id: 2498

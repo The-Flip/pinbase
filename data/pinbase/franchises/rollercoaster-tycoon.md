@@ -1,5 +1,4 @@
 ---
-slug: rollercoaster-tycoon
 name: RollerCoaster Tycoon
 ---
 

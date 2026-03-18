@@ -1,5 +1,4 @@
 ---
-slug: shooting-stars
 name: Shooting Stars
 title_slug: shooting-stars
 ipdb_id: 2126

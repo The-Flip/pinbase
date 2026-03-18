@@ -1,5 +1,4 @@
 ---
-slug: sport-page
 name: Sport Page
 title_slug: sport-page
 ipdb_id: 2300

@@ -1,5 +1,4 @@
 ---
-slug: williams-wpc-s
 name: Williams WPC-S
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

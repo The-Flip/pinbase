@@ -1,5 +1,4 @@
 ---
-slug: big-bat
 name: Big Bat
 title_slug: big-bat
 ipdb_id: 4768

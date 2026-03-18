@@ -1,5 +1,4 @@
 ---
-slug: click-2
 name: Click
 title_slug: click-2
 ipdb_id: 5278

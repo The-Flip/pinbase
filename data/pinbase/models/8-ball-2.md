@@ -1,5 +1,4 @@
 ---
-slug: 8-ball-2
 name: 8 Ball
 title_slug: 8-ball-2
 opdb_id: G4dke-M5R3k

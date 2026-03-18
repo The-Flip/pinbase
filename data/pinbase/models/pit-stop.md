@@ -1,5 +1,4 @@
 ---
-slug: pit-stop
 name: Pit Stop
 title_slug: pit-stop
 opdb_id: GrPkj-MLEqv

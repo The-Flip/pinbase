@@ -1,5 +1,4 @@
 ---
-slug: homepin
 name: Homepin
 opdb_manufacturer_id: 116
 ---

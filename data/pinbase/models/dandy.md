@@ -1,5 +1,4 @@
 ---
-slug: dandy
 name: Dandy
 title_slug: dandy
 ipdb_id: 636

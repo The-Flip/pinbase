@@ -1,5 +1,4 @@
 ---
-slug: miss-theresine
 name: Miss Theresine
 title_slug: miss-theresine
 ipdb_id: 4781

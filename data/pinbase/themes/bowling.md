@@ -1,4 +1,3 @@
 ---
-slug: bowling
 name: Bowling
 ---

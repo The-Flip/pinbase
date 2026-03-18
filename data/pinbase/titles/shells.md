@@ -1,4 +1,3 @@
 ---
-slug: shells
 name: Shells
 ---

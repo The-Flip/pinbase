@@ -1,5 +1,4 @@
 ---
-slug: red-show
 name: Red Show
 title_slug: red-show
 opdb_id: GrP7X-ML05X

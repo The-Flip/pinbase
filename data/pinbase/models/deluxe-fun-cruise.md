@@ -1,5 +1,4 @@
 ---
-slug: deluxe-fun-cruise
 name: Deluxe Fun Cruise
 title_slug: deluxe-fun-cruise
 ipdb_id: 658

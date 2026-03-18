@@ -1,5 +1,4 @@
 ---
-slug: monday-night-football
 name: Monday Night Football
 title_slug: monday-night-football
 opdb_id: G5zZ7-Mp474

@@ -1,5 +1,4 @@
 ---
-slug: spinner-3
 name: Spinner
 title_slug: spinner-3
 ipdb_id: 4158

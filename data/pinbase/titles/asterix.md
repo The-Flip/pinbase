@@ -1,4 +1,3 @@
 ---
-slug: asterix
 name: Asterix
 ---

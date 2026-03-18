@@ -1,10 +1,11 @@
 ---
-slug: the-avengers-pro
 name: The Avengers (Pro)
 title_slug: the-avengers
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GRzNR-MLlEj
 ipdb_id: 5938
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: george-gomez
   role: Design

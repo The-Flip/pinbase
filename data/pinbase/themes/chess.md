@@ -1,4 +1,3 @@
 ---
-slug: chess
 name: Chess
 ---

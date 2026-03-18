@@ -1,5 +1,4 @@
 ---
-slug: the-furious-jazz
 name: The Furious Jazz
 title_slug: the-furious-jazz
 ipdb_id: 6273

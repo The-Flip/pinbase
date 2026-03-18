@@ -1,5 +1,4 @@
 ---
-slug: mr-chips
 name: Mr. Chips
 title_slug: mr-chips
 ipdb_id: 1636

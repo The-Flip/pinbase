@@ -1,4 +1,3 @@
 ---
-slug: outdoors
 name: Outdoors
 ---

@@ -1,5 +1,4 @@
 ---
-slug: big-flipper
 name: Big Flipper
 title_slug: cowboy-big-flipper
 opdb_id: G5wkx-MJrkN

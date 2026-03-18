@@ -1,5 +1,4 @@
 ---
-slug: totalizer
 name: Totalizer
 title_slug: totalizer
 ipdb_id: 2605

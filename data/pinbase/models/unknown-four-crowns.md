@@ -1,5 +1,4 @@
 ---
-slug: unknown-four-crowns
 name: Unknown ('Four Crowns')
 title_slug: unknown-four-crowns
 ipdb_id: 5423

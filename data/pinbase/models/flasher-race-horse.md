@@ -1,5 +1,4 @@
 ---
-slug: flasher-race-horse
 name: Flasher (Race Horse)
 title_slug: flasher-race-horse
 ipdb_id: 6746

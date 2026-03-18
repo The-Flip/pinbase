@@ -1,10 +1,11 @@
 ---
-slug: ghostbusters-limited-edition
 name: Ghostbusters (Limited Edition)
 title_slug: ghostbusters
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GR9Nr-MVKol
 ipdb_id: 6334
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: ghostbusters-premium
 credit_refs:
 - person_slug: john-trudeau

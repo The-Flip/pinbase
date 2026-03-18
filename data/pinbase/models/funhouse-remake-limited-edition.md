@@ -1,5 +1,4 @@
 ---
-slug: funhouse-remake-limited-edition
 name: Funhouse (Remake Limited Edition)
 title_slug: funhouse
 opdb_id: G5Dz7-MdEod-AR8Nb

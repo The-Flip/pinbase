@@ -1,5 +1,4 @@
 ---
-slug: 7-segment
 name: Seven-Segment
 display_order: 2
 display_type_slug: alphanumeric

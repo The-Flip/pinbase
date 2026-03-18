@@ -1,5 +1,4 @@
 ---
-slug: zeus
 name: Zeus
 title_slug: zeus
 ipdb_id: 6674

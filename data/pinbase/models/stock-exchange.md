@@ -1,5 +1,4 @@
 ---
-slug: stock-exchange
 name: Stock Exchange
 title_slug: stock-exchange
 ipdb_id: 2379

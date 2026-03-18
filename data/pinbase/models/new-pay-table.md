@@ -1,5 +1,4 @@
 ---
-slug: new-pay-table
 name: New Pay Table
 title_slug: new-pay-table
 ipdb_id: 3487

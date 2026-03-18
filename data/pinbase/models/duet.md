@@ -1,5 +1,4 @@
 ---
-slug: duet
 name: Duet
 title_slug: duet
 ipdb_id: 3065

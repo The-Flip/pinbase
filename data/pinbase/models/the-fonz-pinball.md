@@ -1,5 +1,4 @@
 ---
-slug: the-fonz-pinball
 name: The Fonz Pinball
 title_slug: the-fonz-pinball
 ipdb_id: 6152

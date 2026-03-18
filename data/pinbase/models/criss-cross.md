@@ -1,5 +1,4 @@
 ---
-slug: criss-cross
 name: Criss Cross
 title_slug: criss-cross
 opdb_id: GRvpY-MJ9ON

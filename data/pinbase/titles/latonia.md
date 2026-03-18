@@ -1,4 +1,3 @@
 ---
-slug: latonia
 name: Latonia
 ---

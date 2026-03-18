@@ -1,4 +1,3 @@
 ---
-slug: bicentennial
 name: Bicentennial
 ---

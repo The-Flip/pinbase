@@ -1,4 +1,3 @@
 ---
-slug: alco
 name: Alco
 ---

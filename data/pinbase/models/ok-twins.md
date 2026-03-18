@@ -1,5 +1,4 @@
 ---
-slug: ok-twins
 name: O.K. Twins
 title_slug: ok-twins
 ipdb_id: 1700

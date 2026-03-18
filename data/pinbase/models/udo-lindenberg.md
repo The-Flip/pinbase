@@ -1,5 +1,4 @@
 ---
-slug: udo-lindenberg
 name: Udo Lindenberg
 title_slug: udo-lindenberg
 ipdb_id: 5715

@@ -1,5 +1,4 @@
 ---
-slug: add-a-ball
 name: Add-a-Ball
 display_order: 19
 ---

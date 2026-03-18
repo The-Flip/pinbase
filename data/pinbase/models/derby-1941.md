@@ -1,5 +1,4 @@
 ---
-slug: derby-1941
 name: Derby 1941
 title_slug: derby-1941
 ipdb_id: 922

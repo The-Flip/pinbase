@@ -1,5 +1,4 @@
 ---
-slug: yankee-aggot-tell
 name: Yankee Aggot-Tell!
 title_slug: yankee-aggot-tell
 ipdb_id: 6805

@@ -1,5 +1,4 @@
 ---
-slug: criterium-80
 name: Criterium 80
 opdb_group_id: GRo0B
 ---

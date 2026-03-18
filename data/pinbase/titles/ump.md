@@ -1,4 +1,3 @@
 ---
-slug: ump
 name: Ump
 ---

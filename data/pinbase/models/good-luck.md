@@ -1,5 +1,4 @@
 ---
-slug: good-luck
 name: Good Luck
 title_slug: good-luck
 ipdb_id: 1059

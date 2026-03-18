@@ -1,5 +1,4 @@
 ---
-slug: reviera
 name: Reviera
 title_slug: reviera
 ipdb_id: 5126

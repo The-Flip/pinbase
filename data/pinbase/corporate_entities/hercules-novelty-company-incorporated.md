@@ -1,5 +1,4 @@
 ---
-slug: hercules-novelty-company-incorporated
 name: Hercules Novelty Company, Incorporated
 manufacturer_slug: hercules-novelty-company-incorporated
 ipdb_manufacturer_id: 149

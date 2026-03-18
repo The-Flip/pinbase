@@ -1,5 +1,4 @@
 ---
-slug: all-american-automatic-base-ball-game
 name: All-American Automatic Base Ball Game
 title_slug: all-american-automatic-base-ball-game
 ipdb_id: 6107

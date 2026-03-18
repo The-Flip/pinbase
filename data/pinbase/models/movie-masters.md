@@ -1,5 +1,4 @@
 ---
-slug: movie-masters
 name: Movie Masters
 title_slug: movie-masters
 ipdb_id: 3910

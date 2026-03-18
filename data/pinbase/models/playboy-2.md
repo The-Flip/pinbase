@@ -1,5 +1,4 @@
 ---
-slug: playboy-2
 name: Playboy
 title_slug: playboy-2
 ipdb_id: 4490

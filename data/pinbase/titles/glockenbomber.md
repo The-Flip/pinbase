@@ -1,4 +1,3 @@
 ---
-slug: glockenbomber
 name: Glockenbomber
 ---

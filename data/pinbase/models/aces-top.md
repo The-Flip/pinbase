@@ -1,5 +1,4 @@
 ---
-slug: aces-top
 name: Aces Top
 title_slug: aces-high
 opdb_id: G56BE-MQYxZ-A1XBn

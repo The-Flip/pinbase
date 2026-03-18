@@ -1,5 +1,4 @@
 ---
-slug: the-joy-game
 name: The Joy Game
 title_slug: the-joy-game
 ipdb_id: 1318

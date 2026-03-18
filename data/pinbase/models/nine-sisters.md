@@ -1,5 +1,4 @@
 ---
-slug: nine-sisters
 name: Nine Sisters
 title_slug: nine-sisters
 opdb_id: GRny1-MDbBZ

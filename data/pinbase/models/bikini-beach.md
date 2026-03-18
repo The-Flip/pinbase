@@ -1,5 +1,4 @@
 ---
-slug: bikini-beach
 name: Bikini Beach
 title_slug: bikini-beach
 ipdb_id: 6904

@@ -1,5 +1,4 @@
 ---
-slug: jersey-jack
 name: Jersey Jack
 manufacturer_slug: jersey-jack
 technology_subgeneration_slug: ss-pc

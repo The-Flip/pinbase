@@ -1,5 +1,4 @@
 ---
-slug: special-entry-1948
 name: Special Entry 1948
 title_slug: special-entry-1948
 ipdb_id: 5570

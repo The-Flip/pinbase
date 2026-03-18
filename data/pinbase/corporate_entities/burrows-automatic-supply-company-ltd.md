@@ -1,5 +1,4 @@
 ---
-slug: burrows-automatic-supply-company-ltd
 name: Burrows Automatic Supply Company, Ltd.
 manufacturer_slug: burrows-automatic-supply-company-ltd
 ipdb_manufacturer_id: 66

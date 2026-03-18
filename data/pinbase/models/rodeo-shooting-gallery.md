@@ -1,5 +1,4 @@
 ---
-slug: rodeo-shooting-gallery
 name: Rodeo Shooting Gallery
 title_slug: rodeo-shooting-gallery
 ipdb_id: 6655

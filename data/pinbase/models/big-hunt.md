@@ -1,5 +1,4 @@
 ---
-slug: big-hunt
 name: Big Hunt
 title_slug: big-hunt
 opdb_id: GrJPo-MDXVN

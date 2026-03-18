@@ -1,5 +1,4 @@
 ---
-slug: safari
 name: Safari
 title_slug: safari
 opdb_id: GR6X2-MQj25

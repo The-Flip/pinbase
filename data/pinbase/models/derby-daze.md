@@ -1,5 +1,4 @@
 ---
-slug: derby-daze
 name: Derby Daze
 title_slug: derby-daze
 ipdb_id: 4460

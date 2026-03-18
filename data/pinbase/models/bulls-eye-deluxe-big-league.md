@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-deluxe-big-league
 name: Bulls Eye Deluxe Big League
 title_slug: bulls-eye-deluxe-big-league
 ipdb_id: 4691

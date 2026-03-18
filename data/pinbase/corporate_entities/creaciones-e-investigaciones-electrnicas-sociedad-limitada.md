@@ -1,5 +1,4 @@
 ---
-slug: creaciones-e-investigaciones-electrnicas-sociedad-limitada
 name: Creaciones e Investigaciones Electr�nicas, Sociedad Limitada
 manufacturer_slug: sleic
 ipdb_manufacturer_id: 374

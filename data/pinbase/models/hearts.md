@@ -1,5 +1,4 @@
 ---
-slug: hearts
 name: Hearts
 title_slug: hearts
 ipdb_id: 4231

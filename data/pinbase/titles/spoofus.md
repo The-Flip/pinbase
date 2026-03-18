@@ -1,4 +1,3 @@
 ---
-slug: spoofus
 name: Spoofus
 ---

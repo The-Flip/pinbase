@@ -1,5 +1,4 @@
 ---
-slug: bounty-2
 name: Bounty
 title_slug: bounty-2
 ipdb_id: 3659

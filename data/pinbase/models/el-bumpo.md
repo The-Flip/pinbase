@@ -1,5 +1,4 @@
 ---
-slug: el-bumpo
 name: El Bumpo
 title_slug: el-bumpo
 ipdb_id: 3077

@@ -1,5 +1,4 @@
 ---
-slug: batman-standard-model
 name: Batman (Standard Model)
 title_slug: batman
 opdb_id: G4yVw-MQY90

@@ -1,5 +1,4 @@
 ---
-slug: constelacion
 name: Constelación
 title_slug: constelacion
 ipdb_id: 6794

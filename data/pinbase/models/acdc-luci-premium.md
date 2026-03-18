@@ -1,5 +1,4 @@
 ---
-slug: acdc-luci-premium
 name: AC/DC (LUCI)
 title_slug: ac-dc
 opdb_id: G43W4-MXrPx-AO6D9

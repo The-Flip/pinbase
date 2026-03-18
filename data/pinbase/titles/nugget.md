@@ -1,4 +1,3 @@
 ---
-slug: nugget
 name: Nugget
 ---

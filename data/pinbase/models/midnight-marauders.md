@@ -1,5 +1,4 @@
 ---
-slug: midnight-marauders
 name: Midnight Marauders
 title_slug: midnight-marauders
 ipdb_id: 6498

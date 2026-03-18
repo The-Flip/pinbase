@@ -1,5 +1,4 @@
 ---
-slug: hook
 name: Hook
 title_slug: hook
 opdb_id: G42EQ-MJYpj

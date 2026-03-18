@@ -1,5 +1,4 @@
 ---
-slug: silver-skates
 name: Silver Skates
 title_slug: silver-skates
 opdb_id: G4XJ6-MLBw6

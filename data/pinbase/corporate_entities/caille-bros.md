@@ -1,5 +1,4 @@
 ---
-slug: caille-bros
 name: Caille Bros.
 manufacturer_slug: caille-bros
 ipdb_manufacturer_id: 72

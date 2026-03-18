@@ -1,5 +1,4 @@
 ---
-slug: three-musketeers
 name: Three Musketeers
 title_slug: three-musketeers
 opdb_id: GwevP-M6166

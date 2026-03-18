@@ -1,5 +1,4 @@
 ---
-slug: twin-joker
 name: Twin Joker
 title_slug: twin-joker
 ipdb_id: 2687

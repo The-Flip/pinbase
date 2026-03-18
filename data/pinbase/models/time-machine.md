@@ -1,5 +1,4 @@
 ---
-slug: time-machine
 name: Time Machine
 title_slug: time-machine
 opdb_id: GR99Y-MJ9Zy

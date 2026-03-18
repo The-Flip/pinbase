@@ -1,5 +1,4 @@
 ---
-slug: sunshine-park
 name: Sunshine Park
 title_slug: sunshine-park
 ipdb_id: 2426

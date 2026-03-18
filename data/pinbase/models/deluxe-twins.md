@@ -1,5 +1,4 @@
 ---
-slug: deluxe-twins
 name: Deluxe Twins
 title_slug: deluxe-twins
 ipdb_id: 660

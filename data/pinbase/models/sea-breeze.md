@@ -1,5 +1,4 @@
 ---
-slug: sea-breeze
 name: Sea Breeze
 title_slug: sea-breeze-2
 ipdb_id: 2079

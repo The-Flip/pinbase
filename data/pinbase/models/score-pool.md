@@ -1,5 +1,4 @@
 ---
-slug: score-pool
 name: Score Pool
 title_slug: score-pool
 ipdb_id: 4771

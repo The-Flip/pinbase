@@ -1,5 +1,4 @@
 ---
-slug: williams-system-11c
 name: Williams System 11C
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

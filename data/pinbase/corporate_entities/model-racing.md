@@ -1,5 +1,4 @@
 ---
-slug: model-racing
 name: Model Racing
 manufacturer_slug: model-racing
 ipdb_manufacturer_id: 525

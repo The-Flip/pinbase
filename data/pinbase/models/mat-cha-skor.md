@@ -1,5 +1,4 @@
 ---
-slug: mat-cha-skor
 name: Mat-Cha-Skor
 title_slug: mat-cha-skor
 ipdb_id: 1560

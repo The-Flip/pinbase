@@ -1,5 +1,4 @@
 ---
-slug: over-18-under
 name: Over 18 Under
 title_slug: over-18-under
 ipdb_id: 1730

@@ -1,5 +1,4 @@
 ---
-slug: strikes-n-spares
 name: Strikes N' Spares
 title_slug: strikes-n-spares
 ipdb_id: 4336

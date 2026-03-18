@@ -1,5 +1,4 @@
 ---
-slug: heads-up
 name: Heads Up!
 title_slug: heads-up
 opdb_id: GELLO-M0o1y

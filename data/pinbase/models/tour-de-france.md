@@ -1,5 +1,4 @@
 ---
-slug: tour-de-france
 name: Tour De France
 title_slug: tour-de-france
 ipdb_id: 4031

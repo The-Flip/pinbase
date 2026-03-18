@@ -1,5 +1,4 @@
 ---
-slug: snow-queen
 name: Snow Queen
 title_slug: snow-queen-snow-derby
 opdb_id: GRKZV-MQZ9X

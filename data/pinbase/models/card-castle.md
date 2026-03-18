@@ -1,5 +1,4 @@
 ---
-slug: card-castle
 name: Card Castle
 title_slug: card-castle
 opdb_id: GRodq-M5RY1

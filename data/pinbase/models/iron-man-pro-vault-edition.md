@@ -1,5 +1,4 @@
 ---
-slug: iron-man-pro-vault-edition
 name: Iron Man (Vault)
 title_slug: iron-man
 opdb_id: GRVq4-M4oNp

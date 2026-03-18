@@ -1,5 +1,4 @@
 ---
-slug: silver-moon-2
 name: Silver Moon
 title_slug: silver-moon
 ipdb_id: 4732

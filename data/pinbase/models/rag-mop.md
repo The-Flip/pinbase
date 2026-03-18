@@ -1,5 +1,4 @@
 ---
-slug: rag-mop
 name: Rag Mop
 title_slug: rag-mop
 opdb_id: G4O9Q-MJZ2E

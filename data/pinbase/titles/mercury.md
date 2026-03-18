@@ -1,4 +1,3 @@
 ---
-slug: mercury
 name: Mercury
 ---

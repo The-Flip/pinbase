@@ -1,5 +1,4 @@
 ---
-slug: auto-derby
 name: Auto Derby
 title_slug: auto-derby
 ipdb_id: 2885

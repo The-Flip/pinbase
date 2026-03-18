@@ -1,5 +1,4 @@
 ---
-slug: drop-a-card
 name: Drop-A-Card
 title_slug: drop-a-card-pop-a-card
 opdb_id: GRL9Q-MQNXK

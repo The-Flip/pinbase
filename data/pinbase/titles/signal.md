@@ -1,4 +1,3 @@
 ---
-slug: signal
 name: Signal
 ---

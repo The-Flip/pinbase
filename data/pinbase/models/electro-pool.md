@@ -1,5 +1,4 @@
 ---
-slug: electro-pool
 name: Electro-Pool
 title_slug: electro-pool
 ipdb_id: 6397

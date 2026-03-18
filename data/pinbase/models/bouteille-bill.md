@@ -1,5 +1,4 @@
 ---
-slug: bouteille-bill
 name: Bouteille Bill
 title_slug: bouteille-bill
 ipdb_id: 5972

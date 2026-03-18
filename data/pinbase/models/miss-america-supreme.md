@@ -1,5 +1,4 @@
 ---
-slug: miss-america-supreme
 name: Miss America Supreme
 title_slug: miss-america-supreme
 ipdb_id: 3405

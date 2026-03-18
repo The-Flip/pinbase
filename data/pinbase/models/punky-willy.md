@@ -1,5 +1,4 @@
 ---
-slug: punky-willy
 name: Punky Willy
 title_slug: rock
 opdb_id: Grk62-Mo18j

@@ -1,5 +1,4 @@
 ---
-slug: grandstand
 name: Grandstand
 title_slug: grandstand
 ipdb_id: 1080

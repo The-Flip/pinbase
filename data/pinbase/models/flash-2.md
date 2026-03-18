@@ -1,5 +1,4 @@
 ---
-slug: flash-2
 name: Flash
 title_slug: flash
 opdb_id: Grypn-MQdbe

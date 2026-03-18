@@ -1,5 +1,4 @@
 ---
-slug: bomber-2
 name: Bomber
 title_slug: bomber
 opdb_id: Gry2Q-MnKnB

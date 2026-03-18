@@ -1,5 +1,4 @@
 ---
-slug: hula-hula-2
 name: Hula-Hula
 title_slug: hula-hula-2
 ipdb_id: 6324

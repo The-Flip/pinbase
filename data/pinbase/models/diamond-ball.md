@@ -1,5 +1,4 @@
 ---
-slug: diamond-ball
 name: Diamond Ball
 title_slug: diamond-ball
 ipdb_id: 675

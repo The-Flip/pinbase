@@ -1,5 +1,4 @@
 ---
-slug: can-can-3
 name: Can Can
 title_slug: can-can-2
 ipdb_id: 5808

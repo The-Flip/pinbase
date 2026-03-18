@@ -1,5 +1,4 @@
 ---
-slug: metallica-pro-led
 name: Metallica (Pro LED)
 title_slug: metallica
 opdb_id: GRBE4-MQK1Z-A9Yn1

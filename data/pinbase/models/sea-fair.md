@@ -1,5 +1,4 @@
 ---
-slug: sea-fair
 name: Sea Fair
 title_slug: sea-fair
 ipdb_id: 4530

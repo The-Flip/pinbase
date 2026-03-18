@@ -1,5 +1,4 @@
 ---
-slug: ambush
 name: Ambush
 title_slug: ambush
 ipdb_id: 6637

@@ -1,5 +1,4 @@
 ---
-slug: the-baron
 name: The Baron
 title_slug: the-baron
 ipdb_id: 4928

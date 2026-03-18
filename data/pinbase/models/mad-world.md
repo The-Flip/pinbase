@@ -1,5 +1,4 @@
 ---
-slug: mad-world
 name: Mad World
 title_slug: mad-world
 opdb_id: Grl21-MJwpB

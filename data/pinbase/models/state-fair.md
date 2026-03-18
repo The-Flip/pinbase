@@ -1,5 +1,4 @@
 ---
-slug: state-fair
 name: State Fair
 title_slug: state-fair
 ipdb_id: 2367

@@ -1,4 +1,3 @@
 ---
-slug: baby
 name: Baby
 ---

@@ -1,5 +1,4 @@
 ---
-slug: marbelous
 name: Marbelous
 title_slug: marbelous
 ipdb_id: 5167

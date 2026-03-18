@@ -1,5 +1,4 @@
 ---
-slug: champ-2
 name: Champ
 title_slug: race-way
 opdb_id: G57eW-MLnel-AOpql

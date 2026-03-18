@@ -1,5 +1,4 @@
 ---
-slug: stern-pinball
 name: Stern
 opdb_manufacturer_id: 12
 ---

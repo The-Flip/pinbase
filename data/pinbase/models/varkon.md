@@ -1,5 +1,4 @@
 ---
-slug: varkon
 name: Varkon
 title_slug: varkon
 opdb_id: G5Lvz-MQkvB

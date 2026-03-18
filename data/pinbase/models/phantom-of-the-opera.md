@@ -1,10 +1,11 @@
 ---
-slug: phantom-of-the-opera
 name: The Phantom of the Opera
 title_slug: phantom-of-the-opera
 corporate_entity_slug: data-east-pinball-incorporated
 opdb_id: Grq1D-MQokp
 ipdb_id: 1777
+display_type_slug: alphanumeric
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: ed-cebula
   role: Design

@@ -1,5 +1,4 @@
 ---
-slug: equalite
 name: Equalite
 title_slug: equalite
 ipdb_id: 786

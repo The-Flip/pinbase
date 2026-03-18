@@ -1,5 +1,4 @@
 ---
-slug: vulcan-iv
 name: Vulcan IV
 title_slug: vulcan
 opdb_id: GRoDo-Ml9Kj

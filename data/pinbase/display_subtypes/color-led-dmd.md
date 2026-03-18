@@ -1,5 +1,4 @@
 ---
-slug: color-led-dmd
 name: Color LED
 display_order: 5
 display_type_slug: dot-matrix

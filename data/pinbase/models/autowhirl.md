@@ -1,5 +1,4 @@
 ---
-slug: autowhirl
 name: Autowhirl
 title_slug: autowhirl
 ipdb_id: 116

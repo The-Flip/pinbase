@@ -1,5 +1,4 @@
 ---
-slug: new-contact
 name: New Contact
 title_slug: new-contact
 ipdb_id: 3435

@@ -1,5 +1,4 @@
 ---
-slug: wahoo
 name: Wahoo
 title_slug: wahoo
 ipdb_id: 2748

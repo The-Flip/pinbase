@@ -1,5 +1,4 @@
 ---
-slug: the-hobbit-smaug-gold-special-edition
 name: The Hobbit (Smaug Gold)
 title_slug: the-hobbit
 opdb_id: G5bYr-MLezO-AO3J1

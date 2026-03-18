@@ -1,5 +1,4 @@
 ---
-slug: colors-2
 name: Colors
 title_slug: colors-2
 ipdb_id: 6182

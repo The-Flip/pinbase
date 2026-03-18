@@ -1,5 +1,4 @@
 ---
-slug: original-flipper
 name: Original Flipper
 title_slug: original-flipper
 ipdb_id: 5220

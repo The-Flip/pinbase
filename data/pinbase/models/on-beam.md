@@ -1,5 +1,4 @@
 ---
-slug: on-beam
 name: On Beam
 title_slug: on-beam
 opdb_id: G4XQE-MnKBB

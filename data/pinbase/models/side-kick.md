@@ -1,5 +1,4 @@
 ---
-slug: side-kick
 name: Side Kick
 title_slug: side-kick
 ipdb_id: 2140

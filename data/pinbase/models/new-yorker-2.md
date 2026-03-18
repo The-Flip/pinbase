@@ -1,5 +1,4 @@
 ---
-slug: new-yorker-2
 name: New-Yorker
 title_slug: new-yorker-2
 ipdb_id: 5799

@@ -1,4 +1,3 @@
 ---
-slug: track
 name: Track
 ---

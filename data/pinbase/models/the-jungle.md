@@ -1,5 +1,4 @@
 ---
-slug: the-jungle
 name: The Jungle
 title_slug: the-jungle
 ipdb_id: 5438

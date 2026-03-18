@@ -1,5 +1,4 @@
 ---
-slug: barb-wire
 name: Barb Wire
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: portal-standard
 name: Portal (Standard)
 title_slug: portal
 opdb_id: GpebN-Mq1rW

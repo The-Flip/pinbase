@@ -1,5 +1,4 @@
 ---
-slug: two-fifty
 name: Two Fifty
 title_slug: two-fifty
 ipdb_id: 2696

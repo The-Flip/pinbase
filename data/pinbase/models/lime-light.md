@@ -1,5 +1,4 @@
 ---
-slug: lime-light
 name: Lime Light
 title_slug: lime-light
 ipdb_id: 1446

@@ -1,5 +1,4 @@
 ---
-slug: silver-chest
 name: Silver Chest
 title_slug: silver-chest
 ipdb_id: 2145

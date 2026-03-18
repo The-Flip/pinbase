@@ -1,5 +1,4 @@
 ---
-slug: supreme
 name: Supreme x Stern
 title_slug: supreme-x-stern
 opdb_id: G3EnZ-MePOV

@@ -1,5 +1,4 @@
 ---
-slug: pistol-poker
 name: Pistol Poker
 title_slug: pistol-poker
 opdb_id: GRLL9-MDOkz

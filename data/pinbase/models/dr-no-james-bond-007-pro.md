@@ -1,5 +1,4 @@
 ---
-slug: dr-no-james-bond-007-pro
 name: James Bond 007 (Pro)
 title_slug: james-bond-007
 opdb_id: GQKyP-Mx0O4

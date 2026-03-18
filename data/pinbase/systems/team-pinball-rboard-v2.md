@@ -1,5 +1,4 @@
 ---
-slug: team-pinball-rboard-v2
 name: Team Pinball Rboard v2
 manufacturer_slug: team-pinball
 technology_subgeneration_slug: ss-pc

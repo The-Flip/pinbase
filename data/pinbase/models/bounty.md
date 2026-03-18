@@ -1,5 +1,4 @@
 ---
-slug: bounty
 name: Bounty
 title_slug: bounty
 ipdb_id: 360

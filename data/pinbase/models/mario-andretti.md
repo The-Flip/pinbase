@@ -1,5 +1,4 @@
 ---
-slug: mario-andretti
 name: Mario Andretti
 title_slug: mario-andretti
 opdb_id: GRBqq-Mp4ZY

@@ -1,5 +1,4 @@
 ---
-slug: virginia
 name: Virginia
 title_slug: virginia
 opdb_id: GWy0j-M0oY2

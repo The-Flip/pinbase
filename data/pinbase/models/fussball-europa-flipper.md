@@ -1,5 +1,4 @@
 ---
-slug: fussball-europa-flipper
 name: Fussball Europa Flipper
 title_slug: fussball-europa-flipper
 ipdb_id: 4081

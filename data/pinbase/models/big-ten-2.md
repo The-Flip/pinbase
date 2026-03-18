@@ -1,5 +1,4 @@
 ---
-slug: big-ten-2
 name: Big Ten
 title_slug: big-ten-2
 ipdb_id: 3642

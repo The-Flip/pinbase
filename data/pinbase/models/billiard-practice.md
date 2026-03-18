@@ -1,5 +1,4 @@
 ---
-slug: billiard-practice
 name: Billiard Practice
 title_slug: billiard-practice
 ipdb_id: 6145

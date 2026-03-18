@@ -1,5 +1,4 @@
 ---
-slug: payday
 name: Payday
 title_slug: payday
 ipdb_id: 3334

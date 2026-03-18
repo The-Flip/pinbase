@@ -1,5 +1,4 @@
 ---
-slug: 1941-velvet
 name: 1941 Velvet
 title_slug: 1941-velvet
 ipdb_id: 2726

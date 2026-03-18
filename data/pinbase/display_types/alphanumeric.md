@@ -1,5 +1,4 @@
 ---
-slug: alphanumeric
 name: Alpha-Numeric
 display_order: 3
 ---

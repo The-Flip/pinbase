@@ -1,5 +1,4 @@
 ---
-slug: tie-score
 name: Tie Score
 title_slug: tie-score
 ipdb_id: 4284

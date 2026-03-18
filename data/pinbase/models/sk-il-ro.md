@@ -1,5 +1,4 @@
 ---
-slug: sk-il-ro
 name: SK-IL-RO
 title_slug: sk-il-ro
 ipdb_id: 3235

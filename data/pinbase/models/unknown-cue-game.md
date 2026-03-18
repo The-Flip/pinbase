@@ -1,5 +1,4 @@
 ---
-slug: unknown-cue-game
 name: Unknown (Cue Game)
 title_slug: unknown-cue-game
 ipdb_id: 6779

@@ -1,4 +1,3 @@
 ---
-slug: monsters
 name: Monsters
 ---

@@ -1,5 +1,4 @@
 ---
-slug: drop-kick
 name: Drop Kick
 title_slug: drop-kick
 ipdb_id: 734

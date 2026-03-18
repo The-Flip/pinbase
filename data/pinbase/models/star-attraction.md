@@ -1,5 +1,4 @@
 ---
-slug: star-attraction
 name: Star Attraction
 title_slug: star-attraction
 ipdb_id: 2343

@@ -1,5 +1,4 @@
 ---
-slug: merchandiser
 name: Merchandiser
 title_slug: merchandiser
 ipdb_id: 1571

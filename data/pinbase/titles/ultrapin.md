@@ -1,4 +1,3 @@
 ---
-slug: ultrapin
 name: UltraPin
 ---

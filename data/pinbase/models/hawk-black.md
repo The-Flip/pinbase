@@ -1,5 +1,4 @@
 ---
-slug: hawk-black
 name: Hawk Black
 title_slug: hawk-black
 ipdb_id: 4475

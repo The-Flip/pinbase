@@ -1,5 +1,4 @@
 ---
-slug: target
 name: Target
 title_slug: target
 ipdb_id: 3751

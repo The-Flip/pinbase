@@ -1,5 +1,4 @@
 ---
-slug: solitaire
 name: Solitaire
 title_slug: king-of-diamonds
 opdb_id: GrlPj-MLqnR

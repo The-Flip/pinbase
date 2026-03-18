@@ -1,5 +1,4 @@
 ---
-slug: the-100-yards
 name: The 100 Yards
 title_slug: the-100-yards
 ipdb_id: 4465

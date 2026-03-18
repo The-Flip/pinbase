@@ -1,5 +1,4 @@
 ---
-slug: marble-queen
 name: Marble Queen
 title_slug: marble-queen
 opdb_id: G560e-MDx52

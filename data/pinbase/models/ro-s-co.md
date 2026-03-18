@@ -1,5 +1,4 @@
 ---
-slug: ro-s-co
 name: Ro-S-Co
 title_slug: ro-s-co
 ipdb_id: 6166

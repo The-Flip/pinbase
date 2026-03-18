@@ -1,5 +1,4 @@
 ---
-slug: dyscus-de-luxe
 name: DYSCUS De-Luxe
 title_slug: dyscus-de-luxe
 ipdb_id: 751

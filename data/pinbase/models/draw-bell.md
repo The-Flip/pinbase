@@ -1,5 +1,4 @@
 ---
-slug: draw-bell
 name: Draw Bell
 title_slug: draw-bell
 ipdb_id: 3073

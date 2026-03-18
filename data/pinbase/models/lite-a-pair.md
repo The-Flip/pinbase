@@ -1,5 +1,4 @@
 ---
-slug: lite-a-pair
 name: Lite-A-Pair
 title_slug: lite-a-pair
 ipdb_id: 1452

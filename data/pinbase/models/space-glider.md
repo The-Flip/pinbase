@@ -1,5 +1,4 @@
 ---
-slug: space-glider
 name: Space Glider
 title_slug: space-glider
 ipdb_id: 6839

@@ -1,5 +1,4 @@
 ---
-slug: doughboy-deluxe-jackpot-table
 name: Doughboy Deluxe Jackpot Table
 title_slug: doughboy-deluxe-jackpot-table
 ipdb_id: 6055

@@ -1,5 +1,4 @@
 ---
-slug: cue-t
 name: Cue-T
 title_slug: miss-o-cue-t
 opdb_id: G4eqP-MYeX8

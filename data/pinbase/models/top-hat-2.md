@@ -1,5 +1,4 @@
 ---
-slug: top-hat-2
 name: Top Hat
 title_slug: top-hat-2
 ipdb_id: 2584

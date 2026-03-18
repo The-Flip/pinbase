@@ -1,4 +1,3 @@
 ---
-slug: apocalyptic
 name: Apocalyptic
 ---

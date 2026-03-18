@@ -1,5 +1,4 @@
 ---
-slug: booster
 name: Booster
 title_slug: booster
 ipdb_id: 4282

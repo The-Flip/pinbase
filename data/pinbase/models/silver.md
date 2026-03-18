@@ -1,5 +1,4 @@
 ---
-slug: silver
 name: Silver
 title_slug: silver
 opdb_id: G4Xod-M5Rv0

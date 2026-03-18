@@ -1,5 +1,4 @@
 ---
-slug: nautilus-2
 name: Nautilus
 title_slug: nautilus-2
 opdb_id: G5np6-MOEor

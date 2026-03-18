@@ -1,5 +1,4 @@
 ---
-slug: bright-spot
 name: Bright Spot
 title_slug: bright-spot
 ipdb_id: 375

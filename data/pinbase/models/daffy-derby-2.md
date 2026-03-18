@@ -1,5 +1,4 @@
 ---
-slug: daffy-derby-2
 name: Daffy Derby
 title_slug: daffy-derby-2
 ipdb_id: 6282

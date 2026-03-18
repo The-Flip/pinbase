@@ -1,5 +1,4 @@
 ---
-slug: wonder-wizard-demolition-derby
 name: Wonder Wizard Demolition Derby
 title_slug: wonder-wizard-demolition-derby
 ipdb_id: 4891

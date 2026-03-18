@@ -1,5 +1,4 @@
 ---
-slug: hyde-park-italy
 name: Hyde Park (Italy)
 title_slug: hyde-park-italy
 ipdb_id: 5678

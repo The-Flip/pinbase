@@ -1,5 +1,4 @@
 ---
-slug: easy-aces
 name: Easy Aces
 title_slug: easy-aces
 opdb_id: G5p1j-MJ9zW

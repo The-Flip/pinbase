@@ -1,4 +1,3 @@
 ---
-slug: pipeline
 name: Pipeline
 ---

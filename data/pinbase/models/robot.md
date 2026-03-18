@@ -1,5 +1,4 @@
 ---
-slug: robot
 name: Robot
 title_slug: robot
 opdb_id: G5Wjk-MLvBr

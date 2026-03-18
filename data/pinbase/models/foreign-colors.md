@@ -1,5 +1,4 @@
 ---
-slug: foreign-colors
 name: Foreign Colors
 title_slug: foreign-colors
 ipdb_id: 3108

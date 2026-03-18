@@ -1,5 +1,4 @@
 ---
-slug: bank-nite
 name: Bank Nite
 title_slug: bank-nite
 ipdb_id: 2898

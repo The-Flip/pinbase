@@ -1,5 +1,4 @@
 ---
-slug: cavalier-2
 name: Cavalier
 title_slug: cavalier-2
 ipdb_id: 6406

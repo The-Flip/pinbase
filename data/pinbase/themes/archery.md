@@ -1,4 +1,3 @@
 ---
-slug: archery
 name: Archery
 ---

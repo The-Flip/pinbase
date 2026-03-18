@@ -1,5 +1,4 @@
 ---
-slug: thing
 name: Thing
 title_slug: thing
 opdb_id: GRB6P-MDEed

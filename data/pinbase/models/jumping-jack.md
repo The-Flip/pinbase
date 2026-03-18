@@ -1,5 +1,4 @@
 ---
-slug: jumping-jack
 name: Jumping Jack
 title_slug: jack-in-the-box-jumping-jack
 opdb_id: Gr2JJ-MOExx

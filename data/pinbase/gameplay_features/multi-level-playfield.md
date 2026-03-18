@@ -1,5 +1,4 @@
 ---
-slug: multi-level-playfield
 name: Multi-Level Playfield
 display_order: 16
 ---

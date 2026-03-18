@@ -1,5 +1,4 @@
 ---
-slug: hare-n-hound
 name: Hare-n-Hound
 title_slug: hare-n-hound
 ipdb_id: 1124

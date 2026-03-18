@@ -1,5 +1,4 @@
 ---
-slug: ship-ahoy
 name: Ship Ahoy
 title_slug: ship-ahoy
 ipdb_id: 2118

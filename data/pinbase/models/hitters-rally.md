@@ -1,5 +1,4 @@
 ---
-slug: hitters-rally
 name: Hitter's Rally
 title_slug: hitters-rally
 ipdb_id: 4815

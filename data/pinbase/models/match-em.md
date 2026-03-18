@@ -1,5 +1,4 @@
 ---
-slug: match-em
 name: Match 'Em
 title_slug: match-em
 ipdb_id: 3366

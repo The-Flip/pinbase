@@ -1,4 +1,3 @@
 ---
-slug: poker
 name: Poker
 ---

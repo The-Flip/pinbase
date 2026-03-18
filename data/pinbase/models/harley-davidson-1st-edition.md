@@ -1,5 +1,4 @@
 ---
-slug: harley-davidson-1st-edition
 name: Harley Davidson
 title_slug: harley-davidson
 opdb_id: G56lO-MDXpW

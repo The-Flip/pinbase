@@ -1,5 +1,4 @@
 ---
-slug: hayburners-ii
 name: Hayburners II
 title_slug: hayburners-ii
 opdb_id: G48Xw-MJ4XY

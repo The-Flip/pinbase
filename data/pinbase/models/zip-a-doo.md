@@ -1,5 +1,4 @@
 ---
-slug: zip-a-doo
 name: Zip-A-Doo
 title_slug: zip-a-doo
 opdb_id: GrdKP-MLv2o

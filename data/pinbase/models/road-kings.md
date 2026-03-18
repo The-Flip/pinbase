@@ -1,5 +1,4 @@
 ---
-slug: road-kings
 name: Road Kings
 title_slug: road-kings
 opdb_id: G4NKJ-Mo1Xj

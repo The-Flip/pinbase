@@ -1,5 +1,4 @@
 ---
-slug: seven-up
 name: Seven Up
 title_slug: seven-up
 ipdb_id: 2103

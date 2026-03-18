@@ -1,5 +1,4 @@
 ---
-slug: marbl-jax
 name: Marbl-Jax
 title_slug: marbl-jax
 ipdb_id: 1543

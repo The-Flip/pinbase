@@ -1,5 +1,4 @@
 ---
-slug: deluxe-register
 name: DeLuxe Register
 title_slug: deluxe-register
 ipdb_id: 4670

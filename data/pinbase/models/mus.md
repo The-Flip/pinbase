@@ -1,5 +1,4 @@
 ---
-slug: mus
 name: Mus
 title_slug: mus
 ipdb_id: 5944

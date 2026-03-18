@@ -1,5 +1,4 @@
 ---
-slug: genesis
 name: Genesis
 title_slug: genesis
 opdb_id: Gr2wz-MLBob

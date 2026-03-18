@@ -1,5 +1,4 @@
 ---
-slug: fox-and-hound
 name: Fox and Hound
 title_slug: fox-and-hound
 ipdb_id: 6538

@@ -1,5 +1,4 @@
 ---
-slug: circus-9
 name: Circus
 title_slug: circus-2
 opdb_id: GRpw8-MDyqp

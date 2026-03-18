@@ -1,5 +1,4 @@
 ---
-slug: solo
 name: Solo
 title_slug: solo
 ipdb_id: 4310

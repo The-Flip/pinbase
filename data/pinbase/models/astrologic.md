@@ -1,5 +1,4 @@
 ---
-slug: astrologic
 name: Astrologic
 title_slug: astrologic
 ipdb_id: 5710

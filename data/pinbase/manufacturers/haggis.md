@@ -1,5 +1,4 @@
 ---
-slug: haggis
 name: Haggis Pinball
 opdb_manufacturer_id: 122
 ---

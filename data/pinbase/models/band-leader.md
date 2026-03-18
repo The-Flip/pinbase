@@ -1,5 +1,4 @@
 ---
-slug: band-leader
 name: Band Leader
 title_slug: band-leader
 opdb_id: GX21L-M9R9W

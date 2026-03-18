@@ -1,5 +1,4 @@
 ---
-slug: club-trophy
 name: Club Trophy
 title_slug: club-trophy
 ipdb_id: 539

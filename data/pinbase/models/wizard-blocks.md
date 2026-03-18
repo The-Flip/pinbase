@@ -1,5 +1,4 @@
 ---
-slug: wizard-blocks
 name: Wizard Blocks!
 title_slug: wizard-blocks
 ipdb_id: 4489

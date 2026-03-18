@@ -1,5 +1,4 @@
 ---
-slug: foo-fighters-pro
 name: Foo Fighters (Pro)
 title_slug: foo-fighters
 opdb_id: GpeoL-MyNPq

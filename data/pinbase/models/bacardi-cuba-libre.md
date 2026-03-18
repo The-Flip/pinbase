@@ -1,5 +1,4 @@
 ---
-slug: bacardi-cuba-libre
 name: Bacardi Cuba Libre
 title_slug: bacardi-cuba-libre
 ipdb_id: 6219

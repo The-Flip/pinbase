@@ -1,4 +1,3 @@
 ---
-slug: panama
 name: Panama
 ---

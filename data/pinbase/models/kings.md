@@ -1,5 +1,4 @@
 ---
-slug: kings
 name: Kings
 title_slug: kings-2
 ipdb_id: 1379

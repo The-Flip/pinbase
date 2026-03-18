@@ -1,5 +1,4 @@
 ---
-slug: grand-prix-3
 name: Grand Prix
 title_slug: grand-prix-2
 ipdb_id: 5647

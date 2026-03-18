@@ -1,5 +1,4 @@
 ---
-slug: zaccaria
 name: Zaccaria
 opdb_manufacturer_id: 11
 ---

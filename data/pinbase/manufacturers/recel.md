@@ -1,5 +1,4 @@
 ---
-slug: recel
 name: Recel
 opdb_manufacturer_id: 17
 ---

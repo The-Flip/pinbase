@@ -1,5 +1,4 @@
 ---
-slug: unknown-24
 name: Unknown
 title_slug: unknown-24
 ipdb_id: 6323

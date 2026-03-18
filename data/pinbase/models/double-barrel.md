@@ -1,5 +1,4 @@
 ---
-slug: double-barrel
 name: Double Barrel
 title_slug: double-barrel-2
 ipdb_id: 708

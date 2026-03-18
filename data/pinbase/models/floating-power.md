@@ -1,5 +1,4 @@
 ---
-slug: floating-power
 name: Floating Power
 title_slug: floating-power
 opdb_id: GqZ1Y-Mq1Ey

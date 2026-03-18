@@ -1,5 +1,4 @@
 ---
-slug: evolution
 name: Evolution
 title_slug: evolution
 opdb_id: G4dLk-MYe1k

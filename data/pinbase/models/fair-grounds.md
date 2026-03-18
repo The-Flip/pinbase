@@ -1,5 +1,4 @@
 ---
-slug: fair-grounds
 name: Fair Grounds
 title_slug: fair-grounds
 ipdb_id: 810

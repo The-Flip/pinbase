@@ -1,5 +1,4 @@
 ---
-slug: pinball-shop
 name: Pinball Shop
 title_slug: pinball-shop
 ipdb_id: 4429

@@ -1,5 +1,4 @@
 ---
-slug: improved-whiffle
 name: Improved Whiffle
 title_slug: improved-whiffle
 ipdb_id: 5393

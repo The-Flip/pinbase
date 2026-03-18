@@ -1,5 +1,4 @@
 ---
-slug: lucky-luke
 name: Lucky Luke
 title_slug: lucky-luke
 ipdb_id: 6605

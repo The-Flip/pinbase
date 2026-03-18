@@ -1,5 +1,4 @@
 ---
-slug: nostalgia
 name: Nostalgia
 title_slug: nostalgia
 opdb_id: G5vqv-MJN3K

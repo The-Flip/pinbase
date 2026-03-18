@@ -1,5 +1,4 @@
 ---
-slug: daily-double-standard
 name: Daily Double (Standard)
 title_slug: daily-double-standard
 ipdb_id: 626

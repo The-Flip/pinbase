@@ -1,5 +1,4 @@
 ---
-slug: daisy-may
 name: Daisy May
 title_slug: daisy-may
 opdb_id: Gred6-Mz2Z8

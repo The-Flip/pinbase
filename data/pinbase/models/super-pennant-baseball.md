@@ -1,5 +1,4 @@
 ---
-slug: super-pennant-baseball
 name: Super Pennant Baseball
 title_slug: super-pennant-baseball
 ipdb_id: 3426

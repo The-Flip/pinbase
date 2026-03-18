@@ -1,5 +1,4 @@
 ---
-slug: leap-frog
 name: Leap Frog
 title_slug: leap-frog
 ipdb_id: 4283

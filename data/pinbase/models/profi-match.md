@@ -1,5 +1,4 @@
 ---
-slug: profi-match
 name: PROFI Match
 title_slug: profi-match
 ipdb_id: 6272

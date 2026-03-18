@@ -1,5 +1,4 @@
 ---
-slug: bera-ball
 name: Bera-Ball
 title_slug: bera-ball
 ipdb_id: 6240

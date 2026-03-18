@@ -1,5 +1,4 @@
 ---
-slug: champion
 name: Champion
 title_slug: champion-2
 opdb_id: GZV8O-Ml9Wy

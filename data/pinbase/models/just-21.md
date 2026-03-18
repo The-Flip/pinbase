@@ -1,5 +1,4 @@
 ---
-slug: just-21
 name: Just 21
 title_slug: just-21
 opdb_id: G8ldZ-ME0y8

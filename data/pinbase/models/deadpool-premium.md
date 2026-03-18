@@ -1,10 +1,11 @@
 ---
-slug: deadpool-premium
 name: Deadpool (Premium)
 title_slug: deadpool
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G6lnq-MRj7Z
 ipdb_id: 6559
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: george-gomez
   role: Design

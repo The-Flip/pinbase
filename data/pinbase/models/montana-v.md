@@ -1,5 +1,4 @@
 ---
-slug: montana-v
 name: Montana V
 title_slug: montana-v
 ipdb_id: 5471

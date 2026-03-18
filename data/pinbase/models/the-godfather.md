@@ -1,5 +1,4 @@
 ---
-slug: the-godfather
 name: The Godfather
 title_slug: the-godfather-2
 ipdb_id: 4598

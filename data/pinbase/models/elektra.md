@@ -1,5 +1,4 @@
 ---
-slug: elektra
 name: Elektra
 title_slug: elektra
 opdb_id: GRVld-MDE3l

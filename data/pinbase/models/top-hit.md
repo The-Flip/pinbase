@@ -1,5 +1,4 @@
 ---
-slug: top-hit
 name: Top Hit
 title_slug: top-hit
 ipdb_id: 2585

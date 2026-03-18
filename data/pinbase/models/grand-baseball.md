@@ -1,5 +1,4 @@
 ---
-slug: grand-baseball
 name: Grand Baseball
 title_slug: grand-baseball
 ipdb_id: 6857

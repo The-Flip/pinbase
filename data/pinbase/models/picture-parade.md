@@ -1,5 +1,4 @@
 ---
-slug: picture-parade
 name: Picture Parade
 title_slug: picture-parade
 ipdb_id: 4773

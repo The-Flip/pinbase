@@ -1,5 +1,4 @@
 ---
-slug: avalon
 name: Avalon
 title_slug: avalon
 ipdb_id: 117

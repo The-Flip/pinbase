@@ -1,5 +1,4 @@
 ---
-slug: horse-shoes
 name: Horse Shoes
 title_slug: horse-shoes
 ipdb_id: 1238

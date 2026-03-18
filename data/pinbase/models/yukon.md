@@ -1,5 +1,4 @@
 ---
-slug: yukon
 name: Yukon
 title_slug: gold-rush-yukon-klondike
 opdb_id: GR987-MQrrP

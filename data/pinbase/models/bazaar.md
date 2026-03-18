@@ -1,5 +1,4 @@
 ---
-slug: bazaar
 name: Bazaar
 title_slug: bazaar-2
 ipdb_id: 200

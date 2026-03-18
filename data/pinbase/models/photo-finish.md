@@ -1,5 +1,4 @@
 ---
-slug: photo-finish
 name: Photo Finish
 title_slug: photo-finish
 ipdb_id: 1781

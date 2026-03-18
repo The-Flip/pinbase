@@ -1,5 +1,4 @@
 ---
-slug: super-flipper
 name: Super Flipper
 title_slug: super-flipper
 ipdb_id: 2432

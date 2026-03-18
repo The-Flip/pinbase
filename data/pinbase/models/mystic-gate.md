@@ -1,5 +1,4 @@
 ---
-slug: mystic-gate
 name: Mystic Gate
 title_slug: mystic-gate
 ipdb_id: 3377

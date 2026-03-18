@@ -1,5 +1,4 @@
 ---
-slug: preview-2
 name: Preview
 title_slug: preview-2
 ipdb_id: 3315

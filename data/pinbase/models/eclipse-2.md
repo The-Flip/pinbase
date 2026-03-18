@@ -1,5 +1,4 @@
 ---
-slug: eclipse-2
 name: Eclipse
 title_slug: eclipse-2
 ipdb_id: 757

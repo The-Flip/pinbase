@@ -1,5 +1,4 @@
 ---
-slug: automat-2
 name: Automat
 title_slug: automat-2
 ipdb_id: 5724

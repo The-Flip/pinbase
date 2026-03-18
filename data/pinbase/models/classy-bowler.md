@@ -1,5 +1,4 @@
 ---
-slug: classy-bowler
 name: Classy Bowler
 title_slug: classy-bowler
 opdb_id: GrPDn-MD0qb

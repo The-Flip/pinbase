@@ -1,5 +1,4 @@
 ---
-slug: contest-2
 name: Contest
 title_slug: contest
 opdb_id: GrdEK-MyNjz

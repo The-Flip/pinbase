@@ -1,10 +1,11 @@
 ---
-slug: earthshaker
 name: Earthshaker
 title_slug: earthshaker
 corporate_entity_slug: williams-electronics-games-incorporated-a-subsidiary-of-wms-industries-incorporated
 opdb_id: GRw0r-Mp42p
 ipdb_id: 753
+display_type_slug: alphanumeric
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: pat-lawlor
   role: Design

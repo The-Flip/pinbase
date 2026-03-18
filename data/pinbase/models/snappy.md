@@ -1,5 +1,4 @@
 ---
-slug: snappy
 name: Snappy
 title_slug: snappy
 ipdb_id: 2221

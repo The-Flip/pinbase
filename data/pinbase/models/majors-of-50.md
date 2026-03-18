@@ -1,5 +1,4 @@
 ---
-slug: majors-of-50
 name: Majors of 50
 title_slug: majors-of-50
 ipdb_id: 5514

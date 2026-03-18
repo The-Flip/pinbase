@@ -1,5 +1,4 @@
 ---
-slug: alpha-2001
 name: Alpha 2001
 title_slug: alpha-2001
 opdb_id: GRLdW-MDOz8

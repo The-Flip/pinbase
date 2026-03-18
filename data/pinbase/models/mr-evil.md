@@ -1,5 +1,4 @@
 ---
-slug: mr-evil
 name: Mr. Evil
 title_slug: mr-evil
 opdb_id: G4N3O-MJ5xK

@@ -1,5 +1,4 @@
 ---
-slug: the-flintstones
 name: The Flintstones
 ---
 

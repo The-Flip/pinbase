@@ -1,5 +1,4 @@
 ---
-slug: school-girl-reaper
 name: School Girl Reaper
 title_slug: school-girl-reaper
 ipdb_id: 6900

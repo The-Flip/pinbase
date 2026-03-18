@@ -1,5 +1,4 @@
 ---
-slug: super-circus-3
 name: Super Circus
 title_slug: super-circus-3
 ipdb_id: 6995

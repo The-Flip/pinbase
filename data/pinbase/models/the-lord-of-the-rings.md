@@ -1,5 +1,4 @@
 ---
-slug: the-lord-of-the-rings
 name: Lord of the Rings
 title_slug: lord-of-the-rings
 opdb_id: GrqZX-MD15w

@@ -1,5 +1,4 @@
 ---
-slug: defense
 name: Defense
 title_slug: defense
 ipdb_id: 652

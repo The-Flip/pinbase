@@ -1,5 +1,4 @@
 ---
-slug: amazon-hunt-ii
 name: Amazon Hunt II
 title_slug: amazon-hunt
 opdb_id: GrJkp-MQ21p

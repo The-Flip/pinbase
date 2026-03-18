@@ -1,5 +1,4 @@
 ---
-slug: sweetheart
 name: Sweetheart
 title_slug: sweetheart
 opdb_id: GnPdP-MQrxB

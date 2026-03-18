@@ -1,5 +1,4 @@
 ---
-slug: teed-off
 name: Tee'd Off
 title_slug: teed-off
 opdb_id: G4yzj-ML0P4

@@ -1,5 +1,4 @@
 ---
-slug: doozie
 name: Doozie
 title_slug: doozie-daffie
 opdb_id: GRVk8-MJZnp

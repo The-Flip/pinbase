@@ -1,5 +1,4 @@
 ---
-slug: royal-skittle
 name: Royal Skittle
 title_slug: royal-skittle
 ipdb_id: 5145

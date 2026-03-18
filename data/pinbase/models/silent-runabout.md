@@ -1,5 +1,4 @@
 ---
-slug: silent-runabout
 name: Silent Runabout
 title_slug: silent-runabout
 ipdb_id: 5414

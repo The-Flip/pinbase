@@ -1,5 +1,4 @@
 ---
-slug: watch-my-line
 name: Watch My Line
 title_slug: watch-my-line
 ipdb_id: 2755

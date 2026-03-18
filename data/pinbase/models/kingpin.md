@@ -1,5 +1,4 @@
 ---
-slug: kingpin
 name: Kingpin
 title_slug: kingpin
 opdb_id: G48od-MJNnn

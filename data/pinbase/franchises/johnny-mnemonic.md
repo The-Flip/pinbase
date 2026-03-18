@@ -1,5 +1,4 @@
 ---
-slug: johnny-mnemonic
 name: Johnny Mnemonic
 ---
 

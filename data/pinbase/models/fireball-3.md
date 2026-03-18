@@ -1,5 +1,4 @@
 ---
-slug: fireball-3
 name: Fireball (Home Model)
 title_slug: fireball
 opdb_id: G48ZN-MQ56q

@@ -1,4 +1,3 @@
 ---
-slug: bicycling
 name: Bicycling
 ---

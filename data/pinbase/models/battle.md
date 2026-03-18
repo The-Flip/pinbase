@@ -1,5 +1,4 @@
 ---
-slug: battle
 name: Battle
 title_slug: battle
 ipdb_id: 199

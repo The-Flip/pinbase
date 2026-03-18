@@ -1,5 +1,4 @@
 ---
-slug: majestic-sr
 name: Majestic (Sr)
 title_slug: majestic-sr
 ipdb_id: 1523

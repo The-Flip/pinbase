@@ -1,5 +1,4 @@
 ---
-slug: super-mario-bros
 name: Super Mario Bros.
 ---
 

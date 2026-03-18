@@ -1,5 +1,4 @@
 ---
-slug: upper-deck
 name: Upper Deck
 title_slug: upper-deck
 ipdb_id: 2708

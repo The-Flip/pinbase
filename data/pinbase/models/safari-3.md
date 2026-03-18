@@ -1,5 +1,4 @@
 ---
-slug: safari-3
 name: Safari
 title_slug: safari-3
 ipdb_id: 3534

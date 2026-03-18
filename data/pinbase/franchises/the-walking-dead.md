@@ -1,5 +1,4 @@
 ---
-slug: the-walking-dead
 name: The Walking Dead
 ---
 

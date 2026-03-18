@@ -1,5 +1,4 @@
 ---
-slug: flik-flak
 name: Flik Flak
 title_slug: flik-flak
 ipdb_id: 5613

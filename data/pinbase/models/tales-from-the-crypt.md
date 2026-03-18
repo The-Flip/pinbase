@@ -1,5 +1,4 @@
 ---
-slug: tales-from-the-crypt
 name: Tales from the Crypt
 title_slug: tales-from-the-crypt
 opdb_id: GR6wO-MDvzk

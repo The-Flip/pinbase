@@ -1,5 +1,4 @@
 ---
-slug: road-race-2
 name: Road Race
 title_slug: road-race
 ipdb_id: 5317

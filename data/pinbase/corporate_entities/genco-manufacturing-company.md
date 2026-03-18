@@ -1,5 +1,4 @@
 ---
-slug: genco-manufacturing-company
 name: Genco Manufacturing Company
 manufacturer_slug: genco
 ipdb_manufacturer_id: 130

@@ -1,5 +1,4 @@
 ---
-slug: happy-gang
 name: Happy Gang
 title_slug: happy-gang
 ipdb_id: 1117

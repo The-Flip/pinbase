@@ -1,5 +1,4 @@
 ---
-slug: aquacade
 name: Aquacade
 title_slug: aquacade
 opdb_id: GbPXB-MP399

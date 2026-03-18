@@ -1,5 +1,4 @@
 ---
-slug: show-time
 name: Show Time
 title_slug: show-time
 ipdb_id: 2135

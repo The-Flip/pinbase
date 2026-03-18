@@ -1,5 +1,4 @@
 ---
-slug: blue-box
 name: Blue Box
 title_slug: blue-box
 ipdb_id: 4739

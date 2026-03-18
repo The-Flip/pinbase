@@ -1,5 +1,4 @@
 ---
-slug: mini-baseball
 name: Mini-Baseball
 title_slug: mini-baseball
 ipdb_id: 5985

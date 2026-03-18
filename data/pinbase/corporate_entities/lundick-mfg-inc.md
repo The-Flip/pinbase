@@ -1,5 +1,4 @@
 ---
-slug: lundick-mfg-inc
 name: Lundick Mfg., Inc.
 manufacturer_slug: lundick-mfg-inc
 ipdb_manufacturer_id: 481

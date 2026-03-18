@@ -1,4 +1,3 @@
 ---
-slug: hell
 name: Hell
 ---

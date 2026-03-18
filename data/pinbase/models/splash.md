@@ -1,5 +1,4 @@
 ---
-slug: splash
 name: Splash
 title_slug: splash
 ipdb_id: 3461

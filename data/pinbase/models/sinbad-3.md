@@ -1,5 +1,4 @@
 ---
-slug: sinbad-3
 name: Sinbad
 title_slug: sinbad
 opdb_id: G4xqN-ML3o5-A9y5D

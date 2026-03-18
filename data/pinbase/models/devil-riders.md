@@ -1,5 +1,4 @@
 ---
-slug: devil-riders
 name: Devil Riders
 title_slug: devil-riders
 opdb_id: G5DPP-MJKbp

@@ -1,5 +1,4 @@
 ---
-slug: seven-seas
 name: Seven Seas
 title_slug: seven-seas
 opdb_id: G4xLZ-MjBd9

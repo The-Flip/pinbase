@@ -1,5 +1,4 @@
 ---
-slug: catch-n-match
 name: Catch-N-Match
 title_slug: catch-n-match
 ipdb_id: 472

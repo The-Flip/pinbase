@@ -1,5 +1,4 @@
 ---
-slug: carousel
 name: Carousel
 title_slug: carousel
 ipdb_id: 459

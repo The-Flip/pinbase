@@ -1,5 +1,4 @@
 ---
-slug: volley-ball
 name: Volley Ball
 title_slug: volley-ball
 ipdb_id: 4461

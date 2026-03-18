@@ -1,5 +1,4 @@
 ---
-slug: tura-duplex
 name: Tura-Duplex
 title_slug: tura-duplex
 ipdb_id: 4723

@@ -1,5 +1,4 @@
 ---
-slug: whirlwind-play-booster
 name: Whirlwind Play Booster
 title_slug: whirlwind-play-booster
 ipdb_id: 6681

@@ -1,5 +1,4 @@
 ---
-slug: play-joker
 name: Play Joker
 title_slug: play-joker
 ipdb_id: 5411

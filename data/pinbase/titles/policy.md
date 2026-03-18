@@ -1,4 +1,3 @@
 ---
-slug: policy
 name: Policy
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sharps-diamond-shooter
 name: Sharp's Diamond Shooter
 title_slug: sharps-diamond-shooter
 ipdb_id: 4904

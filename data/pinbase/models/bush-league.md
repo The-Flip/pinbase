@@ -1,5 +1,4 @@
 ---
-slug: bush-league
 name: Bush-League
 title_slug: bush-league
 ipdb_id: 3759

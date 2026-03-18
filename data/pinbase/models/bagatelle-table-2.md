@@ -1,5 +1,4 @@
 ---
-slug: bagatelle-table-2
 name: Bagatelle Table
 title_slug: bagatelle-table-2
 ipdb_id: 5999

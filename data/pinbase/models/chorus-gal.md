@@ -1,5 +1,4 @@
 ---
-slug: chorus-gal
 name: Chorus Gal
 title_slug: chorus-gal
 ipdb_id: 5480

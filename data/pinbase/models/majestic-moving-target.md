@@ -1,5 +1,4 @@
 ---
-slug: majestic-moving-target
 name: Majestic Moving Target
 title_slug: majestic-moving-target
 ipdb_id: 6361

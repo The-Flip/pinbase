@@ -1,10 +1,11 @@
 ---
-slug: whoa-nellie-big-juicy-melons
 name: Whoa Nellie! Big Juicy Melons
 title_slug: pabst-blue-ribbon
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GRYX4-MLqqx
 ipdb_id: 6252
+display_type_slug: score-reels
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: dennis-nordman
   role: Design

@@ -1,5 +1,4 @@
 ---
-slug: jokers-wild-3
 name: Joker's Wild
 title_slug: jokers-wild-2
 opdb_id: GrPJ2-MQken

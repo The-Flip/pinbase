@@ -1,5 +1,4 @@
 ---
-slug: sweetheart-double
 name: Sweetheart Double
 title_slug: sweetheart-double
 ipdb_id: 2480

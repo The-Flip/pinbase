@@ -1,5 +1,4 @@
 ---
-slug: gran-domino
 name: Gran Dominó
 title_slug: gran-domino
 ipdb_id: 5810

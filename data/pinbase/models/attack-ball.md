@@ -1,5 +1,4 @@
 ---
-slug: attack-ball
 name: Attack Ball
 title_slug: attack-ball
 ipdb_id: 6874

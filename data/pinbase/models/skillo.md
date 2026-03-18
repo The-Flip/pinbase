@@ -1,5 +1,4 @@
 ---
-slug: skillo
 name: Skillo
 title_slug: skillo
 ipdb_id: 2186

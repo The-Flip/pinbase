@@ -1,5 +1,4 @@
 ---
-slug: el-reloj
 name: El Reloj
 title_slug: el-reloj
 ipdb_id: 4603

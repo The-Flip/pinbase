@@ -1,5 +1,4 @@
 ---
-slug: flicker-3
 name: Flicker
 title_slug: flicker-2
 ipdb_id: 885

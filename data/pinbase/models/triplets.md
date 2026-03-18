@@ -1,5 +1,4 @@
 ---
-slug: triplets
 name: Triplets
 title_slug: triplets
 opdb_id: GRpdX-MJY3N

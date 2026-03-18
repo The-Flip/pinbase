@@ -1,4 +1,3 @@
 ---
-slug: stud
 name: Stud
 ---

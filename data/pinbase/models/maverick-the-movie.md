@@ -1,5 +1,4 @@
 ---
-slug: maverick-the-movie
 name: Maverick
 title_slug: maverick
 opdb_id: GrN9V-ML8nw

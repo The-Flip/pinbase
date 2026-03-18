@@ -1,5 +1,4 @@
 ---
-slug: nugget
 name: Nugget
 title_slug: nugget
 ipdb_id: 3449

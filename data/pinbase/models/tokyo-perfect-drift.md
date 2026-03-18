@@ -1,5 +1,4 @@
 ---
-slug: tokyo-perfect-drift
 name: Tokyo Perfect Drift
 title_slug: tokyo-perfect-drift
 opdb_id: GnP9y-MOEWd

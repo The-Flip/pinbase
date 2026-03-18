@@ -1,5 +1,4 @@
 ---
-slug: star-trek-3
 name: Star Trek
 title_slug: star-trek
 opdb_id: G42qQ-MLn3y

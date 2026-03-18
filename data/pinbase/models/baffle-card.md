@@ -1,5 +1,4 @@
 ---
-slug: baffle-card
 name: Baffle-Card
 title_slug: baffle-card
 ipdb_id: 132

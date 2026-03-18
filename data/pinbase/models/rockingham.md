@@ -1,5 +1,4 @@
 ---
-slug: rockingham
 name: Rockingham
 title_slug: rockingham
 ipdb_id: 1992

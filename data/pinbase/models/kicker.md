@@ -1,5 +1,4 @@
 ---
-slug: kicker
 name: Kicker
 title_slug: kicker
 opdb_id: G5Qed-MLX4Z

@@ -1,4 +1,3 @@
 ---
-slug: paramount
 name: Paramount
 ---

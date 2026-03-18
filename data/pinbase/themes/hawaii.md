@@ -1,4 +1,3 @@
 ---
-slug: hawaii
 name: Hawaii
 ---

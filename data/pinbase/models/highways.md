@@ -1,5 +1,4 @@
 ---
-slug: highways
 name: Highways
 title_slug: highways
 opdb_id: G4j0D-MLeyd

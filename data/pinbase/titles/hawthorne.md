@@ -1,4 +1,3 @@
 ---
-slug: hawthorne
 name: Hawthorne
 ---

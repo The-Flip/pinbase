@@ -1,5 +1,4 @@
 ---
-slug: mountain-climber
 name: Mountain Climber
 title_slug: mountain-climber
 ipdb_id: 7021

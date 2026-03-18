@@ -1,5 +1,4 @@
 ---
-slug: radio-pin-game-de-luxe
 name: Radio Pin Game De Luxe
 title_slug: radio-pin-game-de-luxe
 ipdb_id: 6885

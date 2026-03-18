@@ -1,5 +1,4 @@
 ---
-slug: rancho-3
 name: Rancho
 title_slug: rancho
 opdb_id: GrPJz-MLbe6

@@ -1,5 +1,4 @@
 ---
-slug: spooksville
 name: Spooksville
 title_slug: spooksville
 opdb_id: G4XBb-MD3Vd

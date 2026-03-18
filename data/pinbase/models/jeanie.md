@@ -1,5 +1,4 @@
 ---
-slug: jeanie
 name: Jeanie
 title_slug: jeanie
 opdb_id: G5olj-ME0k9

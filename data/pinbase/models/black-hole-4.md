@@ -1,5 +1,4 @@
 ---
-slug: black-hole-4
 name: Black Hole
 title_slug: blackout
 opdb_id: GRwYo-MvBnV

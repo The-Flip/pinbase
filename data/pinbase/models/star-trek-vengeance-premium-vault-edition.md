@@ -1,5 +1,4 @@
 ---
-slug: star-trek-vengeance-premium-vault-edition
 name: Star Trek (Vengeance Premium Vault Edition)
 title_slug: star-trek-vengeance-premium-vault-edition
 ipdb_id: 6554

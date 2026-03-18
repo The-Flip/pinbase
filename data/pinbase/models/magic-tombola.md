@@ -1,5 +1,4 @@
 ---
-slug: magic-tombola
 name: Magic Tombola
 title_slug: magic-tombola
 ipdb_id: 5843

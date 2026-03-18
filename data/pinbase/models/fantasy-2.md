@@ -1,5 +1,4 @@
 ---
-slug: fantasy-2
 name: Fantasy
 title_slug: fantasy
 ipdb_id: 3088

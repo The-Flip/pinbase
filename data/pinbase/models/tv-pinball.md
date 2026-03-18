@@ -1,5 +1,4 @@
 ---
-slug: tv-pinball
 name: TV Pinball
 title_slug: tv-pinball
 ipdb_id: 3921

@@ -1,5 +1,4 @@
 ---
-slug: big-top-4
 name: Big Top
 title_slug: big-top
 opdb_id: G5DV6-M2YYr

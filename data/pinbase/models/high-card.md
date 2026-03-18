@@ -1,5 +1,4 @@
 ---
-slug: high-card
 name: High Card
 title_slug: high-card
 ipdb_id: 1169

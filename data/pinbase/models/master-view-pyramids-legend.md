@@ -1,5 +1,4 @@
 ---
-slug: master-view-pyramids-legend
 name: Master View (Pyramids Legend)
 title_slug: master-view-pyramids-legend
 ipdb_id: 6077

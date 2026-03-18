@@ -1,5 +1,4 @@
 ---
-slug: merry-widow
 name: Merry Widow
 title_slug: merry-widow-2
 opdb_id: GBLqd-MyNOK

@@ -1,5 +1,4 @@
 ---
-slug: monterrey
 name: Monterrey
 title_slug: monterrey
 opdb_id: GqZZY-Mx0w4

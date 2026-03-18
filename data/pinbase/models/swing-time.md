@@ -1,5 +1,4 @@
 ---
-slug: swing-time
 name: Swing Time
 title_slug: swing-time-2
 ipdb_id: 2482

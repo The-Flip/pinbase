@@ -1,5 +1,4 @@
 ---
-slug: multiple-flying-high
 name: Multiple Flying High
 title_slug: multiple-flying-high
 ipdb_id: 3430

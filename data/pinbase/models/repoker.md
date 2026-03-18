@@ -1,5 +1,4 @@
 ---
-slug: repoker
 name: Repoker
 title_slug: repoker
 ipdb_id: 6455

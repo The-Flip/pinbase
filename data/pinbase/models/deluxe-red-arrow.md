@@ -1,5 +1,4 @@
 ---
-slug: deluxe-red-arrow
 name: Deluxe Red Arrow
 title_slug: deluxe-red-arrow
 ipdb_id: 6961

@@ -1,5 +1,4 @@
 ---
-slug: rolo-polo
 name: Rolo-Polo
 title_slug: rolo-polo
 ipdb_id: 5786

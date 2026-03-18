@@ -1,5 +1,4 @@
 ---
-slug: bow-and-arrow
 name: Bow and Arrow
 title_slug: bow-and-arrow
 opdb_id: GRoqq-MJr9K

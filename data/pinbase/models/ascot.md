@@ -1,5 +1,4 @@
 ---
-slug: ascot
 name: Ascot
 title_slug: ascot
 ipdb_id: 5965

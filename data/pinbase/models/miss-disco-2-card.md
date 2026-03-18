@@ -1,5 +1,4 @@
 ---
-slug: miss-disco-2-card
 name: Miss Disco (2 card)
 title_slug: miss-disco-2-card
 ipdb_id: 6199

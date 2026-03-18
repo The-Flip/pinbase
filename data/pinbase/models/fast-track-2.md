@@ -1,5 +1,4 @@
 ---
-slug: fast-track-2
 name: Fast Track
 title_slug: fast-track-2
 ipdb_id: 5217

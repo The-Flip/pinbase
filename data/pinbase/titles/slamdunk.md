@@ -1,4 +1,3 @@
 ---
-slug: slamdunk
 name: Slamdunk
 ---

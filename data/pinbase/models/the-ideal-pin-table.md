@@ -1,5 +1,4 @@
 ---
-slug: the-ideal-pin-table
 name: The Ideal Pin Table
 title_slug: the-ideal-pin-table
 ipdb_id: 5208

@@ -1,5 +1,4 @@
 ---
-slug: 4-ball-top-it
 name: 4 Ball Top It
 title_slug: 4-ball-top-it
 ipdb_id: 4316

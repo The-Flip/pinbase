@@ -1,5 +1,4 @@
 ---
-slug: black-pearl
 name: Black Pearl
 title_slug: black-pearl
 ipdb_id: 5612

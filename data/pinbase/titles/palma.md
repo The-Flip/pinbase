@@ -1,4 +1,3 @@
 ---
-slug: palma
 name: Palma
 ---

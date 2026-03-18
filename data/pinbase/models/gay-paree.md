@@ -1,5 +1,4 @@
 ---
-slug: gay-paree
 name: Gay Paree
 title_slug: gay-paree
 opdb_id: G4dwK-MQK64

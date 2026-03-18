@@ -1,5 +1,4 @@
 ---
-slug: mike-bossy-the-scoring-machine
 name: Mike Bossy The Scoring Machine
 title_slug: mike-bossy-the-scoring-machine
 ipdb_id: 1596

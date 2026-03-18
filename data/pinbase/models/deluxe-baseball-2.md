@@ -1,5 +1,4 @@
 ---
-slug: deluxe-baseball-2
 name: Deluxe Baseball
 title_slug: deluxe-baseball-3
 ipdb_id: 3044

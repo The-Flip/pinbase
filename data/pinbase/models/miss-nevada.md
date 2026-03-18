@@ -1,5 +1,4 @@
 ---
-slug: miss-nevada
 name: Miss Nevada
 title_slug: miss-nevada
 ipdb_id: 6202

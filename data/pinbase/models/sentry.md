@@ -1,5 +1,4 @@
 ---
-slug: sentry
 name: Sentry
 title_slug: sentry
 ipdb_id: 3844

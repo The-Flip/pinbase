@@ -1,5 +1,4 @@
 ---
-slug: mariner
 name: Mariner
 title_slug: mariner-sea-ray
 opdb_id: G4jBk-MDlw8

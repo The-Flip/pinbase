@@ -1,5 +1,4 @@
 ---
-slug: scout
 name: Scout
 title_slug: scout
 ipdb_id: 6823

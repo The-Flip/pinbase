@@ -1,5 +1,4 @@
 ---
-slug: blondie-2
 name: Blondie
 title_slug: blondie-2
 ipdb_id: 322

@@ -1,4 +1,3 @@
 ---
-slug: leader
 name: Leader
 ---

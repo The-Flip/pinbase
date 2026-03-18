@@ -1,5 +1,4 @@
 ---
-slug: shaq-attaq
 name: Shaq Attaq
 title_slug: shaq
 opdb_id: G4PoV-MQr5e

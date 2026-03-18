@@ -1,5 +1,4 @@
 ---
-slug: rocket-3
 name: Rocket
 title_slug: rocket-3
 ipdb_id: 1987

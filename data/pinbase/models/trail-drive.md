@@ -1,5 +1,4 @@
 ---
-slug: trail-drive
 name: Trail Drive
 title_slug: trail-drive
 opdb_id: G5QZZ-MLXOj

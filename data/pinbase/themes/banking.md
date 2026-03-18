@@ -1,4 +1,3 @@
 ---
-slug: banking
 name: Banking
 ---

@@ -1,5 +1,4 @@
 ---
-slug: aspen
 name: Aspen
 title_slug: aspen
 opdb_id: G41o2-MePPv

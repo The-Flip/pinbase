@@ -1,5 +1,4 @@
 ---
-slug: the-avengers
 name: The Avengers
 ---
 

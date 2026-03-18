@@ -1,5 +1,4 @@
 ---
-slug: fun-land-rifle
 name: Fun Land Rifle
 title_slug: fun-land-rifle
 ipdb_id: 6484

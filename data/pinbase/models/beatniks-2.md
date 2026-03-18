@@ -1,5 +1,4 @@
 ---
-slug: beatniks-2
 name: Beatniks (AAB)
 title_slug: beatniks
 opdb_id: G5bYP-MDO7Y

@@ -1,5 +1,4 @@
 ---
-slug: tour-one-bicycle
 name: Tour (One Bicycle)
 title_slug: tour-one-bicycle
 ipdb_id: 6217

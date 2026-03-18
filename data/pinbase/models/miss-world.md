@@ -1,5 +1,4 @@
 ---
-slug: miss-world
 name: Miss World
 title_slug: kiss
 opdb_id: G4jXr-MLexO

@@ -1,5 +1,4 @@
 ---
-slug: skill-feature
 name: Skill Feature
 title_slug: skill-feature
 ipdb_id: 3229

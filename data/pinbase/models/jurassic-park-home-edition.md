@@ -1,5 +1,4 @@
 ---
-slug: jurassic-park-home-edition
 name: Jurassic Park (Home Edition)
 title_slug: jurassic-park-home-edition
 opdb_id: GxvvB-MOEKX

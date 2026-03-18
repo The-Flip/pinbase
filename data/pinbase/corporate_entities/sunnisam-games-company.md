@@ -1,5 +1,4 @@
 ---
-slug: sunnisam-games-company
 name: Sunnisam Games Company
 manufacturer_slug: sunnisam-games-company
 ipdb_manufacturer_id: 307

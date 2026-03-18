@@ -1,5 +1,4 @@
 ---
-slug: hot-diggity
 name: Hot Diggity
 title_slug: hot-diggity
 opdb_id: G4dvK-MvBZb

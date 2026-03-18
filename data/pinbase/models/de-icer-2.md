@@ -1,5 +1,4 @@
 ---
-slug: de-icer-2
 name: De-Icer
 title_slug: de-icer-2
 ipdb_id: 4790

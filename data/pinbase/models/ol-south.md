@@ -1,5 +1,4 @@
 ---
-slug: ol-south
 name: Ol' South
 title_slug: ol-south
 ipdb_id: 5827

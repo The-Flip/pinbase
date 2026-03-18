@@ -1,5 +1,4 @@
 ---
-slug: houdini-master-mystery
 name: Houdini "Master Mystery"
 title_slug: houdini-master-mystery
 ipdb_id: 6469

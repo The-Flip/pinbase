@@ -1,5 +1,4 @@
 ---
-slug: invasion-stratogy
 name: Invasion Strategy
 title_slug: invasion-strategy
 opdb_id: G4NwL-MQZZO

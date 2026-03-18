@@ -1,5 +1,4 @@
 ---
-slug: stern-spike-1
 name: Stern SPIKE
 manufacturer_slug: stern-pinball
 technology_subgeneration_slug: ss-pc

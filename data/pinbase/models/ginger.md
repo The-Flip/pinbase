@@ -1,5 +1,4 @@
 ---
-slug: ginger
 name: Ginger
 title_slug: ginger
 ipdb_id: 1007

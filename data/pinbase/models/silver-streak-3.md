@@ -1,5 +1,4 @@
 ---
-slug: silver-streak-3
 name: Silver Streak
 title_slug: silver-streak-3
 ipdb_id: 2155

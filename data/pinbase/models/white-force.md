@@ -1,5 +1,4 @@
 ---
-slug: white-force
 name: White Force
 title_slug: white-force
 opdb_id: GRnW8-MQ66o

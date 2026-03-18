@@ -1,5 +1,4 @@
 ---
-slug: hoops-2
 name: Hoops
 title_slug: hoops-2
 ipdb_id: 6395

@@ -1,5 +1,4 @@
 ---
-slug: abc-roll
 name: ABC Roll
 title_slug: abc-roll
 ipdb_id: 4519

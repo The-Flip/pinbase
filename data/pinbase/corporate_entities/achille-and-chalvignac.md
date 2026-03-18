@@ -1,5 +1,4 @@
 ---
-slug: achille-and-chalvignac
 name: Achille and Chalvignac
 manufacturer_slug: achille-and-chalvignac
 ipdb_manufacturer_id: 541

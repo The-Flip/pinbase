@@ -1,5 +1,4 @@
 ---
-slug: cleopatra-4
 name: Cleopatra (EM)
 title_slug: cleopatra
 opdb_id: GrknN-MDqV0

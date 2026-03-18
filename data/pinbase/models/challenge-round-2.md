@@ -1,5 +1,4 @@
 ---
-slug: challenge-round-2
 name: Challenge Round
 title_slug: challenge-round-2
 ipdb_id: 6793

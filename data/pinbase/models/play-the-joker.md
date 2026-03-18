@@ -1,5 +1,4 @@
 ---
-slug: play-the-joker
 name: Play the Joker
 title_slug: play-the-joker-2
 ipdb_id: 1820

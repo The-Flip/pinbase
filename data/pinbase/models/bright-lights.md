@@ -1,5 +1,4 @@
 ---
-slug: bright-lights
 name: Bright Lights
 title_slug: bright-lights
 ipdb_id: 374

@@ -1,5 +1,4 @@
 ---
-slug: reward-time
 name: Reward Time
 title_slug: reward-time
 ipdb_id: 3564

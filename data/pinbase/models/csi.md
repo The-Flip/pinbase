@@ -1,5 +1,4 @@
 ---
-slug: csi
 name: 'CSI: Crime Scene Investigation'
 title_slug: csi
 opdb_id: GRokz-ML8oW

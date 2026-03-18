@@ -1,5 +1,4 @@
 ---
-slug: gran-parada
 name: Gran Parada
 title_slug: gran-parada
 ipdb_id: 4996

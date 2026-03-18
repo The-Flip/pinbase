@@ -1,5 +1,4 @@
 ---
-slug: smokehouse
 name: Smokehouse
 title_slug: smokehouse
 ipdb_id: 3288

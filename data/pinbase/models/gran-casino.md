@@ -1,5 +1,4 @@
 ---
-slug: gran-casino
 name: Gran Casino
 title_slug: gran-casino
 ipdb_id: 4604

@@ -1,5 +1,4 @@
 ---
-slug: nudgy
 name: Nudgy
 title_slug: nudgy
 ipdb_id: 1686

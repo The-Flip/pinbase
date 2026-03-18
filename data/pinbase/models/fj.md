@@ -1,5 +1,4 @@
 ---
-slug: fj
 name: FJ
 title_slug: fj
 opdb_id: GrlEV-ML872

@@ -1,4 +1,3 @@
 ---
-slug: smokehouse
 name: Smokehouse
 ---

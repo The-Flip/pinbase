@@ -1,4 +1,3 @@
 ---
-slug: bagdad
 name: Bagdad
 ---

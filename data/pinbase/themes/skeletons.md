@@ -1,4 +1,3 @@
 ---
-slug: skeletons
 name: Skeletons
 ---

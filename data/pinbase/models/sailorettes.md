@@ -1,5 +1,4 @@
 ---
-slug: sailorettes
 name: Sailorettes
 title_slug: sailorettes
 ipdb_id: 3828

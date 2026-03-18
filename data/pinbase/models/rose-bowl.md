@@ -1,5 +1,4 @@
 ---
-slug: rose-bowl
 name: Rose Bowl
 title_slug: rose-bowl-2
 ipdb_id: 2015

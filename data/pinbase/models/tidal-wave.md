@@ -1,5 +1,4 @@
 ---
-slug: tidal-wave
 name: Tidal Wave
 title_slug: tidal-wave
 ipdb_id: 5326

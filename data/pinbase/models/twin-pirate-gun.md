@@ -1,5 +1,4 @@
 ---
-slug: twin-pirate-gun
 name: Twin Pirate Gun
 title_slug: twin-pirate-gun
 ipdb_id: 7012

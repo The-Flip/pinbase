@@ -1,4 +1,3 @@
 ---
-slug: lost
 name: Lost
 ---

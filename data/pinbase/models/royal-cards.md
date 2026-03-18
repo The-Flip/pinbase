@@ -1,5 +1,4 @@
 ---
-slug: royal-cards
 name: Royal Cards
 title_slug: royal-cards
 ipdb_id: 5547

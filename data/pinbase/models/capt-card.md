@@ -1,5 +1,4 @@
 ---
-slug: capt-card
 name: Capt. Card
 title_slug: high-hand-capt-card
 opdb_id: GRYbJ-MNEz8

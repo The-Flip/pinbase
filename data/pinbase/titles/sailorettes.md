@@ -1,4 +1,3 @@
 ---
-slug: sailorettes
 name: Sailorettes
 ---

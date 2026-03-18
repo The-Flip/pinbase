@@ -1,5 +1,4 @@
 ---
-slug: daisy
 name: Daisy
 title_slug: daisy
 ipdb_id: 630

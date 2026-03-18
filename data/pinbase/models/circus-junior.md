@@ -1,5 +1,4 @@
 ---
-slug: circus-junior
 name: Circus-Junior
 title_slug: circus-junior
 ipdb_id: 4752

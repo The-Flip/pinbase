@@ -1,5 +1,4 @@
 ---
-slug: kick-off
 name: Kick Off
 title_slug: kick-off-quarterback
 opdb_id: GRzed-MDBl4

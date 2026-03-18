@@ -1,4 +1,3 @@
 ---
-slug: conquest
 name: Conquest
 ---

@@ -1,5 +1,4 @@
 ---
-slug: the-new-hi-lite
 name: The New Hi-Lite
 title_slug: the-new-hi-lite
 ipdb_id: 5685

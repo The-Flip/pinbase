@@ -1,5 +1,4 @@
 ---
-slug: starlight
 name: Starlight
 title_slug: starlight
 ipdb_id: 3868

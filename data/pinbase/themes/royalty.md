@@ -1,4 +1,3 @@
 ---
-slug: royalty
 name: Royalty
 ---

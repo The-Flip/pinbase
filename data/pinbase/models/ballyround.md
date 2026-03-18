@@ -1,5 +1,4 @@
 ---
-slug: ballyround
 name: Ballyround
 title_slug: ballyround
 ipdb_id: 159

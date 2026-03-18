@@ -1,5 +1,4 @@
 ---
-slug: foot-baller
 name: Foot Baller
 title_slug: foot-baller
 ipdb_id: 4975

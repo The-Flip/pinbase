@@ -1,5 +1,4 @@
 ---
-slug: star-pool
 name: Star Pool
 title_slug: cue-tee-star-pool
 opdb_id: G4O30-MD18o

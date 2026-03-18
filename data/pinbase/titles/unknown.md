@@ -1,4 +1,3 @@
 ---
-slug: unknown
 name: Unknown
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sparkz
 name: Sparkz
 title_slug: sparkz
 ipdb_id: 6522

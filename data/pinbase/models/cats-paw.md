@@ -1,5 +1,4 @@
 ---
-slug: cats-paw
 name: Cat's Paw
 title_slug: cats-paw
 ipdb_id: 4245

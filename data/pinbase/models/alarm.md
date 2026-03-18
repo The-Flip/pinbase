@@ -1,5 +1,4 @@
 ---
-slug: alarm
 name: Alarm
 title_slug: alarm
 ipdb_id: 2867

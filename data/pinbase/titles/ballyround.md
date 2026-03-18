@@ -1,4 +1,3 @@
 ---
-slug: ballyround
 name: Ballyround
 ---

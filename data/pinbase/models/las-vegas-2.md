@@ -1,5 +1,4 @@
 ---
-slug: las-vegas-2
 name: Las Vegas
 title_slug: las-vegas
 opdb_id: G4Jzo-MQ7jl

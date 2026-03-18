@@ -1,5 +1,4 @@
 ---
-slug: totalite
 name: Totalite
 title_slug: totalite
 ipdb_id: 2604

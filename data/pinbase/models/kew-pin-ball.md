@@ -1,5 +1,4 @@
 ---
-slug: kew-pin-ball
 name: Kew-Pin-Ball
 title_slug: kew-pin-ball
 ipdb_id: 1359

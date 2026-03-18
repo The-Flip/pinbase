@@ -1,5 +1,4 @@
 ---
-slug: big-jack
 name: Big Jack
 title_slug: big-jack
 opdb_id: GR937-MDe3z

@@ -1,5 +1,4 @@
 ---
-slug: kiss
 name: KISS
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: yanks
 name: Yanks
 title_slug: yanks
 opdb_id: GnP2o-MjByk

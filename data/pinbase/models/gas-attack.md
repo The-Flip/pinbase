@@ -1,5 +1,4 @@
 ---
-slug: gas-attack
 name: Gas Attack
 title_slug: gas-attack
 ipdb_id: 5111

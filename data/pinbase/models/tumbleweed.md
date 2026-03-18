@@ -1,5 +1,4 @@
 ---
-slug: tumbleweed
 name: Tumbleweed
 title_slug: tumbleweed
 opdb_id: GBLxO-MXrbO

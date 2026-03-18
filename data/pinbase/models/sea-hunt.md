@@ -1,5 +1,4 @@
 ---
-slug: sea-hunt
 name: Sea Hunt
 title_slug: sea-hunt
 opdb_id: GRoN2-MRj30

@@ -1,5 +1,4 @@
 ---
-slug: canada-dry
 name: Canada Dry
 title_slug: el-dorado
 opdb_id: GrEZ5-ME0Ko

@@ -1,5 +1,4 @@
 ---
-slug: dakota-ii
 name: Dakota II
 title_slug: dakota-ii
 ipdb_id: 632

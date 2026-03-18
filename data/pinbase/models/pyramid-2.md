@@ -1,5 +1,4 @@
 ---
-slug: pyramid-2
 name: Pyramid
 title_slug: pyramid
 ipdb_id: 1882

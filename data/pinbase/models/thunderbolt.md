@@ -1,5 +1,4 @@
 ---
-slug: thunderbolt
 name: Thunderbolt
 title_slug: thunderbolt
 opdb_id: GRVzX-MJdy0

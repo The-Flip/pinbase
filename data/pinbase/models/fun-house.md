@@ -1,5 +1,4 @@
 ---
-slug: fun-house
 name: Fun House
 title_slug: fun-house
 opdb_id: GrEvQ-MePRP

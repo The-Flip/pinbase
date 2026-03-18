@@ -1,5 +1,4 @@
 ---
-slug: relay
 name: Relay
 title_slug: relay
 ipdb_id: 3572

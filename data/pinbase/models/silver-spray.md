@@ -1,5 +1,4 @@
 ---
-slug: silver-spray
 name: Silver Spray
 title_slug: silver-spray
 ipdb_id: 3250

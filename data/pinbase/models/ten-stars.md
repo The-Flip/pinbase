@@ -1,5 +1,4 @@
 ---
-slug: ten-stars
 name: Ten Stars
 title_slug: ten-stars
 opdb_id: G4PW2-MDExV

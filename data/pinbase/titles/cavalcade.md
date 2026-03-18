@@ -1,4 +1,3 @@
 ---
-slug: cavalcade
 name: Cavalcade
 ---

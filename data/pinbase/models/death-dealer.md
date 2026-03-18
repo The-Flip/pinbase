@@ -1,5 +1,4 @@
 ---
-slug: death-dealer
 name: Death Dealer
 title_slug: death-dealer
 ipdb_id: 3041

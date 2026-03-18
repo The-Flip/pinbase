@@ -1,5 +1,4 @@
 ---
-slug: 1940-rebound
 name: 1940 Rebound
 title_slug: 1940-rebound
 ipdb_id: 1928

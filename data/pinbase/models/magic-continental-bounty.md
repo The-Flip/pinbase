@@ -1,5 +1,4 @@
 ---
-slug: magic-continental-bounty
 name: Magic Continental Bounty
 title_slug: magic-continental-bounty
 ipdb_id: 6097

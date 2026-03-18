@@ -1,5 +1,4 @@
 ---
-slug: titan-2
 name: Titan
 title_slug: titan-2
 ipdb_id: 5330

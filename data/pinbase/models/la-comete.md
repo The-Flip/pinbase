@@ -1,5 +1,4 @@
 ---
-slug: la-comete
 name: La Comete
 title_slug: la-comete
 ipdb_id: 6121

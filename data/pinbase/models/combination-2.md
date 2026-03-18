@@ -1,5 +1,4 @@
 ---
-slug: combination-2
 name: Combination
 title_slug: combination-2
 ipdb_id: 547

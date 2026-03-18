@@ -1,5 +1,4 @@
 ---
-slug: fun-way
 name: Fun Way
 title_slug: fun-way
 ipdb_id: 971

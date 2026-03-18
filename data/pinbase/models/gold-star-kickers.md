@@ -1,5 +1,4 @@
 ---
-slug: gold-star-kickers
 name: Gold Star Kickers
 title_slug: gold-star-kickers
 ipdb_id: 1041

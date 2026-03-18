@@ -1,5 +1,4 @@
 ---
-slug: dakota
 name: Dakota
 title_slug: dakota
 ipdb_id: 4636

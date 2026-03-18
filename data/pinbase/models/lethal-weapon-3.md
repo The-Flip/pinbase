@@ -1,5 +1,4 @@
 ---
-slug: lethal-weapon-3
 name: Lethal Weapon 3
 title_slug: lethal-weapon
 opdb_id: GRokL-MQP78

@@ -1,5 +1,4 @@
 ---
-slug: circus-trix
 name: Circus Trix
 title_slug: circus-trix
 ipdb_id: 4712

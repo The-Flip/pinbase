@@ -1,5 +1,4 @@
 ---
-slug: aaron-spelling
 name: Aaron Spelling
 title_slug: aaron-spelling
 ipdb_id: 4339

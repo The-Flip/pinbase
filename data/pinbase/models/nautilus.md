@@ -1,5 +1,4 @@
 ---
-slug: nautilus
 name: Nautilus
 title_slug: nautilus
 opdb_id: GRKYx-MD067

@@ -1,5 +1,4 @@
 ---
-slug: baby-pac-man
 name: Baby Pac-Man
 title_slug: baby-pac-man
 opdb_id: G5Kvx-MQdpl

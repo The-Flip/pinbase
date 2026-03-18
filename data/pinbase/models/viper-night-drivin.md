@@ -1,5 +1,4 @@
 ---
-slug: viper-night-drivin
 name: Viper Night Drivin'
 title_slug: viper-night-drivin
 opdb_id: G4Obw-ML83d

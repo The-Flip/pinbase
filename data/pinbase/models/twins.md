@@ -1,5 +1,4 @@
 ---
-slug: twins
 name: Twins
 title_slug: twins
 ipdb_id: 2693

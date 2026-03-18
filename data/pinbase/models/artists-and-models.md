@@ -1,5 +1,4 @@
 ---
-slug: artists-and-models
 name: Artists and Models
 title_slug: artists-and-models
 ipdb_id: 3656

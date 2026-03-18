@@ -1,5 +1,4 @@
 ---
-slug: archery
 name: Archery
 title_slug: archery
 ipdb_id: 3857

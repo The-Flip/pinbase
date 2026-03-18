@@ -1,5 +1,4 @@
 ---
-slug: rodeo-3
 name: Rodeo
 title_slug: rodeo
 opdb_id: GR9vD-MDbkK

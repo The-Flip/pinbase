@@ -1,5 +1,4 @@
 ---
-slug: whirl-wind
 name: Whirl-Wind
 title_slug: whirl-wind
 opdb_id: G56Ed-MrR7W

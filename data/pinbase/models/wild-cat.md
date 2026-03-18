@@ -1,5 +1,4 @@
 ---
-slug: wild-cat
 name: Wild Cat
 title_slug: wild-cat
 ipdb_id: 6966

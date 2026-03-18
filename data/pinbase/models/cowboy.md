@@ -1,5 +1,4 @@
 ---
-slug: cowboy
 name: Cowboy
 title_slug: cowboy
 ipdb_id: 582

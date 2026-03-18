@@ -1,5 +1,4 @@
 ---
-slug: hangers
 name: Hangers
 title_slug: hangers
 ipdb_id: 1113

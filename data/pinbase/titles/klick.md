@@ -1,4 +1,3 @@
 ---
-slug: klick
 name: Klick
 ---

@@ -1,4 +1,3 @@
 ---
-slug: vogue
 name: Vogue
 ---

@@ -1,5 +1,4 @@
 ---
-slug: atari-system-2
 name: Atari System 2
 manufacturer_slug: atari
 technology_subgeneration_slug: ss-discrete

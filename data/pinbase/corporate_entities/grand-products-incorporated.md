@@ -1,5 +1,4 @@
 ---
-slug: grand-products-incorporated
 name: Grand Products Incorporated
 manufacturer_slug: grand-products
 ipdb_manufacturer_id: 139

@@ -1,5 +1,4 @@
 ---
-slug: long-island
 name: Long Island
 title_slug: long-island
 ipdb_id: 3965

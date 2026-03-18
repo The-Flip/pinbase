@@ -1,5 +1,4 @@
 ---
-slug: hearts-gain
 name: Hearts Gain
 title_slug: hearts-gain
 opdb_id: G4OZ1-MrRN6

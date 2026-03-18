@@ -1,5 +1,4 @@
 ---
-slug: tailspin
 name: Tailspin
 title_slug: tailspin
 ipdb_id: 1810

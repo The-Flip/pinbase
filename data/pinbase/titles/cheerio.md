@@ -1,4 +1,3 @@
 ---
-slug: cheerio
 name: Cheerio
 ---

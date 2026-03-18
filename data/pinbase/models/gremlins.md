@@ -1,5 +1,4 @@
 ---
-slug: gremlins
 name: Gremlins
 title_slug: gremlins
 ipdb_id: 4595

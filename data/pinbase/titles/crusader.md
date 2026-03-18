@@ -1,4 +1,3 @@
 ---
-slug: crusader
 name: Crusader
 ---

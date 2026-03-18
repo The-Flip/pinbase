@@ -1,5 +1,4 @@
 ---
-slug: mini-flipper-2
 name: Mini Flipper 2
 title_slug: mini-flipper-2
 ipdb_id: 5567

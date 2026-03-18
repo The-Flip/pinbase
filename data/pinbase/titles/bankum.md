@@ -1,4 +1,3 @@
 ---
-slug: bankum
 name: Bankum
 ---

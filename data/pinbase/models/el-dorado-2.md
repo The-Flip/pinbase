@@ -1,5 +1,4 @@
 ---
-slug: el-dorado-2
 name: El Dorado
 title_slug: el-dorado-2
 ipdb_id: 4638

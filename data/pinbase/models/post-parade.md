@@ -1,5 +1,4 @@
 ---
-slug: post-parade
 name: Post Parade
 title_slug: post-parade
 ipdb_id: 5298

@@ -1,5 +1,4 @@
 ---
-slug: the-big-lebowski
 name: The Big Lebowski
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: zipball
 name: Zipball
 title_slug: zipball
 ipdb_id: 5452

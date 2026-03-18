@@ -1,5 +1,4 @@
 ---
-slug: california-games-incorporated
 name: California Games, Incorporated
 manufacturer_slug: california-games-incorporated
 ipdb_manufacturer_id: 75

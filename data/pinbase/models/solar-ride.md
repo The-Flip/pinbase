@@ -1,5 +1,4 @@
 ---
-slug: solar-ride
 name: Solar Ride
 title_slug: solar-ride
 opdb_id: GRDqo-MDbPx

@@ -1,5 +1,4 @@
 ---
-slug: gun-club-2
 name: Gun Club
 title_slug: gun-club
 opdb_id: G4Pwx-MXrWn

@@ -1,5 +1,4 @@
 ---
-slug: frisky-2
 name: Frisky
 title_slug: frisky
 opdb_id: GllZX-MwN0r

@@ -1,5 +1,4 @@
 ---
-slug: ro-go
 name: Ro Go
 title_slug: ro-go
 opdb_id: G42OJ-MD1w4

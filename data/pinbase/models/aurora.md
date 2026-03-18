@@ -1,5 +1,4 @@
 ---
-slug: aurora
 name: Aurora
 title_slug: aurora
 ipdb_id: 110

@@ -1,5 +1,4 @@
 ---
-slug: arnon-milchan
 name: Arnon Milchan
 title_slug: arnon-milchan
 ipdb_id: 4340

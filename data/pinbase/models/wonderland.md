@@ -1,5 +1,4 @@
 ---
-slug: wonderland
 name: Wonderland
 title_slug: wonderland
 opdb_id: GRwPK-MJ6o8

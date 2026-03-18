@@ -1,5 +1,4 @@
 ---
-slug: stage-coach
 name: Stage Coach
 title_slug: stage-coach
 opdb_id: G4x98-MYe9n

@@ -1,5 +1,4 @@
 ---
-slug: ac-dc
 name: AC/DC
 ---
 

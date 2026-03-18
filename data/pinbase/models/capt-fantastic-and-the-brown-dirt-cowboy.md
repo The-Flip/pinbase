@@ -1,5 +1,4 @@
 ---
-slug: capt-fantastic-and-the-brown-dirt-cowboy
 name: Captain Fantastic and the Brown Dirt Cowboy
 title_slug: captain-fantastic-and-the-brown-dirt-cowboy
 opdb_id: GRveZ-MNE38

@@ -1,4 +1,3 @@
 ---
-slug: bouncer
 name: Bouncer
 ---

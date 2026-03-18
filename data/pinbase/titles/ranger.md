@@ -1,4 +1,3 @@
 ---
-slug: ranger
 name: Ranger
 ---

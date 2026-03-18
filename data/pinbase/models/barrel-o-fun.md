@@ -1,5 +1,4 @@
 ---
-slug: barrel-o-fun
 name: Barrel O' Fun
 title_slug: barrel-o-fun
 ipdb_id: 180

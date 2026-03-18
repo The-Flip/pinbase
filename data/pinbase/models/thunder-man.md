@@ -1,5 +1,4 @@
 ---
-slug: thunder-man
 name: Thunder Man
 title_slug: thunder-man
 opdb_id: GRoyw-M4ojr

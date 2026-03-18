@@ -1,4 +1,3 @@
 ---
-slug: cloverleaf
 name: Cloverleaf
 ---

@@ -1,5 +1,4 @@
 ---
-slug: casbah
 name: Casbah
 title_slug: jubilee-darling
 opdb_id: Gr3J1-MQr2R

@@ -1,5 +1,4 @@
 ---
-slug: wanghe-mfg-co
 name: Wanghe Mfg. Co.
 manufacturer_slug: wanghe-mfg-co
 ipdb_manufacturer_id: 696

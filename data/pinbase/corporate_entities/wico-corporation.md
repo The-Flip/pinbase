@@ -1,5 +1,4 @@
 ---
-slug: wico-corporation
 name: Wico Corporation
 manufacturer_slug: wico
 ipdb_manufacturer_id: 347

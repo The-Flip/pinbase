@@ -1,5 +1,4 @@
 ---
-slug: cue-ball
 name: Cue Ball
 title_slug: cue-ball
 opdb_id: GrExQ-Mb5NB

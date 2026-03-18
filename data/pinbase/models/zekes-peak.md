@@ -1,5 +1,4 @@
 ---
-slug: zekes-peak
 name: Zeke's Peak
 title_slug: zekes-peak
 ipdb_id: 6803

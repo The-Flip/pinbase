@@ -1,5 +1,4 @@
 ---
-slug: longchamp
 name: Longchamp
 title_slug: longchamp
 ipdb_id: 3220

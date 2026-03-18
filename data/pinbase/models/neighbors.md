@@ -1,5 +1,4 @@
 ---
-slug: neighbors
 name: Neighbors
 title_slug: neighbors
 ipdb_id: 1660

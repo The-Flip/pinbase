@@ -1,5 +1,4 @@
 ---
-slug: double-track
 name: Double Track
 title_slug: double-track
 ipdb_id: 3068

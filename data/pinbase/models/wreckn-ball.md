@@ -1,5 +1,4 @@
 ---
-slug: wreckn-ball
 name: Wreck'n Ball
 title_slug: wreckn-ball
 ipdb_id: 6167

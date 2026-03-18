@@ -1,5 +1,4 @@
 ---
-slug: world-cup
 name: World Cup
 title_slug: world-cup
 opdb_id: GrNqO-MRjzl

@@ -1,5 +1,4 @@
 ---
-slug: jig-saw
 name: Jig Saw
 title_slug: jig-saw
 opdb_id: G4Nbz-Mz2V8

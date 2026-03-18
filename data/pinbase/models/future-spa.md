@@ -1,5 +1,4 @@
 ---
-slug: future-spa
 name: Future Spa
 title_slug: future-spa
 opdb_id: G5Dbo-M3dv6

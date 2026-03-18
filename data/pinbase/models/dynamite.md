@@ -1,5 +1,4 @@
 ---
-slug: dynamite
 name: Dynamite
 title_slug: dynamite
 ipdb_id: 749

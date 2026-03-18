@@ -1,4 +1,3 @@
 ---
-slug: law
 name: Law
 ---

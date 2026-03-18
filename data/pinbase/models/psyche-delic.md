@@ -1,5 +1,4 @@
 ---
-slug: psyche-delic
 name: Psyche Delic
 title_slug: psyche-delic
 ipdb_id: 6280

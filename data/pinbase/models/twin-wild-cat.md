@@ -1,5 +1,4 @@
 ---
-slug: twin-wild-cat
 name: Twin Wild Cat
 title_slug: twin-wild-cat
 ipdb_id: 6967

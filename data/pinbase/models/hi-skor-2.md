@@ -1,5 +1,4 @@
 ---
-slug: hi-skor-2
 name: Hi-Skor
 title_slug: hi-skor-2
 ipdb_id: 5225

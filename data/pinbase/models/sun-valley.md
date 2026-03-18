@@ -1,5 +1,4 @@
 ---
-slug: sun-valley
 name: Sun Valley
 title_slug: sun-valley
 opdb_id: GRnvZ-M9RYe

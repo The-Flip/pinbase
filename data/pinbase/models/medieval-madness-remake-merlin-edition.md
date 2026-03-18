@@ -1,5 +1,4 @@
 ---
-slug: medieval-madness-remake-merlin-edition
 name: Medieval Madness (Remake Merlin Edition)
 title_slug: medieval-madness
 opdb_id: G5pe4-MrRrv

@@ -1,5 +1,4 @@
 ---
-slug: zaccaria-gen-1
 name: Zaccaria Generation 1
 manufacturer_slug: zaccaria
 technology_subgeneration_slug: ss-discrete

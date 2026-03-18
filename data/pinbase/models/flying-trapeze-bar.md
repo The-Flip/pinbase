@@ -1,5 +1,4 @@
 ---
-slug: flying-trapeze-bar
 name: Flying Trapeze Bar
 title_slug: flying-trapeze-bar
 ipdb_id: 4213

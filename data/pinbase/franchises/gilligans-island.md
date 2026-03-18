@@ -1,5 +1,4 @@
 ---
-slug: gilligans-island
 name: Gilligan's Island
 ---
 

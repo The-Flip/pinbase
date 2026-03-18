@@ -1,5 +1,4 @@
 ---
-slug: de-icer
 name: De-Icer
 title_slug: de-icer
 opdb_id: GQKqy-MKNn4

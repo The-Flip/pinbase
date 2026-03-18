@@ -1,4 +1,3 @@
 ---
-slug: prehistoric
 name: Prehistoric
 ---

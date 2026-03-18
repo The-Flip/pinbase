@@ -1,5 +1,4 @@
 ---
-slug: king-tut
 name: King Tut
 title_slug: king-tut-king-rex
 opdb_id: Gr3qw-MQjYp

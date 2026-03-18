@@ -1,5 +1,4 @@
 ---
-slug: hi-shot
 name: Hi-Shot
 title_slug: hi-shot
 ipdb_id: 1190

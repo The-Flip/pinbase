@@ -1,5 +1,4 @@
 ---
-slug: banker
 name: Banker
 title_slug: banker
 ipdb_id: 174

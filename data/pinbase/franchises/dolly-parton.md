@@ -1,5 +1,4 @@
 ---
-slug: dolly-parton
 name: Dolly Parton
 ---
 

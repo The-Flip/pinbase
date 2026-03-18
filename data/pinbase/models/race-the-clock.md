@@ -1,5 +1,4 @@
 ---
-slug: race-the-clock
 name: Race the Clock
 title_slug: race-the-clock
 opdb_id: G42yx-MJw7V

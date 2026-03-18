@@ -1,5 +1,4 @@
 ---
-slug: shuffle-bowl
 name: Shuffle Bowl
 title_slug: shuffle-bowl
 ipdb_id: 3246

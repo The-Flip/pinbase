@@ -1,5 +1,4 @@
 ---
-slug: u-boat-65
 name: U-Boat 65
 title_slug: u-boat-65
 opdb_id: GRD67-Mo1Ol

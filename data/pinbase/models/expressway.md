@@ -1,5 +1,4 @@
 ---
-slug: expressway
 name: Expressway
 title_slug: expressway
 opdb_id: G4xK8-MQ5jK

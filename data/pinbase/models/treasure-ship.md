@@ -1,5 +1,4 @@
 ---
-slug: treasure-ship
 name: Treasure Ship
 title_slug: treasure-ship
 ipdb_id: 2639

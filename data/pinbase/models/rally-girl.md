@@ -1,5 +1,4 @@
 ---
-slug: rally-girl
 name: Rally Girl
 title_slug: rally-girl
 opdb_id: G4Oeq-Mb55q

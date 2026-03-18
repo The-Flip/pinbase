@@ -1,5 +1,4 @@
 ---
-slug: chico-derby
 name: Chico Derby
 title_slug: chico-derby
 ipdb_id: 504

@@ -1,5 +1,4 @@
 ---
-slug: jungle-lord
 name: Jungle Lord
 title_slug: jungle-lord
 opdb_id: G5nkY-MDv88

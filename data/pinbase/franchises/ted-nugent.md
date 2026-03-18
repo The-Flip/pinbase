@@ -1,5 +1,4 @@
 ---
-slug: ted-nugent
 name: Ted Nugent
 ---
 

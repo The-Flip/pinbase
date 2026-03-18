@@ -1,5 +1,4 @@
 ---
-slug: jumpin-jacks
 name: Jumpin' Jack's
 title_slug: jumpin-jacks
 opdb_id: G5QLj-MLBy0

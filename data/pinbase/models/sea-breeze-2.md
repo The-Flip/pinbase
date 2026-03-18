@@ -1,5 +1,4 @@
 ---
-slug: sea-breeze-2
 name: Sea Breeze
 title_slug: sea-breeze
 opdb_id: GvBZO-M85kN

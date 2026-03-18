@@ -1,5 +1,4 @@
 ---
-slug: lite-a-basket
 name: Lite A Basket
 title_slug: lite-a-basket
 ipdb_id: 3212

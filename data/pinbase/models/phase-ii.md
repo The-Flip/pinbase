@@ -1,5 +1,4 @@
 ---
-slug: phase-ii
 name: Phase II
 title_slug: phase-ii
 ipdb_id: 5787

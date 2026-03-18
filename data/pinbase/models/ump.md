@@ -1,5 +1,4 @@
 ---
-slug: ump
 name: Ump
 title_slug: ump
 ipdb_id: 2701

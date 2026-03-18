@@ -1,5 +1,4 @@
 ---
-slug: james-bond
 name: James Bond
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: the-amazing-spider-man
 name: The Amazing Spider-Man
 title_slug: spider-man-gottlieb
 opdb_id: GrXlr-MOEE2

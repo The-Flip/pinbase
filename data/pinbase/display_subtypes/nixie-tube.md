@@ -1,5 +1,4 @@
 ---
-slug: nixie-tube
 name: Nixie Tube
 display_order: 1
 display_type_slug: alphanumeric

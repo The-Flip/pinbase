@@ -1,5 +1,4 @@
 ---
-slug: apollo-ball
 name: Apollo Ball
 title_slug: apollo-ball
 ipdb_id: 3648

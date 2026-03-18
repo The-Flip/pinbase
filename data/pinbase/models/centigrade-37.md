@@ -1,5 +1,4 @@
 ---
-slug: centigrade-37
 name: Centigrade 37
 title_slug: centigrade-37
 opdb_id: GrZ1k-MrRKZ

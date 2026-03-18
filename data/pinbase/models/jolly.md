@@ -1,5 +1,4 @@
 ---
-slug: jolly
 name: Jolly
 title_slug: jolly
 ipdb_id: 1309

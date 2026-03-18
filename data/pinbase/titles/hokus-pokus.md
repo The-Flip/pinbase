@@ -1,5 +1,4 @@
 ---
-slug: hokus-pokus
 name: Hokus Pokus
 opdb_group_id: GRwBN
 ---

@@ -1,5 +1,4 @@
 ---
-slug: race-way
 name: Race-Way
 title_slug: race-way
 opdb_id: G57eW-MLnel

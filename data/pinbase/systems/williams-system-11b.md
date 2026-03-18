@@ -1,5 +1,4 @@
 ---
-slug: williams-system-11b
 name: Williams System 11B
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

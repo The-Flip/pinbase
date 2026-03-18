@@ -1,4 +1,3 @@
 ---
-slug: romans
 name: Romans
 ---

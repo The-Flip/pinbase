@@ -1,5 +1,4 @@
 ---
-slug: star-jet-2
 name: Star Jet
 title_slug: star-jet-2
 ipdb_id: 6849

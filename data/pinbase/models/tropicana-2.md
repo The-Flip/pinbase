@@ -1,5 +1,4 @@
 ---
-slug: tropicana-2
 name: Tropicana
 title_slug: tropicana-2
 ipdb_id: 2664

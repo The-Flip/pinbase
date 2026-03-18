@@ -1,4 +1,3 @@
 ---
-slug: livestock
 name: Livestock
 ---

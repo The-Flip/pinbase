@@ -1,5 +1,4 @@
 ---
-slug: torpedo-6
 name: Torpedo
 title_slug: torpedo-5
 ipdb_id: 5006

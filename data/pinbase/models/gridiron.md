@@ -1,5 +1,4 @@
 ---
-slug: gridiron
 name: Gridiron
 title_slug: gridiron
 ipdb_id: 1087

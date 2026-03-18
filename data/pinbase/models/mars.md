@@ -1,5 +1,4 @@
 ---
-slug: mars
 name: Mars
 title_slug: mars
 ipdb_id: 3395

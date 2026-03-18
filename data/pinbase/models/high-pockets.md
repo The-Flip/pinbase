@@ -1,5 +1,4 @@
 ---
-slug: high-pockets
 name: High Pockets
 title_slug: high-pockets
 ipdb_id: 3148

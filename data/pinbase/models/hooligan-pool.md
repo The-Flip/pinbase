@@ -1,5 +1,4 @@
 ---
-slug: hooligan-pool
 name: Hooligan Pool
 title_slug: hooligan-pool
 ipdb_id: 6380

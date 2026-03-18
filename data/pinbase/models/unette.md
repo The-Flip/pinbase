@@ -1,5 +1,4 @@
 ---
-slug: unette
 name: U'nette
 title_slug: unette
 ipdb_id: 2703

@@ -1,5 +1,4 @@
 ---
-slug: rocs
 name: ROCs
 title_slug: rocs
 opdb_id: Gd22x-MNElO

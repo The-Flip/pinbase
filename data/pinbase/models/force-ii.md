@@ -1,5 +1,4 @@
 ---
-slug: force-ii
 name: Force II
 title_slug: force-ii
 opdb_id: G5Wpk-MDWpy

@@ -1,5 +1,4 @@
 ---
-slug: drakor
 name: Drakor
 title_slug: gorgar
 opdb_id: G5zd6-MJVo4-ARN3r

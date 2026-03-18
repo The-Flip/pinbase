@@ -1,5 +1,4 @@
 ---
-slug: flippers
 name: Flippers
 display_order: 1
 ---

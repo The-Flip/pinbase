@@ -1,4 +1,3 @@
 ---
-slug: competition
 name: Competition
 ---

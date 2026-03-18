@@ -1,5 +1,4 @@
 ---
-slug: coquette
 name: Coquette
 title_slug: coquette
 opdb_id: G4NBw-MLxkb

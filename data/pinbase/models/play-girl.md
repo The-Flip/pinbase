@@ -1,5 +1,4 @@
 ---
-slug: play-girl
 name: Play Girl
 title_slug: play-girl
 ipdb_id: 4702

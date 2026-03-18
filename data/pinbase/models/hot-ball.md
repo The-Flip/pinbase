@@ -1,5 +1,4 @@
 ---
-slug: hot-ball
 name: Hot Ball
 title_slug: hot-ball
 ipdb_id: 4665

@@ -1,5 +1,4 @@
 ---
-slug: yoho-hooker
 name: Yoho & Hooker
 manufacturer_slug: yoho-hooker
 ipdb_manufacturer_id: 427

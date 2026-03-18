@@ -1,5 +1,4 @@
 ---
-slug: sky-lover
 name: Sky Lover
 title_slug: sky-lover
 ipdb_id: 4558

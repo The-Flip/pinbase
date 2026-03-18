@@ -1,5 +1,4 @@
 ---
-slug: victory-special
 name: Victory Special
 title_slug: victory-special
 ipdb_id: 2736

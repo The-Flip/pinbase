@@ -1,5 +1,4 @@
 ---
-slug: bally-hoo
 name: Bally Hoo
 title_slug: bally-hoo
 opdb_id: G4NQ7-M85Bk

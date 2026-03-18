@@ -1,5 +1,4 @@
 ---
-slug: martian-queen
 name: Martian Queen
 title_slug: martian-queen
 opdb_id: GllV2-Mp4bZ

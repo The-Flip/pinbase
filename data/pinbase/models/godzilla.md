@@ -1,5 +1,4 @@
 ---
-slug: godzilla
 name: Godzilla
 title_slug: godzilla
 opdb_id: G5po2-MeP6B

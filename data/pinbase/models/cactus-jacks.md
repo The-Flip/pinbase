@@ -1,5 +1,4 @@
 ---
-slug: cactus-jacks
 name: Cactus Jack's
 title_slug: cactus-jacks
 opdb_id: G5bxy-ML30z

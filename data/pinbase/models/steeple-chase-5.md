@@ -1,5 +1,4 @@
 ---
-slug: steeple-chase-5
 name: Steeple Chase
 title_slug: steeple-chase-5
 ipdb_id: 5553

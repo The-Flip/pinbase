@@ -1,5 +1,4 @@
 ---
-slug: tunnel
 name: Tunnel
 title_slug: tunnel
 ipdb_id: 4151

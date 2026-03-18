@@ -1,5 +1,4 @@
 ---
-slug: big-star-2
 name: Big Star
 title_slug: big-star
 ipdb_id: 5552

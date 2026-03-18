@@ -1,5 +1,4 @@
 ---
-slug: in-and-outdoor-games-company
 name: In and Outdoor Games Company
 manufacturer_slug: in-and-outdoor-games-company
 ipdb_manufacturer_id: 155

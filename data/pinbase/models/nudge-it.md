@@ -1,5 +1,4 @@
 ---
-slug: nudge-it
 name: Nudge-It
 title_slug: nudge-it
 ipdb_id: 3454

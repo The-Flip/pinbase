@@ -1,5 +1,4 @@
 ---
-slug: black-beauty
 name: Black Beauty
 title_slug: black-beauty
 ipdb_id: 302

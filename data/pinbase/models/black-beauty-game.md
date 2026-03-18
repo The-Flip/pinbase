@@ -1,5 +1,4 @@
 ---
-slug: black-beauty-game
 name: Black Beauty Game
 title_slug: black-beauty-game
 ipdb_id: 5997

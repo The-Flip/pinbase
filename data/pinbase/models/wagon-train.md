@@ -1,5 +1,4 @@
 ---
-slug: wagon-train
 name: Wagon Train
 title_slug: wagon-train
 opdb_id: GrPYn-MQrvK

@@ -1,5 +1,4 @@
 ---
-slug: the-happy-musketeers
 name: The Happy Musketeers
 title_slug: the-happy-musketeers
 ipdb_id: 5285

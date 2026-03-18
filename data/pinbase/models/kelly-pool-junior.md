@@ -1,5 +1,4 @@
 ---
-slug: kelly-pool-junior
 name: Kelly Pool (Junior)
 title_slug: kelly-pool-junior
 ipdb_id: 5161

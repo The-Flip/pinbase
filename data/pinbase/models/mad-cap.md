@@ -1,5 +1,4 @@
 ---
-slug: mad-cap
 name: Mad Cap
 title_slug: mad-cap
 ipdb_id: 1503

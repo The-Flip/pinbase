@@ -1,4 +1,3 @@
 ---
-slug: hurdles
 name: Hurdles
 ---

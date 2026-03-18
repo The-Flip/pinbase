@@ -1,5 +1,4 @@
 ---
-slug: disney-tron-legacy-4th-edition
 name: Disney TRON Legacy (4th Edition)
 title_slug: disney-tron-legacy-4th-edition
 ipdb_id: 6019

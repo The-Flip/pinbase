@@ -1,5 +1,4 @@
 ---
-slug: middle-earth
 name: Middle Earth
 title_slug: middle-earth
 opdb_id: G4OzV-MJN4z

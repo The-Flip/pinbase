@@ -1,4 +1,3 @@
 ---
-slug: playa
 name: Playa
 ---

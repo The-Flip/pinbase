@@ -1,5 +1,4 @@
 ---
-slug: ballerina-2
 name: Ballerina
 title_slug: ballerina
 opdb_id: G4dyO-MwNBy

@@ -1,5 +1,4 @@
 ---
-slug: marvel-super-heroes
 name: Marvel Super Heroes
 title_slug: marvel-super-heroes
 ipdb_id: 5643

@@ -1,5 +1,4 @@
 ---
-slug: faukland
 name: Faukland
 title_slug: faukland
 ipdb_id: 4376

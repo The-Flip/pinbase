@@ -1,5 +1,4 @@
 ---
-slug: the-ball-fan
 name: The Ball Fan
 title_slug: the-ball-fan
 ipdb_id: 136

@@ -1,5 +1,4 @@
 ---
-slug: hoe-down
 name: Hoe Down
 title_slug: roy-clark-super-picker
 opdb_id: G4J11-MJ9B1

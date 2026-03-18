@@ -1,5 +1,4 @@
 ---
-slug: coney-island-4
 name: Coney Island
 title_slug: coney-island-3
 ipdb_id: 6087

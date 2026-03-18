@@ -1,5 +1,4 @@
 ---
-slug: single-coin-3
 name: Single Coin
 title_slug: single-coin-3
 ipdb_id: 4982

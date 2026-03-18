@@ -1,5 +1,4 @@
 ---
-slug: bally-alley
 name: Bally Alley
 title_slug: bally-alley
 ipdb_id: 6508

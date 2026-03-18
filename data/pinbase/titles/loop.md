@@ -1,4 +1,3 @@
 ---
-slug: loop
 name: Loop
 ---

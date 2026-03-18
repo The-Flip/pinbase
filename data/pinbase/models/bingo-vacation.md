@@ -1,5 +1,4 @@
 ---
-slug: bingo-vacation
 name: Bingo Vacation
 title_slug: bingo-vacation
 ipdb_id: 5857

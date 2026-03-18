@@ -1,4 +1,3 @@
 ---
-slug: feitico
 name: Feitiço
 ---

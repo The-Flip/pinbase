@@ -1,5 +1,4 @@
 ---
-slug: legionnaire
 name: Legionnaire
 title_slug: legionnaire
 ipdb_id: 1430

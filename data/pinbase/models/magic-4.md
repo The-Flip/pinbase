@@ -1,5 +1,4 @@
 ---
-slug: magic-4
 name: Magic
 title_slug: magic-4
 ipdb_id: 5328

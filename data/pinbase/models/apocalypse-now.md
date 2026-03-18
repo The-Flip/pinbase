@@ -1,5 +1,4 @@
 ---
-slug: apocalypse-now
 name: Apocalypse Now
 title_slug: apocalypse-now
 opdb_id: G4Zyj-MQK1O

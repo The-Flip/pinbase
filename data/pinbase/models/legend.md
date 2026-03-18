@@ -1,5 +1,4 @@
 ---
-slug: legend
 name: Legend
 title_slug: legend
 ipdb_id: 4553

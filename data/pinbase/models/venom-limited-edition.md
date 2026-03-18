@@ -1,5 +1,4 @@
 ---
-slug: venom-limited-edition
 name: Venom (Limited Edition)
 title_slug: venom
 opdb_id: G3EBl-MRj6e-ARzbx

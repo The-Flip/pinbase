@@ -1,5 +1,4 @@
 ---
-slug: tabletop
 name: Tabletop
 display_order: 2
 ---

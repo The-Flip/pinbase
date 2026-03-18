@@ -1,5 +1,4 @@
 ---
-slug: lucky-seven-2
 name: Lucky Seven
 title_slug: lucky-seven
 opdb_id: G5D3O-MJKe0

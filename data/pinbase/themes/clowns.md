@@ -1,4 +1,3 @@
 ---
-slug: clowns
 name: Clowns
 ---

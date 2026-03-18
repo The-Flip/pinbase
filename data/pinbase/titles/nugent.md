@@ -1,4 +1,3 @@
 ---
-slug: nugent
 name: Nugent
 ---

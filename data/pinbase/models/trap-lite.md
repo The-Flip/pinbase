@@ -1,5 +1,4 @@
 ---
-slug: trap-lite
 name: Trap Lite
 title_slug: trap-lite
 ipdb_id: 2631

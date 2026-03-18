@@ -1,5 +1,4 @@
 ---
-slug: stevo-ball-no-3
 name: Stevo-Ball No. 3
 title_slug: stevo-ball-no-3
 ipdb_id: 5210

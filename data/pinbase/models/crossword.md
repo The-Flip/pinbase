@@ -1,5 +1,4 @@
 ---
-slug: crossword
 name: Crossword
 title_slug: crossword
 opdb_id: GRYJD-MLzvN

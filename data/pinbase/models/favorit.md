@@ -1,5 +1,4 @@
 ---
-slug: favorit
 name: Favorit
 title_slug: favorit
 ipdb_id: 4888

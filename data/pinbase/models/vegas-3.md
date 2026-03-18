@@ -1,5 +1,4 @@
 ---
-slug: vegas-3
 name: Vegas
 title_slug: lady-luck-4
 opdb_id: GLWke-MwNqK

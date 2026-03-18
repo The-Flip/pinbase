@@ -1,5 +1,4 @@
 ---
-slug: majors-of-49
 name: Majors of '49
 title_slug: majors-of-49
 opdb_id: G18dj-MNEBE

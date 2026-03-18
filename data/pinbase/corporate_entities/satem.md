@@ -1,5 +1,4 @@
 ---
-slug: satem
 name: Satem
 manufacturer_slug: satem
 ipdb_manufacturer_id: 453

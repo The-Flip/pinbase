@@ -1,4 +1,3 @@
 ---
-slug: skillo
 name: Skillo
 ---

@@ -1,5 +1,4 @@
 ---
-slug: three-point
 name: Three Point
 title_slug: three-point
 ipdb_id: 2542

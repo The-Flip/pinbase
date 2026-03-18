@@ -1,5 +1,4 @@
 ---
-slug: star-wars-comic-art-premium
 name: Star Wars Comic Art (Premium)
 title_slug: star-wars-stern
 opdb_id: G5vLR-ME049-ARrK0

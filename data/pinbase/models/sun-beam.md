@@ -1,5 +1,4 @@
 ---
-slug: sun-beam
 name: Sun Beam
 title_slug: sun-beam
 ipdb_id: 2420

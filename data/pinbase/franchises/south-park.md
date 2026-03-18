@@ -1,5 +1,4 @@
 ---
-slug: south-park
 name: South Park
 ---
 

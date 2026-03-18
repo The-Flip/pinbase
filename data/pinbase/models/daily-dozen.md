@@ -1,5 +1,4 @@
 ---
-slug: daily-dozen
 name: Daily Dozen
 title_slug: daily-dozen
 ipdb_id: 3038

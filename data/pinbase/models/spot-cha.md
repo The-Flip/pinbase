@@ -1,5 +1,4 @@
 ---
-slug: spot-cha
 name: Spot-Cha
 title_slug: spot-cha
 ipdb_id: 2319

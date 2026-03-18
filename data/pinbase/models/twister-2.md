@@ -1,5 +1,4 @@
 ---
-slug: twister-2
 name: Twister
 title_slug: twister-2
 ipdb_id: 3351

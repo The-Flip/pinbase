@@ -1,5 +1,4 @@
 ---
-slug: rocket-shot
 name: Rocket Shot
 title_slug: rocket-shot
 ipdb_id: 4827

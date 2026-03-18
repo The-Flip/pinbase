@@ -1,5 +1,4 @@
 ---
-slug: sensation-of-1937
 name: Sensation of 1937
 title_slug: sensation-of-1937
 ipdb_id: 3349

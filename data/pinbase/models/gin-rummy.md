@@ -1,5 +1,4 @@
 ---
-slug: gin-rummy
 name: Gin Rummy
 title_slug: gin-rummy
 opdb_id: GpeNN-MePxk

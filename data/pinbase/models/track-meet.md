@@ -1,5 +1,4 @@
 ---
-slug: track-meet
 name: Track Meet
 title_slug: track-meet
 ipdb_id: 2615

@@ -1,5 +1,4 @@
 ---
-slug: basket
 name: Basket
 title_slug: basket
 ipdb_id: 5852

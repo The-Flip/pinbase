@@ -1,5 +1,4 @@
 ---
-slug: turf-champs
 name: Turf Champs
 title_slug: turf-champs
 ipdb_id: 2671

@@ -1,5 +1,4 @@
 ---
-slug: kontest-bomber
 name: Kontest Bomber
 title_slug: kontest-bomber
 ipdb_id: 4520

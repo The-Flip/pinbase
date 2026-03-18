@@ -1,5 +1,4 @@
 ---
-slug: sapporo
 name: Sapporo
 title_slug: sapporo
 opdb_id: G5n67-MQVRQ

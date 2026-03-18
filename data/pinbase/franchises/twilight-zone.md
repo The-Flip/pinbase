@@ -1,5 +1,4 @@
 ---
-slug: twilight-zone
 name: Twilight Zone
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: contest
 name: Contest
 title_slug: contest-2
 ipdb_id: 563

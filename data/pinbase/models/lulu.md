@@ -1,5 +1,4 @@
 ---
-slug: lulu
 name: Lulu
 title_slug: lulu
 opdb_id: G57ww-Ml98k

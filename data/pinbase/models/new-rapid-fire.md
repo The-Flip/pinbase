@@ -1,5 +1,4 @@
 ---
-slug: new-rapid-fire
 name: New Rapid Fire
 title_slug: new-rapid-fire
 ipdb_id: 3483

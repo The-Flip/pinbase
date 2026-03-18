@@ -1,5 +1,4 @@
 ---
-slug: runabout
 name: Runabout
 title_slug: runabout
 ipdb_id: 2041

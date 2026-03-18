@@ -1,5 +1,4 @@
 ---
-slug: lin-up
 name: Lin-Up
 title_slug: lin-up
 ipdb_id: 3949

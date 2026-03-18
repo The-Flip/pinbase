@@ -1,5 +1,4 @@
 ---
-slug: deadpool
 name: Deadpool
 ---
 

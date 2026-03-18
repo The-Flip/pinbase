@@ -1,5 +1,4 @@
 ---
-slug: dubbs
 name: Dubbs
 title_slug: dubbs
 ipdb_id: 5454

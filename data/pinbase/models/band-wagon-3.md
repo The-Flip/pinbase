@@ -1,5 +1,4 @@
 ---
-slug: band-wagon-3
 name: Band Wagon
 title_slug: band-wagon-3
 ipdb_id: 165

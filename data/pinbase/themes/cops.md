@@ -1,4 +1,3 @@
 ---
-slug: cops
 name: Cops
 ---

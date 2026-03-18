@@ -1,5 +1,4 @@
 ---
-slug: the-addams-family
 name: The Addams Family
 title_slug: the-addams-family
 opdb_id: G4ODR-MDXEy

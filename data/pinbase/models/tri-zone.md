@@ -1,5 +1,4 @@
 ---
-slug: tri-zone
 name: Tri Zone
 title_slug: tri-zone
 opdb_id: GrxNK-MLEzY

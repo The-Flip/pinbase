@@ -1,5 +1,4 @@
 ---
-slug: super-ball
 name: Super-Ball
 title_slug: super-ball
 ipdb_id: 6080

@@ -1,5 +1,4 @@
 ---
-slug: poker-lite
 name: Poker-Lite
 title_slug: poker-lite
 ipdb_id: 4226

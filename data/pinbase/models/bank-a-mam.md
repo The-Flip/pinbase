@@ -1,5 +1,4 @@
 ---
-slug: bank-a-mam
 name: Bank-A-Mam
 title_slug: bank-a-mam
 ipdb_id: 6767

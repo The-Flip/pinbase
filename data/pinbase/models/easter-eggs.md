@@ -1,5 +1,4 @@
 ---
-slug: easter-eggs
 name: Easter Eggs
 title_slug: easter-eggs
 ipdb_id: 4464

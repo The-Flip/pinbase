@@ -1,5 +1,4 @@
 ---
-slug: jack-pot-pin-game
 name: Jack Pot Pin Game
 title_slug: jack-pot-pin-game
 ipdb_id: 5404

@@ -1,5 +1,4 @@
 ---
-slug: simon
 name: Simon
 title_slug: simon
 ipdb_id: 6595

@@ -1,5 +1,4 @@
 ---
-slug: gold-mine-3
 name: Gold Mine
 title_slug: gold-mine-3
 ipdb_id: 4935

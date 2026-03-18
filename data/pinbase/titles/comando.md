@@ -1,4 +1,3 @@
 ---
-slug: comando
 name: Comando
 ---

@@ -1,4 +1,3 @@
 ---
-slug: buttons
 name: Buttons
 ---

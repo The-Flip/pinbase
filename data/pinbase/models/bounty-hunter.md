@@ -1,5 +1,4 @@
 ---
-slug: bounty-hunter
 name: Bounty Hunter
 title_slug: bounty-hunter
 opdb_id: G5nO8-ME0Wo

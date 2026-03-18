@@ -1,5 +1,4 @@
 ---
-slug: running-horse
 name: Running Horse
 title_slug: running-horse
 opdb_id: G4ev3-MQdqY

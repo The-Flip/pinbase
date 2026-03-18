@@ -1,5 +1,4 @@
 ---
-slug: playland
 name: Playland!
 title_slug: playland
 opdb_id: G5Q82-MJYll

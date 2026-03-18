@@ -1,5 +1,4 @@
 ---
-slug: big-six
 name: Big Six
 title_slug: big-six
 ipdb_id: 278

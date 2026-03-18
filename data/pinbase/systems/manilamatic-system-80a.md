@@ -1,5 +1,4 @@
 ---
-slug: manilamatic-system-80a
 name: ManilaMatic System 80A
 manufacturer_slug: manilamatic
 technology_subgeneration_slug: ss-discrete

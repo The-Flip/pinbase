@@ -1,4 +1,3 @@
 ---
-slug: handicapper
 name: Handicapper
 ---

@@ -1,4 +1,3 @@
 ---
-slug: campidoglio
 name: Campidoglio
 ---

@@ -1,5 +1,4 @@
 ---
-slug: airways
 name: Airways
 title_slug: airways
 ipdb_id: 4775

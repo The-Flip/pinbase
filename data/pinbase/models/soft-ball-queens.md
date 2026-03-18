@@ -1,5 +1,4 @@
 ---
-slug: soft-ball-queens
 name: Soft-Ball Queens
 title_slug: soft-ball-queens
 ipdb_id: 2236

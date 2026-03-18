@@ -1,5 +1,4 @@
 ---
-slug: city-slicker
 name: City Slicker
 title_slug: city-slicker
 opdb_id: GrEVb-MLOxJ

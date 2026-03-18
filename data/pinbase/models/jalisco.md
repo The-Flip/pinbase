@@ -1,5 +1,4 @@
 ---
-slug: jalisco
 name: Jalisco
 title_slug: jalisco
 opdb_id: G56xZ-MLx84

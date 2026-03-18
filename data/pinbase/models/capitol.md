@@ -1,5 +1,4 @@
 ---
-slug: capitol
 name: Capitol
 title_slug: capitol
 ipdb_id: 6306

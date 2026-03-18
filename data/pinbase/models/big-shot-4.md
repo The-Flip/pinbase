@@ -1,5 +1,4 @@
 ---
-slug: big-shot-4
 name: Big Shot
 title_slug: big-shot-3
 ipdb_id: 3926

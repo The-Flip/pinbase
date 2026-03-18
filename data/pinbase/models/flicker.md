@@ -1,5 +1,4 @@
 ---
-slug: flicker
 name: Flicker
 title_slug: boomerang-flicker
 opdb_id: GrEOB-MJZYw

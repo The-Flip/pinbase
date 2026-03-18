@@ -1,5 +1,4 @@
 ---
-slug: big-casino-2
 name: Big Casino
 title_slug: big-casino-2
 ipdb_id: 2859

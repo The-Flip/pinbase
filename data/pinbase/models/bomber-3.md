@@ -1,5 +1,4 @@
 ---
-slug: bomber-3
 name: Bomber
 title_slug: bomber-3
 ipdb_id: 3649

@@ -1,5 +1,4 @@
 ---
-slug: pigskin
 name: Pigskin
 title_slug: pigskin
 ipdb_id: 1785

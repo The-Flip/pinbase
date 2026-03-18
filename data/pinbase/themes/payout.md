@@ -1,4 +1,3 @@
 ---
-slug: payout
 name: Payout
 ---

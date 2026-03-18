@@ -1,5 +1,4 @@
 ---
-slug: atlas-2
 name: Atlas
 title_slug: atlas-2
 ipdb_id: 2883

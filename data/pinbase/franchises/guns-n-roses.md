@@ -1,5 +1,4 @@
 ---
-slug: guns-n-roses
 name: Guns N' Roses
 ---
 

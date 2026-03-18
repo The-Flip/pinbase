@@ -1,5 +1,4 @@
 ---
-slug: radical
 name: Radical!
 title_slug: radical
 opdb_id: G59ZY-MD8p7

@@ -1,5 +1,4 @@
 ---
-slug: criss-cross-pop-up
 name: Criss Cross Pop-Up
 title_slug: criss-cross-pop-up
 ipdb_id: 4760

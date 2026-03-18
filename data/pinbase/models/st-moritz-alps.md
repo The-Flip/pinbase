@@ -1,5 +1,4 @@
 ---
-slug: st-moritz-alps
 name: St. Moritz Alps
 title_slug: st-moritz-alps
 ipdb_id: 64

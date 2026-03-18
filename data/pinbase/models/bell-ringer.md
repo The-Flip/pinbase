@@ -1,5 +1,4 @@
 ---
-slug: bell-ringer
 name: Bell Ringer
 title_slug: bell-ringer
 ipdb_id: 3602

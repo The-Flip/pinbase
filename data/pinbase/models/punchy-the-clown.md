@@ -1,5 +1,4 @@
 ---
-slug: punchy-the-clown
 name: Punchy the Clown
 title_slug: punchy-the-clown
 opdb_id: G4x2P-MnK03

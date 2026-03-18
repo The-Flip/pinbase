@@ -1,5 +1,4 @@
 ---
-slug: hypnox
 name: Hypnox
 title_slug: hypnox
 ipdb_id: 5226

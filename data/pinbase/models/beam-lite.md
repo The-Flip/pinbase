@@ -1,5 +1,4 @@
 ---
-slug: beam-lite
 name: Beam-Lite
 title_slug: beam-lite
 ipdb_id: 209

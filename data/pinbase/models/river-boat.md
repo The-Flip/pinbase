@@ -1,5 +1,4 @@
 ---
-slug: river-boat
 name: River Boat
 title_slug: river-boat
 opdb_id: GrP2Z-MjB8X

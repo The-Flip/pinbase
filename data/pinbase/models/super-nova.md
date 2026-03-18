@@ -1,5 +1,4 @@
 ---
-slug: super-nova
 name: Super Nova
 title_slug: super-nova
 opdb_id: G56KW-MKNNj

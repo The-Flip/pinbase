@@ -1,4 +1,3 @@
 ---
-slug: amber
 name: Amber
 ---

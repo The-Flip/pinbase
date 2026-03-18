@@ -1,4 +1,3 @@
 ---
-slug: widget
 name: Widget
 ---

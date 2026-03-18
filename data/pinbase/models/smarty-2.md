@@ -1,5 +1,4 @@
 ---
-slug: smarty-2
 name: Smarty
 title_slug: ding-dong-smarty
 opdb_id: GRop9-MyNYp

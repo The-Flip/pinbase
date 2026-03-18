@@ -1,5 +1,4 @@
 ---
-slug: homestretch
 name: Homestretch
 title_slug: homestretch
 ipdb_id: 1227

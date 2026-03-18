@@ -1,5 +1,4 @@
 ---
-slug: cover-girl-2
 name: Cover Girl
 title_slug: cover-girl
 opdb_id: GRvbo-MJroP

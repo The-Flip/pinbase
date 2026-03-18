@@ -1,5 +1,4 @@
 ---
-slug: metal-man
 name: Metal Man
 title_slug: metal-man
 opdb_id: G4x3Y-MDznw

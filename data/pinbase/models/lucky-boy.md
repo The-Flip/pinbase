@@ -1,5 +1,4 @@
 ---
-slug: lucky-boy
 name: Lucky Boy
 title_slug: lucky-boy
 ipdb_id: 5858

@@ -1,5 +1,4 @@
 ---
-slug: spook-gun
 name: Spook Gun
 title_slug: spook-gun
 ipdb_id: 6739

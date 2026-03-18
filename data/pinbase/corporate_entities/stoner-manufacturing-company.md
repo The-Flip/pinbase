@@ -1,5 +1,4 @@
 ---
-slug: stoner-manufacturing-company
 name: Stoner Manufacturing Company
 manufacturer_slug: stoner-manufacturing-company
 ipdb_manufacturer_id: 304

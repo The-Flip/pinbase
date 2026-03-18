@@ -1,5 +1,4 @@
 ---
-slug: hootenanny
 name: Hootenanny
 title_slug: hootenanny
 opdb_id: G4xo0-MJjOK

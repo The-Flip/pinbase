@@ -1,4 +1,3 @@
 ---
-slug: cavalry
 name: Cavalry
 ---

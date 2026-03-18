@@ -1,5 +1,4 @@
 ---
-slug: nation-wide-novelties-inc
 name: Nation Wide Novelties, Inc.
 manufacturer_slug: nation-wide-novelties-inc
 ipdb_manufacturer_id: 703

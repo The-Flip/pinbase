@@ -1,4 +1,3 @@
 ---
-slug: subway
 name: Subway
 ---

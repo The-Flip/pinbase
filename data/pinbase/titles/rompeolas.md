@@ -1,4 +1,3 @@
 ---
-slug: rompeolas
 name: Rompeolas
 ---

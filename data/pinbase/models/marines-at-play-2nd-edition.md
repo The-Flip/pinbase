@@ -1,5 +1,4 @@
 ---
-slug: marines-at-play-2nd-edition
 name: Marines At Play (2nd Edition)
 title_slug: marines-at-play-2nd-edition
 ipdb_id: 3393

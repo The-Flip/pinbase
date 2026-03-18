@@ -1,5 +1,4 @@
 ---
-slug: hercules-2
 name: Hercules
 title_slug: hercules-2
 ipdb_id: 4394

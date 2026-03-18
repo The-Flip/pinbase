@@ -1,4 +1,3 @@
 ---
-slug: damnation
 name: Damnation
 ---

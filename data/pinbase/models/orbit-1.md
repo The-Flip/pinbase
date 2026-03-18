@@ -1,5 +1,4 @@
 ---
-slug: orbit-1
 name: Orbit 1
 title_slug: orbit-1
 opdb_id: G50jJ-ML09x

@@ -1,4 +1,3 @@
 ---
-slug: fighter
 name: Fighter
 ---

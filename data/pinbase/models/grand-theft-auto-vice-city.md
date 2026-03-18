@@ -1,5 +1,4 @@
 ---
-slug: grand-theft-auto-vice-city
 name: grand theft auto vice city
 title_slug: grand-theft-auto-vice-city
 ipdb_id: 6426

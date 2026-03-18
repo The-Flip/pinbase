@@ -1,5 +1,4 @@
 ---
-slug: ship-mates
 name: Ship-Mates
 title_slug: ship-mates
 opdb_id: G4jvD-MJKjd

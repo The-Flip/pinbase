@@ -1,4 +1,3 @@
 ---
-slug: traveling
 name: Traveling
 ---

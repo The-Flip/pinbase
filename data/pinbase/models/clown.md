@@ -1,5 +1,4 @@
 ---
-slug: clown
 name: Clown
 title_slug: clown
 opdb_id: G5Wjo-MJ9ll

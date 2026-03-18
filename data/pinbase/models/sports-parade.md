@@ -1,5 +1,4 @@
 ---
-slug: sports-parade
 name: Sports Parade
 title_slug: sports-parade
 ipdb_id: 3469

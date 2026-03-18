@@ -1,5 +1,4 @@
 ---
-slug: orgie
 name: Orgie
 title_slug: orgie
 ipdb_id: 6063

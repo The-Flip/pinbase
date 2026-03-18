@@ -1,5 +1,4 @@
 ---
-slug: cyclone-2
 name: Cyclone
 title_slug: cyclone-2
 opdb_id: GR9EB-MZe46

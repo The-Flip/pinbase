@@ -1,5 +1,4 @@
 ---
-slug: indicator
 name: Indicator
 title_slug: indicator
 ipdb_id: 3171

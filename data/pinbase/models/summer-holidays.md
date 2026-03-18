@@ -1,5 +1,4 @@
 ---
-slug: summer-holidays
 name: Summer Holidays
 title_slug: summer-holidays
 ipdb_id: 4597

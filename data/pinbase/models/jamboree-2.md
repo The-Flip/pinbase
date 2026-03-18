@@ -1,5 +1,4 @@
 ---
-slug: jamboree-2
 name: Jamboree
 title_slug: jamboree-2
 ipdb_id: 6958

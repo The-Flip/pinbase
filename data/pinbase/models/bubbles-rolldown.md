@@ -1,5 +1,4 @@
 ---
-slug: bubbles-rolldown
 name: Bubbles (Rolldown)
 title_slug: bubbles-rolldown
 ipdb_id: 4355

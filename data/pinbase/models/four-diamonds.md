@@ -1,5 +1,4 @@
 ---
-slug: four-diamonds
 name: Four Diamonds
 title_slug: four-diamonds
 ipdb_id: 932

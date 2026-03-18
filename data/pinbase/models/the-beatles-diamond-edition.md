@@ -1,5 +1,4 @@
 ---
-slug: the-beatles-diamond-edition
 name: The Beatles (Diamond)
 title_slug: the-beatles
 opdb_id: G0l8P-M85d9-AOv0B

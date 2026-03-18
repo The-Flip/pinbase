@@ -1,5 +1,4 @@
 ---
-slug: flying-champ
 name: Flying Champ
 title_slug: flying-champ
 ipdb_id: 900

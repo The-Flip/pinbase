@@ -1,5 +1,4 @@
 ---
-slug: olympic-doubles-2
 name: Olympic Doubles
 title_slug: olympic-doubles-2
 ipdb_id: 5362

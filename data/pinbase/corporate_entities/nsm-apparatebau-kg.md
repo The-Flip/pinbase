@@ -1,5 +1,4 @@
 ---
-slug: nsm-apparatebau-kg
 name: NSM Apparatebau KG
 manufacturer_slug: nsm
 ipdb_manufacturer_id: 793

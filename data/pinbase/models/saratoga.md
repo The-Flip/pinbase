@@ -1,5 +1,4 @@
 ---
-slug: saratoga
 name: Saratoga
 title_slug: saratoga
 opdb_id: GllXX-MwNdr

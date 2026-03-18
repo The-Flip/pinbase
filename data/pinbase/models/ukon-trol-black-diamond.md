@@ -1,5 +1,4 @@
 ---
-slug: ukon-trol-black-diamond
 name: Ukon Trol Black Diamond
 title_slug: ukon-trol-black-diamond
 ipdb_id: 5774

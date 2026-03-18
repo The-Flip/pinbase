@@ -1,5 +1,4 @@
 ---
-slug: king-of-diamonds-2
 name: King of Diamonds
 title_slug: king-of-diamonds
 opdb_id: GrlPj-MQjdp

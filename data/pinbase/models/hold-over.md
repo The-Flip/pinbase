@@ -1,5 +1,4 @@
 ---
-slug: hold-over
 name: Hold Over
 title_slug: hold-over
 ipdb_id: 1208

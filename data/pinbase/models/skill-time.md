@@ -1,5 +1,4 @@
 ---
-slug: skill-time
 name: Skill Time
 title_slug: skill-time
 ipdb_id: 3234

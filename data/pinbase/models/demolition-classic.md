@@ -1,5 +1,4 @@
 ---
-slug: demolition-classic
 name: Demolition Classic
 title_slug: demolition-classic
 opdb_id: G5vVk-MDX22

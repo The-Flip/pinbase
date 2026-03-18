@@ -1,5 +1,4 @@
 ---
-slug: salute
 name: Salute
 title_slug: salute
 ipdb_id: 2047

@@ -1,5 +1,4 @@
 ---
-slug: sweet-shawnee
 name: Sweet Shawnee
 title_slug: sweet-shawnee
 ipdb_id: 6939

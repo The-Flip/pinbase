@@ -1,5 +1,4 @@
 ---
-slug: bristol-hills
 name: Bristol Hills
 title_slug: snow-queen-snow-derby
 opdb_id: GRKZV-MwN33

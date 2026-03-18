@@ -1,5 +1,4 @@
 ---
-slug: predator-2
 name: Predator
 title_slug: predator-2
 opdb_id: Gwe3B-MnKrO

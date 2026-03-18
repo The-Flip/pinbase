@@ -1,5 +1,4 @@
 ---
-slug: the-ritz
 name: The Ritz
 title_slug: the-ritz
 ipdb_id: 1964

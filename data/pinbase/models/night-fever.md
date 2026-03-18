@@ -1,5 +1,4 @@
 ---
-slug: night-fever
 name: Night Fever
 title_slug: night-fever
 opdb_id: GR9Po-MePYy

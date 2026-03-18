@@ -1,5 +1,4 @@
 ---
-slug: space-time-2
 name: Space Time
 title_slug: space-time
 ipdb_id: 4062

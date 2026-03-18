@@ -1,5 +1,4 @@
 ---
-slug: palm-beach-turbo
 name: Palm Beach Turbo
 title_slug: palm-beach-turbo
 ipdb_id: 5495

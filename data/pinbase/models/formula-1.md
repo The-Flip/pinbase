@@ -1,5 +1,4 @@
 ---
-slug: formula-1
 name: Formula I
 title_slug: formula-i
 opdb_id: GrqBj-MDRw3

@@ -1,5 +1,4 @@
 ---
-slug: congo
 name: Congo
 ---
 

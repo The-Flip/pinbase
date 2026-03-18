@@ -1,5 +1,4 @@
 ---
-slug: the-fiery-30s
 name: The Fiery 30's
 title_slug: the-fiery-30s-bang-bang
 opdb_id: GrdnO-Mo1be

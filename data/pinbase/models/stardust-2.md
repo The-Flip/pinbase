@@ -1,5 +1,4 @@
 ---
-slug: stardust-2
 name: Stardust
 title_slug: stardust-2
 ipdb_id: 3493

@@ -1,5 +1,4 @@
 ---
-slug: cannon-ball
 name: Cannon Ball
 title_slug: cannon-ball
 ipdb_id: 6062

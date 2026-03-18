@@ -1,4 +1,3 @@
 ---
-slug: kansas
 name: Kansas
 ---

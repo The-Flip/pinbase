@@ -1,5 +1,4 @@
 ---
-slug: parachute
 name: Parachute
 title_slug: parachute
 ipdb_id: 5639

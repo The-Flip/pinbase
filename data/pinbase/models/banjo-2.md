@@ -1,5 +1,4 @@
 ---
-slug: banjo-2
 name: Banjo
 title_slug: banjo-2
 ipdb_id: 2897

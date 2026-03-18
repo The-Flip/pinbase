@@ -1,5 +1,4 @@
 ---
-slug: big-chief-3
 name: Big Chief
 title_slug: big-chief-3
 ipdb_id: 2861

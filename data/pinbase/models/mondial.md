@@ -1,5 +1,4 @@
 ---
-slug: mondial
 name: Mondial
 title_slug: mondial
 ipdb_id: 5831

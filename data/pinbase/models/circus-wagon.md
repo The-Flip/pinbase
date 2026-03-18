@@ -1,5 +1,4 @@
 ---
-slug: circus-wagon
 name: Circus Wagon
 title_slug: circus-wagon
 opdb_id: G4qWJ-MrRl7

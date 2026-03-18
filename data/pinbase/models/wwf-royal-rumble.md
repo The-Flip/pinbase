@@ -1,5 +1,4 @@
 ---
-slug: wwf-royal-rumble
 name: WWF Royal Rumble
 title_slug: wwf
 opdb_id: G57y6-MLej6

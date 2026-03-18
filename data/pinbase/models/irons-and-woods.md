@@ -1,5 +1,4 @@
 ---
-slug: irons-and-woods
 name: Irons and Woods
 title_slug: irons-and-woods
 ipdb_id: 4651

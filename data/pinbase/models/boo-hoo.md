@@ -1,5 +1,4 @@
 ---
-slug: boo-hoo
 name: Boo-Hoo
 title_slug: boo-hoo
 ipdb_id: 353

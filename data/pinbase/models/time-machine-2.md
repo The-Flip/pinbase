@@ -1,5 +1,4 @@
 ---
-slug: time-machine-2
 name: Time Machine
 title_slug: time-machine-2
 ipdb_id: 5887

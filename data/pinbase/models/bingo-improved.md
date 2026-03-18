@@ -1,5 +1,4 @@
 ---
-slug: bingo-improved
 name: Bingo (Improved)
 title_slug: bingo-improved
 ipdb_id: 5406

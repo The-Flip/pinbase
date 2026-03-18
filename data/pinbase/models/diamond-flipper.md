@@ -1,5 +1,4 @@
 ---
-slug: diamond-flipper
 name: Diamond Flipper
 title_slug: diamond-flipper
 ipdb_id: 5869

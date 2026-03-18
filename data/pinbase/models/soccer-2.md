@@ -1,5 +1,4 @@
 ---
-slug: soccer-2
 name: Soccer
 title_slug: soccer-super-soccer
 opdb_id: GRn8D-MJpzR

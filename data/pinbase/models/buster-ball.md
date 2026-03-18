@@ -1,5 +1,4 @@
 ---
-slug: buster-ball
 name: Buster Ball
 title_slug: buster-ball
 ipdb_id: 409

@@ -1,5 +1,4 @@
 ---
-slug: ultra-attack
 name: Ultra Attack (ウルトラアタック)
 title_slug: ultra-attack
 ipdb_id: 6068

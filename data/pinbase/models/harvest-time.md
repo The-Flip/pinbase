@@ -1,5 +1,4 @@
 ---
-slug: harvest-time
 name: Harvest Time
 title_slug: harvest-time
 opdb_id: GrZKd-MyNNN

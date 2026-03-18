@@ -1,5 +1,4 @@
 ---
-slug: medieval-madness-remake-limited-edition
 name: Medieval Madness (Remake Limited Edition)
 title_slug: medieval-madness
 opdb_id: G5pe4-M61y6

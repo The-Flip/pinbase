@@ -1,5 +1,4 @@
 ---
-slug: rainbow-4
 name: Rainbow
 title_slug: rainbow-4
 ipdb_id: 1912

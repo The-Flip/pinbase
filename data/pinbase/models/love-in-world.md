@@ -1,5 +1,4 @@
 ---
-slug: love-in-world
 name: Love in World
 title_slug: love-in-world
 ipdb_id: 5666

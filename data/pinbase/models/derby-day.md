@@ -1,5 +1,4 @@
 ---
-slug: derby-day
 name: Derby Day
 title_slug: derby-day-2
 opdb_id: G5vyY-MJdZy

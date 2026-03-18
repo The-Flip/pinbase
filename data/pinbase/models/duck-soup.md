@@ -1,5 +1,4 @@
 ---
-slug: duck-soup
 name: Duck Soup
 title_slug: duck-soup
 ipdb_id: 4242

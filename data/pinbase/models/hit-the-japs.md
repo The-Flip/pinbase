@@ -1,5 +1,4 @@
 ---
-slug: hit-the-japs
 name: Hit The Japs
 title_slug: hit-the-japs
 ipdb_id: 1202

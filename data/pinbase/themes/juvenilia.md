@@ -1,4 +1,3 @@
 ---
-slug: juvenilia
 name: Juvenilia
 ---

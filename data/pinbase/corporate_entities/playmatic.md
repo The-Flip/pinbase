@@ -1,5 +1,4 @@
 ---
-slug: playmatic
 name: Playmatic
 manufacturer_slug: playmatic
 ipdb_manufacturer_id: 255

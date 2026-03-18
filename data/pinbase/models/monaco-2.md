@@ -1,5 +1,4 @@
 ---
-slug: monaco-2
 name: Monaco
 title_slug: monaco-cannes
 opdb_id: GRVzL-MJ2rb

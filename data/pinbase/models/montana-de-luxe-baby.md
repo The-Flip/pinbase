@@ -1,5 +1,4 @@
 ---
-slug: montana-de-luxe-baby
 name: Montana De Luxe Baby
 title_slug: montana-de-luxe-baby
 ipdb_id: 5473

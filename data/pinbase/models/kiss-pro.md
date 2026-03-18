@@ -1,5 +1,4 @@
 ---
-slug: kiss-pro
 name: KISS (Pro)
 title_slug: kiss-stern
 opdb_id: G4qX5-Mz2Pp

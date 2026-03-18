@@ -1,5 +1,4 @@
 ---
-slug: cargo
 name: Cargo
 title_slug: cargo
 ipdb_id: 448

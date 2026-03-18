@@ -1,4 +1,3 @@
 ---
-slug: elmer
 name: Elmer
 ---

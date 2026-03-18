@@ -1,5 +1,4 @@
 ---
-slug: hot-rods
 name: Hot-Rods
 title_slug: hot-rods
 ipdb_id: 1246

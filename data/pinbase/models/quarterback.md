@@ -1,5 +1,4 @@
 ---
-slug: quarterback
 name: Quarterback
 title_slug: kick-off-quarterback
 opdb_id: GRzed-MdEx8

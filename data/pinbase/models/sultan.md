@@ -1,5 +1,4 @@
 ---
-slug: sultan
 name: Sultan
 title_slug: sinbad
 opdb_id: G4xqN-MD1Rj-AO3dd

@@ -1,5 +1,4 @@
 ---
-slug: bridgeball-game-board-model
 name: Bridgeball (game board model)
 title_slug: bridgeball-game-board-model
 ipdb_id: 6748

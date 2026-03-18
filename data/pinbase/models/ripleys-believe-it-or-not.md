@@ -1,5 +1,4 @@
 ---
-slug: ripleys-believe-it-or-not
 name: Ripley's Believe It or Not!
 title_slug: ripleys-believe-it-or-not
 opdb_id: GRWyB-MLz6Z

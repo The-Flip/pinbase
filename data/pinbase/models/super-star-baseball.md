@@ -1,5 +1,4 @@
 ---
-slug: super-star-baseball
 name: Super Star Baseball
 title_slug: super-star-baseball
 ipdb_id: 5060

@@ -1,5 +1,4 @@
 ---
-slug: trinidad
 name: Trinidad
 title_slug: trinidad
 opdb_id: G8ljD-Mz2oP

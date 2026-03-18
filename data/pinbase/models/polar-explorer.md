@@ -1,5 +1,4 @@
 ---
-slug: polar-explorer
 name: Polar Explorer
 title_slug: polar-explorer
 opdb_id: GZVnO-M2Yxo

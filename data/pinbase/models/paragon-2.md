@@ -1,5 +1,4 @@
 ---
-slug: paragon-2
 name: Paragon
 title_slug: paragon
 opdb_id: GrXy3-ML0Ey

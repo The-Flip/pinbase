@@ -1,5 +1,4 @@
 ---
-slug: cabaret-2
 name: Cabaret
 title_slug: cabaret-2
 opdb_id: GEL0v-M9ROz

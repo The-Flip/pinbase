@@ -1,5 +1,4 @@
 ---
-slug: all-american-twin
 name: All-American Twin
 title_slug: all-american-twin
 ipdb_id: 3919

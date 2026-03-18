@@ -1,5 +1,4 @@
 ---
-slug: buckaroo
 name: Buckaroo
 title_slug: buckaroo-cow-poke
 opdb_id: GRzow-MQYqx

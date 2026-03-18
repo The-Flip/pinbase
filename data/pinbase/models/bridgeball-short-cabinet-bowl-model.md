@@ -1,5 +1,4 @@
 ---
-slug: bridgeball-short-cabinet-bowl-model
 name: Bridgeball (short cabinet bowl model)
 title_slug: bridgeball-short-cabinet-bowl-model
 ipdb_id: 5602

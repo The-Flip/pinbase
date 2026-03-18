@@ -1,5 +1,4 @@
 ---
-slug: home-stretch
 name: Home Stretch
 title_slug: home-stretch
 ipdb_id: 3156

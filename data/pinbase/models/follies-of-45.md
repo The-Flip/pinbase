@@ -1,5 +1,4 @@
 ---
-slug: follies-of-45
 name: Follies of '45
 title_slug: follies-of-45
 ipdb_id: 5439

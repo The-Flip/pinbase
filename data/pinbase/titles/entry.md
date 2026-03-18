@@ -1,4 +1,3 @@
 ---
-slug: entry
 name: Entry
 ---

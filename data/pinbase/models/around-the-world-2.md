@@ -1,5 +1,4 @@
 ---
-slug: around-the-world-2
 name: Around the World
 title_slug: around-the-world
 opdb_id: G5bpE-MLE4d

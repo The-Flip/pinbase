@@ -1,5 +1,4 @@
 ---
-slug: slap-stick
 name: Slap Stick
 title_slug: slap-stick
 opdb_id: GRvLv-M2YX5

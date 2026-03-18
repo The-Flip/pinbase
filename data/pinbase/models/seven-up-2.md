@@ -1,5 +1,4 @@
 ---
-slug: seven-up-2
 name: Seven Up
 title_slug: seven-up-set-up
 opdb_id: G5BJx-MLO2P

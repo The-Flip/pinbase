@@ -1,5 +1,4 @@
 ---
-slug: ivory-golf
 name: Ivory Golf
 title_slug: ivory-golf
 ipdb_id: 3173

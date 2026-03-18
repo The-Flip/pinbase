@@ -1,5 +1,4 @@
 ---
-slug: sky-fly
 name: Sky Fly
 title_slug: sky-fly
 opdb_id: G5Yqx-MKNjX

@@ -1,5 +1,4 @@
 ---
-slug: jack-rabbit-2
 name: Jack Rabbit
 title_slug: jack-rabbit-2
 ipdb_id: 3635

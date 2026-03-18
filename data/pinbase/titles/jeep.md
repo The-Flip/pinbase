@@ -1,4 +1,3 @@
 ---
-slug: jeep
 name: Jeep
 ---

@@ -1,5 +1,4 @@
 ---
-slug: auto-race
 name: Auto Race
 title_slug: auto-race
 opdb_id: GR9WJ-MLX0W

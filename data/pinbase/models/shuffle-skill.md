@@ -1,5 +1,4 @@
 ---
-slug: shuffle-skill
 name: Shuffle Skill
 title_slug: shuffle-skill
 ipdb_id: 5655

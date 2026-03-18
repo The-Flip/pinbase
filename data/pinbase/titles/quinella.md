@@ -1,4 +1,3 @@
 ---
-slug: quinella
 name: Quinella
 ---

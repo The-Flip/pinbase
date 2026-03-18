@@ -1,5 +1,4 @@
 ---
-slug: krull-ii
 name: Krull II
 title_slug: krull-ii
 ipdb_id: 5338

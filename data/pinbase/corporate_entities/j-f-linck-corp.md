@@ -1,5 +1,4 @@
 ---
-slug: j-f-linck-corp
 name: J. F. Linck Corp.
 manufacturer_slug: j-f-linck-corp
 ipdb_manufacturer_id: 733

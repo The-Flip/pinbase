@@ -1,5 +1,4 @@
 ---
-slug: nevada
 name: Nevada
 title_slug: nevada
 ipdb_id: 1665

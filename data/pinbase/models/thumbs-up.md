@@ -1,5 +1,4 @@
 ---
-slug: thumbs-up
 name: Thumbs Up
 title_slug: thumbs-up
 ipdb_id: 2553

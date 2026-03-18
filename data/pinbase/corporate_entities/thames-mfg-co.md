@@ -1,5 +1,4 @@
 ---
-slug: thames-mfg-co
 name: Thames Mfg. Co.
 manufacturer_slug: taco
 ipdb_manufacturer_id: 554

@@ -1,5 +1,4 @@
 ---
-slug: all-star-basketball
 name: All-Star Basketball
 title_slug: all-star-basketball
 opdb_id: GRBeJ-MDvKY

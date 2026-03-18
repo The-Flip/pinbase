@@ -1,5 +1,4 @@
 ---
-slug: cue-jr
 name: Cue Jr.
 title_slug: cue-jr
 ipdb_id: 5054

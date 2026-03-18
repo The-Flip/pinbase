@@ -1,5 +1,4 @@
 ---
-slug: magic-card
 name: Magic Card
 title_slug: magic-card
 ipdb_id: 3776

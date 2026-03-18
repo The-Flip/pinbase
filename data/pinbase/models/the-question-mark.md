@@ -1,5 +1,4 @@
 ---
-slug: the-question-mark
 name: The Question Mark
 title_slug: the-question-mark
 ipdb_id: 1892

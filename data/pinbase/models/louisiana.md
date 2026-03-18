@@ -1,5 +1,4 @@
 ---
-slug: louisiana
 name: Louisiana
 title_slug: louisiana
 ipdb_id: 4533

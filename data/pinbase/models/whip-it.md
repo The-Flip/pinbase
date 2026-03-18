@@ -1,5 +1,4 @@
 ---
-slug: whip-it
 name: Whip-It
 title_slug: whip-it
 ipdb_id: 5761

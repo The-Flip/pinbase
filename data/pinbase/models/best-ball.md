@@ -1,5 +1,4 @@
 ---
-slug: best-ball
 name: Best Ball
 title_slug: best-ball
 ipdb_id: 6646

@@ -1,5 +1,4 @@
 ---
-slug: electric-tournament-pool
 name: Electric Tournament Pool
 title_slug: electric-tournament-pool
 ipdb_id: 6781

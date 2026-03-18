@@ -1,5 +1,4 @@
 ---
-slug: tom-tom-2
 name: Tom Tom
 title_slug: tom-tom-2
 ipdb_id: 5099

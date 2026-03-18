@@ -1,5 +1,4 @@
 ---
-slug: victory
 name: Victory
 title_slug: victory-2
 ipdb_id: 2731

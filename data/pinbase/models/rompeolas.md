@@ -1,5 +1,4 @@
 ---
-slug: rompeolas
 name: Rompeolas
 title_slug: rompeolas
 ipdb_id: 5806

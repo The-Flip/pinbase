@@ -1,5 +1,4 @@
 ---
-slug: the-arrow
 name: The Arrow
 title_slug: the-arrow
 ipdb_id: 94

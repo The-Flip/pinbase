@@ -1,5 +1,4 @@
 ---
-slug: aces-kings
 name: Aces & Kings
 title_slug: aces-kings
 opdb_id: G5oK2-M9R6y

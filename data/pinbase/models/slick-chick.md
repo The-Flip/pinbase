@@ -1,5 +1,4 @@
 ---
-slug: slick-chick
 name: Slick Chick
 title_slug: slick-chick
 opdb_id: Gre8z-MLeK2

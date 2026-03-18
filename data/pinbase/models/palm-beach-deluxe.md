@@ -1,5 +1,4 @@
 ---
-slug: palm-beach-deluxe
 name: Palm Beach DeLuxe
 title_slug: palm-beach-deluxe
 ipdb_id: 5867

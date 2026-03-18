@@ -1,10 +1,11 @@
 ---
-slug: the-avengers-limited-edition
 name: The Avengers (Limited Edition)
 title_slug: the-avengers
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GRzNR-MyNq8
 ipdb_id: 5940
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: the-avengers-premium
 credit_refs:
 - person_slug: george-gomez

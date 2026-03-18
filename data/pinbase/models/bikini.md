@@ -1,5 +1,4 @@
 ---
-slug: bikini
 name: Bikini
 title_slug: bikini
 ipdb_id: 290

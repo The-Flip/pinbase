@@ -1,5 +1,4 @@
 ---
-slug: turf
 name: Turf
 title_slug: turf
 ipdb_id: 3900

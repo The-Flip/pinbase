@@ -1,5 +1,4 @@
 ---
-slug: vector
 name: Vector
 title_slug: vector
 opdb_id: G486B-MrRwE

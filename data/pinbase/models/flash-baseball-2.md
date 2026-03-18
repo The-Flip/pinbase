@@ -1,5 +1,4 @@
 ---
-slug: flash-baseball-2
 name: Flash-Baseball
 title_slug: flash-baseball-2
 ipdb_id: 6437

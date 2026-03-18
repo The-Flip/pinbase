@@ -1,5 +1,4 @@
 ---
-slug: melody-2
 name: Melody
 title_slug: melody
 opdb_id: GwebP-MBRxn

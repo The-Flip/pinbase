@@ -1,5 +1,4 @@
 ---
-slug: surfer
 name: Surfer
 title_slug: surf-champ-surfer
 opdb_id: GrZwo-MJNlQ

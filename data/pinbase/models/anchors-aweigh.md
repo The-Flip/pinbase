@@ -1,5 +1,4 @@
 ---
-slug: anchors-aweigh
 name: Anchors Aweigh
 title_slug: anchors-aweigh
 ipdb_id: 4727

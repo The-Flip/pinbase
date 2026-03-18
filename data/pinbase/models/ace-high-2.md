@@ -1,5 +1,4 @@
 ---
-slug: ace-high-2
 name: Ace High
 title_slug: ace-high
 opdb_id: GrlJ3-M2YvO

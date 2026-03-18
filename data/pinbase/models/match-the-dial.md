@@ -1,5 +1,4 @@
 ---
-slug: match-the-dial
 name: Match The Dial
 title_slug: match-the-dial
 ipdb_id: 1559

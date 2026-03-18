@@ -1,5 +1,4 @@
 ---
-slug: landing-on-venus
 name: Landing on Venus
 title_slug: landing-on-venus
 opdb_id: G4dPD-MDvqp

@@ -1,4 +1,3 @@
 ---
-slug: montana
 name: Montana
 ---

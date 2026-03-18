@@ -1,4 +1,3 @@
 ---
-slug: ships
 name: Ships
 ---

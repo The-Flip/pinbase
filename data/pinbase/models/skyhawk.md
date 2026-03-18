@@ -1,5 +1,4 @@
 ---
-slug: skyhawk
 name: Skyhawk
 title_slug: skyhawk
 ipdb_id: 4699

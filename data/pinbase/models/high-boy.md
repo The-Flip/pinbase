@@ -1,5 +1,4 @@
 ---
-slug: high-boy
 name: High Boy
 title_slug: high-boy
 ipdb_id: 4791

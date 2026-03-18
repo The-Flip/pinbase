@@ -1,5 +1,4 @@
 ---
-slug: miami-balls
 name: Miami Balls
 title_slug: miami-balls
 ipdb_id: 5281

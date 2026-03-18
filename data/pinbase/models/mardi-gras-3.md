@@ -1,5 +1,4 @@
 ---
-slug: mardi-gras-3
 name: Mardi Gras
 title_slug: mardi-gras-3
 ipdb_id: 3390

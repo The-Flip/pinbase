@@ -1,5 +1,4 @@
 ---
-slug: dancing-dolls-extended-play-prototype
 name: Dancing Dolls (Extended Play Prototype)
 title_slug: dancing-dolls-extended-play-prototype
 ipdb_id: 5902

@@ -1,5 +1,4 @@
 ---
-slug: ajax
 name: Ajax
 title_slug: ajax
 ipdb_id: 6725

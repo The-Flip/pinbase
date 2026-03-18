@@ -1,5 +1,4 @@
 ---
-slug: sara-suzy
 name: Sara-Suzy
 title_slug: sara-suzy
 ipdb_id: 2053

@@ -1,5 +1,4 @@
 ---
-slug: derby-roll
 name: Derby Roll
 title_slug: derby-roll
 ipdb_id: 3060

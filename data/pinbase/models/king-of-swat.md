@@ -1,5 +1,4 @@
 ---
-slug: king-of-swat
 name: King of Swat
 title_slug: king-of-swat
 ipdb_id: 3195

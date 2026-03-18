@@ -1,5 +1,4 @@
 ---
-slug: foto-finish-2
 name: Foto Finish
 title_slug: foto-finish
 opdb_id: GRV1D-MQkOy

@@ -1,5 +1,4 @@
 ---
-slug: win-a-card
 name: Win A Card
 title_slug: win-a-card
 ipdb_id: 3567

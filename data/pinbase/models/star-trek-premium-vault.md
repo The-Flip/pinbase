@@ -1,5 +1,4 @@
 ---
-slug: star-trek-premium-vault
 name: Star Trek (Premium Vault)
 title_slug: star-trek-stern
 opdb_id: Gryw4-MwNwZ

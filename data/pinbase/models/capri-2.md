@@ -1,5 +1,4 @@
 ---
-slug: capri-2
 name: Capri
 title_slug: capri-2
 ipdb_id: 4602

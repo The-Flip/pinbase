@@ -1,5 +1,4 @@
 ---
-slug: road
 name: Road
 title_slug: road
 ipdb_id: 4403

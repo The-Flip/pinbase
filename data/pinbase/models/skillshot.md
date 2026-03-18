@@ -1,5 +1,4 @@
 ---
-slug: skillshot
 name: SkillShot
 title_slug: skillshot
 ipdb_id: 5722

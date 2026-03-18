@@ -1,4 +1,3 @@
 ---
-slug: animated
 name: Animated
 ---

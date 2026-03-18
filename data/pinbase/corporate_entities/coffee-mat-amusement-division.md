@@ -1,5 +1,4 @@
 ---
-slug: coffee-mat-amusement-division
 name: Coffee-Mat Amusement Division
 manufacturer_slug: coffee-mat
 ipdb_manufacturer_id: 86

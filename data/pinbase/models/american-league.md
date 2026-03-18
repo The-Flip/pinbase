@@ -1,5 +1,4 @@
 ---
-slug: american-league
 name: American League
 title_slug: american-league
 ipdb_id: 5001

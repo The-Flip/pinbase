@@ -1,5 +1,4 @@
 ---
-slug: manhattan
 name: Manhattan
 title_slug: manhattan
 opdb_id: G3EEl-MkP51

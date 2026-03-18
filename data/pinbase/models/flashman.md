@@ -1,5 +1,4 @@
 ---
-slug: flashman
 name: Flashman
 title_slug: flashman
 opdb_id: G5Q0J-MQkYy

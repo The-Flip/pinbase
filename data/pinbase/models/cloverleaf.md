@@ -1,5 +1,4 @@
 ---
-slug: cloverleaf
 name: Cloverleaf
 title_slug: cloverleaf
 ipdb_id: 537

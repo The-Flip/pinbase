@@ -1,5 +1,4 @@
 ---
-slug: advance-roll
 name: Advance Roll
 title_slug: advance-roll
 ipdb_id: 2880

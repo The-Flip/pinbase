@@ -1,4 +1,3 @@
 ---
-slug: dimensional
 name: dimensional
 ---

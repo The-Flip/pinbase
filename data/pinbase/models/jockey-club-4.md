@@ -1,5 +1,4 @@
 ---
-slug: jockey-club-4
 name: Jockey Club
 title_slug: jockey-club
 opdb_id: G4lqL-MD36o

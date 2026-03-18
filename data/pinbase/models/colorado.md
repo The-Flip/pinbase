@@ -1,5 +1,4 @@
 ---
-slug: colorado
 name: Colorado
 title_slug: colorado
 ipdb_id: 4421

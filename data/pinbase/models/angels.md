@@ -1,5 +1,4 @@
 ---
-slug: angels
 name: Angels
 title_slug: angels
 ipdb_id: 4396

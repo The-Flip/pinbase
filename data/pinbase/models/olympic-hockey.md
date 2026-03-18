@@ -1,5 +1,4 @@
 ---
-slug: olympic-hockey
 name: Olympic Hockey
 title_slug: olympic-hockey
 opdb_id: G41WY-MJj5r

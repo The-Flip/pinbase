@@ -1,5 +1,4 @@
 ---
-slug: play-ball-6
 name: Play Ball
 title_slug: play-ball-6
 ipdb_id: 3298

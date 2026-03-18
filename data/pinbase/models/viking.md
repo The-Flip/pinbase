@@ -1,5 +1,4 @@
 ---
-slug: viking
 name: Viking
 title_slug: viking
 opdb_id: G57kN-MQ71K

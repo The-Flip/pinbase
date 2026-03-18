@@ -1,5 +1,4 @@
 ---
-slug: center-field
 name: Center Field
 title_slug: center-field
 ipdb_id: 4327

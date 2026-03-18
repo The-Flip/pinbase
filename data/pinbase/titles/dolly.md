@@ -1,4 +1,3 @@
 ---
-slug: dolly
 name: Dolly
 ---

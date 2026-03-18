@@ -1,5 +1,4 @@
 ---
-slug: gobble-holes
 name: Gobble Holes
 display_order: 11
 ---

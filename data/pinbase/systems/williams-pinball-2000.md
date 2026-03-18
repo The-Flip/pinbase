@@ -1,5 +1,4 @@
 ---
-slug: williams-pinball-2000
 name: Williams Pinball 2000
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

@@ -1,5 +1,4 @@
 ---
-slug: telecard
 name: Telecard
 title_slug: telecard
 opdb_id: G4jBe-MVK67

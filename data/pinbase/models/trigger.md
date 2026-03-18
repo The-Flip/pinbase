@@ -1,5 +1,4 @@
 ---
-slug: trigger
 name: Trigger
 title_slug: trigger
 opdb_id: G4273-ME0R8

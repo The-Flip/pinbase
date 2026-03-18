@@ -1,5 +1,4 @@
 ---
-slug: sky-chief-2
 name: Sky Chief
 title_slug: sky-chief-2
 ipdb_id: 3256

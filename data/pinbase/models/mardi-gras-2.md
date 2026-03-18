@@ -1,5 +1,4 @@
 ---
-slug: mardi-gras-2
 name: Mardi Gras
 title_slug: mardi-gras-2
 opdb_id: G3Ewl-ME0El

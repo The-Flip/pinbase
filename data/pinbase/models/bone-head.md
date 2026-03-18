@@ -1,5 +1,4 @@
 ---
-slug: bone-head
 name: Bone Head
 title_slug: bone-head
 opdb_id: GELZO-M2YkK

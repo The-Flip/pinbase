@@ -1,5 +1,4 @@
 ---
-slug: boston
 name: Boston
 title_slug: boston
 opdb_id: G5n6W-MjBj6

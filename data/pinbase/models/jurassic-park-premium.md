@@ -1,10 +1,10 @@
 ---
-slug: jurassic-park-premium
 name: Jurassic Park (Premium)
 title_slug: jurassic-park-stern
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GK17D-MKNKd-A15Yn
 ipdb_id: 6574
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: keith-elwin
   role: Design

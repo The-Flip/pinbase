@@ -1,5 +1,4 @@
 ---
-slug: spitfire
 name: Spitfire
 title_slug: spitfire
 opdb_id: G50qY-ML0YB

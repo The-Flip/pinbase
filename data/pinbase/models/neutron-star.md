@@ -1,5 +1,4 @@
 ---
-slug: neutron-star
 name: Neutron Star
 title_slug: neutron-star
 opdb_id: GrlQV-ML1BY

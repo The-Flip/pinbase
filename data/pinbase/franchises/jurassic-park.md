@@ -1,5 +1,4 @@
 ---
-slug: jurassic-park
 name: Jurassic Park
 ---
 

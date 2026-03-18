@@ -1,4 +1,3 @@
 ---
-slug: warfare
 name: Warfare
 ---

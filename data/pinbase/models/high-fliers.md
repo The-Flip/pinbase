@@ -1,5 +1,4 @@
 ---
-slug: high-fliers
 name: High Fliers
 title_slug: high-fliers
 ipdb_id: 6249

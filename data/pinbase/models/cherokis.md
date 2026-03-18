@@ -1,5 +1,4 @@
 ---
-slug: cherokis
 name: Cherokis
 title_slug: cherokeecherokis
 opdb_id: G5BE9-MW9PV

@@ -1,4 +1,3 @@
 ---
-slug: equity
 name: Equity
 ---

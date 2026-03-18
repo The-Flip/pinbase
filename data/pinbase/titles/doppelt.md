@@ -1,4 +1,3 @@
 ---
-slug: doppelt
 name: Doppelt
 ---

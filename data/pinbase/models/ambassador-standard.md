@@ -1,5 +1,4 @@
 ---
-slug: ambassador-standard
 name: Ambassador (Standard)
 title_slug: ambassador-standard
 ipdb_id: 67

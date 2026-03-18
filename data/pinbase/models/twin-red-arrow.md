@@ -1,5 +1,4 @@
 ---
-slug: twin-red-arrow
 name: Twin Red Arrow
 title_slug: twin-red-arrow
 ipdb_id: 6962

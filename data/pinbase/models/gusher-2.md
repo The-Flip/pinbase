@@ -1,5 +1,4 @@
 ---
-slug: gusher-2
 name: Gusher
 title_slug: gusher-2
 ipdb_id: 3132

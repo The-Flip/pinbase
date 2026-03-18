@@ -1,4 +1,3 @@
 ---
-slug: birdie
 name: Birdie
 ---

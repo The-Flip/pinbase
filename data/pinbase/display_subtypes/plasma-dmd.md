@@ -1,5 +1,4 @@
 ---
-slug: plasma-dmd
 name: Plasma
 display_order: 4
 display_type_slug: dot-matrix

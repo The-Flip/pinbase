@@ -1,5 +1,4 @@
 ---
-slug: slugfest-third-model
 name: SlugFest (Third Model)
 title_slug: slugfest-third-model
 ipdb_id: 6023

@@ -1,5 +1,4 @@
 ---
-slug: cocktail-tray-bagatelle
 name: Cocktail Tray Bagatelle
 title_slug: cocktail-tray-bagatelle
 ipdb_id: 6073

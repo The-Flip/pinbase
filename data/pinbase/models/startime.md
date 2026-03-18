@@ -1,5 +1,4 @@
 ---
-slug: startime
 name: Startime
 title_slug: startime
 ipdb_id: 3400

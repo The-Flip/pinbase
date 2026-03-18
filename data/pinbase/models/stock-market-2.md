@@ -1,5 +1,4 @@
 ---
-slug: stock-market-2
 name: Stock Market
 title_slug: stock-market-2
 ipdb_id: 3389

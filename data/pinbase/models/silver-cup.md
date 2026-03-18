@@ -1,5 +1,4 @@
 ---
-slug: silver-cup
 name: Silver Cup
 title_slug: silver-cup
 ipdb_id: 2146

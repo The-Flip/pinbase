@@ -1,5 +1,4 @@
 ---
-slug: trickle-ball
 name: Trickle Ball
 title_slug: trickle-ball
 ipdb_id: 6633

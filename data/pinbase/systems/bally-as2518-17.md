@@ -1,5 +1,4 @@
 ---
-slug: bally-as2518-17
 name: Bally AS-2518-17
 manufacturer_slug: bally
 technology_subgeneration_slug: ss-discrete

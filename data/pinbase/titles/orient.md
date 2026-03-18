@@ -1,4 +1,3 @@
 ---
-slug: orient
 name: Orient
 ---

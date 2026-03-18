@@ -1,5 +1,4 @@
 ---
-slug: victory-3
 name: Victory
 title_slug: victory
 opdb_id: GrdBk-Mq18w

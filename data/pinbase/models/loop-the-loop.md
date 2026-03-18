@@ -1,5 +1,4 @@
 ---
-slug: loop-the-loop
 name: Loop the Loop
 title_slug: loop-the-loop
 opdb_id: GrkYy-MDxOP

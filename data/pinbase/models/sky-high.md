@@ -1,5 +1,4 @@
 ---
-slug: sky-high
 name: Sky High
 title_slug: sky-high
 ipdb_id: 2194

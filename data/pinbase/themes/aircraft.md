@@ -1,4 +1,3 @@
 ---
-slug: aircraft
 name: Aircraft
 ---

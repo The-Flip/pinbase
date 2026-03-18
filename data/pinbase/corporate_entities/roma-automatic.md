@@ -1,5 +1,4 @@
 ---
-slug: roma-automatic
 name: Roma-Automatic
 manufacturer_slug: roma-automatic
 ipdb_manufacturer_id: 517

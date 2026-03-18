@@ -1,5 +1,4 @@
 ---
-slug: explorer
 name: Explorer
 title_slug: explorer-2
 opdb_id: GRDW6-MXrwl

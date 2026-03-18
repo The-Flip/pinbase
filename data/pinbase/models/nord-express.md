@@ -1,5 +1,4 @@
 ---
-slug: nord-express
 name: Nord-Express
 title_slug: nord-express
 ipdb_id: 3898

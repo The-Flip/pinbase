@@ -1,5 +1,4 @@
 ---
-slug: tahiti
 name: Tahiti
 title_slug: tahiti
 opdb_id: G8loD-M4o9w

@@ -1,5 +1,4 @@
 ---
-slug: elektro-bomber-type-c
 name: Elektro-Bomber (Type C)
 title_slug: elektro-bomber-type-c
 ipdb_id: 6057

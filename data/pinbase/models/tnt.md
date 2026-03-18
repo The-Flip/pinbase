@@ -1,5 +1,4 @@
 ---
-slug: tnt
 name: TNT
 title_slug: tnt
 ipdb_id: 2576

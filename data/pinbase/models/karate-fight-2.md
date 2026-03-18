@@ -1,5 +1,4 @@
 ---
-slug: karate-fight-2
 name: Karate Fight
 title_slug: karate-fight
 ipdb_id: 4663

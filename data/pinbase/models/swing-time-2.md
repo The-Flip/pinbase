@@ -1,5 +1,4 @@
 ---
-slug: swing-time-2
 name: Swing Time
 title_slug: swing-time
 opdb_id: Grk27-MQde8

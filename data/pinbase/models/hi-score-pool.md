@@ -1,5 +1,4 @@
 ---
-slug: hi-score-pool
 name: Hi-Score Pool
 title_slug: hi-score-pool
 opdb_id: GrPZj-MOEY7

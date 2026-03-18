@@ -1,5 +1,4 @@
 ---
-slug: baffle-ball
 name: Baffle Ball
 title_slug: baffle-ball
 ipdb_id: 129

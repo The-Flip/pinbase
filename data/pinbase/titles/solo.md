@@ -1,4 +1,3 @@
 ---
-slug: solo
 name: Solo
 ---

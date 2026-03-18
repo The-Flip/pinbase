@@ -1,5 +1,4 @@
 ---
-slug: jiggers-sr
 name: Jiggers (Sr)
 title_slug: jiggers-sr
 ipdb_id: 1293

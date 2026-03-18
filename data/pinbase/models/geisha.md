@@ -1,5 +1,4 @@
 ---
-slug: geisha
 name: Geisha
 title_slug: geisha
 opdb_id: GRb1z-MyN5o

@@ -1,5 +1,4 @@
 ---
-slug: shangrila
 name: Shangri'La
 title_slug: shangrila
 ipdb_id: 3337

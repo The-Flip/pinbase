@@ -1,5 +1,4 @@
 ---
-slug: skill-jumbo
 name: Skill Jumbo
 title_slug: skill-jumbo
 ipdb_id: 5110

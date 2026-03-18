@@ -1,5 +1,4 @@
 ---
-slug: peter-betres
 name: Peter Betres
 manufacturer_slug: betco-products-inc
 ipdb_manufacturer_id: 807

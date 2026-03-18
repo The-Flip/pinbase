@@ -1,5 +1,4 @@
 ---
-slug: star-trek-starfleet-pro-vault-edition
 name: Star Trek (Starfleet Pro Vault Edition)
 title_slug: star-trek-starfleet-pro-vault-edition
 ipdb_id: 6553

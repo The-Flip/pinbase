@@ -1,5 +1,4 @@
 ---
-slug: tex-op
 name: TEX-OP
 title_slug: tex-op
 ipdb_id: 5166

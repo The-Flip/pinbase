@@ -1,4 +1,3 @@
 ---
-slug: zipper
 name: Zipper
 ---

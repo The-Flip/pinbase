@@ -1,5 +1,4 @@
 ---
-slug: sky-ray
 name: Sky Ray
 title_slug: sky-ray
 ipdb_id: 2199

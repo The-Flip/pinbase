@@ -1,5 +1,4 @@
 ---
-slug: chicago-express
 name: Chicago Express
 title_slug: chicago-express
 ipdb_id: 503

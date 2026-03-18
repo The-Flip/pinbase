@@ -1,5 +1,4 @@
 ---
-slug: pop-em-2
 name: Pop-Em
 title_slug: pop-em-2
 ipdb_id: 5229

@@ -1,5 +1,4 @@
 ---
-slug: road-race
 name: Road Race
 title_slug: road-race-stock-car
 opdb_id: G4PQj-MQ6l8

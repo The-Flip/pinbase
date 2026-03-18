@@ -1,5 +1,4 @@
 ---
-slug: iron-man
 name: Iron Man
 ---
 

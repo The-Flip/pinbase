@@ -1,5 +1,4 @@
 ---
-slug: crescendo
 name: Crescendo
 title_slug: groovy-crescendo
 opdb_id: GRpKY-MJYo1

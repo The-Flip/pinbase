@@ -1,5 +1,4 @@
 ---
-slug: pay-day
 name: Pay Day
 title_slug: pay-day
 ipdb_id: 1769

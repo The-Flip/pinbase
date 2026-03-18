@@ -1,5 +1,4 @@
 ---
-slug: klondike
 name: Klondike
 title_slug: gold-rush-yukon-klondike
 opdb_id: GR987-M5Rny

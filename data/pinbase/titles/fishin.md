@@ -1,4 +1,3 @@
 ---
-slug: fishin
 name: Fishin'
 ---

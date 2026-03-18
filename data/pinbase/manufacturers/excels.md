@@ -1,4 +1,3 @@
 ---
-slug: excels
 name: Excels
 ---

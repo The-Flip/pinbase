@@ -1,5 +1,4 @@
 ---
-slug: round-and-round
 name: Round and Round
 title_slug: round-and-round
 ipdb_id: 4181

@@ -1,5 +1,4 @@
 ---
-slug: marvel
 name: Marvel
 title_slug: marvel
 ipdb_id: 3396

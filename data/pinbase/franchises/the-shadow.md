@@ -1,5 +1,4 @@
 ---
-slug: the-shadow
 name: The Shadow
 ---
 

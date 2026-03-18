@@ -1,5 +1,4 @@
 ---
-slug: alices-adventures-in-wonderland
 name: Alice's Adventures in Wonderland
 title_slug: alices-adventures-in-wonderland
 opdb_id: GX2vL-MW9en

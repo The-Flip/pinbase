@@ -1,5 +1,4 @@
 ---
-slug: nerts
 name: Nerts
 title_slug: nerts
 ipdb_id: 5582

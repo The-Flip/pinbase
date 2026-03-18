@@ -1,4 +1,3 @@
 ---
-slug: knights
 name: Knights
 ---

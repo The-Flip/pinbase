@@ -1,5 +1,4 @@
 ---
-slug: miss-reno
 name: Miss Reno
 title_slug: miss-reno
 ipdb_id: 5825

@@ -1,5 +1,4 @@
 ---
-slug: ufo-x
 name: UFO-X
 title_slug: ufo-x
 opdb_id: GrZb1-ML3le

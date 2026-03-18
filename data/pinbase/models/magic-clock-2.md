@@ -1,5 +1,4 @@
 ---
-slug: magic-clock-2
 name: Magic Clock
 title_slug: magic-clock-2
 ipdb_id: 1516

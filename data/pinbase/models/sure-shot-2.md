@@ -1,5 +1,4 @@
 ---
-slug: sure-shot-2
 name: Sure Shot
 title_slug: bank-shot-sure-shot
 opdb_id: GrqL6-Mx07k

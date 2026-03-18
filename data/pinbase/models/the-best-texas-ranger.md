@@ -1,5 +1,4 @@
 ---
-slug: the-best-texas-ranger
 name: The Best Texas Ranger
 title_slug: the-best-texas-ranger
 ipdb_id: 5633

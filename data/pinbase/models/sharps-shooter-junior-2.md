@@ -1,5 +1,4 @@
 ---
-slug: sharps-shooter-junior-2
 name: Sharp's Shooter Junior
 title_slug: sharps-shooter-junior-2
 ipdb_id: 5026

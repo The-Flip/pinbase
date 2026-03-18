@@ -1,5 +1,4 @@
 ---
-slug: jumbokick
 name: JumboKick (ジャンボキック)
 title_slug: jumbokick
 ipdb_id: 6772

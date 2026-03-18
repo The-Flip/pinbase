@@ -1,5 +1,4 @@
 ---
-slug: forward-pass
 name: Forward Pass
 title_slug: forward-pass
 ipdb_id: 4958

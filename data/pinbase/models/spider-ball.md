@@ -1,5 +1,4 @@
 ---
-slug: spider-ball
 name: Spider Ball
 title_slug: spider-ball
 ipdb_id: 5909

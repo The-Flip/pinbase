@@ -1,5 +1,4 @@
 ---
-slug: new-city
 name: New City
 title_slug: new-city
 ipdb_id: 4401

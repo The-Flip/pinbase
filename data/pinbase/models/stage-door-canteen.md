@@ -1,5 +1,4 @@
 ---
-slug: stage-door-canteen
 name: Stage Door Canteen
 title_slug: stage-door-canteen
 ipdb_id: 2338

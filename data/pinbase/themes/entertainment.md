@@ -1,4 +1,3 @@
 ---
-slug: entertainment
 name: Entertainment
 ---

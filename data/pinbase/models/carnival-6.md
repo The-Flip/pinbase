@@ -1,5 +1,4 @@
 ---
-slug: carnival-6
 name: Carnival
 title_slug: carnival-6
 ipdb_id: 3679

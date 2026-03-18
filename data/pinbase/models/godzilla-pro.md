@@ -1,5 +1,4 @@
 ---
-slug: godzilla-pro
 name: Godzilla (Pro)
 title_slug: godzilla-stern
 opdb_id: GweeP-MW95j

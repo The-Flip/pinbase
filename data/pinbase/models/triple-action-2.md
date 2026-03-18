@@ -1,5 +1,4 @@
 ---
-slug: triple-action-2
 name: Triple Action
 title_slug: triple-action-star-action
 opdb_id: GRzny-MJpew

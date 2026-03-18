@@ -1,5 +1,4 @@
 ---
-slug: playing-for-keeps
 name: Playing For Keeps
 title_slug: playing-for-keeps
 ipdb_id: 5924

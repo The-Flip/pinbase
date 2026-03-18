@@ -1,5 +1,4 @@
 ---
-slug: runabout-improved
 name: Runabout (Improved)
 title_slug: runabout-improved
 ipdb_id: 5413

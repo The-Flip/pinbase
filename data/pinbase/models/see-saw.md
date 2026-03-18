@@ -1,5 +1,4 @@
 ---
-slug: see-saw
 name: See Saw
 title_slug: see-saw
 opdb_id: G4lKk-MQ59j

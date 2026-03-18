@@ -1,5 +1,4 @@
 ---
-slug: skil-luck
 name: Skil Luck
 title_slug: skil-luck
 ipdb_id: 4847

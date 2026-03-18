@@ -1,5 +1,4 @@
 ---
-slug: shooting-star-junior
 name: Shooting Star (Junior)
 title_slug: shooting-star-junior
 ipdb_id: 6021

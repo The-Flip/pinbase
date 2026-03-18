@@ -1,4 +1,3 @@
 ---
-slug: beaches
 name: Beaches
 ---

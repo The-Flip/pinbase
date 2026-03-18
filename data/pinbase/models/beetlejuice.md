@@ -1,5 +1,4 @@
 ---
-slug: beetlejuice
 name: Beetlejuice
 title_slug: beetlejuice
 opdb_id: GqZVo-Mb5xK

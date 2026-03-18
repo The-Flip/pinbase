@@ -1,5 +1,4 @@
 ---
-slug: quicksilver
 name: Quicksilver
 title_slug: quicksilver
 opdb_id: GRBZl-Mb5Zq

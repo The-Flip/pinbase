@@ -1,5 +1,4 @@
 ---
-slug: swat-king
 name: Swat King
 title_slug: swat-king
 ipdb_id: 5074

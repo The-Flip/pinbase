@@ -1,5 +1,4 @@
 ---
-slug: flying-aces-2
 name: Flying Aces
 title_slug: star-explorer
 opdb_id: G48DQ-MQwod-ARNzE

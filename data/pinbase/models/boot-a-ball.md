@@ -1,5 +1,4 @@
 ---
-slug: boot-a-ball
 name: Boot-A-Ball
 title_slug: boot-a-ball
 opdb_id: G4JDn-MkPNb

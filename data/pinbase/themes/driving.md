@@ -1,4 +1,3 @@
 ---
-slug: driving
 name: Driving
 ---

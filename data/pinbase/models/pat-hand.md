@@ -1,5 +1,4 @@
 ---
-slug: pat-hand
 name: Pat Hand
 title_slug: pat-hand-satin-doll
 opdb_id: G48YQ-M1r1d

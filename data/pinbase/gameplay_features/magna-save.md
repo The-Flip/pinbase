@@ -1,5 +1,4 @@
 ---
-slug: magna-save
 name: Magna-Save
 display_order: 13
 ---

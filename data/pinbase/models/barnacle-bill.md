@@ -1,5 +1,4 @@
 ---
-slug: barnacle-bill
 name: Barnacle Bill
 title_slug: barnacle-bill
 opdb_id: GrEEB-MNE4n

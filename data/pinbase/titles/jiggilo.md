@@ -1,4 +1,3 @@
 ---
-slug: jiggilo
 name: Jiggilo
 ---

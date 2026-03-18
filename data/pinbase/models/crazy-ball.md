@@ -1,5 +1,4 @@
 ---
-slug: crazy-ball
 name: Crazy Ball
 title_slug: crazy-ball
 opdb_id: Gj69Z-MnKxq

@@ -1,5 +1,4 @@
 ---
-slug: unknown-16
 name: Unknown
 title_slug: unknown-16
 ipdb_id: 5764

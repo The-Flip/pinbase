@@ -1,5 +1,4 @@
 ---
-slug: high-low
 name: High-Low
 title_slug: high-low
 ipdb_id: 3147

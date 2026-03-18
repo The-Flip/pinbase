@@ -1,5 +1,4 @@
 ---
-slug: penalty-2
 name: Penalty 2
 title_slug: penalty-2
 ipdb_id: 5743

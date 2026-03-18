@@ -1,5 +1,4 @@
 ---
-slug: pirate-gold
 name: Pirate Gold
 title_slug: pirate-gold
 opdb_id: GRQQZ-MLyjq

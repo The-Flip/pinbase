@@ -1,5 +1,4 @@
 ---
-slug: golden-gate-2
 name: Golden Gate
 title_slug: golden-gate-2
 ipdb_id: 1048

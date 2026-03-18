@@ -1,5 +1,4 @@
 ---
-slug: jaws-pro
 name: JAWS (Pro)
 title_slug: jaws
 opdb_id: GLWll-MXr4N

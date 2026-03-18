@@ -1,5 +1,4 @@
 ---
-slug: mars-trek
 name: Mars Trek
 title_slug: mars-trek
 opdb_id: Gr89x-Mp4nB

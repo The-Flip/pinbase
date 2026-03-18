@@ -1,4 +1,3 @@
 ---
-slug: furie
 name: Furie
 ---

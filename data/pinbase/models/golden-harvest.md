@@ -1,5 +1,4 @@
 ---
-slug: golden-harvest
 name: Golden Harvest
 title_slug: golden-harvest
 ipdb_id: 1052

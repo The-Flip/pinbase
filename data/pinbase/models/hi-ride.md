@@ -1,5 +1,4 @@
 ---
-slug: hi-ride
 name: Hi-Ride
 title_slug: hi-ride
 ipdb_id: 1159

@@ -1,5 +1,4 @@
 ---
-slug: easy-steps
 name: Easy Steps
 title_slug: easy-steps
 ipdb_id: 755

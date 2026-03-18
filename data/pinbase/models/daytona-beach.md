@@ -1,5 +1,4 @@
 ---
-slug: daytona-beach
 name: Daytona Beach
 title_slug: daytona-beach
 ipdb_id: 3040

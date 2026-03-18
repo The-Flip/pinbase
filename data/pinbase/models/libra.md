@@ -1,5 +1,4 @@
 ---
-slug: libra
 name: Libra
 title_slug: libra
 ipdb_id: 4065

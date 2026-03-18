@@ -1,4 +1,3 @@
 ---
-slug: kabuki
 name: Kabuki
 ---

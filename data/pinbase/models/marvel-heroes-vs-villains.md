@@ -1,5 +1,4 @@
 ---
-slug: marvel-heroes-vs-villains
 name: Marvel Heroes vs. Villains
 title_slug: marvel-heroes-vs-villains
 ipdb_id: 5165

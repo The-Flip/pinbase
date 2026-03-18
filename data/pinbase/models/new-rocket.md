@@ -1,5 +1,4 @@
 ---
-slug: new-rocket
 name: New Rocket
 title_slug: new-rocket
 ipdb_id: 3575

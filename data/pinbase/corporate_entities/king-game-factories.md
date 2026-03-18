@@ -1,5 +1,4 @@
 ---
-slug: king-game-factories
 name: King Game Factories
 manufacturer_slug: king-game-factories
 ipdb_manufacturer_id: 176

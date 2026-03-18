@@ -1,5 +1,4 @@
 ---
-slug: joy-game
 name: Joy Game
 title_slug: joy-game
 ipdb_id: 3185

@@ -1,5 +1,4 @@
 ---
-slug: viking-king
 name: Viking King
 title_slug: viking-king
 ipdb_id: 5895

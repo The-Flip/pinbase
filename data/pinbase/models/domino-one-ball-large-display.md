@@ -1,5 +1,4 @@
 ---
-slug: domino-one-ball-large-display
 name: Domino One Ball (Large Display)
 title_slug: domino-one-ball-large-display
 ipdb_id: 6085

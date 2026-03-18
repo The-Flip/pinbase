@@ -1,5 +1,4 @@
 ---
-slug: ace-2
 name: Ace
 title_slug: ace-2
 ipdb_id: 5

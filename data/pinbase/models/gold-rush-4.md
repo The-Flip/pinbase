@@ -1,5 +1,4 @@
 ---
-slug: gold-rush-4
 name: Gold Rush
 title_slug: gold-rush-3
 ipdb_id: 3125

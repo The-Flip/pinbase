@@ -1,5 +1,4 @@
 ---
-slug: qualified
 name: Qualified
 title_slug: qualified
 ipdb_id: 3588

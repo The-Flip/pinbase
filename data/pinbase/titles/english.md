@@ -1,4 +1,3 @@
 ---
-slug: english
 name: English
 ---

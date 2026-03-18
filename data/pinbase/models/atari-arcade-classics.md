@@ -1,5 +1,4 @@
 ---
-slug: atari-arcade-classics
 name: Atari Arcade Classics
 title_slug: atari-arcade-classics
 ipdb_id: 6628

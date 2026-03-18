@@ -1,5 +1,4 @@
 ---
-slug: hit-the-deck
 name: Hit the Deck
 title_slug: hit-the-deck-neptune
 opdb_id: GRoWo-MDzOZ

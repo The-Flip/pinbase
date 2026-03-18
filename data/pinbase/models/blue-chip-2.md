@@ -1,5 +1,4 @@
 ---
-slug: blue-chip-2
 name: Blue Chip
 title_slug: blue-chip-2
 ipdb_id: 3632

@@ -1,4 +1,3 @@
 ---
-slug: transmitter
 name: Transmitter
 ---

@@ -1,5 +1,4 @@
 ---
-slug: horseshoes
 name: Horseshoes
 title_slug: horseshoes-2
 ipdb_id: 3961

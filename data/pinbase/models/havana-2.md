@@ -1,5 +1,4 @@
 ---
-slug: havana-2
 name: Havana
 title_slug: havana-2
 ipdb_id: 1135

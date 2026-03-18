@@ -1,5 +1,4 @@
 ---
-slug: stop-n-go
 name: Stop n Go
 title_slug: stop-n-go-2
 ipdb_id: 2383

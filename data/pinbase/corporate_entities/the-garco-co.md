@@ -1,5 +1,4 @@
 ---
-slug: the-garco-co
 name: The Garco Co.
 manufacturer_slug: the-garco-co
 ipdb_manufacturer_id: 665

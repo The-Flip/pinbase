@@ -1,5 +1,4 @@
 ---
-slug: chevron-2
 name: Chevron
 title_slug: chevron-2
 ipdb_id: 3012

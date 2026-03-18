@@ -1,5 +1,4 @@
 ---
-slug: track-odds
 name: Track Odds
 title_slug: track-odds
 ipdb_id: 2616

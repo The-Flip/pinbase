@@ -1,5 +1,4 @@
 ---
-slug: casino-2
 name: Casino
 title_slug: casino
 opdb_id: G4xOz-MDnlX

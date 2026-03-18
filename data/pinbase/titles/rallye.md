@@ -1,4 +1,3 @@
 ---
-slug: rallye
 name: Rallye
 ---

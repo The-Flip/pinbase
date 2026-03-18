@@ -1,4 +1,3 @@
 ---
-slug: rap
 name: Rap
 ---

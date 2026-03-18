@@ -1,5 +1,4 @@
 ---
-slug: rondeevoo
 name: Rondeevoo
 title_slug: rondeevoo
 opdb_id: GRQ3b-MrRZ7

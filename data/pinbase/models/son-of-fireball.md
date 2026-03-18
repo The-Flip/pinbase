@@ -1,5 +1,4 @@
 ---
-slug: son-of-fireball
 name: Son of Fireball
 title_slug: son-of-fireball
 ipdb_id: 6515

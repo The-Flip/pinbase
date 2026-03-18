@@ -1,5 +1,4 @@
 ---
-slug: free-fall
 name: Free Fall
 title_slug: sky-dive
 opdb_id: G4xlK-MDEKL

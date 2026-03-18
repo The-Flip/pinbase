@@ -1,5 +1,4 @@
 ---
-slug: mini-cycle
 name: Mini Cycle
 title_slug: polo-mini-cycle
 opdb_id: G59j7-MJ940

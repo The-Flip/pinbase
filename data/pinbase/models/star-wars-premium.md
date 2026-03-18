@@ -1,10 +1,11 @@
 ---
-slug: star-wars-premium
 name: Star Wars (Premium)
 title_slug: star-wars-stern
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G5vLR-ME049
 ipdb_id: 6429
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: steve-ritchie
   role: Design

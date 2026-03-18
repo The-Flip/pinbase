@@ -1,4 +1,3 @@
 ---
-slug: jousting
 name: Jousting
 ---

@@ -1,5 +1,4 @@
 ---
-slug: spin-a-way
 name: Spin-A-Way
 title_slug: spin-a-way
 ipdb_id: 4930

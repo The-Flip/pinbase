@@ -1,5 +1,4 @@
 ---
-slug: black-baby
 name: Black Baby
 title_slug: black-baby
 ipdb_id: 301

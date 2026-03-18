@@ -1,5 +1,4 @@
 ---
-slug: oh-johnny
 name: Oh! Johnny
 title_slug: oh-johnny
 ipdb_id: 1697

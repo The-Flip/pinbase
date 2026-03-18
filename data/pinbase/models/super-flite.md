@@ -1,5 +1,4 @@
 ---
-slug: super-flite
 name: Super-Flite
 title_slug: stratoastrosuper-flite
 opdb_id: GrdlQ-MW9Rl

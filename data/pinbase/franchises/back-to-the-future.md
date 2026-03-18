@@ -1,5 +1,4 @@
 ---
-slug: back-to-the-future
 name: Back to the Future
 ---
 

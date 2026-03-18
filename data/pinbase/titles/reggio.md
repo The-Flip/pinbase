@@ -1,4 +1,3 @@
 ---
-slug: reggio
 name: Reggio
 ---

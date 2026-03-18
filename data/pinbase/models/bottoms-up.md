@@ -1,5 +1,4 @@
 ---
-slug: bottoms-up
 name: Bottoms Up
 title_slug: bottoms-up
 ipdb_id: 5465

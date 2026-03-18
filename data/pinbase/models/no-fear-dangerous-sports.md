@@ -1,5 +1,4 @@
 ---
-slug: no-fear-dangerous-sports
 name: 'No Fear: Dangerous Sports'
 title_slug: no-fear
 opdb_id: Gr2Y2-MDxZq

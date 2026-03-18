@@ -1,5 +1,4 @@
 ---
-slug: lightning-3
 name: Lightning
 title_slug: lightning-2
 ipdb_id: 3211

@@ -1,5 +1,4 @@
 ---
-slug: sky-jump
 name: Sky Jump
 title_slug: sky-dive
 opdb_id: G4xlK-Mo163

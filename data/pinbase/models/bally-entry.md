@@ -1,5 +1,4 @@
 ---
-slug: bally-entry
 name: Bally Entry
 title_slug: bally-entry
 ipdb_id: 149

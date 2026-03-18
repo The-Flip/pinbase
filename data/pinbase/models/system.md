@@ -1,5 +1,4 @@
 ---
-slug: system
 name: System
 title_slug: system
 ipdb_id: 2487

@@ -1,5 +1,4 @@
 ---
-slug: reserve
 name: Reserve
 title_slug: reserve
 opdb_id: GRQ2j-M61vd

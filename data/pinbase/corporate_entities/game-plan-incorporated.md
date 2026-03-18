@@ -1,5 +1,4 @@
 ---
-slug: game-plan-incorporated
 name: Game Plan, Incorporated
 manufacturer_slug: game-plan
 ipdb_manufacturer_id: 126

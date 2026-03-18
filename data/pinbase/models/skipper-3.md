@@ -1,5 +1,4 @@
 ---
-slug: skipper-3
 name: Skipper
 title_slug: skipper
 opdb_id: GRvkP-MQYn1

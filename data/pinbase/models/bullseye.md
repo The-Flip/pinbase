@@ -1,5 +1,4 @@
 ---
-slug: bullseye
 name: Bullseye
 title_slug: bullseye
 ipdb_id: 4563

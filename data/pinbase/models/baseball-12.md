@@ -1,5 +1,4 @@
 ---
-slug: baseball-12
 name: Baseball
 title_slug: baseball-11
 ipdb_id: 5056

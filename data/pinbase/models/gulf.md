@@ -1,5 +1,4 @@
 ---
-slug: gulf
 name: Gulf
 title_slug: gulf
 ipdb_id: 6507

@@ -1,5 +1,4 @@
 ---
-slug: feed-bag
 name: Feed Bag
 title_slug: feed-bag
 ipdb_id: 3093

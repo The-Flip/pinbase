@@ -1,5 +1,4 @@
 ---
-slug: flipper-bingo
 name: Flipper Bingo
 title_slug: flipper-bingo
 ipdb_id: 6164

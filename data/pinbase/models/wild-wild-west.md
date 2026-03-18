@@ -1,5 +1,4 @@
 ---
-slug: wild-wild-west
 name: Wild Wild West
 title_slug: wild-wild-west-lariat
 opdb_id: G5LQ2-MQZ7p

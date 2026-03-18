@@ -1,5 +1,4 @@
 ---
-slug: goona-goona
 name: Goona Goona
 title_slug: goona-goona
 ipdb_id: 3812

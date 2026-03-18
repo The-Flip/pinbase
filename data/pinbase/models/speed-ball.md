@@ -1,5 +1,4 @@
 ---
-slug: speed-ball
 name: Speed Ball
 title_slug: speed-ball
 ipdb_id: 2276

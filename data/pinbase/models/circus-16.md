@@ -1,5 +1,4 @@
 ---
-slug: circus-16
 name: Circus (サーカス)
 title_slug: circus-14
 ipdb_id: 6871

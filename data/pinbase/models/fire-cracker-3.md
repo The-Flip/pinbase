@@ -1,5 +1,4 @@
 ---
-slug: fire-cracker-3
 name: Fire Cracker
 title_slug: fire-cracker-3
 ipdb_id: 6671

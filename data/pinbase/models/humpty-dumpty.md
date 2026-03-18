@@ -1,5 +1,4 @@
 ---
-slug: humpty-dumpty
 name: Humpty Dumpty
 title_slug: humpty-dumpty
 opdb_id: GyVVQ-MVKYX

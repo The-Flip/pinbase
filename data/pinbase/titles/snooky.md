@@ -1,4 +1,3 @@
 ---
-slug: snooky
 name: Snooky
 ---

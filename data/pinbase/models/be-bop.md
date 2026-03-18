@@ -1,5 +1,4 @@
 ---
-slug: be-bop
 name: Be-Bop
 title_slug: be-bop
 opdb_id: GPBj9-MLeRz

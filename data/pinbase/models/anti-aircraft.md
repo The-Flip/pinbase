@@ -1,5 +1,4 @@
 ---
-slug: anti-aircraft
 name: Anti-Aircraft
 title_slug: anti-aircraft
 ipdb_id: 3856

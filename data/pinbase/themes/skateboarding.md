@@ -1,4 +1,3 @@
 ---
-slug: skateboarding
 name: Skateboarding
 ---

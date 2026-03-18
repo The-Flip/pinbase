@@ -1,5 +1,4 @@
 ---
-slug: poko-lite
 name: Poko-Lite
 title_slug: poko-lite
 ipdb_id: 5299

@@ -1,5 +1,4 @@
 ---
-slug: war
 name: War
 title_slug: war-2
 ipdb_id: 6337

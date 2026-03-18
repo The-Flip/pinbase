@@ -1,5 +1,4 @@
 ---
-slug: cross-line
 name: Cross-Line
 title_slug: cross-line
 ipdb_id: 3035

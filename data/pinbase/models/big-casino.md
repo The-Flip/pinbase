@@ -1,5 +1,4 @@
 ---
-slug: big-casino
 name: Big Casino
 title_slug: big-casino
 opdb_id: GrEvL-MQYNY

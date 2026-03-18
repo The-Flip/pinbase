@@ -1,5 +1,4 @@
 ---
-slug: ditto
 name: Ditto
 title_slug: ditto
 ipdb_id: 690

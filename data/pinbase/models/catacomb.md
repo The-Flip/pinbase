@@ -1,5 +1,4 @@
 ---
-slug: catacomb
 name: Catacomb
 title_slug: catacomb
 opdb_id: GRoQ6-MLx0X

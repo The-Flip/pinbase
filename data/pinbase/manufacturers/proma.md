@@ -1,4 +1,3 @@
 ---
-slug: proma
 name: Proma
 ---

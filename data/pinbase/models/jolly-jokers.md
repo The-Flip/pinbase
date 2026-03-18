@@ -1,5 +1,4 @@
 ---
-slug: jolly-jokers
 name: Jolly Jokers
 title_slug: 3-coins
 opdb_id: GR0Q1-MLzk1

@@ -1,5 +1,4 @@
 ---
-slug: batting
 name: Batting
 title_slug: batting
 ipdb_id: 5770

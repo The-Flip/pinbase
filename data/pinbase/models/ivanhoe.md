@@ -1,5 +1,4 @@
 ---
-slug: ivanhoe
 name: Ivanhoe
 title_slug: ivanhoe
 ipdb_id: 3172

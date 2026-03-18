@@ -1,5 +1,4 @@
 ---
-slug: jungle-princess
 name: Jungle Princess
 title_slug: jungle-queenprincess
 opdb_id: GrNnr-MJkj3

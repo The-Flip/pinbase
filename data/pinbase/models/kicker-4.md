@@ -1,5 +1,4 @@
 ---
-slug: kicker-4
 name: Kicker
 title_slug: kicker-3
 ipdb_id: 6946

@@ -1,4 +1,3 @@
 ---
-slug: western
 name: Western
 ---

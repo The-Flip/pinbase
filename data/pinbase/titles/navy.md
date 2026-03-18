@@ -1,4 +1,3 @@
 ---
-slug: navy
 name: Navy
 ---

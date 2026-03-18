@@ -1,5 +1,4 @@
 ---
-slug: louisiana-2001
 name: Louisiana 2001
 title_slug: louisiana-2001
 ipdb_id: 4532

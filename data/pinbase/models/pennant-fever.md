@@ -1,5 +1,4 @@
 ---
-slug: pennant-fever
 name: Pennant Fever
 title_slug: pennant-fever
 ipdb_id: 3335

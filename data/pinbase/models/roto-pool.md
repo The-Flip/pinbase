@@ -1,5 +1,4 @@
 ---
-slug: roto-pool
 name: Roto Pool
 title_slug: roto-pool
 opdb_id: G59JJ-Ml9XY

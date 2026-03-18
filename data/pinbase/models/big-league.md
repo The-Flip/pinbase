@@ -1,5 +1,4 @@
 ---
-slug: big-league
 name: Big League
 title_slug: big-league
 ipdb_id: 259

@@ -1,5 +1,4 @@
 ---
-slug: widebody
 name: Widebody
 display_order: 3
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sky-gunner
 name: Sky Gunner
 title_slug: sky-gunner
 ipdb_id: 6550

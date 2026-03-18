@@ -1,5 +1,4 @@
 ---
-slug: triple-threat
 name: Triple Threat
 title_slug: triple-threat
 ipdb_id: 2653

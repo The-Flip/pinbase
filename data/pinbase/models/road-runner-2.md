@@ -1,5 +1,4 @@
 ---
-slug: road-runner-2
 name: Road Runner
 title_slug: road-runner-2
 ipdb_id: 3777

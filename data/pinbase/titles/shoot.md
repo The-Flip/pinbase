@@ -1,4 +1,3 @@
 ---
-slug: shoot
 name: Shoot
 ---

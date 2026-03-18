@@ -1,5 +1,4 @@
 ---
-slug: sinbad-4
 name: Sinbad
 title_slug: sinbad-2
 ipdb_id: 5730

@@ -1,4 +1,3 @@
 ---
-slug: skillshot
 name: SkillShot
 ---

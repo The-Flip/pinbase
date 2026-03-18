@@ -1,4 +1,3 @@
 ---
-slug: thistledowns
 name: Thistledowns
 ---

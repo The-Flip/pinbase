@@ -1,5 +1,4 @@
 ---
-slug: pool-champion
 name: Pool Champion
 title_slug: pool-champion
 opdb_id: G4jex-MLly8

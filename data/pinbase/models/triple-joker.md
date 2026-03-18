@@ -1,5 +1,4 @@
 ---
-slug: triple-joker
 name: Triple Joker
 title_slug: triple-joker
 ipdb_id: 4221

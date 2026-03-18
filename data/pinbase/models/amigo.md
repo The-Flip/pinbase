@@ -1,5 +1,4 @@
 ---
-slug: amigo
 name: Amigo
 title_slug: amigo
 opdb_id: G4ONX-MQY24

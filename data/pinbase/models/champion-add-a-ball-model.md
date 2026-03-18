@@ -1,5 +1,4 @@
 ---
-slug: champion-add-a-ball-model
 name: Champion (Add-a-Ball Model)
 title_slug: champion-add-a-ball-model
 ipdb_id: 6808

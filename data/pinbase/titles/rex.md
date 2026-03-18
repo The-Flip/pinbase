@@ -1,4 +1,3 @@
 ---
-slug: rex
 name: Rex
 ---

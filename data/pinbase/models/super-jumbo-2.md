@@ -1,5 +1,4 @@
 ---
-slug: super-jumbo-2
 name: Super Jumbo
 title_slug: super-jumbo
 ipdb_id: 6965

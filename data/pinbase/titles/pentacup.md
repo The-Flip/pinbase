@@ -1,4 +1,3 @@
 ---
-slug: pentacup
 name: Pentacup
 ---

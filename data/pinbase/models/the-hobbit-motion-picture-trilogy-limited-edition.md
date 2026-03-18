@@ -1,5 +1,4 @@
 ---
-slug: the-hobbit-motion-picture-trilogy-limited-edition
 name: The Hobbit (Motion Picture Trilogy)
 title_slug: the-hobbit
 opdb_id: G5bYr-MLezO-A97xX

@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-crusader
 name: De Luxe Crusader
 title_slug: de-luxe-crusader
 ipdb_id: 7002

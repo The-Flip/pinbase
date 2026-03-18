@@ -1,5 +1,4 @@
 ---
-slug: rh-osbrink-manufacturing-company
 name: R.H. Osbrink Manufacturing Company
 manufacturer_slug: rh-osbrink-manufacturing-company
 ipdb_manufacturer_id: 260

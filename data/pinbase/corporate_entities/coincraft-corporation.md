@@ -1,5 +1,4 @@
 ---
-slug: coincraft-corporation
 name: Coincraft Corporation
 manufacturer_slug: coincraft-corporation
 ipdb_manufacturer_id: 88

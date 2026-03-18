@@ -1,5 +1,4 @@
 ---
-slug: fire-cracker-2
 name: Fire Cracker
 title_slug: fire-cracker
 opdb_id: GrN2w-MwNyj

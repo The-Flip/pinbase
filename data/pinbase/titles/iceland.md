@@ -1,4 +1,3 @@
 ---
-slug: iceland
 name: Iceland
 ---

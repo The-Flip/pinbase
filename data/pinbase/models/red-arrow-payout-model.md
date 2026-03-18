@@ -1,5 +1,4 @@
 ---
-slug: red-arrow-payout-model
 name: Red Arrow (payout model)
 title_slug: red-arrow-payout-model
 ipdb_id: 7023

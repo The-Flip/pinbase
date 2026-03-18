@@ -1,5 +1,4 @@
 ---
-slug: scooby-doo-blood-sucker-edition
 name: Scooby-Doo (Blood Sucker Edition)
 title_slug: scooby-doo
 opdb_id: GllPz-MBRrV-ARZo2

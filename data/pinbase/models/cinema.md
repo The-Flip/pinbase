@@ -1,5 +1,4 @@
 ---
-slug: cinema
 name: Cinema
 title_slug: cinema-hollywood
 opdb_id: Grj7K-MOEXv

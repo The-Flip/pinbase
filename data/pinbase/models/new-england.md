@@ -1,5 +1,4 @@
 ---
-slug: new-england
 name: New England
 title_slug: new-england
 ipdb_id: 4912

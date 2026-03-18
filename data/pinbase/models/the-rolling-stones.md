@@ -1,5 +1,4 @@
 ---
-slug: the-rolling-stones
 name: The Rolling Stones
 title_slug: the-rolling-stones
 opdb_id: GredR-MDE2K

@@ -1,5 +1,4 @@
 ---
-slug: acapulco
 name: Acapulco
 title_slug: acapulco
 ipdb_id: 3

@@ -1,5 +1,4 @@
 ---
-slug: williams-wpc-fliptronics-2
 name: Williams WPC Fliptronics II
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

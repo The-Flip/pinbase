@@ -1,5 +1,4 @@
 ---
-slug: phantom-haus
 name: Phantom Haus
 title_slug: phantom-haus
 ipdb_id: 6840

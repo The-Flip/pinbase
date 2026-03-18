@@ -1,4 +1,3 @@
 ---
-slug: duet
 name: Duet
 ---

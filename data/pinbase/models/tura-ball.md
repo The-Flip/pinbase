@@ -1,5 +1,4 @@
 ---
-slug: tura-ball
 name: Tura-Ball
 title_slug: tura-ball
 ipdb_id: 4748

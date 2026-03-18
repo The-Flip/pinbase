@@ -1,5 +1,4 @@
 ---
-slug: king-pin-2
 name: King Pin
 title_slug: king-pin-pin-up
 opdb_id: GR6DZ-MJrBz

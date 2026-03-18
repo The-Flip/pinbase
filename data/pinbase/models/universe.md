@@ -1,5 +1,4 @@
 ---
-slug: universe
 name: Universe
 title_slug: universe-3
 ipdb_id: 2704

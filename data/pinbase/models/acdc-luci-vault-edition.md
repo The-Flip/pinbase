@@ -1,5 +1,4 @@
 ---
-slug: acdc-luci-vault-edition
 name: AC/DC (LUCI Vault Edition)
 title_slug: ac-dc
 opdb_id: G43W4-MdEjy-ARXn1

@@ -1,5 +1,4 @@
 ---
-slug: space-riders
 name: Space Riders
 title_slug: space-riders
 opdb_id: GrdzE-MQ2E6

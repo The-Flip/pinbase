@@ -1,5 +1,4 @@
 ---
-slug: continental-2000
 name: Continental 2000
 title_slug: continental-2000
 ipdb_id: 5970

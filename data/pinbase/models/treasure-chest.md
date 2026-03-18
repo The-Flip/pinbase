@@ -1,5 +1,4 @@
 ---
-slug: treasure-chest
 name: Treasure Chest
 title_slug: treasure-chest
 ipdb_id: 2638

@@ -1,5 +1,4 @@
 ---
-slug: sky-lark
 name: Sky Lark
 title_slug: sky-lark
 ipdb_id: 2197

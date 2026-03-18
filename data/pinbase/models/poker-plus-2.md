@@ -1,5 +1,4 @@
 ---
-slug: poker-plus-2
 name: Poker Plus (EM)
 title_slug: poker-plus
 opdb_id: GrPyz-MLOOd

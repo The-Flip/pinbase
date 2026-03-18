@@ -1,5 +1,4 @@
 ---
-slug: domino-bowler
 name: Domino Bowler
 title_slug: domino-bowler
 ipdb_id: 702

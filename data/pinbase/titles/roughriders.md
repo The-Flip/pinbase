@@ -1,4 +1,3 @@
 ---
-slug: roughriders
 name: Roughriders
 ---

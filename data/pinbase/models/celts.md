@@ -1,5 +1,4 @@
 ---
-slug: celts
 name: Celts
 title_slug: celts
 opdb_id: G9zzB-MvBKz

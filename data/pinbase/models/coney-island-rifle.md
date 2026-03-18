@@ -1,5 +1,4 @@
 ---
-slug: coney-island-rifle
 name: Coney Island Rifle
 title_slug: coney-island-rifle
 ipdb_id: 6478

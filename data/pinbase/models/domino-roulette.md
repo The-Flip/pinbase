@@ -1,5 +1,4 @@
 ---
-slug: domino-roulette
 name: Domino Roulette
 title_slug: domino-roulette
 ipdb_id: 6093

@@ -1,5 +1,4 @@
 ---
-slug: hole-in-one
 name: Hole In One
 title_slug: hole-in-one
 ipdb_id: 3634

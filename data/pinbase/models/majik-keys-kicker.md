@@ -1,5 +1,4 @@
 ---
-slug: majik-keys-kicker
 name: Majik Keys Kicker
 title_slug: majik-keys-kicker
 ipdb_id: 1524

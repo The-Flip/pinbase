@@ -1,5 +1,4 @@
 ---
-slug: gold-record
 name: Gold Record
 title_slug: gold-record-top-ten
 opdb_id: G5vwv-MwNNW

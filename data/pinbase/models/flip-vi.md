@@ -1,5 +1,4 @@
 ---
-slug: flip-vi
 name: Flip-VI
 title_slug: mundial-90-flip-vi
 opdb_id: Gr3yE-MLb3K

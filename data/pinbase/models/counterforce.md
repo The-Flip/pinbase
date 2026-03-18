@@ -1,5 +1,4 @@
 ---
-slug: counterforce
 name: Counterforce
 title_slug: counterforce
 opdb_id: GRYPN-Mz2RE

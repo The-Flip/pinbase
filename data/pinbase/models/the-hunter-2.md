@@ -1,5 +1,4 @@
 ---
-slug: the-hunter-2
 name: The Hunter
 title_slug: the-hunter-2
 ipdb_id: 6978

@@ -1,4 +1,3 @@
 ---
-slug: valley
 name: Valley
 ---

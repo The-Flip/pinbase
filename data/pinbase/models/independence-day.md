@@ -1,5 +1,4 @@
 ---
-slug: independence-day
 name: Independence Day
 title_slug: independence-day
 opdb_id: G4doQ-MKNN9

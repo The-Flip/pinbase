@@ -1,5 +1,4 @@
 ---
-slug: carrusel
 name: Carrusel
 title_slug: subway-cross-town
 opdb_id: GrEQy-MQYkj-A9vrl

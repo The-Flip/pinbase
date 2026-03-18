@@ -1,5 +1,4 @@
 ---
-slug: pink-panther
 name: Pink Panther
 title_slug: pink-panther
 opdb_id: Gre72-MDE5e

@@ -1,4 +1,3 @@
 ---
-slug: salute
 name: Salute
 ---

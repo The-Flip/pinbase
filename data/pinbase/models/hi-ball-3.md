@@ -1,5 +1,4 @@
 ---
-slug: hi-ball-3
 name: Hi Ball
 title_slug: hi-ball
 opdb_id: GR7j6-MDxWl

@@ -1,5 +1,4 @@
 ---
-slug: phoenix-city
 name: Phoenix City
 title_slug: phoenix-city
 ipdb_id: 5880

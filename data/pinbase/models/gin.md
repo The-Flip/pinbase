@@ -1,5 +1,4 @@
 ---
-slug: gin
 name: Gin
 title_slug: gin
 opdb_id: GrNNZ-MJoXP

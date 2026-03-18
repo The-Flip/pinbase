@@ -1,5 +1,4 @@
 ---
-slug: space-galaxy
 name: Space Galaxy
 title_slug: space-galaxy
 ipdb_id: 3259

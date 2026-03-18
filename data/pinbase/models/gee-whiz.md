@@ -1,5 +1,4 @@
 ---
-slug: gee-whiz
 name: Gee-Whiz
 title_slug: gee-whiz
 ipdb_id: 4285

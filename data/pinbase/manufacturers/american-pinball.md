@@ -1,5 +1,4 @@
 ---
-slug: american-pinball
 name: American Pinball
 opdb_manufacturer_id: 115
 ---

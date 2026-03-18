@@ -1,4 +1,3 @@
 ---
-slug: buckaroo
 name: Buckaroo
 ---

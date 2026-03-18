@@ -1,4 +1,3 @@
 ---
-slug: variety
 name: Variety
 ---

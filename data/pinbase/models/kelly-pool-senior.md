@@ -1,5 +1,4 @@
 ---
-slug: kelly-pool-senior
 name: Kelly Pool (Senior)
 title_slug: kelly-pool-senior
 ipdb_id: 1351

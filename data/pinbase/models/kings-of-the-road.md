@@ -1,5 +1,4 @@
 ---
-slug: kings-of-the-road
 name: Kings of the Road
 title_slug: kings-of-the-road
 ipdb_id: 5723

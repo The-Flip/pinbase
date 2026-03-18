@@ -1,5 +1,4 @@
 ---
-slug: big-bend
 name: Big Bend
 title_slug: big-bend
 ipdb_id: 4734

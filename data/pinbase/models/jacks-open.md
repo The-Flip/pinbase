@@ -1,5 +1,4 @@
 ---
-slug: jacks-open
 name: Jacks Open
 title_slug: jacks-open-lucky-hand
 opdb_id: GrPpb-ML3pn

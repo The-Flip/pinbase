@@ -1,5 +1,4 @@
 ---
-slug: banner
 name: Banner
 title_slug: banner
 ipdb_id: 3993

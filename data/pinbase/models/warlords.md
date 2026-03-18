@@ -1,5 +1,4 @@
 ---
-slug: warlords
 name: Warlords
 title_slug: warlords
 ipdb_id: 5189

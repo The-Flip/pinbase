@@ -1,4 +1,3 @@
 ---
-slug: jumaci
 name: Jumaci
 ---

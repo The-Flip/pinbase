@@ -1,5 +1,4 @@
 ---
-slug: wisconsin
 name: Wisconsin
 title_slug: wisconsin
 opdb_id: G5pOZ-MOE37

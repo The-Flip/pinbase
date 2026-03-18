@@ -1,5 +1,4 @@
 ---
-slug: plus-and-minus-2
 name: Plus and Minus
 title_slug: plus-and-minus-2
 ipdb_id: 4275

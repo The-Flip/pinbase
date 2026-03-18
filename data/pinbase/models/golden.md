@@ -1,5 +1,4 @@
 ---
-slug: golden
 name: Golden
 title_slug: golden
 ipdb_id: 3123

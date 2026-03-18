@@ -1,5 +1,4 @@
 ---
-slug: stargate
 name: Stargate
 ---
 

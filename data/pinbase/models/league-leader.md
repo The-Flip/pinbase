@@ -1,5 +1,4 @@
 ---
-slug: league-leader
 name: League Leader
 title_slug: league-leader
 ipdb_id: 1425

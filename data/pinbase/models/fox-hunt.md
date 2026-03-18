@@ -1,5 +1,4 @@
 ---
-slug: fox-hunt
 name: Fox Hunt
 title_slug: fox-hunt
 ipdb_id: 945

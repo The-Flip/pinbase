@@ -1,5 +1,4 @@
 ---
-slug: consumer-pin
 name: Consumer Pin
 title_slug: consumer-pin
 ipdb_id: 3694

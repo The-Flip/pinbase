@@ -1,4 +1,3 @@
 ---
-slug: triumph
 name: Triumph
 ---

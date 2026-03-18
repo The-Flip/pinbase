@@ -1,5 +1,4 @@
 ---
-slug: goofus-2
 name: Goofus
 title_slug: goofus-2
 ipdb_id: 3956

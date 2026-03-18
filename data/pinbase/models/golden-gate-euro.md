@@ -1,5 +1,4 @@
 ---
-slug: golden-gate-euro
 name: Golden Gate Euro
 title_slug: golden-gate-euro
 ipdb_id: 6082

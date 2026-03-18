@@ -1,5 +1,4 @@
 ---
-slug: woman-lib
 name: Woman-Lib
 title_slug: woman-lib
 ipdb_id: 4565

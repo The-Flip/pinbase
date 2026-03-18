@@ -1,5 +1,4 @@
 ---
-slug: rola
 name: Rola
 title_slug: rola
 ipdb_id: 6050

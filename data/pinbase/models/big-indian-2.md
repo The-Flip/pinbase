@@ -1,5 +1,4 @@
 ---
-slug: big-indian-2
 name: Big Indian
 title_slug: big-indian
 ipdb_id: 5621

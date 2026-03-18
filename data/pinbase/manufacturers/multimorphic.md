@@ -1,5 +1,4 @@
 ---
-slug: multimorphic
 name: Multimorphic
 opdb_manufacturer_id: 91
 ---

@@ -1,5 +1,4 @@
 ---
-slug: left-or-right
 name: Left or Right
 title_slug: left-or-right
 ipdb_id: 4234

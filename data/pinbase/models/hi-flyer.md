@@ -1,5 +1,4 @@
 ---
-slug: hi-flyer
 name: Hi-Flyer
 title_slug: sky-rider-hi-flyer
 opdb_id: G50Oy-MBRlZ

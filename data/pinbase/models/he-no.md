@@ -1,5 +1,4 @@
 ---
-slug: he-no
 name: He-No
 title_slug: he-no
 ipdb_id: 1154

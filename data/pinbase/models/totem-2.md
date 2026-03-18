@@ -1,5 +1,4 @@
 ---
-slug: totem-2
 name: Totem
 title_slug: totem
 opdb_id: G5YDN-MJKYo

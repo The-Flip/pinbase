@@ -1,5 +1,4 @@
 ---
-slug: border-town
 name: Border-Town
 title_slug: border-town
 ipdb_id: 357

@@ -1,5 +1,4 @@
 ---
-slug: hoopers-automatics
 name: Hoopers' Automatics
 manufacturer_slug: hoopers-automatics
 ipdb_manufacturer_id: 727

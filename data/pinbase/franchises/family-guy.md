@@ -1,5 +1,4 @@
 ---
-slug: family-guy
 name: Family Guy
 ---
 

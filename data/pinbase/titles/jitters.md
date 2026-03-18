@@ -1,4 +1,3 @@
 ---
-slug: jitters
 name: Jitters
 ---

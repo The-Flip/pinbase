@@ -1,5 +1,4 @@
 ---
-slug: parlor-bagatelle
 name: Parlor Bagatelle
 title_slug: parlor-bagatelle
 ipdb_id: 5625

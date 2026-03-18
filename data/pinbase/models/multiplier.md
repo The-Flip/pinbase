@@ -1,5 +1,4 @@
 ---
-slug: multiplier
 name: Multiplier
 title_slug: multiplier
 ipdb_id: 4057

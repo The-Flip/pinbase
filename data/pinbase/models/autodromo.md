@@ -1,5 +1,4 @@
 ---
-slug: autodromo
 name: Autodromo
 title_slug: autodromo
 ipdb_id: 7058

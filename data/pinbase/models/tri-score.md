@@ -1,5 +1,4 @@
 ---
-slug: tri-score
 name: Tri-Score
 title_slug: tri-score
 opdb_id: G5v8X-MVKV7

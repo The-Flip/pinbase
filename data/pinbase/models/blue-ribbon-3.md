@@ -1,5 +1,4 @@
 ---
-slug: blue-ribbon-3
 name: Blue Ribbon
 title_slug: blue-ribbon-3
 ipdb_id: 3826

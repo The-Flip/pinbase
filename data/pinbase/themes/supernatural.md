@@ -1,4 +1,3 @@
 ---
-slug: supernatural
 name: Supernatural
 ---

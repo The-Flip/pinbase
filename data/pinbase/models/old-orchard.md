@@ -1,5 +1,4 @@
 ---
-slug: old-orchard
 name: Old Orchard
 title_slug: old-orchard
 ipdb_id: 1707

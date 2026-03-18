@@ -1,5 +1,4 @@
 ---
-slug: ten-grand
 name: Ten Grand
 title_slug: ten-grand
 ipdb_id: 2514

@@ -1,5 +1,4 @@
 ---
-slug: squirly
 name: Squirly
 title_slug: squirly
 ipdb_id: 2331

@@ -1,5 +1,4 @@
 ---
-slug: a-go-go
 name: A-Go-Go
 title_slug: a-go-go
 opdb_id: G5oO9-MJYE4

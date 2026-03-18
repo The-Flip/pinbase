@@ -1,5 +1,4 @@
 ---
-slug: sluggin-champ
 name: Sluggin' Champ
 title_slug: sluggin-champ
 opdb_id: G4xVZ-MW9wv

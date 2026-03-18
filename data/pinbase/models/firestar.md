@@ -1,5 +1,4 @@
 ---
-slug: firestar
 name: Firestar
 title_slug: firestar
 ipdb_id: 5366

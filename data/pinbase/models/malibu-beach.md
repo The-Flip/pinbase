@@ -1,5 +1,4 @@
 ---
-slug: malibu-beach
 name: Malibu Beach
 title_slug: malibu-beach
 ipdb_id: 3481

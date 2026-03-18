@@ -1,4 +1,3 @@
 ---
-slug: multiplier
 name: Multiplier
 ---

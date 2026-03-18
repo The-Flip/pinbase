@@ -1,5 +1,4 @@
 ---
-slug: roto-pool-2
 name: Roto-Pool
 title_slug: roto-pool-2
 ipdb_id: 4515

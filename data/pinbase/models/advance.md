@@ -1,5 +1,4 @@
 ---
-slug: advance
 name: Advance
 title_slug: advance
 ipdb_id: 2879

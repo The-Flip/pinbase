@@ -1,4 +1,3 @@
 ---
-slug: thriller
 name: Thriller
 ---

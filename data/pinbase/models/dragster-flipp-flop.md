@@ -1,5 +1,4 @@
 ---
-slug: dragster-flipp-flop
 name: Dragster Flipp Flop
 title_slug: dragster-flipp-flop
 ipdb_id: 5912

@@ -1,4 +1,3 @@
 ---
-slug: trapping
 name: Trapping
 ---

@@ -1,4 +1,3 @@
 ---
-slug: recorder
 name: Recorder
 ---

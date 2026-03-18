@@ -1,5 +1,4 @@
 ---
-slug: town-bar
 name: Town Bar
 title_slug: town-bar
 ipdb_id: 4261

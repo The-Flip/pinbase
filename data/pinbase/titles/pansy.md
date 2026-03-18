@@ -1,4 +1,3 @@
 ---
-slug: pansy
 name: Pansy
 ---

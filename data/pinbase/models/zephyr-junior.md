@@ -1,5 +1,4 @@
 ---
-slug: zephyr-junior
 name: Zephyr Junior
 title_slug: zephyr-junior
 ipdb_id: 3530

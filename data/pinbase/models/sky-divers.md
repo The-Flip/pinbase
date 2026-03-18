@@ -1,5 +1,4 @@
 ---
-slug: sky-divers
 name: Sky Divers
 title_slug: sky-divers
 opdb_id: G4dVX-MLlBy

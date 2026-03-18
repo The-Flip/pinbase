@@ -1,5 +1,4 @@
 ---
-slug: fifteen
 name: Fifteen
 title_slug: fifteen
 ipdb_id: 4409

@@ -1,5 +1,4 @@
 ---
-slug: lucky-roll
 name: Lucky Roll
 title_slug: lucky-roll
 ipdb_id: 1490

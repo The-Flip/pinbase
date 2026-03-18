@@ -1,5 +1,4 @@
 ---
-slug: utran
 name: Utran
 title_slug: utran
 ipdb_id: 3305

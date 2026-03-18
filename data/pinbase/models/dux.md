@@ -1,5 +1,4 @@
 ---
-slug: dux
 name: Dux
 title_slug: dux
 ipdb_id: 748

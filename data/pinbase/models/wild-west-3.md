@@ -1,5 +1,4 @@
 ---
-slug: wild-west-3
 name: Wild West
 title_slug: wild-west-3
 ipdb_id: 6607

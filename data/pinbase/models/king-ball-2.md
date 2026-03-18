@@ -1,5 +1,4 @@
 ---
-slug: king-ball-2
 name: King Ball
 title_slug: king-ball-2
 ipdb_id: 4365

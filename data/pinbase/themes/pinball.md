@@ -1,4 +1,3 @@
 ---
-slug: pinball
 name: Pinball
 ---

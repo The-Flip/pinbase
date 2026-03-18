@@ -1,4 +1,3 @@
 ---
-slug: fascinating
 name: Fascinating
 ---

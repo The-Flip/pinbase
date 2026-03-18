@@ -1,5 +1,4 @@
 ---
-slug: big-rig
 name: Big Rig
 title_slug: big-rig
 ipdb_id: 2857

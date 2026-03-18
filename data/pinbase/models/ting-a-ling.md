@@ -1,5 +1,4 @@
 ---
-slug: ting-a-ling
 name: Ting-A-Ling
 title_slug: ting-a-ling
 ipdb_id: 5626

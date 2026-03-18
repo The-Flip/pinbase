@@ -1,5 +1,4 @@
 ---
-slug: monkey-bash
 name: Monkey Bash
 title_slug: monkey-bash
 ipdb_id: 3509

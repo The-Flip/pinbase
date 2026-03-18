@@ -1,5 +1,4 @@
 ---
-slug: red-n-blue
 name: Red 'n Blue
 title_slug: red-n-blue
 ipdb_id: 1936

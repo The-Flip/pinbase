@@ -1,4 +1,3 @@
 ---
-slug: eureka
 name: Eureka
 ---

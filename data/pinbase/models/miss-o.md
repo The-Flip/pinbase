@@ -1,5 +1,4 @@
 ---
-slug: miss-o
 name: Miss-O
 title_slug: miss-o-cue-t
 opdb_id: G4eqP-MLR0P

@@ -1,5 +1,4 @@
 ---
-slug: teezer
 name: Teezer
 title_slug: teezer
 ipdb_id: 2510

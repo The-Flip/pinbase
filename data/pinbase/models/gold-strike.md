@@ -1,5 +1,4 @@
 ---
-slug: gold-strike
 name: Gold Strike
 title_slug: el-dorado
 opdb_id: GrEZ5-MQ2q4

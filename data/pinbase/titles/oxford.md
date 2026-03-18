@@ -1,4 +1,3 @@
 ---
-slug: oxford
 name: Oxford
 ---

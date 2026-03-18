@@ -1,5 +1,4 @@
 ---
-slug: pinball-tronic
 name: Pinball Tronic
 title_slug: pinball-tronic
 ipdb_id: 5616

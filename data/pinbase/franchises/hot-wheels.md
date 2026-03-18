@@ -1,5 +1,4 @@
 ---
-slug: hot-wheels
 name: Hot Wheels
 ---
 

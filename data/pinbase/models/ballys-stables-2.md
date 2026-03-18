@@ -1,5 +1,4 @@
 ---
-slug: ballys-stables-2
 name: Bally's Stables
 title_slug: ballys-stables
 ipdb_id: 2894

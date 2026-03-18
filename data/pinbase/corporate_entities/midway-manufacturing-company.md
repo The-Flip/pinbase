@@ -1,5 +1,4 @@
 ---
-slug: midway-manufacturing-company
 name: Midway Manufacturing Company
 manufacturer_slug: midway
 ipdb_manufacturer_id: 213

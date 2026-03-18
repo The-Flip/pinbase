@@ -1,5 +1,4 @@
 ---
-slug: skill-circle
 name: Skill Circle
 title_slug: skill-circle
 ipdb_id: 2179

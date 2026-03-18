@@ -1,5 +1,4 @@
 ---
-slug: pabst-blue-ribbon
 name: Pabst Blue Ribbon
 ---
 

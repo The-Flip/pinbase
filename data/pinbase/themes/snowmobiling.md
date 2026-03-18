@@ -1,4 +1,3 @@
 ---
-slug: snowmobiling
 name: Snowmobiling
 ---

@@ -1,5 +1,4 @@
 ---
-slug: jumping-jack-2
 name: Jumping Jack
 title_slug: jumping-jack
 ipdb_id: 5815

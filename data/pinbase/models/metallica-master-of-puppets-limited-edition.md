@@ -1,10 +1,11 @@
 ---
-slug: metallica-master-of-puppets-limited-edition
 name: Metallica Master of Puppets (Limited Edition)
 title_slug: metallica
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GRBE4-MOE4l
 ipdb_id: 6031
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: metallica-premium
 credit_refs:
 - person_slug: john-borg

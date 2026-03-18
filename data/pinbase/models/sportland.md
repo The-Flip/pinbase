@@ -1,5 +1,4 @@
 ---
-slug: sportland
 name: Sportland
 title_slug: sportland
 ipdb_id: 2303

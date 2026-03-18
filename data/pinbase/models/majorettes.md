@@ -1,5 +1,4 @@
 ---
-slug: majorettes
 name: Majorettes
 title_slug: majorettes
 opdb_id: GRwDD-Ml9Br

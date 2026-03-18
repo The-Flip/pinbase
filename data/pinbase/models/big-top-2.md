@@ -1,5 +1,4 @@
 ---
-slug: big-top-2
 name: Big Top
 title_slug: big-top-3
 opdb_id: GYWyw-MBROn

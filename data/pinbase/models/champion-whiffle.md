@@ -1,5 +1,4 @@
 ---
-slug: champion-whiffle
 name: Champion Whiffle
 title_slug: champion-whiffle
 ipdb_id: 4601

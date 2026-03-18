@@ -1,4 +1,3 @@
 ---
-slug: zoser
 name: Zoser
 ---

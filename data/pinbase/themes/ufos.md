@@ -1,4 +1,3 @@
 ---
-slug: ufos
 name: Ufos
 ---

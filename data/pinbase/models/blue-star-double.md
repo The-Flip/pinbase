@@ -1,5 +1,4 @@
 ---
-slug: blue-star-double
 name: Blue Star Double
 title_slug: blue-star-double
 ipdb_id: 4011

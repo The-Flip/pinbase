@@ -1,5 +1,4 @@
 ---
-slug: 3-in-line-2
 name: 3 in LINE
 title_slug: 3-in-line-2
 ipdb_id: 2550

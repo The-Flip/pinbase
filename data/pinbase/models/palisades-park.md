@@ -1,5 +1,4 @@
 ---
-slug: palisades-park
 name: Palisades Park
 title_slug: palisades-park
 ipdb_id: 6512

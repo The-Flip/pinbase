@@ -1,5 +1,4 @@
 ---
-slug: forward-pass-freshman
 name: Forward Pass (Freshman)
 title_slug: forward-pass-freshman
 ipdb_id: 925

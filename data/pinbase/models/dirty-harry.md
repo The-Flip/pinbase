@@ -1,5 +1,4 @@
 ---
-slug: dirty-harry
 name: Dirty Harry
 title_slug: dirty-harry
 opdb_id: GrJ2Z-M61Xd

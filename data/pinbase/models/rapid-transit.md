@@ -1,5 +1,4 @@
 ---
-slug: rapid-transit
 name: Rapid Transit
 title_slug: rapid-transit
 ipdb_id: 1921

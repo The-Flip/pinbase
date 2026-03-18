@@ -1,5 +1,4 @@
 ---
-slug: lost
 name: Lost
 title_slug: lost
 ipdb_id: 6887

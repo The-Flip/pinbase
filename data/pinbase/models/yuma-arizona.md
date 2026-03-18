@@ -1,5 +1,4 @@
 ---
-slug: yuma-arizona
 name: Yuma Arizona
 title_slug: yuma-arizona
 opdb_id: GqZe1-MW9jl

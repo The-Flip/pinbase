@@ -1,5 +1,4 @@
 ---
-slug: mini-prix
 name: mini-prix
 title_slug: mini-prix
 ipdb_id: 6137

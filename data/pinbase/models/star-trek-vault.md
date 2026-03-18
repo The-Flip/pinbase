@@ -1,5 +1,4 @@
 ---
-slug: star-trek-vault
 name: Star Trek (Vault)
 title_slug: star-trek-stern
 opdb_id: Gryw4-MOE7P

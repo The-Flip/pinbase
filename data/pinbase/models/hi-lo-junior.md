@@ -1,5 +1,4 @@
 ---
-slug: hi-lo-junior
 name: Hi-Lo (Junior)
 title_slug: hi-lo-junior
 ipdb_id: 1188

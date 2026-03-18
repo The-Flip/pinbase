@@ -1,5 +1,4 @@
 ---
-slug: mythology
 name: Mythology
 title_slug: mythology
 ipdb_id: 5265

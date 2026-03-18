@@ -1,5 +1,4 @@
 ---
-slug: rainbow-2
 name: Rainbow
 title_slug: rainbow-2
 opdb_id: GPBKv-MNErK

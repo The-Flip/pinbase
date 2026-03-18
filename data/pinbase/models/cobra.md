@@ -1,5 +1,4 @@
 ---
-slug: cobra
 name: Cobra
 title_slug: cobra
 opdb_id: G50zO-MJ97Z

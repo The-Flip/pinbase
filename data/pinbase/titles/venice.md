@@ -1,4 +1,3 @@
 ---
-slug: venice
 name: Venice
 ---

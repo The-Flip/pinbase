@@ -1,5 +1,4 @@
 ---
-slug: arabian-night
 name: Arabian Night
 title_slug: arabian-night
 opdb_id: G59dD-M7ZRb

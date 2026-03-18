@@ -1,10 +1,11 @@
 ---
-slug: star-trek-limited-edition
 name: Star Trek (Limited Edition)
 title_slug: star-trek-stern
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: Gryw4-MNEKn
 ipdb_id: 6046
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: star-trek-premium
 credit_refs:
 - person_slug: steve-ritchie

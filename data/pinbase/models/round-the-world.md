@@ -1,5 +1,4 @@
 ---
-slug: round-the-world
 name: Round The World
 title_slug: round-the-world
 ipdb_id: 6208

@@ -1,4 +1,3 @@
 ---
-slug: bifuca
 name: Bifuca
 ---

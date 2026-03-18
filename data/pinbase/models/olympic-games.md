@@ -1,5 +1,4 @@
 ---
-slug: olympic-games
 name: Olympic Games
 title_slug: olympic-games
 opdb_id: GreWJ-MLb7N

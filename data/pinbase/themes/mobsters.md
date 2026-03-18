@@ -1,4 +1,3 @@
 ---
-slug: mobsters
 name: Mobsters
 ---

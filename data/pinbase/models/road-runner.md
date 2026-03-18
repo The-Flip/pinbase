@@ -1,5 +1,4 @@
 ---
-slug: road-runner
 name: Road Runner
 title_slug: road-runner
 opdb_id: G421X-ME0nK

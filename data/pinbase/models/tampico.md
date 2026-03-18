@@ -1,5 +1,4 @@
 ---
-slug: tampico
 name: Tampico
 title_slug: tampico
 opdb_id: G3Eo3-M7Zyq

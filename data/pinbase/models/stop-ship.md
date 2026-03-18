@@ -1,5 +1,4 @@
 ---
-slug: stop-ship
 name: Stop Ship
 title_slug: stop-ship
 ipdb_id: 3380

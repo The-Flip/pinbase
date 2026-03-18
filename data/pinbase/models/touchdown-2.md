@@ -1,5 +1,4 @@
 ---
-slug: touchdown-2
 name: Touchdown
 title_slug: touchdown-kickoff
 opdb_id: G4qEl-MQrRE

@@ -1,5 +1,4 @@
 ---
-slug: first-toon-to-the-moon
 name: First Toon To The Moon
 title_slug: first-toon-to-the-moon
 ipdb_id: 6903

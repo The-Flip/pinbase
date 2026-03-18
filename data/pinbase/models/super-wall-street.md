@@ -1,5 +1,4 @@
 ---
-slug: super-wall-street
 name: Super Wall Street
 title_slug: super-wall-street
 ipdb_id: 6349

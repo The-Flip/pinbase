@@ -1,5 +1,4 @@
 ---
-slug: sweet-21
 name: Sweet 21
 title_slug: sweet-21
 ipdb_id: 2477

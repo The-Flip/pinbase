@@ -1,5 +1,4 @@
 ---
-slug: bram-stokers-dracula
 name: Bram Stoker's Dracula
 title_slug: dracula
 opdb_id: G41do-MP3Py

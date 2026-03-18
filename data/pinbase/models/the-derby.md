@@ -1,5 +1,4 @@
 ---
-slug: the-derby
 name: The Derby
 title_slug: the-derby
 ipdb_id: 3944

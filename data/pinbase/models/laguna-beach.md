@@ -1,5 +1,4 @@
 ---
-slug: laguna-beach
 name: Laguna Beach
 title_slug: laguna-beach
 ipdb_id: 1408

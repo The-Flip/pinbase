@@ -1,4 +1,3 @@
 ---
-slug: circus
 name: Circus
 ---

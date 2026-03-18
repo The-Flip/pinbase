@@ -1,4 +1,3 @@
 ---
-slug: hippy
 name: Hippy
 ---

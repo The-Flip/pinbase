@@ -1,5 +1,4 @@
 ---
-slug: super-soccer
 name: Super Soccer
 title_slug: soccer-super-soccer
 opdb_id: GRn8D-MQd21

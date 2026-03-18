@@ -1,5 +1,4 @@
 ---
-slug: special-jax
 name: Special-Jax
 title_slug: special-jax
 ipdb_id: 3361

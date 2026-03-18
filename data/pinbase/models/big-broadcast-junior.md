@@ -1,5 +1,4 @@
 ---
-slug: big-broadcast-junior
 name: Big Broadcast (Junior)
 title_slug: big-broadcast-junior
 ipdb_id: 236

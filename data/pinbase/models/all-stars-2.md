@@ -1,5 +1,4 @@
 ---
-slug: all-stars-2
 name: All Stars
 title_slug: all-stars-2
 ipdb_id: 56

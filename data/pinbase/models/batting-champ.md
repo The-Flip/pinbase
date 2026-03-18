@@ -1,5 +1,4 @@
 ---
-slug: batting-champ
 name: Batting Champ
 title_slug: batting-champ
 ipdb_id: 198

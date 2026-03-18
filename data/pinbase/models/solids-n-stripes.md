@@ -1,5 +1,4 @@
 ---
-slug: solids-n-stripes
 name: Solids N Stripes
 title_slug: solids-n-stripes
 opdb_id: G5Dv1-MW9ro

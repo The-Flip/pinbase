@@ -1,5 +1,4 @@
 ---
-slug: niagara
 name: Niagara
 title_slug: niagara
 opdb_id: G5v3l-ML3Z4

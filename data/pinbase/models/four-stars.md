@@ -1,5 +1,4 @@
 ---
-slug: four-stars
 name: Four Stars
 title_slug: quartette-four-stars
 opdb_id: G5nn1-MBRRW

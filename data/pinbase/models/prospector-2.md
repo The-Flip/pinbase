@@ -1,5 +1,4 @@
 ---
-slug: prospector-2
 name: Prospector
 title_slug: prospector-2
 ipdb_id: 1872

@@ -1,5 +1,4 @@
 ---
-slug: camel-caravan
 name: Camel Caravan
 title_slug: camel-caravan
 opdb_id: GK1Xj-MkPkl

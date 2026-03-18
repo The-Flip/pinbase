@@ -1,4 +1,3 @@
 ---
-slug: carnality
 name: Carnality
 ---

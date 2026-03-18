@@ -1,5 +1,4 @@
 ---
-slug: capri
 name: Capri
 title_slug: capri
 opdb_id: Gryoo-MJYv6

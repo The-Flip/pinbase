@@ -1,5 +1,4 @@
 ---
-slug: the-big-lebowski-pinball-second-model
 name: The Big Lebowski Pinball (Second Model)
 title_slug: the-big-lebowski-pinball-second-model
 ipdb_id: 6833

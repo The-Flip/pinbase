@@ -1,5 +1,4 @@
 ---
-slug: usa-football-2
 name: U.S.A. Football
 title_slug: usa-football
 ipdb_id: 5506

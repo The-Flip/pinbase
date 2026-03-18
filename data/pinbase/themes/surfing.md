@@ -1,4 +1,3 @@
 ---
-slug: surfing
 name: Surfing
 ---

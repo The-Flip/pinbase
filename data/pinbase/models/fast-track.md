@@ -1,5 +1,4 @@
 ---
-slug: fast-track
 name: Fast Track
 title_slug: fast-track
 ipdb_id: 3833

@@ -1,5 +1,4 @@
 ---
-slug: sweet-hearts
 name: Sweet Hearts
 title_slug: sweet-hearts
 opdb_id: G4JwE-MLXB3

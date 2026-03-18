@@ -1,5 +1,4 @@
 ---
-slug: kentucky-star
 name: Kentucky Star
 title_slug: kentucky-star
 ipdb_id: 1356

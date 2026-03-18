@@ -1,4 +1,3 @@
 ---
-slug: basketball
 name: Basketball
 ---

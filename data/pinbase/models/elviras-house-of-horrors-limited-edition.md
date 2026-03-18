@@ -1,10 +1,10 @@
 ---
-slug: elviras-house-of-horrors-limited-edition
 name: Elvira's House of Horrors (Limited Edition)
 title_slug: elviras-house-of-horrors
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GZVOd-MwNxZ-AR8vV
 ipdb_id: 6597
+technology_generation_slug: solid-state
 variant_of: elviras-house-of-horrors-premium
 credit_refs:
 - person_slug: dennis-nordman

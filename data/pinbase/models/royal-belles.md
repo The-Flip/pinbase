@@ -1,5 +1,4 @@
 ---
-slug: royal-belles
 name: Royal Belles
 title_slug: royal-belles
 ipdb_id: 6821

@@ -1,5 +1,4 @@
 ---
-slug: velocity-ball
 name: Velocity Ball
 title_slug: velocity-ball
 ipdb_id: 3302

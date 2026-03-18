@@ -1,5 +1,4 @@
 ---
-slug: count-down
 name: Count-Down
 title_slug: count-down-space-walk
 opdb_id: G56zB-MLv9k

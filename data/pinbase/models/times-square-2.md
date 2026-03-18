@@ -1,5 +1,4 @@
 ---
-slug: times-square-2
 name: Times Square
 title_slug: times-square-2
 ipdb_id: 3452

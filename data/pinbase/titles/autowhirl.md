@@ -1,4 +1,3 @@
 ---
-slug: autowhirl
 name: Autowhirl
 ---

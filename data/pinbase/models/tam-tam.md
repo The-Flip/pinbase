@@ -1,5 +1,4 @@
 ---
-slug: tam-tam
 name: Tam-Tam
 title_slug: tam-tam
 ipdb_id: 2496

@@ -1,5 +1,4 @@
 ---
-slug: sport-king
 name: Sport King
 title_slug: sport-king
 ipdb_id: 2299

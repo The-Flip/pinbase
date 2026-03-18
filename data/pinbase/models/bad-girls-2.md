@@ -1,5 +1,4 @@
 ---
-slug: bad-girls-2
 name: Bad Girls
 title_slug: bad-girls-2
 ipdb_id: 6695

@@ -1,5 +1,4 @@
 ---
-slug: michigan
 name: Michigan
 title_slug: michigan
 ipdb_id: 6645

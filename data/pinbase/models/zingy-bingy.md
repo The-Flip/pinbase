@@ -1,5 +1,4 @@
 ---
-slug: zingy-bingy
 name: Zingy Bingy
 title_slug: zingy-bingy
 ipdb_id: 6635

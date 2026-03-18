@@ -1,5 +1,4 @@
 ---
-slug: track-record
 name: Track Record
 title_slug: track-record
 ipdb_id: 2617

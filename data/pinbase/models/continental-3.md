@@ -1,5 +1,4 @@
 ---
-slug: continental-3
 name: Continental
 title_slug: continental-3
 ipdb_id: 6111

@@ -1,5 +1,4 @@
 ---
-slug: new-wave-2
 name: New Wave
 title_slug: new-wave-2
 ipdb_id: 6922

@@ -1,5 +1,4 @@
 ---
-slug: playboy
 name: Playboy
 ---
 

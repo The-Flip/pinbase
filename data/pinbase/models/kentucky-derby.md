@@ -1,5 +1,4 @@
 ---
-slug: kentucky-derby
 name: Kentucky Derby
 title_slug: kentucky-derby
 ipdb_id: 1354

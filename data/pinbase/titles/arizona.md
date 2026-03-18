@@ -1,4 +1,3 @@
 ---
-slug: arizona
 name: Arizona
 ---

@@ -1,5 +1,4 @@
 ---
-slug: army-and-navy
 name: Army and Navy
 title_slug: army-and-navy
 ipdb_id: 90

@@ -1,5 +1,4 @@
 ---
-slug: hokum
 name: Hokum
 title_slug: hokum
 ipdb_id: 5088

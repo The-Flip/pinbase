@@ -1,5 +1,4 @@
 ---
-slug: nightmare-on-elm-street
 name: A Nightmare on Elm Street
 ---
 

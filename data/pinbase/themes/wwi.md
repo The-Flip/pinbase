@@ -1,4 +1,3 @@
 ---
-slug: wwi
 name: Wwi
 ---

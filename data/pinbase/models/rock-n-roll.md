@@ -1,5 +1,4 @@
 ---
-slug: rock-n-roll
 name: Rock 'N Roll
 title_slug: jive-time-rock-n-roll
 opdb_id: GrjKk-MLBnP

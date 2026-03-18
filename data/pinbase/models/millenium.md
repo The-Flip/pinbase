@@ -1,5 +1,4 @@
 ---
-slug: millenium
 name: Millenium
 title_slug: millenium
 ipdb_id: 5829

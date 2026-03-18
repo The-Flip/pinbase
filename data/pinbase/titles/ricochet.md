@@ -1,4 +1,3 @@
 ---
-slug: ricochet
 name: Ricochet
 ---

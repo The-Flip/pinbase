@@ -1,5 +1,4 @@
 ---
-slug: wall-street-special-spain
 name: Wall Street Special (Spain)
 title_slug: wall-street-special-spain
 ipdb_id: 6127

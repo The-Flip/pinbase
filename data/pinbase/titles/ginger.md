@@ -1,4 +1,3 @@
 ---
-slug: ginger
 name: Ginger
 ---

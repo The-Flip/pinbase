@@ -1,4 +1,3 @@
 ---
-slug: fitness
 name: Fitness
 ---

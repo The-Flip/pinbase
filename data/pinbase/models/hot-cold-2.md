@@ -1,5 +1,4 @@
 ---
-slug: hot-cold-2
 name: Hot & Cold
 title_slug: hot-cold-2
 ipdb_id: 4854

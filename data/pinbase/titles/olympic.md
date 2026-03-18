@@ -1,4 +1,3 @@
 ---
-slug: olympic
 name: Olympic
 ---

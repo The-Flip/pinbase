@@ -1,5 +1,4 @@
 ---
-slug: harvey
 name: Harvey
 title_slug: harvey
 opdb_id: G4jbP-MQ4dR

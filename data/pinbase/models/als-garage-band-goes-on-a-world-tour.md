@@ -1,5 +1,4 @@
 ---
-slug: als-garage-band-goes-on-a-world-tour
 name: Al's Garage Band goes on a World Tour
 title_slug: als-garage-band-goes-on-a-world-tour
 opdb_id: GRLz0-MeP4B

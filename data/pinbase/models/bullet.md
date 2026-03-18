@@ -1,5 +1,4 @@
 ---
-slug: bullet
 name: Bullet
 title_slug: bullet
 ipdb_id: 399

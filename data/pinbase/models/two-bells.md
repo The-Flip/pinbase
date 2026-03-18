@@ -1,5 +1,4 @@
 ---
-slug: two-bells
 name: Two Bells
 title_slug: two-bells
 ipdb_id: 2695

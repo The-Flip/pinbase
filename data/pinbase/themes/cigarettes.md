@@ -1,4 +1,3 @@
 ---
-slug: cigarettes
 name: Cigarettes
 ---

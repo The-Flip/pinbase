@@ -1,5 +1,4 @@
 ---
-slug: fair-2
 name: Fair
 title_slug: fair-2
 ipdb_id: 2846

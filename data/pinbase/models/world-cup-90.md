@@ -1,5 +1,4 @@
 ---
-slug: world-cup-90
 name: World Cup '90
 title_slug: world-cup-90
 opdb_id: G56Y8-MDlqK

@@ -1,5 +1,4 @@
 ---
-slug: american-sales-corporation
 name: American Sales Corporation
 manufacturer_slug: american-sales-corporation
 ipdb_manufacturer_id: 23

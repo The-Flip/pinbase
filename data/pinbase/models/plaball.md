@@ -1,5 +1,4 @@
 ---
-slug: plaball
 name: Plaball
 title_slug: plaball
 ipdb_id: 6038

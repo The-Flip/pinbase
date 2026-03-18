@@ -1,5 +1,4 @@
 ---
-slug: sunset-riders
 name: Sunset Riders
 title_slug: sunset-riders
 ipdb_id: 6304

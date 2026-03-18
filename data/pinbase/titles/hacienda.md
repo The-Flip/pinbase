@@ -1,4 +1,3 @@
 ---
-slug: hacienda
 name: Hacienda
 ---

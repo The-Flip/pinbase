@@ -1,4 +1,3 @@
 ---
-slug: tenis
 name: Tenis
 ---

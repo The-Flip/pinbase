@@ -1,5 +1,4 @@
 ---
-slug: pursuit
 name: Pursuit
 title_slug: pursuit
 ipdb_id: 4053

@@ -1,5 +1,4 @@
 ---
-slug: home-run-4
 name: Home Run
 title_slug: playball-home-run
 opdb_id: GR612-MLyRe

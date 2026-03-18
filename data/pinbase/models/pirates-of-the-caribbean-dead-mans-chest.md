@@ -1,5 +1,4 @@
 ---
-slug: pirates-of-the-caribbean-dead-mans-chest
 name: Pirates of the Caribbean Dead Man's Chest
 title_slug: pirates-of-the-caribbean-dead-mans-chest
 ipdb_id: 5164

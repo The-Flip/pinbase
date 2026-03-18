@@ -1,5 +1,4 @@
 ---
-slug: pitchem-batem
 name: Pitch'Em & Bat'Em
 title_slug: pitchem-batem
 ipdb_id: 4700

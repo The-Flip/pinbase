@@ -1,5 +1,4 @@
 ---
-slug: tv-baseball
 name: TV-Baseball
 title_slug: tv-baseball
 ipdb_id: 3331

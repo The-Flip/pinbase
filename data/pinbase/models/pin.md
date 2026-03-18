@@ -1,5 +1,4 @@
 ---
-slug: pin
 name: Pin
 title_slug: pin
 ipdb_id: 5921

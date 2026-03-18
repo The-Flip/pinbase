@@ -1,5 +1,4 @@
 ---
-slug: great-northern-chair-company
 name: Great Northern Chair Company
 manufacturer_slug: great-northern-chair-company
 ipdb_manufacturer_id: 594

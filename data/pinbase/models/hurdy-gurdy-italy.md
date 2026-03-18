@@ -1,5 +1,4 @@
 ---
-slug: hurdy-gurdy-italy
 name: Hurdy Gurdy (Italy)
 title_slug: central-park
 opdb_id: GRpYQ-MdE3y-A1NZ3

@@ -1,5 +1,4 @@
 ---
-slug: bat-a-score
 name: Bat-A-Score
 title_slug: bat-a-score
 ipdb_id: 2910

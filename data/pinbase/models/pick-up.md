@@ -1,5 +1,4 @@
 ---
-slug: pick-up
 name: Pick-Up
 title_slug: pick-up
 ipdb_id: 3790

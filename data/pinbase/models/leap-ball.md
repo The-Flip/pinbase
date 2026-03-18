@@ -1,5 +1,4 @@
 ---
-slug: leap-ball
 name: Leap Ball
 title_slug: leap-ball
 ipdb_id: 1426

@@ -1,4 +1,3 @@
 ---
-slug: firestone
 name: Firestone
 ---

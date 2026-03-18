@@ -1,5 +1,4 @@
 ---
-slug: e-hood-and-company
 name: E. Hood and Company
 manufacturer_slug: e-hood-and-company
 ipdb_manufacturer_id: 609

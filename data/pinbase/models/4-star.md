@@ -1,5 +1,4 @@
 ---
-slug: 4-star
 name: 4 Star
 title_slug: 4-star
 opdb_id: GRnVL-MP3NR

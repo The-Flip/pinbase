@@ -1,5 +1,4 @@
 ---
-slug: cypress-gardens
 name: Cypress Gardens
 title_slug: cypress-gardens
 ipdb_id: 620

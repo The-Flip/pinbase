@@ -1,5 +1,4 @@
 ---
-slug: super-charger
 name: Super-Charger
 title_slug: super-charger
 ipdb_id: 2451

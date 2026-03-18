@@ -1,5 +1,4 @@
 ---
-slug: hot-wheels-2
 name: Hot Wheels
 title_slug: hot-wheels
 opdb_id: GEL31-M61W3

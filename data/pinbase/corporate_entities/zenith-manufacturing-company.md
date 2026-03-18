@@ -1,5 +1,4 @@
 ---
-slug: zenith-manufacturing-company
 name: Zenith Manufacturing Company
 manufacturer_slug: zenith-manufacturing-company
 ipdb_manufacturer_id: 357

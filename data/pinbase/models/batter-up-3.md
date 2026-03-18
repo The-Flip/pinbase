@@ -1,5 +1,4 @@
 ---
-slug: batter-up-3
 name: Batter "Up"
 title_slug: batter-up
 ipdb_id: 2911

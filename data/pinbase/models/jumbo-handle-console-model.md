@@ -1,5 +1,4 @@
 ---
-slug: jumbo-handle-console-model
 name: Jumbo (handle console model)
 title_slug: jumbo-handle-console-model
 ipdb_id: 6964

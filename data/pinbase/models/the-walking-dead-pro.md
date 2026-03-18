@@ -1,5 +1,4 @@
 ---
-slug: the-walking-dead-pro
 name: The Walking Dead (Pro)
 title_slug: the-walking-dead
 opdb_id: G5nz5-M3d38

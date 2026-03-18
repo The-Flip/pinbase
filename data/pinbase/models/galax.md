@@ -1,5 +1,4 @@
 ---
-slug: galax
 name: Galax
 title_slug: galax
 ipdb_id: 6902

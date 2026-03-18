@@ -1,5 +1,4 @@
 ---
-slug: armada
 name: Armada
 title_slug: armada
 ipdb_id: 89

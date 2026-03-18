@@ -1,5 +1,4 @@
 ---
-slug: usa-football
 name: U.S.A. Football
 title_slug: ag-soccer-ball-ag-football
 opdb_id: G5wxv-MP3k9

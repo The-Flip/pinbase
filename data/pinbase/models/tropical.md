@@ -1,5 +1,4 @@
 ---
-slug: tropical
 name: Tropical
 title_slug: tropical
 ipdb_id: 5511

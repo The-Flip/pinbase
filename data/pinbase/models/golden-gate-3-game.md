@@ -1,5 +1,4 @@
 ---
-slug: golden-gate-3-game
 name: Golden Gate (3-game)
 title_slug: golden-gate-3-game
 ipdb_id: 6261

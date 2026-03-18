@@ -1,4 +1,3 @@
 ---
-slug: football
 name: Football
 ---

@@ -1,5 +1,4 @@
 ---
-slug: black-sheep-squadron
 name: Black Sheep Squadron
 title_slug: black-sheep-squadron
 opdb_id: G4j1L-MZerb

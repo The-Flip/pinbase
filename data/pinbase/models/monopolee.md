@@ -1,5 +1,4 @@
 ---
-slug: monopolee
 name: Monopolee
 title_slug: monopolee
 ipdb_id: 1618

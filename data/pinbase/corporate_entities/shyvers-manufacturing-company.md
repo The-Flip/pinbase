@@ -1,5 +1,4 @@
 ---
-slug: shyvers-manufacturing-company
 name: Shyvers Manufacturing Company
 manufacturer_slug: shyvers
 ipdb_manufacturer_id: 452

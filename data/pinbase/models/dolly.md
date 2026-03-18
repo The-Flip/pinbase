@@ -1,5 +1,4 @@
 ---
-slug: dolly
 name: Dolly
 title_slug: dolly
 ipdb_id: 697

@@ -1,5 +1,4 @@
 ---
-slug: thriller-2
 name: Thriller
 title_slug: thriller-2
 ipdb_id: 3491

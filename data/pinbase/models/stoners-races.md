@@ -1,5 +1,4 @@
 ---
-slug: stoners-races
 name: Stoner's Races
 title_slug: stoners-races
 ipdb_id: 1899

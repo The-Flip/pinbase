@@ -1,4 +1,3 @@
 ---
-slug: horses
 name: Horses
 ---

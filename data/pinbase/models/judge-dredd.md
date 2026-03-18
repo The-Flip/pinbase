@@ -1,5 +1,4 @@
 ---
-slug: judge-dredd
 name: Judge Dredd
 title_slug: judge-dredd
 opdb_id: GRoZw-MLW3j

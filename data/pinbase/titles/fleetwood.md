@@ -1,4 +1,3 @@
 ---
-slug: fleetwood
 name: Fleetwood
 ---

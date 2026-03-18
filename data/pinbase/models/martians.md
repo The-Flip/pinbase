@@ -1,5 +1,4 @@
 ---
-slug: martians
 name: Martians!
 title_slug: martians
 ipdb_id: 5004

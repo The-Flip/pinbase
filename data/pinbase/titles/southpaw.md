@@ -1,4 +1,3 @@
 ---
-slug: southpaw
 name: Southpaw
 ---

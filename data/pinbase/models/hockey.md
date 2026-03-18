@@ -1,5 +1,4 @@
 ---
-slug: hockey
 name: Hockey
 title_slug: hockey
 ipdb_id: 5014

@@ -1,5 +1,4 @@
 ---
-slug: trou-de-souris
 name: Trou de Souris
 title_slug: trou-de-souris
 ipdb_id: 6067

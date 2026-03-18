@@ -1,5 +1,4 @@
 ---
-slug: tura-fortuna
 name: Tura Fortuna
 title_slug: tura-fortuna
 ipdb_id: 4724

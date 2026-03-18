@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-2
 name: Lucky Strike
 title_slug: lucky-strike-2
 ipdb_id: 1496

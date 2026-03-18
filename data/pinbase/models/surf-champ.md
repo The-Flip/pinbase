@@ -1,5 +1,4 @@
 ---
-slug: surf-champ
 name: Surf Champ
 title_slug: surf-champ-surfer
 opdb_id: GrZwo-MDnWP

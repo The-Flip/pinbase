@@ -1,5 +1,4 @@
 ---
-slug: hi-low-game-senior
 name: Hi-Low Game (Senior)
 title_slug: hi-low-game-senior
 ipdb_id: 5041

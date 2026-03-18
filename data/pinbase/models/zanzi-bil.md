@@ -1,5 +1,4 @@
 ---
-slug: zanzi-bil
 name: '"ZANZI-BIL"'
 title_slug: zanzi-bil
 ipdb_id: 6879

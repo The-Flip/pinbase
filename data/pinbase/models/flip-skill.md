@@ -1,5 +1,4 @@
 ---
-slug: flip-skill
 name: Flip Skill
 title_slug: flip-skill
 ipdb_id: 5697

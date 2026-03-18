@@ -1,5 +1,4 @@
 ---
-slug: ticket-tac-toe
 name: Ticket Tac Toe
 title_slug: ticket-tac-toe
 ipdb_id: 4334

@@ -1,5 +1,4 @@
 ---
-slug: sir-lancelot
 name: Sir Lancelot
 title_slug: sir-lancelot
 ipdb_id: 4949

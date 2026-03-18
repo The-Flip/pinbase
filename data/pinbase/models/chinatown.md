@@ -1,5 +1,4 @@
 ---
-slug: chinatown
 name: Chinatown
 title_slug: chinatown
 opdb_id: GRQzX-MQY8N

@@ -1,5 +1,4 @@
 ---
-slug: erbu-rennen
 name: ERBU-RENNEN
 title_slug: erbu-rennen
 ipdb_id: 6033

@@ -1,5 +1,4 @@
 ---
-slug: yukon-2
 name: Yukon
 title_slug: yukon
 ipdb_id: 6197

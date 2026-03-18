@@ -1,5 +1,4 @@
 ---
-slug: algar
 name: Algar
 title_slug: algar
 opdb_id: G5nQQ-MLbbp

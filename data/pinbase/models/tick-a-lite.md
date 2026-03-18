@@ -1,5 +1,4 @@
 ---
-slug: tick-a-lite
 name: Tick 'a' Lite
 title_slug: tick-a-lite
 ipdb_id: 3749

@@ -1,5 +1,4 @@
 ---
-slug: paragon
 name: Paragon
 title_slug: paragon-2
 ipdb_id: 1754

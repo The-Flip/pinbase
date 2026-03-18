@@ -1,5 +1,4 @@
 ---
-slug: hot-cold
 name: Hot & Cold (1P)
 title_slug: hot-cold
 opdb_id: G5LVp-Mq1lw

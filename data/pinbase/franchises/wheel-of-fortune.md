@@ -1,5 +1,4 @@
 ---
-slug: wheel-of-fortune
 name: Wheel of Fortune
 ---
 

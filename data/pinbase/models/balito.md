@@ -1,5 +1,4 @@
 ---
-slug: balito
 name: Balito
 title_slug: balito
 ipdb_id: 5248

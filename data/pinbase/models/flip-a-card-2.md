@@ -1,5 +1,4 @@
 ---
-slug: flip-a-card-2
 name: Flip a Card
 title_slug: flip-a-card
 ipdb_id: 5900

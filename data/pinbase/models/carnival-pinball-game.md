@@ -1,5 +1,4 @@
 ---
-slug: carnival-pinball-game
 name: Carnival Pinball Game
 title_slug: carnival-pinball-game
 ipdb_id: 5803

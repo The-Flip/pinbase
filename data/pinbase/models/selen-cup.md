@@ -1,5 +1,4 @@
 ---
-slug: selen-cup
 name: Selen Cup
 title_slug: selen-cup
 ipdb_id: 3977

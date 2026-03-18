@@ -1,5 +1,4 @@
 ---
-slug: cine-star
 name: Cine Star
 title_slug: cine-star
 ipdb_id: 5048

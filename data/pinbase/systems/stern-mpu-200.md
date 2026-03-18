@@ -1,5 +1,4 @@
 ---
-slug: stern-mpu-200
 name: Stern MPU-200
 manufacturer_slug: stern-electronics
 technology_subgeneration_slug: ss-discrete

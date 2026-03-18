@@ -1,5 +1,4 @@
 ---
-slug: ranger
 name: Ranger
 title_slug: ranger
 ipdb_id: 1919

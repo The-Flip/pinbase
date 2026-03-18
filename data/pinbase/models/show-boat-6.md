@@ -1,5 +1,4 @@
 ---
-slug: show-boat-6
 name: Show Boat
 title_slug: show-boat-6
 ipdb_id: 2136

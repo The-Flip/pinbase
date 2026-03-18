@@ -1,4 +1,3 @@
 ---
-slug: jostle
 name: Jostle
 ---

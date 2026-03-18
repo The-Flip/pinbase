@@ -1,5 +1,4 @@
 ---
-slug: john-wick-pro
 name: John Wick (Pro)
 title_slug: john-wick
 opdb_id: GQK1P-MW9pj

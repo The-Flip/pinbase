@@ -1,4 +1,3 @@
 ---
-slug: gorth
 name: Gorth
 ---

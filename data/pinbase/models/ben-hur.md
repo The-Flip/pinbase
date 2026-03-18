@@ -1,5 +1,4 @@
 ---
-slug: ben-hur
 name: Ben Hur
 title_slug: ben-hur-2
 ipdb_id: 2854

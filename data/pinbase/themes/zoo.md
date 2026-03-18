@@ -1,4 +1,3 @@
 ---
-slug: zoo
 name: Zoo
 ---

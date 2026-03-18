@@ -1,5 +1,4 @@
 ---
-slug: dutch-pinball
 name: Dutch Pinball
 opdb_manufacturer_id: 54
 ---

@@ -1,5 +1,4 @@
 ---
-slug: giorgio-massiero
 name: Giorgio Massiero
 manufacturer_slug: giorgio-massiero
 ipdb_manufacturer_id: 134

@@ -1,5 +1,4 @@
 ---
-slug: atari-pinball
 name: Atari Pinball
 title_slug: atari-pinball
 ipdb_id: 5276

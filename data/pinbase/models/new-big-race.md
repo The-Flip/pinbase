@@ -1,5 +1,4 @@
 ---
-slug: new-big-race
 name: New Big Race
 title_slug: new-big-race
 ipdb_id: 6070

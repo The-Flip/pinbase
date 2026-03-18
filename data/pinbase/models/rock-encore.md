@@ -1,5 +1,4 @@
 ---
-slug: rock-encore
 name: Rock Encore
 title_slug: rock
 opdb_id: Grk62-MLeWx

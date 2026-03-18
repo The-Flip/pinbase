@@ -1,5 +1,4 @@
 ---
-slug: king-tut-2
 name: King Tut
 title_slug: king-tut
 ipdb_id: 3957

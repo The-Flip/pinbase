@@ -1,5 +1,4 @@
 ---
-slug: mikoshi
 name: Mikoshi
 title_slug: mikoshi
 opdb_id: G4Z9k-MQjqr

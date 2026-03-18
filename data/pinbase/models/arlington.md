@@ -1,5 +1,4 @@
 ---
-slug: arlington
 name: Arlington
 title_slug: arlington
 ipdb_id: 88

@@ -1,5 +1,4 @@
 ---
-slug: marjorie
 name: Marjorie
 title_slug: marjorie
 ipdb_id: 1548

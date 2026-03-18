@@ -1,5 +1,4 @@
 ---
-slug: air-circus
 name: Air Circus
 title_slug: air-circus
 ipdb_id: 29

@@ -1,4 +1,3 @@
 ---
-slug: cueball
 name: Cueball
 ---

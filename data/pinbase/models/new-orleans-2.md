@@ -1,5 +1,4 @@
 ---
-slug: new-orleans-2
 name: New Orlean's
 title_slug: new-orleans
 ipdb_id: 6146

@@ -1,5 +1,4 @@
 ---
-slug: magic-eight
 name: Magic Eight
 title_slug: magic-eight
 ipdb_id: 5606

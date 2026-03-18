@@ -1,4 +1,3 @@
 ---
-slug: volleyball
 name: Volleyball
 ---

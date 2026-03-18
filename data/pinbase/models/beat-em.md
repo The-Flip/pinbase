@@ -1,5 +1,4 @@
 ---
-slug: beat-em
 name: Beat 'Em
 title_slug: beat-em
 ipdb_id: 2851

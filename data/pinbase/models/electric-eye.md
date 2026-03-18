@@ -1,5 +1,4 @@
 ---
-slug: electric-eye
 name: Electric Eye
 title_slug: electric-eye
 ipdb_id: 775

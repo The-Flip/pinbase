@@ -1,5 +1,4 @@
 ---
-slug: electra-pool
 name: Electra-Pool
 title_slug: bank-a-ball-flipper-pool
 opdb_id: GrxdD-MLywn

@@ -1,5 +1,4 @@
 ---
-slug: continental-cafe
 name: Continental Cafe
 title_slug: continental-cafe
 opdb_id: G4ZWJ-MLnNW

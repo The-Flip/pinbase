@@ -1,5 +1,4 @@
 ---
-slug: goofy-senior
 name: Goofy (Senior)
 title_slug: goofy-senior
 ipdb_id: 5043

@@ -1,5 +1,4 @@
 ---
-slug: pinch-hitter
 name: Pinch Hitter
 title_slug: pinch-hitter
 opdb_id: Gj62j-Mq1oW

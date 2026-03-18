@@ -1,5 +1,4 @@
 ---
-slug: ponies
 name: Ponies
 title_slug: ponies
 ipdb_id: 1845

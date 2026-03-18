@@ -1,5 +1,4 @@
 ---
-slug: santa-anita-2
 name: Santa Anita
 title_slug: santa-anita-2
 ipdb_id: 5051

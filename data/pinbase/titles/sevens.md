@@ -1,4 +1,3 @@
 ---
-slug: sevens
 name: Sevens
 ---

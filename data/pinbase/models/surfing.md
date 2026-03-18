@@ -1,5 +1,4 @@
 ---
-slug: surfing
 name: Surfing
 title_slug: surfing
 opdb_id: GrlWn-MYebl

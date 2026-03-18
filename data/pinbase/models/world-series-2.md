@@ -1,5 +1,4 @@
 ---
-slug: world-series-2
 name: World Series
 title_slug: world-series
 ipdb_id: 3852

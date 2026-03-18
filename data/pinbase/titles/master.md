@@ -1,4 +1,3 @@
 ---
-slug: master
 name: Master
 ---

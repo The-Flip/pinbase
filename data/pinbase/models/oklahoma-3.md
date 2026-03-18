@@ -1,5 +1,4 @@
 ---
-slug: oklahoma-3
 name: Oklahoma
 title_slug: oklahoma-3
 ipdb_id: 1703

@@ -1,5 +1,4 @@
 ---
-slug: zip
 name: Zip
 title_slug: zip
 ipdb_id: 2837

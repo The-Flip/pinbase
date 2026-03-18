@@ -1,4 +1,3 @@
 ---
-slug: natural
 name: Natural
 ---

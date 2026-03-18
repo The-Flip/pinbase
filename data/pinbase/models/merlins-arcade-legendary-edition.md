@@ -1,5 +1,4 @@
 ---
-slug: merlins-arcade-legendary-edition
 name: Merlin's Arcade (Legendary Edition)
 title_slug: merlins-arcade
 opdb_id: GllVX-MjBnk

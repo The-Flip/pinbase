@@ -1,4 +1,3 @@
 ---
-slug: screwy
 name: Screwy
 ---

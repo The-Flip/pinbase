@@ -1,5 +1,4 @@
 ---
-slug: teaser
 name: Teaser
 title_slug: teaser
 ipdb_id: 3421

@@ -1,4 +1,3 @@
 ---
-slug: paraiso
 name: Paraiso
 ---

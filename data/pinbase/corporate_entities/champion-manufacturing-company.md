@@ -1,5 +1,4 @@
 ---
-slug: champion-manufacturing-company
 name: Champion Manufacturing Company
 manufacturer_slug: champion-manufacturing-company
 ipdb_manufacturer_id: 361

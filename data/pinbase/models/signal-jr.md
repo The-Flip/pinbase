@@ -1,5 +1,4 @@
 ---
-slug: signal-jr
 name: Signal (Jr)
 title_slug: signal-jr
 ipdb_id: 2142

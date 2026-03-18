@@ -1,4 +1,3 @@
 ---
-slug: trapper
 name: Trapper
 ---

@@ -1,5 +1,4 @@
 ---
-slug: jackpot-2
 name: Jackpot
 title_slug: jackpot
 opdb_id: G6ldP-MvB8p

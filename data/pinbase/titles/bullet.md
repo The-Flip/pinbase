@@ -1,4 +1,3 @@
 ---
-slug: bullet
 name: Bullet
 ---

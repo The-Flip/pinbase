@@ -1,5 +1,4 @@
 ---
-slug: cosmic-venus
 name: Cosmic Venus
 title_slug: cosmic-venus
 ipdb_id: 5711

@@ -1,5 +1,4 @@
 ---
-slug: super-circus
 name: Super Circus
 title_slug: super-circus
 opdb_id: G4kLJ-Mz2Xp

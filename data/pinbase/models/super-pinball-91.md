@@ -1,5 +1,4 @@
 ---
-slug: super-pinball-91
 name: Super Pinball 91
 title_slug: super-pinball-91
 ipdb_id: 6491

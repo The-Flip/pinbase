@@ -1,5 +1,4 @@
 ---
-slug: iron-maiden
 name: Iron Maiden
 title_slug: iron-maiden-2
 opdb_id: G4yZN-MDEP7

@@ -1,5 +1,4 @@
 ---
-slug: op-pop-pop
 name: Op-Pop-Pop
 title_slug: op-pop-pop
 opdb_id: G4k30-MnK6N

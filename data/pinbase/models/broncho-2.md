@@ -1,5 +1,4 @@
 ---
-slug: broncho-2
 name: Broncho
 title_slug: broncho-2
 ipdb_id: 386

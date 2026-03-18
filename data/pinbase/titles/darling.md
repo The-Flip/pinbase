@@ -1,4 +1,3 @@
 ---
-slug: darling
 name: Darling
 ---

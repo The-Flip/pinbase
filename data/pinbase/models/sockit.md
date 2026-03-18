@@ -1,5 +1,4 @@
 ---
-slug: sockit
 name: Sockit
 title_slug: sockit
 ipdb_id: 3291

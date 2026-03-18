@@ -1,5 +1,4 @@
 ---
-slug: blue-chip
 name: Blue Chip
 title_slug: blue-chip
 opdb_id: GrkNp-MJkpo

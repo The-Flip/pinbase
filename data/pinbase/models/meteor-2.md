@@ -1,5 +1,4 @@
 ---
-slug: meteor-2
 name: Meteor
 title_slug: meteor-2
 ipdb_id: 4571

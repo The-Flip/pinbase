@@ -1,5 +1,4 @@
 ---
-slug: lost-in-space
 name: Lost in Space
 ---
 

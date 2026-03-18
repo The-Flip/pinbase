@@ -1,5 +1,4 @@
 ---
-slug: peerless-products-company
 name: Peerless Products Company
 manufacturer_slug: peerless-products-company
 ipdb_manufacturer_id: 536

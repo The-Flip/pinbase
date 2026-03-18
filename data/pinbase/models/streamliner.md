@@ -1,5 +1,4 @@
 ---
-slug: streamliner
 name: Streamliner
 title_slug: streamliner
 ipdb_id: 2402

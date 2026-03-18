@@ -1,5 +1,4 @@
 ---
-slug: lapero
 name: L'Apero
 title_slug: lapero
 ipdb_id: 6271

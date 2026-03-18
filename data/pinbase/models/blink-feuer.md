@@ -1,5 +1,4 @@
 ---
-slug: blink-feuer
 name: Blink-Feuer
 title_slug: blink-feuer
 ipdb_id: 5973

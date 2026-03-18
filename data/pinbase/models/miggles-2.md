@@ -1,5 +1,4 @@
 ---
-slug: miggles-2
 name: Miggles
 title_slug: miggles-2
 ipdb_id: 6800

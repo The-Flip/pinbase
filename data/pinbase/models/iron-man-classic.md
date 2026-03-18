@@ -1,5 +1,4 @@
 ---
-slug: iron-man-classic
 name: Iron Man Classic
 title_slug: iron-man
 opdb_id: GRVq4-MDRKr

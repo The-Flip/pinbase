@@ -1,5 +1,4 @@
 ---
-slug: fire-queen
 name: Fire Queen
 title_slug: vulcan
 opdb_id: GRoDo-Mp4Kk

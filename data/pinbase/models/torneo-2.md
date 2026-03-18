@@ -1,5 +1,4 @@
 ---
-slug: torneo-2
 name: Torneo
 title_slug: torneo-2
 ipdb_id: 5937

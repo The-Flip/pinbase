@@ -1,5 +1,4 @@
 ---
-slug: galactic-girl
 name: Galactic Girl
 title_slug: galactic-girl
 ipdb_id: 5559

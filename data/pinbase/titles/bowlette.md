@@ -1,4 +1,3 @@
 ---
-slug: bowlette
 name: Bowlette
 ---

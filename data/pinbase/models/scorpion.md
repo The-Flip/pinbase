@@ -1,5 +1,4 @@
 ---
-slug: scorpion
 name: Scorpion
 title_slug: scorpion
 opdb_id: G4qQj-MD8XD

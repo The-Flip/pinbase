@@ -1,5 +1,4 @@
 ---
-slug: terminator-3-rise-of-the-machines
 name: 'Terminator 3: Rise of the Machines'
 title_slug: terminator-3-rise-of-the-machines
 opdb_id: GR91N-MLOyE

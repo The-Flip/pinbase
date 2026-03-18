@@ -1,5 +1,4 @@
 ---
-slug: top-hat
 name: Top Hat
 title_slug: top-hat
 opdb_id: Gr3xX-MLxyl

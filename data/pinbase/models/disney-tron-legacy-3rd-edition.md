@@ -1,5 +1,4 @@
 ---
-slug: disney-tron-legacy-3rd-edition
 name: Disney TRON Legacy (3rd Edition)
 title_slug: disney-tron-legacy-3rd-edition
 ipdb_id: 6018

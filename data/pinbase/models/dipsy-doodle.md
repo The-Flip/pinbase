@@ -1,5 +1,4 @@
 ---
-slug: dipsy-doodle
 name: Dipsy Doodle
 title_slug: dipsy-doodle-doodle-bug-love-bug
 opdb_id: Grx1z-MOE9x

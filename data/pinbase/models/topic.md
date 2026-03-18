@@ -1,5 +1,4 @@
 ---
-slug: topic
 name: Topic
 title_slug: topic
 ipdb_id: 2592

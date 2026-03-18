@@ -1,5 +1,4 @@
 ---
-slug: space-fantasy
 name: Space Fantasy
 title_slug: space-fantasy
 ipdb_id: 5311

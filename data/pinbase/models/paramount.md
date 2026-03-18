@@ -1,5 +1,4 @@
 ---
-slug: paramount
 name: Paramount
 title_slug: paramount
 ipdb_id: 1756

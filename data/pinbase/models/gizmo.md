@@ -1,5 +1,4 @@
 ---
-slug: gizmo
 name: Gizmo
 title_slug: gizmo
 opdb_id: G9zw0-M5RdB

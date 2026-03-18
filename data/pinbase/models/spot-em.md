@@ -1,5 +1,4 @@
 ---
-slug: spot-em
 name: Spot-Em
 title_slug: spot-em
 ipdb_id: 4856

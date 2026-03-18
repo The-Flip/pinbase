@@ -1,5 +1,4 @@
 ---
-slug: amazon-hunt-2
 name: Amazon Hunt
 title_slug: amazon-hunt-2
 ipdb_id: 5691

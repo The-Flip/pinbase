@@ -1,5 +1,4 @@
 ---
-slug: stratosphere
 name: Stratosphere
 title_slug: stratosphere
 ipdb_id: 2400

@@ -1,5 +1,4 @@
 ---
-slug: deadly-weapon
 name: Deadly Weapon
 title_slug: deadly-weapon
 opdb_id: Grj9q-MQ2EZ

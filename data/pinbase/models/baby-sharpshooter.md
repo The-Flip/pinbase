@@ -1,5 +1,4 @@
 ---
-slug: baby-sharpshooter
 name: Baby Sharpshooter
 title_slug: baby-sharpshooter
 ipdb_id: 5680

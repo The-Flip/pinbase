@@ -1,5 +1,4 @@
 ---
-slug: kick-back
 name: Kick-Back
 title_slug: kick-back
 ipdb_id: 4798

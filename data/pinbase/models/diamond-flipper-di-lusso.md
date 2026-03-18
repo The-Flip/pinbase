@@ -1,5 +1,4 @@
 ---
-slug: diamond-flipper-di-lusso
 name: Diamond Flipper Di Lusso
 title_slug: diamond-flipper-di-lusso
 ipdb_id: 5872

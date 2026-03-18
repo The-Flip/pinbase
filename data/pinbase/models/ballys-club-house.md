@@ -1,5 +1,4 @@
 ---
-slug: ballys-club-house
 name: Bally's Club House
 title_slug: ballys-club-house
 ipdb_id: 3025

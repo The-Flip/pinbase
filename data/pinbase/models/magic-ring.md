@@ -1,5 +1,4 @@
 ---
-slug: magic-ring
 name: Magic Ring
 title_slug: magic-ring
 ipdb_id: 3475

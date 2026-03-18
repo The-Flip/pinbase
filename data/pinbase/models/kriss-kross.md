@@ -1,5 +1,4 @@
 ---
-slug: kriss-kross
 name: Kriss-Kross
 title_slug: kriss-kross
 ipdb_id: 1396

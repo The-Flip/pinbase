@@ -1,5 +1,4 @@
 ---
-slug: bumper-bowling
 name: Bumper Bowling
 title_slug: bumper-bowling
 ipdb_id: 3670

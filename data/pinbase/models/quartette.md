@@ -1,5 +1,4 @@
 ---
-slug: quartette
 name: Quartette
 title_slug: quartette-four-stars
 opdb_id: G5nn1-MJ7B2

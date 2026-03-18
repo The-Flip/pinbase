@@ -1,5 +1,4 @@
 ---
-slug: icarus
 name: Icarus
 title_slug: icarus
 opdb_id: GR9v1-MBReY

@@ -1,5 +1,4 @@
 ---
-slug: centaur-ii
 name: Centaur II
 title_slug: centaur
 opdb_id: GrX7q-MD0yP

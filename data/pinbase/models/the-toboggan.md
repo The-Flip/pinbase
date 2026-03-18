@@ -1,5 +1,4 @@
 ---
-slug: the-toboggan
 name: The Toboggan
 title_slug: the-toboggan
 ipdb_id: 6941

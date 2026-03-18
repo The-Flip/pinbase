@@ -1,5 +1,4 @@
 ---
-slug: halloween-blood-sucker-edition
 name: Halloween (Blood Sucker Edition)
 title_slug: halloween
 opdb_id: Gj66Z-Mp4BN-AObBz

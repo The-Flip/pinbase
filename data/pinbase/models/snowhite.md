@@ -1,5 +1,4 @@
 ---
-slug: snowhite
 name: Snowhite
 title_slug: snowhite
 ipdb_id: 4329

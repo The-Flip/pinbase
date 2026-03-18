@@ -1,5 +1,4 @@
 ---
-slug: darling-2
 name: Darling
 title_slug: jubilee-darling
 opdb_id: Gr3J1-Mx0kk

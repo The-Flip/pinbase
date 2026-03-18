@@ -1,5 +1,4 @@
 ---
-slug: balls-a-poppin
 name: Balls-A-Poppin
 title_slug: balls-a-poppin-circus
 opdb_id: G5KJW-MDEZn

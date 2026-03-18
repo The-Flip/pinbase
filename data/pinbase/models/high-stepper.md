@@ -1,5 +1,4 @@
 ---
-slug: high-stepper
 name: High Stepper
 title_slug: high-stepper
 ipdb_id: 6729

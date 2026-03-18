@@ -1,5 +1,4 @@
 ---
-slug: plus-or-minus
 name: Plus or Minus
 title_slug: plus-or-minus
 ipdb_id: 4187

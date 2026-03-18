@@ -1,5 +1,4 @@
 ---
-slug: jokerz
 name: Jokerz!
 title_slug: jokerz
 opdb_id: Gry3j-Mq1Oe

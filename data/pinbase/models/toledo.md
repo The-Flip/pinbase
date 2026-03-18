@@ -1,5 +1,4 @@
 ---
-slug: toledo
 name: Toledo
 title_slug: valencia-toledo
 opdb_id: G5nj6-MyNEZ

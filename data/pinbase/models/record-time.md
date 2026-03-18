@@ -1,5 +1,4 @@
 ---
-slug: record-time
 name: Record Time
 title_slug: record-time
 ipdb_id: 1929

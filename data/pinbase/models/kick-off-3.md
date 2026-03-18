@@ -1,5 +1,4 @@
 ---
-slug: kick-off-3
 name: Kick Off
 title_slug: kick-off-2
 ipdb_id: 4733

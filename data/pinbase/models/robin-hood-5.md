@@ -1,5 +1,4 @@
 ---
-slug: robin-hood-5
 name: Robin Hood
 title_slug: olympics
 opdb_id: Gr8Q6-ML1Ke-ARZnW

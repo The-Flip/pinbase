@@ -1,5 +1,4 @@
 ---
-slug: rey-del-oeste
 name: Rey del Oeste
 title_slug: rey-del-oeste
 ipdb_id: 4627

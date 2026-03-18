@@ -1,4 +1,3 @@
 ---
-slug: psichedelic
 name: Psichedelic
 ---

@@ -1,5 +1,4 @@
 ---
-slug: star-wars-pro
 name: Star Wars (Pro)
 title_slug: star-wars-stern
 opdb_id: G5vLR-MwNwy

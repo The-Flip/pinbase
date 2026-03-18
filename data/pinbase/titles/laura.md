@@ -1,4 +1,3 @@
 ---
-slug: laura
 name: Laura
 ---

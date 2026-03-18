@@ -1,5 +1,4 @@
 ---
-slug: pin-ball-2
 name: Pin Ball
 title_slug: pin-ball-2
 ipdb_id: 3906

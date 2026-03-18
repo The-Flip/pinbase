@@ -1,5 +1,4 @@
 ---
-slug: jet-spin
 name: Jet Spin
 title_slug: super-spin
 opdb_id: G4qzZ-M0oWR

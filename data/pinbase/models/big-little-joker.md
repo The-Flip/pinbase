@@ -1,5 +1,4 @@
 ---
-slug: big-little-joker
 name: Big Little Joker
 title_slug: big-little-joker
 ipdb_id: 264

@@ -1,5 +1,4 @@
 ---
-slug: snafu
 name: Snafu
 title_slug: snafu
 opdb_id: G5nE1-Mo17e

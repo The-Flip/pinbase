@@ -1,4 +1,3 @@
 ---
-slug: continental
 name: Continental
 ---

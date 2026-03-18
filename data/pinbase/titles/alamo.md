@@ -1,4 +1,3 @@
 ---
-slug: alamo
 name: Alamo
 ---

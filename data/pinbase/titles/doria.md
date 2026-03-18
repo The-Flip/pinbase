@@ -1,4 +1,3 @@
 ---
-slug: doria
 name: Doria
 ---

@@ -1,5 +1,4 @@
 ---
-slug: jack-pot
 name: Jack Pot
 title_slug: jack-pot
 ipdb_id: 1275

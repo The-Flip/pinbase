@@ -1,4 +1,3 @@
 ---
-slug: celebrities
 name: Celebrities
 ---

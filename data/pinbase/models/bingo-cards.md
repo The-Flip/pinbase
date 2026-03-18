@@ -1,5 +1,4 @@
 ---
-slug: bingo-cards
 name: Bingo-Cards
 title_slug: bingo-cards
 ipdb_id: 5910

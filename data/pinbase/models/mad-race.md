@@ -1,5 +1,4 @@
 ---
-slug: mad-race
 name: Mad Race
 title_slug: mad-race
 opdb_id: GRo6K-Mb5qr

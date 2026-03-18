@@ -1,5 +1,4 @@
 ---
-slug: peppy
 name: Peppy
 title_slug: peppy
 ipdb_id: 3356

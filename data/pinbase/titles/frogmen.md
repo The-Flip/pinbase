@@ -1,4 +1,3 @@
 ---
-slug: frogmen
 name: Frogmen
 ---

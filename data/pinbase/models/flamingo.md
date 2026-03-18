@@ -1,5 +1,4 @@
 ---
-slug: flamingo
 name: Flamingo
 title_slug: flamingo
 ipdb_id: 869

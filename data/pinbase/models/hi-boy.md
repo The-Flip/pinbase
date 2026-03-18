@@ -1,5 +1,4 @@
 ---
-slug: hi-boy
 name: Hi-Boy
 title_slug: hi-boy-2
 ipdb_id: 3143

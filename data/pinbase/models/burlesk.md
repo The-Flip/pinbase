@@ -1,5 +1,4 @@
 ---
-slug: burlesk
 name: Burlesk
 title_slug: burlesk
 ipdb_id: 5063

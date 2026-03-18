@@ -1,5 +1,4 @@
 ---
-slug: no-good-gofers
 name: No Good Gofers
 title_slug: no-good-gofers
 opdb_id: G57X4-MLb1y

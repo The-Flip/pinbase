@@ -1,5 +1,4 @@
 ---
-slug: the-flintstones
 name: The Flintstones
 title_slug: the-flintstones
 opdb_id: GRK95-MQ674

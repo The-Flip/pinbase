@@ -1,5 +1,4 @@
 ---
-slug: calamity
 name: Calamity
 title_slug: calamity
 ipdb_id: 6998

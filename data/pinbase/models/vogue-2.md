@@ -1,5 +1,4 @@
 ---
-slug: vogue-2
 name: Vogue
 title_slug: vogue-2
 ipdb_id: 3998

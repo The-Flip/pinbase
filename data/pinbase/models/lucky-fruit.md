@@ -1,5 +1,4 @@
 ---
-slug: lucky-fruit
 name: Lucky Fruit
 title_slug: lucky-fruit
 opdb_id: G5n0W-MQP6n

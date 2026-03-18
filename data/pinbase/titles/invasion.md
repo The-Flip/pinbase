@@ -1,4 +1,3 @@
 ---
-slug: invasion
 name: Invasion
 ---

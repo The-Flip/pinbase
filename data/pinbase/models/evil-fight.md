@@ -1,5 +1,4 @@
 ---
-slug: evil-fight
 name: Evil Fight
 title_slug: evil-fight
 opdb_id: GRLbx-MLOn8

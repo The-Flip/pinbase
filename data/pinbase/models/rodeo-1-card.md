@@ -1,5 +1,4 @@
 ---
-slug: rodeo-1-card
 name: Rodeo (1 card)
 title_slug: rodeo-1-card
 ipdb_id: 6209

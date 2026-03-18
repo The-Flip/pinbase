@@ -1,5 +1,4 @@
 ---
-slug: score-a-lite
 name: Score-A-Lite
 title_slug: score-a-lite
 ipdb_id: 2065

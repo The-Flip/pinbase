@@ -1,5 +1,4 @@
 ---
-slug: super-star-2
 name: Super Star
 title_slug: super-star-olympics
 opdb_id: G5WKO-ML32x

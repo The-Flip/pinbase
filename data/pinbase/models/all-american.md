@@ -1,5 +1,4 @@
 ---
-slug: all-american
 name: All American
 title_slug: all-american
 ipdb_id: 51

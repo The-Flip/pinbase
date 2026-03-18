@@ -1,5 +1,4 @@
 ---
-slug: standup-targets
 name: Standup Targets
 display_order: 5
 ---

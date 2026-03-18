@@ -1,5 +1,4 @@
 ---
-slug: the-tango-game
 name: The Tango Game
 title_slug: the-tango-game
 ipdb_id: 2497

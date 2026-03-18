@@ -1,4 +1,3 @@
 ---
-slug: round
 name: Round
 ---

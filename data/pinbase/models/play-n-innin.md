@@ -1,5 +1,4 @@
 ---
-slug: play-n-innin
 name: Play 'N Innin
 title_slug: play-n-innin
 ipdb_id: 5430

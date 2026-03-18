@@ -1,5 +1,4 @@
 ---
-slug: royal-flush-extended-play-prototype
 name: Royal Flush (Extended Play Prototype)
 title_slug: royal-flush-extended-play-prototype
 ipdb_id: 7036

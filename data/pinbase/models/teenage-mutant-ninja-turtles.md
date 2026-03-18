@@ -1,5 +1,4 @@
 ---
-slug: teenage-mutant-ninja-turtles
 name: Teenage Mutant Ninja Turtles
 title_slug: teenage-mutant-ninja-turtles-2
 opdb_id: Gr8xn-MKN66

@@ -1,5 +1,4 @@
 ---
-slug: bullfight
 name: Bullfight
 title_slug: bullfight
 opdb_id: G5pJQ-MQwE5

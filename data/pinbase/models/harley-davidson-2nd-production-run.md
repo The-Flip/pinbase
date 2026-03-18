@@ -1,5 +1,4 @@
 ---
-slug: harley-davidson-2nd-production-run
 name: Harley-Davidson (2nd production run)
 title_slug: harley-davidson-2nd-production-run
 ipdb_id: 7047

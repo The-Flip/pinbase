@@ -1,5 +1,4 @@
 ---
-slug: attention
 name: Attention
 title_slug: attention
 ipdb_id: 108

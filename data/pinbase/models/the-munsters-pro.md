@@ -1,5 +1,4 @@
 ---
-slug: the-munsters-pro
 name: The Munsters (Pro)
 title_slug: the-munsters
 opdb_id: GbPde-M5Rkv

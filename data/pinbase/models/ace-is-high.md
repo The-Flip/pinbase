@@ -1,5 +1,4 @@
 ---
-slug: ace-is-high
 name: Ace Is High
 title_slug: ace-is-high
 ipdb_id: 8

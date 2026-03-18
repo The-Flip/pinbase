@@ -1,5 +1,4 @@
 ---
-slug: coed
 name: Coed
 title_slug: coed
 ipdb_id: 540

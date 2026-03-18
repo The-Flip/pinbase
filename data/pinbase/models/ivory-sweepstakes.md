@@ -1,5 +1,4 @@
 ---
-slug: ivory-sweepstakes
 name: Ivory Sweepstakes
 title_slug: ivory-sweepstakes
 ipdb_id: 4295

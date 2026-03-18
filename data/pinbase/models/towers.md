@@ -1,5 +1,4 @@
 ---
-slug: towers
 name: Towers
 title_slug: towers
 ipdb_id: 5095

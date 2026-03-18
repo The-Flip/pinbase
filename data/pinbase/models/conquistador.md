@@ -1,5 +1,4 @@
 ---
-slug: conquistador
 name: Conquistador
 title_slug: conquistador
 ipdb_id: 5739

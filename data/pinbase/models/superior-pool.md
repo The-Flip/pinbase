@@ -1,5 +1,4 @@
 ---
-slug: superior-pool
 name: Superior Pool
 title_slug: superior-pool
 ipdb_id: 5911

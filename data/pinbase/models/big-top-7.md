@@ -1,5 +1,4 @@
 ---
-slug: big-top-7
 name: Big Top
 title_slug: big-top-7
 ipdb_id: 7000

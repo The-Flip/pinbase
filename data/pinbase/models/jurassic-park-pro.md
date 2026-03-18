@@ -1,5 +1,4 @@
 ---
-slug: jurassic-park-pro
 name: Jurassic Park (Pro)
 title_slug: jurassic-park-stern
 opdb_id: GK17D-MdEqz

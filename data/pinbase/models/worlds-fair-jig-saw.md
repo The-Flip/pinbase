@@ -1,5 +1,4 @@
 ---
-slug: worlds-fair-jig-saw
 name: World's Fair Jig-Saw
 title_slug: worlds-fair-jig-saw
 ipdb_id: 1295

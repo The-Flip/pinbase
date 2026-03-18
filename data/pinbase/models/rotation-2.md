@@ -1,5 +1,4 @@
 ---
-slug: rotation-2
 name: Rotation
 title_slug: rotation-2
 ipdb_id: 2018

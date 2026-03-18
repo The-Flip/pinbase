@@ -1,5 +1,4 @@
 ---
-slug: crystal-palace
 name: Crystal Palace
 title_slug: crystal-palace
 ipdb_id: 6513

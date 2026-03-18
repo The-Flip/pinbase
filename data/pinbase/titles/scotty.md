@@ -1,4 +1,3 @@
 ---
-slug: scotty
 name: Scotty
 ---

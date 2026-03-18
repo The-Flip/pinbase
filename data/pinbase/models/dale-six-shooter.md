@@ -1,5 +1,4 @@
 ---
-slug: dale-six-shooter
 name: Dale Six Shooter
 title_slug: dale-six-shooter
 ipdb_id: 6590

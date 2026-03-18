@@ -1,5 +1,4 @@
 ---
-slug: champion-baseball
 name: Champion Baseball
 title_slug: champion-baseball
 ipdb_id: 3010

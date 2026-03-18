@@ -1,5 +1,4 @@
 ---
-slug: champion-2
 name: Champion
 title_slug: champion-3
 ipdb_id: 488

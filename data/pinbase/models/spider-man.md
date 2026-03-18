@@ -1,5 +1,4 @@
 ---
-slug: spider-man
 name: Spider-Man
 title_slug: spider-man
 opdb_id: G5D94-MLnXq

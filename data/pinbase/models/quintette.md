@@ -1,5 +1,4 @@
 ---
-slug: quintette
 name: Quintette
 title_slug: quintette
 opdb_id: GR77w-MJd0Y

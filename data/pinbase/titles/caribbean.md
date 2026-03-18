@@ -1,4 +1,3 @@
 ---
-slug: caribbean
 name: Caribbean
 ---

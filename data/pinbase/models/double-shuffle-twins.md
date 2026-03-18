@@ -1,5 +1,4 @@
 ---
-slug: double-shuffle-twins
 name: Double-Shuffle Twins
 title_slug: double-shuffle-twins-2
 ipdb_id: 726

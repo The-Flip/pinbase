@@ -1,5 +1,4 @@
 ---
-slug: space-team
 name: Space Team
 title_slug: space-team
 opdb_id: G4kyZ-MLR5r

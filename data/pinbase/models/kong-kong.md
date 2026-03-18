@@ -1,5 +1,4 @@
 ---
-slug: kong-kong
 name: Kong Kong
 title_slug: kong-kong
 ipdb_id: 1394

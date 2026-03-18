@@ -1,5 +1,4 @@
 ---
-slug: ride-m-cowboy
 name: Ride "M" Cowboy
 title_slug: ride-m-cowboy
 ipdb_id: 4704

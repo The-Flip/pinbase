@@ -1,5 +1,4 @@
 ---
-slug: shuffle-king-shuffle-board
 name: Shuffle-King (Shuffle Board)
 title_slug: shuffle-king-shuffle-board
 ipdb_id: 3245

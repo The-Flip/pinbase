@@ -1,5 +1,4 @@
 ---
-slug: speedboat
 name: Speedboat
 title_slug: speedboat
 ipdb_id: 4333

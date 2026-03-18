@@ -1,5 +1,4 @@
 ---
-slug: air-aces
 name: Air Aces
 title_slug: air-aces
 opdb_id: G420v-M1rYR

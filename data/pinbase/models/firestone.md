@@ -1,5 +1,4 @@
 ---
-slug: firestone
 name: Firestone
 title_slug: firestone
 ipdb_id: 858

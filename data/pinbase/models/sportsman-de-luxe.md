@@ -1,5 +1,4 @@
 ---
-slug: sportsman-de-luxe
 name: Sportsman De Luxe
 title_slug: sportsman-de-luxe
 ipdb_id: 3473

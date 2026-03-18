@@ -1,4 +1,3 @@
 ---
-slug: moderna
 name: Moderna
 ---

@@ -1,4 +1,3 @@
 ---
-slug: headliner
 name: Headliner
 ---

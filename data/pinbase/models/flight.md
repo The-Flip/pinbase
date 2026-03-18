@@ -1,5 +1,4 @@
 ---
-slug: flight
 name: Flight
 title_slug: flight
 ipdb_id: 886

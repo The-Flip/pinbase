@@ -1,5 +1,4 @@
 ---
-slug: penquin
 name: Penquin
 title_slug: penquin
 ipdb_id: 4301

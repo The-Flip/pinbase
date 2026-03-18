@@ -1,5 +1,4 @@
 ---
-slug: boop-a-doop
 name: Boop-A-Doop
 title_slug: boop-a-doop
 ipdb_id: 3653

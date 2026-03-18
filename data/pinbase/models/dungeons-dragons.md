@@ -1,5 +1,4 @@
 ---
-slug: dungeons-dragons
 name: Dungeons & Dragons
 title_slug: dungeons-dragons
 opdb_id: G4JBP-MJ6jr

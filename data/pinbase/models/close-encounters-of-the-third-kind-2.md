@@ -1,5 +1,4 @@
 ---
-slug: close-encounters-of-the-third-kind-2
 name: Close Encounters of the Third Kind (EM)
 title_slug: close-encounters
 opdb_id: G4qvL-MJ6z6

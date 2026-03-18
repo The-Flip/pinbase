@@ -1,5 +1,4 @@
 ---
-slug: electric-automatic-whiffle-model-34
 name: Electric Automatic Whiffle Model 34
 title_slug: electric-automatic-whiffle-model-34
 ipdb_id: 5400

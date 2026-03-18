@@ -1,5 +1,4 @@
 ---
-slug: space-patrol
 name: Space Patrol
 title_slug: space-patrol
 opdb_id: GN6zD-M3d2z

@@ -1,5 +1,4 @@
 ---
-slug: trojan
 name: Trojan
 title_slug: trojan
 ipdb_id: 2657

@@ -1,5 +1,4 @@
 ---
-slug: ok-america
 name: Ok America
 title_slug: ok-america
 ipdb_id: 1699

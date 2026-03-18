@@ -1,4 +1,3 @@
 ---
-slug: ajax
 name: Ajax
 ---

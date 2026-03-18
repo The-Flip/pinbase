@@ -1,5 +1,4 @@
 ---
-slug: sensation
 name: Sensation
 title_slug: sensation
 ipdb_id: 2095

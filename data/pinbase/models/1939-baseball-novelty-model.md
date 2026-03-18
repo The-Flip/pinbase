@@ -1,5 +1,4 @@
 ---
-slug: 1939-baseball-novelty-model
 name: 1939 Baseball (Novelty Model)
 title_slug: 1939-baseball-novelty-model
 ipdb_id: 5549

@@ -1,5 +1,4 @@
 ---
-slug: wagon-train-2
 name: Wagon Train
 title_slug: wagon-train-2
 ipdb_id: 3319

@@ -1,4 +1,3 @@
 ---
-slug: pasini
 name: Pasini
 ---

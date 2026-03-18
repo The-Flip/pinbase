@@ -1,5 +1,4 @@
 ---
-slug: jumaci
 name: Jumaci
 title_slug: jumaci
 ipdb_id: 4626

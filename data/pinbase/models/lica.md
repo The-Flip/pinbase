@@ -1,5 +1,4 @@
 ---
-slug: lica
 name: LICA
 title_slug: lica
 ipdb_id: 5896

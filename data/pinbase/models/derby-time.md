@@ -1,5 +1,4 @@
 ---
-slug: derby-time
 name: Derby Time
 title_slug: derby-time
 ipdb_id: 3061

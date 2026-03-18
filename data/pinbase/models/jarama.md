@@ -1,5 +1,4 @@
 ---
-slug: jarama
 name: Jarama
 title_slug: jarama
 opdb_id: G18KO-MdE9K

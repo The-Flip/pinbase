@@ -1,5 +1,4 @@
 ---
-slug: worlds-series-second-model
 name: World's Series (Second Model)
 title_slug: worlds-series-second-model
 ipdb_id: 2815

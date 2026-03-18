@@ -1,5 +1,4 @@
 ---
-slug: iceland
 name: Iceland
 title_slug: iceland
 ipdb_id: 5066

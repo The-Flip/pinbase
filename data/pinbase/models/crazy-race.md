@@ -1,5 +1,4 @@
 ---
-slug: crazy-race
 name: Crazy Race
 title_slug: crazy-race
 opdb_id: Gr1k2-MD0Ve

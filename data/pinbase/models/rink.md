@@ -1,5 +1,4 @@
 ---
-slug: rink
 name: Rink
 title_slug: rink
 ipdb_id: 1958

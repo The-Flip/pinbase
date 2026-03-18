@@ -1,5 +1,4 @@
 ---
-slug: sure-shot-3
 name: Sure Shot
 title_slug: sure-shot
 ipdb_id: 2458

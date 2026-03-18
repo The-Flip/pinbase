@@ -1,5 +1,4 @@
 ---
-slug: seabiscuit
 name: Seabiscuit
 title_slug: seabiscuit
 ipdb_id: 3825

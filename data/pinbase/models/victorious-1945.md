@@ -1,5 +1,4 @@
 ---
-slug: victorious-1945
 name: Victorious 1945
 title_slug: victorious-1945
 ipdb_id: 3299

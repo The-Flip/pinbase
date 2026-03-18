@@ -1,5 +1,4 @@
 ---
-slug: metallica
 name: Metallica
 ---
 

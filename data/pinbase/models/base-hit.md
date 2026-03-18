@@ -1,5 +1,4 @@
 ---
-slug: base-hit
 name: Base Hit
 title_slug: base-hit
 ipdb_id: 183

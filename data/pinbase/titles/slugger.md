@@ -1,4 +1,3 @@
 ---
-slug: slugger
 name: Slugger
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-drop-ball-rebound-model
 name: Bulls-Eye Drop Ball (Rebound Model)
 title_slug: bulls-eye-drop-ball-rebound-model
 ipdb_id: 6782

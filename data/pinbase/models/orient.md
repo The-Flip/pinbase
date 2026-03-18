@@ -1,5 +1,4 @@
 ---
-slug: orient
 name: Orient
 title_slug: orient
 ipdb_id: 3283

@@ -1,5 +1,4 @@
 ---
-slug: flip-out-1991
 name: Flip Out! 1991
 title_slug: flip-out-1991
 ipdb_id: 4026

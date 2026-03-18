@@ -1,5 +1,4 @@
 ---
-slug: little-league
 name: Little League
 title_slug: little-league
 ipdb_id: 3213

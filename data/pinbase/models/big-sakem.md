@@ -1,5 +1,4 @@
 ---
-slug: big-sakem
 name: Big Sakem
 title_slug: big-sakem
 ipdb_id: 5622

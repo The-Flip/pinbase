@@ -1,5 +1,4 @@
 ---
-slug: tiny
 name: Tiny
 title_slug: tiny
 ipdb_id: 3451

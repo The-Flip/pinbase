@@ -1,5 +1,4 @@
 ---
-slug: carom-junior
 name: Carom Junior
 title_slug: carom-junior
 ipdb_id: 3002

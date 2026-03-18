@@ -1,5 +1,4 @@
 ---
-slug: galloping-dominos
 name: Galloping Dominos
 title_slug: galloping-dominos
 ipdb_id: 6954

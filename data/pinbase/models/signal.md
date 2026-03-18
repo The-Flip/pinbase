@@ -1,5 +1,4 @@
 ---
-slug: signal
 name: Signal
 title_slug: signal
 ipdb_id: 2141

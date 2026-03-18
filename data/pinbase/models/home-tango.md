@@ -1,5 +1,4 @@
 ---
-slug: home-tango
 name: Home Tango
 title_slug: home-tango
 ipdb_id: 6331

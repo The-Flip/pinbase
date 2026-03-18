@@ -1,5 +1,4 @@
 ---
-slug: dune
 name: Dune
 title_slug: dune
 opdb_id: Gd266-ME0l7

@@ -1,5 +1,4 @@
 ---
-slug: ametrallador-2002
 name: Ametrallador 2002
 title_slug: ametrallador-2002
 ipdb_id: 6851

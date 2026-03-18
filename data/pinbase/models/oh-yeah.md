@@ -1,5 +1,4 @@
 ---
-slug: oh-yeah
 name: Oh Yeah!
 title_slug: oh-yeah
 ipdb_id: 1698

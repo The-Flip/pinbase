@@ -1,5 +1,4 @@
 ---
-slug: crown-soccer-special
 name: Crown Soccer Special
 title_slug: crown-soccer-special
 opdb_id: G5vjW-MJk99

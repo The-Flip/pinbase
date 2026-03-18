@@ -1,5 +1,4 @@
 ---
-slug: miss-nessie
 name: Miss Nessie
 title_slug: miss-nessie
 opdb_id: G4kJ3-MvB72

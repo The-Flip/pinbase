@@ -1,5 +1,4 @@
 ---
-slug: slugfest-first-model
 name: SlugFest (First Model)
 title_slug: slugfest-first-model
 ipdb_id: 3281

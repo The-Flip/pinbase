@@ -1,5 +1,4 @@
 ---
-slug: dolly-parton
 name: Dolly Parton
 title_slug: dolly-parton
 opdb_id: G43Yq-MJ7o4

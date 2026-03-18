@@ -1,5 +1,4 @@
 ---
-slug: fun-park
 name: Fun Park
 title_slug: fun-land-fun-park
 opdb_id: GRwqx-MwNj2

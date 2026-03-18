@@ -1,5 +1,4 @@
 ---
-slug: dune
 name: Dune
 ---
 

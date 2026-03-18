@@ -1,5 +1,4 @@
 ---
-slug: south-paw
 name: South-Paw
 title_slug: south-paw
 ipdb_id: 3274

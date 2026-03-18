@@ -1,4 +1,3 @@
 ---
-slug: admiral
 name: Admiral
 ---

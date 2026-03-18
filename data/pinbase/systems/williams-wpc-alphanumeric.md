@@ -1,5 +1,4 @@
 ---
-slug: williams-wpc-alphanumeric
 name: Williams WPC Alphanumeric
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

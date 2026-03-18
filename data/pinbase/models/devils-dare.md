@@ -1,5 +1,4 @@
 ---
-slug: devils-dare
 name: Devil's Dare
 title_slug: devils-dare
 opdb_id: GrNkY-MDbn2

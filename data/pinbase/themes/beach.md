@@ -1,4 +1,3 @@
 ---
-slug: beach
 name: Beach
 ---

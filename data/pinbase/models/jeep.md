@@ -1,5 +1,4 @@
 ---
-slug: jeep
 name: Jeep
 title_slug: jeep
 ipdb_id: 3843

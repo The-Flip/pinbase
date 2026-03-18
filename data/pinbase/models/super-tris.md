@@ -1,5 +1,4 @@
 ---
-slug: super-tris
 name: Super Tris
 title_slug: super-tris
 opdb_id: GRLpx-MJwxe

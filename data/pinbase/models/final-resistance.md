@@ -1,5 +1,4 @@
 ---
-slug: final-resistance
 name: Final Resistance
 title_slug: final-resistance
 opdb_id: G187W-MKNro

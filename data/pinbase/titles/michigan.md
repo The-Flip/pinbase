@@ -1,4 +1,3 @@
 ---
-slug: michigan
 name: Michigan
 ---

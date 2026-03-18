@@ -1,5 +1,4 @@
 ---
-slug: apollo-moon-shot-rifle
 name: Apollo Moon Shot Rifle
 title_slug: apollo-moon-shot-rifle
 ipdb_id: 6487

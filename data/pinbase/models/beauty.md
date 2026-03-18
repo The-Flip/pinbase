@@ -1,5 +1,4 @@
 ---
-slug: beauty
 name: Beauty
 title_slug: beauty
 ipdb_id: 215

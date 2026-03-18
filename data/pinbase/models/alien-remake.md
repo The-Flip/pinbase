@@ -1,5 +1,4 @@
 ---
-slug: alien-remake
 name: Alien (Remake)
 title_slug: alien
 opdb_id: G4PBO-MyNeb

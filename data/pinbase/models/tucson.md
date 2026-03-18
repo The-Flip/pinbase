@@ -1,5 +1,4 @@
 ---
-slug: tucson
 name: Tucson
 title_slug: tucson
 opdb_id: GrP8X-MD86N

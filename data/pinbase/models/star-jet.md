@@ -1,5 +1,4 @@
 ---
-slug: star-jet
 name: Star-Jet
 title_slug: star-jet
 opdb_id: GRwEJ-MQY7w

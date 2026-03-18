@@ -1,4 +1,3 @@
 ---
-slug: rockingham
 name: Rockingham
 ---

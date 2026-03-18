@@ -1,5 +1,4 @@
 ---
-slug: dimensional
 name: dimensional
 title_slug: dimensional
 ipdb_id: 4951

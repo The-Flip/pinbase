@@ -1,5 +1,4 @@
 ---
-slug: light-speed
 name: Light Speed
 title_slug: light-speed
 ipdb_id: 3712

@@ -1,4 +1,3 @@
 ---
-slug: stella
 name: Stella
 ---

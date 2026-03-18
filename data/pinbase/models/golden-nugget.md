@@ -1,5 +1,4 @@
 ---
-slug: golden-nugget
 name: Golden Nugget
 title_slug: golden-nugget
 ipdb_id: 1054

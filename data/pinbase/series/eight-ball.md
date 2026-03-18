@@ -1,5 +1,4 @@
 ---
-slug: eight-ball
 name: Eight Ball
 credit_refs:
 - person_slug: george-christian

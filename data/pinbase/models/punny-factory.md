@@ -1,5 +1,4 @@
 ---
-slug: punny-factory
 name: Punny Factory
 title_slug: punny-factory
 opdb_id: G8lwL-MjBXp

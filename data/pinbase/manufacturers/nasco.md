@@ -1,4 +1,3 @@
 ---
-slug: nasco
 name: Nasco
 ---

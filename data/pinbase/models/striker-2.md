@@ -1,5 +1,4 @@
 ---
-slug: striker-2
 name: Striker
 title_slug: striker-2
 ipdb_id: 6313

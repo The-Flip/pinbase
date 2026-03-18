@@ -1,5 +1,4 @@
 ---
-slug: soccer-kick-off
 name: Soccer Kick-Off
 title_slug: kick-off
 opdb_id: Gr8L0-MLRdY-A9b3z

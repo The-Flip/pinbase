@@ -1,5 +1,4 @@
 ---
-slug: caveman
 name: Caveman
 title_slug: caveman
 opdb_id: GR768-MLErr

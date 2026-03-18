@@ -1,5 +1,4 @@
 ---
-slug: st-moritz
 name: St. Moritz
 title_slug: st-moritz
 ipdb_id: 2410

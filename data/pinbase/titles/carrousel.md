@@ -1,4 +1,3 @@
 ---
-slug: carrousel
 name: Carrousel
 ---

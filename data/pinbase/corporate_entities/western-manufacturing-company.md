@@ -1,5 +1,4 @@
 ---
-slug: western-manufacturing-company
 name: Western Manufacturing Company
 manufacturer_slug: stern-electronics
 ipdb_manufacturer_id: 343

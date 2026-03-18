@@ -1,5 +1,4 @@
 ---
-slug: the-4-horsemen
 name: The 4 Horsemen
 title_slug: the-4-horsemen
 opdb_id: GRKdD-MLnxD

@@ -1,5 +1,4 @@
 ---
-slug: yale
 name: Yale
 title_slug: yale
 opdb_id: G59K6-M2Y4R

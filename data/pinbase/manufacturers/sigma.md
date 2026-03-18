@@ -1,4 +1,3 @@
 ---
-slug: sigma
 name: Sigma
 ---

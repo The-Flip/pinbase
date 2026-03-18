@@ -1,5 +1,4 @@
 ---
-slug: fortune
 name: Fortune
 title_slug: lady-luck-fortune
 opdb_id: GrOBL-M8587

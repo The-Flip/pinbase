@@ -1,5 +1,4 @@
 ---
-slug: bosco
 name: Bosco
 title_slug: bosco
 ipdb_id: 358

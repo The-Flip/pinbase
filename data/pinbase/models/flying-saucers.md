@@ -1,5 +1,4 @@
 ---
-slug: flying-saucers
 name: Flying Saucers
 title_slug: flying-saucers
 opdb_id: G4JlO-MLWZ7

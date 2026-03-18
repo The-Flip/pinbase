@@ -1,5 +1,4 @@
 ---
-slug: flipper-clown
 name: Flipper Clown
 title_slug: flipper-clown
 opdb_id: GrJVE-MdEE8

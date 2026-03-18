@@ -1,5 +1,4 @@
 ---
-slug: magik-carpet
 name: Magik Carpet
 title_slug: magik-carpet
 ipdb_id: 5768

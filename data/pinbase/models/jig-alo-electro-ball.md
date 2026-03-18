@@ -1,5 +1,4 @@
 ---
-slug: jig-alo-electro-ball
 name: Jig-alo Electro-Ball
 title_slug: jig-alo-electro-ball
 ipdb_id: 1294

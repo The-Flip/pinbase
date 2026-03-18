@@ -1,5 +1,4 @@
 ---
-slug: fun-cruise
 name: Fun Cruise
 title_slug: fun-cruise
 ipdb_id: 963

@@ -1,4 +1,3 @@
 ---
-slug: rollet
 name: Rollet
 ---

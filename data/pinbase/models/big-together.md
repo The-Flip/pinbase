@@ -1,5 +1,4 @@
 ---
-slug: big-together
 name: Big Together
 title_slug: big-together
 opdb_id: G5bNx-MLzNP

@@ -1,5 +1,4 @@
 ---
-slug: iron-maiden-2
 name: Iron Maiden
 title_slug: iron-maiden-3
 ipdb_id: 5190

@@ -1,5 +1,4 @@
 ---
-slug: angle-lite
 name: Angle Lite
 title_slug: angle-lite
 ipdb_id: 74

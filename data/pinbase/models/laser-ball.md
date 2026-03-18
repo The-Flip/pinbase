@@ -1,5 +1,4 @@
 ---
-slug: laser-ball
 name: Laser Ball
 title_slug: laser-ball
 opdb_id: GRBXl-MLq9k

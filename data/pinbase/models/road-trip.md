@@ -1,5 +1,4 @@
 ---
-slug: road-trip
 name: Road Trip
 title_slug: road-trip
 opdb_id: GQKXy-MNENE

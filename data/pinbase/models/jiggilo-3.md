@@ -1,5 +1,4 @@
 ---
-slug: jiggilo-3
 name: Jiggilo
 title_slug: jiggilo-3
 ipdb_id: 5390

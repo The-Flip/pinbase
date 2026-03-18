@@ -1,5 +1,4 @@
 ---
-slug: fair
 name: Fair
 title_slug: fair
 ipdb_id: 807

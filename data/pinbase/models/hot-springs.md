@@ -1,5 +1,4 @@
 ---
-slug: hot-springs
 name: Hot Springs
 title_slug: hot-springs
 ipdb_id: 1249

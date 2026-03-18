@@ -1,5 +1,4 @@
 ---
-slug: shoot-out-rifle
 name: Shoot Out Rifle
 title_slug: shoot-out-rifle
 ipdb_id: 6480

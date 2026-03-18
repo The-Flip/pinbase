@@ -1,5 +1,4 @@
 ---
-slug: flying-turns
 name: Flying Turns
 title_slug: flying-turns
 opdb_id: G42xB-MrRXW

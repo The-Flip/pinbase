@@ -1,5 +1,4 @@
 ---
-slug: moon-glow
 name: Moon Glow
 title_slug: moon-glow
 opdb_id: GxvbB-MkPjl

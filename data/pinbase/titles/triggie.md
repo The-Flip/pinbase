@@ -1,4 +1,3 @@
 ---
-slug: triggie
 name: Triggie
 ---

@@ -1,5 +1,4 @@
 ---
-slug: block-marble-company
 name: Block Marble Company
 manufacturer_slug: block-marble-company
 ipdb_manufacturer_id: 60

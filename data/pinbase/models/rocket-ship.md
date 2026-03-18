@@ -1,5 +1,4 @@
 ---
-slug: rocket-ship
 name: Rocket Ship
 title_slug: rocket-ship
 opdb_id: G4P3n-MYeon

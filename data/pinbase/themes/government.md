@@ -1,4 +1,3 @@
 ---
-slug: government
 name: Government
 ---

@@ -1,5 +1,4 @@
 ---
-slug: psychedelic
 name: Psychedelic
 title_slug: groovy-crescendo
 opdb_id: GRpKY-MLylE

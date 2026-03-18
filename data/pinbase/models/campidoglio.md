@@ -1,5 +1,4 @@
 ---
-slug: campidoglio
 name: Campidoglio
 title_slug: campidoglio
 ipdb_id: 5873

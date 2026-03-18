@@ -1,4 +1,3 @@
 ---
-slug: coed
 name: Coed
 ---

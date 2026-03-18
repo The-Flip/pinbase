@@ -1,5 +1,4 @@
 ---
-slug: cosmic-gunfight
 name: Cosmic Gunfight
 title_slug: cosmic-gunfight
 opdb_id: GRv7B-MLqPd

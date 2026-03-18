@@ -1,5 +1,4 @@
 ---
-slug: 3-across
 name: 3 Across
 title_slug: 3-across
 ipdb_id: 4174

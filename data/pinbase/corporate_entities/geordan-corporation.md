@@ -1,5 +1,4 @@
 ---
-slug: geordan-corporation
 name: Geordan Corporation
 manufacturer_slug: geordan-corporation
 ipdb_manufacturer_id: 571

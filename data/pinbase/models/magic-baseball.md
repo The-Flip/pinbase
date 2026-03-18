@@ -1,5 +1,4 @@
 ---
-slug: magic-baseball
 name: Magic Baseball
 title_slug: magic-baseball
 ipdb_id: 6129

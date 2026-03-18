@@ -1,5 +1,4 @@
 ---
-slug: transporter-the-rescue
 name: Transporter the Rescue
 title_slug: transporter-the-rescue
 opdb_id: G5n2D-MLn85

@@ -1,5 +1,4 @@
 ---
-slug: merry-old-king
 name: Merry Old King
 title_slug: merry-old-king
 ipdb_id: 4357

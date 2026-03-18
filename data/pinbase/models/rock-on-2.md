@@ -1,5 +1,4 @@
 ---
-slug: rock-on-2
 name: Rock On
 title_slug: rock-on
 ipdb_id: 5092

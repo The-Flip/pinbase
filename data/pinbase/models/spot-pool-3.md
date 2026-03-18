@@ -1,5 +1,4 @@
 ---
-slug: spot-pool-3
 name: Spot Pool
 title_slug: spot-pool-3
 ipdb_id: 3456

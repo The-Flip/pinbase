@@ -1,5 +1,4 @@
 ---
-slug: tommy-gun
 name: Tommy Gun
 title_slug: tommy-gun
 ipdb_id: 6727

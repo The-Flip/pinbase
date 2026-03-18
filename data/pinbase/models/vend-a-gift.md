@@ -1,5 +1,4 @@
 ---
-slug: vend-a-gift
 name: Vend-A-Gift
 title_slug: vend-a-gift
 ipdb_id: 5578

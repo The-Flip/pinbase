@@ -1,5 +1,4 @@
 ---
-slug: the-addams-family-special-collectors-edition
 name: The Addams Family Special Collectors Edition
 title_slug: the-addams-family
 opdb_id: G4ODR-MLzY7

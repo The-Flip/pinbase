@@ -1,5 +1,4 @@
 ---
-slug: freedom-2
 name: Freedom
 title_slug: freedom
 opdb_id: GR9qY-MD3Px

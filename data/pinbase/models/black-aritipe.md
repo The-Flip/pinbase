@@ -1,5 +1,4 @@
 ---
-slug: black-aritipe
 name: Black Aritipe?
 title_slug: black-aritipe
 ipdb_id: 3804

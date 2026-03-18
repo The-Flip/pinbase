@@ -1,5 +1,4 @@
 ---
-slug: battle-2
 name: Battle
 title_slug: battle-2
 ipdb_id: 3841

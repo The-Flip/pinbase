@@ -1,5 +1,4 @@
 ---
-slug: new-city-3
 name: New City
 title_slug: new-city-3
 ipdb_id: 6990

@@ -1,5 +1,4 @@
 ---
-slug: harley-davidson-2nd-edition
 name: Harley-Davidson (2nd Edition)
 title_slug: harley-davidson
 opdb_id: G56lO-MZeRq

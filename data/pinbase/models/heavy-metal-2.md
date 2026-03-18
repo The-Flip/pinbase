@@ -1,5 +1,4 @@
 ---
-slug: heavy-metal-2
 name: Heavy Metal
 title_slug: heavy-metal
 opdb_id: GoEej-Mo1q0

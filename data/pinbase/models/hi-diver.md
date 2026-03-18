@@ -1,5 +1,4 @@
 ---
-slug: hi-diver
 name: Hi-Diver
 title_slug: hi-diver
 opdb_id: G5DEb-MLeX6

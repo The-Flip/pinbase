@@ -1,5 +1,4 @@
 ---
-slug: apollo-9
 name: Apollo-9
 title_slug: apollo-9
 ipdb_id: 5304

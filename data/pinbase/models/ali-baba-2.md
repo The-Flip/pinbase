@@ -1,5 +1,4 @@
 ---
-slug: ali-baba-2
 name: Ali-Baba
 title_slug: ali-baba-2
 opdb_id: Gd2lx-Mb5K6

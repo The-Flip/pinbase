@@ -1,5 +1,4 @@
 ---
-slug: sportsman
 name: Sportsman
 title_slug: sportsman
 opdb_id: G432j-MYeew

@@ -1,5 +1,4 @@
 ---
-slug: cape-may
 name: Cape May
 title_slug: cape-may
 ipdb_id: 4855

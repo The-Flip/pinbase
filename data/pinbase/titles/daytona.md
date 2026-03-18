@@ -1,4 +1,3 @@
 ---
-slug: daytona
 name: Daytona
 ---

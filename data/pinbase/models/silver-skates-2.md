@@ -1,5 +1,4 @@
 ---
-slug: silver-skates-2
 name: Silver Skates
 title_slug: silver-skates-2
 ipdb_id: 2151

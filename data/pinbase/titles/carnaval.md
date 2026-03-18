@@ -1,4 +1,3 @@
 ---
-slug: carnaval
 name: Carnaval
 ---

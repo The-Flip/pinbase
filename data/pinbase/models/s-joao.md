@@ -1,5 +1,4 @@
 ---
-slug: s-joao
 name: S. João
 title_slug: s-joao
 ipdb_id: 5738

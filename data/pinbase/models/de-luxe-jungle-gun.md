@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-jungle-gun
 name: De Luxe Jungle Gun
 title_slug: de-luxe-jungle-gun
 ipdb_id: 6363

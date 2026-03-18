@@ -1,5 +1,4 @@
 ---
-slug: monster-bash
 name: Monster Bash
 title_slug: monster-bash
 opdb_id: Gr3EW-MD3Nj

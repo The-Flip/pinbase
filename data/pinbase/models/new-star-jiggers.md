@@ -1,5 +1,4 @@
 ---
-slug: new-star-jiggers
 name: New Star Jiggers
 title_slug: new-star-jiggers
 ipdb_id: 4528

@@ -1,5 +1,4 @@
 ---
-slug: hunter
 name: Hunter
 title_slug: hunter
 ipdb_id: 1255

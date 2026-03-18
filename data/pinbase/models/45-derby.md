@@ -1,5 +1,4 @@
 ---
-slug: 45-derby
 name: 45-Derby
 title_slug: 45-derby
 ipdb_id: 5705

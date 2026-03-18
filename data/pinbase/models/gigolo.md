@@ -1,5 +1,4 @@
 ---
-slug: gigolo
 name: Gigolo
 title_slug: gigolo
 ipdb_id: 3818

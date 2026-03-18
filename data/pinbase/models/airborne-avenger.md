@@ -1,5 +1,4 @@
 ---
-slug: airborne-avenger
 name: Airborne Avenger
 title_slug: airborne-avenger
 opdb_id: G4dZZ-MKNzE

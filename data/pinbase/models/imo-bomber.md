@@ -1,5 +1,4 @@
 ---
-slug: imo-bomber
 name: Imo-Bomber
 title_slug: imo-bomber
 ipdb_id: 4718

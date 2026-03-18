@@ -1,5 +1,4 @@
 ---
-slug: big-guns
 name: Big Guns
 title_slug: big-guns
 opdb_id: G4d8k-MJ5Z8

@@ -1,5 +1,4 @@
 ---
-slug: star-wars-comic-art-pro
 name: Star Wars Comic Art (Pro)
 title_slug: star-wars-stern
 opdb_id: G5vLR-MwNwy-A9Vob

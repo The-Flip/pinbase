@@ -1,5 +1,4 @@
 ---
-slug: animated
 name: Animated
 title_slug: animated
 ipdb_id: 821

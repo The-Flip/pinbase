@@ -1,4 +1,3 @@
 ---
-slug: justice
 name: Justice
 ---

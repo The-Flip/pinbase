@@ -1,4 +1,3 @@
 ---
-slug: sunbeam
 name: Sunbeam
 ---

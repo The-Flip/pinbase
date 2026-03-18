@@ -1,5 +1,4 @@
 ---
-slug: barok-company
 name: Barok Company
 manufacturer_slug: barok-company
 ipdb_manufacturer_id: 50

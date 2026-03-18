@@ -1,5 +1,4 @@
 ---
-slug: totem-4
 name: Totem
 title_slug: totem-3
 ipdb_id: 6669

@@ -1,5 +1,4 @@
 ---
-slug: domino-one-ball
 name: Domino One Ball
 title_slug: domino-one-ball
 ipdb_id: 4058

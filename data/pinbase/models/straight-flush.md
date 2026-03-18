@@ -1,5 +1,4 @@
 ---
-slug: straight-flush
 name: Straight Flush
 title_slug: straight-flush
 opdb_id: G5L06-ML08k

@@ -1,5 +1,4 @@
 ---
-slug: bad-girls
 name: Bad Girls
 title_slug: bad-girls
 opdb_id: G5WOo-MePp0

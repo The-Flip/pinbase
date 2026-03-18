@@ -1,5 +1,4 @@
 ---
-slug: tura-junior
 name: Tura-Junior
 title_slug: tura-junior
 ipdb_id: 4750

@@ -1,5 +1,4 @@
 ---
-slug: jupiter
 name: Jupiter
 title_slug: jupiter
 ipdb_id: 5159

@@ -1,5 +1,4 @@
 ---
-slug: mini-golf
 name: Mini Golf
 title_slug: mini-golf
 ipdb_id: 3434

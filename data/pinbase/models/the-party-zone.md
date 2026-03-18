@@ -1,5 +1,4 @@
 ---
-slug: the-party-zone
 name: The Party Zone
 title_slug: the-party-zone
 opdb_id: G5oBw-ML3Kw

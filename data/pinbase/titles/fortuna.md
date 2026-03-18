@@ -1,4 +1,3 @@
 ---
-slug: fortuna
 name: Fortuna
 ---

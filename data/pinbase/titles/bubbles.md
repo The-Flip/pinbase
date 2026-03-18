@@ -1,4 +1,3 @@
 ---
-slug: bubbles
 name: Bubbles
 ---

@@ -1,5 +1,4 @@
 ---
-slug: video-dens-sa
 name: Video Dens, S.A.
 manufacturer_slug: videodens
 ipdb_manufacturer_id: 565

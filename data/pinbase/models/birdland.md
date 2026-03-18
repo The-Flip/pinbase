@@ -1,5 +1,4 @@
 ---
-slug: birdland
 name: Birdland
 title_slug: birdland
 ipdb_id: 5747

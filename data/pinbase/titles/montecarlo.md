@@ -1,4 +1,3 @@
 ---
-slug: montecarlo
 name: Montecarlo
 ---

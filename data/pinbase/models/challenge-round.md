@@ -1,5 +1,4 @@
 ---
-slug: challenge-round
 name: Challenge Round
 title_slug: challenge-round
 opdb_id: Gxvv7-MdE0z

@@ -1,5 +1,4 @@
 ---
-slug: auto-roll
 name: Auto Roll
 title_slug: auto-roll
 ipdb_id: 5446

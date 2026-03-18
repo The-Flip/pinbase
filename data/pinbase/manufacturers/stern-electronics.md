@@ -1,5 +1,4 @@
 ---
-slug: stern-electronics
 name: Stern Electronics
 opdb_manufacturer_id: 137
 ---

@@ -1,5 +1,4 @@
 ---
-slug: cleopatra-3
 name: Cleopatra
 title_slug: cleopatra-3
 ipdb_id: 4328

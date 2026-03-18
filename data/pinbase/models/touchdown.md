@@ -1,5 +1,4 @@
 ---
-slug: touchdown
 name: Touchdown
 title_slug: touchdown-2
 ipdb_id: 2608

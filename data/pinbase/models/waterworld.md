@@ -1,5 +1,4 @@
 ---
-slug: waterworld
 name: Waterworld
 title_slug: waterworld
 opdb_id: G4JK7-MDBe6

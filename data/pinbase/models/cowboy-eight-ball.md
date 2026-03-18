@@ -1,5 +1,4 @@
 ---
-slug: cowboy-eight-ball
 name: Cowboy Eight Ball
 title_slug: cowboy-eight-ball
 ipdb_id: 5132

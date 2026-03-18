@@ -1,5 +1,4 @@
 ---
-slug: playboy-35th-anniversary
 name: Playboy 35th Anniversary
 title_slug: playboy-35th-anniversary
 opdb_id: GRL60-MLW2q

@@ -1,4 +1,3 @@
 ---
-slug: turret
 name: Turret
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bugs-bunnys-birthday-ball
 name: Bugs Bunny's Birthday Ball
 title_slug: bugs-bunnys-birthday-ball
 opdb_id: GRozL-MDb46

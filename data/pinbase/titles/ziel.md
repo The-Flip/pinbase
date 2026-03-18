@@ -1,4 +1,3 @@
 ---
-slug: ziel
 name: Ziel
 ---

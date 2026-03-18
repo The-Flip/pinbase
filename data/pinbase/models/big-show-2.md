@@ -1,5 +1,4 @@
 ---
-slug: big-show-2
 name: Big Show
 title_slug: big-show-2
 ipdb_id: 276

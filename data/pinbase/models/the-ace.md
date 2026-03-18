@@ -1,5 +1,4 @@
 ---
-slug: the-ace
 name: The Ace
 title_slug: the-ace
 ipdb_id: 6157

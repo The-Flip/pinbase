@@ -1,5 +1,4 @@
 ---
-slug: fleet
 name: Fleet
 title_slug: fleet
 ipdb_id: 877

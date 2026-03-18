@@ -1,5 +1,4 @@
 ---
-slug: shark-3
 name: Shark
 title_slug: shark-3
 ipdb_id: 6705

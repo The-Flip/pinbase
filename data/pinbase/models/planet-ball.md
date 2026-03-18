@@ -1,5 +1,4 @@
 ---
-slug: planet-ball
 name: Planet Ball
 title_slug: planet-ball
 ipdb_id: 298

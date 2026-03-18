@@ -1,5 +1,4 @@
 ---
-slug: sink-or-swim
 name: Sink or Swim
 title_slug: sink-or-swim
 ipdb_id: 2163

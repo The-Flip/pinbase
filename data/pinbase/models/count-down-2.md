@@ -1,5 +1,4 @@
 ---
-slug: count-down-2
 name: Count Down
 title_slug: count-down
 ipdb_id: 4118

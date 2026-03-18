@@ -1,5 +1,4 @@
 ---
-slug: daily-double-de-luxe
 name: Daily Double (De Luxe)
 title_slug: daily-double-de-luxe
 ipdb_id: 6916

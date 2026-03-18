@@ -1,5 +1,4 @@
 ---
-slug: fortuna
 name: Fortuna
 title_slug: fortuna
 ipdb_id: 6909

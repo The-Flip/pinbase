@@ -1,5 +1,4 @@
 ---
-slug: all-the-way
 name: All The Way
 title_slug: all-the-way
 ipdb_id: 6278

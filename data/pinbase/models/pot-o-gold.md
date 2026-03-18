@@ -1,5 +1,4 @@
 ---
-slug: pot-o-gold
 name: Pot 'O' Gold
 title_slug: pot-o-gold
 opdb_id: G4Xlx-Mq179

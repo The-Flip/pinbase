@@ -1,5 +1,4 @@
 ---
-slug: brazil
 name: Brazil
 title_slug: brazil
 ipdb_id: 372

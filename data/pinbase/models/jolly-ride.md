@@ -1,5 +1,4 @@
 ---
-slug: jolly-ride
 name: Jolly Ride
 title_slug: jolly-ride
 opdb_id: Gr1zL-MJ2kp

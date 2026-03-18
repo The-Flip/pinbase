@@ -1,5 +1,4 @@
 ---
-slug: disco
 name: Disco
 title_slug: disco
 opdb_id: G43bY-MwNRn

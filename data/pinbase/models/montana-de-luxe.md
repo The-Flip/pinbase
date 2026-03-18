@@ -1,5 +1,4 @@
 ---
-slug: montana-de-luxe
 name: Montana De Luxe
 title_slug: montana-de-luxe
 ipdb_id: 5472

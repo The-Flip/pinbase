@@ -1,5 +1,4 @@
 ---
-slug: rajah
 name: Rajah
 title_slug: rajah
 ipdb_id: 5036

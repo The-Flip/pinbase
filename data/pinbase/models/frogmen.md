@@ -1,5 +1,4 @@
 ---
-slug: frogmen
 name: Frogmen
 title_slug: frogmen
 ipdb_id: 4399

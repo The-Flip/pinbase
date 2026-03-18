@@ -1,5 +1,4 @@
 ---
-slug: mercury-2
 name: Mercury
 title_slug: mercury
 ipdb_id: 1573

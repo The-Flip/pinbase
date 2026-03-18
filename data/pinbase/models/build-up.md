@@ -1,5 +1,4 @@
 ---
-slug: build-up
 name: Build Up
 title_slug: build-up
 opdb_id: GoEVx-MYeP1

@@ -1,5 +1,4 @@
 ---
-slug: firepower
 name: Firepower
 title_slug: firepower
 opdb_id: G5VDd-MJpqO

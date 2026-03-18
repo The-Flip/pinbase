@@ -1,5 +1,4 @@
 ---
-slug: green-pastures
 name: Green Pastures
 title_slug: green-pastures
 opdb_id: Gr12y-MJYyY

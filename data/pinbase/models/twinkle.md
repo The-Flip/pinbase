@@ -1,5 +1,4 @@
 ---
-slug: twinkle
 name: Twinkle
 title_slug: twinkle
 ipdb_id: 2691

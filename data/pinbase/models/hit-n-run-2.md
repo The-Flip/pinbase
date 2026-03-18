@@ -1,5 +1,4 @@
 ---
-slug: hit-n-run-2
 name: Hit 'N' Run
 title_slug: hit-n-run-2
 ipdb_id: 3149

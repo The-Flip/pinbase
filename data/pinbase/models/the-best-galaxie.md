@@ -1,5 +1,4 @@
 ---
-slug: the-best-galaxie
 name: The Best Galaxie
 title_slug: the-best-galaxie
 ipdb_id: 6836

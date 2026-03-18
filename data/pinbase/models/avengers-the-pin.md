@@ -1,5 +1,4 @@
 ---
-slug: avengers-the-pin
 name: Avengers The Pin
 title_slug: avengers-the-pin
 ipdb_id: 6373

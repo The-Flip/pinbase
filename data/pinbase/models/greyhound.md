@@ -1,5 +1,4 @@
 ---
-slug: greyhound
 name: Greyhound
 title_slug: greyhound
 ipdb_id: 1086

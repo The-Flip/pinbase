@@ -1,5 +1,4 @@
 ---
-slug: billiard-flash
 name: Billiard Flash
 title_slug: billiard-flash
 ipdb_id: 3752

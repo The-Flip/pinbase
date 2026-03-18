@@ -1,5 +1,4 @@
 ---
-slug: reggio
 name: Reggio
 title_slug: reggio
 ipdb_id: 5675

@@ -1,5 +1,4 @@
 ---
-slug: westerhaus-amusement-company
 name: Westerhaus Amusement Company
 manufacturer_slug: westerhaus-amusement-company
 ipdb_manufacturer_id: 340

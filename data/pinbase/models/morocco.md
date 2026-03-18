@@ -1,5 +1,4 @@
 ---
-slug: morocco
 name: Morocco
 title_slug: morocco
 opdb_id: GvBY8-MW9pn

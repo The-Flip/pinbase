@@ -1,5 +1,4 @@
 ---
-slug: alien-warrior
 name: Alien Warrior
 title_slug: alien-warrior
 ipdb_id: 5882

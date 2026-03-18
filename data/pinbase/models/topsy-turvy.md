@@ -1,5 +1,4 @@
 ---
-slug: topsy-turvy
 name: Topsy Turvy
 title_slug: topsy-turvy
 ipdb_id: 4232

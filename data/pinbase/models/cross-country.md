@@ -1,5 +1,4 @@
 ---
-slug: cross-country
 name: Cross Country
 title_slug: cross-country
 opdb_id: GRzWL-MRjWy

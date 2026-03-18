@@ -1,5 +1,4 @@
 ---
-slug: antiaereo-reflejos
 name: Antiaereo Reflejos
 title_slug: antiaereo-reflejos
 ipdb_id: 7057

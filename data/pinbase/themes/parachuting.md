@@ -1,4 +1,3 @@
 ---
-slug: parachuting
 name: Parachuting
 ---

@@ -1,5 +1,4 @@
 ---
-slug: columbia-2
 name: Columbia
 title_slug: columbia-2
 ipdb_id: 5759

@@ -1,5 +1,4 @@
 ---
-slug: 4-queens
 name: 4 Queens
 title_slug: 4-queens
 opdb_id: GRwKx-MJV8q

@@ -1,5 +1,4 @@
 ---
-slug: super-canasta
 name: Super Canasta
 title_slug: super-canasta
 opdb_id: GLWLl-MRjee

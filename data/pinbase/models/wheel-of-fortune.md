@@ -1,5 +1,4 @@
 ---
-slug: wheel-of-fortune
 name: Wheel of Fortune
 title_slug: wheel-of-fortune-2
 ipdb_id: 2757

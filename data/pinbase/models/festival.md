@@ -1,5 +1,4 @@
 ---
-slug: festival
 name: Festival
 title_slug: festival
 opdb_id: G4lY9-MLRXe

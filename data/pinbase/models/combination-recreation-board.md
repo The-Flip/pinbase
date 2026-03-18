@@ -1,5 +1,4 @@
 ---
-slug: combination-recreation-board
 name: Combination Recreation Board
 title_slug: combination-recreation-board
 ipdb_id: 6103

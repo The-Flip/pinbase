@@ -1,5 +1,4 @@
 ---
-slug: screwball-2
 name: Screwball
 title_slug: screwball-2
 ipdb_id: 6742

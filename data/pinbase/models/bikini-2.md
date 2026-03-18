@@ -1,5 +1,4 @@
 ---
-slug: bikini-2
 name: Bikini
 title_slug: bikini-2
 ipdb_id: 5481

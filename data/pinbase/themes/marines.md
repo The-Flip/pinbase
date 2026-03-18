@@ -1,4 +1,3 @@
 ---
-slug: marines
 name: Marines
 ---

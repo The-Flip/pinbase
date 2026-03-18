@@ -1,5 +1,4 @@
 ---
-slug: volley
 name: Volley
 title_slug: volley
 opdb_id: G5Q19-MLeEN

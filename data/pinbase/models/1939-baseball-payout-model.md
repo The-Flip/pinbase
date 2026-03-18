@@ -1,5 +1,4 @@
 ---
-slug: 1939-baseball-payout-model
 name: 1939 Baseball (Payout Model)
 title_slug: 1939-baseball-payout-model
 ipdb_id: 6601

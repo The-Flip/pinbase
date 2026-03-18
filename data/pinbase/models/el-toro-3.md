@@ -1,5 +1,4 @@
 ---
-slug: el-toro-3
 name: El Toro
 title_slug: el-toro
 opdb_id: GR6yy-Mb5kj

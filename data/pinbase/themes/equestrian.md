@@ -1,4 +1,3 @@
 ---
-slug: equestrian
 name: Equestrian
 ---

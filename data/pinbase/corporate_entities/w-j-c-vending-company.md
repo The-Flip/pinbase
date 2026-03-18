@@ -1,5 +1,4 @@
 ---
-slug: w-j-c-vending-company
 name: W. J. C. Vending Company
 manufacturer_slug: w-j-c-vending-company
 ipdb_manufacturer_id: 334

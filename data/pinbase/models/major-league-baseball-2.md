@@ -1,5 +1,4 @@
 ---
-slug: major-league-baseball-2
 name: Major League Baseball
 title_slug: major-league-baseball-2
 ipdb_id: 4765

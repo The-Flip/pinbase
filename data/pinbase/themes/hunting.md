@@ -1,4 +1,3 @@
 ---
-slug: hunting
 name: Hunting
 ---

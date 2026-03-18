@@ -1,5 +1,4 @@
 ---
-slug: dudley-clark-company
 name: Dudley-Clark Company
 manufacturer_slug: dudley-clark-company
 ipdb_manufacturer_id: 106

@@ -1,5 +1,4 @@
 ---
-slug: hit-line
 name: Hit Line
 title_slug: hit-line
 opdb_id: G41nY-MDqB1

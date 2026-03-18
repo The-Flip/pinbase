@@ -1,5 +1,4 @@
 ---
-slug: derby-day-2
 name: Derby Day
 title_slug: derby-day-3
 ipdb_id: 665

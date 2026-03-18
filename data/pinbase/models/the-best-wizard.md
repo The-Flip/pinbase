@@ -1,5 +1,4 @@
 ---
-slug: the-best-wizard
 name: The Best Wizard
 title_slug: the-best-wizard
 ipdb_id: 4919

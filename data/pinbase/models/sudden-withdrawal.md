@@ -1,5 +1,4 @@
 ---
-slug: sudden-withdrawal
 name: Sudden Withdrawal
 title_slug: sudden-withdrawal
 ipdb_id: 5721

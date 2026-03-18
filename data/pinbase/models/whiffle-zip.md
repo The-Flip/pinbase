@@ -1,5 +1,4 @@
 ---
-slug: whiffle-zip
 name: Whiffle-Zip
 title_slug: whiffle-zip
 ipdb_id: 3558

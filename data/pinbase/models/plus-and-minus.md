@@ -1,5 +1,4 @@
 ---
-slug: plus-and-minus
 name: Plus and Minus
 title_slug: plus-and-minus
 ipdb_id: 1833

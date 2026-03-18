@@ -1,5 +1,4 @@
 ---
-slug: twist
 name: Twist
 title_slug: twist
 opdb_id: GRDne-MDnv4

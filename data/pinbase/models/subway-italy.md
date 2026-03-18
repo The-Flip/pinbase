@@ -1,5 +1,4 @@
 ---
-slug: subway-italy
 name: Subway
 title_slug: subway-cross-town
 opdb_id: GrEQy-MwN12

@@ -1,5 +1,4 @@
 ---
-slug: fightin-phils
 name: Fightin' Phils
 title_slug: fightin-phils
 ipdb_id: 3095

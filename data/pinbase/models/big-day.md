@@ -1,5 +1,4 @@
 ---
-slug: big-day
 name: Big Day
 title_slug: big-day
 opdb_id: G48JX-MJw3J

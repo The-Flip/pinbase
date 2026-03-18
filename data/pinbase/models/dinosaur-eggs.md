@@ -1,5 +1,4 @@
 ---
-slug: dinosaur-eggs
 name: Dinosaur Eggs
 title_slug: dinosaur-eggs
 ipdb_id: 3062

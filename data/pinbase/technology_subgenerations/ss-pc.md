@@ -1,5 +1,4 @@
 ---
-slug: ss-pc
 name: PC-Based
 display_order: 3
 technology_generation_slug: solid-state

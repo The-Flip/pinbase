@@ -1,5 +1,4 @@
 ---
-slug: jumbo-jr
 name: Jumbo, Jr.
 title_slug: jumbo-jr
 ipdb_id: 3769

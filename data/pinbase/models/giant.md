@@ -1,5 +1,4 @@
 ---
-slug: giant
 name: Giant
 title_slug: giant
 ipdb_id: 1001

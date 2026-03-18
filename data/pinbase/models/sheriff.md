@@ -1,5 +1,4 @@
 ---
-slug: sheriff
 name: Sheriff
 title_slug: lawman
 opdb_id: GrEXx-MQ9Wb

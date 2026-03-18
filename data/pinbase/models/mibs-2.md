@@ -1,5 +1,4 @@
 ---
-slug: mibs-2
 name: Mibs
 title_slug: mibs-2
 ipdb_id: 5319

@@ -1,4 +1,3 @@
 ---
-slug: preakness
 name: Preakness
 ---

@@ -1,4 +1,3 @@
 ---
-slug: elettrocoin
 name: Elettrocoin
 ---

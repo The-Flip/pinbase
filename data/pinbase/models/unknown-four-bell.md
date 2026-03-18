@@ -1,5 +1,4 @@
 ---
-slug: unknown-four-bell
 name: Unknown ("Four Bell")
 title_slug: unknown-four-bell
 ipdb_id: 4806

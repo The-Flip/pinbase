@@ -1,5 +1,4 @@
 ---
-slug: treff-gloria-water-skier
 name: Treff-Gloria (water skier)
 title_slug: treff-gloria-water-skier
 ipdb_id: 4420

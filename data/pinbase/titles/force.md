@@ -1,4 +1,3 @@
 ---
-slug: force
 name: Force
 ---

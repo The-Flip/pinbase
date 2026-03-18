@@ -1,5 +1,4 @@
 ---
-slug: torneo
 name: Torneo
 title_slug: torneo
 ipdb_id: 2599

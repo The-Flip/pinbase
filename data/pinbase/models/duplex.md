@@ -1,5 +1,4 @@
 ---
-slug: duplex
 name: Duplex
 title_slug: duplex
 ipdb_id: 745

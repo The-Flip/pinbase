@@ -1,5 +1,4 @@
 ---
-slug: automatic
 name: Automatic
 title_slug: automatic
 ipdb_id: 6910

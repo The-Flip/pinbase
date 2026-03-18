@@ -1,5 +1,4 @@
 ---
-slug: ultraman-kaiju-rumble-blood-sucker-edition
 name: 'Ultraman: Kaiju Rumble (Blood Sucker Edition)'
 title_slug: ultraman-kaiju-rumble
 opdb_id: GBLLd-MdEON-A94po

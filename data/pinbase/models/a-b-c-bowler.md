@@ -1,5 +1,4 @@
 ---
-slug: a-b-c-bowler
 name: A-B-C Bowler
 title_slug: a-b-c-bowler
 ipdb_id: 1

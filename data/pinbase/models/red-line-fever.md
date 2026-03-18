@@ -1,5 +1,4 @@
 ---
-slug: red-line-fever
 name: Red Line Fever
 title_slug: red-line-fever
 ipdb_id: 4696

@@ -1,5 +1,4 @@
 ---
-slug: corsario
 name: Corsario
 title_slug: corsario
 opdb_id: G5LYj-MdE7E

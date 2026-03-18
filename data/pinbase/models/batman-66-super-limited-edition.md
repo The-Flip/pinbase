@@ -1,5 +1,4 @@
 ---
-slug: batman-66-super-limited-edition
 name: Batman 66 (Super Limited Edition)
 title_slug: batman-66
 opdb_id: GRoz4-MrRPw-A97X1

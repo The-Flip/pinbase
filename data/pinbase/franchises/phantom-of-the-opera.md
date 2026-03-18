@@ -1,5 +1,4 @@
 ---
-slug: phantom-of-the-opera
 name: The Phantom of the Opera
 ---
 

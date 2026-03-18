@@ -1,5 +1,4 @@
 ---
-slug: jockey-special
 name: Jockey Special
 title_slug: jockey-special
 ipdb_id: 1303

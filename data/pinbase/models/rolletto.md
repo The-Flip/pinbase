@@ -1,5 +1,4 @@
 ---
-slug: rolletto
 name: Rolletto
 title_slug: rolletto
 ipdb_id: 2008

@@ -1,5 +1,4 @@
 ---
-slug: midget-hi-ball
 name: Midget Hi-Ball
 title_slug: midget-hi-ball
 ipdb_id: 4657

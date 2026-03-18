@@ -1,5 +1,4 @@
 ---
-slug: hook
 name: Hook
 ---
 

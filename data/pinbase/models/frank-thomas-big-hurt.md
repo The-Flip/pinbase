@@ -1,5 +1,4 @@
 ---
-slug: frank-thomas-big-hurt
 name: Frank Thomas' Big Hurt
 title_slug: frank-thomas-big-hurt
 opdb_id: G4kzN-MQpYx

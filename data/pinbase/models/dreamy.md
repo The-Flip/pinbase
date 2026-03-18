@@ -1,5 +1,4 @@
 ---
-slug: dreamy
 name: Dreamy
 title_slug: dreamy
 opdb_id: GV8Kw-MDl3O

@@ -1,5 +1,4 @@
 ---
-slug: royal-flush-5
 name: Royal Flush
 title_slug: royal-flush-4
 ipdb_id: 6928

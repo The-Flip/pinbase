@@ -1,5 +1,4 @@
 ---
-slug: space-queen
 name: Space Queen
 title_slug: space-queen
 ipdb_id: 6165

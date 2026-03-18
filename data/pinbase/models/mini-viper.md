@@ -1,5 +1,4 @@
 ---
-slug: mini-viper
 name: Mini-Viper
 title_slug: mini-viper
 ipdb_id: 4905

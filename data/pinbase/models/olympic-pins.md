@@ -1,5 +1,4 @@
 ---
-slug: olympic-pins
 name: Olympic Pins
 title_slug: olympic-pins
 ipdb_id: 1710

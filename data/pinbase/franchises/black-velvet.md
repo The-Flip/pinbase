@@ -1,5 +1,4 @@
 ---
-slug: black-velvet
 name: Black Velvet
 ---
 

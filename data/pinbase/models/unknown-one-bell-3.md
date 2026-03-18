@@ -1,5 +1,4 @@
 ---
-slug: unknown-one-bell-3
 name: Unknown ("One Bell")
 title_slug: unknown-one-bell-3
 ipdb_id: 5192

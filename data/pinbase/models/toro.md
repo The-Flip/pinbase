@@ -1,5 +1,4 @@
 ---
-slug: toro
 name: Toro
 title_slug: toro
 opdb_id: Gr1Q6-MDe0K

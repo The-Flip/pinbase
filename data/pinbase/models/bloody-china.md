@@ -1,5 +1,4 @@
 ---
-slug: bloody-china
 name: Bloody China
 title_slug: strikes-and-spares
 opdb_id: GrleW-MQYkZ

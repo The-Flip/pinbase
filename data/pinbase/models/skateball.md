@@ -1,5 +1,4 @@
 ---
-slug: skateball
 name: Skateball
 title_slug: skateball
 opdb_id: GrNpx-M2YZq

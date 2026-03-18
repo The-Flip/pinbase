@@ -1,5 +1,4 @@
 ---
-slug: stampede-3
 name: Stampede
 title_slug: stampede-rawhide
 opdb_id: GRQ79-MDE30

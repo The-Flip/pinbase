@@ -1,5 +1,4 @@
 ---
-slug: liga
 name: Liga
 title_slug: liga
 ipdb_id: 4721

@@ -1,5 +1,4 @@
 ---
-slug: rey-de-diamantes
 name: Rey de Diamantes
 title_slug: king-of-diamonds
 opdb_id: GrlPj-MLEY9

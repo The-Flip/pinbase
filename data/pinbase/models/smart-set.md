@@ -1,5 +1,4 @@
 ---
-slug: smart-set
 name: Smart Set
 title_slug: smart-set
 opdb_id: G5YQK-MvBzn

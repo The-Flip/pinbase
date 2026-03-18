@@ -1,5 +1,4 @@
 ---
-slug: whoopee
 name: Whoopee
 title_slug: whoopee
 opdb_id: G4jxo-MOE5v

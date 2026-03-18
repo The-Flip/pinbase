@@ -1,5 +1,4 @@
 ---
-slug: sprint-girl
 name: Sprint Girl
 title_slug: sprint-girl
 ipdb_id: 4378

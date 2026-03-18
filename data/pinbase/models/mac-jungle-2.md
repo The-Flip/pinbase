@@ -1,5 +1,4 @@
 ---
-slug: mac-jungle-2
 name: Mac Jungle
 title_slug: mac-jungle
 ipdb_id: 4616

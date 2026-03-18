@@ -1,4 +1,3 @@
 ---
-slug: imperator
 name: Imperator
 ---

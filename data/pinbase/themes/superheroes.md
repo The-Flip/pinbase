@@ -1,4 +1,3 @@
 ---
-slug: superheroes
 name: Superheroes
 ---

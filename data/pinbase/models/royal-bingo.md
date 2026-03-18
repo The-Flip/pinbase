@@ -1,5 +1,4 @@
 ---
-slug: royal-bingo
 name: Royal Bingo
 title_slug: royal-bingo
 ipdb_id: 5246

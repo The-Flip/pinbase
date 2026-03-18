@@ -1,5 +1,4 @@
 ---
-slug: justice
 name: Justice
 title_slug: justice
 ipdb_id: 1345

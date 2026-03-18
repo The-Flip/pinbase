@@ -1,5 +1,4 @@
 ---
-slug: faeton
 name: Faeton
 title_slug: faeton
 opdb_id: GrPp3-Mx08N

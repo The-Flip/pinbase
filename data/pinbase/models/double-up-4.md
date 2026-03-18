@@ -1,5 +1,4 @@
 ---
-slug: double-up-4
 name: Double Up
 title_slug: double-up-3
 ipdb_id: 5437

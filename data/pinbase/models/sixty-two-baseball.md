@@ -1,5 +1,4 @@
 ---
-slug: sixty-two-baseball
 name: Sixty-Two Baseball
 title_slug: sixty-two-baseball
 ipdb_id: 3239

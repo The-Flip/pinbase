@@ -1,5 +1,4 @@
 ---
-slug: champion-replay-model
 name: Champion
 title_slug: champion
 opdb_id: G5v11-ML0Nk

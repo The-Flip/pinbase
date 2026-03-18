@@ -1,5 +1,4 @@
 ---
-slug: tic-tac-toe
 name: Tic-Tac-Toe
 title_slug: tic-tac-toe
 opdb_id: GreoN-MJj0y

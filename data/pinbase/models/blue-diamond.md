@@ -1,5 +1,4 @@
 ---
-slug: blue-diamond
 name: Blue Diamond
 title_slug: blue-diamond
 ipdb_id: 4531

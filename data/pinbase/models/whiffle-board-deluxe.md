@@ -1,5 +1,4 @@
 ---
-slug: whiffle-board-deluxe
 name: Whiffle Board Deluxe
 title_slug: whiffle-board-deluxe
 ipdb_id: 5396

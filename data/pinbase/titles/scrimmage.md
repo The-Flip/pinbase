@@ -1,4 +1,3 @@
 ---
-slug: scrimmage
 name: Scrimmage
 ---

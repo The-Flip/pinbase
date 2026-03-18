@@ -1,5 +1,4 @@
 ---
-slug: ballyhoo
 name: Ballyhoo
 title_slug: ballyhoo
 ipdb_id: 158

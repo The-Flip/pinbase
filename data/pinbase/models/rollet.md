@@ -1,5 +1,4 @@
 ---
-slug: rollet
 name: Rollet
 title_slug: rollet
 ipdb_id: 2007

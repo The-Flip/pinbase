@@ -1,5 +1,4 @@
 ---
-slug: pokette
 name: Pokette
 title_slug: pokette
 ipdb_id: 1840

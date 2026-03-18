@@ -1,5 +1,4 @@
 ---
-slug: super-world-series
 name: Super World Series
 title_slug: super-world-series
 ipdb_id: 2450

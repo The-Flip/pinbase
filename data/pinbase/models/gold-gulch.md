@@ -1,5 +1,4 @@
 ---
-slug: gold-gulch
 name: Gold Gulch
 title_slug: gold-gulch
 ipdb_id: 1029

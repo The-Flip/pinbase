@@ -1,5 +1,4 @@
 ---
-slug: lost-world
 name: Lost World
 title_slug: lost-world
 opdb_id: G5pEk-MDWe4

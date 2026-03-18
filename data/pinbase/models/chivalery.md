@@ -1,5 +1,4 @@
 ---
-slug: chivalery
 name: Chivalery
 title_slug: chivalery
 ipdb_id: 5096

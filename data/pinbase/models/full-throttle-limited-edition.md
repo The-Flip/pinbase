@@ -1,5 +1,4 @@
 ---
-slug: full-throttle-limited-edition
 name: Full Throttle (Limited Edition)
 title_slug: full-throttle-limited-edition
 ipdb_id: 6368

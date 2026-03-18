@@ -1,5 +1,4 @@
 ---
-slug: joker-4
 name: Joker
 title_slug: joker-4
 ipdb_id: 6466

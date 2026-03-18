@@ -1,5 +1,4 @@
 ---
-slug: new-century
 name: New Century
 title_slug: new-century
 ipdb_id: 3330

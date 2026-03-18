@@ -1,5 +1,4 @@
 ---
-slug: supersonic-2
 name: Supersonic
 title_slug: supersonic
 opdb_id: G4xyV-MJK7V

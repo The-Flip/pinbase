@@ -1,4 +1,3 @@
 ---
-slug: thrills
 name: Thrills
 ---

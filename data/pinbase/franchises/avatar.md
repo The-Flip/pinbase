@@ -1,5 +1,4 @@
 ---
-slug: avatar
 name: Avatar
 ---
 

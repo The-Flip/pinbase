@@ -1,5 +1,4 @@
 ---
-slug: signal-2
 name: Signal
 title_slug: signal-2
 ipdb_id: 5648

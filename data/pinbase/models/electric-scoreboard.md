@@ -1,5 +1,4 @@
 ---
-slug: electric-scoreboard
 name: Electric Scoreboard
 title_slug: electric-scoreboard
 ipdb_id: 2061

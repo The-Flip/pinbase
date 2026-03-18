@@ -1,5 +1,4 @@
 ---
-slug: square-amusement-co
 name: Square Amusement Co.
 manufacturer_slug: square-amusement-co
 ipdb_manufacturer_id: 546

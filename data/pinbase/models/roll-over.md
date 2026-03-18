@@ -1,5 +1,4 @@
 ---
-slug: roll-over
 name: Roll Over
 title_slug: roll-over
 ipdb_id: 1999

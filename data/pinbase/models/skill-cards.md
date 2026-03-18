@@ -1,5 +1,4 @@
 ---
-slug: skill-cards
 name: Skill Cards
 title_slug: skill-cards
 ipdb_id: 4022

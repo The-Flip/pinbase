@@ -1,4 +1,3 @@
 ---
-slug: airports
 name: Airports
 ---

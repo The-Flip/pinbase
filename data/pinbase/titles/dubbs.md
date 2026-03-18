@@ -1,4 +1,3 @@
 ---
-slug: dubbs
 name: Dubbs
 ---

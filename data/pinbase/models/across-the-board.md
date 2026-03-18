@@ -1,5 +1,4 @@
 ---
-slug: across-the-board
 name: Across the Board
 title_slug: across-the-board
 ipdb_id: 12

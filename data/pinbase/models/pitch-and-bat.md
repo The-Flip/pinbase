@@ -1,5 +1,4 @@
 ---
-slug: pitch-and-bat
 name: Pitch and Bat
 title_slug: pitch-and-bat
 ipdb_id: 1807

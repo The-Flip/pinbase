@@ -1,5 +1,4 @@
 ---
-slug: transformers
 name: Transformers
 ---
 

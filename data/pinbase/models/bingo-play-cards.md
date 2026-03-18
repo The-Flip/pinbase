@@ -1,5 +1,4 @@
 ---
-slug: bingo-play-cards
 name: Bingo Play Cards
 title_slug: bingo-play-cards
 ipdb_id: 299

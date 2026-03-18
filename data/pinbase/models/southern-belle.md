@@ -1,5 +1,4 @@
 ---
-slug: southern-belle
 name: Southern Belle
 title_slug: southern-belle
 opdb_id: Gry8L-MJd5z

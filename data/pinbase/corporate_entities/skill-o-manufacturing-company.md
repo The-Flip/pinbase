@@ -1,5 +1,4 @@
 ---
-slug: skill-o-manufacturing-company
 name: Skill-O Manufacturing Company
 manufacturer_slug: skill-o-manufacturing-company
 ipdb_manufacturer_id: 289

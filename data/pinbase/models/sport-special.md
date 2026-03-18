@@ -1,5 +1,4 @@
 ---
-slug: sport-special
 name: Sport Special
 title_slug: sport-special
 ipdb_id: 2302

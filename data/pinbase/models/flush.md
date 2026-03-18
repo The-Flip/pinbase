@@ -1,5 +1,4 @@
 ---
-slug: flush
 name: Flush
 title_slug: flush
 ipdb_id: 4640

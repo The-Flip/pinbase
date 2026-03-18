@@ -1,5 +1,4 @@
 ---
-slug: circus-7
 name: Circus
 title_slug: big-show
 opdb_id: G5oxB-MDzKN

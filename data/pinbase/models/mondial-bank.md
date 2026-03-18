@@ -1,5 +1,4 @@
 ---
-slug: mondial-bank
 name: Mondial Bank
 title_slug: mondial-bank
 ipdb_id: 4069

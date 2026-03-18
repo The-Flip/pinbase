@@ -1,5 +1,4 @@
 ---
-slug: hot-rocker
 name: Hot Rocker
 title_slug: hot-rocker
 ipdb_id: 6191

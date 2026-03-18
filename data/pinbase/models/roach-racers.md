@@ -1,5 +1,4 @@
 ---
-slug: roach-racers
 name: Roach Racers
 title_slug: roach-racers
 ipdb_id: 4456

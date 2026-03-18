@@ -1,5 +1,4 @@
 ---
-slug: mundial-90
 name: Mundial 90
 title_slug: mundial-90-flip-vi
 opdb_id: Gr3yE-MQKZk

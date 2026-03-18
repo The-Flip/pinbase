@@ -1,5 +1,4 @@
 ---
-slug: entry
 name: Entry
 title_slug: entry
 ipdb_id: 3083

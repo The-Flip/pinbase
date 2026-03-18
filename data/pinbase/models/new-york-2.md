@@ -1,5 +1,4 @@
 ---
-slug: new-york-2
 name: New York
 title_slug: new-york
 ipdb_id: 5283

@@ -1,4 +1,3 @@
 ---
-slug: tropic
 name: Tropic
 ---

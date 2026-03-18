@@ -1,5 +1,4 @@
 ---
-slug: six-sixty-six
 name: Six-Sixty-Six
 title_slug: six-sixty-six
 ipdb_id: 2169

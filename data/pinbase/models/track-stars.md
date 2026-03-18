@@ -1,5 +1,4 @@
 ---
-slug: track-stars
 name: Track Stars
 title_slug: track-stars
 ipdb_id: 2618

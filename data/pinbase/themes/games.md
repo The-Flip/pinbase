@@ -1,4 +1,3 @@
 ---
-slug: games
 name: Games
 ---

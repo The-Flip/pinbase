@@ -1,5 +1,4 @@
 ---
-slug: primus
 name: Primus
 title_slug: pabst-blue-ribbon
 opdb_id: GRYX4-MvBpz

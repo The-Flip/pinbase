@@ -1,5 +1,4 @@
 ---
-slug: ten-spot-2
 name: Ten Spot
 title_slug: ten-spot
 opdb_id: GRoYk-MLXbp

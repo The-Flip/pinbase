@@ -1,5 +1,4 @@
 ---
-slug: petes-penny-ante
 name: Pete's Penny Ante
 title_slug: petes-penny-ante
 ipdb_id: 5785

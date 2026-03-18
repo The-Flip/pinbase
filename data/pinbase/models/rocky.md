@@ -1,5 +1,4 @@
 ---
-slug: rocky
 name: Rocky
 title_slug: rocky
 opdb_id: GrJvk-MDekx

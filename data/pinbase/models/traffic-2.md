@@ -1,5 +1,4 @@
 ---
-slug: traffic-2
 name: Traffic
 title_slug: traffic-2
 ipdb_id: 4303

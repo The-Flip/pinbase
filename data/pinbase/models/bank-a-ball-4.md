@@ -1,5 +1,4 @@
 ---
-slug: bank-a-ball-4
 name: Bank A Ball
 title_slug: bank-a-ball-2
 ipdb_id: 2899

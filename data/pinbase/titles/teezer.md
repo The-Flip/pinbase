@@ -1,4 +1,3 @@
 ---
-slug: teezer
 name: Teezer
 ---

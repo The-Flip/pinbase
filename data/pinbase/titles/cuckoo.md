@@ -1,4 +1,3 @@
 ---
-slug: cuckoo
 name: Cuckoo
 ---

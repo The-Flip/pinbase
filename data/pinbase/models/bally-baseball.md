@@ -1,5 +1,4 @@
 ---
-slug: bally-baseball
 name: Bally Baseball
 title_slug: bally-baseball
 ipdb_id: 6524

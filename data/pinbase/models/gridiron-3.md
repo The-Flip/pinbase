@@ -1,5 +1,4 @@
 ---
-slug: gridiron-3
 name: Gridiron
 title_slug: gridiron-pro-football
 opdb_id: G41E2-ML85X

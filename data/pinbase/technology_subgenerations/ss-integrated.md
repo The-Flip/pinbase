@@ -1,5 +1,4 @@
 ---
-slug: ss-integrated
 name: Integrated
 display_order: 2
 technology_generation_slug: solid-state

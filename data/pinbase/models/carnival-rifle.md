@@ -1,5 +1,4 @@
 ---
-slug: carnival-rifle
 name: Carnival Rifle
 title_slug: carnival-rifle
 ipdb_id: 6486

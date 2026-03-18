@@ -1,5 +1,4 @@
 ---
-slug: rush
 name: Rush
 ---
 

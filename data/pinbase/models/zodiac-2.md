@@ -1,5 +1,4 @@
 ---
-slug: zodiac-2
 name: Zodiac
 title_slug: zodiac
 ipdb_id: 3585

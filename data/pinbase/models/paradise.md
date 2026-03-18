@@ -1,5 +1,4 @@
 ---
-slug: paradise
 name: Paradise
 title_slug: paradise
 opdb_id: G6lYP-MZewx

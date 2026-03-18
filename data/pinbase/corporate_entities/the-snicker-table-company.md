@@ -1,5 +1,4 @@
 ---
-slug: the-snicker-table-company
 name: The Snicker Table Company
 manufacturer_slug: the-snicker-table-company
 ipdb_manufacturer_id: 290

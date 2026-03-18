@@ -1,5 +1,4 @@
 ---
-slug: joker-2
 name: Joker
 title_slug: joker
 opdb_id: GRpvZ-MwNEn

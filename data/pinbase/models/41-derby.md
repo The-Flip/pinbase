@@ -1,5 +1,4 @@
 ---
-slug: 41-derby
 name: 41-Derby
 title_slug: 41-derby
 ipdb_id: 3057

@@ -1,5 +1,4 @@
 ---
-slug: viking-3
 name: Viking
 title_slug: viking-3
 ipdb_id: 4485

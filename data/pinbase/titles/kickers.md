@@ -1,4 +1,3 @@
 ---
-slug: kickers
 name: Kickers
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bally-reserve
 name: Bally Reserve
 title_slug: bally-reserve
 ipdb_id: 152

@@ -1,5 +1,4 @@
 ---
-slug: big-house
 name: Big House
 title_slug: big-house
 opdb_id: GR07v-MDRlz

@@ -1,5 +1,4 @@
 ---
-slug: mandalay
 name: Mandalay
 title_slug: mandalay
 ipdb_id: 3384

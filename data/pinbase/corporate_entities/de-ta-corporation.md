@@ -1,5 +1,4 @@
 ---
-slug: de-ta-corporation
 name: De-Ta Corporation
 manufacturer_slug: de-ta-corporation
 ipdb_manufacturer_id: 757

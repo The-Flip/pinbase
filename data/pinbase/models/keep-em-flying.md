@@ -1,5 +1,4 @@
 ---
-slug: keep-em-flying
 name: Keep 'Em Flying
 title_slug: keep-em-flying
 ipdb_id: 3191

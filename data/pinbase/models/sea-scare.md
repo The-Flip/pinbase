@@ -1,5 +1,4 @@
 ---
-slug: sea-scare
 name: Sea Scare
 title_slug: sea-scare
 opdb_id: GRD1O-MdE5R

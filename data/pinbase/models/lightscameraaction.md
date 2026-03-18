@@ -1,5 +1,4 @@
 ---
-slug: lightscameraaction
 name: Lights...Camera...Action!
 title_slug: lightscameraaction
 opdb_id: GrlZe-MQY0Y

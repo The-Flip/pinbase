@@ -1,5 +1,4 @@
 ---
-slug: golden-gate-388
 name: Golden Gate 388
 title_slug: golden-gate-388
 ipdb_id: 5840

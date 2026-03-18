@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-3
 name: Lucky Strike
 title_slug: el-dorado
 opdb_id: GrEZ5-MJoWX

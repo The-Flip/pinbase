@@ -1,5 +1,4 @@
 ---
-slug: the-simpsons
 name: The Simpsons
 ---
 

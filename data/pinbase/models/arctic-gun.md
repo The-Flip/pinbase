@@ -1,5 +1,4 @@
 ---
-slug: arctic-gun
 name: Arctic Gun
 title_slug: arctic-gun
 ipdb_id: 6342

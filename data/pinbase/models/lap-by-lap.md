@@ -1,5 +1,4 @@
 ---
-slug: lap-by-lap
 name: Lap By Lap
 title_slug: lap-by-lap
 opdb_id: G4exx-MXrkn

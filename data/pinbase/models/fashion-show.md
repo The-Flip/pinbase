@@ -1,5 +1,4 @@
 ---
-slug: fashion-show
 name: Fashion Show
 title_slug: fashion-show
 opdb_id: Gr2Qb-MDRbp

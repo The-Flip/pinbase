@@ -1,5 +1,4 @@
 ---
-slug: pickwick-improved
 name: Pickwick (Improved)
 title_slug: pickwick-improved
 ipdb_id: 5432

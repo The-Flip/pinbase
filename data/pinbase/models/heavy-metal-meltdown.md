@@ -1,5 +1,4 @@
 ---
-slug: heavy-metal-meltdown
 name: Heavy Metal Meltdown
 title_slug: heavy-metal-meltdown
 opdb_id: GRo3e-MQ7OW

@@ -1,5 +1,4 @@
 ---
-slug: super-triangle
 name: Super Triangle
 title_slug: super-triangle
 ipdb_id: 5450

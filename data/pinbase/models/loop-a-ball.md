@@ -1,5 +1,4 @@
 ---
-slug: loop-a-ball
 name: Loop-A-Ball
 title_slug: loop-a-ball
 ipdb_id: 1474

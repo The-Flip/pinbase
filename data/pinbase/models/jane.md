@@ -1,5 +1,4 @@
 ---
-slug: jane
 name: Jane
 title_slug: jane
 ipdb_id: 5489

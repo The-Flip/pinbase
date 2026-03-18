@@ -1,5 +1,4 @@
 ---
-slug: admiral
 name: Admiral
 title_slug: admiral
 ipdb_id: 22

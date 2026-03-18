@@ -1,5 +1,4 @@
 ---
-slug: red-teds-road-show
 name: Red & Ted's Road Show
 title_slug: road-show
 opdb_id: G4dWd-MJ2p6

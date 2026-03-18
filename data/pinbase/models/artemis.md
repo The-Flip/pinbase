@@ -1,5 +1,4 @@
 ---
-slug: artemis
 name: Artemis
 title_slug: artemis
 ipdb_id: 5528

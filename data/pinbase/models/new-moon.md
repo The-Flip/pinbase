@@ -1,5 +1,4 @@
 ---
-slug: new-moon
 name: New Moon
 title_slug: new-moon
 ipdb_id: 3489

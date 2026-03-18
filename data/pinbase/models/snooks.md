@@ -1,5 +1,4 @@
 ---
-slug: snooks
 name: Snooks
 title_slug: snooks
 opdb_id: G5neP-M2YRr

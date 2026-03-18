@@ -1,5 +1,4 @@
 ---
-slug: sunshine-baseball
 name: Sunshine Baseball
 title_slug: sunshine-baseball
 ipdb_id: 2424

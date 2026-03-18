@@ -1,5 +1,4 @@
 ---
-slug: calif-express
 name: Calif. Express
 title_slug: calif-express
 ipdb_id: 3674

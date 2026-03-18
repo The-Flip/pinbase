@@ -1,5 +1,4 @@
 ---
-slug: magic-town
 name: Magic Town
 title_slug: magic-city-magic-town
 opdb_id: G57xp-MDlj0

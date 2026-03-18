@@ -1,4 +1,3 @@
 ---
-slug: bali
 name: Bali
 ---

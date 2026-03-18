@@ -1,5 +1,4 @@
 ---
-slug: tura
 name: Tura
 title_slug: tura
 ipdb_id: 4900

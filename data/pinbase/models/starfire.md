@@ -1,5 +1,4 @@
 ---
-slug: starfire
 name: Starfire
 title_slug: starfire
 opdb_id: G4qDp-MDb20

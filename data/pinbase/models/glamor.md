@@ -1,5 +1,4 @@
 ---
-slug: glamor
 name: Glamor
 title_slug: glamor
 opdb_id: G5W7q-M3dbp

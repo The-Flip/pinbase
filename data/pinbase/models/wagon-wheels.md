@@ -1,5 +1,4 @@
 ---
-slug: wagon-wheels
 name: Wagon Wheels
 title_slug: wagon-wheels
 ipdb_id: 2747

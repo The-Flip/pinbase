@@ -1,5 +1,4 @@
 ---
-slug: dragon-2
 name: Dragon
 title_slug: dragon-2
 opdb_id: G5Wn2-Mp4lp

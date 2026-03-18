@@ -1,5 +1,4 @@
 ---
-slug: verspiel-dein-wasser-nicht
 name: Verspiel Dein Wasser nicht!
 title_slug: verspiel-dein-wasser-nicht
 ipdb_id: 4689

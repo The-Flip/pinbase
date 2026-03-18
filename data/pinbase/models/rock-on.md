@@ -1,5 +1,4 @@
 ---
-slug: rock-on
 name: Rock On
 title_slug: tnt-rock-on-boogie-dyn-o-mite
 opdb_id: G4yLE-MLn8X

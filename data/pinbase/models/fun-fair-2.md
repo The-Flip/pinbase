@@ -1,5 +1,4 @@
 ---
-slug: fun-fair-2
 name: Fun-Fair
 title_slug: fun-fair
 opdb_id: G5V6N-MDeeO

@@ -1,5 +1,4 @@
 ---
-slug: odd-ball
 name: Odd Ball
 title_slug: odd-ball
 ipdb_id: 1691

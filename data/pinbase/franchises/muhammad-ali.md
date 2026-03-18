@@ -1,5 +1,4 @@
 ---
-slug: muhammad-ali
 name: Muhammad Ali
 ---
 

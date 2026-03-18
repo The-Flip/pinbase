@@ -1,4 +1,3 @@
 ---
-slug: mondial
 name: Mondial
 ---

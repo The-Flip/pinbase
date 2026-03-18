@@ -1,5 +1,4 @@
 ---
-slug: flying-chariots
 name: Flying Chariots
 title_slug: flying-chariots
 opdb_id: GR6ex-MQkke

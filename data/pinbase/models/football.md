@@ -1,5 +1,4 @@
 ---
-slug: football
 name: Football
 title_slug: football
 opdb_id: G5W6O-MjB4n

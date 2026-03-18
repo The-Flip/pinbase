@@ -1,5 +1,4 @@
 ---
-slug: the-hellacopters
 name: The Hellacopters
 title_slug: the-hellacopters
 ipdb_id: 5464

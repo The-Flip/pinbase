@@ -1,5 +1,4 @@
 ---
-slug: krazy-komiks
 name: Krazy Komiks
 title_slug: krazy-komiks
 ipdb_id: 1395

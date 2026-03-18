@@ -1,5 +1,4 @@
 ---
-slug: air-force
 name: Air Force
 title_slug: air-force
 ipdb_id: 2882

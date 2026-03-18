@@ -1,5 +1,4 @@
 ---
-slug: whiz-ball-2
 name: Whiz Ball
 title_slug: whiz-ball-2
 ipdb_id: 6985

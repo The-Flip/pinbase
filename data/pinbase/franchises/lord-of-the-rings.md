@@ -1,5 +1,4 @@
 ---
-slug: lord-of-the-rings
 name: Lord of the Rings
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: monaco
 name: Monaco
 title_slug: monaco
 ipdb_id: 1613

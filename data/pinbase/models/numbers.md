@@ -1,5 +1,4 @@
 ---
-slug: numbers
 name: Numbers
 title_slug: numbers
 ipdb_id: 3446

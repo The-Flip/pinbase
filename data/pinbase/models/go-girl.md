@@ -1,5 +1,4 @@
 ---
-slug: go-girl
 name: Go Girl!
 title_slug: go-girl
 ipdb_id: 5005

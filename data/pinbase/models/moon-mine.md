@@ -1,5 +1,4 @@
 ---
-slug: moon-mine
 name: Moon Mine
 title_slug: moon-mine
 ipdb_id: 5337

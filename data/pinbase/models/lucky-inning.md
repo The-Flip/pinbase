@@ -1,5 +1,4 @@
 ---
-slug: lucky-inning
 name: Lucky Inning
 title_slug: lucky-inning
 opdb_id: Gj6LP-MNEYx

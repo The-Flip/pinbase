@@ -1,5 +1,4 @@
 ---
-slug: scrimmage
 name: Scrimmage
 title_slug: scrimmage
 ipdb_id: 2076

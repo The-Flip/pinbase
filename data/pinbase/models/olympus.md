@@ -1,5 +1,4 @@
 ---
-slug: olympus
 name: Olympus
 title_slug: olympus
 opdb_id: GzyBx-M0ow2

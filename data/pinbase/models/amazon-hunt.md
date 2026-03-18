@@ -1,5 +1,4 @@
 ---
-slug: amazon-hunt
 name: Amazon Hunt
 title_slug: amazon-hunt
 opdb_id: GrJkp-M1rBN

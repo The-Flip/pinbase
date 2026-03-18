@@ -1,5 +1,4 @@
 ---
-slug: super-xx
 name: Super XX
 title_slug: super-xx
 ipdb_id: 5661

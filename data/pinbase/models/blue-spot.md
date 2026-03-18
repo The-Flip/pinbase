@@ -1,5 +1,4 @@
 ---
-slug: blue-spot
 name: Blue Spot
 title_slug: blue-spot
 ipdb_id: 7014

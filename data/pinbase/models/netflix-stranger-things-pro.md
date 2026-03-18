@@ -1,5 +1,4 @@
 ---
-slug: netflix-stranger-things-pro
 name: Stranger Things (Pro)
 title_slug: stranger-things
 opdb_id: Gzy89-MNEeO

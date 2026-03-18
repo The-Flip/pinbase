@@ -1,5 +1,4 @@
 ---
-slug: silver-horseshoe
 name: Silver Horseshoe
 title_slug: silver-horseshoe
 ipdb_id: 3789

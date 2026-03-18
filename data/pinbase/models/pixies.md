@@ -1,5 +1,4 @@
 ---
-slug: pixies
 name: Pixies
 title_slug: pixies
 ipdb_id: 1808

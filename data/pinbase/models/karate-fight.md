@@ -1,5 +1,4 @@
 ---
-slug: karate-fight
 name: Karate Fight
 title_slug: black-belt-karate-fight
 opdb_id: G562j-MLWYq

@@ -1,5 +1,4 @@
 ---
-slug: best-bet
 name: Best Bet
 title_slug: best-bet
 ipdb_id: 5592

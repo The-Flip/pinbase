@@ -1,5 +1,4 @@
 ---
-slug: galaxie
 name: Galaxie
 title_slug: 2001-dimension-galaxie
 opdb_id: G48nw-ML02p

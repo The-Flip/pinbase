@@ -1,4 +1,3 @@
 ---
-slug: monopolee
 name: Monopolee
 ---

@@ -1,5 +1,4 @@
 ---
-slug: yukon-special
 name: Yukon (Special)
 title_slug: gold-rush-yukon-klondike
 opdb_id: GR987-MLRR9

@@ -1,5 +1,4 @@
 ---
-slug: big-prize
 name: Big Prize
 title_slug: big-prize
 ipdb_id: 268

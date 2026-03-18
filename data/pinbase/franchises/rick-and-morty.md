@@ -1,5 +1,4 @@
 ---
-slug: rick-and-morty
 name: Rick and Morty
 ---
 

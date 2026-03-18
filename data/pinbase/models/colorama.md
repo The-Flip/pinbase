@@ -1,5 +1,4 @@
 ---
-slug: colorama
 name: Colorama
 title_slug: colorama
 opdb_id: GRBjX-MLqz1

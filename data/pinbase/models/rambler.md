@@ -1,5 +1,4 @@
 ---
-slug: rambler
 name: Rambler
 title_slug: rambler
 ipdb_id: 1914

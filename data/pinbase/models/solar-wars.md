@@ -1,5 +1,4 @@
 ---
-slug: solar-wars
 name: Solar Wars
 title_slug: solar-wars
 ipdb_id: 3273

@@ -1,5 +1,4 @@
 ---
-slug: glocken-tivoli
 name: Glocken-Tivoli
 title_slug: glocken-tivoli
 ipdb_id: 5853

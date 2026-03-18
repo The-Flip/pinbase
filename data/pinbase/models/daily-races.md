@@ -1,5 +1,4 @@
 ---
-slug: daily-races
 name: Daily Races
 title_slug: daily-races
 ipdb_id: 628

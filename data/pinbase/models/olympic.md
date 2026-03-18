@@ -1,5 +1,4 @@
 ---
-slug: olympic
 name: Olympic
 title_slug: olympic
 ipdb_id: 1712

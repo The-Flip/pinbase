@@ -1,4 +1,3 @@
 ---
-slug: mascot
 name: Mascot
 ---

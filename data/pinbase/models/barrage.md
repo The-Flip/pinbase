@@ -1,5 +1,4 @@
 ---
-slug: barrage
 name: Barrage
 title_slug: barrage
 ipdb_id: 178

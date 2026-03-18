@@ -1,5 +1,4 @@
 ---
-slug: day-one
 name: Day One Pinball
 ---
 

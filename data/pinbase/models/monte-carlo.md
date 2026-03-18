@@ -1,5 +1,4 @@
 ---
-slug: monte-carlo
 name: Monte Carlo
 title_slug: monte-carlo-2
 ipdb_id: 1619

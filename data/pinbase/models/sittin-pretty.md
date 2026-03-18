@@ -1,5 +1,4 @@
 ---
-slug: sittin-pretty
 name: Sittin' Pretty
 title_slug: sittin-pretty
 opdb_id: GRp3O-M9RE2

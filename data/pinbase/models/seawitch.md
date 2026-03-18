@@ -1,5 +1,4 @@
 ---
-slug: seawitch
 name: Seawitch
 title_slug: seawitch
 opdb_id: GR6kB-MDz81

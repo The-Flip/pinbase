@@ -1,5 +1,4 @@
 ---
-slug: crossline
 name: Crossline
 title_slug: crossline
 ipdb_id: 599

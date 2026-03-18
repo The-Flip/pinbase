@@ -1,5 +1,4 @@
 ---
-slug: spot-a-card
 name: Spot-A-Card
 title_slug: spot-a-card-2
 ipdb_id: 2317

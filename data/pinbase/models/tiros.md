@@ -1,5 +1,4 @@
 ---
-slug: tiros
 name: Tiro's
 title_slug: tiros
 opdb_id: G18Kj-Ml9Rj

@@ -1,5 +1,4 @@
 ---
-slug: space-woman
 name: Space Woman
 title_slug: space-woman
 ipdb_id: 5951

@@ -1,5 +1,4 @@
 ---
-slug: ball-shooter-gum-vender
 name: Ball Shooter Gum Vender
 title_slug: ball-shooter-gum-vender
 ipdb_id: 5460

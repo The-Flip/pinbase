@@ -1,5 +1,4 @@
 ---
-slug: automatic-whiffle
 name: Automatic Whiffle
 title_slug: automatic-whiffle
 ipdb_id: 5399

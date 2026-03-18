@@ -1,5 +1,4 @@
 ---
-slug: merlins-magic
 name: Merlin's Magic
 title_slug: merlins-magic
 ipdb_id: 5469

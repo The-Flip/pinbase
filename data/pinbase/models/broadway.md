@@ -1,5 +1,4 @@
 ---
-slug: broadway
 name: Broadway
 title_slug: broadway
 ipdb_id: 380

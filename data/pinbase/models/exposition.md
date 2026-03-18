@@ -1,5 +1,4 @@
 ---
-slug: exposition
 name: Exposition
 title_slug: exposition
 ipdb_id: 799

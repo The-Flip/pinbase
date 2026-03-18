@@ -1,4 +1,3 @@
 ---
-slug: flicker
 name: Flicker
 ---

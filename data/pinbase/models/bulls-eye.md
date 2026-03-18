@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye
 name: Bull's Eye
 title_slug: bulls-eye-2
 ipdb_id: 401

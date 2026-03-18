@@ -1,5 +1,4 @@
 ---
-slug: dancing-dolls
 name: Dancing Dolls
 title_slug: dancing-dolls
 opdb_id: G5nDL-M2YZ5

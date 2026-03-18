@@ -1,5 +1,4 @@
 ---
-slug: on-beam-italy
 name: On Beam (Italy)
 title_slug: on-beam-italy
 ipdb_id: 6753

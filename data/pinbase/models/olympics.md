@@ -1,5 +1,4 @@
 ---
-slug: olympics
 name: Olympics
 title_slug: super-star-olympics
 opdb_id: G5WKO-MJZRk

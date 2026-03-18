@@ -1,5 +1,4 @@
 ---
-slug: vemco-special
 name: Vemco Special
 title_slug: vemco-special
 ipdb_id: 6005

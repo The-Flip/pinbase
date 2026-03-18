@@ -1,5 +1,4 @@
 ---
-slug: playland-rifle-gallery
 name: Playland Rifle Gallery
 title_slug: playland-rifle-gallery
 ipdb_id: 6953

@@ -1,4 +1,3 @@
 ---
-slug: leisure
 name: Leisure
 ---

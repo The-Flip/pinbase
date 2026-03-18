@@ -1,5 +1,4 @@
 ---
-slug: college-daze
 name: College Daze
 title_slug: college-daze
 opdb_id: GZV2Y-Mp4EN

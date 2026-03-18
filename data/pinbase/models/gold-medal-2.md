@@ -1,5 +1,4 @@
 ---
-slug: gold-medal-2
 name: Gold Medal
 title_slug: gold-medal-2
 ipdb_id: 1031

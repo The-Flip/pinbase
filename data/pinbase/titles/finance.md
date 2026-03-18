@@ -1,4 +1,3 @@
 ---
-slug: finance
 name: Finance
 ---

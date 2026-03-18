@@ -1,5 +1,4 @@
 ---
-slug: marbelo
 name: Marbelo
 title_slug: marbelo
 ipdb_id: 1542

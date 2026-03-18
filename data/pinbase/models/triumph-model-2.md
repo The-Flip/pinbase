@@ -1,5 +1,4 @@
 ---
-slug: triumph-model-2
 name: Triumph (Model 2)
 title_slug: triumph-model-2
 ipdb_id: 6251

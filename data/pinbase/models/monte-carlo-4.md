@@ -1,5 +1,4 @@
 ---
-slug: monte-carlo-4
 name: Monte Carlo
 title_slug: monte-carlo
 opdb_id: G5Wl0-MJoR7

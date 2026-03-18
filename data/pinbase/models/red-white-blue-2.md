@@ -1,5 +1,4 @@
 ---
-slug: red-white-blue-2
 name: Red White Blue
 title_slug: red-white-blue
 opdb_id: GrN1z-MJVNo

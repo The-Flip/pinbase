@@ -1,4 +1,3 @@
 ---
-slug: trains
 name: Trains
 ---

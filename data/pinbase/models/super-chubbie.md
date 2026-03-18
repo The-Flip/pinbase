@@ -1,5 +1,4 @@
 ---
-slug: super-chubbie
 name: Super Chubbie
 title_slug: super-chubbie
 ipdb_id: 2429

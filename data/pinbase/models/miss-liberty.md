@@ -1,5 +1,4 @@
 ---
-slug: miss-liberty
 name: Miss Liberty
 title_slug: miss-liberty
 ipdb_id: 4273

@@ -1,5 +1,4 @@
 ---
-slug: ball-quet
 name: Ball-Quet
 title_slug: ball-quet
 ipdb_id: 143

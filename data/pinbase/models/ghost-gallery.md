@@ -1,5 +1,4 @@
 ---
-slug: ghost-gallery
 name: Ghost Gallery
 title_slug: ghost-gallery
 ipdb_id: 3802

@@ -1,5 +1,4 @@
 ---
-slug: oktoberfest
 name: Oktoberfest
 title_slug: oktoberfest
 opdb_id: GLWBV-Mz2El

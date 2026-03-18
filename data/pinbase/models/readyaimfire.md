@@ -1,5 +1,4 @@
 ---
-slug: readyaimfire
 name: Ready...Aim...Fire!
 title_slug: readyaimfire
 opdb_id: GRL2z-MQkqe

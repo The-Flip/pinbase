@@ -1,5 +1,4 @@
 ---
-slug: stella
 name: Stella
 title_slug: stella
 ipdb_id: 5925

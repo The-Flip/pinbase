@@ -1,5 +1,4 @@
 ---
-slug: goofy-junior
 name: Goofy (Junior)
 title_slug: goofy-junior
 ipdb_id: 1061

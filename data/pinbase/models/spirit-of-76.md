@@ -1,5 +1,4 @@
 ---
-slug: spirit-of-76
 name: Spirit of 76
 title_slug: spirit-of-76-pioneer-new-york
 opdb_id: GrlPK-Mx0By

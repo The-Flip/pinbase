@@ -1,5 +1,4 @@
 ---
-slug: crystal-ball-2
 name: Crystal-Ball
 title_slug: crystal-ball
 opdb_id: G8lxD-M0ow9

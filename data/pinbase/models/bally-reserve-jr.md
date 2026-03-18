@@ -1,5 +1,4 @@
 ---
-slug: bally-reserve-jr
 name: Bally Reserve Jr.
 title_slug: bally-reserve-jr
 ipdb_id: 2893

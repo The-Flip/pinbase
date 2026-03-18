@@ -1,5 +1,4 @@
 ---
-slug: william-tell
 name: William Tell
 title_slug: william-tell
 ipdb_id: 3979

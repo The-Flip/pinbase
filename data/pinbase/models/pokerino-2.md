@@ -1,5 +1,4 @@
 ---
-slug: pokerino-2
 name: Pokerino
 title_slug: pokerino-2
 ipdb_id: 5445

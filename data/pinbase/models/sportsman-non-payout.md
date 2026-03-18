@@ -1,5 +1,4 @@
 ---
-slug: sportsman-non-payout
 name: Sportsman (Non-payout)
 title_slug: sportsman-non-payout
 ipdb_id: 5391

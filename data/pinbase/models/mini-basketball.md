@@ -1,5 +1,4 @@
 ---
-slug: mini-basketball
 name: Mini Basketball
 title_slug: mini-basketball
 ipdb_id: 5125

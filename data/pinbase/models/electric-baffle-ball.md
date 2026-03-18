@@ -1,5 +1,4 @@
 ---
-slug: electric-baffle-ball
 name: Electric Baffle Ball
 title_slug: electric-baffle-ball
 ipdb_id: 773

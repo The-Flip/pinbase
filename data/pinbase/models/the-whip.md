@@ -1,5 +1,4 @@
 ---
-slug: the-whip
 name: The Whip
 title_slug: the-whip
 ipdb_id: 6537

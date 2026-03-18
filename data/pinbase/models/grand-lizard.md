@@ -1,5 +1,4 @@
 ---
-slug: grand-lizard
 name: Grand Lizard
 title_slug: grand-lizard
 opdb_id: G4XPZ-M7Zob

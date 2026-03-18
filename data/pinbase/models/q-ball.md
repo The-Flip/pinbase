@@ -1,5 +1,4 @@
 ---
-slug: q-ball
 name: Q-Ball
 title_slug: q-ball
 ipdb_id: 1884

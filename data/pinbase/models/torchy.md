@@ -1,5 +1,4 @@
 ---
-slug: torchy
 name: Torchy
 title_slug: torchy
 ipdb_id: 2596

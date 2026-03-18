@@ -1,5 +1,4 @@
 ---
-slug: paddles
 name: Paddles
 title_slug: paddles
 ipdb_id: 3255

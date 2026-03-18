@@ -1,5 +1,4 @@
 ---
-slug: lancers
 name: Lancers
 title_slug: lancers
 opdb_id: G5p6d-MdEVb

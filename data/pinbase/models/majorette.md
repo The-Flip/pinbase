@@ -1,5 +1,4 @@
 ---
-slug: majorette
 name: Majorette
 title_slug: majorette
 ipdb_id: 5067

@@ -1,5 +1,4 @@
 ---
-slug: volcano
 name: Volcano
 title_slug: volcano
 opdb_id: GrEzp-MDbW3

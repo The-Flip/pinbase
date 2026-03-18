@@ -1,5 +1,4 @@
 ---
-slug: pool-player
 name: Pool Player
 title_slug: pool-player
 ipdb_id: 4495

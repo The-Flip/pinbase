@@ -1,5 +1,4 @@
 ---
-slug: st-louis
 name: St. Louis
 title_slug: st-louis
 opdb_id: G7Znb-M3d9q

@@ -1,5 +1,4 @@
 ---
-slug: fairway-2
 name: Fairway
 title_slug: fairway
 opdb_id: Gr26x-MW9kd

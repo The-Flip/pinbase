@@ -1,5 +1,4 @@
 ---
-slug: caddie
 name: Caddie
 title_slug: caddie-2
 opdb_id: G5pDZ-MQP09

@@ -1,5 +1,4 @@
 ---
-slug: dona-elvira
 name: Dona Elvira
 title_slug: dona-elvira
 ipdb_id: 5736

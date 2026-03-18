@@ -1,5 +1,4 @@
 ---
-slug: truck-stop
 name: Truck Stop
 title_slug: truck-stop
 opdb_id: G5Y6O-MLn90

@@ -1,5 +1,4 @@
 ---
-slug: make-or-break
 name: Make or Break
 title_slug: make-or-break
 ipdb_id: 1533

@@ -1,5 +1,4 @@
 ---
-slug: space-war
 name: Space War
 title_slug: space-war
 ipdb_id: 6716

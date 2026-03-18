@@ -1,5 +1,4 @@
 ---
-slug: rainbow-3
 name: Rainbow
 title_slug: rainbow
 opdb_id: GRobp-MDRWe

@@ -1,5 +1,4 @@
 ---
-slug: spinners
 name: Spinners
 display_order: 6
 ---

@@ -1,5 +1,4 @@
 ---
-slug: action-2
 name: Action
 title_slug: action-2
 ipdb_id: 3839

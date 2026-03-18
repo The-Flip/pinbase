@@ -1,5 +1,4 @@
 ---
-slug: kiss
 name: KISS
 title_slug: kiss
 opdb_id: G4jXr-MQ6kz

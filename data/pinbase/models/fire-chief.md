@@ -1,5 +1,4 @@
 ---
-slug: fire-chief
 name: Fire Chief
 title_slug: fire-chief
 ipdb_id: 848

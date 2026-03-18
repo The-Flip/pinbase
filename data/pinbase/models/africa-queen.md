@@ -1,5 +1,4 @@
 ---
-slug: africa-queen
 name: Africa Queen
 title_slug: africa-queen
 ipdb_id: 5114

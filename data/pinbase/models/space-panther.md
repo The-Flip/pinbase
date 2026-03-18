@@ -1,5 +1,4 @@
 ---
-slug: space-panther
 name: Space Panther
 title_slug: space-panther
 ipdb_id: 4391

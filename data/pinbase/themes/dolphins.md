@@ -1,4 +1,3 @@
 ---
-slug: dolphins
 name: Dolphins
 ---

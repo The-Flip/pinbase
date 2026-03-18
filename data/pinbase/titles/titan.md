@@ -1,4 +1,3 @@
 ---
-slug: titan
 name: Titan
 ---

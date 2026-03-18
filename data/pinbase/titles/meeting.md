@@ -1,4 +1,3 @@
 ---
-slug: meeting
 name: Meeting
 ---

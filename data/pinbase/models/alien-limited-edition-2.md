@@ -1,5 +1,4 @@
 ---
-slug: alien-limited-edition-2
 name: ALIEN Limited Edition
 title_slug: alien-limited-edition
 ipdb_id: 6420

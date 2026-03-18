@@ -1,5 +1,4 @@
 ---
-slug: oba-oba
 name: Oba-Oba
 title_slug: playboy-arkon
 opdb_id: GrkOB-MJVvl-A1K2E

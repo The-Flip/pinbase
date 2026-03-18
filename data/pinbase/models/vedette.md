@@ -1,5 +1,4 @@
 ---
-slug: vedette
 name: Vedette
 title_slug: vedette
 ipdb_id: 6501

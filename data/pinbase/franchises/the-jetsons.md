@@ -1,5 +1,4 @@
 ---
-slug: the-jetsons
 name: The Jetsons
 ---
 

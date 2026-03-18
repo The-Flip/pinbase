@@ -1,5 +1,4 @@
 ---
-slug: classic-3
 name: Classic
 title_slug: classic-3
 ipdb_id: 5384

@@ -1,5 +1,4 @@
 ---
-slug: knockout-blow
 name: Knockout Blow
 title_slug: knockout-blow
 ipdb_id: 5543

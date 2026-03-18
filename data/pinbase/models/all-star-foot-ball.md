@@ -1,5 +1,4 @@
 ---
-slug: all-star-foot-ball
 name: All Star Foot Ball
 title_slug: all-star-foot-ball
 ipdb_id: 7048

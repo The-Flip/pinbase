@@ -1,5 +1,4 @@
 ---
-slug: winning-shot
 name: Winning Shot
 title_slug: winning-shot
 ipdb_id: 6212

@@ -1,5 +1,4 @@
 ---
-slug: straight-eight
 name: Straight Eight
 title_slug: straight-eight
 ipdb_id: 2391

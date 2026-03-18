@@ -1,5 +1,4 @@
 ---
-slug: grand-national
 name: Grand National
 title_slug: grand-national
 ipdb_id: 1071

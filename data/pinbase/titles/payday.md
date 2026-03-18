@@ -1,4 +1,3 @@
 ---
-slug: payday
 name: Payday
 ---

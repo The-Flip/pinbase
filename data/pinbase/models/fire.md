@@ -1,5 +1,4 @@
 ---
-slug: fire
 name: Fire!
 title_slug: fire
 opdb_id: G41Lo-MJp3y

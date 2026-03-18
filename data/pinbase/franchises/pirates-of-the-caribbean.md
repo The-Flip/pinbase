@@ -1,5 +1,4 @@
 ---
-slug: pirates-of-the-caribbean
 name: Pirates of the Caribbean
 ---
 

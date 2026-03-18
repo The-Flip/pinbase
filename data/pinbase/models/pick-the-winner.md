@@ -1,5 +1,4 @@
 ---
-slug: pick-the-winner
 name: Pick the Winner
 title_slug: pick-the-winner
 ipdb_id: 6066

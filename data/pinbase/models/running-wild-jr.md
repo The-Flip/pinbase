@@ -1,5 +1,4 @@
 ---
-slug: running-wild-jr
 name: Running Wild Jr.
 title_slug: running-wild-jr
 ipdb_id: 4907

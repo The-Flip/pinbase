@@ -1,4 +1,3 @@
 ---
-slug: birdland
 name: Birdland
 ---

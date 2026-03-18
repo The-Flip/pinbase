@@ -1,5 +1,4 @@
 ---
-slug: bagatelle
 name: Bagatelle
 title_slug: bagatelle
 ipdb_id: 5195

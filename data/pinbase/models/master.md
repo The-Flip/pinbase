@@ -1,5 +1,4 @@
 ---
-slug: master
 name: Master
 title_slug: master
 ipdb_id: 4430

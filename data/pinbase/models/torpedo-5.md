@@ -1,5 +1,4 @@
 ---
-slug: torpedo-5
 name: Torpedo
 title_slug: torpedo
 opdb_id: G5p9k-MZenB

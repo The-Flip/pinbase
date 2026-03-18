@@ -1,5 +1,4 @@
 ---
-slug: ideal-golf
 name: Ideal-Golf
 title_slug: ideal-golf
 ipdb_id: 4715

@@ -1,5 +1,4 @@
 ---
-slug: drop-targets
 name: Drop Targets
 display_order: 4
 ---

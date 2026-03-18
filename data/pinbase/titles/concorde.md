@@ -1,4 +1,3 @@
 ---
-slug: concorde
 name: Concorde
 ---

@@ -1,5 +1,4 @@
 ---
-slug: trident
 name: Trident
 title_slug: trident
 opdb_id: GR0KD-MJpnr

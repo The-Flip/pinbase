@@ -1,5 +1,4 @@
 ---
-slug: sun-valley-2
 name: Sun Valley
 title_slug: sun-valley-2
 ipdb_id: 2418

@@ -1,5 +1,4 @@
 ---
-slug: dead-heat
 name: Dead Heat
 title_slug: dead-heat
 ipdb_id: 644

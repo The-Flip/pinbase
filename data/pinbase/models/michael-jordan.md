@@ -1,5 +1,4 @@
 ---
-slug: michael-jordan
 name: Michael Jordan
 title_slug: michael-jordan
 opdb_id: G57EJ-MLWB9

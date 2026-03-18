@@ -1,4 +1,3 @@
 ---
-slug: transportation
 name: Transportation
 ---

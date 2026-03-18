@@ -1,5 +1,4 @@
 ---
-slug: bubbles-pop
 name: Bubbles Pop
 title_slug: bubbles-pop
 ipdb_id: 6717

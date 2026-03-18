@@ -1,5 +1,4 @@
 ---
-slug: red-hot
 name: Red Hot
 title_slug: red-hot
 ipdb_id: 4025

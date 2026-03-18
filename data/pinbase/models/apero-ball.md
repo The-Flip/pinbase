@@ -1,5 +1,4 @@
 ---
-slug: apero-ball
 name: Apero Ball
 title_slug: apero-ball
 ipdb_id: 6114

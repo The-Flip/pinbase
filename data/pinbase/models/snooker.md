@@ -1,5 +1,4 @@
 ---
-slug: snooker
 name: Snooker
 title_slug: snooker
 ipdb_id: 2224

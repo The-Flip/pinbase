@@ -1,5 +1,4 @@
 ---
-slug: world-cup-world-championship
 name: World Cup / World Championship
 title_slug: world-cup-world-championship
 ipdb_id: 5152

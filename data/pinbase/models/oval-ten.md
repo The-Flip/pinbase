@@ -1,5 +1,4 @@
 ---
-slug: oval-ten
 name: Oval Ten
 title_slug: oval-ten
 ipdb_id: 1729

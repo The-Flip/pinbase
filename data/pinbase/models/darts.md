@@ -1,5 +1,4 @@
 ---
-slug: darts
 name: Darts
 title_slug: darts
 opdb_id: G5WWb-MJNKN

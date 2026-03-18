@@ -1,5 +1,4 @@
 ---
-slug: madison-square-gardens
 name: Madison Square Gardens
 title_slug: madison-square-gardens
 opdb_id: G4Eb1-M85RZ

@@ -1,5 +1,4 @@
 ---
-slug: beach-club
 name: Beach Club
 title_slug: beach-club
 ipdb_id: 204

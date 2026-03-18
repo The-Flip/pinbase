@@ -1,5 +1,4 @@
 ---
-slug: the-time-of-your-life
 name: The Time of Your Life
 title_slug: the-time-of-your-life
 ipdb_id: 2529

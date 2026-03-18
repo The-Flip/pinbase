@@ -1,5 +1,4 @@
 ---
-slug: air-lane
 name: Air Lane
 title_slug: air-lane
 ipdb_id: 30

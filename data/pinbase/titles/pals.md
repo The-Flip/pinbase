@@ -1,4 +1,3 @@
 ---
-slug: pals
 name: Pals
 ---

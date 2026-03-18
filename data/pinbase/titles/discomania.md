@@ -1,4 +1,3 @@
 ---
-slug: discomania
 name: Discomania
 ---

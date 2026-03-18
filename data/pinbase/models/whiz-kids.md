@@ -1,5 +1,4 @@
 ---
-slug: whiz-kids
 name: Whiz Kids
 title_slug: whiz-kids
 opdb_id: G4807-M612P

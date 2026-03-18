@@ -1,5 +1,4 @@
 ---
-slug: ghostbusters
 name: Ghostbusters
 ---
 

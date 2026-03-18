@@ -1,5 +1,4 @@
 ---
-slug: galloping-ghost
 name: Galloping Ghost
 title_slug: galloping-ghost
 ipdb_id: 982

@@ -1,5 +1,4 @@
 ---
-slug: far-west
 name: Far-West
 title_slug: far-west
 ipdb_id: 6400

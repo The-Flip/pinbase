@@ -1,5 +1,4 @@
 ---
-slug: nippy
 name: Nippy
 title_slug: nippy
 ipdb_id: 1681

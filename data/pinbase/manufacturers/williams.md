@@ -1,5 +1,4 @@
 ---
-slug: williams
 name: Williams
 opdb_manufacturer_id: 7
 ---

@@ -1,5 +1,4 @@
 ---
-slug: the-cricket
 name: The Cricket
 title_slug: the-cricket
 ipdb_id: 591

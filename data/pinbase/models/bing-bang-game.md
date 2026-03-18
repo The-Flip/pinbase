@@ -1,5 +1,4 @@
 ---
-slug: bing-bang-game
 name: Bing Bang Game
 title_slug: bing-bang-game
 ipdb_id: 6279

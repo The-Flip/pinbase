@@ -1,5 +1,4 @@
 ---
-slug: dona-elvira-2
 name: Dona Elvira 2
 title_slug: dona-elvira-2
 opdb_id: G5oVL-MQ2XK

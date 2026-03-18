@@ -1,5 +1,4 @@
 ---
-slug: jungle-hunt-2
 name: Jungle Hunt
 title_slug: jungle-hunt-2
 ipdb_id: 4220

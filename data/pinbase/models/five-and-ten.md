@@ -1,5 +1,4 @@
 ---
-slug: five-and-ten
 name: Five and Ten
 title_slug: five-and-ten
 ipdb_id: 862

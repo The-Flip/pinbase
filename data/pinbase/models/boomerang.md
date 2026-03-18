@@ -1,5 +1,4 @@
 ---
-slug: boomerang
 name: Boomerang
 title_slug: boomerang-flicker
 opdb_id: GrEOB-MDR2Y

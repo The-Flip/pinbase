@@ -1,5 +1,4 @@
 ---
-slug: frees-bros
 name: Frees Bros.
 manufacturer_slug: frees-bros
 ipdb_manufacturer_id: 692

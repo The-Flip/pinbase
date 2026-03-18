@@ -1,5 +1,4 @@
 ---
-slug: basket-world-trotter
 name: Basket World Trotter
 title_slug: basket-world-trotter
 ipdb_id: 4083

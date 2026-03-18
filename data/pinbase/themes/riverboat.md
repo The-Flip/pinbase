@@ -1,4 +1,3 @@
 ---
-slug: riverboat
 name: Riverboat
 ---

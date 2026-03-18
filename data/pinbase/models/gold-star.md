@@ -1,5 +1,4 @@
 ---
-slug: gold-star
 name: Gold Star
 title_slug: gold-star
 opdb_id: GRKyL-MJpbw

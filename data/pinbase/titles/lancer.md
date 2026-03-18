@@ -1,4 +1,3 @@
 ---
-slug: lancer
 name: Lancer
 ---

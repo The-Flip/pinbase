@@ -1,5 +1,4 @@
 ---
-slug: action-jr
 name: Action (Jr)
 title_slug: action-jr
 ipdb_id: 17

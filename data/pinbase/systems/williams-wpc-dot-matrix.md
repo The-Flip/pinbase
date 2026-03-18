@@ -1,5 +1,4 @@
 ---
-slug: williams-wpc-dot-matrix
 name: Williams WPC Dot Matrix
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

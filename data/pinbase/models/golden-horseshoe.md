@@ -1,5 +1,4 @@
 ---
-slug: golden-horseshoe
 name: Golden Horseshoe
 title_slug: golden-horseshoe
 ipdb_id: 1053

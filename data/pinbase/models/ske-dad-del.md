@@ -1,5 +1,4 @@
 ---
-slug: ske-dad-del
 name: Ske-Dad-Del
 title_slug: ske-dad-del
 ipdb_id: 2171

@@ -1,5 +1,4 @@
 ---
-slug: whiffle-delux
 name: Whiffle Delux
 title_slug: whiffle-delux
 ipdb_id: 5398

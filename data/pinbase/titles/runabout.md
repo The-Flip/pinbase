@@ -1,4 +1,3 @@
 ---
-slug: runabout
 name: Runabout
 ---

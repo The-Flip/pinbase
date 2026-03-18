@@ -1,5 +1,4 @@
 ---
-slug: majorettes-no-2
 name: Majorettes (No. 2)
 title_slug: majorettes-no-2
 ipdb_id: 6284

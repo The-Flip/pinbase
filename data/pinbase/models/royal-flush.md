@@ -1,5 +1,4 @@
 ---
-slug: royal-flush
 name: Royal Flush
 title_slug: royal-flush
 opdb_id: G4ezN-M0orp

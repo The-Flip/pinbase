@@ -1,5 +1,4 @@
 ---
-slug: the-chutes
 name: The Chutes
 title_slug: the-chutes
 ipdb_id: 5346

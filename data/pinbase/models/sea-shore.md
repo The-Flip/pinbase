@@ -1,5 +1,4 @@
 ---
-slug: sea-shore
 name: Sea Shore
 title_slug: sea-shore
 opdb_id: GryDO-ML032

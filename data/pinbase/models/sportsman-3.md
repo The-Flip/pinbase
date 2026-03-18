@@ -1,5 +1,4 @@
 ---
-slug: sportsman-3
 name: Sportsman
 title_slug: sportsman-3
 ipdb_id: 2308

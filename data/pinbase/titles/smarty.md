@@ -1,4 +1,3 @@
 ---
-slug: smarty
 name: Smarty
 ---

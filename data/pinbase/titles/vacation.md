@@ -1,4 +1,3 @@
 ---
-slug: vacation
 name: Vacation
 ---

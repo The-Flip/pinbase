@@ -1,5 +1,4 @@
 ---
-slug: austin-powers
 name: Austin Powers
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: pinball-2
 name: Pinball (EM)
 title_slug: pinball-stern
 opdb_id: GrZXj-MD3ee

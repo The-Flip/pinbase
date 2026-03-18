@@ -1,5 +1,4 @@
 ---
-slug: equity
 name: Equity
 title_slug: equity
 ipdb_id: 787

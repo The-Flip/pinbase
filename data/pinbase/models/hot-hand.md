@@ -1,5 +1,4 @@
 ---
-slug: hot-hand
 name: Hot Hand
 title_slug: hot-hand
 opdb_id: GRvNk-MQkro

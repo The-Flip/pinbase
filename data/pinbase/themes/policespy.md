@@ -1,4 +1,3 @@
 ---
-slug: policespy
 name: Policespy
 ---

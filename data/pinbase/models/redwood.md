@@ -1,5 +1,4 @@
 ---
-slug: redwood
 name: Redwood
 title_slug: redwood
 ipdb_id: 4167

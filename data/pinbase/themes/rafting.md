@@ -1,4 +1,3 @@
 ---
-slug: rafting
 name: Rafting
 ---

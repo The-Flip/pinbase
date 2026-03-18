@@ -1,5 +1,4 @@
 ---
-slug: em-h-co
 name: E.M. & H. Co.
 manufacturer_slug: em-h-co
 ipdb_manufacturer_id: 509

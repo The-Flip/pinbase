@@ -1,5 +1,4 @@
 ---
-slug: muscle-car-cafe
 name: Muscle Car Cafe
 title_slug: muscle-car-cafe
 ipdb_id: 5560

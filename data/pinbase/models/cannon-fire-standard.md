@@ -1,5 +1,4 @@
 ---
-slug: cannon-fire-standard
 name: Cannon Fire (Standard)
 title_slug: cannon-fire-standard
 ipdb_id: 430

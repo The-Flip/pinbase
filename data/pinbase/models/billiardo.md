@@ -1,5 +1,4 @@
 ---
-slug: billiardo
 name: Billiard'o
 title_slug: billiardo
 ipdb_id: 3610

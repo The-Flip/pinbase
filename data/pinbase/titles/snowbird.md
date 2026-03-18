@@ -1,4 +1,3 @@
 ---
-slug: snowbird
 name: Snowbird
 ---

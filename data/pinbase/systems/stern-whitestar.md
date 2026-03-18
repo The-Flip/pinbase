@@ -1,5 +1,4 @@
 ---
-slug: stern-whitestar
 name: Stern Whitestar
 manufacturer_slug: stern-pinball
 technology_subgeneration_slug: ss-integrated

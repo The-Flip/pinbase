@@ -1,5 +1,4 @@
 ---
-slug: king-rock
 name: King Rock
 title_slug: king-rock-king-kool
 opdb_id: GRBly-MJ58y

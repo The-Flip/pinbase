@@ -1,5 +1,4 @@
 ---
-slug: cue-senior-de-luxe
 name: Cue Senior De Luxe
 title_slug: cue-senior-de-luxe
 ipdb_id: 5055

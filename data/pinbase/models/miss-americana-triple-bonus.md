@@ -1,5 +1,4 @@
 ---
-slug: miss-americana-triple-bonus
 name: Miss Americana Triple Bonus
 title_slug: miss-americana-triple-bonus
 ipdb_id: 4051

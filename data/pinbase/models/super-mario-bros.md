@@ -1,5 +1,4 @@
 ---
-slug: super-mario-bros
 name: Super Mario Bros.
 title_slug: super-mario-bros
 opdb_id: GRBzQ-MLO1j

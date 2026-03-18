@@ -1,5 +1,4 @@
 ---
-slug: space-invaders
 name: Space Invaders
 title_slug: space-invaders
 opdb_id: G42PX-MyNXo

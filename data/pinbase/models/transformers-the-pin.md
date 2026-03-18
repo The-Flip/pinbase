@@ -1,5 +1,4 @@
 ---
-slug: transformers-the-pin
 name: Transformers The Pin
 title_slug: transformers-the-pin
 opdb_id: Grd2o-MQK8Z

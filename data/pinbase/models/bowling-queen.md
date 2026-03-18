@@ -1,5 +1,4 @@
 ---
-slug: bowling-queen
 name: Bowling Queen
 title_slug: bowling-queen
 opdb_id: G4xYD-MD3nw

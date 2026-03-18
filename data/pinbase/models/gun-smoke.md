@@ -1,5 +1,4 @@
 ---
-slug: gun-smoke
 name: Gun Smoke
 title_slug: gun-smoke
 opdb_id: G5nlX-MVKWR

@@ -1,5 +1,4 @@
 ---
-slug: blue-streak-2
 name: Blue Streak
 title_slug: blue-streak-2
 ipdb_id: 4206

@@ -1,5 +1,4 @@
 ---
-slug: disco-fever
 name: Disco Fever
 title_slug: disco-fever
 opdb_id: G5o9o-MQpN2

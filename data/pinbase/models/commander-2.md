@@ -1,5 +1,4 @@
 ---
-slug: commander-2
 name: Commander
 title_slug: commander-2
 ipdb_id: 3842

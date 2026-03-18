@@ -1,4 +1,3 @@
 ---
-slug: polo
 name: Polo
 ---

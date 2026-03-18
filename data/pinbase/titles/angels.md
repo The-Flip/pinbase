@@ -1,4 +1,3 @@
 ---
-slug: angels
 name: Angels
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sheraton-crafts
 name: Sheraton Crafts
 manufacturer_slug: sheraton-crafts
 ipdb_manufacturer_id: 657

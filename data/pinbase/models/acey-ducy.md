@@ -1,5 +1,4 @@
 ---
-slug: acey-ducy
 name: Acey Ducy
 title_slug: acey-ducy
 ipdb_id: 2877

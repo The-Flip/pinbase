@@ -1,5 +1,4 @@
 ---
-slug: rocky-and-bullwinkle
 name: Rocky and Bullwinkle
 ---
 

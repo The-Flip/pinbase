@@ -1,5 +1,4 @@
 ---
-slug: spirit-of-america
 name: Spirit of America
 title_slug: spirit-of-america
 ipdb_id: 4972

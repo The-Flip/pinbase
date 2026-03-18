@@ -1,5 +1,4 @@
 ---
-slug: metallica-pro
 name: Metallica (Pro)
 title_slug: metallica
 opdb_id: GRBE4-MQK1Z

@@ -1,5 +1,4 @@
 ---
-slug: liberty-bell
 name: Liberty Bell
 title_slug: liberty-bell
 opdb_id: GrNJO-MQYd6

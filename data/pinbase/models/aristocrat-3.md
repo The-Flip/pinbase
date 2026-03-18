@@ -1,5 +1,4 @@
 ---
-slug: aristocrat-3
 name: Aristocrat
 title_slug: aristocrat-3
 ipdb_id: 5677

@@ -1,5 +1,4 @@
 ---
-slug: dragoon
 name: Dragoon
 title_slug: dragoon
 ipdb_id: 4872

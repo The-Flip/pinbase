@@ -1,4 +1,3 @@
 ---
-slug: frisco
 name: Frisco
 ---

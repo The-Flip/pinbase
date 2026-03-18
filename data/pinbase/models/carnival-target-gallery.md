@@ -1,5 +1,4 @@
 ---
-slug: carnival-target-gallery
 name: Carnival Target Gallery
 title_slug: carnival-target-gallery
 ipdb_id: 452

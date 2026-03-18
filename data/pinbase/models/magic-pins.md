@@ -1,5 +1,4 @@
 ---
-slug: magic-pins
 name: Magic Pins
 title_slug: magic-pins
 ipdb_id: 1517

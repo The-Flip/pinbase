@@ -1,5 +1,4 @@
 ---
-slug: provence-daytona
 name: Provence Daytona
 title_slug: provence-daytona
 ipdb_id: 5835

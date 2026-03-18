@@ -1,5 +1,4 @@
 ---
-slug: brite-spot
 name: Brite Spot
 title_slug: brite-spot
 ipdb_id: 377

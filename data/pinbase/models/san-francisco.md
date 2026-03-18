@@ -1,5 +1,4 @@
 ---
-slug: san-francisco
 name: San Francisco
 title_slug: san-francisco
 opdb_id: GRLwP-MDnpY

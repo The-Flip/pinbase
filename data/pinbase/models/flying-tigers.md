@@ -1,5 +1,4 @@
 ---
-slug: flying-tigers
 name: Flying Tigers
 title_slug: flying-tigers
 ipdb_id: 3854

@@ -1,5 +1,4 @@
 ---
-slug: six-balls
 name: Six Balls
 title_slug: six-balls
 ipdb_id: 5919

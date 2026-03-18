@@ -1,5 +1,4 @@
 ---
-slug: fun-spot-61
 name: Fun Spot '61
 title_slug: fun-spot-61
 ipdb_id: 5994

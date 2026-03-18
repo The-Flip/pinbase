@@ -1,5 +1,4 @@
 ---
-slug: navy
 name: Navy
 title_slug: navy
 ipdb_id: 1658

@@ -1,5 +1,4 @@
 ---
-slug: tic-tac-lotto
 name: Tic-Tac-Lotto
 title_slug: tic-tac-lotto
 ipdb_id: 6413

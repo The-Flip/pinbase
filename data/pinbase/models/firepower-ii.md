@@ -1,5 +1,4 @@
 ---
-slug: firepower-ii
 name: Firepower II
 title_slug: firepower-ii
 opdb_id: GRWYk-Mb5OV

@@ -1,5 +1,4 @@
 ---
-slug: kozak-specialty-company
 name: Kozak Specialty Company
 manufacturer_slug: kozak-specialty-company
 ipdb_manufacturer_id: 180

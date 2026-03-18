@@ -1,5 +1,4 @@
 ---
-slug: big-inning-new-york-model
 name: Big Inning (New York Model)
 title_slug: big-inning-new-york-model
 ipdb_id: 2863

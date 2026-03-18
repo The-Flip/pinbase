@@ -1,5 +1,4 @@
 ---
-slug: beverator-company
 name: Beverator Company
 manufacturer_slug: beverator-company
 ipdb_manufacturer_id: 57

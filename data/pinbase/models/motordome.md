@@ -1,5 +1,4 @@
 ---
-slug: motordome
 name: Motordome
 title_slug: motordome
 opdb_id: Gr8PN-MDqlN

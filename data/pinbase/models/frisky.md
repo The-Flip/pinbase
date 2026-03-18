@@ -1,5 +1,4 @@
 ---
-slug: frisky
 name: Frisky
 title_slug: frisky-2
 ipdb_id: 957

@@ -1,5 +1,4 @@
 ---
-slug: traffic
 name: Traffic
 title_slug: traffic
 ipdb_id: 2622

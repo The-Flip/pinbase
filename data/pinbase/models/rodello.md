@@ -1,5 +1,4 @@
 ---
-slug: rodello
 name: '''Rodello'''
 title_slug: rodello
 ipdb_id: 5978

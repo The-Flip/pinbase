@@ -1,5 +1,4 @@
 ---
-slug: stockade
 name: Stockade
 title_slug: stockade
 ipdb_id: 6636

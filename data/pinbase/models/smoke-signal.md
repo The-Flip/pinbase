@@ -1,5 +1,4 @@
 ---
-slug: smoke-signal
 name: Smoke Signal
 title_slug: smoke-signal
 opdb_id: G48B7-MQpRr

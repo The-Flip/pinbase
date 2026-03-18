@@ -1,5 +1,4 @@
 ---
-slug: crazy-clock
 name: Crazy Clock
 title_slug: crazy-clock
 opdb_id: G5zld-MJ5NW

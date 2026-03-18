@@ -1,5 +1,4 @@
 ---
-slug: criterium-75-3
 name: Criterium 75
 title_slug: criterium-75-2
 ipdb_id: 6014

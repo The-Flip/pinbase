@@ -1,5 +1,4 @@
 ---
-slug: goal-kick
 name: Goal-Kick
 title_slug: goal-kick
 ipdb_id: 1019

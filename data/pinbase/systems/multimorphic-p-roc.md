@@ -1,5 +1,4 @@
 ---
-slug: multimorphic-p-roc
 name: Multimorphic P-ROC
 manufacturer_slug: multimorphic
 technology_subgeneration_slug: ss-pc

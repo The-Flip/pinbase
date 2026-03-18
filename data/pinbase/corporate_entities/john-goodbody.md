@@ -1,5 +1,4 @@
 ---
-slug: john-goodbody
 name: John Goodbody
 manufacturer_slug: john-goodbody
 ipdb_manufacturer_id: 798

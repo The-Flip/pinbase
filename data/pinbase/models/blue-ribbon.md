@@ -1,5 +1,4 @@
 ---
-slug: blue-ribbon
 name: Blue Ribbon
 title_slug: blue-ribbon-2
 ipdb_id: 329

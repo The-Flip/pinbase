@@ -1,5 +1,4 @@
 ---
-slug: skill-ball-combination-pin-and-pool-table
 name: Skill Ball (Combination Pin and Pool Table)
 title_slug: skill-ball-combination-pin-and-pool-table
 ipdb_id: 6052

@@ -1,5 +1,4 @@
 ---
-slug: ball-game
 name: Ball Game
 title_slug: ball-game
 ipdb_id: 5649

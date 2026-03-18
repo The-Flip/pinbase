@@ -1,5 +1,4 @@
 ---
-slug: cue-tee
 name: Cue-Tee
 title_slug: cue-tee-star-pool
 opdb_id: G4O30-MJwBe

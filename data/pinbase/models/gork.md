@@ -1,5 +1,4 @@
 ---
-slug: gork
 name: Gork
 title_slug: gork
 opdb_id: G9zZb-MePVz

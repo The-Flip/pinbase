@@ -1,4 +1,3 @@
 ---
-slug: movie
 name: Movie
 ---

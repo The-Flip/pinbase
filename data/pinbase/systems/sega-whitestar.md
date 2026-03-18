@@ -1,5 +1,4 @@
 ---
-slug: sega-whitestar
 name: Sega Whitestar
 manufacturer_slug: sega
 technology_subgeneration_slug: ss-integrated

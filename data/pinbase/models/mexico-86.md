@@ -1,5 +1,4 @@
 ---
-slug: mexico-86
 name: Mexico 86
 title_slug: mexico-86
 opdb_id: GrxeN-MD0ky

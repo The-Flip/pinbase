@@ -1,5 +1,4 @@
 ---
-slug: capitole
 name: Capitole
 title_slug: capitole
 ipdb_id: 6144

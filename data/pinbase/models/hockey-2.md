@@ -1,5 +1,4 @@
 ---
-slug: hockey-2
 name: Hockey
 title_slug: hockey-2
 ipdb_id: 6791

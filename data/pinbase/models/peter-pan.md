@@ -1,5 +1,4 @@
 ---
-slug: peter-pan
 name: Peter Pan
 title_slug: peter-pan
 opdb_id: G4xV9-MJNoO

@@ -1,4 +1,3 @@
 ---
-slug: lighthouse
 name: Lighthouse
 ---

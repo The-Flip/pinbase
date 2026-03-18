@@ -1,4 +1,3 @@
 ---
-slug: acapulco
 name: Acapulco
 ---

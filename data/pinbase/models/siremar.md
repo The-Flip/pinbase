@@ -1,5 +1,4 @@
 ---
-slug: siremar
 name: Siremar
 title_slug: siremar
 ipdb_id: 5968

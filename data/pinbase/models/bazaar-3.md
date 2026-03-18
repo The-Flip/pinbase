@@ -1,5 +1,4 @@
 ---
-slug: bazaar-3
 name: Bazaar
 title_slug: bazaar-3
 ipdb_id: 2849

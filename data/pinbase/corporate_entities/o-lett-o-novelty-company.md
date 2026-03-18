@@ -1,5 +1,4 @@
 ---
-slug: o-lett-o-novelty-company
 name: O-Lett-O Novelty Company
 manufacturer_slug: o-lett-o-novelty-company
 ipdb_manufacturer_id: 236

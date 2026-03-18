@@ -1,5 +1,4 @@
 ---
-slug: pick-em
 name: Pick-Em
 title_slug: pick-em
 ipdb_id: 1783

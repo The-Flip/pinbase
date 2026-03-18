@@ -1,5 +1,4 @@
 ---
-slug: rancho
 name: Rancho
 title_slug: rancho-2
 ipdb_id: 1916

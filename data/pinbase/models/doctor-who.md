@@ -1,5 +1,4 @@
 ---
-slug: doctor-who
 name: Doctor Who
 title_slug: doctor-who
 opdb_id: G4x2Y-MQwwe

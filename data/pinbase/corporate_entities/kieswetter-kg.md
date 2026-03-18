@@ -1,5 +1,4 @@
 ---
-slug: kieswetter-kg
 name: Kieswetter KG
 manufacturer_slug: kieswetter-kg
 ipdb_manufacturer_id: 662

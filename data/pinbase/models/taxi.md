@@ -1,5 +1,4 @@
 ---
-slug: taxi
 name: Taxi
 title_slug: taxi
 opdb_id: GrN90-MJrnj

@@ -1,5 +1,4 @@
 ---
-slug: black-jack-4
 name: Black-Jack
 title_slug: black-jack-3
 ipdb_id: 4843

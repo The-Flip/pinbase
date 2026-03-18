@@ -1,5 +1,4 @@
 ---
-slug: freedom
 name: Freedom (EM)
 title_slug: freedom
 opdb_id: GR9qY-M0oXW

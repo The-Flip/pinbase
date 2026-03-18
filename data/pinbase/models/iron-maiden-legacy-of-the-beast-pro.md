@@ -1,10 +1,11 @@
 ---
-slug: iron-maiden-legacy-of-the-beast-pro
 name: 'Iron Maiden: Legacy of the Beast (Pro)'
 title_slug: iron-maiden
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G4dOQ-MyNbb
 ipdb_id: 6555
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: keith-elwin
   role: Design

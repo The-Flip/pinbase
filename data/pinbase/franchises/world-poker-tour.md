@@ -1,5 +1,4 @@
 ---
-slug: world-poker-tour
 name: World Poker Tour
 ---
 

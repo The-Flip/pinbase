@@ -1,5 +1,4 @@
 ---
-slug: old-jenny-whiffle
 name: Old Jenny (Whiffle)
 title_slug: old-jenny-whiffle
 ipdb_id: 5394

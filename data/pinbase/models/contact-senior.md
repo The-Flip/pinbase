@@ -1,5 +1,4 @@
 ---
-slug: contact-senior
 name: Contact (Senior)
 title_slug: contact-senior
 ipdb_id: 3029

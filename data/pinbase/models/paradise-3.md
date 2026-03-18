@@ -1,5 +1,4 @@
 ---
-slug: paradise-3
 name: Paradise
 title_slug: paradise-2
 ipdb_id: 1753

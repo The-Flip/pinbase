@@ -1,5 +1,4 @@
 ---
-slug: jay-ball
 name: Jay-Ball
 title_slug: jay-ball
 ipdb_id: 1287

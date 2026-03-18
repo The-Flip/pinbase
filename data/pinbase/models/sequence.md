@@ -1,5 +1,4 @@
 ---
-slug: sequence
 name: Sequence
 title_slug: sequence
 ipdb_id: 2096

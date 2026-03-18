@@ -1,5 +1,4 @@
 ---
-slug: the-bally-game-show
 name: The Bally Game Show
 title_slug: the-bally-game-show
 opdb_id: G5V92-MJ9XO

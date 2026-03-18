@@ -1,5 +1,4 @@
 ---
-slug: fun-ball
 name: Fun Ball
 title_slug: fun-ball
 ipdb_id: 962

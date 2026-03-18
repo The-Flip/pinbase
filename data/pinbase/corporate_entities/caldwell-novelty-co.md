@@ -1,5 +1,4 @@
 ---
-slug: caldwell-novelty-co
 name: Caldwell Novelty Co.
 manufacturer_slug: caldwell-novelty-co
 ipdb_manufacturer_id: 689

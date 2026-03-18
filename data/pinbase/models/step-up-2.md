@@ -1,5 +1,4 @@
 ---
-slug: step-up-2
 name: Step-Up
 title_slug: step-up-2
 ipdb_id: 2374

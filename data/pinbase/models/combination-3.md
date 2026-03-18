@@ -1,5 +1,4 @@
 ---
-slug: combination-3
 name: Combination
 title_slug: combination-3
 ipdb_id: 3028

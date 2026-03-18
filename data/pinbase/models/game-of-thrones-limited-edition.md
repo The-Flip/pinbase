@@ -1,10 +1,11 @@
 ---
-slug: game-of-thrones-limited-edition
 name: Game of Thrones (Limited Edition)
 title_slug: game-of-thrones
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G41d5-M9REd
 ipdb_id: 6309
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 variant_of: game-of-thrones-premium
 credit_refs:
 - person_slug: steve-ritchie

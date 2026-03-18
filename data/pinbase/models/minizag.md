@@ -1,5 +1,4 @@
 ---
-slug: minizag
 name: MiniZag
 title_slug: minizag
 opdb_id: G4q68-MQk5o

@@ -1,5 +1,4 @@
 ---
-slug: adventures-of-rocky-and-bullwinkle-and-friends
 name: Adventures of Rocky and Bullwinkle and Friends
 title_slug: rocky-and-bullwinkle
 opdb_id: G5vnL-MJP3y

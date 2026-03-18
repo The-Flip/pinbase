@@ -1,5 +1,4 @@
 ---
-slug: acdc-premium-vault-edition
 name: AC/DC (Premium Vault Edition)
 title_slug: ac-dc
 opdb_id: G43W4-MdEjy

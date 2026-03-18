@@ -1,4 +1,3 @@
 ---
-slug: plaball
 name: Plaball
 ---

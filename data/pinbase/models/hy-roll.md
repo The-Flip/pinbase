@@ -1,5 +1,4 @@
 ---
-slug: hy-roll
 name: Hy-Roll
 title_slug: hy-roll
 ipdb_id: 5901

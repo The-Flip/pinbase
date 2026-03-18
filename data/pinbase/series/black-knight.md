@@ -1,5 +1,4 @@
 ---
-slug: black-knight
 name: Black Knight
 credit_refs:
 - person_slug: steve-ritchie

@@ -1,5 +1,4 @@
 ---
-slug: advance-pool
 name: Advance Pool
 title_slug: advance-pool
 ipdb_id: 5752

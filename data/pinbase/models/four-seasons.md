@@ -1,5 +1,4 @@
 ---
-slug: four-seasons
 name: Four Seasons
 title_slug: four-seasons
 opdb_id: G5WQN-ML8Wq

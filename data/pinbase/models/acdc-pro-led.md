@@ -1,5 +1,4 @@
 ---
-slug: acdc-pro-led
 name: AC/DC (Pro LED)
 title_slug: ac-dc
 opdb_id: G43W4-MKNW0-AOENR

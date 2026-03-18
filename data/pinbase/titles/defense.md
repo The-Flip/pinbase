@@ -1,4 +1,3 @@
 ---
-slug: defense
 name: Defense
 ---

@@ -1,5 +1,4 @@
 ---
-slug: strange-science
 name: Strange Science
 title_slug: strange-science
 opdb_id: G5nzJ-MJVX8

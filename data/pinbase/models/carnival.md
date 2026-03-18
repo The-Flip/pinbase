@@ -1,5 +1,4 @@
 ---
-slug: carnival
 name: Carnival
 title_slug: carnival-4
 opdb_id: GrOXo-MJKyB

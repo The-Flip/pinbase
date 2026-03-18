@@ -1,5 +1,4 @@
 ---
-slug: show-girl
 name: Show Girl
 title_slug: show-girl
 ipdb_id: 3243

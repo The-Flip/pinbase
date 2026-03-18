@@ -1,5 +1,4 @@
 ---
-slug: ding-dong
 name: Ding Dong
 title_slug: ding-dong-smarty
 opdb_id: GRop9-MkPXd

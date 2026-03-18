@@ -1,4 +1,3 @@
 ---
-slug: hearts
 name: Hearts
 ---

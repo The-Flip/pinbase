@@ -1,5 +1,4 @@
 ---
-slug: tivoli-jr
 name: Tivoli JR.
 title_slug: tivoli-jr
 ipdb_id: 4822

@@ -1,4 +1,3 @@
 ---
-slug: paddock
 name: Paddock
 ---

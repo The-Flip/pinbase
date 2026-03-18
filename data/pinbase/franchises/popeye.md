@@ -1,5 +1,4 @@
 ---
-slug: popeye
 name: Popeye
 ---
 

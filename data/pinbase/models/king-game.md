@@ -1,5 +1,4 @@
 ---
-slug: king-game
 name: King Game
 title_slug: high-hand-capt-card
 opdb_id: GRYbJ-ML0Ny

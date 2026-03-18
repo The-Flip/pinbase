@@ -1,5 +1,4 @@
 ---
-slug: universe-3
 name: Universe
 title_slug: universe
 opdb_id: G4dxZ-MVKn9

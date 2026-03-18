@@ -1,5 +1,4 @@
 ---
-slug: twenty-1
 name: Twenty "1"
 title_slug: twenty-1
 ipdb_id: 2682

@@ -1,4 +1,3 @@
 ---
-slug: ufo
 name: Ufo
 ---

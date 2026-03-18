@@ -1,5 +1,4 @@
 ---
-slug: riviera-golf
 name: Riviera Golf
 title_slug: riviera-golf
 ipdb_id: 6327

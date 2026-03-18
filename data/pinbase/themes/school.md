@@ -1,4 +1,3 @@
 ---
-slug: school
 name: School
 ---

@@ -1,4 +1,3 @@
 ---
-slug: poseidon
 name: Poseidon
 ---

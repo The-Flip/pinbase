@@ -1,5 +1,4 @@
 ---
-slug: rotation-3
 name: Rotation
 title_slug: rotation-3
 ipdb_id: 6392

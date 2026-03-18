@@ -1,5 +1,4 @@
 ---
-slug: touch-off
 name: Touch-Off
 title_slug: touch-off
 ipdb_id: 3262

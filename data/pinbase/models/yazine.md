@@ -1,5 +1,4 @@
 ---
-slug: yazine
 name: Yazine
 title_slug: yazine
 ipdb_id: 4614

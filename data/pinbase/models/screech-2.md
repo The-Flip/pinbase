@@ -1,5 +1,4 @@
 ---
-slug: screech-2
 name: Screech
 title_slug: screech-2
 ipdb_id: 5718

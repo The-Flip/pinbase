@@ -1,5 +1,4 @@
 ---
-slug: torpedo-patrol
 name: Torpedo Patrol
 title_slug: torpedo-patrol
 ipdb_id: 3838

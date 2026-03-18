@@ -1,5 +1,4 @@
 ---
-slug: royal-pair
 name: Royal Pair
 title_slug: top-card-royal-pair
 opdb_id: G4JND-MDR6K

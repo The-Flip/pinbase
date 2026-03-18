@@ -1,5 +1,4 @@
 ---
-slug: godzilla
 name: Godzilla
 ---
 

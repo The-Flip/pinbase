@@ -1,5 +1,4 @@
 ---
-slug: double-feature-4
 name: Double Feature
 title_slug: double-feature-4
 ipdb_id: 713

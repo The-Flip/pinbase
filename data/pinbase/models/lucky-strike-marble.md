@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-marble
 name: Lucky Strike (Marble)
 title_slug: lucky-strike-marble
 ipdb_id: 3224

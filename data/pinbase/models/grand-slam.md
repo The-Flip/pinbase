@@ -1,5 +1,4 @@
 ---
-slug: grand-slam
 name: Grand Slam
 title_slug: grand-slam-2
 opdb_id: GrJ9q-MJNkp

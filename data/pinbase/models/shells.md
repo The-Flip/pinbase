@@ -1,5 +1,4 @@
 ---
-slug: shells
 name: Shells
 title_slug: shells
 ipdb_id: 3341

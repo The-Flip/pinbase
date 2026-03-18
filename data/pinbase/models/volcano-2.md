@@ -1,5 +1,4 @@
 ---
-slug: volcano-2
 name: Volcano
 title_slug: volcano-2
 ipdb_id: 4578

@@ -1,5 +1,4 @@
 ---
-slug: sky-kings
 name: Sky Kings
 title_slug: sky-kings
 opdb_id: Grk0j-MBRRY

@@ -1,5 +1,4 @@
 ---
-slug: klever-lite
 name: Klever Lite
 title_slug: klever-lite
 ipdb_id: 4658

@@ -1,5 +1,4 @@
 ---
-slug: skill-pool
 name: Skill Pool
 title_slug: skill-pool
 opdb_id: G4O66-MW96E

@@ -1,5 +1,4 @@
 ---
-slug: pro-pool
 name: Pro Pool
 title_slug: play-pool
 opdb_id: G5n1Q-MQZdq

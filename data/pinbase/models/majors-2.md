@@ -1,5 +1,4 @@
 ---
-slug: majors-2
 name: Majors
 title_slug: majors
 ipdb_id: 3485

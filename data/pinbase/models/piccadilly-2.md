@@ -1,5 +1,4 @@
 ---
-slug: piccadilly-2
 name: Piccadilly
 title_slug: piccadilly-2
 ipdb_id: 4313

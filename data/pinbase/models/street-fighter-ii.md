@@ -1,5 +1,4 @@
 ---
-slug: street-fighter-ii
 name: Street Fighter II
 title_slug: street-fighter-ii
 opdb_id: G5BYQ-MQdBV

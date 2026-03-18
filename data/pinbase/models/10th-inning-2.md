@@ -1,5 +1,4 @@
 ---
-slug: 10th-inning-2
 name: 10th Inning
 title_slug: 10th-inning
 opdb_id: GwexB-M7Zxq

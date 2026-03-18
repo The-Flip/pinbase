@@ -1,5 +1,4 @@
 ---
-slug: snake-machine
 name: Snake Machine
 title_slug: snake-machine
 opdb_id: G6lvP-M7Zj5

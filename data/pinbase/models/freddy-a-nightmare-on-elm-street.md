@@ -1,5 +1,4 @@
 ---
-slug: freddy-a-nightmare-on-elm-street
 name: 'Freddy: A Nightmare On Elm Street'
 title_slug: nightmare-on-elm-street
 opdb_id: GRzB7-MD8ld

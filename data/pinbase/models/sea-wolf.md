@@ -1,5 +1,4 @@
 ---
-slug: sea-wolf
 name: Sea Wolf
 title_slug: sea-wolf
 opdb_id: G57NK-MQwlq

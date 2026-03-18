@@ -1,5 +1,4 @@
 ---
-slug: new-world
 name: New World
 title_slug: new-world-conquest-200
 opdb_id: G4E88-MQ447

@@ -1,5 +1,4 @@
 ---
-slug: univerx
 name: Univerx
 title_slug: univerx
 ipdb_id: 6702

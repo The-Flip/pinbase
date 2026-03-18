@@ -1,5 +1,4 @@
 ---
-slug: fan-tas-tic
 name: Fan-Tas-Tic
 title_slug: fan-tas-tic
 opdb_id: G48VE-MLebR

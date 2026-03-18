@@ -1,5 +1,4 @@
 ---
-slug: stevo-jackpot
 name: Stevo Jackpot
 title_slug: stevo-jackpot
 ipdb_id: 2375

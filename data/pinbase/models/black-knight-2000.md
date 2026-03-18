@@ -1,5 +1,4 @@
 ---
-slug: black-knight-2000
 name: Black Knight 2000
 title_slug: black-knight-2000
 opdb_id: GrxPP-Ml91r

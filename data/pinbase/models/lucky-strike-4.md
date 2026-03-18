@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-4
 name: Lucky Strike
 title_slug: lucky-strike-bowl-a-strike
 opdb_id: G5BQj-MJ5ep

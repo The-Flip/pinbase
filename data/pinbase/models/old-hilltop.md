@@ -1,5 +1,4 @@
 ---
-slug: old-hilltop
 name: Old Hilltop
 title_slug: old-hilltop
 ipdb_id: 1706

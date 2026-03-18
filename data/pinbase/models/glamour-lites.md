@@ -1,5 +1,4 @@
 ---
-slug: glamour-lites
 name: Glamour Lites
 title_slug: glamour-lites
 ipdb_id: 3121

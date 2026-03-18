@@ -1,5 +1,4 @@
 ---
-slug: triangle
 name: Triangle
 title_slug: triangle
 ipdb_id: 3226

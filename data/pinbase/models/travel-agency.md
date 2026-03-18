@@ -1,5 +1,4 @@
 ---
-slug: travel-agency
 name: Travel Agency
 title_slug: travel-agency
 ipdb_id: 4106

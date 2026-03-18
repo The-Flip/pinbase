@@ -1,5 +1,4 @@
 ---
-slug: president
 name: President
 title_slug: president
 ipdb_id: 4039

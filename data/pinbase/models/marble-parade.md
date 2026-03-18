@@ -1,5 +1,4 @@
 ---
-slug: marble-parade
 name: Marble Parade
 title_slug: marble-parade
 ipdb_id: 4294

@@ -1,5 +1,4 @@
 ---
-slug: kingdom
 name: Kingdom
 title_slug: kingdom
 ipdb_id: 5168

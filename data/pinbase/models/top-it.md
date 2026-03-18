@@ -1,5 +1,4 @@
 ---
-slug: top-it
 name: Top It
 title_slug: top-it
 ipdb_id: 2586

@@ -1,4 +1,3 @@
 ---
-slug: invader
 name: Invader
 ---

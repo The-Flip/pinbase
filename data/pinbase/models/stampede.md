@@ -1,5 +1,4 @@
 ---
-slug: stampede
 name: Stampede
 title_slug: stampede-rawhide
 opdb_id: GRQ79-MQ2NZ

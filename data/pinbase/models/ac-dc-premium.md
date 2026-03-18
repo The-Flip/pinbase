@@ -1,10 +1,11 @@
 ---
-slug: ac-dc-premium
 name: AC/DC (Premium)
 title_slug: ac-dc
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G43W4-MXrPx
 ipdb_id: 5775
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: steve-ritchie
   role: Design

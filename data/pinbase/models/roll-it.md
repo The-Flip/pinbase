@@ -1,5 +1,4 @@
 ---
-slug: roll-it
 name: Roll-It
 title_slug: roll-it
 ipdb_id: 6415

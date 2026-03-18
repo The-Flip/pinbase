@@ -1,5 +1,4 @@
 ---
-slug: top-score
 name: Top Score
 title_slug: 300-top-score
 opdb_id: G5W1w-MQVkq

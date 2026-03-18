@@ -1,5 +1,4 @@
 ---
-slug: pickwick
 name: Pickwick
 title_slug: pickwick
 ipdb_id: 5431

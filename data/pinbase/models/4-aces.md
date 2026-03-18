@@ -1,5 +1,4 @@
 ---
-slug: 4-aces
 name: 4 Aces
 title_slug: 4-aces
 opdb_id: GrqK8-MJdoe

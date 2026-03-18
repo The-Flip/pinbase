@@ -1,5 +1,4 @@
 ---
-slug: social-whirl
 name: Social Whirl
 title_slug: social-whirl
 ipdb_id: 6701

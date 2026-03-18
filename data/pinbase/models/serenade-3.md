@@ -1,5 +1,4 @@
 ---
-slug: serenade-3
 name: Serenade
 title_slug: serenade-3
 opdb_id: GN6YD-MvBNp

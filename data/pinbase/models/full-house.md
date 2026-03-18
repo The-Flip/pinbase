@@ -1,5 +1,4 @@
 ---
-slug: full-house
 name: Full House
 title_slug: full-house-top-hand
 opdb_id: G4EeX-MDl4j

@@ -1,5 +1,4 @@
 ---
-slug: round-up
 name: Round Up
 title_slug: round-up
 opdb_id: G5vKP-M3d8p

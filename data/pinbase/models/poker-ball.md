@@ -1,5 +1,4 @@
 ---
-slug: poker-ball
 name: Poker Ball
 title_slug: poker-ball
 ipdb_id: 4894

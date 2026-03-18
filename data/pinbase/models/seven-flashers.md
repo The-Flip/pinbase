@@ -1,5 +1,4 @@
 ---
-slug: seven-flashers
 name: Seven Flashers
 title_slug: seven-flashers
 ipdb_id: 2101

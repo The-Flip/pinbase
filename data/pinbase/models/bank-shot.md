@@ -1,5 +1,4 @@
 ---
-slug: bank-shot
 name: Bank Shot
 title_slug: bank-shot-sure-shot
 opdb_id: GrqL6-MQ5Rn

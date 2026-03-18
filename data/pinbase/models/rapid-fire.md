@@ -1,5 +1,4 @@
 ---
-slug: rapid-fire
 name: Rapid Fire
 title_slug: rapid-fire
 ipdb_id: 3568

@@ -1,5 +1,4 @@
 ---
-slug: pirates-gold
 name: Pirates Gold
 title_slug: pirates-gold
 ipdb_id: 5351

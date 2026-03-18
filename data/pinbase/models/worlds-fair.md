@@ -1,5 +1,4 @@
 ---
-slug: worlds-fair
 name: World's Fair
 title_slug: worlds-fair
 ipdb_id: 3524

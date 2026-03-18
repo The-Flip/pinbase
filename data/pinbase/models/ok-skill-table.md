@@ -1,5 +1,4 @@
 ---
-slug: ok-skill-table
 name: O.K. Skill Table
 title_slug: ok-skill-table
 ipdb_id: 4209

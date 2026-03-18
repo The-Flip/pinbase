@@ -1,5 +1,4 @@
 ---
-slug: spoofus
 name: Spoofus
 title_slug: spoofus
 ipdb_id: 5457

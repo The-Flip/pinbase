@@ -1,5 +1,4 @@
 ---
-slug: flying-high-2
 name: Flying High
 title_slug: flying-high
 opdb_id: GRbZZ-MJr0r

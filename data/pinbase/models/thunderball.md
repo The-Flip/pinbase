@@ -1,5 +1,4 @@
 ---
-slug: thunderball
 name: Thunderball
 title_slug: thunderball
 opdb_id: G4J3k-MLnnX

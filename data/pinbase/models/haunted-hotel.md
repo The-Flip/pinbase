@@ -1,5 +1,4 @@
 ---
-slug: haunted-hotel
 name: Haunted Hotel
 title_slug: haunted-hotel
 ipdb_id: 5704

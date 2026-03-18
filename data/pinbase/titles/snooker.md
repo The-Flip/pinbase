@@ -1,4 +1,3 @@
 ---
-slug: snooker
 name: Snooker
 ---

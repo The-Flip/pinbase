@@ -1,5 +1,4 @@
 ---
-slug: monicker
 name: Monicker
 title_slug: monicker
 ipdb_id: 1617

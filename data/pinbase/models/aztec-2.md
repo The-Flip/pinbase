@@ -1,5 +1,4 @@
 ---
-slug: aztec-2
 name: Aztec
 title_slug: aztec-2
 ipdb_id: 4828

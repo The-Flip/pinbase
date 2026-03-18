@@ -1,5 +1,4 @@
 ---
-slug: gigi
 name: Gigi
 title_slug: gigi
 opdb_id: G43ek-MQd7N

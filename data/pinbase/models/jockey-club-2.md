@@ -1,5 +1,4 @@
 ---
-slug: jockey-club-2
 name: Jockey Club
 title_slug: jockey-club-3
 ipdb_id: 1300

@@ -1,5 +1,4 @@
 ---
-slug: crusader
 name: Crusader
 title_slug: crusader
 ipdb_id: 607

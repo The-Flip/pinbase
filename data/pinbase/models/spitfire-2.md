@@ -1,5 +1,4 @@
 ---
-slug: spitfire-2
 name: Spitfire
 title_slug: spitfire-2
 ipdb_id: 3728

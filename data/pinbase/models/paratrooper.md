@@ -1,5 +1,4 @@
 ---
-slug: paratrooper
 name: Paratrooper
 title_slug: paratrooper
 opdb_id: GRoj7-Ml91k

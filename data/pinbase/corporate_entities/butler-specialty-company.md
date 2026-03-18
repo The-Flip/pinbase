@@ -1,5 +1,4 @@
 ---
-slug: butler-specialty-company
 name: Butler Specialty Company
 manufacturer_slug: butler-specialty-company
 ipdb_manufacturer_id: 67

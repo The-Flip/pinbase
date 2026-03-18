@@ -1,5 +1,4 @@
 ---
-slug: sea-jockeys
 name: Sea Jockeys
 title_slug: sea-jockeys
 opdb_id: Grl1y-MYeKk

@@ -1,5 +1,4 @@
 ---
-slug: cow-poke
 name: Cow Poke
 title_slug: buckaroo-cow-poke
 opdb_id: GRzow-M9R2d

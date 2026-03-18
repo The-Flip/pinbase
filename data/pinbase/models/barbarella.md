@@ -1,5 +1,4 @@
 ---
-slug: barbarella
 name: Barbarella
 title_slug: barbarella
 ipdb_id: 5809

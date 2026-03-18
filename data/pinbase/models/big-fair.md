@@ -1,5 +1,4 @@
 ---
-slug: big-fair
 name: Big Fair
 title_slug: big-fair
 ipdb_id: 5089

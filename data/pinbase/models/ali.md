@@ -1,5 +1,4 @@
 ---
-slug: ali
 name: Ali
 title_slug: muhammad-ali
 opdb_id: G43kO-MQ50p

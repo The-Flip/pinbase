@@ -1,5 +1,4 @@
 ---
-slug: star-play
 name: Star Play
 title_slug: star-play
 ipdb_id: 2350

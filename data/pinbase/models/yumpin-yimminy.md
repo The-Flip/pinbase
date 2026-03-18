@@ -1,5 +1,4 @@
 ---
-slug: yumpin-yimminy
 name: Yumpin Yimminy
 title_slug: yumpin-yimminy
 ipdb_id: 5052

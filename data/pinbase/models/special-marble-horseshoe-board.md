@@ -1,5 +1,4 @@
 ---
-slug: special-marble-horseshoe-board
 name: Special Marble (Horseshoe Board)
 title_slug: special-marble-horseshoe-board
 ipdb_id: 5980

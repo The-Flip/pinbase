@@ -1,5 +1,4 @@
 ---
-slug: daily-limit
 name: Daily Limit
 title_slug: daily-limit
 ipdb_id: 627

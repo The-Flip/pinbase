@@ -1,5 +1,4 @@
 ---
-slug: kings-queens
 name: Kings & Queens
 title_slug: kings-queens
 opdb_id: G4Ne1-ML3dR

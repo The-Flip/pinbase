@@ -1,5 +1,4 @@
 ---
-slug: pool-sharks
 name: Pool Sharks
 title_slug: pool-sharks
 opdb_id: GR68o-M0o2O

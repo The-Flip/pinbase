@@ -1,5 +1,4 @@
 ---
-slug: summer-time
 name: Summer Time
 title_slug: summer-time
 opdb_id: GJ208-M5R5B

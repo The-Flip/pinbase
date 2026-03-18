@@ -1,5 +1,4 @@
 ---
-slug: lucky-card-2
 name: Lucky Card
 title_slug: lucky-card
 ipdb_id: 5657

@@ -1,5 +1,4 @@
 ---
-slug: les-deux-as
 name: Les Deux As
 title_slug: les-deux-as
 ipdb_id: 6211

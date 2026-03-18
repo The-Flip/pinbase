@@ -1,5 +1,4 @@
 ---
-slug: le-tennis
 name: Le Tennis
 title_slug: le-tennis
 ipdb_id: 6751

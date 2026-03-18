@@ -1,4 +1,3 @@
 ---
-slug: arlington
 name: Arlington
 ---

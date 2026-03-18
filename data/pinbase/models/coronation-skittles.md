@@ -1,5 +1,4 @@
 ---
-slug: coronation-skittles
 name: Coronation Skittles
 title_slug: coronation-skittles
 ipdb_id: 3996

@@ -1,5 +1,4 @@
 ---
-slug: united-amusement-company
 name: United Amusement Company
 manufacturer_slug: united-amusement-company
 ipdb_manufacturer_id: 322

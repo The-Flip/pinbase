@@ -1,5 +1,4 @@
 ---
-slug: all-star-basketball-game
 name: All-Star Basketball Game
 title_slug: all-star-basketball-game
 ipdb_id: 5690

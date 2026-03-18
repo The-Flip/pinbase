@@ -1,5 +1,4 @@
 ---
-slug: bing
 name: Bing
 title_slug: bing
 ipdb_id: 4832

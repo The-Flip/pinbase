@@ -1,5 +1,4 @@
 ---
-slug: speedy
 name: Speedy
 title_slug: speedy
 ipdb_id: 2283

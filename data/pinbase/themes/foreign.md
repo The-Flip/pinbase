@@ -1,4 +1,3 @@
 ---
-slug: foreign
 name: Foreign
 ---

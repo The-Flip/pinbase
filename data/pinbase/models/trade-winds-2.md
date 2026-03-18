@@ -1,5 +1,4 @@
 ---
-slug: trade-winds-2
 name: Trade Winds
 title_slug: trade-winds-3
 ipdb_id: 2620

@@ -1,5 +1,4 @@
 ---
-slug: lucky-twins
 name: Lucky Twins
 title_slug: lucky-twins
 ipdb_id: 4010

@@ -1,5 +1,4 @@
 ---
-slug: safe-cracker
 name: Safe Cracker
 title_slug: safe-cracker
 opdb_id: GRBxq-MJpOP

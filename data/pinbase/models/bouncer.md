@@ -1,5 +1,4 @@
 ---
-slug: bouncer
 name: Bouncer
 title_slug: bouncer
 ipdb_id: 4740

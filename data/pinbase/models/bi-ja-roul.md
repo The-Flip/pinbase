@@ -1,5 +1,4 @@
 ---
-slug: bi-ja-roul
 name: BI-JA-Roul
 title_slug: bi-ja-roul
 ipdb_id: 5539

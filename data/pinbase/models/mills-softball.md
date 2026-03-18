@@ -1,5 +1,4 @@
 ---
-slug: mills-softball
 name: Mills Softball
 title_slug: mills-softball
 ipdb_id: 5773

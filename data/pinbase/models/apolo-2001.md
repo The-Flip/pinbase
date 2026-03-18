@@ -1,5 +1,4 @@
 ---
-slug: apolo-2001
 name: Apolo 2001
 title_slug: apolo-2001
 ipdb_id: 5756

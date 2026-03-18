@@ -1,5 +1,4 @@
 ---
-slug: ice-show-italy
 name: Ice Show (Italy)
 title_slug: ice-show-italy
 ipdb_id: 1263

@@ -1,5 +1,4 @@
 ---
-slug: finance
 name: Finance
 title_slug: finance
 ipdb_id: 3096

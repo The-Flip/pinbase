@@ -1,5 +1,4 @@
 ---
-slug: bang
 name: Bang
 title_slug: bang
 ipdb_id: 166

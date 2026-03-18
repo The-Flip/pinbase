@@ -1,5 +1,4 @@
 ---
-slug: x-men
 name: X-Men
 ---
 

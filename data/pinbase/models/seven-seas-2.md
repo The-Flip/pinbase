@@ -1,5 +1,4 @@
 ---
-slug: seven-seas-2
 name: Seven Seas
 title_slug: seven-seas-2
 ipdb_id: 5091

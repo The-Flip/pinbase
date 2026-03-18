@@ -1,5 +1,4 @@
 ---
-slug: demolition-man
 name: Demolition Man
 ---
 

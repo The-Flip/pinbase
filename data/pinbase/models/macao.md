@@ -1,5 +1,4 @@
 ---
-slug: macao
 name: Macao
 title_slug: macao
 ipdb_id: 3966

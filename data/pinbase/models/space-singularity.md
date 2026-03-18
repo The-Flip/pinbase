@@ -1,5 +1,4 @@
 ---
-slug: space-singularity
 name: Space Singularity
 title_slug: space-singularity
 opdb_id: GD7yB-Ml9ry

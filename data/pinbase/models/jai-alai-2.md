@@ -1,5 +1,4 @@
 ---
-slug: jai-alai-2
 name: Jai Alai
 title_slug: jai-alai-2
 ipdb_id: 3779

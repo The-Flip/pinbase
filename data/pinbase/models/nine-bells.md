@@ -1,5 +1,4 @@
 ---
-slug: nine-bells
 name: Nine Bells
 title_slug: nine-bells
 ipdb_id: 3862

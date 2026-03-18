@@ -1,5 +1,4 @@
 ---
-slug: alamo
 name: Alamo
 title_slug: alamo
 ipdb_id: 41

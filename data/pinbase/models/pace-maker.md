@@ -1,5 +1,4 @@
 ---
-slug: pace-maker
 name: Pace Maker
 title_slug: pace-maker
 ipdb_id: 1734

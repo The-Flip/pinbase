@@ -1,5 +1,4 @@
 ---
-slug: roll-call
 name: Roll Call
 title_slug: roll-call
 ipdb_id: 4789

@@ -1,5 +1,4 @@
 ---
-slug: attention-2
 name: Attention
 title_slug: attention-2
 ipdb_id: 4139

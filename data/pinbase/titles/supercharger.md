@@ -1,4 +1,3 @@
 ---
-slug: supercharger
 name: Supercharger
 ---

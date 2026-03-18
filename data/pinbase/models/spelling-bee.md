@@ -1,5 +1,4 @@
 ---
-slug: spelling-bee
 name: Spelling Bee
 title_slug: spelling-bee
 ipdb_id: 4385

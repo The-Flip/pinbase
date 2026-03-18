@@ -1,5 +1,4 @@
 ---
-slug: star-wars
 name: Star Wars
 title_slug: star-wars-data-east
 opdb_id: G420r-MLedz

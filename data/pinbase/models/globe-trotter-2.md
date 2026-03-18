@@ -1,5 +1,4 @@
 ---
-slug: globe-trotter-2
 name: Globe Trotter
 title_slug: globe-trotter
 opdb_id: G5pqX-MLx3q

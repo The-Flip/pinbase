@@ -1,5 +1,4 @@
 ---
-slug: bingo-whirl
 name: Bingo Whirl
 title_slug: bingo-whirl
 ipdb_id: 300

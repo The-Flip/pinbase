@@ -1,4 +1,3 @@
 ---
-slug: cartoons
 name: Cartoons
 ---

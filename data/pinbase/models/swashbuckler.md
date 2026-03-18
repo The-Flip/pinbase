@@ -1,5 +1,4 @@
 ---
-slug: swashbuckler
 name: Swashbuckler
 title_slug: swashbuckler
 opdb_id: G48yY-M2YzO

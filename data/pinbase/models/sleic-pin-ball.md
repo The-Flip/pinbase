@@ -1,5 +1,4 @@
 ---
-slug: sleic-pin-ball
 name: Sleic Pin-Ball
 title_slug: sleic-pin-ball
 opdb_id: GD7Yl-Mp4zN

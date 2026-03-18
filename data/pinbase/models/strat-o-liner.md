@@ -1,5 +1,4 @@
 ---
-slug: strat-o-liner
 name: Strat-O-Liner
 title_slug: strat-o-liner
 ipdb_id: 2399

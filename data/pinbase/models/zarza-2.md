@@ -1,5 +1,4 @@
 ---
-slug: zarza-2
 name: Zarza
 title_slug: zarza
 ipdb_id: 5922

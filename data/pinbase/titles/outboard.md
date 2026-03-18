@@ -1,4 +1,3 @@
 ---
-slug: outboard
 name: Outboard
 ---

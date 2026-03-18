@@ -1,5 +1,4 @@
 ---
-slug: tommy
 name: Tommy
 title_slug: tommy
 ipdb_id: 5150

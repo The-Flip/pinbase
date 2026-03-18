@@ -1,5 +1,4 @@
 ---
-slug: loop
 name: Loop
 title_slug: loop
 ipdb_id: 1473

@@ -1,5 +1,4 @@
 ---
-slug: handicapper
 name: Handicapper
 title_slug: handicapper
 ipdb_id: 3817

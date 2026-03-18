@@ -1,5 +1,4 @@
 ---
-slug: fantastic-car
 name: Fantastic Car
 title_slug: fantastic-car
 ipdb_id: 5024

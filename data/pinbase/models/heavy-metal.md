@@ -1,5 +1,4 @@
 ---
-slug: heavy-metal
 name: Heavy Metal
 title_slug: heavy-metal-2
 ipdb_id: 5175

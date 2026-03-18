@@ -1,5 +1,4 @@
 ---
-slug: 42nd-street
 name: 42nd Street
 title_slug: 42nd-street
 ipdb_id: 923

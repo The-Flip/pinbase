@@ -1,4 +1,3 @@
 ---
-slug: trapeze
 name: Trapeze
 ---

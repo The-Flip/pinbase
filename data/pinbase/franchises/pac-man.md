@@ -1,5 +1,4 @@
 ---
-slug: pac-man
 name: Pac-Man
 ---
 

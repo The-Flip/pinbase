@@ -1,5 +1,4 @@
 ---
-slug: futbol
 name: Futbol
 title_slug: futbol
 ipdb_id: 5119

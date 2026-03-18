@@ -1,4 +1,3 @@
 ---
-slug: bermuda
 name: Bermuda
 ---

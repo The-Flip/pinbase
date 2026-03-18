@@ -1,5 +1,4 @@
 ---
-slug: roller-catch
 name: Roller Catch
 title_slug: roller-catch
 ipdb_id: 6035

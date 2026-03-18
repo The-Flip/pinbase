@@ -1,5 +1,4 @@
 ---
-slug: pinball-shop
 name: Pinball Shop
 manufacturer_slug: pinball-shop
 ipdb_manufacturer_id: 477

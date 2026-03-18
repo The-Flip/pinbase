@@ -1,4 +1,3 @@
 ---
-slug: midway
 name: Midway
 ---

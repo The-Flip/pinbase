@@ -1,5 +1,4 @@
 ---
-slug: autodart
 name: Autodart
 title_slug: autodart
 ipdb_id: 115

@@ -1,5 +1,4 @@
 ---
-slug: scoreboard-shuffleboard
 name: Scoreboard (Shuffleboard)
 title_slug: scoreboard-shuffleboard
 ipdb_id: 6387

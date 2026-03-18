@@ -1,5 +1,4 @@
 ---
-slug: whirl-pool
 name: Whirl Pool
 title_slug: whirl-pool
 ipdb_id: 2759

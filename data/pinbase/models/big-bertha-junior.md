@@ -1,5 +1,4 @@
 ---
-slug: big-bertha-junior
 name: Big-Bertha (Junior)
 title_slug: big-bertha-junior
 ipdb_id: 5383

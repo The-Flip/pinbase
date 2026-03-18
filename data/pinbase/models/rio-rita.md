@@ -1,5 +1,4 @@
 ---
-slug: rio-rita
 name: Rio Rita
 title_slug: rio-rita
 ipdb_id: 5784

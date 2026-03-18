@@ -1,5 +1,4 @@
 ---
-slug: conquest-200
 name: Conquest 200
 title_slug: new-world-conquest-200
 opdb_id: G4E88-MLEo0

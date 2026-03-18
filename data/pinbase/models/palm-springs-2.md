@@ -1,5 +1,4 @@
 ---
-slug: palm-springs-2
 name: Palm Springs
 title_slug: palm-springs-2
 ipdb_id: 1741

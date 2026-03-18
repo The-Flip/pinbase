@@ -1,5 +1,4 @@
 ---
-slug: twin-tim-buc-too
 name: Twin Tim Buc Too
 title_slug: twin-tim-buc-too
 ipdb_id: 6974

@@ -1,5 +1,4 @@
 ---
-slug: last-action-hero
 name: Last Action Hero
 title_slug: last-action-hero
 opdb_id: GRwyq-MW9lN

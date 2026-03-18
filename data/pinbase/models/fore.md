@@ -1,5 +1,4 @@
 ---
-slug: fore
 name: Fore
 title_slug: fore
 opdb_id: G4k8j-MLO6l

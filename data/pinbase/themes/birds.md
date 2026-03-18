@@ -1,4 +1,3 @@
 ---
-slug: birds
 name: Birds
 ---

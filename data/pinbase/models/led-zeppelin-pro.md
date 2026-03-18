@@ -1,5 +1,4 @@
 ---
-slug: led-zeppelin-pro
 name: Led Zeppelin (Pro)
 title_slug: led-zeppelin
 opdb_id: Gweel-M9Rk0

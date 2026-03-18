@@ -1,5 +1,4 @@
 ---
-slug: batman
 name: Batman
 title_slug: batman-data-east
 opdb_id: GrOpb-MQ7w1

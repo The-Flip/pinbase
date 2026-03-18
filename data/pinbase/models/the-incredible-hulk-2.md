@@ -1,5 +1,4 @@
 ---
-slug: the-incredible-hulk-2
 name: The Incredible Hulk
 title_slug: the-incredible-hulk-2
 ipdb_id: 5350

@@ -1,5 +1,4 @@
 ---
-slug: gold-cup-2
 name: Gold Cup
 title_slug: gold-cup-2
 ipdb_id: 1028

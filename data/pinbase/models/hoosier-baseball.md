@@ -1,5 +1,4 @@
 ---
-slug: hoosier-baseball
 name: Hoosier Baseball
 title_slug: hoosier-baseball
 ipdb_id: 5162

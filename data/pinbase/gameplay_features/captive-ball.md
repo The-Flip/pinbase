@@ -1,5 +1,4 @@
 ---
-slug: captive-ball
 name: Captive Ball
 display_order: 9
 ---

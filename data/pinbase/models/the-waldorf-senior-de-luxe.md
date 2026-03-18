@@ -1,5 +1,4 @@
 ---
-slug: the-waldorf-senior-de-luxe
 name: The Waldorf (Senior De Luxe)
 title_slug: the-waldorf-senior-de-luxe
 ipdb_id: 6818

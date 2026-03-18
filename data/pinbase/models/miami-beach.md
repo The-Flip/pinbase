@@ -1,5 +1,4 @@
 ---
-slug: miami-beach
 name: Miami Beach
 title_slug: miami-beach
 ipdb_id: 1587

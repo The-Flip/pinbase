@@ -1,5 +1,4 @@
 ---
-slug: mary-shelleys-frankenstein
 name: Mary Shelley's Frankenstein
 title_slug: frankenstein
 opdb_id: GRB7E-MP3rR

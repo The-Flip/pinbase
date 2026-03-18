@@ -1,5 +1,4 @@
 ---
-slug: quick-silver
 name: Quick Silver
 title_slug: quick-silver
 ipdb_id: 1894

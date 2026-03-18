@@ -1,5 +1,4 @@
 ---
-slug: basketball-2
 name: Basketball
 title_slug: basketball-3
 ipdb_id: 4669

@@ -1,5 +1,4 @@
 ---
-slug: queens-castle
 name: Queen's Castle
 title_slug: house-of-diamonds
 opdb_id: GRVpL-MLqW3

@@ -1,5 +1,4 @@
 ---
-slug: miss-annabelle
 name: Miss Annabelle
 title_slug: miss-annabelle
 opdb_id: G4JqB-MJK9O

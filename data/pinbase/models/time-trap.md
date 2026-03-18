@@ -1,5 +1,4 @@
 ---
-slug: time-trap
 name: Time Trap
 title_slug: time-trap
 ipdb_id: 6457

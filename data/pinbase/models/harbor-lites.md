@@ -1,5 +1,4 @@
 ---
-slug: harbor-lites
 name: Harbor Lites
 title_slug: blondie
 opdb_id: GRVdN-MLnY4

@@ -1,5 +1,4 @@
 ---
-slug: ufo-electronic-pinball
 name: UFO Electronic Pinball
 title_slug: ufo-electronic-pinball
 ipdb_id: 6150

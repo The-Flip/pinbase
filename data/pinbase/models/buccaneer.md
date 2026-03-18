@@ -1,5 +1,4 @@
 ---
-slug: buccaneer
 name: Buccaneer
 title_slug: buccaneer
 opdb_id: G6lwl-MjBNp

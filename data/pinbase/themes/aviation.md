@@ -1,4 +1,3 @@
 ---
-slug: aviation
 name: Aviation
 ---

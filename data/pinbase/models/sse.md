@@ -1,5 +1,4 @@
 ---
-slug: sse
 name: SSE
 title_slug: sse
 ipdb_id: 6285

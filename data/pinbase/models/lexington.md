@@ -1,5 +1,4 @@
 ---
-slug: lexington
 name: Lexington
 title_slug: lexington
 ipdb_id: 1434

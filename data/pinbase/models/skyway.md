@@ -1,5 +1,4 @@
 ---
-slug: skyway
 name: Skyway
 title_slug: skyway
 opdb_id: G4E1P-MnK7x

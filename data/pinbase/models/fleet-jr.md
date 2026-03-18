@@ -1,5 +1,4 @@
 ---
-slug: fleet-jr
 name: Fleet Jr.
 title_slug: fleet-jr
 ipdb_id: 880

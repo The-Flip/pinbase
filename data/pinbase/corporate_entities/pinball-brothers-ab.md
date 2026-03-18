@@ -1,5 +1,4 @@
 ---
-slug: pinball-brothers-ab
 name: Pinball Brothers AB
 manufacturer_slug: pinball-brothers-ab
 ipdb_manufacturer_id: 767

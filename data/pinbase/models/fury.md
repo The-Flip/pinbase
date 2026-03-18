@@ -1,5 +1,4 @@
 ---
-slug: fury
 name: Fury
 title_slug: fury
 ipdb_id: 3994

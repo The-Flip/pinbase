@@ -1,5 +1,4 @@
 ---
-slug: big-top-mini-pinball
 name: Big Top Mini Pinball
 title_slug: big-top-mini-pinball
 ipdb_id: 3952

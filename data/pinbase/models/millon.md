@@ -1,5 +1,4 @@
 ---
-slug: millon
 name: Millón
 title_slug: millon
 ipdb_id: 6218

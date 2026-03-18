@@ -1,5 +1,4 @@
 ---
-slug: cheetah
 name: Cheetah
 title_slug: cheetah
 opdb_id: GR6kW-Mo1W3

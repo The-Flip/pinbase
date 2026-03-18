@@ -1,5 +1,4 @@
 ---
-slug: stormy
 name: Stormy
 title_slug: stormy-2
 ipdb_id: 2389

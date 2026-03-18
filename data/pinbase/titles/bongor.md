@@ -1,4 +1,3 @@
 ---
-slug: bongor
 name: Bongor
 ---

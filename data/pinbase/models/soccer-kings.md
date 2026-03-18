@@ -1,5 +1,4 @@
 ---
-slug: soccer-kings
 name: Soccer Kings
 title_slug: soccer-kings
 opdb_id: GR0VJ-MDnEy

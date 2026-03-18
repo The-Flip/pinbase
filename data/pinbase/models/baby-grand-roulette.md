@@ -1,5 +1,4 @@
 ---
-slug: baby-grand-roulette
 name: Baby Grand (Roulette)
 title_slug: baby-grand-roulette
 ipdb_id: 2888

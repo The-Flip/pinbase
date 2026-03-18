@@ -1,5 +1,4 @@
 ---
-slug: hot-tip-3
 name: Hot Tip (EM)
 title_slug: hot-tip
 opdb_id: Grep0-MDlv7

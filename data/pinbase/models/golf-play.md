@@ -1,5 +1,4 @@
 ---
-slug: golf-play
 name: Golf Play
 title_slug: golf-play
 ipdb_id: 5812

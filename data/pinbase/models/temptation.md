@@ -1,5 +1,4 @@
 ---
-slug: temptation
 name: Temptation
 title_slug: temptation-2
 opdb_id: GoEz3-MYeOB

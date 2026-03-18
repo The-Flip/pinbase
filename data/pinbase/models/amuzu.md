@@ -1,5 +1,4 @@
 ---
-slug: amuzu
 name: Amuzu
 title_slug: amuzu
 ipdb_id: 6237

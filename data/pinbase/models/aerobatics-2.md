@@ -1,5 +1,4 @@
 ---
-slug: aerobatics-2
 name: Aerobatics
 title_slug: aerobatics-2
 ipdb_id: 6882

@@ -1,5 +1,4 @@
 ---
-slug: blue-grass
 name: Blue Grass
 title_slug: blue-grass
 ipdb_id: 326

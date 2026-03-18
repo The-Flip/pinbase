@@ -1,5 +1,4 @@
 ---
-slug: starship-troopers
 name: Starship Troopers
 title_slug: starship-troopers
 opdb_id: G5we0-MDx6b

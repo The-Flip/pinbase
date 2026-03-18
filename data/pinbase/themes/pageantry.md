@@ -1,4 +1,3 @@
 ---
-slug: pageantry
 name: Pageantry
 ---

@@ -1,5 +1,4 @@
 ---
-slug: monster-bash-remake-classic-edition
 name: Monster Bash (Remake)
 title_slug: monster-bash
 opdb_id: Gr3EW-M3dBn

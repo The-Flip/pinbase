@@ -1,5 +1,4 @@
 ---
-slug: mousin-around
 name: Mousin' Around!
 title_slug: mousin-around
 opdb_id: G43oq-MJp02

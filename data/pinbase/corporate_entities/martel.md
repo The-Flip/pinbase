@@ -1,5 +1,4 @@
 ---
-slug: martel
 name: Martel
 manufacturer_slug: martel
 ipdb_manufacturer_id: 714

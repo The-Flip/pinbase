@@ -1,5 +1,4 @@
 ---
-slug: back-shot
 name: Back-Shot
 title_slug: back-shot
 ipdb_id: 5519

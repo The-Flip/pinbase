@@ -1,5 +1,4 @@
 ---
-slug: black-fever
 name: Black Fever
 title_slug: black-fever-rock-2500
 opdb_id: Grydq-MJNqv

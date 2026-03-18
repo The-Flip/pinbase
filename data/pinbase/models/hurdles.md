@@ -1,5 +1,4 @@
 ---
-slug: hurdles
 name: Hurdles
 title_slug: hurdles
 ipdb_id: 3167

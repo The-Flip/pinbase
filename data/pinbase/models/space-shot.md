@@ -1,5 +1,4 @@
 ---
-slug: space-shot
 name: Space Shot
 title_slug: space-shot
 ipdb_id: 6656

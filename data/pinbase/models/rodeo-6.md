@@ -1,5 +1,4 @@
 ---
-slug: rodeo-6
 name: Rodeo
 title_slug: rodeo-6
 ipdb_id: 6778

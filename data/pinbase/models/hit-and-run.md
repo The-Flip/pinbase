@@ -1,5 +1,4 @@
 ---
-slug: hit-and-run
 name: Hit and Run
 title_slug: hit-and-run
 ipdb_id: 3992

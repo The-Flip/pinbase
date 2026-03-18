@@ -1,4 +1,3 @@
 ---
-slug: energy
 name: Energy
 ---

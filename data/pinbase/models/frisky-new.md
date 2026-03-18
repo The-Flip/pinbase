@@ -1,5 +1,4 @@
 ---
-slug: frisky-new
 name: Frisky (New)
 title_slug: frisky-new
 ipdb_id: 4989

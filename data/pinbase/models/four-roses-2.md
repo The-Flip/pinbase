@@ -1,5 +1,4 @@
 ---
-slug: four-roses-2
 name: Four Roses
 title_slug: four-roses-2
 ipdb_id: 4321

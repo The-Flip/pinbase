@@ -1,4 +1,3 @@
 ---
-slug: cci
 name: CCI
 ---

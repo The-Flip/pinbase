@@ -1,5 +1,4 @@
 ---
-slug: sparky
 name: Sparky
 title_slug: sparky
 ipdb_id: 2268

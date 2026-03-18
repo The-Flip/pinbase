@@ -1,5 +1,4 @@
 ---
-slug: hollywood
 name: Hollywood
 title_slug: cinema-hollywood
 opdb_id: Grj7K-MQj8k

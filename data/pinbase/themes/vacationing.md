@@ -1,4 +1,3 @@
 ---
-slug: vacationing
 name: Vacationing
 ---

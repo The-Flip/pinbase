@@ -1,5 +1,4 @@
 ---
-slug: ambassador
 name: Ambassador
 title_slug: ambassador
 ipdb_id: 4180

@@ -1,5 +1,4 @@
 ---
-slug: harvest-moon
 name: Harvest Moon
 title_slug: harvest-moon
 opdb_id: GyVZ1-Mp49z

@@ -1,5 +1,4 @@
 ---
-slug: hot-spot
 name: Hot Spot
 title_slug: hot-spot
 ipdb_id: 6120

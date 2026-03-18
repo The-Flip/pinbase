@@ -1,5 +1,4 @@
 ---
-slug: kick-out-holes
 name: Kick-Out Holes
 display_order: 10
 ---

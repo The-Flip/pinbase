@@ -1,4 +1,3 @@
 ---
-slug: slammer
 name: Slammer
 ---

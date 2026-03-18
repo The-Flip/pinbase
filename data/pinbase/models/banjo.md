@@ -1,5 +1,4 @@
 ---
-slug: banjo
 name: Banjo
 title_slug: banjo
 opdb_id: G5zOy-MLO1z

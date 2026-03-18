@@ -1,5 +1,4 @@
 ---
-slug: jack-n-jill
 name: Jack 'N Jill
 title_slug: jack-n-jill
 opdb_id: GO0EK-MvBdk

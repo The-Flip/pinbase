@@ -1,5 +1,4 @@
 ---
-slug: sweet-sioux-2
 name: Sweet Sioux
 title_slug: sweet-sioux-2
 ipdb_id: 3415

@@ -1,5 +1,4 @@
 ---
-slug: collins-entertainment-inc
 name: Collins Entertainment, Inc.
 manufacturer_slug: skillpins
 ipdb_manufacturer_id: 697

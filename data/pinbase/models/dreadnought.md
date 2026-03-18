@@ -1,5 +1,4 @@
 ---
-slug: dreadnought
 name: Dreadnought
 title_slug: dreadnought
 ipdb_id: 4005

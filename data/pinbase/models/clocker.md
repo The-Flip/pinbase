@@ -1,5 +1,4 @@
 ---
-slug: clocker
 name: Clocker
 title_slug: clocker
 ipdb_id: 535

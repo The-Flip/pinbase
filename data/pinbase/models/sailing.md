@@ -1,5 +1,4 @@
 ---
-slug: sailing
 name: Sailing
 title_slug: sailing
 ipdb_id: 5072

@@ -1,5 +1,4 @@
 ---
-slug: card-king-2
 name: Card King
 title_slug: card-king
 ipdb_id: 5214

@@ -1,5 +1,4 @@
 ---
-slug: cocktail
 name: Cocktail
 display_order: 4
 ---

@@ -1,5 +1,4 @@
 ---
-slug: vole
 name: Volèe
 title_slug: volley
 opdb_id: G5Q19-MDEy0

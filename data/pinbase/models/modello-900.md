@@ -1,5 +1,4 @@
 ---
-slug: modello-900
 name: Modello 900
 title_slug: modello-900
 ipdb_id: 5683

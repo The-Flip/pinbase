@@ -1,5 +1,4 @@
 ---
-slug: big-brave-2
 name: Big Brave
 title_slug: big-brave
 ipdb_id: 4061

@@ -1,5 +1,4 @@
 ---
-slug: a-maze-ing-baseball
 name: A-MAZE-ING Baseball
 title_slug: a-maze-ing-baseball
 ipdb_id: 4957

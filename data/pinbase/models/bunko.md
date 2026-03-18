@@ -1,5 +1,4 @@
 ---
-slug: bunko
 name: Bunko
 title_slug: bunko
 ipdb_id: 3672

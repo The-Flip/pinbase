@@ -1,5 +1,4 @@
 ---
-slug: roy-clark-super-picker
 name: Roy Clark Super Picker
 title_slug: roy-clark-super-picker
 opdb_id: G4J11-MDXwO

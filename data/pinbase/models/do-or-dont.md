@@ -1,5 +1,4 @@
 ---
-slug: do-or-dont
 name: Do or Don't
 title_slug: do-or-dont
 ipdb_id: 693

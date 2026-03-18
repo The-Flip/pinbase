@@ -1,5 +1,4 @@
 ---
-slug: pitch-and-bat
 name: Pitch and Bat
 display_order: 4
 ---

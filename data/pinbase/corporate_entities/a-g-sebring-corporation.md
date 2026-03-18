@@ -1,5 +1,4 @@
 ---
-slug: a-g-sebring-corporation
 name: A. G. Sebring Corporation
 manufacturer_slug: a-g-sebring-corporation
 ipdb_manufacturer_id: 704

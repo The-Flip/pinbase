@@ -1,5 +1,4 @@
 ---
-slug: synchro
 name: Synchro
 title_slug: synchro
 ipdb_id: 4222

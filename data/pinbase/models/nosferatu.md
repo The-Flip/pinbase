@@ -1,5 +1,4 @@
 ---
-slug: nosferatu
 name: Nosferatu
 title_slug: nosferatu
 opdb_id: GyVzp-Mb5wK

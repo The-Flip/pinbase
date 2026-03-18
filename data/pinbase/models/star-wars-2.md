@@ -1,5 +1,4 @@
 ---
-slug: star-wars-2
 name: Star Wars
 title_slug: star-wars
 opdb_id: G5w67-MDe1k

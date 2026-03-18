@@ -1,5 +1,4 @@
 ---
-slug: shuffle-pool
 name: Shuffle Pool
 title_slug: shuffle-pool
 ipdb_id: 6819

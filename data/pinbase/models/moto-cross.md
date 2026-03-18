@@ -1,5 +1,4 @@
 ---
-slug: moto-cross
 name: Moto Cross
 title_slug: moto-cross
 ipdb_id: 6001

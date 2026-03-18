@@ -1,5 +1,4 @@
 ---
-slug: star-foot
 name: Star Foot
 title_slug: star-foot
 ipdb_id: 4976

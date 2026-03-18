@@ -1,4 +1,3 @@
 ---
-slug: dogs
 name: Dogs
 ---

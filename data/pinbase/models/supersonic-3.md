@@ -1,5 +1,4 @@
 ---
-slug: supersonic-3
 name: Supersonic
 title_slug: supersonic-2
 ipdb_id: 4850

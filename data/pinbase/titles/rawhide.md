@@ -1,4 +1,3 @@
 ---
-slug: rawhide
 name: Rawhide
 ---

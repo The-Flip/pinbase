@@ -1,5 +1,4 @@
 ---
-slug: buffalo-bill
 name: Buffalo Bill
 title_slug: buffalo-bill
 opdb_id: GWyqq-Mq13Y

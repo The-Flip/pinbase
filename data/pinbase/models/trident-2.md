@@ -1,5 +1,4 @@
 ---
-slug: trident-2
 name: Trident
 title_slug: trident-2
 ipdb_id: 6443

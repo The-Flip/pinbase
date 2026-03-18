@@ -1,5 +1,4 @@
 ---
-slug: canasta
 name: Canasta
 title_slug: canasta
 opdb_id: G4lOy-MDXN3

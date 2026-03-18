@@ -1,4 +1,3 @@
 ---
-slug: saloon
 name: Saloon
 ---

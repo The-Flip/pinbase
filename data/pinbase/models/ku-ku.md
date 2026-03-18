@@ -1,5 +1,4 @@
 ---
-slug: ku-ku
 name: Ku-Ku
 title_slug: ku-ku
 ipdb_id: 1398

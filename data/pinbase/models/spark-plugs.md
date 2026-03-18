@@ -1,5 +1,4 @@
 ---
-slug: spark-plugs
 name: Spark Plugs
 title_slug: spark-plugs
 opdb_id: GrEd1-Mx0ny

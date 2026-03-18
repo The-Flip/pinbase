@@ -1,5 +1,4 @@
 ---
-slug: fantasy-jackpot
 name: Fantasy Jackpot
 title_slug: fantasy-jackpot
 ipdb_id: 3092

@@ -1,5 +1,4 @@
 ---
-slug: bang-bang
 name: Bang! Bang!
 title_slug: the-fiery-30s-bang-bang
 opdb_id: GrdnO-MJPn5

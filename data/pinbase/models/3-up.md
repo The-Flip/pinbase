@@ -1,5 +1,4 @@
 ---
-slug: 3-up
 name: 3 UP
 title_slug: 3-up
 ipdb_id: 2547

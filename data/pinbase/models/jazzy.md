@@ -1,5 +1,4 @@
 ---
-slug: jazzy
 name: Jazzy
 title_slug: jazzy
 ipdb_id: 1288

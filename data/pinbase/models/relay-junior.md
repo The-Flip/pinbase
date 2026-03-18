@@ -1,5 +1,4 @@
 ---
-slug: relay-junior
 name: Relay (Junior)
 title_slug: relay-junior
 ipdb_id: 1944

@@ -1,5 +1,4 @@
 ---
-slug: score-champ
 name: Score Champ
 title_slug: score-champ
 ipdb_id: 3549

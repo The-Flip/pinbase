@@ -1,5 +1,4 @@
 ---
-slug: select-a-card
 name: Select-A-Card
 title_slug: select-a-card
 opdb_id: GyVBQ-M9Rny

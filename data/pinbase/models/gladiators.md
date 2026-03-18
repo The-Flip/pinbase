@@ -1,5 +1,4 @@
 ---
-slug: gladiators
 name: Gladiators
 title_slug: gladiators
 opdb_id: G4P9q-MLnOY

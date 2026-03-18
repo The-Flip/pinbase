@@ -1,5 +1,4 @@
 ---
-slug: car-hop
 name: Car Hop
 title_slug: car-hop
 opdb_id: Grd6d-MLR8W

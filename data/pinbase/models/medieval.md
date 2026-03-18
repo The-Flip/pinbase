@@ -1,5 +1,4 @@
 ---
-slug: medieval
 name: Medieval
 title_slug: medieval
 ipdb_id: 6876

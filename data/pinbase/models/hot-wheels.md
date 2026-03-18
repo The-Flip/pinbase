@@ -1,5 +1,4 @@
 ---
-slug: hot-wheels
 name: Hot Wheels
 title_slug: hot-wheels-2
 opdb_id: GrOY9-Mq14V

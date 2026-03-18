@@ -1,5 +1,4 @@
 ---
-slug: rocket-iii-italy
 name: Rocket III (Italy)
 title_slug: rocket-iii-italy
 ipdb_id: 6891

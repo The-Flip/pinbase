@@ -1,5 +1,4 @@
 ---
-slug: jolly-joker-3
 name: Jolly Joker
 title_slug: jolly-joker
 opdb_id: GrlEB-ML0Pz

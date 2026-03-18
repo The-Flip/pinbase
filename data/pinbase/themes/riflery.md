@@ -1,4 +1,3 @@
 ---
-slug: riflery
 name: Riflery
 ---

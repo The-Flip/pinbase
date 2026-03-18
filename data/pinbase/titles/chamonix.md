@@ -1,4 +1,3 @@
 ---
-slug: chamonix
 name: Chamonix
 ---

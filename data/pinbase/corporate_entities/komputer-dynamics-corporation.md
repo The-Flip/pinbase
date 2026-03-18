@@ -1,5 +1,4 @@
 ---
-slug: komputer-dynamics-corporation
 name: Komputer Dynamics Corporation
 manufacturer_slug: komputer-dynamics
 ipdb_manufacturer_id: 179

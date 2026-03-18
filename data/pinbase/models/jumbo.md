@@ -1,5 +1,4 @@
 ---
-slug: jumbo
 name: Jumbo
 title_slug: jumbo
 ipdb_id: 1325

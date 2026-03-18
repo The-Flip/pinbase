@@ -1,5 +1,4 @@
 ---
-slug: cannon-fire-jr
 name: Cannon Fire Jr.
 title_slug: cannon-fire-jr
 ipdb_id: 4970

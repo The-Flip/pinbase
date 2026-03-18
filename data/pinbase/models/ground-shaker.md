@@ -1,5 +1,4 @@
 ---
-slug: ground-shaker
 name: Ground Shaker
 title_slug: ground-shaker
 ipdb_id: 6548

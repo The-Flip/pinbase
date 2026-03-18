@@ -1,5 +1,4 @@
 ---
-slug: bank-a-shot
 name: Bank-A-Shot
 title_slug: bank-a-shot
 ipdb_id: 173

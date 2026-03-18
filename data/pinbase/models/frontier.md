@@ -1,5 +1,4 @@
 ---
-slug: frontier
 name: Frontier
 title_slug: frontier
 opdb_id: GRwjq-MJwrd

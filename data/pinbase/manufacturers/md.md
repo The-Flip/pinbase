@@ -1,4 +1,3 @@
 ---
-slug: md
 name: Md
 ---

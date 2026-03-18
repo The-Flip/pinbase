@@ -1,4 +1,3 @@
 ---
-slug: reflex
 name: Reflex
 ---

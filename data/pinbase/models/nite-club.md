@@ -1,5 +1,4 @@
 ---
-slug: nite-club
 name: Nite Club
 title_slug: nite-club
 ipdb_id: 4792

@@ -1,5 +1,4 @@
 ---
-slug: miami-bar
 name: Miami Bar
 title_slug: miami-bar
 ipdb_id: 3423

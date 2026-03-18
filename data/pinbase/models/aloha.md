@@ -1,5 +1,4 @@
 ---
-slug: aloha
 name: Aloha
 title_slug: aloha
 opdb_id: G4kw7-MDl0Y

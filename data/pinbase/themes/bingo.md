@@ -1,4 +1,3 @@
 ---
-slug: bingo
 name: Bingo
 ---

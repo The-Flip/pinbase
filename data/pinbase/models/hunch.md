@@ -1,5 +1,4 @@
 ---
-slug: hunch
 name: Hunch
 title_slug: hunch
 ipdb_id: 4157

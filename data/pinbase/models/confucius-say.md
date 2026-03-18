@@ -1,5 +1,4 @@
 ---
-slug: confucius-say
 name: Confucius Say
 title_slug: confucius-say
 ipdb_id: 4695

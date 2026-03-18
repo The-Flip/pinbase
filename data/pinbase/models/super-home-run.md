@@ -1,5 +1,4 @@
 ---
-slug: super-home-run
 name: Super Home Run
 title_slug: super-home-run
 ipdb_id: 4897

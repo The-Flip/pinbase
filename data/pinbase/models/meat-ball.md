@@ -1,5 +1,4 @@
 ---
-slug: meat-ball
 name: Meat Ball
 title_slug: meat-ball
 ipdb_id: 3756

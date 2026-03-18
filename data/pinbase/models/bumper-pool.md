@@ -1,5 +1,4 @@
 ---
-slug: bumper-pool
 name: Bumper Pool
 title_slug: target-pool-mini-pool
 opdb_id: GRbWj-MJw1Z

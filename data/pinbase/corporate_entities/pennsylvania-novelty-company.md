@@ -1,5 +1,4 @@
 ---
-slug: pennsylvania-novelty-company
 name: Pennsylvania Novelty Company
 manufacturer_slug: pennsylvania-novelty-company
 ipdb_manufacturer_id: 246

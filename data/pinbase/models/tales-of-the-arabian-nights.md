@@ -1,5 +1,4 @@
 ---
-slug: tales-of-the-arabian-nights
 name: Tales of the Arabian Nights
 title_slug: tales-of-the-arabian-nights
 opdb_id: G4llj-MQYb2

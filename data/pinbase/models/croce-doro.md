@@ -1,5 +1,4 @@
 ---
-slug: croce-doro
 name: Croce D'Oro
 title_slug: croce-doro
 ipdb_id: 5865

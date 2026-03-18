@@ -1,5 +1,4 @@
 ---
-slug: short-sox
 name: Short-Sox
 title_slug: short-sox
 ipdb_id: 2127

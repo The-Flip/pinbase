@@ -1,5 +1,4 @@
 ---
-slug: treasure-pirate
 name: Treasure Pirate
 title_slug: treasure-pirate
 ipdb_id: 4264

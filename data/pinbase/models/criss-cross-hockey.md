@@ -1,5 +1,4 @@
 ---
-slug: criss-cross-hockey
 name: Criss Cross Hockey
 title_slug: criss-cross-hockey
 ipdb_id: 7001

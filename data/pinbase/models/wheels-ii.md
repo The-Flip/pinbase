@@ -1,5 +1,4 @@
 ---
-slug: wheels-ii
 name: Wheels II
 title_slug: wheels-ii
 ipdb_id: 3559

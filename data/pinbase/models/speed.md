@@ -1,5 +1,4 @@
 ---
-slug: speed
 name: Speed
 title_slug: speed
 ipdb_id: 2275

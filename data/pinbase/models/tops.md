@@ -1,5 +1,4 @@
 ---
-slug: tops
 name: Tops
 title_slug: tops
 ipdb_id: 2594

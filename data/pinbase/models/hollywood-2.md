@@ -1,5 +1,4 @@
 ---
-slug: hollywood-2
 name: Hollywood
 title_slug: hollywood
 opdb_id: G5WW0-MOEXr

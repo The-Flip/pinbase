@@ -1,5 +1,4 @@
 ---
-slug: action-baseball
 name: Action Baseball
 title_slug: action-baseball
 ipdb_id: 14

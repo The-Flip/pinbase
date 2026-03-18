@@ -1,4 +1,3 @@
 ---
-slug: spacelab
 name: Spacelab
 ---

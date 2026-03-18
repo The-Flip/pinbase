@@ -1,5 +1,4 @@
 ---
-slug: showdown-2
 name: Showdown
 title_slug: showdown-2
 ipdb_id: 5402

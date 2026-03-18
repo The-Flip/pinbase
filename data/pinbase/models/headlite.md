@@ -1,5 +1,4 @@
 ---
-slug: headlite
 name: Headlite
 title_slug: headlite
 ipdb_id: 4274

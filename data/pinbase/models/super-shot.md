@@ -1,5 +1,4 @@
 ---
-slug: super-shot
 name: Super Shot
 title_slug: super-shot
 ipdb_id: 6151

@@ -1,5 +1,4 @@
 ---
-slug: 15pool
 name: 15 Pool
 title_slug: bank-shot-sure-shot
 opdb_id: GrqL6-MLy7l

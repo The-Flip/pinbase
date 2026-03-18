@@ -1,5 +1,4 @@
 ---
-slug: lot-o-fun
 name: Lot-O-Fun
 title_slug: lot-o-fun
 ipdb_id: 1477

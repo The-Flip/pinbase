@@ -1,4 +1,3 @@
 ---
-slug: operetta
 name: Operetta
 ---

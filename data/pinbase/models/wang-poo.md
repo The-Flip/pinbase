@@ -1,5 +1,4 @@
 ---
-slug: wang-poo
 name: Wang Poo
 title_slug: wang-poo
 ipdb_id: 2752

@@ -1,5 +1,4 @@
 ---
-slug: cosmic-flash-2
 name: Cosmic Flash
 title_slug: cosmic-flash
 opdb_id: G5pxD-MBRWW

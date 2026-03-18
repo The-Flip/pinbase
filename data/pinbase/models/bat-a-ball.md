@@ -1,5 +1,4 @@
 ---
-slug: bat-a-ball
 name: Bat-A-Ball
 title_slug: bat-a-ball
 ipdb_id: 6022

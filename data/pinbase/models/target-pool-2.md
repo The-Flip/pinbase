@@ -1,5 +1,4 @@
 ---
-slug: target-pool-2
 name: Target Pool
 title_slug: target-pool
 ipdb_id: 5318

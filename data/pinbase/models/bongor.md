@@ -1,5 +1,4 @@
 ---
-slug: bongor
 name: Bongor
 title_slug: bongor
 ipdb_id: 5713

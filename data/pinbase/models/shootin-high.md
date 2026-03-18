@@ -1,5 +1,4 @@
 ---
-slug: shootin-high
 name: Shootin-High
 title_slug: shootin-high
 ipdb_id: 4946

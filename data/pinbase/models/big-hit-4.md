@@ -1,5 +1,4 @@
 ---
-slug: big-hit-4
 name: Big Hit
 title_slug: big-hit-4
 ipdb_id: 254

@@ -1,5 +1,4 @@
 ---
-slug: spin-out-2
 name: Spin Out
 title_slug: spin-out-2
 ipdb_id: 5801

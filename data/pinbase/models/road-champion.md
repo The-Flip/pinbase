@@ -1,5 +1,4 @@
 ---
-slug: road-champion
 name: Road Champion
 title_slug: road-champion
 ipdb_id: 4395

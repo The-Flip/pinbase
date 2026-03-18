@@ -1,5 +1,4 @@
 ---
-slug: bambino
 name: Bambino
 title_slug: bambino
 ipdb_id: 160

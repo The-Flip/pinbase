@@ -1,5 +1,4 @@
 ---
-slug: colors
 name: Colors
 title_slug: colors
 opdb_id: G5b0Z-MLOKw

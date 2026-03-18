@@ -1,10 +1,11 @@
 ---
-slug: jack-bot
 name: Jack*Bot
 title_slug: jack-bot
 corporate_entity_slug: williams-electronics-games-incorporated-a-subsidiary-of-wms-industries-incorporated
 opdb_id: GRKOX-MLyrW
 ipdb_id: 3619
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: barry-oursler
   role: Design

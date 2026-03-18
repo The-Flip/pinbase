@@ -1,5 +1,4 @@
 ---
-slug: bagatelle-and-baseball
 name: Bagatelle And Baseball
 title_slug: bagatelle-and-baseball
 ipdb_id: 6365

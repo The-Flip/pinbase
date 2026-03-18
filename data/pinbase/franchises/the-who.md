@@ -1,5 +1,4 @@
 ---
-slug: the-who
 name: The Who
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: magic-clock
 name: Magic Clock
 title_slug: magic-clock
 opdb_id: GRBwX-M2YYe

@@ -1,5 +1,4 @@
 ---
-slug: flying-circus
 name: Flying Circus
 title_slug: flying-circus
 opdb_id: G41Y6-MDePR

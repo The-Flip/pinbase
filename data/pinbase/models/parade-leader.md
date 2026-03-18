@@ -1,5 +1,4 @@
 ---
-slug: parade-leader
 name: Parade Leader
 title_slug: parade-leader
 ipdb_id: 3864

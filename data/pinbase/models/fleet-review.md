@@ -1,5 +1,4 @@
 ---
-slug: fleet-review
 name: Fleet Review
 title_slug: fleet-review
 ipdb_id: 879

@@ -1,5 +1,4 @@
 ---
-slug: free-play
 name: Free Play
 title_slug: free-play
 ipdb_id: 3112

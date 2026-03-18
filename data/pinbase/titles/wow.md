@@ -1,4 +1,3 @@
 ---
-slug: wow
 name: '!WOW!'
 ---

@@ -1,5 +1,4 @@
 ---
-slug: bowling-league
 name: Bowling League
 title_slug: bowling-league
 ipdb_id: 366

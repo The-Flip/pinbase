@@ -1,5 +1,4 @@
 ---
-slug: darby
 name: Darby
 title_slug: darby
 ipdb_id: 637

@@ -1,5 +1,4 @@
 ---
-slug: shooting-the-rapids
 name: Shooting the Rapids
 title_slug: shooting-the-rapids
 opdb_id: G41oq-MQVR1

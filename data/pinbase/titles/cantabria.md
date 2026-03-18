@@ -1,4 +1,3 @@
 ---
-slug: cantabria
 name: Cantabria
 ---

@@ -1,4 +1,3 @@
 ---
-slug: president
 name: President
 ---

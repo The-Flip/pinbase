@@ -1,5 +1,4 @@
 ---
-slug: topaz
 name: Topaz
 title_slug: topaz
 opdb_id: G5n1e-MQjlv

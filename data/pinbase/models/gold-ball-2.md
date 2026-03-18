@@ -1,5 +1,4 @@
 ---
-slug: gold-ball-2
 name: Gold Ball
 title_slug: gold-ball
 opdb_id: Grjlx-MQkz3

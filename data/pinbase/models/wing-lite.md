@@ -1,5 +1,4 @@
 ---
-slug: wing-lite
 name: Wing Lite
 title_slug: wing-lite
 ipdb_id: 2789

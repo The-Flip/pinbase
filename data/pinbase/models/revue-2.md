@@ -1,5 +1,4 @@
 ---
-slug: revue-2
 name: Revue
 title_slug: revue-2
 ipdb_id: 3899

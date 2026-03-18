@@ -1,5 +1,4 @@
 ---
-slug: saturn
 name: Saturn
 title_slug: saturn
 opdb_id: G41bD-MQK0k

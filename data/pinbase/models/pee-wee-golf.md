@@ -1,5 +1,4 @@
 ---
-slug: pee-wee-golf
 name: Pee Wee Golf
 title_slug: pee-wee-golf
 ipdb_id: 3778

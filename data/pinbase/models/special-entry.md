@@ -1,5 +1,4 @@
 ---
-slug: special-entry
 name: Special Entry
 title_slug: special-entry
 ipdb_id: 2271

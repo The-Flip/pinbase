@@ -1,5 +1,4 @@
 ---
-slug: the-jetsons-regular-edition
 name: The Jetsons
 title_slug: the-jetsons
 opdb_id: GweVl-Mb5lx

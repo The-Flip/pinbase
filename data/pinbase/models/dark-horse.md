@@ -1,5 +1,4 @@
 ---
-slug: dark-horse
 name: Dark Horse
 title_slug: dark-horse
 ipdb_id: 638

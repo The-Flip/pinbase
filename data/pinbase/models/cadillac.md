@@ -1,5 +1,4 @@
 ---
-slug: cadillac
 name: Cadillac
 title_slug: cadillac
 ipdb_id: 420

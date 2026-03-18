@@ -1,5 +1,4 @@
 ---
-slug: montana-baby-usa
 name: Montana Baby USA
 title_slug: montana-baby-usa
 ipdb_id: 5875

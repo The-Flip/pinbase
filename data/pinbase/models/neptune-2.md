@@ -1,5 +1,4 @@
 ---
-slug: neptune-2
 name: Neptune
 title_slug: hit-the-deck-neptune
 opdb_id: GRoWo-MDllp

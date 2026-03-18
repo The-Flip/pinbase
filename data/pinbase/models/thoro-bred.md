@@ -1,5 +1,4 @@
 ---
-slug: thoro-bred
 name: Thoro-Bred
 title_slug: thoro-bred
 opdb_id: G4Zdx-Mb56j

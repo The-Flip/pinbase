@@ -1,5 +1,4 @@
 ---
-slug: sweet-sue
 name: Sweet Sue
 title_slug: sweet-sue
 ipdb_id: 2476

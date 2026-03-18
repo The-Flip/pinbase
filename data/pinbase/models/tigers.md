@@ -1,5 +1,4 @@
 ---
-slug: tigers
 name: Tigers
 title_slug: tigers
 ipdb_id: 3495

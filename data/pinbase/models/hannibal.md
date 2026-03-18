@@ -1,5 +1,4 @@
 ---
-slug: hannibal
 name: Hannibal
 title_slug: hannibal
 ipdb_id: 5336

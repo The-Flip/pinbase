@@ -1,5 +1,4 @@
 ---
-slug: bubbles
 name: Bubbles
 title_slug: bubbles
 ipdb_id: 3963

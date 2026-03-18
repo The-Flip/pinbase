@@ -1,5 +1,4 @@
 ---
-slug: magic-dixieland
 name: Magic-Dixieland
 title_slug: magic-dixieland
 ipdb_id: 6140

@@ -1,5 +1,4 @@
 ---
-slug: vampiro
 name: Vampiro
 title_slug: vampiro
 ipdb_id: 7051

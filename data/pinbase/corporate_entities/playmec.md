@@ -1,5 +1,4 @@
 ---
-slug: playmec
 name: Playmec
 manufacturer_slug: playmec
 ipdb_manufacturer_id: 256

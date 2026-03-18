@@ -1,5 +1,4 @@
 ---
-slug: golden-cue
 name: Golden Cue
 title_slug: golden-cue
 opdb_id: GRYzo-MP3p7

@@ -1,5 +1,4 @@
 ---
-slug: cyclops
 name: Cyclops
 title_slug: cyclops
 ipdb_id: 3698

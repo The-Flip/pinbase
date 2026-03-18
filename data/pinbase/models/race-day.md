@@ -1,5 +1,4 @@
 ---
-slug: race-day
 name: Race Day
 title_slug: race-day
 ipdb_id: 5365

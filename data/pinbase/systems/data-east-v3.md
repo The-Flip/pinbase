@@ -1,5 +1,4 @@
 ---
-slug: data-east-v3
 name: Data East/Sega Version 3
 manufacturer_slug: data-east
 technology_subgeneration_slug: ss-integrated

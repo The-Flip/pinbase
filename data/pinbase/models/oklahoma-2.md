@@ -1,5 +1,4 @@
 ---
-slug: oklahoma-2
 name: Oklahoma
 title_slug: oklahoma
 opdb_id: GR9nl-MdEZB

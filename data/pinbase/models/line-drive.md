@@ -1,5 +1,4 @@
 ---
-slug: line-drive
 name: Line Drive
 title_slug: line-drive
 ipdb_id: 1447

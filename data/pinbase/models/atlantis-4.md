@@ -1,5 +1,4 @@
 ---
-slug: atlantis-4
 name: Atlantis
 title_slug: atlantis-4
 ipdb_id: 6712

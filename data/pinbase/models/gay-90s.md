@@ -1,5 +1,4 @@
 ---
-slug: gay-90s
 name: Gay 90's
 title_slug: gay-90s
 opdb_id: Gr88w-MQPp9

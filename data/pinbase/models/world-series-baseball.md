@@ -1,5 +1,4 @@
 ---
-slug: world-series-baseball
 name: World Series Baseball
 title_slug: world-series-baseball
 ipdb_id: 2816

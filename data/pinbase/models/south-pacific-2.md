@@ -1,5 +1,4 @@
 ---
-slug: south-pacific-2
 name: South Pacific
 title_slug: mercury-rocket
 opdb_id: Gr1JJ-MDEXl

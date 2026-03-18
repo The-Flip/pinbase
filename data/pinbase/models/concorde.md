@@ -1,5 +1,4 @@
 ---
-slug: concorde
 name: Concorde
 title_slug: concorde
 ipdb_id: 4679

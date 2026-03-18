@@ -1,5 +1,4 @@
 ---
-slug: major-league
 name: Major League
 title_slug: major-league
 ipdb_id: 1525

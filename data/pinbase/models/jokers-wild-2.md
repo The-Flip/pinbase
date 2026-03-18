@@ -1,5 +1,4 @@
 ---
-slug: jokers-wild-2
 name: Joker's Wild
 title_slug: jokers-wild-3
 ipdb_id: 3181

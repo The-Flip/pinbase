@@ -1,4 +1,3 @@
 ---
-slug: dingbat
 name: Dingbat
 ---

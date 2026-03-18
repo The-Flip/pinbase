@@ -1,4 +1,3 @@
 ---
-slug: proposta
 name: Proposta
 ---

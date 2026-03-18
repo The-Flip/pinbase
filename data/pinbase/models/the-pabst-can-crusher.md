@@ -1,5 +1,4 @@
 ---
-slug: the-pabst-can-crusher
 name: Pabst Can Crusher
 title_slug: pabst-blue-ribbon
 opdb_id: GRYX4-MRjVP

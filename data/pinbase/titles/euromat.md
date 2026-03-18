@@ -1,4 +1,3 @@
 ---
-slug: euromat
 name: Euromat
 ---

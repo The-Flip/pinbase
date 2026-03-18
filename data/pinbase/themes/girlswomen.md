@@ -1,4 +1,3 @@
 ---
-slug: girlswomen
 name: Girlswomen
 ---

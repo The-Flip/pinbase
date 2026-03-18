@@ -1,5 +1,4 @@
 ---
-slug: smoky
 name: Smoky
 title_slug: smoky
 ipdb_id: 2219

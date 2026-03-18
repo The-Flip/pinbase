@@ -1,4 +1,3 @@
 ---
-slug: earthquake
 name: Earthquake
 ---

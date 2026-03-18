@@ -1,5 +1,4 @@
 ---
-slug: gay-time-2
 name: Gay Time
 title_slug: gay-time-2
 ipdb_id: 3117

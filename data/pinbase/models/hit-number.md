@@ -1,5 +1,4 @@
 ---
-slug: hit-number
 name: Hit Number
 title_slug: hit-number
 ipdb_id: 1196

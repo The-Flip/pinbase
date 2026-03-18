@@ -1,5 +1,4 @@
 ---
-slug: cannon-fire
 name: Cannon Fire
 title_slug: cannon-fire
 ipdb_id: 429

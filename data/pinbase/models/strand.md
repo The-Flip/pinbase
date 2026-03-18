@@ -1,5 +1,4 @@
 ---
-slug: strand
 name: Strand
 title_slug: strand
 ipdb_id: 2395

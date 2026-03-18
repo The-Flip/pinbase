@@ -1,5 +1,4 @@
 ---
-slug: looney-tunes
 name: Looney Tunes
 ---
 

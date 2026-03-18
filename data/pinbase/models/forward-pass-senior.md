@@ -1,5 +1,4 @@
 ---
-slug: forward-pass-senior
 name: Forward Pass (Senior)
 title_slug: forward-pass-senior
 ipdb_id: 4960

@@ -1,5 +1,4 @@
 ---
-slug: high-roller-casino
 name: High Roller Casino
 title_slug: high-roller-casino
 opdb_id: G4JZ4-ML0pL

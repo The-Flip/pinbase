@@ -1,4 +1,3 @@
 ---
-slug: landmarks
 name: Landmarks
 ---

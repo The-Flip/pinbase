@@ -1,5 +1,4 @@
 ---
-slug: fabulous-fantasies
 name: Fabulous Fantasies
 manufacturer_slug: fabulous-fantasies
 ipdb_manufacturer_id: 510

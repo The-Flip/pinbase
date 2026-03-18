@@ -1,5 +1,4 @@
 ---
-slug: jim-hensons-labyrinth
 name: Jim Henson's Labyrinth
 title_slug: jim-hensons-labyrinth
 opdb_id: GvBn8-Mz291

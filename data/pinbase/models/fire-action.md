@@ -1,5 +1,4 @@
 ---
-slug: fire-action
 name: Fire Action
 title_slug: firepower
 opdb_id: G5VDd-MJpqO-A1WVv

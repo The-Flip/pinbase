@@ -1,5 +1,4 @@
 ---
-slug: mar-blette
 name: Mar-blette
 title_slug: mar-blette
 ipdb_id: 4852

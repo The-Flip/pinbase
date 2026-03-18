@@ -1,5 +1,4 @@
 ---
-slug: rollercoaster-tycoon
 name: RollerCoaster Tycoon
 title_slug: rollercoaster-tycoon
 opdb_id: Grybw-M5R0n

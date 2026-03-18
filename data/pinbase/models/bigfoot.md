@@ -1,5 +1,4 @@
 ---
-slug: bigfoot
 name: Big Foot
 title_slug: big-foot
 opdb_id: GR7qv-MQk31

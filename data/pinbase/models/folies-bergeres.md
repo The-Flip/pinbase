@@ -1,5 +1,4 @@
 ---
-slug: folies-bergeres
 name: Folies Bergeres
 title_slug: folies-bergeres
 ipdb_id: 3105

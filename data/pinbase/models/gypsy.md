@@ -1,5 +1,4 @@
 ---
-slug: gypsy
 name: Gypsy
 title_slug: gypsy
 ipdb_id: 5958

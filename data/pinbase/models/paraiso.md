@@ -1,5 +1,4 @@
 ---
-slug: paraiso
 name: Paraiso
 title_slug: paraiso
 ipdb_id: 4363

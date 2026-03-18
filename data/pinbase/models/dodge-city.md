@@ -1,5 +1,4 @@
 ---
-slug: dodge-city
 name: Dodge City
 title_slug: dodge-city
 opdb_id: GrJen-MQ4l6

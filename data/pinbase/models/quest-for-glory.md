@@ -1,5 +1,4 @@
 ---
-slug: quest-for-glory
 name: Quest for Glory
 title_slug: quest-for-glory
 opdb_id: GnPPx-M5R94

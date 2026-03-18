@@ -1,5 +1,4 @@
 ---
-slug: whoopee-game-2
 name: Whoopee Game
 title_slug: whoopee-game-2
 ipdb_id: 5797

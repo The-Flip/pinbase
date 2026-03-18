@@ -1,5 +1,4 @@
 ---
-slug: 7-up
 name: 7-Up
 title_slug: 7-up
 ipdb_id: 4433

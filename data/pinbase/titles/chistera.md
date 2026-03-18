@@ -1,4 +1,3 @@
 ---
-slug: chistera
 name: Chistera
 ---

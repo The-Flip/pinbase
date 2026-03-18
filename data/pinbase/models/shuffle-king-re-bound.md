@@ -1,5 +1,4 @@
 ---
-slug: shuffle-king-re-bound
 name: Shuffle-King Re-bound
 title_slug: shuffle-king-re-bound
 ipdb_id: 3576

@@ -1,5 +1,4 @@
 ---
-slug: beacon
 name: Beacon
 title_slug: beacon
 ipdb_id: 208

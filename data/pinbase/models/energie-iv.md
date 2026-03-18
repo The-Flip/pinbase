@@ -1,5 +1,4 @@
 ---
-slug: energie-iv
 name: Energie IV
 title_slug: energie-iv
 ipdb_id: 6004

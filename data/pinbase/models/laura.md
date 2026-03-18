@@ -1,5 +1,4 @@
 ---
-slug: laura
 name: Laura
 title_slug: laura
 ipdb_id: 1418

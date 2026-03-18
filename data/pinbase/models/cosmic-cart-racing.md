@@ -1,5 +1,4 @@
 ---
-slug: cosmic-cart-racing
 name: Cosmic Cart Racing
 title_slug: cosmic-cart-racing
 opdb_id: GPBB9-M5R9v

@@ -1,5 +1,4 @@
 ---
-slug: pol-roger
 name: Pol Roger
 title_slug: pol-roger
 ipdb_id: 4216

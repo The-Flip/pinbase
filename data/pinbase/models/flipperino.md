@@ -1,5 +1,4 @@
 ---
-slug: flipperino
 name: Flipperino
 title_slug: flipperino
 ipdb_id: 5871

@@ -1,5 +1,4 @@
 ---
-slug: sharpshooter-2
 name: Sharpshooter
 title_slug: sharpshooter
 opdb_id: Gr37O-MePr0

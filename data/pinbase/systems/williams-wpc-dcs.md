@@ -1,5 +1,4 @@
 ---
-slug: williams-wpc-dcs
 name: Williams WPC-DCS
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-integrated

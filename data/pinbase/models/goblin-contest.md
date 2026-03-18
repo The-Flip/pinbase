@@ -1,5 +1,4 @@
 ---
-slug: goblin-contest
 name: Goblin Contest
 title_slug: goblin-contest
 ipdb_id: 6848

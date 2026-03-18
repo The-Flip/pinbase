@@ -1,5 +1,4 @@
 ---
-slug: preview
 name: Preview
 title_slug: preview
 opdb_id: G5wXJ-MJ54V

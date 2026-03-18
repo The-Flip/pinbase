@@ -1,5 +1,4 @@
 ---
-slug: operation-thunder
 name: 'Operation: Thunder'
 title_slug: operation-thunder
 opdb_id: Gr3Lq-MJZo5

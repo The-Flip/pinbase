@@ -1,4 +1,3 @@
 ---
-slug: chingy
 name: Chingy
 ---

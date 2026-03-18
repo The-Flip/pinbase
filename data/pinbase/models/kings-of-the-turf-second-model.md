@@ -1,5 +1,4 @@
 ---
-slug: kings-of-the-turf-second-model
 name: Kings of the Turf (Second Model)
 title_slug: kings-of-the-turf-second-model
 ipdb_id: 4237

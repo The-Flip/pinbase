@@ -1,5 +1,4 @@
 ---
-slug: teachers-pet
 name: Teacher's Pet
 opdb_group_id: G5wpD
 ---

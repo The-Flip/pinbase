@@ -1,5 +1,4 @@
 ---
-slug: card-whiz
 name: Card Whiz
 title_slug: royal-flush-card-whiz
 opdb_id: GrEWx-MQPPX

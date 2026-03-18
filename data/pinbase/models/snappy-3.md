@@ -1,5 +1,4 @@
 ---
-slug: snappy-3
 name: Snappy
 title_slug: snappy-3
 ipdb_id: 2223

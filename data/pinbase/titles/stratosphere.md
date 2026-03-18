@@ -1,4 +1,3 @@
 ---
-slug: stratosphere
 name: Stratosphere
 ---

@@ -1,5 +1,4 @@
 ---
-slug: gold-crown
 name: Gold Crown
 title_slug: gold-crown
 ipdb_id: 1026

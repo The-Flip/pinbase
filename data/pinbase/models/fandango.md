@@ -1,5 +1,4 @@
 ---
-slug: fandango
 name: Fandango
 title_slug: fiesta-fandango
 opdb_id: Gr1VD-MDRNP

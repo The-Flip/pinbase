@@ -1,4 +1,3 @@
 ---
-slug: water
 name: Water
 ---

@@ -1,5 +1,4 @@
 ---
-slug: victory-ball
 name: Victory Ball
 title_slug: victory-ball
 ipdb_id: 2734

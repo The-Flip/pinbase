@@ -1,5 +1,4 @@
 ---
-slug: target-roll
 name: Target Roll
 title_slug: target-roll
 ipdb_id: 2503

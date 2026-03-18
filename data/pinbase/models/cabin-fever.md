@@ -1,5 +1,4 @@
 ---
-slug: cabin-fever
 name: Cabin Fever
 title_slug: cabin-fever
 ipdb_id: 5186

@@ -1,5 +1,4 @@
 ---
-slug: winchester-mystery-house
 name: Winchester Mystery House
 title_slug: winchester-mystery-house
 opdb_id: GvBzO-Mz2r7

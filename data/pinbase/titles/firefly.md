@@ -1,4 +1,3 @@
 ---
-slug: firefly
 name: Firefly
 ---

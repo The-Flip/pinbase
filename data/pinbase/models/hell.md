@@ -1,5 +1,4 @@
 ---
-slug: hell
 name: Hell
 title_slug: hell
 opdb_id: G2LEp-MZeYx

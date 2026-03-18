@@ -1,5 +1,4 @@
 ---
-slug: hustler
 name: Hustler
 title_slug: hustler
 opdb_id: Gpeb0-Mx0R8

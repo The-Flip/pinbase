@@ -1,4 +1,3 @@
 ---
-slug: startime
 name: Startime
 ---

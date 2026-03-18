@@ -1,5 +1,4 @@
 ---
-slug: spot-bowler
 name: Spot Bowler
 title_slug: spot-bowler
 opdb_id: G5D0d-MJZVO

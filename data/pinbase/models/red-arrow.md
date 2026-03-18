@@ -1,5 +1,4 @@
 ---
-slug: red-arrow
 name: Red Arrow
 title_slug: red-arrow
 ipdb_id: 1930

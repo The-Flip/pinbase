@@ -1,5 +1,4 @@
 ---
-slug: duette
 name: Duette
 title_slug: duette
 opdb_id: G5vyl-MLW1x

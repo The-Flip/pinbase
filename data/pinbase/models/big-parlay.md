@@ -1,5 +1,4 @@
 ---
-slug: big-parlay
 name: Big Parlay
 title_slug: big-parlay
 ipdb_id: 267

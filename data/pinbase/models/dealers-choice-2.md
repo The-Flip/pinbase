@@ -1,5 +1,4 @@
 ---
-slug: dealers-choice-2
 name: Dealer's Choice
 title_slug: dealers-choice-lucky-ace-high-ace
 opdb_id: GRwW9-MDbo7

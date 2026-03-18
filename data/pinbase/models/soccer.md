@@ -1,5 +1,4 @@
 ---
-slug: soccer
 name: Soccer
 title_slug: soccer
 opdb_id: GRoJk-MQk40

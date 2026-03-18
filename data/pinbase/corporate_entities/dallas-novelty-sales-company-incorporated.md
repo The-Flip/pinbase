@@ -1,5 +1,4 @@
 ---
-slug: dallas-novelty-sales-company-incorporated
 name: Dallas Novelty Sales Company Incorporated
 manufacturer_slug: dallas-novelty-sales-company-incorporated
 ipdb_manufacturer_id: 96

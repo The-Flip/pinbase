@@ -1,5 +1,4 @@
 ---
-slug: alabama-crimson-tide
 name: Alabama Crimson Tide
 title_slug: alabama-crimson-tide
 ipdb_id: 4998

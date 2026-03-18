@@ -1,5 +1,4 @@
 ---
-slug: yo-ho-senior
 name: Yo-Ho (Senior)
 title_slug: yo-ho-senior
 ipdb_id: 4839

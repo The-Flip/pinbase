@@ -1,5 +1,4 @@
 ---
-slug: pippin
 name: Pippin
 title_slug: pippin
 ipdb_id: 1803

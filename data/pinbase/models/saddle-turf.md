@@ -1,5 +1,4 @@
 ---
-slug: saddle-turf
 name: Saddle & Turf
 title_slug: saddle-turf
 ipdb_id: 5302

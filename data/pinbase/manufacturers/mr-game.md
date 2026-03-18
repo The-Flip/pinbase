@@ -1,5 +1,4 @@
 ---
-slug: mr-game
 name: Mr. Game
 opdb_manufacturer_id: 28
 ---

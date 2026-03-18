@@ -1,5 +1,4 @@
 ---
-slug: big-chief
 name: Big Chief
 title_slug: big-chief
 opdb_id: Gr2VB-MdEVE

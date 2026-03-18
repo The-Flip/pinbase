@@ -1,5 +1,4 @@
 ---
-slug: beach-beauty
 name: Beach Beauty
 title_slug: beach-beauty
 ipdb_id: 3598

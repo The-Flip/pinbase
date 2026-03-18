@@ -1,5 +1,4 @@
 ---
-slug: speakeasy-4
 name: Speakeasy 4
 title_slug: speakeasy-4
 ipdb_id: 4342

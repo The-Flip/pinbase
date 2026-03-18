@@ -1,5 +1,4 @@
 ---
-slug: brooks-dunn
 name: Brooks & Dunn
 title_slug: brooks-dunn
 ipdb_id: 4008

@@ -1,5 +1,4 @@
 ---
-slug: sky-show
 name: Sky Show
 title_slug: sky-show
 ipdb_id: 4863

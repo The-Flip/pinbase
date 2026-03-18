@@ -1,5 +1,4 @@
 ---
-slug: golden-comet-ball
 name: Golden Comet Ball
 title_slug: golden-comet-ball
 ipdb_id: 1046

@@ -1,5 +1,4 @@
 ---
-slug: le-cameleon
 name: Le Cameleon
 title_slug: le-cameleon
 ipdb_id: 6269

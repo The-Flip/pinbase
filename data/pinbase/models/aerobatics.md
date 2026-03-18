@@ -1,5 +1,4 @@
 ---
-slug: aerobatics
 name: Aerobatics
 title_slug: aerobatics
 opdb_id: G5WJw-MkP98

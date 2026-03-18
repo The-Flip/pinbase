@@ -1,5 +1,4 @@
 ---
-slug: proposta
 name: Proposta
 title_slug: proposta
 ipdb_id: 6822

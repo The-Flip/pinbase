@@ -1,4 +1,3 @@
 ---
-slug: bagatello
 name: Bagatello
 ---

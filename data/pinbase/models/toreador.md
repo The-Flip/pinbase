@@ -1,5 +1,4 @@
 ---
-slug: toreador
 name: Toreador
 title_slug: toreador
 opdb_id: G4810-MJppZ

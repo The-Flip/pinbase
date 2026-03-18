@@ -1,5 +1,4 @@
 ---
-slug: flying-turf
 name: Flying Turf
 title_slug: flying-turf
 ipdb_id: 909

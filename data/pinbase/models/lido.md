@@ -1,5 +1,4 @@
 ---
-slug: lido
 name: Lido
 title_slug: lido
 ipdb_id: 1439

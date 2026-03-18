@@ -1,5 +1,4 @@
 ---
-slug: smart-ball
 name: Smart Ball (スマートボール)
 title_slug: smart-ball
 ipdb_id: 6930

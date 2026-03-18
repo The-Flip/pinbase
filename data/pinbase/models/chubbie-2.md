@@ -1,5 +1,4 @@
 ---
-slug: chubbie-2
 name: Chubbie
 title_slug: chubbie
 ipdb_id: 5354

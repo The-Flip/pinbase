@@ -1,5 +1,4 @@
 ---
-slug: air-raider
 name: Air Raider
 title_slug: air-raider
 ipdb_id: 6549

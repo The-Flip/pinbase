@@ -1,5 +1,4 @@
 ---
-slug: arc-en-ciel
 name: Arc En Ciel
 title_slug: arc-en-ciel
 ipdb_id: 5259

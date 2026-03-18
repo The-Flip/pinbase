@@ -1,5 +1,4 @@
 ---
-slug: headliner
 name: Headliner
 title_slug: headliner
 ipdb_id: 1144

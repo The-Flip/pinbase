@@ -1,10 +1,11 @@
 ---
-slug: mustang-premium
 name: Mustang (Premium)
 title_slug: mustang
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GrPOR-M61Pw
 ipdb_id: 6099
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: john-trudeau
   role: Design

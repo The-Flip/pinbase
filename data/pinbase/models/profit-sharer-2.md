@@ -1,5 +1,4 @@
 ---
-slug: profit-sharer-2
 name: Profit Sharer
 title_slug: profit-sharer-2
 ipdb_id: 6257

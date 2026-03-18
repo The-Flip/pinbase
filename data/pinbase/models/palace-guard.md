@@ -1,5 +1,4 @@
 ---
-slug: palace-guard
 name: Palace Guard
 title_slug: royal-guard-palace-guard
 opdb_id: GRLD2-MJjRv

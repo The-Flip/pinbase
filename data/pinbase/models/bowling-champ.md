@@ -1,5 +1,4 @@
 ---
-slug: bowling-champ
 name: Bowling Champ
 title_slug: bowling-champ
 opdb_id: Gzyxj-MOEeX

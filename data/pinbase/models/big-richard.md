@@ -1,5 +1,4 @@
 ---
-slug: big-richard
 name: Big Richard
 title_slug: big-richard
 ipdb_id: 270

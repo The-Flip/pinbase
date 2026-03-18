@@ -1,5 +1,4 @@
 ---
-slug: sweepstakes
 name: Sweepstakes
 title_slug: sweepstakes
 ipdb_id: 5859

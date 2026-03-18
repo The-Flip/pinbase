@@ -1,5 +1,4 @@
 ---
-slug: black-hole-3
 name: Black Hole
 title_slug: black-hole-2
 ipdb_id: 4577

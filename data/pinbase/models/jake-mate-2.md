@@ -1,5 +1,4 @@
 ---
-slug: jake-mate-2
 name: Jake Mate
 title_slug: jake-mate
 ipdb_id: 5927

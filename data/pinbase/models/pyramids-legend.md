@@ -1,5 +1,4 @@
 ---
-slug: pyramids-legend
 name: Pyramids Legend
 title_slug: pyramids-legend
 ipdb_id: 6078

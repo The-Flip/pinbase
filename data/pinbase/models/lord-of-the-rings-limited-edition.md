@@ -1,10 +1,11 @@
 ---
-slug: lord-of-the-rings-limited-edition
 name: Lord of the Rings (Limited Edition)
 title_slug: lord-of-the-rings
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GrqZX-MDEPd
 ipdb_id: 5558
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: chris-granner
   role: Design

@@ -1,5 +1,4 @@
 ---
-slug: deluxe-wild-widow
 name: Deluxe Wild Widow
 title_slug: deluxe-wild-widow
 ipdb_id: 5579

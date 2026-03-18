@@ -1,5 +1,4 @@
 ---
-slug: royal-ball
 name: Royal Ball
 title_slug: royal-ball
 ipdb_id: 6065

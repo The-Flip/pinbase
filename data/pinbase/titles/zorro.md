@@ -1,4 +1,3 @@
 ---
-slug: zorro
 name: Zorro
 ---

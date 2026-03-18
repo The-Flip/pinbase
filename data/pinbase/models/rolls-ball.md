@@ -1,5 +1,4 @@
 ---
-slug: rolls-ball
 name: Rolls Ball
 title_slug: rolls-ball
 ipdb_id: 6162

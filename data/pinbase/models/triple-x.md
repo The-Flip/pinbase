@@ -1,5 +1,4 @@
 ---
-slug: triple-x
 name: Triple X
 title_slug: oxo
 opdb_id: Gr87E-Mo1B0

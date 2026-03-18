@@ -1,5 +1,4 @@
 ---
-slug: ko
 name: K.O.
 title_slug: ko
 ipdb_id: 5587

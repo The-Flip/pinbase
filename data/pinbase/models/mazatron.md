@@ -1,5 +1,4 @@
 ---
-slug: mazatron
 name: Mazatron
 title_slug: mazatron
 ipdb_id: 3800

@@ -1,5 +1,4 @@
 ---
-slug: replay
 name: Replay
 display_order: 18
 ---

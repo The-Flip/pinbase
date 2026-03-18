@@ -1,4 +1,3 @@
 ---
-slug: bounty
 name: Bounty
 ---

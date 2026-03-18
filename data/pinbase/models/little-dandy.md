@@ -1,5 +1,4 @@
 ---
-slug: little-dandy
 name: Little Dandy
 title_slug: little-dandy
 ipdb_id: 1459

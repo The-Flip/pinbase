@@ -1,5 +1,4 @@
 ---
-slug: super-par-golf
 name: Super Par Golf
 title_slug: super-par-golf
 ipdb_id: 4754

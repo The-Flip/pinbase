@@ -1,4 +1,3 @@
 ---
-slug: roundup
 name: Roundup
 ---

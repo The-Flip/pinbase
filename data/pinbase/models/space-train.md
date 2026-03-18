@@ -1,5 +1,4 @@
 ---
-slug: space-train
 name: Space Train
 title_slug: space-train
 opdb_id: GrN0J-MLqb0

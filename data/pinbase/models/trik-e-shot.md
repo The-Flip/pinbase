@@ -1,5 +1,4 @@
 ---
-slug: trik-e-shot
 name: Trik-E-Shot
 title_slug: trik-e-shot
 ipdb_id: 4698

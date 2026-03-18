@@ -1,5 +1,4 @@
 ---
-slug: derby-clock
 name: Derby Clock
 title_slug: derby-clock
 ipdb_id: 663

@@ -1,5 +1,4 @@
 ---
-slug: skylab
 name: Skylab
 title_slug: skylab-spacelab
 opdb_id: G5DOx-MJwzd

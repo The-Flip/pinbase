@@ -1,5 +1,4 @@
 ---
-slug: baseball-5
 name: Baseball
 title_slug: baseball
 opdb_id: GoEB8-MBRnb

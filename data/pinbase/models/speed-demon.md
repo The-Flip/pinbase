@@ -1,5 +1,4 @@
 ---
-slug: speed-demon
 name: Speed Demon
 title_slug: speed-demon
 ipdb_id: 2278

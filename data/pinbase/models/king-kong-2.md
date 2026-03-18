@@ -1,5 +1,4 @@
 ---
-slug: king-kong-2
 name: King Kong
 title_slug: king-kong-2
 ipdb_id: 5894

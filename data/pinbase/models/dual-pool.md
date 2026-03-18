@@ -1,5 +1,4 @@
 ---
-slug: dual-pool
 name: Dual-Pool
 title_slug: dual-pool
 ipdb_id: 4347

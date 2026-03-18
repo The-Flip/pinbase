@@ -1,5 +1,4 @@
 ---
-slug: bahama-beach
 name: Bahama Beach
 title_slug: bahama-beach
 ipdb_id: 2889

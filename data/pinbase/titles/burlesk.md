@@ -1,4 +1,3 @@
 ---
-slug: burlesk
 name: Burlesk
 ---

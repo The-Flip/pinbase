@@ -1,5 +1,4 @@
 ---
-slug: yankee-doodle
 name: Yankee Doodle
 title_slug: yankee-doodle
 ipdb_id: 2826

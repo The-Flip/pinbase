@@ -1,5 +1,4 @@
 ---
-slug: clown-n-up
 name: Clown-N-Up
 title_slug: clown-n-up
 ipdb_id: 5688

@@ -1,5 +1,4 @@
 ---
-slug: royal-play
 name: Royal Play
 title_slug: royal-play
 ipdb_id: 5227

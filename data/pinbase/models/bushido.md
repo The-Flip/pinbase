@@ -1,5 +1,4 @@
 ---
-slug: bushido
 name: Bushido
 title_slug: bushido
 opdb_id: GrkVZ-MLnkl

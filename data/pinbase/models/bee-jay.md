@@ -1,5 +1,4 @@
 ---
-slug: bee-jay
 name: Bee Jay
 title_slug: bee-jay
 ipdb_id: 219

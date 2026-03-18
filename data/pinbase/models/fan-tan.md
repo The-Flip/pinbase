@@ -1,5 +1,4 @@
 ---
-slug: fan-tan
 name: Fan-Tan
 title_slug: fan-tan
 ipdb_id: 819

@@ -1,5 +1,4 @@
 ---
-slug: midget-racer
 name: Midget Racer
 title_slug: midget-racer
 ipdb_id: 1592

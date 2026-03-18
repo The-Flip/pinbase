@@ -1,5 +1,4 @@
 ---
-slug: nags-3
 name: Nags
 title_slug: nags-3
 ipdb_id: 3371

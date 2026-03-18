@@ -1,5 +1,4 @@
 ---
-slug: arc-en-ciel-bebe
 name: Arc En Ciel Bebe
 title_slug: arc-en-ciel-bebe
 ipdb_id: 5258

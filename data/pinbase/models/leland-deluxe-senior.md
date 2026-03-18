@@ -1,5 +1,4 @@
 ---
-slug: leland-deluxe-senior
 name: Leland (Deluxe Senior)
 title_slug: leland-deluxe-senior
 ipdb_id: 1431

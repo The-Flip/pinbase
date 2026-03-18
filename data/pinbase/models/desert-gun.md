@@ -1,5 +1,4 @@
 ---
-slug: desert-gun
 name: Desert Gun
 title_slug: desert-gun
 ipdb_id: 6375

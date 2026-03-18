@@ -1,4 +1,3 @@
 ---
-slug: turfe
 name: Turfe
 ---

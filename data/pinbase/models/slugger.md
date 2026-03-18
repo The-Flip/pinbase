@@ -1,5 +1,4 @@
 ---
-slug: slugger
 name: Slugger
 title_slug: slugger
 ipdb_id: 2210

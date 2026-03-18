@@ -1,5 +1,4 @@
 ---
-slug: win-or-lose
 name: Win or Lose
 title_slug: win-or-lose
 ipdb_id: 4159

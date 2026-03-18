@@ -1,5 +1,4 @@
 ---
-slug: bell-ball
 name: Bell-Ball
 title_slug: bell-ball
 ipdb_id: 220

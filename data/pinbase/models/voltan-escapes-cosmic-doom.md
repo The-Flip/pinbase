@@ -1,5 +1,4 @@
 ---
-slug: voltan-escapes-cosmic-doom
 name: Voltan Escapes Cosmic Doom
 title_slug: voltan-escapes-cosmic-doom
 opdb_id: GrkW3-MD8RW

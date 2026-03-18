@@ -1,5 +1,4 @@
 ---
-slug: asterix
 name: Asterix
 title_slug: asterix
 ipdb_id: 5584

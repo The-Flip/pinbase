@@ -1,5 +1,4 @@
 ---
-slug: delta-queen
 name: Delta Queen
 title_slug: delta-queen
 opdb_id: G5bez-M0oEW

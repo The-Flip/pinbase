@@ -1,5 +1,4 @@
 ---
-slug: iron-balls
 name: Iron Balls
 title_slug: iron-balls
 opdb_id: G59LZ-MJo2o

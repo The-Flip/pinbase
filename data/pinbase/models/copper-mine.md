@@ -1,5 +1,4 @@
 ---
-slug: copper-mine
 name: Copper Mine
 title_slug: copper-mine
 ipdb_id: 6540

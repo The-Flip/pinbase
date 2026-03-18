@@ -1,5 +1,4 @@
 ---
-slug: bonanza-2
 name: Bonanza
 title_slug: bonanza
 opdb_id: GR6NE-MLWd4

@@ -1,4 +1,3 @@
 ---
-slug: towers
 name: Towers
 ---

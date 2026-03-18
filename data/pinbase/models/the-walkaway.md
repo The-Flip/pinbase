@@ -1,5 +1,4 @@
 ---
-slug: the-walkaway
 name: The Walkaway
 title_slug: the-walkaway
 ipdb_id: 5706

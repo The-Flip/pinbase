@@ -1,5 +1,4 @@
 ---
-slug: texan-3
 name: Texan
 title_slug: texan-2
 ipdb_id: 5694

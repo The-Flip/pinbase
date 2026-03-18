@@ -1,5 +1,4 @@
 ---
-slug: chicago-gaming
 name: Chicago Gaming
 opdb_manufacturer_id: 112
 ---

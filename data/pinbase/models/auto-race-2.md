@@ -1,5 +1,4 @@
 ---
-slug: auto-race-2
 name: Auto Race
 title_slug: auto-race-2
 ipdb_id: 3747

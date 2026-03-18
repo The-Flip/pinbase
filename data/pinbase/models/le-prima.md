@@ -1,5 +1,4 @@
 ---
-slug: le-prima
 name: Le Prima
 title_slug: le-prima
 ipdb_id: 6322

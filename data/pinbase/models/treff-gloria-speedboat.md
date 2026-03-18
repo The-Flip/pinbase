@@ -1,5 +1,4 @@
 ---
-slug: treff-gloria-speedboat
 name: Treff-Gloria (speedboat)
 title_slug: treff-gloria-speedboat
 ipdb_id: 4417

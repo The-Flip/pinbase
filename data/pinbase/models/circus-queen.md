@@ -1,5 +1,4 @@
 ---
-slug: circus-queen
 name: Circus Queen
 title_slug: circus-queen
 ipdb_id: 524

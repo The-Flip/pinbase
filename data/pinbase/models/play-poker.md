@@ -1,5 +1,4 @@
 ---
-slug: play-poker
 name: Play Poker
 title_slug: play-poker
 ipdb_id: 5412

@@ -1,5 +1,4 @@
 ---
-slug: international-shoot-out
 name: International Shoot-Out
 title_slug: international-shoot-out
 ipdb_id: 6986

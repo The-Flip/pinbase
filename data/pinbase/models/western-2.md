@@ -1,5 +1,4 @@
 ---
-slug: western-2
 name: Western
 title_slug: western-2
 ipdb_id: 4066

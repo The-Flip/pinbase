@@ -1,5 +1,4 @@
 ---
-slug: winner-4
 name: Winner
 title_slug: winner-4
 ipdb_id: 2795

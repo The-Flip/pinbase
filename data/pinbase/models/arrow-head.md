@@ -1,5 +1,4 @@
 ---
-slug: arrow-head
 name: Arrow Head
 title_slug: arrow-head
 opdb_id: G5z1q-MDzz5

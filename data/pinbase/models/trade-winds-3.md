@@ -1,5 +1,4 @@
 ---
-slug: trade-winds-3
 name: Trade Winds
 title_slug: trade-winds
 opdb_id: G56Qx-MJNnO

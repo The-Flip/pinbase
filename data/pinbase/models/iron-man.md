@@ -1,5 +1,4 @@
 ---
-slug: iron-man
 name: Iron Man
 title_slug: iron-man
 opdb_id: GRVq4-MLyxq

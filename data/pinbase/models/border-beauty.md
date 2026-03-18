@@ -1,5 +1,4 @@
 ---
-slug: border-beauty
 name: Border Beauty
 title_slug: border-beauty
 ipdb_id: 3657

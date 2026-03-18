@@ -1,5 +1,4 @@
 ---
-slug: strange-world
 name: Strange World
 title_slug: strange-world
 opdb_id: GRYox-MJV2B

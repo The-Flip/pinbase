@@ -1,5 +1,4 @@
 ---
-slug: all-star-basketball-game-with-bell
 name: All-Star Basketball Game (with bell)
 title_slug: all-star-basketball-game-with-bell
 ipdb_id: 4703

@@ -1,5 +1,4 @@
 ---
-slug: king-arthur-and-his-round-table
 name: King Arthur and his Round Table
 title_slug: king-arthur-and-his-round-table
 opdb_id: GYWOL-MZePp

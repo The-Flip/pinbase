@@ -1,4 +1,3 @@
 ---
-slug: charm
 name: Charm
 ---

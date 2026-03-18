@@ -1,5 +1,4 @@
 ---
-slug: super-8
 name: Super '8'
 title_slug: super-8
 ipdb_id: 2427

@@ -1,5 +1,4 @@
 ---
-slug: regent
 name: Regent
 title_slug: regent
 ipdb_id: 1940

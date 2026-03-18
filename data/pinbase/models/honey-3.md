@@ -1,5 +1,4 @@
 ---
-slug: honey-3
 name: Honey
 title_slug: honey
 opdb_id: G5vO1-MKNYE

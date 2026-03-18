@@ -1,5 +1,4 @@
 ---
-slug: back-to-the-future
 name: Back to the Future
 title_slug: back-to-the-future
 opdb_id: GRpbW-MLXq2

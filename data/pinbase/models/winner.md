@@ -1,5 +1,4 @@
 ---
-slug: winner
 name: Winner
 title_slug: winner-2
 opdb_id: G42nJ-ML3wj

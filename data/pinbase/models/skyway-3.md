@@ -1,5 +1,4 @@
 ---
-slug: skyway-3
 name: Skyway
 title_slug: skyway-3
 ipdb_id: 6937

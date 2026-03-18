@@ -1,5 +1,4 @@
 ---
-slug: double-treasure
 name: Double Treasure
 title_slug: double-treasure
 ipdb_id: 724

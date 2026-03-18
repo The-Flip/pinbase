@@ -1,5 +1,4 @@
 ---
-slug: chief
 name: Chief
 title_slug: chief
 ipdb_id: 507

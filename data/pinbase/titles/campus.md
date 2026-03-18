@@ -1,4 +1,3 @@
 ---
-slug: campus
 name: Campus
 ---

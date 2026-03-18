@@ -1,4 +1,3 @@
 ---
-slug: lica
 name: LICA
 ---

@@ -1,5 +1,4 @@
 ---
-slug: campus
 name: Campus
 title_slug: campus
 ipdb_id: 423

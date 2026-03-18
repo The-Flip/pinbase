@@ -1,5 +1,4 @@
 ---
-slug: rescue-911
 name: Rescue 911
 title_slug: rescue-911
 opdb_id: G5pNW-MVK46

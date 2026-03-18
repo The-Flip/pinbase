@@ -1,5 +1,4 @@
 ---
-slug: sho-me-2
 name: Sho Me
 title_slug: sho-me-2
 ipdb_id: 5073

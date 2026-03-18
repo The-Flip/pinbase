@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-big-league
 name: Bulls Eye Big League
 title_slug: bulls-eye-big-league
 ipdb_id: 5045

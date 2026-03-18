@@ -1,5 +1,4 @@
 ---
-slug: team-one-2
 name: Team One
 title_slug: team-one
 ipdb_id: 6602

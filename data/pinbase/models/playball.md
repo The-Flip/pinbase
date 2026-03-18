@@ -1,5 +1,4 @@
 ---
-slug: playball
 name: Playball
 title_slug: playball-home-run
 opdb_id: GR612-MJ9Bz

@@ -1,5 +1,4 @@
 ---
-slug: star-king
 name: Star King
 title_slug: star-king
 ipdb_id: 5193

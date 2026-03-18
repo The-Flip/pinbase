@@ -1,5 +1,4 @@
 ---
-slug: big-deal-2
 name: Big Deal
 title_slug: big-deal
 opdb_id: G5vq2-MDnP0

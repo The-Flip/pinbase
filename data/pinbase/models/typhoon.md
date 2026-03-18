@@ -1,5 +1,4 @@
 ---
-slug: typhoon
 name: Typhoon
 title_slug: typhoon
 ipdb_id: 6546

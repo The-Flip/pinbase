@@ -1,5 +1,4 @@
 ---
-slug: sweet-sioux
 name: Sweet Sioux
 title_slug: sweet-sioux
 opdb_id: G503n-ML8el

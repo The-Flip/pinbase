@@ -1,5 +1,4 @@
 ---
-slug: lariat-2
 name: Lariat
 title_slug: wild-wild-west-lariat
 opdb_id: G5LQ2-MDvYV

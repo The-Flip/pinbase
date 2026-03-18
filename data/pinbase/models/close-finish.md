@@ -1,5 +1,4 @@
 ---
-slug: close-finish
 name: Close Finish
 title_slug: close-finish
 ipdb_id: 3995

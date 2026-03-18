@@ -1,5 +1,4 @@
 ---
-slug: target-skill
 name: Target Skill
 title_slug: target-skill
 ipdb_id: 2504

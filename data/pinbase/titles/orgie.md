@@ -1,4 +1,3 @@
 ---
-slug: orgie
 name: Orgie
 ---

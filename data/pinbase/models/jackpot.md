@@ -1,5 +1,4 @@
 ---
-slug: jackpot
 name: Jackpot
 title_slug: gold-rush-yukon-klondike
 opdb_id: GR987-MJPEX

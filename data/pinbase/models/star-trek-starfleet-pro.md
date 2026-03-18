@@ -1,5 +1,4 @@
 ---
-slug: star-trek-starfleet-pro
 name: Star Trek (Pro)
 title_slug: star-trek-stern
 opdb_id: Gryw4-MwNky

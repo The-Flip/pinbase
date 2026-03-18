@@ -1,5 +1,4 @@
 ---
-slug: the-all-american-baseball-game
 name: The All-American Baseball Game
 title_slug: the-all-american-baseball-game
 ipdb_id: 6108

@@ -1,5 +1,4 @@
 ---
-slug: mad-game
 name: Mad Game
 title_slug: mad-game
 ipdb_id: 6792

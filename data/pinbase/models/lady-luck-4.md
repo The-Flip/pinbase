@@ -1,5 +1,4 @@
 ---
-slug: lady-luck-4
 name: Lady Luck
 title_slug: lady-luck-fortune
 opdb_id: GrOBL-MQP13

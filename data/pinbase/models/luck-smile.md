@@ -1,5 +1,4 @@
 ---
-slug: luck-smile
 name: Lucky Smile
 title_slug: lucky-smile
 opdb_id: G4Zjo-MQw84

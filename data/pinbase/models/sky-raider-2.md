@@ -1,5 +1,4 @@
 ---
-slug: sky-raider-2
 name: Sky Raider
 title_slug: sky-raider-2
 ipdb_id: 6585

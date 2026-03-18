@@ -1,5 +1,4 @@
 ---
-slug: secav
 name: Secav
 manufacturer_slug: secav
 ipdb_manufacturer_id: 566

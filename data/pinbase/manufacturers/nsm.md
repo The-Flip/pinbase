@@ -1,5 +1,4 @@
 ---
-slug: nsm
 name: NSM
 opdb_manufacturer_id: 58
 ---

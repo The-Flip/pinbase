@@ -1,5 +1,4 @@
 ---
-slug: pimlico
 name: Pimlico
 title_slug: pimlico
 ipdb_id: 3344

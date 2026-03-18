@@ -1,5 +1,4 @@
 ---
-slug: american-mill-and-manufacturing-company
 name: American Mill and Manufacturing Company
 manufacturer_slug: american-mill-and-manufacturing-company
 ipdb_manufacturer_id: 22

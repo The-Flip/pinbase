@@ -1,5 +1,4 @@
 ---
-slug: red-white-blue
 name: Red White & Blue
 title_slug: red-white-blue-2
 ipdb_id: 3569

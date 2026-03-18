@@ -1,5 +1,4 @@
 ---
-slug: white-water
 name: White Water
 title_slug: white-water
 opdb_id: GRQKz-MyNXz

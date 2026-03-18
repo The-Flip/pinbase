@@ -1,5 +1,4 @@
 ---
-slug: timothy-t-2
 name: Timothy T.
 title_slug: timothy-t
 ipdb_id: 4819

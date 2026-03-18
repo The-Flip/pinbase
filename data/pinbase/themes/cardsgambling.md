@@ -1,4 +1,3 @@
 ---
-slug: cardsgambling
 name: Cardsgambling
 ---

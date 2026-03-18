@@ -1,5 +1,4 @@
 ---
-slug: space-shuttle-2
 name: Space Shuttle
 title_slug: space-shuttle-2
 opdb_id: G4q3L-MKN50

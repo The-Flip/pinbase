@@ -1,5 +1,4 @@
 ---
-slug: hurdy-gurdy
 name: Hurdy Gurdy
 title_slug: central-park
 opdb_id: GRpYQ-MdE3y

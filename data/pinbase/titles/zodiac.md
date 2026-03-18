@@ -1,4 +1,3 @@
 ---
-slug: zodiac
 name: Zodiac
 ---

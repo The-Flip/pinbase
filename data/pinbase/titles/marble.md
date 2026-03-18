@@ -1,4 +1,3 @@
 ---
-slug: marble
 name: Marble
 ---

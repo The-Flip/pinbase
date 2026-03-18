@@ -1,5 +1,4 @@
 ---
-slug: tycoon
 name: Tycoon
 title_slug: tycoon
 ipdb_id: 2700

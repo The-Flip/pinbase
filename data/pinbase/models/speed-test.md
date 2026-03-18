@@ -1,5 +1,4 @@
 ---
-slug: speed-test
 name: Speed Test
 title_slug: vector
 opdb_id: G486B-MrRwE-ARev2

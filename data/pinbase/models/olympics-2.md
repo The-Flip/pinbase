@@ -1,5 +1,4 @@
 ---
-slug: olympics-2
 name: Olympics
 title_slug: olympics-2
 opdb_id: G4jE1-MJj3p

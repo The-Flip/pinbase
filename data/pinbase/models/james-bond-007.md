@@ -1,5 +1,4 @@
 ---
-slug: james-bond-007
 name: James Bond 007
 title_slug: james-bond-007-gottlieb
 opdb_id: G4PXJ-MQPlw

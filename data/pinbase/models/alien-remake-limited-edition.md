@@ -1,5 +1,4 @@
 ---
-slug: alien-remake-limited-edition
 name: Alien (Remake Limited Edition)
 title_slug: alien
 opdb_id: G4PBO-MyNeb-A9pVL

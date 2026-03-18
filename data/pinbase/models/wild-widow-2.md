@@ -1,5 +1,4 @@
 ---
-slug: wild-widow-2
 name: Wild Widow
 title_slug: wild-widow-2
 ipdb_id: 5580

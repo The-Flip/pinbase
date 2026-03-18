@@ -1,5 +1,4 @@
 ---
-slug: loop-the-loop-2
 name: Loop the Loop (AAB)
 title_slug: loop-the-loop
 opdb_id: GrkYy-MLWz9

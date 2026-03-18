@@ -1,5 +1,4 @@
 ---
-slug: rugby
 name: Rugby
 title_slug: rugby
 ipdb_id: 3340

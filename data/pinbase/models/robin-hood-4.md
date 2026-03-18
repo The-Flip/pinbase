@@ -1,5 +1,4 @@
 ---
-slug: robin-hood-4
 name: Robin Hood
 title_slug: robin-hood-4
 ipdb_id: 5017

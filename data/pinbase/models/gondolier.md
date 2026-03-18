@@ -1,5 +1,4 @@
 ---
-slug: gondolier
 name: Gondolier
 title_slug: gondolier
 opdb_id: Gr1wP-MDq3y

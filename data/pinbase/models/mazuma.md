@@ -1,5 +1,4 @@
 ---
-slug: mazuma
 name: Mazuma
 title_slug: mazuma
 ipdb_id: 1563

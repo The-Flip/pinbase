@@ -1,5 +1,4 @@
 ---
-slug: sally
 name: Sally
 title_slug: sally
 opdb_id: GN6YW-MKNd4

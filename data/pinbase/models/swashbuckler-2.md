@@ -1,5 +1,4 @@
 ---
-slug: swashbuckler-2
 name: Swashbuckler
 title_slug: swashbuckler-2
 ipdb_id: 6683

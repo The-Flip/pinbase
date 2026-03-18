@@ -1,5 +1,4 @@
 ---
-slug: woods-queen-3
 name: Wood's Queen (2P)
 title_slug: woods-queen
 opdb_id: G5By3-ML0Xe

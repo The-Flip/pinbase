@@ -1,5 +1,4 @@
 ---
-slug: chance-2
 name: Chance
 title_slug: chance-2
 opdb_id: G4PqX-MDxv3

@@ -1,5 +1,4 @@
 ---
-slug: cover-girl
 name: Cover Girl
 title_slug: cover-girl-2
 opdb_id: GV88w-Mp4Bl

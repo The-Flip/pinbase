@@ -1,5 +1,4 @@
 ---
-slug: world-champ
 name: World Champ
 title_slug: world-champ
 opdb_id: GRDBb-M0obO

@@ -1,5 +1,4 @@
 ---
-slug: eight-ball-fury
 name: Eight Ball Fury
 title_slug: eight-ball-fury
 opdb_id: GLWze-Mp4oz

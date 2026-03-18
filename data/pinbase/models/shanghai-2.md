@@ -1,5 +1,4 @@
 ---
-slug: shanghai-2
 name: Shanghai
 title_slug: shanghai-2
 ipdb_id: 4471

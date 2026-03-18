@@ -1,5 +1,4 @@
 ---
-slug: blue-bird
 name: Blue Bird
 title_slug: blue-bird
 ipdb_id: 324

@@ -1,5 +1,4 @@
 ---
-slug: the-pinball-circus
 name: Pinball Circus
 title_slug: pinball-circus
 opdb_id: G4qdD-MrR3Z

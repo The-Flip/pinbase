@@ -1,5 +1,4 @@
 ---
-slug: atari-system-1
 name: Atari System 1
 manufacturer_slug: atari
 technology_subgeneration_slug: ss-discrete

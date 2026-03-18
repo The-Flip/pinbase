@@ -1,5 +1,4 @@
 ---
-slug: thorobreds
 name: Thorobreds
 title_slug: thorobreds
 ipdb_id: 3385

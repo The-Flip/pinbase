@@ -1,5 +1,4 @@
 ---
-slug: beach-games
 name: Beach Games
 title_slug: beach-games
 opdb_id: GRbnW-MJo59

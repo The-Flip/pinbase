@@ -1,5 +1,4 @@
 ---
-slug: stars-3
 name: Stars
 title_slug: stars-3
 ipdb_id: 2365

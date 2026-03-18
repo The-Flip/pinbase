@@ -1,5 +1,4 @@
 ---
-slug: monarch-2
 name: Monarch
 title_slug: monarch-2
 ipdb_id: 3414

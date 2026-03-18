@@ -1,4 +1,3 @@
 ---
-slug: longacres
 name: Longacres
 ---

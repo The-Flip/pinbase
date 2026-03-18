@@ -1,5 +1,4 @@
 ---
-slug: steeple-chase-3
 name: Steeple-Chase
 title_slug: steeple-chase
 opdb_id: GrJLB-MQ986

@@ -1,5 +1,4 @@
 ---
-slug: major-league-model-40
 name: Major League (Model 40)
 title_slug: major-league-model-40
 ipdb_id: 5496

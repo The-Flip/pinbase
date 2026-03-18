@@ -1,5 +1,4 @@
 ---
-slug: mega-golf-ball-frenzy
 name: Mega Golf Ball Frenzy
 title_slug: mega-golf-ball-frenzy
 ipdb_id: 5170

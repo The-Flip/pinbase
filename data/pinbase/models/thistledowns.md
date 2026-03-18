@@ -1,5 +1,4 @@
 ---
-slug: thistledowns
 name: Thistledowns
 title_slug: thistledowns
 ipdb_id: 2533

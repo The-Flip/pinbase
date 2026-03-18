@@ -1,5 +1,4 @@
 ---
-slug: flying-saucer
 name: Flying Saucer
 title_slug: flying-saucer
 ipdb_id: 7011

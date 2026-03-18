@@ -1,5 +1,4 @@
 ---
-slug: golf-ball
 name: Golf Ball
 title_slug: golf-ball
 ipdb_id: 5984

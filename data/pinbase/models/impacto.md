@@ -1,5 +1,4 @@
 ---
-slug: impacto
 name: Impacto
 title_slug: impacto
 opdb_id: GvBBX-MKNyd

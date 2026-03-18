@@ -1,5 +1,4 @@
 ---
-slug: rolling-stones
 name: Rolling Stones
 title_slug: rolling-stones
 opdb_id: G5Qz4-MQddv

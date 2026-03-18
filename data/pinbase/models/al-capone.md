@@ -1,5 +1,4 @@
 ---
-slug: al-capone
 name: Al Capone
 title_slug: al-capone
 ipdb_id: 5176

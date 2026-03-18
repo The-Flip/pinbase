@@ -1,5 +1,4 @@
 ---
-slug: royal-flash
 name: Royal Flash
 title_slug: royal-flash-2
 ipdb_id: 2033

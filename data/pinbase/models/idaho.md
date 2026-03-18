@@ -1,5 +1,4 @@
 ---
-slug: idaho
 name: Idaho
 title_slug: idaho
 ipdb_id: 1264

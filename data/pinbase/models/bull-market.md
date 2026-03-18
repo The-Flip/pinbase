@@ -1,5 +1,4 @@
 ---
-slug: bull-market
 name: Bull Market
 title_slug: bull-market
 ipdb_id: 3668

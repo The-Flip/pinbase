@@ -1,5 +1,4 @@
 ---
-slug: rat-race-ii
 name: Rat Race II
 title_slug: rat-race-ii
 ipdb_id: 3719

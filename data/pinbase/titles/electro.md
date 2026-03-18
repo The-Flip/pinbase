@@ -1,4 +1,3 @@
 ---
-slug: electro
 name: Electro
 ---

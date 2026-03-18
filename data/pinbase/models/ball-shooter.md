@@ -1,5 +1,4 @@
 ---
-slug: ball-shooter
 name: Ball Shooter
 title_slug: ball-shooter
 ipdb_id: 5459

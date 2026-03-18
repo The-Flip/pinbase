@@ -1,5 +1,4 @@
 ---
-slug: nascar
 name: Nascar
 title_slug: nascar
 opdb_id: G5YWX-MQ4VW

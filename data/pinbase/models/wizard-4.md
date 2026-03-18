@@ -1,5 +1,4 @@
 ---
-slug: wizard-4
 name: Wizard
 title_slug: wizard-2
 ipdb_id: 7010

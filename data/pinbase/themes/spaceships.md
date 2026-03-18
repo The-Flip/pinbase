@@ -1,4 +1,3 @@
 ---
-slug: spaceships
 name: Spaceships
 ---

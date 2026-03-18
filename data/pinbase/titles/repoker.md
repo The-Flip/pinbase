@@ -1,4 +1,3 @@
 ---
-slug: repoker
 name: Repoker
 ---

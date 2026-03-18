@@ -1,5 +1,4 @@
 ---
-slug: top-secret
 name: Top-Secret
 title_slug: miss-o-cue-t
 opdb_id: G4eqP-ME067

@@ -1,5 +1,4 @@
 ---
-slug: disk-jockey
 name: Disk Jockey
 title_slug: disk-jockey
 opdb_id: G4kon-MwN4W

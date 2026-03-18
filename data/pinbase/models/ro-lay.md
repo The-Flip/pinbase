@@ -1,5 +1,4 @@
 ---
-slug: ro-lay
 name: Ro-Lay
 title_slug: ro-lay
 ipdb_id: 1998

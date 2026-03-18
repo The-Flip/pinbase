@@ -1,5 +1,4 @@
 ---
-slug: this-is-spinal-tap
 name: This is Spinal Tap
 title_slug: this-is-spinal-tap
 opdb_id: GWyoZ-MOEqX

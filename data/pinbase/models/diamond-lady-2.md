@@ -1,5 +1,4 @@
 ---
-slug: diamond-lady-2
 name: Diamond Lady
 title_slug: diamond-lady-2
 ipdb_id: 6694

@@ -1,5 +1,4 @@
 ---
-slug: tally-ho
 name: Tally Ho
 title_slug: tally-ho
 ipdb_id: 2494

@@ -1,5 +1,4 @@
 ---
-slug: twin-trail-blazer
 name: Twin Trail Blazer
 title_slug: twin-trail-blazer
 ipdb_id: 6972

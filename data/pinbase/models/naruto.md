@@ -1,5 +1,4 @@
 ---
-slug: naruto
 name: Naruto
 title_slug: naruto
 ipdb_id: 5698

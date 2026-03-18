@@ -1,5 +1,4 @@
 ---
-slug: ninja-eclipse
 name: Ninja Eclipse
 opdb_group_id: GZVXY
 ---

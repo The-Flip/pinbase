@@ -1,5 +1,4 @@
 ---
-slug: the-red-max
 name: The Red Max
 title_slug: the-red-max
 opdb_id: G57W3-MQdzl

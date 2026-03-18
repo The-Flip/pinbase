@@ -1,4 +1,3 @@
 ---
-slug: slalom
 name: Slalom
 ---

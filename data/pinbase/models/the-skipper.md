@@ -1,5 +1,4 @@
 ---
-slug: the-skipper
 name: The Skipper
 title_slug: the-skipper
 ipdb_id: 4743

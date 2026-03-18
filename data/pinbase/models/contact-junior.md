@@ -1,5 +1,4 @@
 ---
-slug: contact-junior
 name: Contact (Junior)
 title_slug: contact-junior
 ipdb_id: 560

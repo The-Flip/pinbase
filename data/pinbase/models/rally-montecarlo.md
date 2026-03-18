@@ -1,5 +1,4 @@
 ---
-slug: rally-montecarlo
 name: Rally Montecarlo
 title_slug: rally-montecarlo
 ipdb_id: 6409

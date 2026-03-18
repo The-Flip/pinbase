@@ -1,5 +1,4 @@
 ---
-slug: lite-a-card
 name: Lite-A-Card
 title_slug: lite-a-card
 opdb_id: G4j03-MQpBy

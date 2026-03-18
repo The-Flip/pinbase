@@ -1,4 +1,3 @@
 ---
-slug: pimlico
 name: Pimlico
 ---

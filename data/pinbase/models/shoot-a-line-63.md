@@ -1,5 +1,4 @@
 ---
-slug: shoot-a-line-63
 name: Shoot-A-Line '63
 title_slug: shoot-a-line-63
 ipdb_id: 2123

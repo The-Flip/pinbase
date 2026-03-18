@@ -1,5 +1,4 @@
 ---
-slug: high-lite
 name: High-Lite
 title_slug: high-lite
 ipdb_id: 1177

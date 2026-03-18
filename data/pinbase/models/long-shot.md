@@ -1,5 +1,4 @@
 ---
-slug: long-shot
 name: Long Shot
 title_slug: long-shot
 ipdb_id: 1471

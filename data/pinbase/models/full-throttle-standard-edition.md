@@ -1,5 +1,4 @@
 ---
-slug: full-throttle-standard-edition
 name: Full Throttle
 title_slug: full-throttle
 opdb_id: G5V8q-MQYZ6

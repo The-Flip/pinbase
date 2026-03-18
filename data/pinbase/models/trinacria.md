@@ -1,5 +1,4 @@
 ---
-slug: trinacria
 name: Trinacria
 title_slug: trinacria
 ipdb_id: 5844

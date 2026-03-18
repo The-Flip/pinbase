@@ -1,5 +1,4 @@
 ---
-slug: shooting
 name: Shooting
 title_slug: shooting
 ipdb_id: 4020

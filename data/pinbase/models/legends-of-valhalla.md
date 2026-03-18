@@ -1,5 +1,4 @@
 ---
-slug: legends-of-valhalla
 name: Legends of Valhalla
 title_slug: legends-of-valhalla
 opdb_id: GWyyq-M4oPo

@@ -1,5 +1,4 @@
 ---
-slug: cigarette-pin-game
 name: Cigarette Pin Game
 title_slug: cigarette-pin-game
 ipdb_id: 4179

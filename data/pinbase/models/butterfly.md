@@ -1,5 +1,4 @@
 ---
-slug: butterfly
 name: Butterfly
 title_slug: butterfly
 opdb_id: G5nJe-MrR8z

@@ -1,5 +1,4 @@
 ---
-slug: jake-mate
 name: Jake Mate
 title_slug: check-mate-check-jake-mate
 opdb_id: GRBOy-MZe5V

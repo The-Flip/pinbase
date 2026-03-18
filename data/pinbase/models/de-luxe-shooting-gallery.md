@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-shooting-gallery
 name: De Luxe Shooting Gallery
 title_slug: de-luxe-shooting-gallery
 ipdb_id: 6357

@@ -1,5 +1,4 @@
 ---
-slug: screwball
 name: Screwball
 title_slug: screwball
 opdb_id: GpepN-MePek

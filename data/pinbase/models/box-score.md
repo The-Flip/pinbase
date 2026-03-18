@@ -1,5 +1,4 @@
 ---
-slug: box-score
 name: Box Score
 title_slug: box-score
 ipdb_id: 369

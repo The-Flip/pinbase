@@ -1,5 +1,4 @@
 ---
-slug: adventure
 name: Adventure
 title_slug: adventure
 ipdb_id: 5544

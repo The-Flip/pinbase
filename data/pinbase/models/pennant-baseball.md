@@ -1,5 +1,4 @@
 ---
-slug: pennant-baseball
 name: Pennant Baseball
 title_slug: pennant-baseball
 ipdb_id: 5059

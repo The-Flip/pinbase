@@ -1,5 +1,4 @@
 ---
-slug: bunnyboard
 name: Bunnyboard
 title_slug: bunnyboard
 ipdb_id: 407

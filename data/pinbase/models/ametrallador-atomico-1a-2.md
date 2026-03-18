@@ -1,5 +1,4 @@
 ---
-slug: ametrallador-atomico-1a-2
 name: Ametrallador Atomico 1ª
 title_slug: ametrallador-atomico-1a-2
 ipdb_id: 6735

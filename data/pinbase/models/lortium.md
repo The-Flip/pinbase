@@ -1,5 +1,4 @@
 ---
-slug: lortium
 name: Lortium
 title_slug: lortium
 opdb_id: GRW3o-MQkNr

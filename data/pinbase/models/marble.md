@@ -1,5 +1,4 @@
 ---
-slug: marble
 name: Marble
 title_slug: marble
 ipdb_id: 5546

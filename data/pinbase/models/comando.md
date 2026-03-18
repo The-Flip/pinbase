@@ -1,5 +1,4 @@
 ---
-slug: comando
 name: Comando
 title_slug: comando
 ipdb_id: 6158

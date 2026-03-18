@@ -1,4 +1,3 @@
 ---
-slug: pheasant
 name: Pheasant
 ---

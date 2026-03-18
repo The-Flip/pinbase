@@ -1,5 +1,4 @@
 ---
-slug: baywatch
 name: Baywatch
 ---
 

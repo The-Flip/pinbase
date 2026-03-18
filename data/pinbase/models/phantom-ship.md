@@ -1,5 +1,4 @@
 ---
-slug: phantom-ship
 name: Phantom Ship
 title_slug: phantom-ship
 ipdb_id: 4427

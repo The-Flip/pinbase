@@ -1,4 +1,3 @@
 ---
-slug: bubble
 name: Bubble
 ---

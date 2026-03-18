@@ -1,5 +1,4 @@
 ---
-slug: el-toro
 name: El Toro
 title_slug: el-toro-2
 opdb_id: GrXpk-MDx98

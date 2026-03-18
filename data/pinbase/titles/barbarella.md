@@ -1,4 +1,3 @@
 ---
-slug: barbarella
 name: Barbarella
 ---

@@ -1,5 +1,4 @@
 ---
-slug: sky-devils
 name: Sky Devil's
 title_slug: sky-devils
 ipdb_id: 5160

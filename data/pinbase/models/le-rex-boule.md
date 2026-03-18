@@ -1,5 +1,4 @@
 ---
-slug: le-rex-boule
 name: Le Rex Boule
 title_slug: le-rex-boule
 ipdb_id: 4906

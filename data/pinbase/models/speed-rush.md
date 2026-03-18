@@ -1,5 +1,4 @@
 ---
-slug: speed-rush
 name: Speed Rush
 title_slug: speed-rush
 opdb_id: G4qln-MDbq6

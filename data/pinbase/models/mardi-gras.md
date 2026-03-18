@@ -1,5 +1,4 @@
 ---
-slug: mardi-gras
 name: Mardi Gras
 title_slug: mardi-gras
 opdb_id: G5V0D-MQNl0

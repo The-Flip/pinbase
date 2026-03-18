@@ -1,5 +1,4 @@
 ---
-slug: cerberus-2
 name: Cerberus
 title_slug: cerberus-2
 ipdb_id: 6719

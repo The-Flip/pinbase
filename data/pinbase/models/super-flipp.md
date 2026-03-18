@@ -1,5 +1,4 @@
 ---
-slug: super-flipp
 name: Super Flipp
 title_slug: super-flipp
 opdb_id: G4X1D-M2Yy1

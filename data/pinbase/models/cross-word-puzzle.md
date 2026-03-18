@@ -1,5 +1,4 @@
 ---
-slug: cross-word-puzzle
 name: Cross Word Puzzle
 title_slug: cross-word-puzzle
 ipdb_id: 4217

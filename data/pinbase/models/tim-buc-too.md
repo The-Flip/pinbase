@@ -1,5 +1,4 @@
 ---
-slug: tim-buc-too
 name: Tim-Buc-Too
 title_slug: tim-buc-too
 ipdb_id: 6970

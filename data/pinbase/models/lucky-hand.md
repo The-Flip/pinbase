@@ -1,5 +1,4 @@
 ---
-slug: lucky-hand
 name: Lucky Hand
 title_slug: jacks-open-lucky-hand
 opdb_id: GrPpb-MLOZq

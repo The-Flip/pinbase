@@ -1,5 +1,4 @@
 ---
-slug: daytona-3
 name: Daytona
 title_slug: daytona-3
 ipdb_id: 6076

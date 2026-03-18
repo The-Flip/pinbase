@@ -1,5 +1,4 @@
 ---
-slug: screen-test
 name: Screen Test
 title_slug: screen-test
 ipdb_id: 2073

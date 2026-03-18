@@ -1,5 +1,4 @@
 ---
-slug: galloping-plugs
 name: Galloping Plugs
 title_slug: galloping-plugs
 ipdb_id: 983

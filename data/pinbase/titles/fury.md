@@ -1,4 +1,3 @@
 ---
-slug: fury
 name: Fury
 ---

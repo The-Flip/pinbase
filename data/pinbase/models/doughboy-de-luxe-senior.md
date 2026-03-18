@@ -1,5 +1,4 @@
 ---
-slug: doughboy-de-luxe-senior
 name: Doughboy De Luxe Senior
 title_slug: doughboy-de-luxe-senior
 ipdb_id: 6054

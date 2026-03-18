@@ -1,4 +1,3 @@
 ---
-slug: ponies
 name: Ponies
 ---

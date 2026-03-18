@@ -1,5 +1,4 @@
 ---
-slug: baker-ball-shooting-gallery
 name: Baker Ball Shooting Gallery
 title_slug: baker-ball-shooting-gallery
 ipdb_id: 6654

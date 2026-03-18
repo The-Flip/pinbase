@@ -1,4 +1,3 @@
 ---
-slug: marbo
 name: Marbo
 ---

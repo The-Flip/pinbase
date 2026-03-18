@@ -1,5 +1,4 @@
 ---
-slug: baby-face
 name: Baby Face
 title_slug: baby-face
 opdb_id: G4ejB-M4oXP

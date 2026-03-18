@@ -1,5 +1,4 @@
 ---
-slug: eye-of-the-tiger
 name: Eye Of The Tiger
 title_slug: sinbad
 opdb_id: G4xqN-MLbX0

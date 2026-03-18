@@ -1,5 +1,4 @@
 ---
-slug: spit-fire
 name: Spit Fire
 title_slug: spit-fire
 ipdb_id: 2295

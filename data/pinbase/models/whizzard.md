@@ -1,5 +1,4 @@
 ---
-slug: whizzard
 name: Whizzard
 title_slug: whizzard
 ipdb_id: 2770

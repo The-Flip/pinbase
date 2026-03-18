@@ -1,5 +1,4 @@
 ---
-slug: a-world-of-clowns
 name: A World of Clowns
 title_slug: a-world-of-clowns
 ipdb_id: 6592

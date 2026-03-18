@@ -1,5 +1,4 @@
 ---
-slug: big-ben-italy
 name: Big Ben (Italy)
 title_slug: big-ben-italy
 ipdb_id: 6196

@@ -1,5 +1,4 @@
 ---
-slug: skill-ball-senior
 name: Skill Ball (Senior)
 title_slug: skill-ball-senior
 ipdb_id: 3942

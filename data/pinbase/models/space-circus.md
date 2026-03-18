@@ -1,5 +1,4 @@
 ---
-slug: space-circus
 name: Space Circus
 title_slug: space-circus
 ipdb_id: 5573

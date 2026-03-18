@@ -1,5 +1,4 @@
 ---
-slug: tyrannosaurus
 name: Tyrannosaurus
 title_slug: tyrannosaurus
 ipdb_id: 5344

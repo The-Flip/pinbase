@@ -1,5 +1,4 @@
 ---
-slug: acdc-pro-vault-edition
 name: AC/DC (Pro Vault Edition)
 title_slug: ac-dc
 opdb_id: G43W4-MKNX0

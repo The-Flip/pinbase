@@ -1,5 +1,4 @@
 ---
-slug: bally-derby
 name: Bally Derby
 title_slug: bally-derby
 ipdb_id: 148

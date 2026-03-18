@@ -1,5 +1,4 @@
 ---
-slug: trumps-secret-service
 name: Trump's Secret Service
 title_slug: trumps-secret-service
 ipdb_id: 6666

@@ -1,5 +1,4 @@
 ---
-slug: wildcat
 name: Wildcat
 title_slug: wildcat
 ipdb_id: 3570

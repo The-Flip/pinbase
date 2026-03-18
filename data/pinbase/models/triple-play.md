@@ -1,5 +1,4 @@
 ---
-slug: triple-play
 name: Triple Play
 title_slug: triple-play
 ipdb_id: 2651

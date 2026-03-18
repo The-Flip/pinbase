@@ -1,5 +1,4 @@
 ---
-slug: viper
 name: Viper
 title_slug: viper
 opdb_id: G5vXB-MLEve

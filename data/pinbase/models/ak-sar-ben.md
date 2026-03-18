@@ -1,5 +1,4 @@
 ---
-slug: ak-sar-ben
 name: Ak-Sar-Ben
 title_slug: ak-sar-ben
 ipdb_id: 39

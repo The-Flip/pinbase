@@ -1,5 +1,4 @@
 ---
-slug: little-monarch
 name: Little Monarch
 title_slug: little-monarch
 ipdb_id: 5516

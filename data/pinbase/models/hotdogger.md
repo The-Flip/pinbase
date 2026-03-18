@@ -1,5 +1,4 @@
 ---
-slug: hotdogger
 name: Hotdogger
 title_slug: hotdogger
 ipdb_id: 4516

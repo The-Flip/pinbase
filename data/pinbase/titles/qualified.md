@@ -1,4 +1,3 @@
 ---
-slug: qualified
 name: Qualified
 ---

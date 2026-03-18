@@ -1,5 +1,4 @@
 ---
-slug: roy-mcginnis-company
 name: Roy McGinnis Company
 manufacturer_slug: roy-mcginnis-company
 ipdb_manufacturer_id: 272

@@ -1,5 +1,4 @@
 ---
-slug: hop-shot
 name: Hop Shot
 title_slug: hop-shot
 ipdb_id: 4865

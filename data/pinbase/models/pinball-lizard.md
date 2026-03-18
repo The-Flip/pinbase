@@ -1,5 +1,4 @@
 ---
-slug: pinball-lizard
 name: Pinball Lizard
 title_slug: pinball-lizard
 opdb_id: GR9ko-MLzrW

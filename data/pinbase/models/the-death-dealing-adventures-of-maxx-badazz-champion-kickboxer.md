@@ -1,5 +1,4 @@
 ---
-slug: the-death-dealing-adventures-of-maxx-badazz-champion-kickboxer
 name: The Death Dealing Adventures of Maxx Badazz Champion Kickboxer
 title_slug: the-death-dealing-adventures-of-maxx-badazz-champion-kickboxer
 ipdb_id: 4350

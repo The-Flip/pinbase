@@ -1,4 +1,3 @@
 ---
-slug: oscar
 name: Oscar
 ---

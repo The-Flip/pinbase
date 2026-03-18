@@ -1,5 +1,4 @@
 ---
-slug: the-ad-lee-company-incorporated
 name: The Ad-Lee Company, Incorporated
 manufacturer_slug: the-ad-lee-company-incorporated
 ipdb_manufacturer_id: 314

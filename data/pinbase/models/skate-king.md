@@ -1,5 +1,4 @@
 ---
-slug: skate-king
 name: Skate King
 title_slug: skate-king
 ipdb_id: 5466

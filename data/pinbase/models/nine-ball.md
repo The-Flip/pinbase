@@ -1,5 +1,4 @@
 ---
-slug: nine-ball
 name: Nine Ball
 title_slug: nine-ball
 opdb_id: G4jjx-MDbz2

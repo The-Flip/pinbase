@@ -1,5 +1,4 @@
 ---
-slug: racing-club
 name: Racing Club
 title_slug: racing-club
 ipdb_id: 3537

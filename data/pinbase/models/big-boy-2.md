@@ -1,5 +1,4 @@
 ---
-slug: big-boy-2
 name: Big Boy
 title_slug: big-boy-2
 ipdb_id: 4162

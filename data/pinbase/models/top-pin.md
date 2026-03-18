@@ -1,5 +1,4 @@
 ---
-slug: top-pin
 name: Top Pin
 title_slug: top-pin
 ipdb_id: 3471

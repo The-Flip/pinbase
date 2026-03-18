@@ -1,5 +1,4 @@
 ---
-slug: nesting-birds
 name: Nesting Birds
 title_slug: nesting-birds
 ipdb_id: 4893

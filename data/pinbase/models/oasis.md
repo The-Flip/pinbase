@@ -1,5 +1,4 @@
 ---
-slug: oasis
 name: Oasis
 title_slug: oasis
 opdb_id: GRYYZ-MJ4N3

@@ -1,5 +1,4 @@
 ---
-slug: stock-car
 name: Stock Car
 title_slug: road-race-stock-car
 opdb_id: G4PQj-MQ4xo

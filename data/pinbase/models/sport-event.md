@@ -1,5 +1,4 @@
 ---
-slug: sport-event
 name: Sport Event
 title_slug: sport-event
 ipdb_id: 3467

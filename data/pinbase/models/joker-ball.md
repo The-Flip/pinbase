@@ -1,5 +1,4 @@
 ---
-slug: joker-ball
 name: Joker Ball
 title_slug: joker-ball
 ipdb_id: 5561

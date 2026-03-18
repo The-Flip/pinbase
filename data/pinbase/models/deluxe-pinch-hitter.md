@@ -1,5 +1,4 @@
 ---
-slug: deluxe-pinch-hitter
 name: Deluxe Pinch-Hitter
 title_slug: deluxe-pinch-hitter
 ipdb_id: 3051

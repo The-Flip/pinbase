@@ -1,5 +1,4 @@
 ---
-slug: zunt-table
 name: Zunt Table
 title_slug: zunt-table
 ipdb_id: 5904

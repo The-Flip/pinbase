@@ -1,5 +1,4 @@
 ---
-slug: bally-supreme
 name: Bally Supreme
 title_slug: bally-supreme
 ipdb_id: 155

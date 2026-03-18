@@ -1,5 +1,4 @@
 ---
-slug: indy-game
 name: Indy Game (インディゲーム)
 title_slug: indy-game
 ipdb_id: 6774

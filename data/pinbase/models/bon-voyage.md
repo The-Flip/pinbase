@@ -1,5 +1,4 @@
 ---
-slug: bon-voyage
 name: Bon Voyage
 title_slug: bon-voyage
 opdb_id: GRLNQ-MDEb1

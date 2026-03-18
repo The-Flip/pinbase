@@ -1,5 +1,4 @@
 ---
-slug: arabian-knights
 name: Arabian Knights
 title_slug: arabian-knights
 opdb_id: G59Xv-MJdYp

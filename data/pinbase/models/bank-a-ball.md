@@ -1,5 +1,4 @@
 ---
-slug: bank-a-ball
 name: Bank-A-Ball
 title_slug: bank-a-ball-flipper-pool
 opdb_id: GrxdD-MOEnx

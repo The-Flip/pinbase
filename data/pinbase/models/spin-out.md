@@ -1,5 +1,4 @@
 ---
-slug: spin-out
 name: Spin Out
 title_slug: spin-out
 opdb_id: GrPx2-M5RRk

@@ -1,5 +1,4 @@
 ---
-slug: paradise-2
 name: Paradise
 title_slug: paradise-pleasure-isle
 opdb_id: G4yEO-MVKp9

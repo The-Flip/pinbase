@@ -1,4 +1,3 @@
 ---
-slug: jupiter
 name: Jupiter
 ---

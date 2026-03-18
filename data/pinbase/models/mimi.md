@@ -1,5 +1,4 @@
 ---
-slug: mimi
 name: Mimi
 title_slug: mimi
 ipdb_id: 1602

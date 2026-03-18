@@ -1,5 +1,4 @@
 ---
-slug: carioca-beach
 name: Carioca Beach
 title_slug: carioca-beach
 ipdb_id: 5077

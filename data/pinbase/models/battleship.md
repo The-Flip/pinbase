@@ -1,5 +1,4 @@
 ---
-slug: battleship
 name: Battleship
 title_slug: battleship
 ipdb_id: 4146

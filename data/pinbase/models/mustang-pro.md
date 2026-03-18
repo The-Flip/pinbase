@@ -1,5 +1,4 @@
 ---
-slug: mustang-pro
 name: Mustang (Pro)
 title_slug: mustang
 opdb_id: GrPOR-MJK2k

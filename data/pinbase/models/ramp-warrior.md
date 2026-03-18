@@ -1,5 +1,4 @@
 ---
-slug: ramp-warrior
 name: Ramp Warrior
 title_slug: truck-stop
 opdb_id: G5Y6O-MLOqO

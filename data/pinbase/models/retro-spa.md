@@ -1,5 +1,4 @@
 ---
-slug: retro-spa
 name: Retro Spa
 title_slug: retro-spa
 ipdb_id: 7037

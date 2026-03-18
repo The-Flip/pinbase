@@ -1,5 +1,4 @@
 ---
-slug: mach-20-two
 name: Mach 2
 title_slug: mach-2
 opdb_id: G4lVe-MQjwb

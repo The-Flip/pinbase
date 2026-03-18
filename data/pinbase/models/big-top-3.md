@@ -1,5 +1,4 @@
 ---
-slug: big-top-3
 name: Big Top
 title_slug: big-top-2
 opdb_id: GR9el-MQdRK

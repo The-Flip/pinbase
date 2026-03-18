@@ -1,5 +1,4 @@
 ---
-slug: kewpie-doll
 name: Kewpie Doll
 title_slug: kewpie-doll
 opdb_id: GR6ox-MJP59

@@ -1,5 +1,4 @@
 ---
-slug: hit-me-2
 name: Hit Me
 title_slug: hit-me-2
 ipdb_id: 4304

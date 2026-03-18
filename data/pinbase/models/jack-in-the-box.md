@@ -1,5 +1,4 @@
 ---
-slug: jack-in-the-box
 name: Jack In The Box
 title_slug: jack-in-the-box-jumping-jack
 opdb_id: Gr2JJ-MnKlB

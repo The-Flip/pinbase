@@ -1,5 +1,4 @@
 ---
-slug: euromat
 name: Euromat
 title_slug: euromat
 ipdb_id: 5171

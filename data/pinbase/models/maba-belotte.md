@@ -1,5 +1,4 @@
 ---
-slug: maba-belotte
 name: Maba Belotte
 title_slug: maba-belotte
 ipdb_id: 6703

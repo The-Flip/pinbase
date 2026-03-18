@@ -1,4 +1,3 @@
 ---
-slug: flying
 name: Flying
 ---

@@ -1,5 +1,4 @@
 ---
-slug: flipper-cowboy
 name: Flipper Cowboy
 title_slug: flipper-cowboy
 opdb_id: G4yl6-MQ9op

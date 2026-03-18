@@ -1,5 +1,4 @@
 ---
-slug: grand-canyon-2
 name: Grand Canyon
 title_slug: grand-canyon-2
 ipdb_id: 1066

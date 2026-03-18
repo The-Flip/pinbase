@@ -1,5 +1,4 @@
 ---
-slug: mermaid
 name: Mermaid
 title_slug: mermaid
 opdb_id: G4qo1-MQp5l

@@ -1,4 +1,3 @@
 ---
-slug: autoflash
 name: Autoflash
 ---

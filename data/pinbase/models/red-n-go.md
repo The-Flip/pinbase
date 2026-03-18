@@ -1,5 +1,4 @@
 ---
-slug: red-n-go
 name: Red 'N' Go
 title_slug: red-n-go
 ipdb_id: 6143

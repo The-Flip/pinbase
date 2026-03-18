@@ -1,5 +1,4 @@
 ---
-slug: school-days
 name: School Days
 title_slug: school-days
 ipdb_id: 2058

@@ -1,5 +1,4 @@
 ---
-slug: super-highway
 name: Super Highway
 title_slug: super-highway
 ipdb_id: 4163

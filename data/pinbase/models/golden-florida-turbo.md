@@ -1,5 +1,4 @@
 ---
-slug: golden-florida-turbo
 name: Golden Florida Turbo
 title_slug: golden-florida-turbo
 ipdb_id: 5501

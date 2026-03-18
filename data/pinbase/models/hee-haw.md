@@ -1,5 +1,4 @@
 ---
-slug: hee-haw
 name: Hee Haw
 title_slug: hee-haw
 opdb_id: G56Jy-Mx0VX

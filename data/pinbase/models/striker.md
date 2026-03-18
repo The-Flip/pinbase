@@ -1,5 +1,4 @@
 ---
-slug: striker
 name: Striker
 title_slug: striker
 opdb_id: G5YEE-MDEVO

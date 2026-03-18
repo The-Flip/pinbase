@@ -1,5 +1,4 @@
 ---
-slug: starlet
 name: Starlet
 title_slug: starlet
 ipdb_id: 2361

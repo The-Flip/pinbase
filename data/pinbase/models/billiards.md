@@ -1,5 +1,4 @@
 ---
-slug: billiards
 name: Billiards
 title_slug: billiards
 ipdb_id: 5221

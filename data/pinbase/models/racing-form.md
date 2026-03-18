@@ -1,5 +1,4 @@
 ---
-slug: racing-form
 name: Racing Form
 title_slug: racing-form
 ipdb_id: 7059

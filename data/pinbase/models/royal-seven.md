@@ -1,5 +1,4 @@
 ---
-slug: royal-seven
 name: Royal Seven
 title_slug: royal-seven
 ipdb_id: 4141

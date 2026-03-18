@@ -1,5 +1,4 @@
 ---
-slug: jolly-ride-2
 name: Jolly Ride
 title_slug: jolly-ride-2
 ipdb_id: 5085

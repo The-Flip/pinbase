@@ -1,5 +1,4 @@
 ---
-slug: quetzal
 name: Quetzal Pinball
 opdb_manufacturer_id: 130
 ---

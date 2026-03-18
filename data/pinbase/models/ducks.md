@@ -1,5 +1,4 @@
 ---
-slug: ducks
 name: Ducks
 title_slug: ducks
 opdb_id: GR9O6-MQ2oe

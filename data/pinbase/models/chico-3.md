@@ -1,5 +1,4 @@
 ---
-slug: chico-3
 name: Chico
 title_slug: chico-3
 ipdb_id: 4265

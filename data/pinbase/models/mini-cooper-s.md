@@ -1,5 +1,4 @@
 ---
-slug: mini-cooper-s
 name: Mini Cooper S
 title_slug: mini-cooper-s
 ipdb_id: 5538

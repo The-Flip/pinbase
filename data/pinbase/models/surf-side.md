@@ -1,5 +1,4 @@
 ---
-slug: surf-side
 name: Surf Side
 title_slug: surf-side
 opdb_id: G48XX-MDO3P

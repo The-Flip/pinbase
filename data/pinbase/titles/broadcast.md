@@ -1,4 +1,3 @@
 ---
-slug: broadcast
 name: Broadcast
 ---

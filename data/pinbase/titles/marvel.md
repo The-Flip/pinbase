@@ -1,4 +1,3 @@
 ---
-slug: marvel
 name: Marvel
 ---

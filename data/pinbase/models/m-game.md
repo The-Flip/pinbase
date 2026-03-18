@@ -1,5 +1,4 @@
 ---
-slug: m-game
 name: M Game
 title_slug: m-game
 ipdb_id: 3687

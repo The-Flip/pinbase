@@ -1,4 +1,3 @@
 ---
-slug: conquistador
 name: Conquistador
 ---

@@ -1,5 +1,4 @@
 ---
-slug: dino-turbo
 name: Dino Turbo
 title_slug: dino-turbo
 ipdb_id: 4493

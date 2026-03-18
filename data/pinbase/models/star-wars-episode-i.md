@@ -1,5 +1,4 @@
 ---
-slug: star-wars-episode-i
 name: Star Wars Episode I
 title_slug: star-wars-episode-i
 opdb_id: GRL9r-MD34z

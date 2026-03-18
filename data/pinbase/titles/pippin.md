@@ -1,4 +1,3 @@
 ---
-slug: pippin
 name: Pippin
 ---

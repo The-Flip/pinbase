@@ -1,5 +1,4 @@
 ---
-slug: won-der-bar
 name: Won-Der-Bar
 title_slug: won-der-bar
 ipdb_id: 6496

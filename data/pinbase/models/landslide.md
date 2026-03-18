@@ -1,5 +1,4 @@
 ---
-slug: landslide
 name: Landslide
 title_slug: landslide
 ipdb_id: 1411

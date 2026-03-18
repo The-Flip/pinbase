@@ -1,5 +1,4 @@
 ---
-slug: bump-a-lite
 name: Bump-A-Lite
 title_slug: bump-a-lite
 ipdb_id: 404

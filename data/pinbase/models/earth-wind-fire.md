@@ -1,5 +1,4 @@
 ---
-slug: earth-wind-fire
 name: Earth Wind Fire
 title_slug: earth-wind-fire
 opdb_id: GR96Q-MNEnx

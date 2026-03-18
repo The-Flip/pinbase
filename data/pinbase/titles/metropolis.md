@@ -1,4 +1,3 @@
 ---
-slug: metropolis
 name: Metropolis
 ---

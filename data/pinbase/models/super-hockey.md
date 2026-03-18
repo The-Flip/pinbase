@@ -1,5 +1,4 @@
 ---
-slug: super-hockey
 name: Super Hockey
 title_slug: super-hockey
 opdb_id: G4qOn-M1rXN

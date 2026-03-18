@@ -1,5 +1,4 @@
 ---
-slug: le-roulis
 name: Le Roulis
 title_slug: le-roulis
 ipdb_id: 5962

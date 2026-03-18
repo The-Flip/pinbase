@@ -1,5 +1,4 @@
 ---
-slug: showtime
 name: Showtime
 title_slug: showtime-dolphin
 opdb_id: GRKNz-MJ7rW

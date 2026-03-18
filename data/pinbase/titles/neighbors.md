@@ -1,4 +1,3 @@
 ---
-slug: neighbors
 name: Neighbors
 ---

@@ -1,4 +1,3 @@
 ---
-slug: frolics
 name: Frolics
 ---

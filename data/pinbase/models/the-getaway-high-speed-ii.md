@@ -1,5 +1,4 @@
 ---
-slug: the-getaway-high-speed-ii
 name: 'The Getaway: High Speed II'
 title_slug: the-getaway-high-speed-ii
 opdb_id: Grx8Y-MKNe9

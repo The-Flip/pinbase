@@ -1,5 +1,4 @@
 ---
-slug: punchy
 name: Punchy
 title_slug: punchy
 opdb_id: GrNjq-MQjzb

@@ -1,5 +1,4 @@
 ---
-slug: centennial
 name: Centennial
 title_slug: centennial
 ipdb_id: 478

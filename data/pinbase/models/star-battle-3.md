@@ -1,5 +1,4 @@
 ---
-slug: star-battle-3
 name: Star Battle
 title_slug: star-battle-3
 ipdb_id: 5733

@@ -1,5 +1,4 @@
 ---
-slug: 1963-major-league
 name: 1963 Major League
 title_slug: 1963-major-league
 ipdb_id: 1526

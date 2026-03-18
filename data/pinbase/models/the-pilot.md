@@ -1,5 +1,4 @@
 ---
-slug: the-pilot
 name: The Pilot
 title_slug: the-pilot
 ipdb_id: 1787

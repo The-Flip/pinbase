@@ -1,5 +1,4 @@
 ---
-slug: future-world
 name: Future World
 title_slug: space-city
 opdb_id: G5Kl7-MDxel

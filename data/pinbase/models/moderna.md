@@ -1,5 +1,4 @@
 ---
-slug: moderna
 name: Moderna
 title_slug: moderna
 ipdb_id: 5889

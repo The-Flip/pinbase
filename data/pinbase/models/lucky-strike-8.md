@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-8
 name: Lucky Strike
 title_slug: play-pool
 opdb_id: G5n1Q-M5RWp

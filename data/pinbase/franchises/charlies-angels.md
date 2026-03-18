@@ -1,5 +1,4 @@
 ---
-slug: charlies-angels
 name: Charlie's Angels
 ---
 

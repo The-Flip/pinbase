@@ -1,5 +1,4 @@
 ---
-slug: pinball-champ-3
 name: Pinball Champ
 title_slug: pinball-champ-3
 ipdb_id: 6149

@@ -1,5 +1,4 @@
 ---
-slug: criss-cross-3
 name: Criss Cross
 title_slug: criss-cross-3
 ipdb_id: 4931

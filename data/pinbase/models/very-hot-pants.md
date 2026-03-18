@@ -1,5 +1,4 @@
 ---
-slug: very-hot-pants
 name: Very Hot Pants
 title_slug: very-hot-pants
 ipdb_id: 5407

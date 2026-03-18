@@ -1,5 +1,4 @@
 ---
-slug: stars-jeep
 name: Stars Jeep
 title_slug: stars-jeep
 ipdb_id: 3484

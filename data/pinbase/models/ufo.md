@@ -1,5 +1,4 @@
 ---
-slug: ufo
 name: UFO
 title_slug: ufo
 ipdb_id: 5314

@@ -1,5 +1,4 @@
 ---
-slug: futurity
 name: Futurity
 title_slug: futurity
 ipdb_id: 975

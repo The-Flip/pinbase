@@ -1,5 +1,4 @@
 ---
-slug: home-run-9
 name: Home Run
 title_slug: home-run-7
 ipdb_id: 4767

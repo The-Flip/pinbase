@@ -1,5 +1,4 @@
 ---
-slug: magic-circle
 name: Magic Circle
 title_slug: magic-circle
 opdb_id: GRb9P-MQN0v

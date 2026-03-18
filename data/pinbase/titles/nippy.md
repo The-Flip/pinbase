@@ -1,4 +1,3 @@
 ---
-slug: nippy
 name: Nippy
 ---

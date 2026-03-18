@@ -1,5 +1,4 @@
 ---
-slug: eight-ball-deluxe-2
 name: Eight Ball Deluxe (1984 edition)
 title_slug: eight-ball-deluxe
 opdb_id: G5KXk-MLB9V-A1JKr

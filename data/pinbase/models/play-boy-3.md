@@ -1,5 +1,4 @@
 ---
-slug: play-boy-3
 name: Playboy
 title_slug: playboy
 opdb_id: G43z8-MLO8j

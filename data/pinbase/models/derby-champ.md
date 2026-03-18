@@ -1,5 +1,4 @@
 ---
-slug: derby-champ
 name: Derby Champ
 title_slug: derby-champ
 ipdb_id: 3059

@@ -1,5 +1,4 @@
 ---
-slug: firecracker
 name: Firecracker
 title_slug: firecracker
 opdb_id: G5bKj-MJobp

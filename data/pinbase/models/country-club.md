@@ -1,5 +1,4 @@
 ---
-slug: country-club
 name: Country Club
 title_slug: country-club
 ipdb_id: 4292

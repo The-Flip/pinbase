@@ -1,5 +1,4 @@
 ---
-slug: empire
 name: Empire
 title_slug: empire
 ipdb_id: 5205

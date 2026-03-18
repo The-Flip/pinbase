@@ -1,5 +1,4 @@
 ---
-slug: flipper-fair
 name: Flipper Fair
 title_slug: flipper-fair
 opdb_id: G4e9z-MD81o

@@ -1,5 +1,4 @@
 ---
-slug: shoo-shoo
 name: Shoo Shoo
 title_slug: shoo-shoo
 opdb_id: GRwwl-MQNPN

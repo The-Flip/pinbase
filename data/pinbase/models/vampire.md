@@ -1,5 +1,4 @@
 ---
-slug: vampire
 name: Vampire
 title_slug: vampire
 opdb_id: GRYZK-MQp44

@@ -1,5 +1,4 @@
 ---
-slug: drop-a-card-2
 name: Drop-A-Card
 title_slug: drop-a-card
 ipdb_id: 4950

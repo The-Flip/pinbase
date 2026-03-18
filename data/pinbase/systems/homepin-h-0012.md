@@ -1,5 +1,4 @@
 ---
-slug: homepin-h-0012
 name: Homepin H-0012
 manufacturer_slug: homepin
 technology_subgeneration_slug: ss-pc

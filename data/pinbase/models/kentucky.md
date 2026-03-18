@@ -1,5 +1,4 @@
 ---
-slug: kentucky
 name: Kentucky
 title_slug: kentucky
 ipdb_id: 1352

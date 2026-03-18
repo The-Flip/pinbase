@@ -1,5 +1,4 @@
 ---
-slug: reno-2
 name: Reno
 title_slug: reno
 opdb_id: GRb8E-MDq0R

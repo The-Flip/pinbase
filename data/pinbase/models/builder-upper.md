@@ -1,5 +1,4 @@
 ---
-slug: builder-upper
 name: Builder Upper
 title_slug: builder-upper
 ipdb_id: 398

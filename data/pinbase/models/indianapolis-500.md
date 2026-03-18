@@ -1,5 +1,4 @@
 ---
-slug: indianapolis-500
 name: Indianapolis 500
 title_slug: indianapolis-500
 opdb_id: Gr8l3-MDWr0

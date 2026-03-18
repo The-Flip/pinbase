@@ -1,4 +1,3 @@
 ---
-slug: bikini
 name: Bikini
 ---

@@ -1,5 +1,4 @@
 ---
-slug: wampum-bank
 name: Wampum-Bank
 title_slug: wampum-bank
 ipdb_id: 2751

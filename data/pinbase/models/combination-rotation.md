@@ -1,5 +1,4 @@
 ---
-slug: combination-rotation
 name: Combination Rotation
 title_slug: combination-rotation
 ipdb_id: 5331

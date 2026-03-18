@@ -1,5 +1,4 @@
 ---
-slug: wall-street
 name: Wall Street
 title_slug: wall-street
 ipdb_id: 2750

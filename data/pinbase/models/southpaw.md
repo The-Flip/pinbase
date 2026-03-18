@@ -1,5 +1,4 @@
 ---
-slug: southpaw
 name: Southpaw
 title_slug: southpaw
 ipdb_id: 5541

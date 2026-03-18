@@ -1,5 +1,4 @@
 ---
-slug: cross-fire
 name: Cross Fire
 title_slug: cross-fire
 ipdb_id: 603

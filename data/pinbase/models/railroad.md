@@ -1,5 +1,4 @@
 ---
-slug: railroad
 name: Railroad
 title_slug: railroad
 ipdb_id: 1907

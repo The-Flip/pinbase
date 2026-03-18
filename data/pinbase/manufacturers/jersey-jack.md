@@ -1,5 +1,4 @@
 ---
-slug: jersey-jack
 name: Jersey Jack Pinball
 opdb_manufacturer_id: 74
 ---

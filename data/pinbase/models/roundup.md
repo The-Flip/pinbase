@@ -1,5 +1,4 @@
 ---
-slug: roundup
 name: Roundup
 title_slug: roundup
 ipdb_id: 2029

@@ -1,5 +1,4 @@
 ---
-slug: riviera
 name: Riviera
 title_slug: riviera-2
 ipdb_id: 1967

@@ -1,4 +1,3 @@
 ---
-slug: squadron
 name: Squadron
 ---

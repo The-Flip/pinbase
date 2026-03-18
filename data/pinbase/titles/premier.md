@@ -1,4 +1,3 @@
 ---
-slug: premier
 name: Premier
 ---

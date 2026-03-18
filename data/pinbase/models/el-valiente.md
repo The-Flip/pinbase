@@ -1,5 +1,4 @@
 ---
-slug: el-valiente
 name: El Valiente
 title_slug: el-valiente
 ipdb_id: 6245

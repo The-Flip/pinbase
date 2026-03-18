@@ -1,5 +1,4 @@
 ---
-slug: rocket-4
 name: Rocket
 title_slug: rocket
 opdb_id: G42BY-MD8ZY

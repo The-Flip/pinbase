@@ -1,5 +1,4 @@
 ---
-slug: bola-way
 name: Bola-Way
 title_slug: bola-way
 ipdb_id: 337

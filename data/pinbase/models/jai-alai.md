@@ -1,5 +1,4 @@
 ---
-slug: jai-alai
 name: Jai Alai
 title_slug: jai-alai
 opdb_id: GrelY-MQjq8

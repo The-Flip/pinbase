@@ -1,5 +1,4 @@
 ---
-slug: sports-2
 name: Sports
 title_slug: sports
 ipdb_id: 3466

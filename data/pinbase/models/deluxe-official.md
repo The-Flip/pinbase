@@ -1,5 +1,4 @@
 ---
-slug: deluxe-official
 name: Deluxe Official
 title_slug: deluxe-official
 ipdb_id: 659

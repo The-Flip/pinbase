@@ -1,5 +1,4 @@
 ---
-slug: the-three-musketeers
 name: The Three Musketeers
 title_slug: the-three-musketeers
 opdb_id: G4q73-MZe1l

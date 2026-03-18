@@ -1,5 +1,4 @@
 ---
-slug: double-score-2
 name: Double Score
 title_slug: double-score-2
 ipdb_id: 5641

@@ -1,5 +1,4 @@
 ---
-slug: phantom-2
 name: Phantom
 title_slug: phantom-2
 ipdb_id: 6980

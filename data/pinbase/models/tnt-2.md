@@ -1,5 +1,4 @@
 ---
-slug: tnt-2
 name: T.N.T.
 title_slug: tnt-rock-on-boogie-dyn-o-mite
 opdb_id: G4yLE-Mq1ee

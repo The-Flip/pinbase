@@ -1,5 +1,4 @@
 ---
-slug: ye-ye-club
 name: Ye-Ye Club
 title_slug: ye-ye-club
 ipdb_id: 4645

@@ -1,5 +1,4 @@
 ---
-slug: fatima
 name: Fatima
 title_slug: fatima
 ipdb_id: 830

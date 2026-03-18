@@ -1,5 +1,4 @@
 ---
-slug: ball-save
 name: Ball Save
 display_order: 14
 ---

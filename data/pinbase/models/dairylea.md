@@ -1,5 +1,4 @@
 ---
-slug: dairylea
 name: Dairylea
 title_slug: dairylea
 ipdb_id: 4214

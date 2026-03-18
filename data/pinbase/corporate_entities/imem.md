@@ -1,5 +1,4 @@
 ---
-slug: imem
 name: imem
 manufacturer_slug: imem
 ipdb_manufacturer_id: 683

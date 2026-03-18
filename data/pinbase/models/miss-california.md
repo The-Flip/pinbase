@@ -1,5 +1,4 @@
 ---
-slug: miss-california
 name: Miss California
 title_slug: miss-california
 ipdb_id: 4753

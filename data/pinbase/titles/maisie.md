@@ -1,4 +1,3 @@
 ---
-slug: maisie
 name: Maisie
 ---

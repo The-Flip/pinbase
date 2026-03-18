@@ -1,5 +1,4 @@
 ---
-slug: fastrac
 name: FasTrac
 title_slug: fastrac
 ipdb_id: 5300

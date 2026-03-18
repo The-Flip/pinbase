@@ -1,4 +1,3 @@
 ---
-slug: sensation
 name: Sensation
 ---

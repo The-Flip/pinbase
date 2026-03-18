@@ -1,5 +1,4 @@
 ---
-slug: whir-pool-jr
 name: Whir-Pool Jr.
 title_slug: whir-pool-jr
 ipdb_id: 5245

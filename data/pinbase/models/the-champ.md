@@ -1,5 +1,4 @@
 ---
-slug: the-champ
 name: The Champ
 title_slug: the-champ
 ipdb_id: 3007

@@ -1,5 +1,4 @@
 ---
-slug: pin-up-girl
 name: Pin Up Girl
 title_slug: pin-up-girl
 ipdb_id: 1790

@@ -1,5 +1,4 @@
 ---
-slug: 1937-daily-races
 name: 1937 Daily Races
 title_slug: 1937-daily-races
 ipdb_id: 4293

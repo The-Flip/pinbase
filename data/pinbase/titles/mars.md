@@ -1,4 +1,3 @@
 ---
-slug: mars
 name: Mars
 ---

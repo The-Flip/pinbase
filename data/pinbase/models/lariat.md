@@ -1,5 +1,4 @@
 ---
-slug: lariat
 name: Lariat
 title_slug: lariat
 ipdb_id: 1401

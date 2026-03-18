@@ -1,4 +1,3 @@
 ---
-slug: marine
 name: Marine
 ---

@@ -1,5 +1,4 @@
 ---
-slug: caribbean
 name: Caribbean
 title_slug: caribbean
 ipdb_id: 449

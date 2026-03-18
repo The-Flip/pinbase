@@ -1,5 +1,4 @@
 ---
-slug: bally-booster
 name: Bally Booster
 title_slug: bally-booster
 ipdb_id: 147

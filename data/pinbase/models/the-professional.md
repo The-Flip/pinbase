@@ -1,5 +1,4 @@
 ---
-slug: the-professional
 name: The Professional
 title_slug: the-professional
 ipdb_id: 7052

@@ -1,5 +1,4 @@
 ---
-slug: grand-prix-2
 name: Grand Prix
 title_slug: nascar
 opdb_id: G5YWX-MDxXX

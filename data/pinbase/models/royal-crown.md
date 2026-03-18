@@ -1,5 +1,4 @@
 ---
-slug: royal-crown
 name: Royal Crown
 title_slug: royal-crown
 ipdb_id: 5536

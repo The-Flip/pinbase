@@ -1,4 +1,3 @@
 ---
-slug: animals
 name: Animals
 ---

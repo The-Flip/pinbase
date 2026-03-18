@@ -1,5 +1,4 @@
 ---
-slug: cocktail-hour
 name: Cocktail Hour
 title_slug: cocktail-hour
 ipdb_id: 4278

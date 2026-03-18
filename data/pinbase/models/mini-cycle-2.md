@@ -1,5 +1,4 @@
 ---
-slug: mini-cycle-2
 name: Mini Cycle
 title_slug: mini-cycle
 ipdb_id: 6227

@@ -1,5 +1,4 @@
 ---
-slug: guys-dolls
 name: Guys Dolls
 title_slug: guys-dolls
 opdb_id: G4N8B-M852k

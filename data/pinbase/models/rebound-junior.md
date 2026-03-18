@@ -1,5 +1,4 @@
 ---
-slug: rebound-junior
 name: Rebound (Junior)
 title_slug: rebound-junior
 ipdb_id: 1927

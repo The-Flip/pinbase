@@ -1,5 +1,4 @@
 ---
-slug: jump-shot
 name: Jump Shot
 title_slug: jump-shot
 opdb_id: G4dyP-Ml9EY

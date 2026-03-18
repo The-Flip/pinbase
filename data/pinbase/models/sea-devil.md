@@ -1,5 +1,4 @@
 ---
-slug: sea-devil
 name: Sea Devil
 title_slug: sea-devil
 ipdb_id: 6386

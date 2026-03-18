@@ -1,5 +1,4 @@
 ---
-slug: solid-state
 name: Solid State
 display_order: 3
 ---

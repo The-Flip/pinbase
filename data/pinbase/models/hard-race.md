@@ -1,5 +1,4 @@
 ---
-slug: hard-race
 name: Hard Race
 title_slug: hard-race
 ipdb_id: 6580

@@ -1,5 +1,4 @@
 ---
-slug: chance
 name: Chance
 title_slug: chance
 opdb_id: G4Elx-MP3R1

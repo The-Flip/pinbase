@@ -1,4 +1,3 @@
 ---
-slug: peachy
 name: Peachy
 ---

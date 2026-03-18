@@ -1,5 +1,4 @@
 ---
-slug: ski-club
 name: Ski Club
 title_slug: alpine-club-ski-club
 opdb_id: G5K3O-MLnzo

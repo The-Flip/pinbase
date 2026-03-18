@@ -1,4 +1,3 @@
 ---
-slug: havana
 name: Havana
 ---

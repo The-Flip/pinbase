@@ -1,5 +1,4 @@
 ---
-slug: race-king
 name: Race King
 title_slug: race-king
 ipdb_id: 3832

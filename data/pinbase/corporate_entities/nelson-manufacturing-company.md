@@ -1,5 +1,4 @@
 ---
-slug: nelson-manufacturing-company
 name: Nelson Manufacturing Company
 manufacturer_slug: nelson-manufacturing-company
 ipdb_manufacturer_id: 230

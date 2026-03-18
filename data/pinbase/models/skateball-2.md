@@ -1,5 +1,4 @@
 ---
-slug: skateball-2
 name: Skateball
 title_slug: skateball-2
 ipdb_id: 3237

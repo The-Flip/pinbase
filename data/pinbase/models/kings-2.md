@@ -1,5 +1,4 @@
 ---
-slug: kings-2
 name: Kings
 title_slug: kings
 opdb_id: GR7oK-ML1xw

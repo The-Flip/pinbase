@@ -1,5 +1,4 @@
 ---
-slug: midway-pattern-company
 name: Midway Pattern Company
 manufacturer_slug: midway
 ipdb_manufacturer_id: 215

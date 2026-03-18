@@ -1,5 +1,4 @@
 ---
-slug: hooey-ball-jr
 name: Hooey-Ball Jr.
 title_slug: hooey-ball-jr
 ipdb_id: 5409

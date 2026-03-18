@@ -1,4 +1,3 @@
 ---
-slug: sporty
 name: Sporty
 ---

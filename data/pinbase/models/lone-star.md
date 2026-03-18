@@ -1,5 +1,4 @@
 ---
-slug: lone-star
 name: Lone Star
 title_slug: lone-star
 ipdb_id: 1468

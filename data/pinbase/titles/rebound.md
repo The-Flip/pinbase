@@ -1,4 +1,3 @@
 ---
-slug: rebound
 name: Rebound
 ---

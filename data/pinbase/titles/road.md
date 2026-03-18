@@ -1,4 +1,3 @@
 ---
-slug: road
 name: Road
 ---

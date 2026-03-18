@@ -1,5 +1,4 @@
 ---
-slug: anabel
 name: Anabel
 title_slug: anabel
 ipdb_id: 72

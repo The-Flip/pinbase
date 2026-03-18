@@ -1,5 +1,4 @@
 ---
-slug: swing-along
 name: Swing-Along
 title_slug: swing-along
 opdb_id: G5D9e-M4owj

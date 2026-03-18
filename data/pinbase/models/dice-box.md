@@ -1,5 +1,4 @@
 ---
-slug: dice-box
 name: Dice Box
 title_slug: dice-box
 ipdb_id: 5000

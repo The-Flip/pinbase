@@ -1,4 +1,3 @@
 ---
-slug: mus
 name: Mus
 ---

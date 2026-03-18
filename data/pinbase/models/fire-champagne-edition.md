@@ -1,5 +1,4 @@
 ---
-slug: fire-champagne-edition
 name: Fire! Champagne Edition
 title_slug: fire
 opdb_id: G41Lo-MDerP

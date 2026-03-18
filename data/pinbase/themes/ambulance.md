@@ -1,4 +1,3 @@
 ---
-slug: ambulance
 name: Ambulance
 ---

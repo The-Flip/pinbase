@@ -1,5 +1,4 @@
 ---
-slug: come-back
 name: Come Back
 title_slug: come-back
 ipdb_id: 3914

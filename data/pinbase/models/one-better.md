@@ -1,5 +1,4 @@
 ---
-slug: one-better
 name: One Better
 title_slug: one-better
 ipdb_id: 1717

@@ -1,5 +1,4 @@
 ---
-slug: bank-shot-2
 name: Bank Shot
 title_slug: bank-shot
 ipdb_id: 5741

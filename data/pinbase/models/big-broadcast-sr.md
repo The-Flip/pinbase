@@ -1,5 +1,4 @@
 ---
-slug: big-broadcast-sr
 name: Big Broadcast (Sr)
 title_slug: big-broadcast-sr
 ipdb_id: 237

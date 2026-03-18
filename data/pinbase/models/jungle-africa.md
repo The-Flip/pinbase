@@ -1,5 +1,4 @@
 ---
-slug: jungle-africa
 name: Jungle Africa
 title_slug: jungle-africa
 ipdb_id: 4915

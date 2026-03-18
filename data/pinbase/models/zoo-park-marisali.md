@@ -1,5 +1,4 @@
 ---
-slug: zoo-park-marisali
 name: Zoo Park MariSali
 title_slug: zoo-park-marisali
 ipdb_id: 5798

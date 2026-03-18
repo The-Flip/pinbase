@@ -1,5 +1,4 @@
 ---
-slug: zenith
 name: Zenith
 title_slug: zenith
 ipdb_id: 2831

@@ -1,5 +1,4 @@
 ---
-slug: vegas-2
 name: Vegas
 title_slug: vegas-2
 opdb_id: GrqVL-MDyKe

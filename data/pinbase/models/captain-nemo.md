@@ -1,5 +1,4 @@
 ---
-slug: captain-nemo
 name: Captain Nemo
 title_slug: captain-nemo
 opdb_id: GWyB8-MKNEK

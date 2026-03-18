@@ -1,5 +1,4 @@
 ---
-slug: special
 name: Special
 title_slug: special
 ipdb_id: 3268

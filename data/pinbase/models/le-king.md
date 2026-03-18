@@ -1,5 +1,4 @@
 ---
-slug: le-king
 name: Le King
 title_slug: le-king
 opdb_id: Grqn7-MLE0K

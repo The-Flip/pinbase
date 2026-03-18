@@ -1,5 +1,4 @@
 ---
-slug: soccer-3
 name: Soccer
 title_slug: soccer-2
 ipdb_id: 4272

@@ -1,5 +1,4 @@
 ---
-slug: click
 name: Click
 title_slug: click
 ipdb_id: 533

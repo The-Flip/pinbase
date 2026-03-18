@@ -1,5 +1,4 @@
 ---
-slug: fence-buster
 name: Fence Buster
 title_slug: fence-buster
 ipdb_id: 832

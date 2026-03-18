@@ -1,5 +1,4 @@
 ---
-slug: buttons-2
 name: Buttons
 title_slug: buttons-2
 ipdb_id: 412

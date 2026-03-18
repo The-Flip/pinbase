@@ -1,5 +1,4 @@
 ---
-slug: wheeler-dealer
 name: Wheeler Dealer
 title_slug: wheeler-dealer
 ipdb_id: 4517

@@ -1,5 +1,4 @@
 ---
-slug: the-lost-world-jurassic-park
 name: The Lost World Jurassic Park
 title_slug: the-lost-world-jurassic-park
 opdb_id: G4kBL-MLndo

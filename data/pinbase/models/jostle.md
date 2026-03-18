@@ -1,5 +1,4 @@
 ---
-slug: jostle
 name: Jostle
 title_slug: jostle
 ipdb_id: 1315

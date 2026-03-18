@@ -1,5 +1,4 @@
 ---
-slug: star-explorer-2
 name: Star Explorer
 title_slug: star-explorer-2
 ipdb_id: 5771

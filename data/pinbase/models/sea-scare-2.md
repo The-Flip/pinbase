@@ -1,5 +1,4 @@
 ---
-slug: sea-scare-2
 name: Sea Scare
 title_slug: sea-scare-2
 ipdb_id: 5930

@@ -1,4 +1,3 @@
 ---
-slug: rodeo
 name: Rodeo
 ---

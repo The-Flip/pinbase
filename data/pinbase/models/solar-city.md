@@ -1,5 +1,4 @@
 ---
-slug: solar-city
 name: Solar City
 title_slug: el-dorado
 opdb_id: GrEZ5-MJ9y3

@@ -1,5 +1,4 @@
 ---
-slug: hi-lo-senior
 name: Hi-Lo (Senior)
 title_slug: hi-lo-senior
 ipdb_id: 1189

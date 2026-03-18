@@ -1,5 +1,4 @@
 ---
-slug: new-century-special
 name: New Century Special
 title_slug: new-century-special
 ipdb_id: 1667

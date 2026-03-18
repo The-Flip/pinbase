@@ -1,5 +1,4 @@
 ---
-slug: trapeze
 name: Trapeze
 title_slug: trapeze
 ipdb_id: 2633

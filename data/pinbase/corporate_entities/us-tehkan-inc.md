@@ -1,5 +1,4 @@
 ---
-slug: us-tehkan-inc
 name: U.S Tehkan Inc.
 manufacturer_slug: tehkan-inc
 ipdb_manufacturer_id: 515

@@ -1,5 +1,4 @@
 ---
-slug: add-a-ball
 name: Add-A-Ball
 title_slug: skill-ball
 opdb_id: G5zpL-ME02b-A9EYN

@@ -1,5 +1,4 @@
 ---
-slug: luna-park
 name: Luna Park
 title_slug: luna-park
 ipdb_id: 4952

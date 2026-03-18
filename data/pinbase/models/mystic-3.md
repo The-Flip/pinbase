@@ -1,5 +1,4 @@
 ---
-slug: mystic-3
 name: Mystic
 title_slug: mystic-3
 ipdb_id: 3786

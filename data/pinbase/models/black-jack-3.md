@@ -1,5 +1,4 @@
 ---
-slug: black-jack-3
 name: Black Jack (EM)
 title_slug: black-jack
 opdb_id: G5nbD-MDbBo

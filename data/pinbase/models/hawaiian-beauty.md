@@ -1,5 +1,4 @@
 ---
-slug: hawaiian-beauty
 name: Hawaiian Beauty
 title_slug: hawaiian-beauty
 opdb_id: GRzLZ-MLB5d

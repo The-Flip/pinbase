@@ -1,5 +1,4 @@
 ---
-slug: quetzal-qpc
 name: Quetzal QPC
 manufacturer_slug: quetzal
 technology_subgeneration_slug: ss-pc

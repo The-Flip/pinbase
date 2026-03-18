@@ -1,5 +1,4 @@
 ---
-slug: attack-from-mars-remake
 name: Attack From Mars (Remake)
 title_slug: attack-from-mars
 opdb_id: G4do5-MkPnV

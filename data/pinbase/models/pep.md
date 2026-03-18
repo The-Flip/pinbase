@@ -1,5 +1,4 @@
 ---
-slug: pep
 name: Pep
 title_slug: pep
 ipdb_id: 3352

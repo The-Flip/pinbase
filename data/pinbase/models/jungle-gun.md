@@ -1,5 +1,4 @@
 ---
-slug: jungle-gun
 name: Jungle Gun
 title_slug: jungle-gun
 ipdb_id: 6362

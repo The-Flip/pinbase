@@ -1,5 +1,4 @@
 ---
-slug: palma
 name: Palma
 title_slug: palma
 ipdb_id: 4613

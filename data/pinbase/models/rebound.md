@@ -1,5 +1,4 @@
 ---
-slug: rebound
 name: Rebound
 title_slug: rebound
 ipdb_id: 1926

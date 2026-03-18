@@ -1,5 +1,4 @@
 ---
-slug: signal-sr
 name: Signal (Sr)
 title_slug: signal-sr
 ipdb_id: 2143

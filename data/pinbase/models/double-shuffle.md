@@ -1,5 +1,4 @@
 ---
-slug: double-shuffle
 name: Double-Shuffle
 title_slug: double-shuffle
 opdb_id: GR986-MjBBV

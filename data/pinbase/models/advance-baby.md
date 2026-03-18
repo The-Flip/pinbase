@@ -1,5 +1,4 @@
 ---
-slug: advance-baby
 name: Advance Baby
 title_slug: advance-baby
 ipdb_id: 4824

@@ -1,5 +1,4 @@
 ---
-slug: nba
 name: NBA
 ---
 

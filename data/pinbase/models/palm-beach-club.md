@@ -1,5 +1,4 @@
 ---
-slug: palm-beach-club
 name: Palm Beach Club
 title_slug: palm-beach-club
 ipdb_id: 5868

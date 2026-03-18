@@ -1,5 +1,4 @@
 ---
-slug: party
 name: Party
 title_slug: party
 opdb_id: Gr23X-MkP78

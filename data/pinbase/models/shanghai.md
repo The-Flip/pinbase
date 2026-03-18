@@ -1,5 +1,4 @@
 ---
-slug: shanghai
 name: Shanghai
 title_slug: shanghai
 opdb_id: Gd2O6-Mb5Ky

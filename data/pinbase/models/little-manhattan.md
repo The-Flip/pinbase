@@ -1,5 +1,4 @@
 ---
-slug: little-manhattan
 name: Little Manhattan
 title_slug: little-manhattan
 ipdb_id: 1462

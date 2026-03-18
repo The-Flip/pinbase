@@ -1,5 +1,4 @@
 ---
-slug: position
 name: Position
 title_slug: position
 ipdb_id: 4298

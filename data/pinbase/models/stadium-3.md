@@ -1,5 +1,4 @@
 ---
-slug: stadium-3
 name: Stadium
 title_slug: stadium-3
 ipdb_id: 3893

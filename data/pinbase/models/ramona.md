@@ -1,5 +1,4 @@
 ---
-slug: ramona
 name: Ramona
 title_slug: ramona
 opdb_id: GqZvQ-MRjlv

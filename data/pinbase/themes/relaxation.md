@@ -1,4 +1,3 @@
 ---
-slug: relaxation
 name: Relaxation
 ---

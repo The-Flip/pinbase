@@ -1,5 +1,4 @@
 ---
-slug: skippy
 name: Skippy
 title_slug: skippy
 ipdb_id: 3333

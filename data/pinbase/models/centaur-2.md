@@ -1,5 +1,4 @@
 ---
-slug: centaur-2
 name: Centaur
 title_slug: centaur-inder
 opdb_id: G5bE7-MQdXd

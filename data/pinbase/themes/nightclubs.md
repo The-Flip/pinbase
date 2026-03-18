@@ -1,4 +1,3 @@
 ---
-slug: nightclubs
 name: Nightclubs
 ---

@@ -1,4 +1,3 @@
 ---
-slug: skating
 name: Skating
 ---

@@ -1,5 +1,4 @@
 ---
-slug: flash-three
 name: Flash Three
 title_slug: flash-three
 ipdb_id: 6825

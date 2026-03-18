@@ -1,5 +1,4 @@
 ---
-slug: three-up
 name: Three Up
 title_slug: three-up
 ipdb_id: 2546

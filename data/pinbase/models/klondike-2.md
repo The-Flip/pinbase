@@ -1,5 +1,4 @@
 ---
-slug: klondike-2
 name: Klondike
 title_slug: klondike
 ipdb_id: 1389

@@ -1,5 +1,4 @@
 ---
-slug: kardtainer
 name: Kardtainer
 title_slug: kardtainer
 ipdb_id: 1347

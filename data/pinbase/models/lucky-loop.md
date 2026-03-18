@@ -1,5 +1,4 @@
 ---
-slug: lucky-loop
 name: '"Lucky Loop"'
 title_slug: lucky-loop
 ipdb_id: 7044

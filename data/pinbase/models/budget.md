@@ -1,5 +1,4 @@
 ---
-slug: budget
 name: Budget
 title_slug: budget
 ipdb_id: 3666

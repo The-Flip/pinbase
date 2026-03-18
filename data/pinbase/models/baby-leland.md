@@ -1,5 +1,4 @@
 ---
-slug: baby-leland
 name: Baby Leland
 title_slug: baby-leland
 ipdb_id: 123

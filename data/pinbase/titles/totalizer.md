@@ -1,4 +1,3 @@
 ---
-slug: totalizer
 name: Totalizer
 ---

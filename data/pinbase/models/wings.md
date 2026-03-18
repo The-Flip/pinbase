@@ -1,5 +1,4 @@
 ---
-slug: wings
 name: Wings
 title_slug: wings
 ipdb_id: 2790

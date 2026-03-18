@@ -1,5 +1,4 @@
 ---
-slug: tally
 name: Tally
 title_slug: tally
 ipdb_id: 4252

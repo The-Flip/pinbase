@@ -1,4 +1,3 @@
 ---
-slug: mexico
 name: Mexico
 ---

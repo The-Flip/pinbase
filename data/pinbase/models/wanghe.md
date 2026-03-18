@@ -1,5 +1,4 @@
 ---
-slug: wanghe
 name: Wanghe
 title_slug: wanghe
 ipdb_id: 6277

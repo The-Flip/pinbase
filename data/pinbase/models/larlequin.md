@@ -1,5 +1,4 @@
 ---
-slug: larlequin
 name: l'arlequin
 title_slug: larlequin
 ipdb_id: 6131

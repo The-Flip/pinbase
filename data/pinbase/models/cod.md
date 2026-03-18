@@ -1,5 +1,4 @@
 ---
-slug: cod
 name: C.O.D.
 title_slug: cod-2
 ipdb_id: 621

@@ -1,5 +1,4 @@
 ---
-slug: martin-martine
 name: Martin-Martine
 title_slug: martin-martine
 ipdb_id: 5744

@@ -1,5 +1,4 @@
 ---
-slug: penalty-one-ball
 name: Penalty One Ball
 title_slug: penalty-one-ball
 ipdb_id: 5848

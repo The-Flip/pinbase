@@ -1,5 +1,4 @@
 ---
-slug: lucky-strike-steel-ball
 name: Lucky Strike (Steel Ball)
 title_slug: lucky-strike-steel-ball
 ipdb_id: 4788

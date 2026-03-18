@@ -1,5 +1,4 @@
 ---
-slug: sherokee
 name: Sherokee
 title_slug: big-indian-big-brave
 opdb_id: GrXKb-MJ4ww-A1oXp

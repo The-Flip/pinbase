@@ -1,5 +1,4 @@
 ---
-slug: kue-ball
 name: Kue Ball
 title_slug: kue-ball
 ipdb_id: 6398

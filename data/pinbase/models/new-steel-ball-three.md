@@ -1,5 +1,4 @@
 ---
-slug: new-steel-ball-three
 name: New Steel Ball Three
 title_slug: new-steel-ball-three
 ipdb_id: 4730

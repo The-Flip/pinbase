@@ -1,5 +1,4 @@
 ---
-slug: manhattan-2
 name: Manhattan
 title_slug: manhattan-2
 ipdb_id: 1538

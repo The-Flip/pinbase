@@ -1,5 +1,4 @@
 ---
-slug: shantytown
 name: Shantytown
 title_slug: shantytown
 opdb_id: GyVQp-Mo1oX

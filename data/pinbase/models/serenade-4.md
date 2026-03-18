@@ -1,5 +1,4 @@
 ---
-slug: serenade-4
 name: Serenade
 title_slug: gondolier
 opdb_id: Gr1wP-MDq3y-AOYEn

@@ -1,5 +1,4 @@
 ---
-slug: ag-football
 name: A.G. Football
 title_slug: ag-soccer-ball-ag-football
 opdb_id: G5wxv-MnKkN

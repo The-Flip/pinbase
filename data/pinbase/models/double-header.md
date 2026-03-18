@@ -1,5 +1,4 @@
 ---
-slug: double-header
 name: Double Header
 title_slug: double-header
 ipdb_id: 716

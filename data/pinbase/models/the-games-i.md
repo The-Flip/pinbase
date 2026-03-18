@@ -1,5 +1,4 @@
 ---
-slug: the-games-i
 name: The Games I
 title_slug: the-games-i
 ipdb_id: 5340

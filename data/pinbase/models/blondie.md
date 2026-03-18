@@ -1,5 +1,4 @@
 ---
-slug: blondie
 name: Blondie
 title_slug: blondie
 opdb_id: GRVdN-MLqwD

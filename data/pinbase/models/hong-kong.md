@@ -1,5 +1,4 @@
 ---
-slug: hong-kong
 name: Hong Kong
 title_slug: hong-kong
 opdb_id: GrEdP-MePnB

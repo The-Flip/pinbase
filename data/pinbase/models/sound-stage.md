@@ -1,5 +1,4 @@
 ---
-slug: sound-stage
 name: Sound Stage
 title_slug: juke-box
 opdb_id: G5Qnx-MQKKB

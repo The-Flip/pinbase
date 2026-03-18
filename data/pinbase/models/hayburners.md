@@ -1,5 +1,4 @@
 ---
-slug: hayburners
 name: Hayburners
 title_slug: hayburners-jalopy
 opdb_id: GRojj-MQwN3

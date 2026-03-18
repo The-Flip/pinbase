@@ -1,5 +1,4 @@
 ---
-slug: american-amusement-mfg-co-inc
 name: American Amusement & Mfg. Co., Inc.
 manufacturer_slug: aamco-inc
 ipdb_manufacturer_id: 486

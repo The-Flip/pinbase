@@ -1,4 +1,3 @@
 ---
-slug: evans
 name: Evans
 ---

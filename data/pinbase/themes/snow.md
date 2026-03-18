@@ -1,4 +1,3 @@
 ---
-slug: snow
 name: Snow
 ---

@@ -1,5 +1,4 @@
 ---
-slug: holiday-hits
 name: Holiday Hits
 title_slug: holiday-hits
 ipdb_id: 1213

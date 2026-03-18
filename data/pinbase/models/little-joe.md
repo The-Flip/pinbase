@@ -1,5 +1,4 @@
 ---
-slug: little-joe
 name: Little Joe
 title_slug: little-joe
 opdb_id: GRwO9-MLObY

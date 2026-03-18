@@ -1,5 +1,4 @@
 ---
-slug: line-o
 name: Line-O
 title_slug: line-o
 ipdb_id: 1451

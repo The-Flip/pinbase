@@ -1,5 +1,4 @@
 ---
-slug: airway-of-1937
 name: Airway of 1937
 title_slug: airway-of-1937
 ipdb_id: 38

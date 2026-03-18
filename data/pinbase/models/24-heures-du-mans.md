@@ -1,5 +1,4 @@
 ---
-slug: 24-heures-du-mans
 name: 24 Heures du Mans
 title_slug: 24-heures-du-mans
 ipdb_id: 5271

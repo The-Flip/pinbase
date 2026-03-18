@@ -1,5 +1,4 @@
 ---
-slug: blackout
 name: Blackout
 title_slug: blackout
 opdb_id: GRwYo-MQoPw

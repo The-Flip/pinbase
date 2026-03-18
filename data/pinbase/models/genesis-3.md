@@ -1,5 +1,4 @@
 ---
-slug: genesis-3
 name: Genesis
 title_slug: genesis-3
 ipdb_id: 6688

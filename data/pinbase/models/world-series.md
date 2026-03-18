@@ -1,5 +1,4 @@
 ---
-slug: world-series
 name: World Series
 title_slug: grand-slam-world-series
 opdb_id: G43j1-MQVd4

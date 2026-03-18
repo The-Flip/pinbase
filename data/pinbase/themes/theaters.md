@@ -1,4 +1,3 @@
 ---
-slug: theaters
 name: Theaters
 ---

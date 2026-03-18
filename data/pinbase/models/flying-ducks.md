@@ -1,5 +1,4 @@
 ---
-slug: flying-ducks
 name: Flying Ducks
 title_slug: flying-ducks
 ipdb_id: 6488

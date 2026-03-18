@@ -1,5 +1,4 @@
 ---
-slug: daval-manufacturing-co
 name: Daval Manufacturing Co.
 manufacturer_slug: daval-manufacturing-co
 ipdb_manufacturer_id: 99

@@ -1,5 +1,4 @@
 ---
-slug: fortune-2
 name: Fortune
 title_slug: fortune-2
 ipdb_id: 920

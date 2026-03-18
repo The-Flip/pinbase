@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-baseball
 name: Bulls Eye Baseball
 title_slug: bulls-eye-baseball
 ipdb_id: 402

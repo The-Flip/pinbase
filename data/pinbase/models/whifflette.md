@@ -1,5 +1,4 @@
 ---
-slug: whifflette
 name: Whifflette
 title_slug: whifflette
 ipdb_id: 5264

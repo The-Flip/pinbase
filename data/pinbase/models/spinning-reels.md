@@ -1,5 +1,4 @@
 ---
-slug: spinning-reels
 name: Spinning Reels
 title_slug: spinning-reels
 ipdb_id: 2291

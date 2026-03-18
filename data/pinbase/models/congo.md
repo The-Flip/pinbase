@@ -1,5 +1,4 @@
 ---
-slug: congo
 name: Congo
 title_slug: congo-2
 ipdb_id: 555

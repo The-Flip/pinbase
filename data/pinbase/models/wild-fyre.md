@@ -1,5 +1,4 @@
 ---
-slug: wild-fyre
 name: Wild Fyre
 title_slug: wild-fyre
 opdb_id: GrOwV-Ml9kO

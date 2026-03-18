@@ -1,5 +1,4 @@
 ---
-slug: lotta-fun
 name: Lotta-Fun
 title_slug: lotta-fun
 ipdb_id: 1479

@@ -1,5 +1,4 @@
 ---
-slug: suspense
 name: Suspense
 title_slug: suspense-2
 ipdb_id: 2468

@@ -1,5 +1,4 @@
 ---
-slug: nitro-ground-shaker
 name: Nitro Ground Shaker
 title_slug: nitro-ground-shaker
 opdb_id: GrP6q-M5Rp1

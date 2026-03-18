@@ -1,5 +1,4 @@
 ---
-slug: black-ball
 name: Black Ball
 title_slug: black-ball
 ipdb_id: 4836

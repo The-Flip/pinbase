@@ -1,5 +1,4 @@
 ---
-slug: op-art
 name: Op Art
 title_slug: op-art
 ipdb_id: 5802

@@ -1,4 +1,3 @@
 ---
-slug: vedette
 name: Vedette
 ---

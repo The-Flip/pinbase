@@ -1,5 +1,4 @@
 ---
-slug: whizz-bang-model-a
 name: Whizz-Bang (Model A)
 title_slug: whizz-bang-model-a
 ipdb_id: 4830

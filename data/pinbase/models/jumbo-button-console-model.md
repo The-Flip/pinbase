@@ -1,5 +1,4 @@
 ---
-slug: jumbo-button-console-model
 name: Jumbo (button console model)
 title_slug: jumbo-button-console-model
 ipdb_id: 6982

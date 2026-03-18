@@ -1,5 +1,4 @@
 ---
-slug: king-kool
 name: King Kool
 title_slug: king-rock-king-kool
 opdb_id: GRBly-MQ9kl

@@ -1,5 +1,4 @@
 ---
-slug: heat-wave
 name: Heat Wave
 title_slug: heat-wave-2
 ipdb_id: 1147

@@ -1,5 +1,4 @@
 ---
-slug: big-league-6
 name: Big League
 title_slug: big-league-6
 ipdb_id: 6391

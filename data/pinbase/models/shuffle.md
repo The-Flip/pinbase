@@ -1,5 +1,4 @@
 ---
-slug: shuffle
 name: Shuffle
 title_slug: shuffle
 ipdb_id: 3244

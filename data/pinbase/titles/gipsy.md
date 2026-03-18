@@ -1,4 +1,3 @@
 ---
-slug: gipsy
 name: Gipsy
 ---

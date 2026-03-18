@@ -1,5 +1,4 @@
 ---
-slug: flagship
 name: Flagship
 title_slug: flagship
 ipdb_id: 867

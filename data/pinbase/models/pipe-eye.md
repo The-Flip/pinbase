@@ -1,5 +1,4 @@
 ---
-slug: pipe-eye
 name: Pipe Eye
 title_slug: pipe-eye
 ipdb_id: 3301

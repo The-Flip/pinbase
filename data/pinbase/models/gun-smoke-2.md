@@ -1,5 +1,4 @@
 ---
-slug: gun-smoke-2
 name: Gun Smoke
 title_slug: gun-smoke-2
 ipdb_id: 4808

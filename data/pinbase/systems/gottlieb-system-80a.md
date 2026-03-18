@@ -1,5 +1,4 @@
 ---
-slug: gottlieb-system-80a
 name: Gottlieb System 80A
 manufacturer_slug: gottlieb
 technology_subgeneration_slug: ss-discrete

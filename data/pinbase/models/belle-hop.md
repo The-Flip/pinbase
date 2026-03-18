@@ -1,5 +1,4 @@
 ---
-slug: belle-hop
 name: Belle Hop
 title_slug: belle-hop
 ipdb_id: 221

@@ -1,5 +1,4 @@
 ---
-slug: flasher-bell-fruit
 name: Flasher (Bell Fruit)
 title_slug: flasher-bell-fruit
 ipdb_id: 3101

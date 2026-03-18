@@ -1,5 +1,4 @@
 ---
-slug: atari
 name: Atari
 opdb_manufacturer_id: 27
 ---

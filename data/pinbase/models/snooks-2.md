@@ -1,5 +1,4 @@
 ---
-slug: snooks-2
 name: Snooks
 title_slug: snooks-2
 ipdb_id: 2227

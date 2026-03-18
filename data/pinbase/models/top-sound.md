@@ -1,5 +1,4 @@
 ---
-slug: top-sound
 name: Top Sound
 title_slug: top-sound
 ipdb_id: 4431

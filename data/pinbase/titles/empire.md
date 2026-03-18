@@ -1,4 +1,3 @@
 ---
-slug: empire
 name: Empire
 ---

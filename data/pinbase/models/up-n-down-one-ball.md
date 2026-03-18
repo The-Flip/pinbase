@@ -1,5 +1,4 @@
 ---
-slug: up-n-down-one-ball
 name: Up 'n Down One Ball
 title_slug: up-n-down-one-ball
 ipdb_id: 6092

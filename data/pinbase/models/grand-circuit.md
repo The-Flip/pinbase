@@ -1,5 +1,4 @@
 ---
-slug: grand-circuit
 name: Grand Circuit
 title_slug: grand-circuit
 ipdb_id: 4185

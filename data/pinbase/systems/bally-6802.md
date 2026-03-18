@@ -1,5 +1,4 @@
 ---
-slug: bally-6802
 name: Bally 6802
 manufacturer_slug: bally
 technology_subgeneration_slug: ss-discrete

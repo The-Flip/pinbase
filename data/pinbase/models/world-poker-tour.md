@@ -1,5 +1,4 @@
 ---
-slug: world-poker-tour
 name: World Poker Tour
 title_slug: world-poker-tour
 opdb_id: G5poe-MQrb5

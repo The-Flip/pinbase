@@ -1,5 +1,4 @@
 ---
-slug: clipper
 name: Clipper
 title_slug: clipper
 ipdb_id: 534

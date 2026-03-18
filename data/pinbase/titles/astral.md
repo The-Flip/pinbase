@@ -1,4 +1,3 @@
 ---
-slug: astral
 name: Astral
 ---

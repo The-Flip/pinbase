@@ -1,5 +1,4 @@
 ---
-slug: grand-casino
 name: Grand Casino
 title_slug: grand-casino
 ipdb_id: 4194

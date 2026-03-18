@@ -1,5 +1,4 @@
 ---
-slug: easy-pickin
 name: Easy Pickin'
 title_slug: easy-pickin
 ipdb_id: 3859

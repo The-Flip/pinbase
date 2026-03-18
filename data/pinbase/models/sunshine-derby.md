@@ -1,5 +1,4 @@
 ---
-slug: sunshine-derby
 name: Sunshine Derby
 title_slug: sunshine-derby
 ipdb_id: 2425

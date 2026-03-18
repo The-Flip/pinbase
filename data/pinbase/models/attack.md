@@ -1,5 +1,4 @@
 ---
-slug: attack
 name: Attack
 title_slug: attack
 opdb_id: GRWDp-MQ2yR

@@ -1,5 +1,4 @@
 ---
-slug: the-best-space-time
 name: The Best Space Time
 title_slug: the-best-space-time
 ipdb_id: 6133

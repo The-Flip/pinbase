@@ -1,4 +1,3 @@
 ---
-slug: shopping
 name: Shopping
 ---

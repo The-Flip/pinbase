@@ -1,5 +1,4 @@
 ---
-slug: mini-flipper
 name: Mini Flipper
 title_slug: mini-flipper
 ipdb_id: 5368

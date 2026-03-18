@@ -1,4 +1,3 @@
 ---
-slug: fleet
 name: Fleet
 ---

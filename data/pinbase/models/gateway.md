@@ -1,5 +1,4 @@
 ---
-slug: gateway
 name: Gateway
 title_slug: gateway
 ipdb_id: 6302

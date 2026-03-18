@@ -1,5 +1,4 @@
 ---
-slug: tanga
 name: Tanga
 title_slug: tanga
 opdb_id: GryjX-MvBXe

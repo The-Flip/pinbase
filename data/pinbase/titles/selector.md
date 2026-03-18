@@ -1,4 +1,3 @@
 ---
-slug: selector
 name: Selector
 ---

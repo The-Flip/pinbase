@@ -1,4 +1,3 @@
 ---
-slug: loony
 name: Loony
 ---

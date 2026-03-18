@@ -1,5 +1,4 @@
 ---
-slug: carnaval-no-rio
 name: Carnaval no Rio
 title_slug: carnaval-no-rio
 opdb_id: GV89W-MNENN

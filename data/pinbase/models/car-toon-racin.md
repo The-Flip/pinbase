@@ -1,5 +1,4 @@
 ---
-slug: car-toon-racin
 name: Car Toon Racin'
 title_slug: car-toon-racin
 ipdb_id: 5545

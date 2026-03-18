@@ -1,5 +1,4 @@
 ---
-slug: nsm-control-unit-217838
 name: NSM Control-Unit 217838
 manufacturer_slug: nsm
 technology_subgeneration_slug: ss-discrete

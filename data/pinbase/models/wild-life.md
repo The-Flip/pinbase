@@ -1,5 +1,4 @@
 ---
-slug: wild-life
 name: Wild Life
 title_slug: jungle-wild-life-jungle-king
 opdb_id: G5B0y-MJ26Y

@@ -1,5 +1,4 @@
 ---
-slug: dark-shadow
 name: Dark Shadow
 title_slug: dark-shadow
 opdb_id: G4eQ2-MJNO7

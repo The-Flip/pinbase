@@ -1,4 +1,3 @@
 ---
-slug: flamingo
 name: Flamingo
 ---

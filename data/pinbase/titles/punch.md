@@ -1,4 +1,3 @@
 ---
-slug: punch
 name: Punch
 ---

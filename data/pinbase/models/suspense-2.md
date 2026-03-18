@@ -1,5 +1,4 @@
 ---
-slug: suspense-2
 name: Suspense
 title_slug: suspense
 opdb_id: G5KQV-MP3Y1

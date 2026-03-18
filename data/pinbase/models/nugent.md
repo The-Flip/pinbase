@@ -1,5 +1,4 @@
 ---
-slug: nugent
 name: Nugent
 title_slug: ted-nugent
 opdb_id: G5VWL-MLRjl

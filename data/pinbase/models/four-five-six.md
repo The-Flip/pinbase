@@ -1,5 +1,4 @@
 ---
-slug: four-five-six
 name: Four Five Six
 title_slug: four-five-six
 ipdb_id: 944

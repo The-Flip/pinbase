@@ -1,4 +1,3 @@
 ---
-slug: repeater
 name: Repeater
 ---

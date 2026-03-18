@@ -1,5 +1,4 @@
 ---
-slug: golden-game
 name: Golden Game
 title_slug: golden-game
 ipdb_id: 6235

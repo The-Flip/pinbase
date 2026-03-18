@@ -1,5 +1,4 @@
 ---
-slug: pure-mechanical
 name: Pure Mechanical
 display_order: 1
 ---

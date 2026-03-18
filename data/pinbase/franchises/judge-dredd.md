@@ -1,5 +1,4 @@
 ---
-slug: judge-dredd
 name: Judge Dredd
 ---
 

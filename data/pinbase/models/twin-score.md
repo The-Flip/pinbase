@@ -1,5 +1,4 @@
 ---
-slug: twin-score
 name: Twin Score
 title_slug: twin-score
 ipdb_id: 3764

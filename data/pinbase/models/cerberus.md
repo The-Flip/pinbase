@@ -1,5 +1,4 @@
 ---
-slug: cerberus
 name: Cerberus
 title_slug: cerberus
 opdb_id: G4NvY-MDx14

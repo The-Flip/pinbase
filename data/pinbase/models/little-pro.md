@@ -1,5 +1,4 @@
 ---
-slug: little-pro
 name: Little Pro
 title_slug: little-pro
 ipdb_id: 4763

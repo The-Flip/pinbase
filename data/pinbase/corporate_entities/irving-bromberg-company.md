@@ -1,5 +1,4 @@
 ---
-slug: irving-bromberg-company
 name: Irving Bromberg Company
 manufacturer_slug: irving-bromberg-company
 ipdb_manufacturer_id: 161

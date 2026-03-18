@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-official-baseball
 name: De Luxe Official Baseball
 title_slug: de-luxe-official-baseball
 ipdb_id: 3474

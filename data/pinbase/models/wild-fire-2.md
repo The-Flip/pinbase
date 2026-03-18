@@ -1,5 +1,4 @@
 ---
-slug: wild-fire-2
 name: Wild Fire
 title_slug: wild-fire-2
 ipdb_id: 2782

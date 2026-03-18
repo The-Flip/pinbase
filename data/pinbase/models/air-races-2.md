@@ -1,5 +1,4 @@
 ---
-slug: air-races-2
 name: Air Races
 title_slug: air-races-2
 ipdb_id: 32

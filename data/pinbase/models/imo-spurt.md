@@ -1,5 +1,4 @@
 ---
-slug: imo-spurt
 name: IMO Spurt
 title_slug: imo-spurt
 ipdb_id: 4719

@@ -1,5 +1,4 @@
 ---
-slug: simplex-phonograph-corporation
 name: Simplex Phonograph Corporation
 manufacturer_slug: simplex-phonograph-corporation
 ipdb_manufacturer_id: 288

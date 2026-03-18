@@ -1,4 +1,3 @@
 ---
-slug: pigskin
 name: Pigskin
 ---

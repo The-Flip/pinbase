@@ -1,5 +1,4 @@
 ---
-slug: whizz
 name: Whizz
 title_slug: whizz
 ipdb_id: 3544

@@ -1,5 +1,4 @@
 ---
-slug: variety-2
 name: Variety
 title_slug: variety-2
 ipdb_id: 2719

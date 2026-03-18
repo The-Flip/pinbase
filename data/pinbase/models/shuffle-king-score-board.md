@@ -1,5 +1,4 @@
 ---
-slug: shuffle-king-score-board
 name: Shuffle-King Score Board
 title_slug: shuffle-king-score-board
 ipdb_id: 3571

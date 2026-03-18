@@ -1,4 +1,3 @@
 ---
-slug: london
 name: London
 ---

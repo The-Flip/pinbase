@@ -1,5 +1,4 @@
 ---
-slug: scala-reale
 name: Scala Reale
 title_slug: scala-reale
 ipdb_id: 4076

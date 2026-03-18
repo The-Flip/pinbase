@@ -1,5 +1,4 @@
 ---
-slug: falstaff
 name: Falstaff
 title_slug: falstaff
 opdb_id: GR0Yn-MJN52

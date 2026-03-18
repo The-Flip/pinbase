@@ -1,5 +1,4 @@
 ---
-slug: turnier-golf
 name: Turnier-Golf
 title_slug: turnier-golf
 ipdb_id: 4649

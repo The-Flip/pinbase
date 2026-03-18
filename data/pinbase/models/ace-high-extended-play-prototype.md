@@ -1,5 +1,4 @@
 ---
-slug: ace-high-extended-play-prototype
 name: Ace High (Extended Play Prototype)
 title_slug: ace-high-extended-play-prototype
 ipdb_id: 7034

@@ -1,5 +1,4 @@
 ---
-slug: batting-practice-2
 name: Batting Practice
 title_slug: batting-practice-2
 ipdb_id: 5574

@@ -1,5 +1,4 @@
 ---
-slug: space-jam
 name: Space Jam
 title_slug: space-jam
 opdb_id: G482d-Mp4kk

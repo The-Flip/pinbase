@@ -1,5 +1,4 @@
 ---
-slug: baywatch
 name: Baywatch
 title_slug: baywatch
 opdb_id: Grxvy-M4oZj

@@ -1,5 +1,4 @@
 ---
-slug: auroran
 name: Auroran
 title_slug: auroran
 ipdb_id: 111

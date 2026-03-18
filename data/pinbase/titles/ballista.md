@@ -1,4 +1,3 @@
 ---
-slug: ballista
 name: Ballista
 ---

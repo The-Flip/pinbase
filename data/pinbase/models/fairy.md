@@ -1,5 +1,4 @@
 ---
-slug: fairy
 name: Fairy
 title_slug: fantasy-fairy
 opdb_id: Gr8zQ-MJd3K

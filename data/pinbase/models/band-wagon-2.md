@@ -1,5 +1,4 @@
 ---
-slug: band-wagon-2
 name: Band Wagon
 title_slug: band-wagon-2
 opdb_id: GRVVb-MDxB4

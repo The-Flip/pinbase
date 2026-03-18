@@ -1,5 +1,4 @@
 ---
-slug: critical-mass
 name: Critical Mass
 title_slug: critical-mass
 ipdb_id: 5139

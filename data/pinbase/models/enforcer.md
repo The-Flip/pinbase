@@ -1,5 +1,4 @@
 ---
-slug: enforcer
 name: Enforcer
 title_slug: enforcer
 ipdb_id: 5604

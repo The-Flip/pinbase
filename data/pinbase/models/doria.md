@@ -1,5 +1,4 @@
 ---
-slug: doria
 name: Doria
 title_slug: doria
 ipdb_id: 6650

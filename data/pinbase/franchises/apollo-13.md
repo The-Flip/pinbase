@@ -1,5 +1,4 @@
 ---
-slug: apollo-13
 name: Apollo 13
 ---
 

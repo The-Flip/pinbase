@@ -1,5 +1,4 @@
 ---
-slug: atracciones
 name: Atracciones
 title_slug: atracciones
 ipdb_id: 6795

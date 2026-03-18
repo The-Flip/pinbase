@@ -1,10 +1,11 @@
 ---
-slug: wrestlemania-pro
 name: WrestleMania (Pro)
 title_slug: wrestlemania
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: GR6Or-MwNex
 ipdb_id: 6215
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: john-trudeau
   role: Design

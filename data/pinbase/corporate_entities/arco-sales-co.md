@@ -1,5 +1,4 @@
 ---
-slug: arco-sales-co
 name: Arco Sales Co.
 manufacturer_slug: arco-sales-co
 ipdb_manufacturer_id: 27

@@ -1,5 +1,4 @@
 ---
-slug: baby-billard
 name: Baby Billard
 title_slug: baby-billard
 ipdb_id: 5788

@@ -1,5 +1,4 @@
 ---
-slug: boomerang-2
 name: Boomerang
 title_slug: boomerang
 ipdb_id: 6042

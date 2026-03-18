@@ -1,5 +1,4 @@
 ---
-slug: shooting-gallery
 name: Shooting Gallery
 title_slug: shooting-gallery
 ipdb_id: 6353

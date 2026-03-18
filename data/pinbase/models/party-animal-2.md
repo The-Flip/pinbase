@@ -1,5 +1,4 @@
 ---
-slug: party-animal-2
 name: Party Animal
 title_slug: party-animal-2
 ipdb_id: 3293

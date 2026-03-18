@@ -1,5 +1,4 @@
 ---
-slug: loony
 name: Loony
 title_slug: loony
 ipdb_id: 4012

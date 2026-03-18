@@ -1,5 +1,4 @@
 ---
-slug: tropics
 name: Tropics
 title_slug: tropics
 ipdb_id: 2665

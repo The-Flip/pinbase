@@ -1,5 +1,4 @@
 ---
-slug: bazaar-2
 name: Bazaar
 title_slug: bazaar
 opdb_id: GRKeO-MQ53E

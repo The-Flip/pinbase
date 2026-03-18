@@ -1,5 +1,4 @@
 ---
-slug: chain-a-light
 name: Chain-A-Light
 title_slug: chain-a-light
 ipdb_id: 482

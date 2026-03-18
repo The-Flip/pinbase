@@ -1,5 +1,4 @@
 ---
-slug: sunbeam
 name: Sunbeam
 title_slug: sunbeam
 ipdb_id: 4250

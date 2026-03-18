@@ -1,5 +1,4 @@
 ---
-slug: happy-midget
 name: Happy Midget
 title_slug: happy-midget
 ipdb_id: 1118

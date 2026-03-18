@@ -1,5 +1,4 @@
 ---
-slug: waterworld
 name: Waterworld
 ---
 

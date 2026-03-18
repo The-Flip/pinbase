@@ -1,4 +1,3 @@
 ---
-slug: tanforan
 name: Tanforan
 ---

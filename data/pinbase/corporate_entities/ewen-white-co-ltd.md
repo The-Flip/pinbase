@@ -1,5 +1,4 @@
 ---
-slug: ewen-white-co-ltd
 name: Ewen, White & Co., Ltd.
 manufacturer_slug: ewen-white-co-ltd
 ipdb_manufacturer_id: 621

@@ -1,5 +1,4 @@
 ---
-slug: majik-keys
 name: Majik Keys
 title_slug: majik-keys
 ipdb_id: 4319

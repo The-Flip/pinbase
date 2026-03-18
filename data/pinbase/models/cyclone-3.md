@@ -1,5 +1,4 @@
 ---
-slug: cyclone-3
 name: Cyclone
 title_slug: cyclone-3
 ipdb_id: 616

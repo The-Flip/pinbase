@@ -1,5 +1,4 @@
 ---
-slug: megaaton
 name: Megaaton
 title_slug: megaaton
 opdb_id: G43DN-ME0kK

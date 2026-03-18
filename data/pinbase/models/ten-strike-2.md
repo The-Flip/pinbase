@@ -1,5 +1,4 @@
 ---
-slug: ten-strike-2
 name: Ten Strike
 title_slug: ten-strike-2
 ipdb_id: 2520

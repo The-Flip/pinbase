@@ -1,5 +1,4 @@
 ---
-slug: malaise-bury
 name: Malaise Bury
 manufacturer_slug: malaise-bury
 ipdb_manufacturer_id: 586

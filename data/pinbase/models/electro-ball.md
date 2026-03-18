@@ -1,5 +1,4 @@
 ---
-slug: electro-ball
 name: Electro-Ball
 title_slug: electro-ball
 ipdb_id: 5535

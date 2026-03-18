@@ -1,5 +1,4 @@
 ---
-slug: hold-tight
 name: Hold Tight
 title_slug: hold-tight
 ipdb_id: 1209

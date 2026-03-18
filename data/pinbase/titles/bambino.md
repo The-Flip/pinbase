@@ -1,4 +1,3 @@
 ---
-slug: bambino
 name: Bambino
 ---

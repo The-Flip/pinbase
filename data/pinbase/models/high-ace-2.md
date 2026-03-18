@@ -1,5 +1,4 @@
 ---
-slug: high-ace-2
 name: High Ace
 title_slug: dealers-choice-lucky-ace-high-ace
 opdb_id: GRwW9-MOEB2

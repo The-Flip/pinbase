@@ -1,5 +1,4 @@
 ---
-slug: live-wire
 name: Live Wire
 title_slug: live-wire
 ipdb_id: 3216

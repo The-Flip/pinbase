@@ -1,5 +1,4 @@
 ---
-slug: apollo-13
 name: Apollo 13
 title_slug: apollo-13
 opdb_id: G411e-MJrEL

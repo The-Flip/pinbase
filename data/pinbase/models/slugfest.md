@@ -1,5 +1,4 @@
 ---
-slug: slugfest
 name: Slugfest
 title_slug: slugfest
 opdb_id: Grkjn-MLnqy

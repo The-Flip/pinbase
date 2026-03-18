@@ -1,10 +1,11 @@
 ---
-slug: family-guy
 name: Family Guy
 title_slug: family-guy
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G5LW9-MQ6N5
 ipdb_id: 5219
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: pat-lawlor
   role: Design

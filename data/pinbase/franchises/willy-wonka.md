@@ -1,5 +1,4 @@
 ---
-slug: willy-wonka
 name: Willy Wonka
 ---
 

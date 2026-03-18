@@ -1,5 +1,4 @@
 ---
-slug: rock
 name: Rock
 title_slug: rock
 opdb_id: Grk62-MD1qe

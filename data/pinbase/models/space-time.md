@@ -1,5 +1,4 @@
 ---
-slug: space-time
 name: Space Time
 title_slug: space-time-time-zone
 opdb_id: GRvE1-MQ2P6

@@ -1,5 +1,4 @@
 ---
-slug: shrek
 name: Shrek
 ---
 

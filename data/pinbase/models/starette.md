@@ -1,5 +1,4 @@
 ---
-slug: starette
 name: Starette
 title_slug: starette
 ipdb_id: 6170

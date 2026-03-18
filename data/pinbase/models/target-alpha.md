@@ -1,5 +1,4 @@
 ---
-slug: target-alpha
 name: Target Alpha
 title_slug: el-dorado
 opdb_id: GrEZ5-MDBY0

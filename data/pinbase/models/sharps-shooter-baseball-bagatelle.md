@@ -1,5 +1,4 @@
 ---
-slug: sharps-shooter-baseball-bagatelle
 name: Sharp's Shooter - Baseball Bagatelle
 title_slug: sharps-shooter-baseball-bagatelle
 ipdb_id: 5585

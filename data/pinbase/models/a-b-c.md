@@ -1,5 +1,4 @@
 ---
-slug: a-b-c
 name: A-B-C
 title_slug: a-b-c
 ipdb_id: 2875

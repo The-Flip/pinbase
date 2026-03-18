@@ -1,5 +1,4 @@
 ---
-slug: the-waldorf-standard
 name: The Waldorf (Standard)
 title_slug: the-waldorf-standard
 ipdb_id: 2749

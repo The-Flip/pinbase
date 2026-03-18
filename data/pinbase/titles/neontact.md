@@ -1,4 +1,3 @@
 ---
-slug: neontact
 name: Neontact
 ---

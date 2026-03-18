@@ -1,4 +1,3 @@
 ---
-slug: horseshoes
 name: Horseshoes
 ---

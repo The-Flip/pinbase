@@ -1,5 +1,4 @@
 ---
-slug: chicago-l
 name: Chicago L
 title_slug: chicago-l
 ipdb_id: 4257

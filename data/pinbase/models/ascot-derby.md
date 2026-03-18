@@ -1,5 +1,4 @@
 ---
-slug: ascot-derby
 name: Ascot Derby
 title_slug: ascot-derby
 ipdb_id: 3658

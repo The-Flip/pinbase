@@ -1,4 +1,3 @@
 ---
-slug: barracuda
 name: Barracuda
 ---

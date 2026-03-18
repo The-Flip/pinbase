@@ -1,5 +1,4 @@
 ---
-slug: shield
 name: Shield
 title_slug: shield
 ipdb_id: 4954

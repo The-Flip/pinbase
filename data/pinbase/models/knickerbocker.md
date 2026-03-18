@@ -1,5 +1,4 @@
 ---
-slug: knickerbocker
 name: Knickerbocker
 title_slug: knickerbocker
 ipdb_id: 3199

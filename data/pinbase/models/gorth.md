@@ -1,5 +1,4 @@
 ---
-slug: gorth
 name: Gorth
 title_slug: gorth
 ipdb_id: 6700

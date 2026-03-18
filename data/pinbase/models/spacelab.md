@@ -1,5 +1,4 @@
 ---
-slug: spacelab
 name: Spacelab
 title_slug: spacelab
 ipdb_id: 6620

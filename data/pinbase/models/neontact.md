@@ -1,5 +1,4 @@
 ---
-slug: neontact
 name: Neontact
 title_slug: neontact
 ipdb_id: 1661

@@ -1,5 +1,4 @@
 ---
-slug: junior-league-bat-a-ball
 name: Junior League Bat-A-Ball
 title_slug: junior-league-bat-a-ball
 ipdb_id: 4675

@@ -1,5 +1,4 @@
 ---
-slug: magnets
 name: Magnets
 display_order: 17
 ---

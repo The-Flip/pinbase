@@ -1,5 +1,4 @@
 ---
-slug: oh-boy
 name: Oh Boy
 title_slug: oh-boy
 opdb_id: G5nLZ-MQ48w

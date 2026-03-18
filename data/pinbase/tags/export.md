@@ -1,5 +1,4 @@
 ---
-slug: export
 name: Export
 display_order: 6
 ---

@@ -1,5 +1,4 @@
 ---
-slug: jive-time-2
 name: Jive Time
 title_slug: jive-time
 ipdb_id: 6699

@@ -1,5 +1,4 @@
 ---
-slug: phillips-electronics-ltd
 name: Phillips Electronics, Ltd.
 manufacturer_slug: phillips-electronics-ltd
 ipdb_manufacturer_id: 574

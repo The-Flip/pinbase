@@ -1,5 +1,4 @@
 ---
-slug: le-grand-carrousel
 name: Le grand Carrousel
 title_slug: le-grand-carrousel
 ipdb_id: 5836

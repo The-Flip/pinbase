@@ -1,5 +1,4 @@
 ---
-slug: imo-diamant
 name: IMO Diamant
 title_slug: imo-diamant
 ipdb_id: 5032

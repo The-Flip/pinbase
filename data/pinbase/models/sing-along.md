@@ -1,5 +1,4 @@
 ---
-slug: sing-along
 name: Sing Along
 title_slug: sing-along-melody
 opdb_id: GrPkZ-MJZk7

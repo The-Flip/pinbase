@@ -1,5 +1,4 @@
 ---
-slug: majestic-3
 name: Majestic
 title_slug: majestic-3
 ipdb_id: 4150

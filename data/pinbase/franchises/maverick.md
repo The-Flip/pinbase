@@ -1,5 +1,4 @@
 ---
-slug: maverick
 name: Maverick
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: ballota-baby
 name: Ballota-Baby
 title_slug: ballota-baby
 ipdb_id: 5372

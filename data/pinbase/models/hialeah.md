@@ -1,5 +1,4 @@
 ---
-slug: hialeah
 name: Hialeah
 title_slug: hialeah
 ipdb_id: 1163

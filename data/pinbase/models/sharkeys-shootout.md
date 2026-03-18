@@ -1,5 +1,4 @@
 ---
-slug: sharkeys-shootout
 name: Sharkey's Shootout
 title_slug: sharkeys-shootout
 opdb_id: GRwv0-MJ99E

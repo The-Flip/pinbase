@@ -1,4 +1,3 @@
 ---
-slug: gangsters
 name: Gangsters
 ---

@@ -1,5 +1,4 @@
 ---
-slug: dragon-5
 name: Dragon
 title_slug: dragon-4
 ipdb_id: 5884

@@ -1,5 +1,4 @@
 ---
-slug: girls-ahoy
 name: Girls Ahoy
 title_slug: girls-ahoy
 ipdb_id: 3119

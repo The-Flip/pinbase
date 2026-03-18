@@ -1,5 +1,4 @@
 ---
-slug: zodiac
 name: Zodiac
 title_slug: zodiac-planets
 opdb_id: GRBBx-MDBEb

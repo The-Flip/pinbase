@@ -1,5 +1,4 @@
 ---
-slug: deluxe-46
 name: Deluxe 46
 title_slug: deluxe-46
 ipdb_id: 655

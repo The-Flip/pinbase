@@ -1,5 +1,4 @@
 ---
-slug: bali-hi
 name: Bali-Hi
 title_slug: bali-hi
 opdb_id: GRDJx-MDvRo

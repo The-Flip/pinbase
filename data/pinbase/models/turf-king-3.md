@@ -1,5 +1,4 @@
 ---
-slug: turf-king-3
 name: Turf King
 title_slug: turf-king-3
 ipdb_id: 3338

@@ -1,5 +1,4 @@
 ---
-slug: masterpiece
 name: Masterpiece
 title_slug: masterpiece
 ipdb_id: 1556

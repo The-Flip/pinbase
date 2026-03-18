@@ -1,5 +1,4 @@
 ---
-slug: silver-slugger
 name: Silver Slugger
 title_slug: silver-slugger
 opdb_id: Gr8jd-MLyxK

@@ -1,4 +1,3 @@
 ---
-slug: balance
 name: Balance
 ---

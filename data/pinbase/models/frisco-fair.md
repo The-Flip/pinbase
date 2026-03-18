@@ -1,5 +1,4 @@
 ---
-slug: frisco-fair
 name: Frisco Fair
 title_slug: frisco-fair
 ipdb_id: 6877

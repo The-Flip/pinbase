@@ -1,5 +1,4 @@
 ---
-slug: super-missil
 name: Super Missil
 title_slug: super-missil
 ipdb_id: 7049

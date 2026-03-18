@@ -1,5 +1,4 @@
 ---
-slug: the-raid
 name: The Raid
 title_slug: raid
 opdb_id: Grd1n-MDepV

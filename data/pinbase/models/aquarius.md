@@ -1,5 +1,4 @@
 ---
-slug: aquarius
 name: Aquarius
 title_slug: aquarius
 opdb_id: GreKP-MLXzY

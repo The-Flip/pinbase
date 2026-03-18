@@ -1,5 +1,4 @@
 ---
-slug: el-tigre
 name: El Tigre
 title_slug: el-tigre
 ipdb_id: 5297

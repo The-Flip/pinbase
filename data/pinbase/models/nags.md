@@ -1,5 +1,4 @@
 ---
-slug: nags
 name: Nags
 title_slug: nags-2
 ipdb_id: 1653

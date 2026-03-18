@@ -1,5 +1,4 @@
 ---
-slug: chocolate-drops
 name: Chocolate Drops
 title_slug: chocolate-drops
 ipdb_id: 3018

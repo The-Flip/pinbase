@@ -1,5 +1,4 @@
 ---
-slug: bullet-mark
 name: Bullet Mark
 title_slug: bullet-mark
 ipdb_id: 6477

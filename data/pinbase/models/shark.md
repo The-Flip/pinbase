@@ -1,5 +1,4 @@
 ---
-slug: shark
 name: Shark
 title_slug: shark
 opdb_id: Grjww-Mx0VR

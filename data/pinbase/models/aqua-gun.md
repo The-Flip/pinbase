@@ -1,5 +1,4 @@
 ---
-slug: aqua-gun
 name: Aqua Gun
 title_slug: aqua-gun
 ipdb_id: 6340

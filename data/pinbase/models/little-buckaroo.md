@@ -1,5 +1,4 @@
 ---
-slug: little-buckaroo
 name: Little Buckaroo
 title_slug: little-buckaroo
 ipdb_id: 6987

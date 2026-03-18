@@ -1,5 +1,4 @@
 ---
-slug: superior-knockout-of-32
 name: Superior Knockout of '32
 title_slug: superior-knockout-of-32
 ipdb_id: 5586

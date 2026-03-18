@@ -1,5 +1,4 @@
 ---
-slug: jungle-4
 name: Jungle
 title_slug: jungle-3
 ipdb_id: 4800

@@ -1,5 +1,4 @@
 ---
-slug: ball-park-2
 name: Ball Park
 title_slug: ball-park-2
 ipdb_id: 139

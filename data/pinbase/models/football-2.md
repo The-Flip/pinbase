@@ -1,5 +1,4 @@
 ---
-slug: football-2
 name: Football
 title_slug: football-2
 ipdb_id: 914

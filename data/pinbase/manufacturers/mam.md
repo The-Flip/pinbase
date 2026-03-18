@@ -1,4 +1,3 @@
 ---
-slug: mam
 name: MAM
 ---

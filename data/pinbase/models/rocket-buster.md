@@ -1,5 +1,4 @@
 ---
-slug: rocket-buster
 name: Rocket Buster
 title_slug: rocket-buster
 ipdb_id: 6943

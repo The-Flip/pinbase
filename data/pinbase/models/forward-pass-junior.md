@@ -1,5 +1,4 @@
 ---
-slug: forward-pass-junior
 name: Forward Pass (Junior)
 title_slug: forward-pass-junior
 ipdb_id: 4959

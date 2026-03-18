@@ -1,5 +1,4 @@
 ---
-slug: extra-inning
 name: Extra Inning
 title_slug: extra-inning
 opdb_id: GRLZ2-MYeWd

@@ -1,5 +1,4 @@
 ---
-slug: pamco-handicap
 name: PAMCO Handicap
 title_slug: pamco-handicap
 ipdb_id: 1110

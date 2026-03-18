@@ -1,5 +1,4 @@
 ---
-slug: dark-shadow-conversion-kit
 name: Dark Shadow (conversion kit)
 title_slug: dark-shadow-conversion-kit
 ipdb_id: 6723

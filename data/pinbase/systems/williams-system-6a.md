@@ -1,5 +1,4 @@
 ---
-slug: williams-system-6a
 name: Williams System 6A
 manufacturer_slug: williams
 technology_subgeneration_slug: ss-discrete

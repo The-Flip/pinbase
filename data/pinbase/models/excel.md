@@ -1,5 +1,4 @@
 ---
-slug: excel
 name: Excel
 title_slug: excel
 ipdb_id: 796

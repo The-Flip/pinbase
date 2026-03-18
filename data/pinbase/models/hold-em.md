@@ -1,5 +1,4 @@
 ---
-slug: hold-em
 name: Hold 'Em
 title_slug: hold-em
 ipdb_id: 1207

@@ -1,5 +1,4 @@
 ---
-slug: pinky
 name: Pinky
 title_slug: pinky
 opdb_id: GrkDY-MQwdB

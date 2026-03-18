@@ -1,5 +1,4 @@
 ---
-slug: spot-lite
 name: Spot-Lite
 title_slug: spot-lite
 ipdb_id: 2320

@@ -1,10 +1,11 @@
 ---
-slug: lexy-lightspeed-escape-from-earth
 name: 'Lexy Lightspeed: Escape from Earth'
 title_slug: lexy-lightspeed
 corporate_entity_slug: multimorphic-inc
 opdb_id: G4doo-MLEj1
 ipdb_id: 6449
+display_type_slug: lcd
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: dennis-nordman
   role: Design

@@ -1,5 +1,4 @@
 ---
-slug: zephyr
 name: Zephyr
 title_slug: zephyr
 ipdb_id: 2832

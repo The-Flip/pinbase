@@ -1,5 +1,4 @@
 ---
-slug: deluxe
 name: Deluxe
 title_slug: deluxe
 ipdb_id: 4191

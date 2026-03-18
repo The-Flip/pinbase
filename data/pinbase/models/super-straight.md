@@ -1,5 +1,4 @@
 ---
-slug: super-straight
 name: Super Straight
 title_slug: super-straight
 opdb_id: G4xyp-MQ25n

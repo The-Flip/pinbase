@@ -1,5 +1,4 @@
 ---
-slug: hi-dolly
 name: Hi Dolly
 title_slug: hi-dolly
 opdb_id: G5Ypy-MDxx7

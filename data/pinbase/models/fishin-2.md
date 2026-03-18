@@ -1,5 +1,4 @@
 ---
-slug: fishin-2
 name: Fishin'
 title_slug: fishin-2
 ipdb_id: 5310

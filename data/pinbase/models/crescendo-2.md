@@ -1,5 +1,4 @@
 ---
-slug: crescendo-2
 name: Crescendo
 title_slug: crescendo
 ipdb_id: 4877

@@ -1,5 +1,4 @@
 ---
-slug: comet
 name: Comet
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: pamco-bells
 name: Pamco Bells
 title_slug: pamco-bells
 ipdb_id: 222

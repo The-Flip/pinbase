@@ -1,5 +1,4 @@
 ---
-slug: student-prince
 name: Student Prince
 title_slug: student-prince
 opdb_id: G42XZ-MDvkd

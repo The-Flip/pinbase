@@ -1,5 +1,4 @@
 ---
-slug: wer-zahlt-die-runde
 name: Wer zahlt die Runde
 title_slug: wer-zahlt-die-runde
 ipdb_id: 4997

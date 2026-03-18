@@ -1,5 +1,4 @@
 ---
-slug: hit-n-run
 name: Hit 'N' Run
 title_slug: hit-n-run
 opdb_id: GrPVx-MQZP5

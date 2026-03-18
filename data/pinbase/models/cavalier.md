@@ -1,5 +1,4 @@
 ---
-slug: cavalier
 name: Cavalier
 title_slug: cavalier
 opdb_id: GrNEx-MRjEl

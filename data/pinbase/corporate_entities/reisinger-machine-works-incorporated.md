@@ -1,5 +1,4 @@
 ---
-slug: reisinger-machine-works-incorporated
 name: Reisinger Machine Works, Incorporated
 manufacturer_slug: reisinger-machine-works-incorporated
 ipdb_manufacturer_id: 264

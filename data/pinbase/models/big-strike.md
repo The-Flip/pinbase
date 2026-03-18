@@ -1,5 +1,4 @@
 ---
-slug: big-strike
 name: Big Strike
 title_slug: hot-line-big-strike
 opdb_id: GrZex-MQKR0

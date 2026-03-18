@@ -1,5 +1,4 @@
 ---
-slug: zowie
 name: Zowie
 title_slug: zowie
 ipdb_id: 2844

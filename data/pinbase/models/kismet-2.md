@@ -1,5 +1,4 @@
 ---
-slug: kismet-2
 name: Kismet
 title_slug: kismet
 opdb_id: G4ZD0-MjB9O

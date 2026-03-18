@@ -1,5 +1,4 @@
 ---
-slug: conan
 name: Conan
 title_slug: conan
 ipdb_id: 4580

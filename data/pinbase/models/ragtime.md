@@ -1,5 +1,4 @@
 ---
-slug: ragtime
 name: Ragtime
 title_slug: ragtime
 ipdb_id: 1906

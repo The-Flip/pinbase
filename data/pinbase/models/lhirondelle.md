@@ -1,5 +1,4 @@
 ---
-slug: lhirondelle
 name: L'Hirondelle
 title_slug: lhirondelle
 ipdb_id: 6461

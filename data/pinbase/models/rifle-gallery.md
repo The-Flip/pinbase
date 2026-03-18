@@ -1,5 +1,4 @@
 ---
-slug: rifle-gallery
 name: Rifle Gallery
 title_slug: rifle-gallery
 ipdb_id: 6482

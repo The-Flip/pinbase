@@ -1,5 +1,4 @@
 ---
-slug: soc-elettrogiochi
 name: Soc. Elettrogiochi
 manufacturer_slug: soc-elettrogiochi
 ipdb_manufacturer_id: 291

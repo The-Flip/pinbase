@@ -1,5 +1,4 @@
 ---
-slug: dyscus-manufacturing-company
 name: Dyscus Manufacturing Company
 manufacturer_slug: dyscus-manufacturing-company
 ipdb_manufacturer_id: 107

@@ -1,5 +1,4 @@
 ---
-slug: wheel
 name: Wheel
 title_slug: wheel
 ipdb_id: 4644

@@ -1,5 +1,4 @@
 ---
-slug: straight-flush-2
 name: Straight Flush
 title_slug: straight-flush-3-jokers
 opdb_id: GrkK0-MQdjZ

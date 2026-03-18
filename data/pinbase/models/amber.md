@@ -1,5 +1,4 @@
 ---
-slug: amber
 name: Amber
 title_slug: amber
 ipdb_id: 68

@@ -1,5 +1,4 @@
 ---
-slug: alice-in-wonderland
 name: Alice in Wonderland
 title_slug: alice-in-wonderland
 opdb_id: GkBXQ-M5RB4

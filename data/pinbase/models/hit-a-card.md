@@ -1,5 +1,4 @@
 ---
-slug: hit-a-card
 name: Hit-A-Card
 title_slug: king-of-diamonds
 opdb_id: GrlPj-MLqnR-ARB37

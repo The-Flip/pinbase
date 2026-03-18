@@ -1,5 +1,4 @@
 ---
-slug: pedal-pushers
 name: Pedal Pushers
 title_slug: pedal-pushers
 ipdb_id: 1771

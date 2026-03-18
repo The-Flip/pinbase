@@ -1,5 +1,4 @@
 ---
-slug: bump-t-ball
 name: Bump-T-Ball
 title_slug: bump-t-ball
 ipdb_id: 3671

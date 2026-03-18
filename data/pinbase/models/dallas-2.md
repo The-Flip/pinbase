@@ -1,5 +1,4 @@
 ---
-slug: dallas-2
 name: Dallas
 title_slug: dallas-2
 ipdb_id: 4046

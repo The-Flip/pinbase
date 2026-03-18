@@ -1,5 +1,4 @@
 ---
-slug: champ
 name: Champ
 title_slug: champ
 opdb_id: GrZNL-MOE2r

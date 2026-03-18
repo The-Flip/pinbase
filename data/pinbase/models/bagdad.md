@@ -1,5 +1,4 @@
 ---
-slug: bagdad
 name: Bagdad
 title_slug: bagdad
 ipdb_id: 3958

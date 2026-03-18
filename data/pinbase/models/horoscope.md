@@ -1,5 +1,4 @@
 ---
-slug: horoscope
 name: Horoscope
 title_slug: horoscope
 ipdb_id: 1237

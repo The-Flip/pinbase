@@ -1,5 +1,4 @@
 ---
-slug: mississippi
 name: Mississippi
 title_slug: mississippi
 opdb_id: GqZVQ-MwN8K

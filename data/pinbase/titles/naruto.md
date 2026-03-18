@@ -1,4 +1,3 @@
 ---
-slug: naruto
 name: Naruto
 ---

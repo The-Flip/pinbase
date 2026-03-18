@@ -1,5 +1,4 @@
 ---
-slug: varsity
 name: Varsity
 title_slug: varsity
 ipdb_id: 2722

@@ -1,5 +1,4 @@
 ---
-slug: arena
 name: Arena
 title_slug: arena
 opdb_id: G4EKb-MDx4p

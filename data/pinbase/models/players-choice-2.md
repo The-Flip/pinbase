@@ -1,5 +1,4 @@
 ---
-slug: players-choice-2
 name: Players Choice
 title_slug: players-choice-2
 ipdb_id: 6997

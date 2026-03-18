@@ -1,5 +1,4 @@
 ---
-slug: the-sopranos
 name: The Sopranos
 ---
 

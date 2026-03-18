@@ -1,5 +1,4 @@
 ---
-slug: big-show
 name: Big Show
 title_slug: big-show
 opdb_id: G5oxB-MJZqX

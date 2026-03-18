@@ -1,5 +1,4 @@
 ---
-slug: boogie
 name: Boogie
 title_slug: tnt-rock-on-boogie-dyn-o-mite
 opdb_id: G4yLE-MQKWK

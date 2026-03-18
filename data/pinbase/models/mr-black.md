@@ -1,5 +1,4 @@
 ---
-slug: mr-black
 name: Mr. Black
 title_slug: mr-black
 opdb_id: G429k-Mq169

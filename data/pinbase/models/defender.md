@@ -1,5 +1,4 @@
 ---
-slug: defender
 name: Defender
 title_slug: defender-2
 ipdb_id: 4428

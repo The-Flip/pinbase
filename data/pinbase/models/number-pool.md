@@ -1,5 +1,4 @@
 ---
-slug: number-pool
 name: Number Pool
 title_slug: number-pool
 ipdb_id: 3768

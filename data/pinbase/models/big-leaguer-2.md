@@ -1,5 +1,4 @@
 ---
-slug: big-leaguer-2
 name: Big Leaguer
 title_slug: big-leaguer-2
 ipdb_id: 263

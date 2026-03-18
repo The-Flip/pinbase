@@ -1,5 +1,4 @@
 ---
-slug: barni-sa
 name: Barni, S.A.
 manufacturer_slug: barni
 ipdb_manufacturer_id: 451

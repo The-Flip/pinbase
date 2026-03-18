@@ -1,5 +1,4 @@
 ---
-slug: club-house
 name: Club House
 title_slug: club-house
 opdb_id: G4ly3-MDx4z

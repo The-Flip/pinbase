@@ -1,5 +1,4 @@
 ---
-slug: nags-2
 name: Nags
 title_slug: nags
 opdb_id: GRV1N-MQ4r2

@@ -1,5 +1,4 @@
 ---
-slug: retro-atomic-zombie-adventureland
 name: Retro Atomic Zombie Adventureland
 title_slug: retro-atomic-zombie-adventureland
 opdb_id: Ge1L8-Mb52x

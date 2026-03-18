@@ -1,5 +1,4 @@
 ---
-slug: krull
 name: Krull
 title_slug: krull
 opdb_id: GV881-MBRNV

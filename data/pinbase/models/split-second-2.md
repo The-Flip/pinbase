@@ -1,5 +1,4 @@
 ---
-slug: split-second-2
 name: Split Second
 title_slug: split-second-2
 ipdb_id: 3463

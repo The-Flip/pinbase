@@ -1,5 +1,4 @@
 ---
-slug: alamo-2
 name: Alamo
 title_slug: alamo-2
 ipdb_id: 4916

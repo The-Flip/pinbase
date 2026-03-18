@@ -1,5 +1,4 @@
 ---
-slug: ad-lee-company
 name: Ad-Lee Company
 manufacturer_slug: ad-lee-company
 ipdb_manufacturer_id: 520

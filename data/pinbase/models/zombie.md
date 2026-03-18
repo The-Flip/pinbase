@@ -1,5 +1,4 @@
 ---
-slug: zombie
 name: Zombie
 title_slug: zombie
 ipdb_id: 2842

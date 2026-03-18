@@ -1,5 +1,4 @@
 ---
-slug: electric-hockey
 name: Electric Hockey
 title_slug: electric-hockey
 opdb_id: GRDo0-MQ9Ry

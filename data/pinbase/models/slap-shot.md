@@ -1,5 +1,4 @@
 ---
-slug: slap-shot
 name: Slap Shot
 title_slug: slap-shot
 ipdb_id: 5792

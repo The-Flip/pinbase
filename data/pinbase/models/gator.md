@@ -1,5 +1,4 @@
 ---
-slug: gator
 name: Gator
 title_slug: gator-sheba-campus-queen
 opdb_id: GRDQ1-MDRZ9

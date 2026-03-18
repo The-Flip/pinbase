@@ -1,4 +1,3 @@
 ---
-slug: totalite
 name: Totalite
 ---

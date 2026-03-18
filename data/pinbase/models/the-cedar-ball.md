@@ -1,5 +1,4 @@
 ---
-slug: the-cedar-ball
 name: The Cedar Ball
 title_slug: the-cedar-ball
 ipdb_id: 295

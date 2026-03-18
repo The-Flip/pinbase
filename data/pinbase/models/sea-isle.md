@@ -1,5 +1,4 @@
 ---
-slug: sea-isle
 name: Sea-Isle
 title_slug: sea-isle
 ipdb_id: 2083

@@ -1,5 +1,4 @@
 ---
-slug: california-exhibit-company
 name: California Exhibit Company
 manufacturer_slug: california-exhibit-company
 ipdb_manufacturer_id: 74

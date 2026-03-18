@@ -1,5 +1,4 @@
 ---
-slug: roll-ette
 name: Roll-ette
 title_slug: roll-ette
 ipdb_id: 4269

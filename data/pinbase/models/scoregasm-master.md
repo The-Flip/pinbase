@@ -1,5 +1,4 @@
 ---
-slug: scoregasm-master
 name: ScoreGasm Master
 title_slug: scoregasm-master
 ipdb_id: 6259

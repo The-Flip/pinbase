@@ -1,4 +1,3 @@
 ---
-slug: parachute
 name: Parachute
 ---

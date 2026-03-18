@@ -1,5 +1,4 @@
 ---
-slug: still-crazy
 name: Still Crazy
 title_slug: still-crazy
 ipdb_id: 3730

@@ -1,5 +1,4 @@
 ---
-slug: pace-manufacturing-company-incorporated
 name: Pace Manufacturing Company Incorporated
 manufacturer_slug: pace-manufacturing-company-incorporated
 ipdb_manufacturer_id: 240

@@ -1,5 +1,4 @@
 ---
-slug: the-maple-leaf
 name: The Maple Leaf
 title_slug: the-maple-leaf
 ipdb_id: 5321

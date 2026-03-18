@@ -1,5 +1,4 @@
 ---
-slug: congo-2
 name: Congo
 title_slug: congo
 opdb_id: GrNd0-MJNW1

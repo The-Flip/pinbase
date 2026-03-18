@@ -1,5 +1,4 @@
 ---
-slug: chistera
 name: Chistera
 title_slug: chistera
 ipdb_id: 4661

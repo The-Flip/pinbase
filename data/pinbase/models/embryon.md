@@ -1,5 +1,4 @@
 ---
-slug: embryon
 name: Embryon
 title_slug: embryon
 opdb_id: G4qk7-MNEjx

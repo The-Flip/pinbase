@@ -1,5 +1,4 @@
 ---
-slug: the-rambler
 name: The Rambler
 title_slug: the-rambler
 ipdb_id: 4801

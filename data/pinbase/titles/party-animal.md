@@ -1,5 +1,4 @@
 ---
-slug: party-animal
 name: Party Animal
 opdb_group_id: G42Zz
 abbreviations:

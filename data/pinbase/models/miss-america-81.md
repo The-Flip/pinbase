@@ -1,5 +1,4 @@
 ---
-slug: miss-america-81
 name: Miss America '81
 title_slug: miss-america-81
 ipdb_id: 6531

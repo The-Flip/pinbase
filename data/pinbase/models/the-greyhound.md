@@ -1,5 +1,4 @@
 ---
-slug: the-greyhound
 name: The Greyhound
 title_slug: the-greyhound
 ipdb_id: 6935

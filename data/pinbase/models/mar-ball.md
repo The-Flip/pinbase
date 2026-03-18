@@ -1,5 +1,4 @@
 ---
-slug: mar-ball
 name: Mar-Ball
 title_slug: mar-ball
 ipdb_id: 3387

@@ -1,5 +1,4 @@
 ---
-slug: balls-a-poppin-2
 name: Balls-A-Poppin'
 title_slug: balls-a-poppin
 ipdb_id: 6993

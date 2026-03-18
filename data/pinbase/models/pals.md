@@ -1,5 +1,4 @@
 ---
-slug: pals
 name: Pals
 title_slug: pals
 ipdb_id: 5068

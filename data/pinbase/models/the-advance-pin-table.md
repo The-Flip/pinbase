@@ -1,5 +1,4 @@
 ---
-slug: the-advance-pin-table
 name: The Advance Pin Table
 title_slug: the-advance-pin-table
 ipdb_id: 5518

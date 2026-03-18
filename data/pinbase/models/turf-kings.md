@@ -1,5 +1,4 @@
 ---
-slug: turf-kings
 name: Turf Kings
 title_slug: turf-kings
 ipdb_id: 2674

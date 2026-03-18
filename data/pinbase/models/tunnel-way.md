@@ -1,5 +1,4 @@
 ---
-slug: tunnel-way
 name: Tunnel Way
 title_slug: tunnel-way
 ipdb_id: 4322

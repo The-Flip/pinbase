@@ -1,5 +1,4 @@
 ---
-slug: on-deck-2
 name: On Deck
 title_slug: on-deck-2
 ipdb_id: 3260

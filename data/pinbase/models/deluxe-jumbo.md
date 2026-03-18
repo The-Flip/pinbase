@@ -1,5 +1,4 @@
 ---
-slug: deluxe-jumbo
 name: Deluxe Jumbo
 title_slug: super-jumbo-deluxe-jumbo
 opdb_id: GrX36-MDbpp

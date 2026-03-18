@@ -1,5 +1,4 @@
 ---
-slug: titan-bingo
 name: Titan Bingo
 title_slug: titan-bingo
 ipdb_id: 5842

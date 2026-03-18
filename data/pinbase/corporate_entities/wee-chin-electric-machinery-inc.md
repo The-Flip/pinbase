@@ -1,5 +1,4 @@
 ---
-slug: wee-chin-electric-machinery-inc
 name: Wee Chin Electric Machinery Inc.
 manufacturer_slug: weche
 ipdb_manufacturer_id: 761

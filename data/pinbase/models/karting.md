@@ -1,5 +1,4 @@
 ---
-slug: karting
 name: Karting
 title_slug: karting
 opdb_id: GR7zW-MLWov

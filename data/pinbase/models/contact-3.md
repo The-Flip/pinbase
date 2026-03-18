@@ -1,5 +1,4 @@
 ---
-slug: contact-3
 name: Contact
 title_slug: contact-3
 ipdb_id: 4196

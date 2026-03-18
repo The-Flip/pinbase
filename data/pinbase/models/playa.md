@@ -1,5 +1,4 @@
 ---
-slug: playa
 name: Playa
 title_slug: playa
 ipdb_id: 5315

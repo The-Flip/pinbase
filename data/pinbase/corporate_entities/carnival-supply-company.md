@@ -1,5 +1,4 @@
 ---
-slug: carnival-supply-company
 name: Carnival Supply Company
 manufacturer_slug: carnival-supply-company
 ipdb_manufacturer_id: 78

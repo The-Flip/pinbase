@@ -1,5 +1,4 @@
 ---
-slug: keen-o
 name: Keen-O
 title_slug: keen-o
 ipdb_id: 3190

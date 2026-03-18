@@ -1,5 +1,4 @@
 ---
-slug: roxy
 name: Roxy
 title_slug: roxy
 ipdb_id: 2031

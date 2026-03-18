@@ -1,4 +1,3 @@
 ---
-slug: brazil
 name: Brazil
 ---

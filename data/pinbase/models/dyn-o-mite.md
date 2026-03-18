@@ -1,5 +1,4 @@
 ---
-slug: dyn-o-mite
 name: Dyn O' Mite
 title_slug: tnt-rock-on-boogie-dyn-o-mite
 opdb_id: G4yLE-MQ7nd

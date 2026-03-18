@@ -1,5 +1,4 @@
 ---
-slug: night-hawk
 name: Night Hawk
 title_slug: night-hawk
 ipdb_id: 4029

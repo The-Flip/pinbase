@@ -1,5 +1,4 @@
 ---
-slug: elvis
 name: Elvis
 ---
 

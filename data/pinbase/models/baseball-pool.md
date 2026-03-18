@@ -1,5 +1,4 @@
 ---
-slug: baseball-pool
 name: Baseball Pool
 title_slug: baseball-pool
 ipdb_id: 5750

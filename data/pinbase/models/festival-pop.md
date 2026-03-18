@@ -1,5 +1,4 @@
 ---
-slug: festival-pop
 name: Festival Pop
 title_slug: festival-pop
 ipdb_id: 4881

@@ -1,4 +1,3 @@
 ---
-slug: wings
 name: Wings
 ---

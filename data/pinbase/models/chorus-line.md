@@ -1,5 +1,4 @@
 ---
-slug: chorus-line
 name: Chorus Line
 title_slug: chorus-line
 ipdb_id: 3019

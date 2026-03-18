@@ -1,4 +1,3 @@
 ---
-slug: trailways
 name: Trailways
 ---

@@ -1,5 +1,4 @@
 ---
-slug: q-t-pay-table
 name: Q. T. Pay Table
 title_slug: q-t-pay-table
 ipdb_id: 1601

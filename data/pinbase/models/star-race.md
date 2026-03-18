@@ -1,5 +1,4 @@
 ---
-slug: star-race
 name: Star Race
 title_slug: star-race
 opdb_id: G5VxP-MLWlV

@@ -1,5 +1,4 @@
 ---
-slug: mr-evil-2
 name: Mr. Evil
 title_slug: mr-evil-2
 ipdb_id: 5929

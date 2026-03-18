@@ -1,5 +1,4 @@
 ---
-slug: stranger-things
 name: Stranger Things
 ---
 

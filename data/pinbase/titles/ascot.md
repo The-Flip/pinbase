@@ -1,4 +1,3 @@
 ---
-slug: ascot
 name: Ascot
 ---

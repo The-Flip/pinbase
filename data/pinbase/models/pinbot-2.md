@@ -1,5 +1,4 @@
 ---
-slug: pinbot-2
 name: PIN*BOT
 title_slug: pinbot-2
 ipdb_id: 4130

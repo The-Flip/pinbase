@@ -1,5 +1,4 @@
 ---
-slug: time-tunnel
 name: Time Tunnel
 title_slug: time-tunnel
 opdb_id: GrXZE-Mx0py

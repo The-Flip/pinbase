@@ -1,5 +1,4 @@
 ---
-slug: big-town-2
 name: Big Town
 title_slug: big-town
 opdb_id: GrjJL-MDyzl

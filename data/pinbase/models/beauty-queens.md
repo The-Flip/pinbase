@@ -1,5 +1,4 @@
 ---
-slug: beauty-queens
 name: Beauty Queens
 title_slug: beauty-queens
 opdb_id: Gryqo-MDbPN

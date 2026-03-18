@@ -1,5 +1,4 @@
 ---
-slug: roller-coaster-2
 name: Roller Coaster
 title_slug: roller-coaster-2
 ipdb_id: 5914

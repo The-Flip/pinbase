@@ -1,5 +1,4 @@
 ---
-slug: pansy
 name: Pansy
 title_slug: pansy
 ipdb_id: 3923

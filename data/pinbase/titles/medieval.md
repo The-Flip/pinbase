@@ -1,4 +1,3 @@
 ---
-slug: medieval
 name: Medieval
 ---

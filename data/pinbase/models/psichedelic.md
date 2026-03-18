@@ -1,5 +1,4 @@
 ---
-slug: psichedelic
 name: Psichedelic
 title_slug: psichedelic
 ipdb_id: 6625

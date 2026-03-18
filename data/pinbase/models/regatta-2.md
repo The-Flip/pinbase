@@ -1,5 +1,4 @@
 ---
-slug: regatta-2
 name: '''Regatta'''
 title_slug: regatta-2
 ipdb_id: 4671

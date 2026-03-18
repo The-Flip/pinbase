@@ -1,5 +1,4 @@
 ---
-slug: hit-parade-3
 name: Hit Parade
 title_slug: hit-parade-3
 ipdb_id: 3150

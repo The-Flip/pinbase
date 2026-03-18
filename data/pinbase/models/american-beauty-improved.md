@@ -1,5 +1,4 @@
 ---
-slug: american-beauty-improved
 name: American Beauty (Improved)
 title_slug: american-beauty-improved
 ipdb_id: 6893

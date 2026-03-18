@@ -1,5 +1,4 @@
 ---
-slug: turf-derby
 name: Turf Derby
 title_slug: turf-derby
 ipdb_id: 3901

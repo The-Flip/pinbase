@@ -1,5 +1,4 @@
 ---
-slug: flipper-pin
 name: Flipper Pin
 title_slug: flipper-pin
 ipdb_id: 6303

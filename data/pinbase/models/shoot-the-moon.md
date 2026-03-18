@@ -1,5 +1,4 @@
 ---
-slug: shoot-the-moon
 name: Shoot the Moon
 title_slug: shoot-the-moon
 opdb_id: GRLq7-MQY6k

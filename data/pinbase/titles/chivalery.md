@@ -1,4 +1,3 @@
 ---
-slug: chivalery
 name: Chivalery
 ---

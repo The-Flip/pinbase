@@ -1,5 +1,4 @@
 ---
-slug: play-time-2
 name: Play Time
 title_slug: play-time-2
 ipdb_id: 4402

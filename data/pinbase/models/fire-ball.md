@@ -1,5 +1,4 @@
 ---
-slug: fire-ball
 name: Fire Ball
 title_slug: fire-ball
 ipdb_id: 847

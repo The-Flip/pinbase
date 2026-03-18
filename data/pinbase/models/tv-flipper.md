@@ -1,5 +1,4 @@
 ---
-slug: tv-flipper
 name: TV Flipper
 title_slug: tv-flipper
 ipdb_id: 6547

@@ -1,5 +1,4 @@
 ---
-slug: the-piffle-novelty-co
 name: The Piffle Novelty Co.
 manufacturer_slug: the-piffle-novelty-co
 ipdb_manufacturer_id: 596

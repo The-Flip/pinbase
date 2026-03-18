@@ -1,5 +1,4 @@
 ---
-slug: sefco
 name: SEFCO
 title_slug: sefco
 ipdb_id: 6827

@@ -1,5 +1,4 @@
 ---
-slug: super-7
 name: Super-7
 title_slug: super-7
 ipdb_id: 3225

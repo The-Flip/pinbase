@@ -1,5 +1,4 @@
 ---
-slug: ticker
 name: Ticker
 title_slug: ticker
 ipdb_id: 2558

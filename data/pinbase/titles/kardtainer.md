@@ -1,4 +1,3 @@
 ---
-slug: kardtainer
 name: Kardtainer
 ---

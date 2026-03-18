@@ -1,4 +1,3 @@
 ---
-slug: favorit
 name: Favorit
 ---

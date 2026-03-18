@@ -1,4 +1,3 @@
 ---
-slug: tramways
 name: Tramways
 ---

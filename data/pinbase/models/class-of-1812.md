@@ -1,5 +1,4 @@
 ---
-slug: class-of-1812
 name: Class of 1812
 title_slug: class-of-1812
 opdb_id: G5DYX-M0oVW

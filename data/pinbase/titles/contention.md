@@ -1,4 +1,3 @@
 ---
-slug: contention
 name: Contention
 ---

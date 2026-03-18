@@ -1,5 +1,4 @@
 ---
-slug: hi-de-ho
 name: Hi-De-Ho
 title_slug: hi-de-ho
 ipdb_id: 1156

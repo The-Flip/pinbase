@@ -1,5 +1,4 @@
 ---
-slug: hits-and-runs
 name: Hits and Runs
 title_slug: hits-and-runs
 opdb_id: G43XZ-MDyen

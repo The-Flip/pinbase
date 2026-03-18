@@ -1,5 +1,4 @@
 ---
-slug: continental-one-ball-2
 name: Continental One Ball
 title_slug: continental-one-ball-2
 ipdb_id: 6203

@@ -1,5 +1,4 @@
 ---
-slug: head-to-head
 name: Head-to-Head
 display_order: 20
 ---

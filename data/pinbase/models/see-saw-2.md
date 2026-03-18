@@ -1,5 +1,4 @@
 ---
-slug: see-saw-2
 name: See-Saw
 title_slug: see-saw-2
 ipdb_id: 2092

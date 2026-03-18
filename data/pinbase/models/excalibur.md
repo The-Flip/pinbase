@@ -1,5 +1,4 @@
 ---
-slug: excalibur
 name: Excalibur
 title_slug: excalibur
 opdb_id: GrPbb-MJZX6

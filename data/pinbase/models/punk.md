@@ -1,5 +1,4 @@
 ---
-slug: punk
 name: Punk!
 title_slug: punk
 opdb_id: GrEwE-MkP0d

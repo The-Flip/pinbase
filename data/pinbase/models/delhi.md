@@ -1,5 +1,4 @@
 ---
-slug: delhi
 name: Delhi
 title_slug: delhi
 ipdb_id: 3959

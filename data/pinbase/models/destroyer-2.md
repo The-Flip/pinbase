@@ -1,5 +1,4 @@
 ---
-slug: destroyer-2
 name: Destroyer
 title_slug: destroyer-2
 ipdb_id: 6523

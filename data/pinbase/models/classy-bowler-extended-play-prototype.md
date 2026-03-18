@@ -1,5 +1,4 @@
 ---
-slug: classy-bowler-extended-play-prototype
 name: Classy Bowler (Extended Play Prototype)
 title_slug: classy-bowler-extended-play-prototype
 ipdb_id: 6401

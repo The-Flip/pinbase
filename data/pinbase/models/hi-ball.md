@@ -1,5 +1,4 @@
 ---
-slug: hi-ball
 name: Hi-Ball
 title_slug: hi-ball-3
 ipdb_id: 1164

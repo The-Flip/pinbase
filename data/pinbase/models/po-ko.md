@@ -1,5 +1,4 @@
 ---
-slug: po-ko
 name: Po-Ko
 title_slug: po-ko
 ipdb_id: 6709

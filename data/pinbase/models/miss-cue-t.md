@@ -1,5 +1,4 @@
 ---
-slug: miss-cue-t
 name: Miss Cue T
 title_slug: miss-cue-t
 opdb_id: G2LYp-M85PN

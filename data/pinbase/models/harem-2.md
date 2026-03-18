@@ -1,5 +1,4 @@
 ---
-slug: harem-2
 name: Harem
 title_slug: harem
 opdb_id: G4l3P-MQPOV

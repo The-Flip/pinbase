@@ -1,4 +1,3 @@
 ---
-slug: alert
 name: Alert
 ---

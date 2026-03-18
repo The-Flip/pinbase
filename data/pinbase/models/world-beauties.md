@@ -1,5 +1,4 @@
 ---
-slug: world-beauties
 name: World Beauties
 title_slug: world-beauties
 opdb_id: GRBpL-MLeYk

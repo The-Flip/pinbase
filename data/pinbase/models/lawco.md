@@ -1,5 +1,4 @@
 ---
-slug: lawco
 name: LAWCO
 title_slug: lawco
 ipdb_id: 7060

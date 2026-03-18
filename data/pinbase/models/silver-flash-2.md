@@ -1,5 +1,4 @@
 ---
-slug: silver-flash-2
 name: Silver Flash
 title_slug: silver-flash-2
 ipdb_id: 5982

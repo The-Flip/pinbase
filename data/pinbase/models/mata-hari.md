@@ -1,5 +1,4 @@
 ---
-slug: mata-hari
 name: Mata Hari
 title_slug: mata-hari-em
 opdb_id: G417e-MDvXz

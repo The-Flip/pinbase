@@ -1,5 +1,4 @@
 ---
-slug: the-whos-tommy-pinball-wizard
 name: The Who's Tommy Pinball Wizard
 title_slug: the-whos-tommy-pinball-wizard
 opdb_id: GR6do-MLBq4

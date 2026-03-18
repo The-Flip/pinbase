@@ -1,5 +1,4 @@
 ---
-slug: mibs
 name: Mibs
 title_slug: mibs
 opdb_id: G56P2-MQKR6

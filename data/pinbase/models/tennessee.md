@@ -1,5 +1,4 @@
 ---
-slug: tennessee
 name: Tennessee
 title_slug: tennessee
 opdb_id: GX2xO-M1rxO

@@ -1,5 +1,4 @@
 ---
-slug: pearl-harbor
 name: Pearl Harbor
 title_slug: pearl-harbor
 ipdb_id: 1770

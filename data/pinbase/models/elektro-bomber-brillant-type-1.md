@@ -1,5 +1,4 @@
 ---
-slug: elektro-bomber-brillant-type-1
 name: Elektro-Bomber (Brillant Type 1)
 title_slug: elektro-bomber-brillant-type-1
 ipdb_id: 6058

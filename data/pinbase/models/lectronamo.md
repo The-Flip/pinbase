@@ -1,5 +1,4 @@
 ---
-slug: lectronamo
 name: Lectronamo
 title_slug: lectronamo
 opdb_id: GRWd2-MQ4Ye

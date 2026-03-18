@@ -1,4 +1,3 @@
 ---
-slug: advance
 name: Advance
 ---

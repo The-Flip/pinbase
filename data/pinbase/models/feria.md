@@ -1,5 +1,4 @@
 ---
-slug: feria
 name: Feria
 title_slug: feria
 ipdb_id: 5813

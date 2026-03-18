@@ -1,5 +1,4 @@
 ---
-slug: gems
 name: Gems
 title_slug: gems
 ipdb_id: 3118

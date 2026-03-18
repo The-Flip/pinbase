@@ -1,4 +1,3 @@
 ---
-slug: amuzu
 name: Amuzu
 ---

@@ -1,5 +1,4 @@
 ---
-slug: chuck-o-luck
 name: Chuck-O-Luck
 title_slug: chuck-o-luck
 ipdb_id: 511

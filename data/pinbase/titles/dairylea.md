@@ -1,4 +1,3 @@
 ---
-slug: dairylea
 name: Dairylea
 ---

@@ -1,5 +1,4 @@
 ---
-slug: locomotion
 name: Locomotion
 title_slug: locomotion
 opdb_id: G4d7B-MJVlK

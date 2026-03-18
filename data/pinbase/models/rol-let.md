@@ -1,5 +1,4 @@
 ---
-slug: rol-let
 name: Rol-Let
 title_slug: rol-let
 ipdb_id: 3468

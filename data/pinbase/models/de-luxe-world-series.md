@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-world-series
 name: De Luxe World Series
 title_slug: de-luxe-world-series
 ipdb_id: 661

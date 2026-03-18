@@ -1,5 +1,4 @@
 ---
-slug: handicap-4
 name: Handicap
 title_slug: handicap-4
 ipdb_id: 4716

@@ -1,5 +1,4 @@
 ---
-slug: the-gold-bowl
 name: The Gold Bowl
 title_slug: the-gold-bowl
 ipdb_id: 6917

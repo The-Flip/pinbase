@@ -1,5 +1,4 @@
 ---
-slug: swinger
 name: Swinger
 title_slug: fun-fest-swinger
 opdb_id: G5L1Q-MDx7R

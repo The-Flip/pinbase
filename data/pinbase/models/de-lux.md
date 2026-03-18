@@ -1,5 +1,4 @@
 ---
-slug: de-lux
 name: De-Lux
 title_slug: de-lux
 ipdb_id: 5477

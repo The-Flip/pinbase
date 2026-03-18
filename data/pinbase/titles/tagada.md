@@ -1,4 +1,3 @@
 ---
-slug: tagada
 name: Tagada
 ---

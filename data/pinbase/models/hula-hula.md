@@ -1,5 +1,4 @@
 ---
-slug: hula-hula
 name: Hula-Hula
 title_slug: hula-hula
 opdb_id: GR7Lp-MQKEP

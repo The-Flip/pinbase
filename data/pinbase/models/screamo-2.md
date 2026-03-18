@@ -1,5 +1,4 @@
 ---
-slug: screamo-2
 name: Screamo
 title_slug: screamo
 opdb_id: GRpVj-MQVrX

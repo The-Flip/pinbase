@@ -1,5 +1,4 @@
 ---
-slug: the-flipper-game-2
 name: The Flipper Game
 title_slug: the-flipper-game-2
 ipdb_id: 6684

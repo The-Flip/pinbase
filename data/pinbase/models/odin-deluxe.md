@@ -1,5 +1,4 @@
 ---
-slug: odin-deluxe
 name: Odin Deluxe
 title_slug: odin
 opdb_id: GJ2d8-M9RWW-AOQ7w

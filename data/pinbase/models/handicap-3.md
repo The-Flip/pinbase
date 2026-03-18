@@ -1,5 +1,4 @@
 ---
-slug: handicap-3
 name: Handicap
 title_slug: handicap
 opdb_id: G5vdo-MnK8w

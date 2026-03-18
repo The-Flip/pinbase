@@ -1,5 +1,4 @@
 ---
-slug: three-feathers
 name: Three Feathers
 title_slug: three-feathers
 opdb_id: GweyB-M3dP4

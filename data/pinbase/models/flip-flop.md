@@ -1,5 +1,4 @@
 ---
-slug: flip-flop
 name: Flip Flop
 title_slug: flip-flop
 opdb_id: Gr28v-Mp4Wr

@@ -1,4 +1,3 @@
 ---
-slug: target
 name: Target
 ---

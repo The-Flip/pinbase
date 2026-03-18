@@ -1,4 +1,3 @@
 ---
-slug: streamline
 name: Streamline
 ---

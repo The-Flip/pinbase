@@ -1,5 +1,4 @@
 ---
-slug: pinboard
 name: Pinboard
 title_slug: pinboard
 ipdb_id: 6007

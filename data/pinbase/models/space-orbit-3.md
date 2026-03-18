@@ -1,5 +1,4 @@
 ---
-slug: space-orbit-3
 name: Space Orbit!
 title_slug: space-orbit-2
 ipdb_id: 5458

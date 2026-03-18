@@ -1,5 +1,4 @@
 ---
-slug: diana
 name: Diana
 title_slug: jungle-queenprincess
 opdb_id: GrNnr-MW92V

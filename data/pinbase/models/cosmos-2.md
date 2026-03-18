@@ -1,5 +1,4 @@
 ---
-slug: cosmos-2
 name: Cosmos
 title_slug: cosmos-2
 ipdb_id: 5079

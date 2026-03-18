@@ -1,5 +1,4 @@
 ---
-slug: valkyrie-2
 name: Valkyrie
 title_slug: valkyrie-2
 ipdb_id: 5262

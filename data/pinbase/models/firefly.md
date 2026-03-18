@@ -1,5 +1,4 @@
 ---
-slug: firefly
 name: Firefly
 title_slug: firefly
 ipdb_id: 6545

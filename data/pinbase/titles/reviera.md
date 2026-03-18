@@ -1,4 +1,3 @@
 ---
-slug: reviera
 name: Reviera
 ---

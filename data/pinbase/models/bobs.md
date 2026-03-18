@@ -1,5 +1,4 @@
 ---
-slug: bobs
 name: Bobs
 title_slug: bobs
 ipdb_id: 3638

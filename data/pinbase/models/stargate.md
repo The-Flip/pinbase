@@ -1,5 +1,4 @@
 ---
-slug: stargate
 name: Stargate
 title_slug: stargate
 opdb_id: G50pv-MdE6R

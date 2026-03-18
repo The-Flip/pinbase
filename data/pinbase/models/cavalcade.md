@@ -1,5 +1,4 @@
 ---
-slug: cavalcade
 name: Cavalcade
 title_slug: cavalcade
 ipdb_id: 473

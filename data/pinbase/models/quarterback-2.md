@@ -1,5 +1,4 @@
 ---
-slug: quarterback-2
 name: Quarterback
 title_slug: quarterback
 ipdb_id: 5700

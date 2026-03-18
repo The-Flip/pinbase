@@ -1,5 +1,4 @@
 ---
-slug: hockey-girl
 name: Hockey Girl
 title_slug: hockey-girl
 opdb_id: Gry16-MD0BB

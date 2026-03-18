@@ -1,4 +1,3 @@
 ---
-slug: argentine
 name: Argentine
 ---

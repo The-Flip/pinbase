@@ -1,5 +1,4 @@
 ---
-slug: royal-flippers
 name: Royal Flippers
 title_slug: royal-flippers
 ipdb_id: 3254

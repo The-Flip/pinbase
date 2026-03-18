@@ -1,5 +1,4 @@
 ---
-slug: friendship-7
 name: Friendship "7"
 title_slug: friendship-7
 opdb_id: GrxD0-MJjp8

@@ -1,5 +1,4 @@
 ---
-slug: w-n-manufacturing-company
 name: W. N. Manufacturing Company
 manufacturer_slug: w-n-manufacturing-company
 ipdb_manufacturer_id: 335

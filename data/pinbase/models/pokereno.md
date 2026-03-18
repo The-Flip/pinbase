@@ -1,5 +1,4 @@
 ---
-slug: pokereno
 name: Pokereno
 title_slug: pokereno
 ipdb_id: 6064

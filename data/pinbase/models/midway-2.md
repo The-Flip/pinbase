@@ -1,5 +1,4 @@
 ---
-slug: midway-2
 name: Midway
 title_slug: midway-2
 ipdb_id: 1594

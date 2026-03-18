@@ -1,5 +1,4 @@
 ---
-slug: round
 name: Round
 title_slug: round
 ipdb_id: 6599

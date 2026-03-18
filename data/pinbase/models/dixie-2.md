@@ -1,5 +1,4 @@
 ---
-slug: dixie-2
 name: Dixie
 title_slug: dixie-2
 ipdb_id: 3063

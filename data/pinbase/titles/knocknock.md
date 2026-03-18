@@ -1,4 +1,3 @@
 ---
-slug: knocknock
 name: KnocKnock
 ---

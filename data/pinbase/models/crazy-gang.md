@@ -1,5 +1,4 @@
 ---
-slug: crazy-gang
 name: Crazy Gang
 title_slug: crazy-gang
 ipdb_id: 7016

@@ -1,5 +1,4 @@
 ---
-slug: hard-rock
 name: Hard Rock
 title_slug: hard-rock
 ipdb_id: 6071

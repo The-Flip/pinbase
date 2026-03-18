@@ -1,5 +1,4 @@
 ---
-slug: csi
 name: CSI
 ---
 

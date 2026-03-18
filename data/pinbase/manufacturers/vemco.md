@@ -1,4 +1,3 @@
 ---
-slug: vemco
 name: Vemco
 ---

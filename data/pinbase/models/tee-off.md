@@ -1,5 +1,4 @@
 ---
-slug: tee-off
 name: Tee-Off
 title_slug: tee-off
 ipdb_id: 6737

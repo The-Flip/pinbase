@@ -1,5 +1,4 @@
 ---
-slug: surf-club
 name: Surf-Club
 title_slug: surf-club
 ipdb_id: 2460

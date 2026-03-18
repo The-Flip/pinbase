@@ -1,4 +1,3 @@
 ---
-slug: eurostar
 name: Eurostar
 ---

@@ -1,5 +1,4 @@
 ---
-slug: new-stars-phoenix
 name: New Star's Phoenix
 title_slug: stars-phoenix
 opdb_id: G5VYY-MRjqd

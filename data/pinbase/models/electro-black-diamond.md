@@ -1,5 +1,4 @@
 ---
-slug: electro-black-diamond
 name: Electro Black Diamond
 title_slug: electro-black-diamond
 ipdb_id: 777

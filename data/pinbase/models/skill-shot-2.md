@@ -1,5 +1,4 @@
 ---
-slug: skill-shot-2
 name: Skill Shot
 title_slug: skill-shot
 ipdb_id: 4201

@@ -1,5 +1,4 @@
 ---
-slug: bagatello
 name: Bagatello
 title_slug: bagatello
 ipdb_id: 4523

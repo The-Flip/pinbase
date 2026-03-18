@@ -1,5 +1,4 @@
 ---
-slug: sunset
 name: Sunset
 title_slug: sunset
 opdb_id: G59Ql-MJNpN

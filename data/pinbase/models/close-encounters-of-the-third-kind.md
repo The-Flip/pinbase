@@ -1,5 +1,4 @@
 ---
-slug: close-encounters-of-the-third-kind
 name: Close Encounters of the Third Kind
 title_slug: close-encounters
 opdb_id: G4qvL-MJwVr

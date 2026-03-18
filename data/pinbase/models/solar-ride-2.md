@@ -1,5 +1,4 @@
 ---
-slug: solar-ride-2
 name: Solar Ride (EM)
 title_slug: solar-ride
 opdb_id: GRDqo-MQ7k2

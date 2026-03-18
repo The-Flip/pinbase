@@ -1,5 +1,4 @@
 ---
-slug: big-hunt-2
 name: Big Hunt
 title_slug: big-hunt-2
 ipdb_id: 6912

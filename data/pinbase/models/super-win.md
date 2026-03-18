@@ -1,5 +1,4 @@
 ---
-slug: super-win
 name: Super Win
 title_slug: super-win
 ipdb_id: 3433

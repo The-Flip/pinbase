@@ -1,5 +1,4 @@
 ---
-slug: lightning-44-new-style
 name: Lightning (44, New Style)
 title_slug: lightning-44-new-style
 ipdb_id: 5609

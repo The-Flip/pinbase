@@ -1,5 +1,4 @@
 ---
-slug: music-man
 name: Music Man
 title_slug: music-man
 opdb_id: Grlb3-MJ4z7

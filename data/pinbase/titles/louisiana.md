@@ -1,4 +1,3 @@
 ---
-slug: louisiana
 name: Louisiana
 ---

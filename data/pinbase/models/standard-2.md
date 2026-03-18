@@ -1,5 +1,4 @@
 ---
-slug: standard-2
 name: Standard
 title_slug: standard-2
 ipdb_id: 4840

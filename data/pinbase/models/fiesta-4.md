@@ -1,5 +1,4 @@
 ---
-slug: fiesta-4
 name: Fiesta
 title_slug: fiesta
 opdb_id: G5v6Y-MJ9nz

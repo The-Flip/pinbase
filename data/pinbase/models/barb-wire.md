@@ -1,5 +1,4 @@
 ---
-slug: barb-wire
 name: Barb Wire
 title_slug: barb-wire
 opdb_id: GRwyv-MQNwr

@@ -1,5 +1,4 @@
 ---
-slug: superliner
 name: Superliner
 title_slug: superliner
 ipdb_id: 2453

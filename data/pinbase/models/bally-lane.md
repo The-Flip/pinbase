@@ -1,5 +1,4 @@
 ---
-slug: bally-lane
 name: Bally Lane
 title_slug: bally-lane
 ipdb_id: 6509

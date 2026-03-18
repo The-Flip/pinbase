@@ -1,5 +1,4 @@
 ---
-slug: tx-sector
 name: TX-Sector
 title_slug: tx-sector
 opdb_id: GRLzj-MJPYK

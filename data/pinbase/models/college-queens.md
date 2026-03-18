@@ -1,5 +1,4 @@
 ---
-slug: college-queens
 name: College Queens
 title_slug: college-queens-airport
 opdb_id: GrOQ1-M0oOr

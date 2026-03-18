@@ -1,5 +1,4 @@
 ---
-slug: poker-plus-3
 name: Poker Plus
 title_slug: poker-plus-2
 ipdb_id: 6404

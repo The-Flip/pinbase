@@ -1,10 +1,11 @@
 ---
-slug: star-trek-premium
 name: Star Trek (Premium)
 title_slug: star-trek-stern
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: Gryw4-MRj4O
 ipdb_id: 6045
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: steve-ritchie
   role: Design

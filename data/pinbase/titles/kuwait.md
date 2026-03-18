@@ -1,4 +1,3 @@
 ---
-slug: kuwait
 name: Kuwait
 ---

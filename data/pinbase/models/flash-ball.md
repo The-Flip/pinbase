@@ -1,5 +1,4 @@
 ---
-slug: flash-ball
 name: Flash Ball
 title_slug: flash-ball
 ipdb_id: 3927

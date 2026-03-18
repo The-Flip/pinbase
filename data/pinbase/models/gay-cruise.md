@@ -1,5 +1,4 @@
 ---
-slug: gay-cruise
 name: Gay Cruise
 title_slug: gay-cruise
 ipdb_id: 990

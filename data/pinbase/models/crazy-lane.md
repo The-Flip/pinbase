@@ -1,5 +1,4 @@
 ---
-slug: crazy-lane
 name: Crazy Lane
 title_slug: crazy-lane
 ipdb_id: 4263

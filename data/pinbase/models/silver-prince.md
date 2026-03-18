@@ -1,5 +1,4 @@
 ---
-slug: silver-prince
 name: '"Silver Prince"'
 title_slug: silver-prince
 ipdb_id: 5463

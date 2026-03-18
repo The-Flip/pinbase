@@ -1,5 +1,4 @@
 ---
-slug: superman
 name: Superman
 title_slug: superman
 opdb_id: GR73N-MwN9x

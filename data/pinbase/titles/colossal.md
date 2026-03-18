@@ -1,4 +1,3 @@
 ---
-slug: colossal
 name: Colossal
 ---

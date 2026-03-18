@@ -1,5 +1,4 @@
 ---
-slug: flash-gordon
 name: Flash Gordon
 ---
 

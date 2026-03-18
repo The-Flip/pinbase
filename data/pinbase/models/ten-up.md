@@ -1,5 +1,4 @@
 ---
-slug: ten-up
 name: Ten-Up
 title_slug: king-pin-pin-up
 opdb_id: GR6DZ-MLOWE

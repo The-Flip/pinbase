@@ -1,5 +1,4 @@
 ---
-slug: super-pang
 name: Super Pang
 title_slug: super-pang
 ipdb_id: 5568

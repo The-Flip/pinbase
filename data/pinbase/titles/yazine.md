@@ -1,4 +1,3 @@
 ---
-slug: yazine
 name: Yazine
 ---

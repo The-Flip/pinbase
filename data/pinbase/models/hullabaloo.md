@@ -1,5 +1,4 @@
 ---
-slug: hullabaloo
 name: Hullabaloo
 title_slug: hullabaloo
 ipdb_id: 6807

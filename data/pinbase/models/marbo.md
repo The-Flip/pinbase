@@ -1,5 +1,4 @@
 ---
-slug: marbo
 name: Marbo
 title_slug: marbo
 ipdb_id: 5983

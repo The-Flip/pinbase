@@ -1,5 +1,4 @@
 ---
-slug: triple-seven
 name: Triple Seven
 title_slug: triple-seven
 ipdb_id: 4711

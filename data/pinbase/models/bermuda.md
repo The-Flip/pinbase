@@ -1,5 +1,4 @@
 ---
-slug: bermuda
 name: Bermuda
 title_slug: bermuda
 ipdb_id: 225

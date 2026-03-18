@@ -1,5 +1,4 @@
 ---
-slug: arizona
 name: Arizona
 title_slug: arizona
 ipdb_id: 86

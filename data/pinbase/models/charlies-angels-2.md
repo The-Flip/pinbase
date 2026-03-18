@@ -1,5 +1,4 @@
 ---
-slug: charlies-angels-2
 name: Charlie’s Angels (EM)
 title_slug: charlies-angels
 opdb_id: G5Woz-MwNP3

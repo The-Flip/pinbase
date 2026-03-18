@@ -1,5 +1,4 @@
 ---
-slug: buttons-and-bows
 name: Buttons and Bows
 title_slug: buttons-and-bows
 opdb_id: Glljy-MjBq2

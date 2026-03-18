@@ -1,4 +1,3 @@
 ---
-slug: bowie
 name: Bowie
 ---

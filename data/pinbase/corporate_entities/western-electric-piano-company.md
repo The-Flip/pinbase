@@ -1,5 +1,4 @@
 ---
-slug: western-electric-piano-company
 name: Western Electric Piano Company
 manufacturer_slug: stern-electronics
 ipdb_manufacturer_id: 341

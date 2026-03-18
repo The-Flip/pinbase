@@ -1,5 +1,4 @@
 ---
-slug: top-card
 name: Top Card
 title_slug: top-card-royal-pair
 opdb_id: G4JND-MJ5K8

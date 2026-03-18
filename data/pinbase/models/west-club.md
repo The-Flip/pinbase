@@ -1,5 +1,4 @@
 ---
-slug: west-club
 name: West Club
 title_slug: west-club
 opdb_id: GRLDP-ML3Oq

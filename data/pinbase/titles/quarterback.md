@@ -1,4 +1,3 @@
 ---
-slug: quarterback
 name: Quarterback
 ---

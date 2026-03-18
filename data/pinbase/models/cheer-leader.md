@@ -1,5 +1,4 @@
 ---
-slug: cheer-leader
 name: Cheer Leader
 title_slug: cheer-leader
 ipdb_id: 499

@@ -1,5 +1,4 @@
 ---
-slug: raven
 name: Raven
 title_slug: raven
 opdb_id: GrJWP-MJ7N1

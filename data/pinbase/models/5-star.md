@@ -1,5 +1,4 @@
 ---
-slug: 5-star
 name: 5 Star
 title_slug: 5-star
 ipdb_id: 864

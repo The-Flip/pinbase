@@ -1,5 +1,4 @@
 ---
-slug: zarza
 name: Zarza
 title_slug: xenon
 opdb_id: G42Pk-MZe2e-A9djJ

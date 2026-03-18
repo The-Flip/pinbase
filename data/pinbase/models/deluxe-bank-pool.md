@@ -1,5 +1,4 @@
 ---
-slug: deluxe-bank-pool
 name: Deluxe Bank-Pool
 title_slug: deluxe-bank-pool
 ipdb_id: 6343

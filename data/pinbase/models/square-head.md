@@ -1,5 +1,4 @@
 ---
-slug: square-head
 name: Square Head
 title_slug: square-head
 opdb_id: GRKB8-MLqzr

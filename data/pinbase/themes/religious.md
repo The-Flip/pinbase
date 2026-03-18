@@ -1,4 +1,3 @@
 ---
-slug: religious
 name: Religious
 ---

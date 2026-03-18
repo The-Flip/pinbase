@@ -1,5 +1,4 @@
 ---
-slug: rob-zombie
 name: Rob Zombie
 ---
 

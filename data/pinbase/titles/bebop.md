@@ -1,4 +1,3 @@
 ---
-slug: bebop
 name: Bebop
 ---

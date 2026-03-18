@@ -1,5 +1,4 @@
 ---
-slug: pipeline-2
 name: Pipeline
 title_slug: pipeline-2
 ipdb_id: 5327

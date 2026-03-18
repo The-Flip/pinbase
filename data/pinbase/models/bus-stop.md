@@ -1,5 +1,4 @@
 ---
-slug: bus-stop
 name: Bus Stop
 title_slug: bus-stop
 opdb_id: G41BE-MLbw7

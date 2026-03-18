@@ -1,4 +1,3 @@
 ---
-slug: zipball
 name: Zipball
 ---

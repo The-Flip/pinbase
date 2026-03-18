@@ -1,5 +1,4 @@
 ---
-slug: ticker-tape
 name: Ticker Tape
 title_slug: ticker-tape
 ipdb_id: 3505

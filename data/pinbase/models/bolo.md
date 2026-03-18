@@ -1,5 +1,4 @@
 ---
-slug: bolo
 name: Bolo
 title_slug: bolo
 ipdb_id: 340

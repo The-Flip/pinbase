@@ -1,5 +1,4 @@
 ---
-slug: big-bank-nite
 name: Big Bank Nite
 title_slug: big-bank-nite
 ipdb_id: 227

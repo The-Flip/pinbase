@@ -1,5 +1,4 @@
 ---
-slug: ten-little-indians
 name: Ten Little Indians
 title_slug: ten-little-indians
 ipdb_id: 3757

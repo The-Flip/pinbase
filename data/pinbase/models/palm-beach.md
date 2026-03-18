@@ -1,5 +1,4 @@
 ---
-slug: palm-beach
 name: Palm Beach
 title_slug: palm-beach
 ipdb_id: 1739

@@ -1,5 +1,4 @@
 ---
-slug: cross-town-2
 name: Cross Town
 title_slug: subway-cross-town
 opdb_id: GrEQy-MQYkj

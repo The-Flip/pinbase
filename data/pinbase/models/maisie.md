@@ -1,5 +1,4 @@
 ---
-slug: maisie
 name: Maisie
 title_slug: maisie
 ipdb_id: 1520

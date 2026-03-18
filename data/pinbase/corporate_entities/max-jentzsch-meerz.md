@@ -1,5 +1,4 @@
 ---
-slug: max-jentzsch-meerz
 name: Max Jentzsch & Meerz
 manufacturer_slug: max-jentzsch-meerz
 ipdb_manufacturer_id: 381

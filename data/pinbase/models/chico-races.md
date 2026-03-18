@@ -1,5 +1,4 @@
 ---
-slug: chico-races
 name: Chico Races
 title_slug: chico-races
 ipdb_id: 506

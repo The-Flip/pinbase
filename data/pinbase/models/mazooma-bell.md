@@ -1,5 +1,4 @@
 ---
-slug: mazooma-bell
 name: Mazooma Bell
 title_slug: mazooma-bell
 ipdb_id: 7020

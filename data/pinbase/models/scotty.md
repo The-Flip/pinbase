@@ -1,5 +1,4 @@
 ---
-slug: scotty
 name: Scotty
 title_slug: scotty
 ipdb_id: 2068

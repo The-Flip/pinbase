@@ -1,5 +1,4 @@
 ---
-slug: jubilee-3
 name: Jubilee
 title_slug: jubilee-2
 ipdb_id: 5856

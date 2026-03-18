@@ -1,5 +1,4 @@
 ---
-slug: score-m-high
 name: Score-M-High
 title_slug: score-m-high
 ipdb_id: 6621

@@ -1,5 +1,4 @@
 ---
-slug: poker
 name: Poker
 title_slug: poker
 opdb_id: Grlwk-MLORq

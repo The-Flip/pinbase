@@ -1,5 +1,4 @@
 ---
-slug: royal-flash-2
 name: Royal Flash
 title_slug: royal-flash
 opdb_id: GrPNp-MQ2w4

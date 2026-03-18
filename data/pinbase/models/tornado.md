@@ -1,5 +1,4 @@
 ---
-slug: tornado
 name: Tornado
 title_slug: tornado
 ipdb_id: 2598

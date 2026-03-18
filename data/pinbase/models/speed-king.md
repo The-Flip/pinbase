@@ -1,5 +1,4 @@
 ---
-slug: speed-king
 name: Speed King
 title_slug: speed-king
 ipdb_id: 2279

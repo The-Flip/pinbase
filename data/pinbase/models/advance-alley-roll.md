@@ -1,5 +1,4 @@
 ---
-slug: advance-alley-roll
 name: Advance Alley Roll
 title_slug: advance-alley-roll
 ipdb_id: 5644

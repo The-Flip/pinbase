@@ -1,5 +1,4 @@
 ---
-slug: star-fire
 name: Star Fire
 title_slug: star-fire
 opdb_id: G5nOY-ML1yo

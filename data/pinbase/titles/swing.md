@@ -1,4 +1,3 @@
 ---
-slug: swing
 name: Swing
 ---

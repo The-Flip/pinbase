@@ -1,5 +1,4 @@
 ---
-slug: tura-derby
 name: Tura Derby
 title_slug: tura-derby
 ipdb_id: 4725

@@ -1,5 +1,4 @@
 ---
-slug: sindbad
 name: Sindbad
 title_slug: sindbad
 ipdb_id: 4555

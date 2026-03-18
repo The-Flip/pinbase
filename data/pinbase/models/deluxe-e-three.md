@@ -1,5 +1,4 @@
 ---
-slug: deluxe-e-three
 name: Deluxe E Three
 title_slug: deluxe-e-three
 ipdb_id: 4728

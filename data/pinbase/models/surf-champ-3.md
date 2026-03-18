@@ -1,5 +1,4 @@
 ---
-slug: surf-champ-3
 name: Surf Champ
 title_slug: surf-champ-2
 ipdb_id: 5689

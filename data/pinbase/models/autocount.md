@@ -1,5 +1,4 @@
 ---
-slug: autocount
 name: Autocount
 title_slug: autocount
 ipdb_id: 114

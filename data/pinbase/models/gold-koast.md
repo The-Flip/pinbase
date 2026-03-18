@@ -1,5 +1,4 @@
 ---
-slug: gold-koast
 name: Gold Koast
 title_slug: gold-koast
 ipdb_id: 4710

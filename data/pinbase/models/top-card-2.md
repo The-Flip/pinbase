@@ -1,5 +1,4 @@
 ---
-slug: top-card-2
 name: Top Card
 title_slug: top-card
 ipdb_id: 5817

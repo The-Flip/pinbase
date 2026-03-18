@@ -1,5 +1,4 @@
 ---
-slug: mars-god-of-war
 name: Mars God of War
 title_slug: mars-god-of-war
 opdb_id: GrNpY-MJrZw

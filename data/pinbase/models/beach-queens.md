@@ -1,5 +1,4 @@
 ---
-slug: beach-queens
 name: Beach Queens
 title_slug: beach-queens
 ipdb_id: 206

@@ -1,5 +1,4 @@
 ---
-slug: baseball-pitch
 name: Baseball Pitch
 title_slug: baseball-pitch
 ipdb_id: 2906

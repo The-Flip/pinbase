@@ -1,5 +1,4 @@
 ---
-slug: key-lite-2
 name: Key Lite
 title_slug: key-lite
 ipdb_id: 6680

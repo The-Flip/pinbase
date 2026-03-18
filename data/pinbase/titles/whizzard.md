@@ -1,4 +1,3 @@
 ---
-slug: whizzard
 name: Whizzard
 ---

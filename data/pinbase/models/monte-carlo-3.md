@@ -1,5 +1,4 @@
 ---
-slug: monte-carlo-3
 name: Monte Carlo
 title_slug: monte-carlo-odds-evens
 opdb_id: G4NnZ-MQjWv

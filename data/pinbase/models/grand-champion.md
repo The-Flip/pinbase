@@ -1,5 +1,4 @@
 ---
-slug: grand-champion
 name: Grand Champion
 title_slug: grand-champion
 opdb_id: G5BdJ-MJPke

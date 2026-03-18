@@ -1,5 +1,4 @@
 ---
-slug: madrid
 name: Madrid
 title_slug: madrid
 ipdb_id: 7054

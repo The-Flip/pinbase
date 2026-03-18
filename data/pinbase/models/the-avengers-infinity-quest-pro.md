@@ -1,5 +1,4 @@
 ---
-slug: the-avengers-infinity-quest-pro
 name: 'Avengers: Infinity Quest (Pro)'
 title_slug: avengers-infinity-quest
 opdb_id: Gj66P-M3dxn

@@ -1,5 +1,4 @@
 ---
-slug: grandstand-2
 name: Grandstand
 title_slug: grandstand-2
 ipdb_id: 1082

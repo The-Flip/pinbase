@@ -1,5 +1,4 @@
 ---
-slug: score-reels
 name: Score Reels
 display_order: 1
 ---

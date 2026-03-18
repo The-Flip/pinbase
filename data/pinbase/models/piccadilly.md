@@ -1,5 +1,4 @@
 ---
-slug: piccadilly
 name: Piccadilly
 title_slug: piccadilly
 opdb_id: GR63d-MQ2zo

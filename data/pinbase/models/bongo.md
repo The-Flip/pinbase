@@ -1,5 +1,4 @@
 ---
-slug: bongo
 name: Bongo
 title_slug: 3-in-line-bongo
 opdb_id: G41e6-M7ZEk

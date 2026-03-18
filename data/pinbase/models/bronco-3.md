@@ -1,5 +1,4 @@
 ---
-slug: bronco-3
 name: Bronco
 title_slug: bronco-2
 ipdb_id: 6672

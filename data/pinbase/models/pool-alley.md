@@ -1,5 +1,4 @@
 ---
-slug: pool-alley
 name: Pool Alley
 title_slug: pool-alley
 ipdb_id: 5751

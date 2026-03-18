@@ -1,5 +1,4 @@
 ---
-slug: nairobi
 name: Nairobi
 title_slug: north-star
 opdb_id: GRV7Q-MJNez-ARX2N

@@ -1,5 +1,4 @@
 ---
-slug: power-house
 name: Power House
 title_slug: power-house
 ipdb_id: 1859

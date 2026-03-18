@@ -1,5 +1,4 @@
 ---
-slug: boing-boing
 name: Boing Boing
 title_slug: boing-boing
 ipdb_id: 4608

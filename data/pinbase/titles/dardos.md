@@ -1,4 +1,3 @@
 ---
-slug: dardos
 name: Dardos
 ---

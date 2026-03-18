@@ -1,5 +1,4 @@
 ---
-slug: shindig
 name: Shindig
 title_slug: shindig
 opdb_id: Gr3Nj-MLWnx

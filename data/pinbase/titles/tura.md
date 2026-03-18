@@ -1,4 +1,3 @@
 ---
-slug: tura
 name: Tura
 ---

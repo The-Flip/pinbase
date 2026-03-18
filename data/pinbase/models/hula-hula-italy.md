@@ -1,5 +1,4 @@
 ---
-slug: hula-hula-italy
 name: Hula-Hula (Italy)
 title_slug: hula-hula-italy
 ipdb_id: 6448

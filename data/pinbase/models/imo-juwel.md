@@ -1,5 +1,4 @@
 ---
-slug: imo-juwel
 name: IMO-JUWEL
 title_slug: imo-juwel
 ipdb_id: 4713

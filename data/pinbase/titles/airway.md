@@ -1,4 +1,3 @@
 ---
-slug: airway
 name: Airway
 ---

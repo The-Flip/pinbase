@@ -1,4 +1,3 @@
 ---
-slug: attention
 name: Attention
 ---

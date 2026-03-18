@@ -1,5 +1,4 @@
 ---
-slug: lone-eagle-2
 name: Lone Eagle
 title_slug: lone-eagle-2
 ipdb_id: 5725

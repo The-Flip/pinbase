@@ -1,5 +1,4 @@
 ---
-slug: triple-strike
 name: Triple Strike
 title_slug: triple-strike
 opdb_id: GR9YD-MQP1j

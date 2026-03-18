@@ -1,4 +1,3 @@
 ---
-slug: tally
 name: Tally
 ---

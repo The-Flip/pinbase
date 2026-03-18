@@ -1,5 +1,4 @@
 ---
-slug: fives-board
 name: Fives Board
 title_slug: fives-board
 ipdb_id: 6947

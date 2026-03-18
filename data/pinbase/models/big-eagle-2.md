@@ -1,5 +1,4 @@
 ---
-slug: big-eagle-2
 name: Big Eagle
 title_slug: big-eagle-2
 ipdb_id: 5795

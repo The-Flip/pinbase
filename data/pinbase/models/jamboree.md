@@ -1,5 +1,4 @@
 ---
-slug: jamboree
 name: Jamboree
 title_slug: jamboree
 opdb_id: GV8B1-MP3b9

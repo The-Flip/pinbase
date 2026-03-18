@@ -1,5 +1,4 @@
 ---
-slug: scared-stiff
 name: Scared Stiff
 title_slug: scared-stiff
 opdb_id: G4xbP-Mp45Y

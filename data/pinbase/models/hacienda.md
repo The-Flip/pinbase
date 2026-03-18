@@ -1,5 +1,4 @@
 ---
-slug: hacienda
 name: Hacienda
 title_slug: hacienda
 ipdb_id: 1105

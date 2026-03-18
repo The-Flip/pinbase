@@ -1,5 +1,4 @@
 ---
-slug: whos-goofy-2
 name: Who's Goofy
 title_slug: whos-goofy-2
 ipdb_id: 5386

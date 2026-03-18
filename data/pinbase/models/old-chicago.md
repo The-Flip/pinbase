@@ -1,5 +1,4 @@
 ---
-slug: old-chicago
 name: Old Chicago
 title_slug: old-chicago
 opdb_id: G4dJE-MQKoo

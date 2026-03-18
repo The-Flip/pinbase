@@ -1,4 +1,3 @@
 ---
-slug: trucking
 name: Trucking
 ---

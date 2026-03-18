@@ -1,5 +1,4 @@
 ---
-slug: the-empire-strikes-back
 name: The Empire Strikes Back
 title_slug: the-empire-strikes-back
 opdb_id: GRVqP-MQrOr

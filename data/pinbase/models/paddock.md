@@ -1,5 +1,4 @@
 ---
-slug: paddock
 name: Paddock
 title_slug: paddock-post-time
 opdb_id: GR0W9-MD3xO

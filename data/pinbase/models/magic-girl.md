@@ -1,5 +1,4 @@
 ---
-slug: magic-girl
 name: Magic Girl
 title_slug: magic-girl
 opdb_id: GBLkP-M2YOn

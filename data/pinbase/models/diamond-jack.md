@@ -1,5 +1,4 @@
 ---
-slug: diamond-jack
 name: Diamond Jack
 title_slug: king-of-diamonds
 opdb_id: GrlPj-MrR46

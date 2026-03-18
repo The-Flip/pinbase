@@ -1,5 +1,4 @@
 ---
-slug: spring-time
 name: Spring Time
 title_slug: spring-time
 ipdb_id: 3754

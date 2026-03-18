@@ -1,5 +1,4 @@
 ---
-slug: record-purse
 name: Record Purse
 title_slug: record-purse
 ipdb_id: 3556

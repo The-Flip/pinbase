@@ -1,5 +1,4 @@
 ---
-slug: tropic-isle
 name: Tropic Isle
 title_slug: tropic-isle
 opdb_id: G5L3N-MLl77

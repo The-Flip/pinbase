@@ -1,5 +1,4 @@
 ---
-slug: abra-ca-dabra-2
 name: Abra Ca Dabra
 title_slug: abra-ca-dabra
 ipdb_id: 2876

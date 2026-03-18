@@ -1,5 +1,4 @@
 ---
-slug: 4-belles
 name: 4-Belles
 title_slug: dragonette-4-belles
 opdb_id: G5DD0-MD014

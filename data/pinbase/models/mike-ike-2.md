@@ -1,5 +1,4 @@
 ---
-slug: mike-ike-2
 name: Mike & Ike
 title_slug: mike-ike-2
 ipdb_id: 3955

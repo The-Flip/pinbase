@@ -1,5 +1,4 @@
 ---
-slug: texas-mustang
 name: Texas Mustang
 title_slug: texas-mustang
 ipdb_id: 2526

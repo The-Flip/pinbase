@@ -1,5 +1,4 @@
 ---
-slug: us-marshal
 name: U.S. Marshal
 title_slug: us-marshal
 ipdb_id: 6591

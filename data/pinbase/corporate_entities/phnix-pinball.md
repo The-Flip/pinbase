@@ -1,5 +1,4 @@
 ---
-slug: phnix-pinball
 name: Ph�nix Pinball
 manufacturer_slug: phnix-pinball
 ipdb_manufacturer_id: 785

@@ -1,5 +1,4 @@
 ---
-slug: wonder-wizard-cb-charlie
 name: Wonder Wizard CB Charlie
 title_slug: wonder-wizard-cb-charlie
 ipdb_id: 5642

@@ -1,5 +1,4 @@
 ---
-slug: sunny
 name: Sunny
 title_slug: sunny
 opdb_id: GyV3V-MNEVN

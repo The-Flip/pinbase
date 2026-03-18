@@ -1,4 +1,3 @@
 ---
-slug: paratroops
 name: Paratroops
 ---

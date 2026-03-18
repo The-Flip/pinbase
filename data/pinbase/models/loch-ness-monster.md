@@ -1,5 +1,4 @@
 ---
-slug: loch-ness-monster
 name: Loch Ness Monster
 title_slug: loch-ness-monster
 ipdb_id: 1465

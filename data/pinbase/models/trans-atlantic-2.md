@@ -1,5 +1,4 @@
 ---
-slug: trans-atlantic-2
 name: Trans-Atlantic
 title_slug: trans-atlantic-2
 ipdb_id: 6177

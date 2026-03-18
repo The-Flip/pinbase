@@ -1,5 +1,4 @@
 ---
-slug: tropic-fun
 name: Tropic Fun
 title_slug: gulfstream-tropic-fun
 opdb_id: G4EJB-ML0ez

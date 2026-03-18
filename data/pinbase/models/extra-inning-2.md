@@ -1,5 +1,4 @@
 ---
-slug: extra-inning-2
 name: Extra Inning
 title_slug: extra-inning-2
 ipdb_id: 3086

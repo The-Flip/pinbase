@@ -1,5 +1,4 @@
 ---
-slug: pikes-peak
 name: Pikes Peak
 title_slug: pikes-peak
 ipdb_id: 1786

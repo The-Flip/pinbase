@@ -1,5 +1,4 @@
 ---
-slug: pla-girl
 name: Pla-Girl
 title_slug: pla-girl
 ipdb_id: 1809

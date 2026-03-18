@@ -1,5 +1,4 @@
 ---
-slug: airborne-2
 name: Airborne
 title_slug: airborne-2
 ipdb_id: 5133

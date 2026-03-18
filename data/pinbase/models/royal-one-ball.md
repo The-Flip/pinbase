@@ -1,5 +1,4 @@
 ---
-slug: royal-one-ball
 name: Royal One Ball
 title_slug: royal-one-ball
 ipdb_id: 4142

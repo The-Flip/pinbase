@@ -1,5 +1,4 @@
 ---
-slug: football-37
 name: Football '37
 title_slug: football-37
 ipdb_id: 915

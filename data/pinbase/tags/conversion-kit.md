@@ -1,5 +1,4 @@
 ---
-slug: conversion-kit
 name: Conversion Kit
 display_order: 5
 ---

@@ -1,4 +1,3 @@
 ---
-slug: rambler
 name: Rambler
 ---

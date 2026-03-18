@@ -1,5 +1,4 @@
 ---
-slug: snooker-2
 name: Snooker
 title_slug: snooker-2
 ipdb_id: 5343

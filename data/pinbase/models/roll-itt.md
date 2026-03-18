@@ -1,5 +1,4 @@
 ---
-slug: roll-itt
 name: Roll-Itt
 title_slug: roll-itt
 ipdb_id: 2011

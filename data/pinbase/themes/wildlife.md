@@ -1,4 +1,3 @@
 ---
-slug: wildlife
 name: Wildlife
 ---

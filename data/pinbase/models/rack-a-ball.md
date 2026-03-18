@@ -1,5 +1,4 @@
 ---
-slug: rack-a-ball
 name: Rack-A-Ball
 title_slug: rack-a-ball
 opdb_id: GrqN3-MLq20

@@ -1,5 +1,4 @@
 ---
-slug: galactic-tank-force-signature
 name: Galactic Tank Force (Signature)
 title_slug: galactic-tank-force
 opdb_id: Gj6PZ-Mb5z6-A183b

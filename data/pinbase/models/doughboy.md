@@ -1,5 +1,4 @@
 ---
-slug: doughboy
 name: Doughboy
 title_slug: doughboy
 ipdb_id: 727

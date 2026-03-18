@@ -1,5 +1,4 @@
 ---
-slug: special-marble-no-horseshoe
 name: Special Marble (No Horseshoe)
 title_slug: special-marble-no-horseshoe
 ipdb_id: 5981

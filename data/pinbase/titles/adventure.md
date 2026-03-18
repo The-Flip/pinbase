@@ -1,4 +1,3 @@
 ---
-slug: adventure
 name: Adventure
 ---

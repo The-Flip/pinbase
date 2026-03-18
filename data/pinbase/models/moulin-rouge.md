@@ -1,5 +1,4 @@
 ---
-slug: moulin-rouge
 name: Moulin Rouge
 title_slug: moulin-rouge
 opdb_id: GRDjY-MJwZ4

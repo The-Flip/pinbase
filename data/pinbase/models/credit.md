@@ -1,5 +1,4 @@
 ---
-slug: credit
 name: Credit
 title_slug: credit
 ipdb_id: 589

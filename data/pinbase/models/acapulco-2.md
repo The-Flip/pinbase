@@ -1,5 +1,4 @@
 ---
-slug: acapulco-2
 name: Acapulco
 title_slug: acapulco-2
 ipdb_id: 5864

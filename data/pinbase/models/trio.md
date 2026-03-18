@@ -1,5 +1,4 @@
 ---
-slug: trio
 name: Trio
 title_slug: trio
 opdb_id: G5LeP-MBRbl

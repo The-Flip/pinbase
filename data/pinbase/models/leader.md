@@ -1,5 +1,4 @@
 ---
-slug: leader
 name: Leader
 title_slug: leader
 ipdb_id: 1423

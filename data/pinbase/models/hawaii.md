@@ -1,5 +1,4 @@
 ---
-slug: hawaii
 name: Hawaii
 title_slug: hawaii
 ipdb_id: 1136

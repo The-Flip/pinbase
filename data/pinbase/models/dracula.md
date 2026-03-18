@@ -1,5 +1,4 @@
 ---
-slug: dracula
 name: Dracula
 title_slug: dracula-2
 opdb_id: G4Zl2-Ml90d

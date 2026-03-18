@@ -1,5 +1,4 @@
 ---
-slug: deluxe-twins-senior
 name: Deluxe Twins Senior
 title_slug: deluxe-twins-senior
 ipdb_id: 4009

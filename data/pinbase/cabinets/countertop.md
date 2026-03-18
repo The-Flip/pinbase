@@ -1,5 +1,4 @@
 ---
-slug: countertop
 name: Countertop
 display_order: 3
 ---

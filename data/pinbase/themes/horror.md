@@ -1,4 +1,3 @@
 ---
-slug: horror
 name: Horror
 ---

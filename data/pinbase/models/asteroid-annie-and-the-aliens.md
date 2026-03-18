@@ -1,5 +1,4 @@
 ---
-slug: asteroid-annie-and-the-aliens
 name: Asteroid Annie and the Aliens
 title_slug: asteroid-annie-and-the-aliens
 opdb_id: G59bo-MJPxj

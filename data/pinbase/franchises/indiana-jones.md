@@ -1,5 +1,4 @@
 ---
-slug: indiana-jones
 name: Indiana Jones
 ---
 

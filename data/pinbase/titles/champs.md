@@ -1,4 +1,3 @@
 ---
-slug: champs
 name: Champs
 ---

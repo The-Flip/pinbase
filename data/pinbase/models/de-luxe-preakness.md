@@ -1,5 +1,4 @@
 ---
-slug: de-luxe-preakness
 name: De Luxe Preakness
 title_slug: de-luxe-preakness
 ipdb_id: 6944

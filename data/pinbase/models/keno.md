@@ -1,5 +1,4 @@
 ---
-slug: keno
 name: Keno
 title_slug: keno
 ipdb_id: 5503

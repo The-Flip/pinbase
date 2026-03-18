@@ -1,5 +1,4 @@
 ---
-slug: repeater
 name: Repeater
 title_slug: repeater
 ipdb_id: 1947

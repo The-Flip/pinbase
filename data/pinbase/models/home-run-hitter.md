@@ -1,5 +1,4 @@
 ---
-slug: home-run-hitter
 name: Home Run Hitter
 title_slug: home-run-hitter
 ipdb_id: 4761

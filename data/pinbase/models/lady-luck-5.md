@@ -1,5 +1,4 @@
 ---
-slug: lady-luck-5
 name: Lady Luck
 title_slug: lady-luck-5
 ipdb_id: 3203

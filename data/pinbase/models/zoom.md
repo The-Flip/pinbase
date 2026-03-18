@@ -1,5 +1,4 @@
 ---
-slug: zoom
 name: Zoom
 title_slug: zoom
 ipdb_id: 2843

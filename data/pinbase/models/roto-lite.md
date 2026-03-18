@@ -1,5 +1,4 @@
 ---
-slug: roto-lite
 name: Roto Lite
 title_slug: roto-lite
 ipdb_id: 2021

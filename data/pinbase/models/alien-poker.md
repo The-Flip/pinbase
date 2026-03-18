@@ -1,5 +1,4 @@
 ---
-slug: alien-poker
 name: Alien Poker
 title_slug: alien-poker
 opdb_id: G4yen-MD12Y

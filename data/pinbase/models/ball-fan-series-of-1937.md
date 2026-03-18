@@ -1,5 +1,4 @@
 ---
-slug: ball-fan-series-of-1937
 name: Ball Fan Series of 1937
 title_slug: ball-fan-series-of-1937
 ipdb_id: 137

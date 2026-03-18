@@ -1,5 +1,4 @@
 ---
-slug: qberts-quest
 name: Q*Bert's Quest
 title_slug: qberts-quest
 opdb_id: Gr1qn-MYerP

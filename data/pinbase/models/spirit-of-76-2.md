@@ -1,5 +1,4 @@
 ---
-slug: spirit-of-76-2
 name: Spirit of 76
 title_slug: spirit-of-76
 opdb_id: G4d0O-MJpj2

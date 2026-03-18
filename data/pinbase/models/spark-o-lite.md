@@ -1,5 +1,4 @@
 ---
-slug: spark-o-lite
 name: Spark-O-Lite
 title_slug: spark-o-lite
 ipdb_id: 4175

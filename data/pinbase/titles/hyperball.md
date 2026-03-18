@@ -1,5 +1,4 @@
 ---
-slug: hyperball
 name: Hyperball
 ---
 

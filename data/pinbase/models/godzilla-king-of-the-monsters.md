@@ -1,5 +1,4 @@
 ---
-slug: godzilla-king-of-the-monsters
 name: Godzilla King of the Monsters!
 title_slug: godzilla-king-of-the-monsters
 ipdb_id: 6888

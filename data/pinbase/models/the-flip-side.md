@@ -1,5 +1,4 @@
 ---
-slug: the-flip-side
 name: The Flip Side
 title_slug: the-flip-side
 opdb_id: GvBB8-MYex1

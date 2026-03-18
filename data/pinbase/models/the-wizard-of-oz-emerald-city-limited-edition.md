@@ -1,5 +1,4 @@
 ---
-slug: the-wizard-of-oz-emerald-city-limited-edition
 name: The Wizard of Oz Emerald City Limited Edition
 title_slug: the-wizard-of-oz-emerald-city-limited-edition
 ipdb_id: 5967

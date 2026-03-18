@@ -1,5 +1,4 @@
 ---
-slug: skating
 name: Skating
 title_slug: skating
 ipdb_id: 5772

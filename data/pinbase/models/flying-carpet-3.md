@@ -1,5 +1,4 @@
 ---
-slug: flying-carpet-3
 name: Flying Carpet
 title_slug: flying-carpet-3
 ipdb_id: 6616

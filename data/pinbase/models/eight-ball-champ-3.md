@@ -1,5 +1,4 @@
 ---
-slug: eight-ball-champ-3
 name: Eight Ball Champ
 title_slug: eight-ball-champ-3
 ipdb_id: 6431

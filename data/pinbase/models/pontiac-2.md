@@ -1,5 +1,4 @@
 ---
-slug: pontiac-2
 name: Pontiac
 title_slug: pontiac-2
 ipdb_id: 1847

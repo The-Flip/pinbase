@@ -1,5 +1,4 @@
 ---
-slug: tagada
 name: Tagada
 title_slug: tagada
 ipdb_id: 5796

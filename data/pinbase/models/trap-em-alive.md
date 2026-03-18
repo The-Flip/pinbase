@@ -1,5 +1,4 @@
 ---
-slug: trap-em-alive
 name: Trap-Em-Alive
 title_slug: trap-em-alive
 ipdb_id: 4705

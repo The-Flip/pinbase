@@ -1,5 +1,4 @@
 ---
-slug: oscar
 name: Oscar
 title_slug: oscar
 ipdb_id: 1726

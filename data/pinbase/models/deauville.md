@@ -1,5 +1,4 @@
 ---
-slug: deauville
 name: Deauville
 title_slug: deauville
 ipdb_id: 650

@@ -1,5 +1,4 @@
 ---
-slug: andromeda
 name: Andromeda
 title_slug: andromeda
 opdb_id: GrXOZ-MLyb0

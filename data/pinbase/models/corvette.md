@@ -1,5 +1,4 @@
 ---
-slug: corvette
 name: Corvette
 title_slug: corvette
 opdb_id: GrjDz-MJKN6

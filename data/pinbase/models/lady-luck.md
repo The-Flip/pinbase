@@ -1,5 +1,4 @@
 ---
-slug: lady-luck
 name: Lady Luck
 title_slug: lady-luck
 opdb_id: GR0nO-MdE2B

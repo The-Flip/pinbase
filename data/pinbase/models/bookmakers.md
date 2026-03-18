@@ -1,5 +1,4 @@
 ---
-slug: bookmakers
 name: Bookmaker's
 title_slug: bookmakers
 ipdb_id: 4397

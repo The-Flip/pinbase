@@ -1,5 +1,4 @@
 ---
-slug: magic-castle
 name: Magic Castle
 title_slug: magic-castle
 opdb_id: G5v2B-MQ2xy

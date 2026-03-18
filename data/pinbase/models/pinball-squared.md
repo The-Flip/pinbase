@@ -1,5 +1,4 @@
 ---
-slug: pinball-squared
 name: Pinball Squared
 title_slug: pinball-squared
 ipdb_id: 5341

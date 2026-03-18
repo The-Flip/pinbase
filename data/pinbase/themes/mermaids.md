@@ -1,4 +1,3 @@
 ---
-slug: mermaids
 name: Mermaids
 ---

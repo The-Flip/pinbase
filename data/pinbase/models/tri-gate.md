@@ -1,5 +1,4 @@
 ---
-slug: tri-gate
 name: Tri Gate
 title_slug: tri-gate
 ipdb_id: 4742

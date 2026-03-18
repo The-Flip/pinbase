@@ -1,5 +1,4 @@
 ---
-slug: top-em
 name: Top 'Em
 title_slug: top-em
 ipdb_id: 3465

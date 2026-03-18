@@ -1,5 +1,4 @@
 ---
-slug: mr-doom-2
 name: Mr. Doom
 title_slug: mr-doom-2
 ipdb_id: 6226

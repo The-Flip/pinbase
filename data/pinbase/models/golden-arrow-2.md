@@ -1,5 +1,4 @@
 ---
-slug: golden-arrow-2
 name: Golden Arrow
 title_slug: golden-arrow-2
 ipdb_id: 3807

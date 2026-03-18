@@ -1,5 +1,4 @@
 ---
-slug: carombolette-table
 name: Carombolette Table
 title_slug: carombolette-table
 ipdb_id: 6104

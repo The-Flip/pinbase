@@ -1,5 +1,4 @@
 ---
-slug: bmx
 name: BMX
 title_slug: bmx
 opdb_id: G48NB-MD384

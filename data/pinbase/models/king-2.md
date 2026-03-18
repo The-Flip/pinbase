@@ -1,5 +1,4 @@
 ---
-slug: king-2
 name: King
 title_slug: king-2
 ipdb_id: 4744

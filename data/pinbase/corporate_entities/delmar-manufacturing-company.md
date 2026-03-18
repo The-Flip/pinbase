@@ -1,5 +1,4 @@
 ---
-slug: delmar-manufacturing-company
 name: Delmar Manufacturing Company
 manufacturer_slug: delmar-manufacturing-company
 ipdb_manufacturer_id: 447

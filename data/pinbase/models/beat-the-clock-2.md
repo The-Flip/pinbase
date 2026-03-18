@@ -1,5 +1,4 @@
 ---
-slug: beat-the-clock-2
 name: Beat the Clock
 title_slug: beat-the-clock
 opdb_id: GRY9k-MQr4w

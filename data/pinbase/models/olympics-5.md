@@ -1,5 +1,4 @@
 ---
-slug: olympics-5
 name: Olympics
 title_slug: olympics-4
 ipdb_id: 6403

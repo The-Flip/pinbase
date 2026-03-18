@@ -1,5 +1,4 @@
 ---
-slug: all-out
 name: All Out
 title_slug: all-out
 ipdb_id: 3840

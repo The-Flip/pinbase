@@ -1,5 +1,4 @@
 ---
-slug: spot-a-ball
 name: Spot A Ball
 title_slug: spot-a-ball
 ipdb_id: 2311

@@ -1,4 +1,3 @@
 ---
-slug: honolulu
 name: Honolulu
 ---

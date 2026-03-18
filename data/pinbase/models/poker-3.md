@@ -1,5 +1,4 @@
 ---
-slug: poker-3
 name: Poker
 title_slug: poker-3
 ipdb_id: 4913

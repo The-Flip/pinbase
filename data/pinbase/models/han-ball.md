@@ -1,5 +1,4 @@
 ---
-slug: han-ball
 name: Han-Ball
 title_slug: han-ball
 ipdb_id: 1107

@@ -1,5 +1,4 @@
 ---
-slug: gold-mine
 name: Gold Mine
 title_slug: gold-mine
 opdb_id: Gj6Wj-MnKdl

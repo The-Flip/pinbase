@@ -1,5 +1,4 @@
 ---
-slug: double-barrel-2
 name: Double Barrel
 title_slug: double-barrel
 opdb_id: G4dvX-MQKOo

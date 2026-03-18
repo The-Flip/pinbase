@@ -1,5 +1,4 @@
 ---
-slug: bord-golf
 name: Bord-Golf
 title_slug: bord-golf
 ipdb_id: 5782

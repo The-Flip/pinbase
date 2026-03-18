@@ -1,5 +1,4 @@
 ---
-slug: pamco-races
 name: Pamco Races
 title_slug: pamco-races
 ipdb_id: 3535

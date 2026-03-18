@@ -1,5 +1,4 @@
 ---
-slug: genesis-2
 name: Genesis
 title_slug: genesis-2
 opdb_id: GV8EW-MrRe5

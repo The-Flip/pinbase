@@ -1,5 +1,4 @@
 ---
-slug: arizona-2
 name: Arizona
 title_slug: arizona-2
 ipdb_id: 5890

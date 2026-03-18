@@ -1,5 +1,4 @@
 ---
-slug: blast-off
 name: Blast Off
 title_slug: apollo-blast-off
 opdb_id: GRBDj-MjBbn

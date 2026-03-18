@@ -1,5 +1,4 @@
 ---
-slug: rocket-2
 name: Rocket
 title_slug: mercury-rocket
 opdb_id: Gr1JJ-MJY40

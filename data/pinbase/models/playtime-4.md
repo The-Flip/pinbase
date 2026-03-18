@@ -1,5 +1,4 @@
 ---
-slug: playtime-4
 name: Playtime
 title_slug: playtime-4
 ipdb_id: 6236

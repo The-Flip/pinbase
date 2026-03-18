@@ -1,5 +1,4 @@
 ---
-slug: star-wars-yellow-stripe-home-edition
 name: Star Wars Comic Art (Home Edition)
 title_slug: star-wars-home-edition
 opdb_id: GpePX-MnKq5-A1Jkz

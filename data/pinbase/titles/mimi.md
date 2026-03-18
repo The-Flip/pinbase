@@ -1,4 +1,3 @@
 ---
-slug: mimi
 name: Mimi
 ---

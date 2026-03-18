@@ -1,5 +1,4 @@
 ---
-slug: free-races
 name: Free Races
 title_slug: free-races
 ipdb_id: 950

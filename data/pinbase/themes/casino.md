@@ -1,4 +1,3 @@
 ---
-slug: casino
 name: Casino
 ---

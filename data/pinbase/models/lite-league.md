@@ -1,5 +1,4 @@
 ---
-slug: lite-league
 name: Lite-League
 title_slug: lite-league
 ipdb_id: 5108

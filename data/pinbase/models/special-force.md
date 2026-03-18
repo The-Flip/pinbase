@@ -1,5 +1,4 @@
 ---
-slug: special-force
 name: Special Force
 title_slug: special-force
 opdb_id: GRDkX-M61RE

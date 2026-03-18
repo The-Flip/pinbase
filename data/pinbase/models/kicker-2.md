@@ -1,5 +1,4 @@
 ---
-slug: kicker-2
 name: Kicker
 title_slug: abra-ca-dabra-team-one
 opdb_id: GRpZ2-MkP3j

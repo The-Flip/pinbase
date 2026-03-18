@@ -1,5 +1,4 @@
 ---
-slug: sicking-manufacturing-company
 name: Sicking Manufacturing Company
 manufacturer_slug: sicking-manufacturing-company
 ipdb_manufacturer_id: 428

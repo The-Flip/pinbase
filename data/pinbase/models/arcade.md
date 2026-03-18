@@ -1,5 +1,4 @@
 ---
-slug: arcade
 name: Arcade
 title_slug: arcade
 opdb_id: GrNyB-MDBkE

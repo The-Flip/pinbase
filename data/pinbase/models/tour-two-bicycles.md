@@ -1,5 +1,4 @@
 ---
-slug: tour-two-bicycles
 name: Tour (Two Bicycles)
 title_slug: tour-two-bicycles
 ipdb_id: 5936

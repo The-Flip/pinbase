@@ -1,4 +1,3 @@
 ---
-slug: knickerbocker
 name: Knickerbocker
 ---

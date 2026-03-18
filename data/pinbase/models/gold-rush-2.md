@@ -1,5 +1,4 @@
 ---
-slug: gold-rush-2
 name: Gold Rush
 title_slug: gold-rush-yukon-klondike
 opdb_id: GR987-MDOdw

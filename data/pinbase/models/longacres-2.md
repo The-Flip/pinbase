@@ -1,5 +1,4 @@
 ---
-slug: longacres-2
 name: Longacres
 title_slug: longacres-2
 ipdb_id: 5504

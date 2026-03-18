@@ -1,5 +1,4 @@
 ---
-slug: contention
 name: Contention
 title_slug: contention
 ipdb_id: 562

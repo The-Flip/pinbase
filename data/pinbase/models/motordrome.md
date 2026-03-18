@@ -1,5 +1,4 @@
 ---
-slug: motordrome
 name: Motordrome
 title_slug: motordrome
 ipdb_id: 1632

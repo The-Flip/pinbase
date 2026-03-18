@@ -1,5 +1,4 @@
 ---
-slug: wimbledon
 name: Wimbledon
 title_slug: volley
 opdb_id: G5Q19-MLeEN-A18jJ

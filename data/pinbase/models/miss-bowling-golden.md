@@ -1,5 +1,4 @@
 ---
-slug: miss-bowling-golden
 name: Miss Bowling Golden
 title_slug: miss-bowling-golden
 ipdb_id: 5757

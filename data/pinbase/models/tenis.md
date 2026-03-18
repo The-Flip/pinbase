@@ -1,5 +1,4 @@
 ---
-slug: tenis
 name: Tenis
 title_slug: tenis
 ipdb_id: 4611

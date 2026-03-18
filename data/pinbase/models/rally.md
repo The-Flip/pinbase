@@ -1,5 +1,4 @@
 ---
-slug: rally
 name: Rally
 title_slug: rally
 ipdb_id: 4067

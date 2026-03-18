@@ -1,5 +1,4 @@
 ---
-slug: video-pinball-2
 name: Video Pinball
 title_slug: video-pinball-2
 ipdb_id: 6432

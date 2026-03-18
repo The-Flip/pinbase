@@ -1,5 +1,4 @@
 ---
-slug: wipe-out-2
 name: Wipe-Out
 title_slug: wipe-out-2
 ipdb_id: 4870

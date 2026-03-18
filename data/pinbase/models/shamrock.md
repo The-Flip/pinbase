@@ -1,5 +1,4 @@
 ---
-slug: shamrock
 name: Shamrock
 title_slug: shamrock-2
 opdb_id: G5n7L-MQplz

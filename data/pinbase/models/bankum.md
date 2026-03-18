@@ -1,5 +1,4 @@
 ---
-slug: bankum
 name: Bankum
 title_slug: bankum
 ipdb_id: 5659

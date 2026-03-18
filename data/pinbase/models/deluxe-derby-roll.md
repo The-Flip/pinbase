@@ -1,5 +1,4 @@
 ---
-slug: deluxe-derby-roll
 name: Deluxe Derby Roll
 title_slug: deluxe-derby-roll
 ipdb_id: 5428

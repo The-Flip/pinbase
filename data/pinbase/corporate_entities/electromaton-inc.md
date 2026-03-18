@@ -1,5 +1,4 @@
 ---
-slug: electromaton-inc
 name: Electromaton, Inc.
 manufacturer_slug: electromaton-inc
 ipdb_manufacturer_id: 550

@@ -1,5 +1,4 @@
 ---
-slug: disco-dancing
 name: Disco Dancing
 title_slug: disco-dancing
 ipdb_id: 5892

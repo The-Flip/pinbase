@@ -1,5 +1,4 @@
 ---
-slug: music-hall
 name: Music-Hall
 title_slug: music-hall
 ipdb_id: 5805

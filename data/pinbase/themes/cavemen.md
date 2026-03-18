@@ -1,4 +1,3 @@
 ---
-slug: cavemen
 name: Cavemen
 ---

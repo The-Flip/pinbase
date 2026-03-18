@@ -1,4 +1,3 @@
 ---
-slug: mad
 name: Mad
 ---

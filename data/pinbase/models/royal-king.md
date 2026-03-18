@@ -1,5 +1,4 @@
 ---
-slug: royal-king
 name: Royal King
 title_slug: top-card-royal-pair
 opdb_id: G4JND-MP3qK

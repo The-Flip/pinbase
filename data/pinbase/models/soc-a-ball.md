@@ -1,5 +1,4 @@
 ---
-slug: soc-a-ball
 name: Soc-A-Ball
 title_slug: soc-a-ball
 ipdb_id: 6722

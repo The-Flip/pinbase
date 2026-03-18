@@ -1,5 +1,4 @@
 ---
-slug: data-east-v1
 name: Data East/Sega Version 1
 manufacturer_slug: data-east
 technology_subgeneration_slug: ss-integrated

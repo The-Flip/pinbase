@@ -1,4 +1,3 @@
 ---
-slug: bicar
 name: BICAR
 ---

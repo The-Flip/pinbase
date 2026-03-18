@@ -1,4 +1,3 @@
 ---
-slug: delhi
 name: Delhi
 ---

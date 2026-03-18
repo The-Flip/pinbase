@@ -1,5 +1,4 @@
 ---
-slug: olympic-sportsman
 name: Olympic Sportsman
 title_slug: olympic-sportsman
 ipdb_id: 3954

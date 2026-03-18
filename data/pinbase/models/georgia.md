@@ -1,5 +1,4 @@
 ---
-slug: georgia
 name: Georgia
 title_slug: georgia
 opdb_id: GRzN9-MyN18

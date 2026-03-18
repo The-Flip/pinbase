@@ -1,5 +1,4 @@
 ---
-slug: electromechanical
 name: Electromechanical
 display_order: 2
 ---

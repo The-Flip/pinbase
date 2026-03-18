@@ -1,4 +1,3 @@
 ---
-slug: miggles
 name: Miggles
 ---

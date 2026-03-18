@@ -1,5 +1,4 @@
 ---
-slug: tricks-senior
 name: Tricks (Senior)
 title_slug: tricks-senior
 ipdb_id: 2643

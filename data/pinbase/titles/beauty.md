@@ -1,4 +1,3 @@
 ---
-slug: beauty
 name: Beauty
 ---

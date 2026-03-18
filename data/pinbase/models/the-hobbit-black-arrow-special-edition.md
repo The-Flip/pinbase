@@ -1,5 +1,4 @@
 ---
-slug: the-hobbit-black-arrow-special-edition
 name: The Hobbit (Black Arrow)
 title_slug: the-hobbit
 opdb_id: G5bYr-MLezO-ARePO

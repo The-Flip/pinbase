@@ -1,5 +1,4 @@
 ---
-slug: jig-joy
 name: Jig Joy
 title_slug: jig-joy
 ipdb_id: 3175

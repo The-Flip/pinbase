@@ -1,5 +1,4 @@
 ---
-slug: hi-fi
 name: Hi-Fi
 title_slug: hi-fi
 ipdb_id: 1166

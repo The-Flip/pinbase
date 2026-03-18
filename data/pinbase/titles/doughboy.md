@@ -1,4 +1,3 @@
 ---
-slug: doughboy
 name: Doughboy
 ---

@@ -1,5 +1,4 @@
 ---
-slug: knock-out-senior
 name: Knock-Out Senior
 title_slug: knock-out-senior
 ipdb_id: 5589

@@ -1,5 +1,4 @@
 ---
-slug: attack-from-mars
 name: Attack from Mars
 title_slug: attack-from-mars
 opdb_id: G4do5-MDlN7

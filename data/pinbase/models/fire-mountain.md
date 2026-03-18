@@ -1,5 +1,4 @@
 ---
-slug: fire-mountain
 name: Fire Mountain
 title_slug: fire-mountain
 opdb_id: G4E9p-MDOrl

@@ -1,5 +1,4 @@
 ---
-slug: arrowhead-2
 name: Arrowhead
 title_slug: arrowhead-2
 ipdb_id: 96

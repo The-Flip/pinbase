@@ -1,5 +1,4 @@
 ---
-slug: super-duo
 name: Super Duo
 title_slug: hi-score-super-score
 opdb_id: GR6XE-M85zX

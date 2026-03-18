@@ -1,5 +1,4 @@
 ---
-slug: genco-champs
 name: Genco Champs
 title_slug: genco-champs
 ipdb_id: 490

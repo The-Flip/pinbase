@@ -1,5 +1,4 @@
 ---
-slug: lazy-q
 name: Lazy-Q
 title_slug: lazy-q
 opdb_id: Grq8J-MJ2W4

@@ -1,5 +1,4 @@
 ---
-slug: dixieland
 name: Dixieland
 title_slug: dixieland
 opdb_id: GrND7-ML0l9

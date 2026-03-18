@@ -1,5 +1,4 @@
 ---
-slug: pros-per-e-ti-special
 name: Pros-Per-E-Ti Special
 title_slug: pros-per-e-ti-special
 ipdb_id: 4709

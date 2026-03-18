@@ -1,5 +1,4 @@
 ---
-slug: strike-force
 name: Strike Force
 title_slug: strike-force
 ipdb_id: 4337

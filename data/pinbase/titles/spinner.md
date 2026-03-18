@@ -1,4 +1,3 @@
 ---
-slug: spinner
 name: Spinner
 ---

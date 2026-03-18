@@ -1,5 +1,4 @@
 ---
-slug: nuclear
 name: Nuclear
 title_slug: nuclear
 ipdb_id: 6316

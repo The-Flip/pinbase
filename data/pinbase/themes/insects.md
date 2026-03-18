@@ -1,4 +1,3 @@
 ---
-slug: insects
 name: Insects
 ---

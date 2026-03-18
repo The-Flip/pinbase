@@ -1,5 +1,4 @@
 ---
-slug: spain-82
 name: Spain 82
 title_slug: spain-82
 opdb_id: G4Zo1-MQV0j

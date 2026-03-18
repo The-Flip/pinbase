@@ -1,5 +1,4 @@
 ---
-slug: north-pole
 name: North Pole
 title_slug: aloha
 opdb_id: G4kw7-MDl0Y-A9YDv

@@ -1,5 +1,4 @@
 ---
-slug: triumph
 name: Triumph
 title_slug: triumph
 ipdb_id: 5662

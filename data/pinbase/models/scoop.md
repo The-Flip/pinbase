@@ -1,5 +1,4 @@
 ---
-slug: scoop
 name: Scoop
 title_slug: scoop
 ipdb_id: 2059

@@ -1,5 +1,4 @@
 ---
-slug: canasta-86
 name: Canasta 86
 title_slug: canasta-86
 opdb_id: GrEpb-MQ2By

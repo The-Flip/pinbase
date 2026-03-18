@@ -1,5 +1,4 @@
 ---
-slug: cavaleiro-negro
 name: Cavaleiro Negro
 title_slug: black-knight
 opdb_id: GrO7w-M9R03-AO6Be

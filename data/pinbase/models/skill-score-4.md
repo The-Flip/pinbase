@@ -1,5 +1,4 @@
 ---
-slug: skill-score-4
 name: Skill Score
 title_slug: skill-score-3
 ipdb_id: 6379

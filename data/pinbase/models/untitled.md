@@ -1,5 +1,4 @@
 ---
-slug: untitled
 name: Untitled
 title_slug: untitled
 ipdb_id: 5332

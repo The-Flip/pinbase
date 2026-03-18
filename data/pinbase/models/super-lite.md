@@ -1,5 +1,4 @@
 ---
-slug: super-lite
 name: Super Lite
 title_slug: super-lite
 ipdb_id: 5034

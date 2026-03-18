@@ -1,4 +1,3 @@
 ---
-slug: arrow
 name: Arrow
 ---

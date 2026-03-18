@@ -1,5 +1,4 @@
 ---
-slug: universe-2
 name: Universe
 title_slug: universe-2
 opdb_id: GRLy6-MnKV7

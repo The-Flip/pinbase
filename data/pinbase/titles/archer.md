@@ -1,4 +1,3 @@
 ---
-slug: archer
 name: Archer
 ---

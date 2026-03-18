@@ -1,5 +1,4 @@
 ---
-slug: jolly-park
 name: Jolly Park
 title_slug: jolly-park
 opdb_id: G4jWq-MLyl0

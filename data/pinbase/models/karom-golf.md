@@ -1,5 +1,4 @@
 ---
-slug: karom-golf
 name: Karom Golf
 title_slug: karom-golf
 ipdb_id: 1348

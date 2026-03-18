@@ -1,5 +1,4 @@
 ---
-slug: festival-2
 name: Festival
 title_slug: festival-2
 ipdb_id: 6367

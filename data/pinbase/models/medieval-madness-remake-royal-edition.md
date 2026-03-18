@@ -1,5 +1,4 @@
 ---
-slug: medieval-madness-remake-royal-edition
 name: Medieval Madness (Remake Royal Edition)
 title_slug: medieval-madness
 opdb_id: G5pe4-MkPRV

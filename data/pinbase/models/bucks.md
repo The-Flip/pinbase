@@ -1,5 +1,4 @@
 ---
-slug: bucks
 name: Bucks
 title_slug: bucks
 ipdb_id: 4161

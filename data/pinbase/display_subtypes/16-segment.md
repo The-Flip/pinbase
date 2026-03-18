@@ -1,5 +1,4 @@
 ---
-slug: 16-segment
 name: Sixteen-Segment
 display_order: 3
 display_type_slug: alphanumeric

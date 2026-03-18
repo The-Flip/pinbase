@@ -1,5 +1,4 @@
 ---
-slug: petaco
 name: Petaco
 title_slug: petaco
 opdb_id: GyVV1-M9Rlp

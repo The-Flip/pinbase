@@ -1,5 +1,4 @@
 ---
-slug: lethal-weapon
 name: Lethal Weapon
 ---
 

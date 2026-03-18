@@ -1,4 +1,3 @@
 ---
-slug: speeding
 name: Speeding
 ---

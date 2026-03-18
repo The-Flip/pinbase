@@ -1,5 +1,4 @@
 ---
-slug: haf-shot
 name: Haf-Shot
 title_slug: haf-shot
 ipdb_id: 1106

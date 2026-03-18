@@ -1,5 +1,4 @@
 ---
-slug: the-wiggle
 name: The Wiggle
 title_slug: the-wiggle
 ipdb_id: 2776

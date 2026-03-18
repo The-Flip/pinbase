@@ -1,5 +1,4 @@
 ---
-slug: grub-stake
 name: Grub Stake
 title_slug: grub-stake
 ipdb_id: 1092

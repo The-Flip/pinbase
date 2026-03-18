@@ -1,5 +1,4 @@
 ---
-slug: pinball-pool
 name: Pinball Pool
 title_slug: pinball-pool
 opdb_id: G4kdB-MLqe3

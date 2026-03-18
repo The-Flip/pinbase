@@ -1,5 +1,4 @@
 ---
-slug: star-wars-original-home-edition
 name: Star Wars (Home Edition)
 title_slug: star-wars-home-edition
 opdb_id: GpePX-MnKq5

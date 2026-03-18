@@ -1,5 +1,4 @@
 ---
-slug: windjammer
 name: Windjammer
 title_slug: windjammer
 ipdb_id: 3561

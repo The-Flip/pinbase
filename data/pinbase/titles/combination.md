@@ -1,4 +1,3 @@
 ---
-slug: combination
 name: Combination
 ---

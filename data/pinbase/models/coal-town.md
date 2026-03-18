@@ -1,5 +1,4 @@
 ---
-slug: coal-town
 name: Coal Town
 title_slug: coal-town
 ipdb_id: 5098

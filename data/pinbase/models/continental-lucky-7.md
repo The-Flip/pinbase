@@ -1,5 +1,4 @@
 ---
-slug: continental-lucky-7
 name: Continental Lucky 7
 title_slug: continental-lucky-7
 ipdb_id: 4535

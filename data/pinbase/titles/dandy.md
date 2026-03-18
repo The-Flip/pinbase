@@ -1,4 +1,3 @@
 ---
-slug: dandy
 name: Dandy
 ---

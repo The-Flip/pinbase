@@ -1,4 +1,3 @@
 ---
-slug: patriotism
 name: Patriotism
 ---

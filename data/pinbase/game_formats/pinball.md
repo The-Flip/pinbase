@@ -1,5 +1,4 @@
 ---
-slug: pinball
 name: Pinball
 display_order: 1
 ---

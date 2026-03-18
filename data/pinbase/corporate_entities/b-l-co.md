@@ -1,5 +1,4 @@
 ---
-slug: b-l-co
 name: B & L Co.
 manufacturer_slug: b-l-co
 ipdb_manufacturer_id: 645

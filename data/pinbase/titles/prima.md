@@ -1,4 +1,3 @@
 ---
-slug: prima
 name: Prima
 ---

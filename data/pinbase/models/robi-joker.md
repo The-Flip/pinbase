@@ -1,5 +1,4 @@
 ---
-slug: robi-joker
 name: Robi Joker
 title_slug: robi-joker
 ipdb_id: 6427

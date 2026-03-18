@@ -1,5 +1,4 @@
 ---
-slug: pyramid
 name: Pyramid
 title_slug: cleopatra
 opdb_id: GrknN-MJ9Kl

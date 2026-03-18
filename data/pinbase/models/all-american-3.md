@@ -1,5 +1,4 @@
 ---
-slug: all-american-3
 name: All American
 title_slug: all-american-2
 ipdb_id: 4200

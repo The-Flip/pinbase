@@ -1,5 +1,4 @@
 ---
-slug: super-star-5
 name: Super Star
 title_slug: super-star
 opdb_id: G3EL3-MjBnR

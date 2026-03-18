@@ -1,5 +1,4 @@
 ---
-slug: the-shadow
 name: The Shadow
 title_slug: the-shadow
 opdb_id: G4jPX-M85YZ

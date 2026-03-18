@@ -1,5 +1,4 @@
 ---
-slug: flipp-shoot
 name: Flipp Shoot
 title_slug: flipp-shoot
 ipdb_id: 6171

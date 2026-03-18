@@ -1,4 +1,3 @@
 ---
-slug: ripepi
 name: Ripepi
 ---

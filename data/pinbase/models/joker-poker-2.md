@@ -1,5 +1,4 @@
 ---
-slug: joker-poker-2
 name: Joker Poker (EM)
 title_slug: joker-poker
 opdb_id: GR9o1-Mx0bX

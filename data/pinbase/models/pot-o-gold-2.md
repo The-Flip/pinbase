@@ -1,5 +1,4 @@
 ---
-slug: pot-o-gold-2
 name: Pot-O-Gold
 title_slug: pot-o-gold-2
 ipdb_id: 3763

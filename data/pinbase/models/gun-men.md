@@ -1,5 +1,4 @@
 ---
-slug: gun-men
 name: Gun Men
 title_slug: gun-men
 opdb_id: GryPE-MNE9k

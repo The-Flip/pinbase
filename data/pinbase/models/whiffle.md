@@ -1,5 +1,4 @@
 ---
-slug: whiffle
 name: Whiffle
 title_slug: whiffle
 ipdb_id: 5395

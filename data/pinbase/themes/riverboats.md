@@ -1,4 +1,3 @@
 ---
-slug: riverboats
 name: Riverboats
 ---

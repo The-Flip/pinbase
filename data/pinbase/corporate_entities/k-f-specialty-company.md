@@ -1,5 +1,4 @@
 ---
-slug: k-f-specialty-company
 name: K & F Specialty Company
 manufacturer_slug: k-f-specialty-company
 ipdb_manufacturer_id: 171

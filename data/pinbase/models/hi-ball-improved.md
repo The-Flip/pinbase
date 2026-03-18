@@ -1,5 +1,4 @@
 ---
-slug: hi-ball-improved
 name: Hi-Ball (Improved)
 title_slug: hi-ball-improved
 ipdb_id: 5377

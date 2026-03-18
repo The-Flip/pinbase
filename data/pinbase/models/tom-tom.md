@@ -1,5 +1,4 @@
 ---
-slug: tom-tom
 name: Tom Tom
 title_slug: tom-tom
 opdb_id: G4EjL-MQjVR

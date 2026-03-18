@@ -1,5 +1,4 @@
 ---
-slug: action
 name: Action
 title_slug: action
 opdb_id: GrJQv-M2Yjq

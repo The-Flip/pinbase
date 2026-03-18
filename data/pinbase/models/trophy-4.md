@@ -1,5 +1,4 @@
 ---
-slug: trophy-4
 name: Trophy
 title_slug: trophy-4
 ipdb_id: 6300

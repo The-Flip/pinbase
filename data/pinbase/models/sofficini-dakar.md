@@ -1,5 +1,4 @@
 ---
-slug: sofficini-dakar
 name: Sofficini Dakar
 title_slug: sofficini-dakar
 ipdb_id: 5185

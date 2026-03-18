@@ -1,5 +1,4 @@
 ---
-slug: gemini
 name: Gemini
 title_slug: gemini
 opdb_id: G5KPZ-MLBKd

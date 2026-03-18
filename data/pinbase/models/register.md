@@ -1,5 +1,4 @@
 ---
-slug: register
 name: Register
 title_slug: register-2
 ipdb_id: 1941

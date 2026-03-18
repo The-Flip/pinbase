@@ -1,5 +1,4 @@
 ---
-slug: happy-days-2
 name: Happy Days
 title_slug: happy-days-2
 ipdb_id: 1116

@@ -1,5 +1,4 @@
 ---
-slug: casino-2000
 name: Casino 2000
 title_slug: casino-2000
 ipdb_id: 4676

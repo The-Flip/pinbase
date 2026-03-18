@@ -1,5 +1,4 @@
 ---
-slug: autoflash
 name: Autoflash
 title_slug: autoflash
 ipdb_id: 4311

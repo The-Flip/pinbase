@@ -1,5 +1,4 @@
 ---
-slug: devil
 name: Devil
 title_slug: devil
 opdb_id: GRbJN-Mz2yK

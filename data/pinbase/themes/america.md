@@ -1,4 +1,3 @@
 ---
-slug: america
 name: America
 ---

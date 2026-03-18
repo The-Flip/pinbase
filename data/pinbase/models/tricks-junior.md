@@ -1,5 +1,4 @@
 ---
-slug: tricks-junior
 name: Tricks (Junior)
 title_slug: tricks-junior
 ipdb_id: 6536

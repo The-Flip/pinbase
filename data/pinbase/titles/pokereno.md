@@ -1,4 +1,3 @@
 ---
-slug: pokereno
 name: Pokereno
 ---

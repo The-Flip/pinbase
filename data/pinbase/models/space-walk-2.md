@@ -1,5 +1,4 @@
 ---
-slug: space-walk-2
 name: Space Walk
 title_slug: space-walk
 ipdb_id: 6603

@@ -1,4 +1,3 @@
 ---
-slug: barrage
 name: Barrage
 ---

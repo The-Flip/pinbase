@@ -1,5 +1,4 @@
 ---
-slug: ramps
 name: Ramps
 display_order: 7
 ---

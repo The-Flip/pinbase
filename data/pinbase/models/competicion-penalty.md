@@ -1,5 +1,4 @@
 ---
-slug: competicion-penalty
 name: Competición Penalty
 title_slug: competicion-penalty
 ipdb_id: 6200

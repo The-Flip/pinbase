@@ -1,5 +1,4 @@
 ---
-slug: bowling-alley
 name: Bowling Alley
 title_slug: bowling-alley
 ipdb_id: 364

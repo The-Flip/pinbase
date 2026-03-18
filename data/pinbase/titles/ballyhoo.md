@@ -1,4 +1,3 @@
 ---
-slug: ballyhoo
 name: Ballyhoo
 ---

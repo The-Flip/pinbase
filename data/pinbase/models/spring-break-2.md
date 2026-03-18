@@ -1,5 +1,4 @@
 ---
-slug: spring-break-2
 name: Spring Break
 title_slug: spring-break-2
 ipdb_id: 6691

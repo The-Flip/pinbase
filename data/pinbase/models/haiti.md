@@ -1,5 +1,4 @@
 ---
-slug: haiti
 name: Haiti
 title_slug: haiti
 ipdb_id: 6662

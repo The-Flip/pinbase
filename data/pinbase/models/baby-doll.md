@@ -1,5 +1,4 @@
 ---
-slug: baby-doll
 name: Baby Doll
 title_slug: pat-hand-satin-doll
 opdb_id: G48YQ-MYelP

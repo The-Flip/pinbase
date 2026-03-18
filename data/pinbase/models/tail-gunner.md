@@ -1,5 +1,4 @@
 ---
-slug: tail-gunner
 name: Tail Gunner
 title_slug: tail-gunner
 ipdb_id: 3407

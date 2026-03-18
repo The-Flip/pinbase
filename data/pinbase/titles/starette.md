@@ -1,4 +1,3 @@
 ---
-slug: starette
 name: Starette
 ---

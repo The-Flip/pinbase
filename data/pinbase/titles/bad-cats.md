@@ -1,5 +1,4 @@
 ---
-slug: bad-cats
 name: Bad Cats
 opdb_group_id: GrEBz
 abbreviations:

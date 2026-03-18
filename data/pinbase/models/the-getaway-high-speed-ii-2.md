@@ -1,5 +1,4 @@
 ---
-slug: the-getaway-high-speed-ii-2
 name: The Getaway High Speed II
 title_slug: the-getaway-high-speed-ii-2
 ipdb_id: 5181

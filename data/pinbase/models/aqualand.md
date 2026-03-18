@@ -1,5 +1,4 @@
 ---
-slug: aqualand
 name: Aqualand
 title_slug: aqualand
 opdb_id: GRQVw-Mx06k

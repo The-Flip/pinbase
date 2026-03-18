@@ -1,5 +1,4 @@
 ---
-slug: rockettes
 name: Rockettes
 title_slug: rockettes
 opdb_id: GreB8-MQdrd

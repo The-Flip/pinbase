@@ -1,5 +1,4 @@
 ---
-slug: rockmakers
 name: RockMakers
 title_slug: rockmakers
 opdb_id: G43zw-M4o2b

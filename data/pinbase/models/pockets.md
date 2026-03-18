@@ -1,5 +1,4 @@
 ---
-slug: pockets
 name: Pockets
 title_slug: pockets
 ipdb_id: 1834

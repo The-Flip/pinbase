@@ -1,5 +1,4 @@
 ---
-slug: comics
 name: Comics
 title_slug: comics
 opdb_id: G4dQD-MNEX8

@@ -1,5 +1,4 @@
 ---
-slug: singapore-2
 name: Singapore
 title_slug: singapore-2
 ipdb_id: 2162

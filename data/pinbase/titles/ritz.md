@@ -1,4 +1,3 @@
 ---
-slug: ritz
 name: Ritz
 ---

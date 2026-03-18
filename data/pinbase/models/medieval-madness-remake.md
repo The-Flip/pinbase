@@ -1,5 +1,4 @@
 ---
-slug: medieval-madness-remake
 name: Medieval Madness (Remake)
 title_slug: medieval-madness
 opdb_id: G5pe4-MyNkp

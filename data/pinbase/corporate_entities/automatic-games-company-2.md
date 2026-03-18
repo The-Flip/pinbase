@@ -1,5 +1,4 @@
 ---
-slug: automatic-games-company-2
 name: Automatic Games Company
 manufacturer_slug: automatic-games-company
 ipdb_manufacturer_id: 40

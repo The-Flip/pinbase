@@ -1,5 +1,4 @@
 ---
-slug: major-league-baseball-3
 name: Major League Baseball
 title_slug: major-league-baseball-3
 ipdb_id: 5106

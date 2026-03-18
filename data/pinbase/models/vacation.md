@@ -1,5 +1,4 @@
 ---
-slug: vacation
 name: Vacation
 title_slug: vacation
 ipdb_id: 2712

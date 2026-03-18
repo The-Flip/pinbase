@@ -1,5 +1,4 @@
 ---
-slug: batman-forever
 name: Batman Forever
 title_slug: batman-forever
 opdb_id: G59zN-MLy0N

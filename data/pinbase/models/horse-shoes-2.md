@@ -1,5 +1,4 @@
 ---
-slug: horse-shoes-2
 name: Horseshoes
 title_slug: horseshoes
 opdb_id: GR6Le-MQZ8o

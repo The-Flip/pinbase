@@ -1,5 +1,4 @@
 ---
-slug: hi-hat
 name: Hi-Hat
 title_slug: hi-hat
 ipdb_id: 1181

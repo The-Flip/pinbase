@@ -1,5 +1,4 @@
 ---
-slug: sea-avenger
 name: Sea Avenger
 title_slug: sea-avenger
 ipdb_id: 6908

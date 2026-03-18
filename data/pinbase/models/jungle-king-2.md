@@ -1,5 +1,4 @@
 ---
-slug: jungle-king-2
 name: Jungle King
 title_slug: jungle-king
 ipdb_id: 4780

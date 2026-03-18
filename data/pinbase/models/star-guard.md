@@ -1,5 +1,4 @@
 ---
-slug: star-guard
 name: Star Guard
 title_slug: star-guard
 ipdb_id: 4424

@@ -1,5 +1,4 @@
 ---
-slug: the-muppets-haunted-house-adventure
 name: The Muppets Haunted House Adventure
 title_slug: the-muppets-haunted-house-adventure
 ipdb_id: 6584

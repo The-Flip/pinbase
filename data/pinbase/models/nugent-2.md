@@ -1,5 +1,4 @@
 ---
-slug: nugent-2
 name: Nugent
 title_slug: nugent
 ipdb_id: 6460

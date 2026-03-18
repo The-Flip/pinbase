@@ -1,5 +1,4 @@
 ---
-slug: navajo
 name: Navajo
 title_slug: big-hunt
 opdb_id: GrJPo-MD3kn

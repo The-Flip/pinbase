@@ -1,5 +1,4 @@
 ---
-slug: gunner
 name: Gunner
 title_slug: gunner
 opdb_id: G4yWX-MJYzZ

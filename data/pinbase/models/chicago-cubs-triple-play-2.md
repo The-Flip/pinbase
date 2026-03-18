@@ -1,5 +1,4 @@
 ---
-slug: chicago-cubs-triple-play-2
 name: Chicago Cubs "Triple Play"
 title_slug: chicago-cubs-triple-play-2
 ipdb_id: 6685

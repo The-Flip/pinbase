@@ -1,5 +1,4 @@
 ---
-slug: ice-mania-2
 name: Ice Mania
 title_slug: ice-mania
 ipdb_id: 4566

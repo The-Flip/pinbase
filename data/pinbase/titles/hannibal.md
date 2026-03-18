@@ -1,4 +1,3 @@
 ---
-slug: hannibal
 name: Hannibal
 ---

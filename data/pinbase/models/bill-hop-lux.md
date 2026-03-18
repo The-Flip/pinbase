@@ -1,5 +1,4 @@
 ---
-slug: bill-hop-lux
 name: Bill-Hop-Lux
 title_slug: bill-hop-lux
 ipdb_id: 5789

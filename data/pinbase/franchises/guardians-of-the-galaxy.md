@@ -1,5 +1,4 @@
 ---
-slug: guardians-of-the-galaxy
 name: Guardians of the Galaxy
 ---
 

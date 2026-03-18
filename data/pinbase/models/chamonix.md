@@ -1,5 +1,4 @@
 ---
-slug: chamonix
 name: Chamonix
 title_slug: chamonix
 ipdb_id: 5485

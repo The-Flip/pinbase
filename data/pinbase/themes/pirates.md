@@ -1,4 +1,3 @@
 ---
-slug: pirates
 name: Pirates
 ---

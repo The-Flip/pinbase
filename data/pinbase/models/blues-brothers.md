@@ -1,5 +1,4 @@
 ---
-slug: blues-brothers
 name: Blues Brothers
 title_slug: blues-brothers
 opdb_id: GkBZD-Mb5oy

@@ -1,5 +1,4 @@
 ---
-slug: west-show
 name: West Show
 title_slug: west-show
 opdb_id: GRbwx-MwNV3

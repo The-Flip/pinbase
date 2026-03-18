@@ -1,4 +1,3 @@
 ---
-slug: cars
 name: Cars
 ---

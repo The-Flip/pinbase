@@ -1,5 +1,4 @@
 ---
-slug: aces
 name: Aces
 title_slug: aces
 ipdb_id: 6831

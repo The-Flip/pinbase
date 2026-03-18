@@ -1,5 +1,4 @@
 ---
-slug: data-east
 name: Data East
 opdb_manufacturer_id: 10
 ---

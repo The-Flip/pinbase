@@ -1,5 +1,4 @@
 ---
-slug: magic-circus
 name: Magic Circus
 title_slug: magic-circus
 ipdb_id: 6084

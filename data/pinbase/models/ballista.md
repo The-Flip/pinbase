@@ -1,5 +1,4 @@
 ---
-slug: ballista
 name: Ballista
 title_slug: ballista
 ipdb_id: 6499

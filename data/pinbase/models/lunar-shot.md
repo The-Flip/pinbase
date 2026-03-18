@@ -1,5 +1,4 @@
 ---
-slug: lunar-shot
 name: Lunar Shot
 title_slug: apollo-blast-off
 opdb_id: GRBDj-MLBV6

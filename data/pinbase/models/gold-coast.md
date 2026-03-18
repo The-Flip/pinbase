@@ -1,5 +1,4 @@
 ---
-slug: gold-coast
 name: Gold Coast
 title_slug: gold-coast
 ipdb_id: 1025

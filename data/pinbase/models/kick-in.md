@@ -1,5 +1,4 @@
 ---
-slug: kick-in
 name: Kick In
 title_slug: kick-in
 ipdb_id: 4741

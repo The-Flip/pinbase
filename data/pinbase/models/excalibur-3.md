@@ -1,5 +1,4 @@
 ---
-slug: excalibur-3
 name: Excalibur
 title_slug: excalibur-3
 ipdb_id: 6696

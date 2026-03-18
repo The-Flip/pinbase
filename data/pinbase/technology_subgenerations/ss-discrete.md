@@ -1,5 +1,4 @@
 ---
-slug: ss-discrete
 name: Discrete
 display_order: 1
 technology_generation_slug: solid-state

@@ -1,5 +1,4 @@
 ---
-slug: subway
 name: Subway
 title_slug: subway
 ipdb_id: 2411

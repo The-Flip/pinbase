@@ -1,4 +1,3 @@
 ---
-slug: tango
 name: Tango
 ---

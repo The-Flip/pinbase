@@ -1,5 +1,4 @@
 ---
-slug: stepper-upper
 name: Stepper-Upper
 title_slug: stepper-upper
 ipdb_id: 3383

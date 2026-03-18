@@ -1,5 +1,4 @@
 ---
-slug: big-hit-3
 name: Big Hit
 title_slug: big-hit
 opdb_id: GRLJp-MDRxv

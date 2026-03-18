@@ -1,5 +1,4 @@
 ---
-slug: monster-bash-remake-limited-edition
 name: Monster Bash (Remake Limited Edition)
 title_slug: monster-bash
 opdb_id: Gr3EW-M1r9Y

@@ -1,4 +1,3 @@
 ---
-slug: pelota
 name: Pelota
 ---

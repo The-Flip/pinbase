@@ -1,5 +1,4 @@
 ---
-slug: temptation-2
 name: Temptation
 title_slug: temptation
 opdb_id: G42bv-MDb24

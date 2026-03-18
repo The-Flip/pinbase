@@ -1,10 +1,11 @@
 ---
-slug: torpedo-alley
 name: Torpedo Alley
 title_slug: torpedo-alley
 corporate_entity_slug: data-east-pinball-incorporated
 opdb_id: G48on-ML8B9
 ipdb_id: 2603
+display_type_slug: alphanumeric
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: claude-fernandez
   role: Design

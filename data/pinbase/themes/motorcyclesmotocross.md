@@ -1,4 +1,3 @@
 ---
-slug: motorcyclesmotocross
 name: Motorcyclesmotocross
 ---

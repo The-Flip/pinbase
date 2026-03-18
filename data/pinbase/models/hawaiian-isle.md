@@ -1,5 +1,4 @@
 ---
-slug: hawaiian-isle
 name: Hawaiian Isle
 title_slug: paradise-pleasure-isle
 opdb_id: G4yEO-M4oqr-ARWky

@@ -1,5 +1,4 @@
 ---
-slug: chingy
 name: Chingy
 title_slug: chingy
 ipdb_id: 5595

@@ -1,5 +1,4 @@
 ---
-slug: astro
 name: Astro
 title_slug: 4-square-astro
 opdb_id: GryO2-MQN82

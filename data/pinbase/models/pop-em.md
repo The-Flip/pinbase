@@ -1,5 +1,4 @@
 ---
-slug: pop-em
 name: Pop 'Em
 title_slug: pop-em
 ipdb_id: 1850

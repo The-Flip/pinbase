@@ -1,5 +1,4 @@
 ---
-slug: score-board-2
 name: Score-Board
 title_slug: score-board
 opdb_id: G42yY-MJj7k

@@ -1,5 +1,4 @@
 ---
-slug: granada-2
 name: Granada
 title_slug: granada-2
 ipdb_id: 6139

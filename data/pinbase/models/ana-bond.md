@@ -1,5 +1,4 @@
 ---
-slug: ana-bond
 name: Ana Bond
 title_slug: ana-bond
 ipdb_id: 4610

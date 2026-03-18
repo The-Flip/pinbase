@@ -1,5 +1,4 @@
 ---
-slug: dominos-spectacular-pinball-adventure-standard-edition
 name: Domino's Spectacular Pinball Adventure
 title_slug: dominos
 opdb_id: GxvQ7-MNE7O

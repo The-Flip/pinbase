@@ -1,5 +1,4 @@
 ---
-slug: billiomat
 name: Billiomat
 title_slug: billiomat
 ipdb_id: 292

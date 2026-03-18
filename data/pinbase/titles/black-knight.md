@@ -1,5 +1,4 @@
 ---
-slug: black-knight
 name: Black Knight
 opdb_group_id: GrO7w
 series_slug: black-knight

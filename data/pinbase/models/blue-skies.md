@@ -1,5 +1,4 @@
 ---
-slug: blue-skies
 name: Blue Skies
 title_slug: blue-skies
 opdb_id: GBLNO-M3dj4

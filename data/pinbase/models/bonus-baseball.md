@@ -1,5 +1,4 @@
 ---
-slug: bonus-baseball
 name: Bonus Baseball
 title_slug: bonus-baseball
 ipdb_id: 350

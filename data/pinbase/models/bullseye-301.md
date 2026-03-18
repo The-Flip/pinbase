@@ -1,5 +1,4 @@
 ---
-slug: bullseye-301
 name: Bullseye 301
 title_slug: bullseye-301
 ipdb_id: 3669

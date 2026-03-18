@@ -1,5 +1,4 @@
 ---
-slug: roller-disco
 name: Roller Disco
 title_slug: roller-disco
 opdb_id: G48qn-MDEl1

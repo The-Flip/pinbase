@@ -1,5 +1,4 @@
 ---
-slug: grand-slam-7
 name: Grand Slam
 title_slug: grand-slam-world-series
 opdb_id: G43j1-MJj12

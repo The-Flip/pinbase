@@ -1,5 +1,4 @@
 ---
-slug: the-new-deal
 name: The New Deal
 title_slug: the-new-deal
 ipdb_id: 1670

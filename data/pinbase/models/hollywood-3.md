@@ -1,5 +1,4 @@
 ---
-slug: hollywood-3
 name: Hollywood
 title_slug: hollywood-2
 ipdb_id: 1216

@@ -1,5 +1,4 @@
 ---
-slug: zira-2
 name: Zira
 title_slug: zira-2
 ipdb_id: 6518

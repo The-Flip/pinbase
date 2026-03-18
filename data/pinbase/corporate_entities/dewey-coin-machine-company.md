@@ -1,5 +1,4 @@
 ---
-slug: dewey-coin-machine-company
 name: Dewey Coin Machine Company
 manufacturer_slug: dewey-coin-machine-company
 ipdb_manufacturer_id: 529

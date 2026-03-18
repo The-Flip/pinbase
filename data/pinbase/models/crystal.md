@@ -1,5 +1,4 @@
 ---
-slug: crystal
 name: Crystal
 title_slug: crystal
 ipdb_id: 6233

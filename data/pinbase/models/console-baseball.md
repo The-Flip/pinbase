@@ -1,5 +1,4 @@
 ---
-slug: console-baseball
 name: Console Baseball
 title_slug: console-baseball
 ipdb_id: 6393

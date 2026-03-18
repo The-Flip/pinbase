@@ -1,5 +1,4 @@
 ---
-slug: elmer
 name: Elmer
 title_slug: elmer
 ipdb_id: 781

@@ -1,5 +1,4 @@
 ---
-slug: pasini
 name: Pasini
 manufacturer_slug: pasini
 ipdb_manufacturer_id: 494

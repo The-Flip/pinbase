@@ -1,5 +1,4 @@
 ---
-slug: wild-boy
 name: Wild Boy
 title_slug: wild-boy
 ipdb_id: 4063

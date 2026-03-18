@@ -1,4 +1,3 @@
 ---
-slug: people
 name: People
 ---

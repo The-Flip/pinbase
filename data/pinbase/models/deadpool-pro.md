@@ -1,5 +1,4 @@
 ---
-slug: deadpool-pro
 name: Deadpool (Pro)
 title_slug: deadpool
 opdb_id: G6lnq-Mq1kv

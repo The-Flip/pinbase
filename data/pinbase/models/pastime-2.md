@@ -1,5 +1,4 @@
 ---
-slug: pastime-2
 name: Pastime
 title_slug: pastime-2
 ipdb_id: 1766

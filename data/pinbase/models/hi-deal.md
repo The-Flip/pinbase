@@ -1,5 +1,4 @@
 ---
-slug: hi-deal
 name: Hi-Deal
 title_slug: hi-deal
 opdb_id: G4joK-M0o8O

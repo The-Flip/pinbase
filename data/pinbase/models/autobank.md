@@ -1,5 +1,4 @@
 ---
-slug: autobank
 name: Autobank
 title_slug: autobank
 ipdb_id: 113

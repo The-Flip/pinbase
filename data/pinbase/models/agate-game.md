@@ -1,5 +1,4 @@
 ---
-slug: agate-game
 name: Agate Game
 title_slug: agate-game
 ipdb_id: 5349

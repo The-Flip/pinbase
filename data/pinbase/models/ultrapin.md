@@ -1,5 +1,4 @@
 ---
-slug: ultrapin
 name: UltraPin
 title_slug: ultrapin
 ipdb_id: 5230

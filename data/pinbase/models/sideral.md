@@ -1,5 +1,4 @@
 ---
-slug: sideral
 name: Sideral
 title_slug: sideral
 ipdb_id: 6232

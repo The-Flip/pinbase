@@ -1,5 +1,4 @@
 ---
-slug: horsefeathers
 name: Horsefeathers
 title_slug: horsefeathers
 opdb_id: GRwzK-MDzWe

@@ -1,5 +1,4 @@
 ---
-slug: elvis-gold-limited-edition
 name: Elvis Gold
 title_slug: elvis
 opdb_id: G4qbX-MJw5r-A93pJ

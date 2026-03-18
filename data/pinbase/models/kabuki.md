@@ -1,5 +1,4 @@
 ---
-slug: kabuki
 name: Kabuki
 title_slug: kabuki
 ipdb_id: 4537

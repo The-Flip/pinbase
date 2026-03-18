@@ -1,5 +1,4 @@
 ---
-slug: kiss-fiberglass-prototype
 name: KISS (fiberglass prototype)
 title_slug: kiss-fiberglass-prototype
 ipdb_id: 6936

@@ -1,5 +1,4 @@
 ---
-slug: big-game-2
 name: Big Game
 title_slug: big-game
 opdb_id: G4jQw-MJ5rl

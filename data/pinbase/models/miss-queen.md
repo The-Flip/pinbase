@@ -1,5 +1,4 @@
 ---
-slug: miss-queen
 name: Miss Queen
 title_slug: miss-queen
 ipdb_id: 4143

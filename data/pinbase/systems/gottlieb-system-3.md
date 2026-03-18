@@ -1,5 +1,4 @@
 ---
-slug: gottlieb-system-3
 name: Gottlieb System 3
 manufacturer_slug: gottlieb
 technology_subgeneration_slug: ss-integrated

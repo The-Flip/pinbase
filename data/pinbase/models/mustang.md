@@ -1,5 +1,4 @@
 ---
-slug: mustang
 name: Mustang
 title_slug: mustang-3
 ipdb_id: 1644

@@ -1,5 +1,4 @@
 ---
-slug: quinella
 name: Quinella
 title_slug: quinella
 ipdb_id: 3543

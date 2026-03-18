@@ -1,5 +1,4 @@
 ---
-slug: sea-hawk
 name: Sea Hawk
 title_slug: sea-hawk
 ipdb_id: 2080

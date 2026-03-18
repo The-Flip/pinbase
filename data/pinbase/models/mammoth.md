@@ -1,5 +1,4 @@
 ---
-slug: mammoth
 name: Mammoth
 title_slug: mammoth
 ipdb_id: 1534

@@ -1,5 +1,4 @@
 ---
-slug: diamond-lady
 name: Diamond Lady
 title_slug: diamond-lady
 opdb_id: G4jXW-MQdrN

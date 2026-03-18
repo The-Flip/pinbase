@@ -1,5 +1,4 @@
 ---
-slug: queen-mary
 name: Queen Mary
 title_slug: queen-mary
 ipdb_id: 1889

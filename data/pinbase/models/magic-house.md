@@ -1,5 +1,4 @@
 ---
-slug: magic-house
 name: Magic House
 title_slug: magic-house
 ipdb_id: 6095

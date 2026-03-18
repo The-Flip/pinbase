@@ -1,5 +1,4 @@
 ---
-slug: pin-boy-bowling
 name: Pin Boy Bowling
 title_slug: pin-boy-bowling
 ipdb_id: 5392

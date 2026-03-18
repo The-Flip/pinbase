@@ -1,5 +1,4 @@
 ---
-slug: halley-comet
 name: Halley Comet
 title_slug: halley-comet
 opdb_id: GR7DY-MQVzp

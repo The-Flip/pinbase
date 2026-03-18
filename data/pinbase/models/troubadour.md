@@ -1,5 +1,4 @@
 ---
-slug: troubadour
 name: Troubadour
 title_slug: sing-along-melody
 opdb_id: GrPkZ-MW9K8-A96YD

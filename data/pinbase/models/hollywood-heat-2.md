@@ -1,5 +1,4 @@
 ---
-slug: hollywood-heat-2
 name: Hollywood Heat
 title_slug: hollywood-heat-2
 ipdb_id: 6687

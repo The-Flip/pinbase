@@ -1,4 +1,3 @@
 ---
-slug: races
 name: Races
 ---

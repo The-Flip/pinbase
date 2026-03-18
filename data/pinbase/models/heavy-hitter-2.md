@@ -1,5 +1,4 @@
 ---
-slug: heavy-hitter-2
 name: Heavy Hitter
 title_slug: heavy-hitter-2
 ipdb_id: 3140

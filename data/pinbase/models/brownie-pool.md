@@ -1,5 +1,4 @@
 ---
-slug: brownie-pool
 name: Brownie Pool
 title_slug: brownie-pool
 ipdb_id: 5508

@@ -1,5 +1,4 @@
 ---
-slug: mac-system-iv
 name: MAC System IV
 manufacturer_slug: mac-sa
 technology_subgeneration_slug: ss-discrete

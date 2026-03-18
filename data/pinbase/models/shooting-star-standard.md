@@ -1,5 +1,4 @@
 ---
-slug: shooting-star-standard
 name: Shooting Star (Standard)
 title_slug: shooting-star-standard
 ipdb_id: 2124

@@ -1,5 +1,4 @@
 ---
-slug: windy-city
 name: Windy City
 title_slug: windy-city
 ipdb_id: 3566

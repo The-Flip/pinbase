@@ -1,5 +1,4 @@
 ---
-slug: recel-system-iii
 name: Recel System III
 manufacturer_slug: recel
 technology_subgeneration_slug: ss-discrete

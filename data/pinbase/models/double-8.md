@@ -1,5 +1,4 @@
 ---
-slug: double-8
 name: Double '8'
 title_slug: double-8
 ipdb_id: 4198

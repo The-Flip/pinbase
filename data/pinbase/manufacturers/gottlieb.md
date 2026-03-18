@@ -1,5 +1,4 @@
 ---
-slug: gottlieb
 name: Gottlieb
 opdb_manufacturer_id: 2
 ---

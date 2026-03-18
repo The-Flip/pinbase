@@ -1,5 +1,4 @@
 ---
-slug: star-trek
 name: Star Trek
 ---
 

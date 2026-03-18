@@ -1,4 +1,3 @@
 ---
-slug: commemorative
 name: Commemorative
 ---

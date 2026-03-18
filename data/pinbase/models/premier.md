@@ -1,5 +1,4 @@
 ---
-slug: premier
 name: Premier
 title_slug: premier
 ipdb_id: 1861

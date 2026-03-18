@@ -1,5 +1,4 @@
 ---
-slug: irmacor
 name: Irmacor
 manufacturer_slug: irmacor
 ipdb_manufacturer_id: 605

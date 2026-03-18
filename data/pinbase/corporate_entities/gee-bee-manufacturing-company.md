@@ -1,5 +1,4 @@
 ---
-slug: gee-bee-manufacturing-company
 name: Gee Bee Manufacturing Company
 manufacturer_slug: gee-bee-manufacturing-company
 ipdb_manufacturer_id: 128

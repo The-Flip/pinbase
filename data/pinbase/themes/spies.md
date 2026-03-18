@@ -1,4 +1,3 @@
 ---
-slug: spies
 name: Spies
 ---

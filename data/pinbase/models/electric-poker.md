@@ -1,5 +1,4 @@
 ---
-slug: electric-poker
 name: Electric Poker
 title_slug: electric-poker
 ipdb_id: 5716

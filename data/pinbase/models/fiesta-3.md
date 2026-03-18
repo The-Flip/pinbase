@@ -1,5 +1,4 @@
 ---
-slug: fiesta-3
 name: Fiesta
 title_slug: fiesta-fandango
 opdb_id: Gr1VD-MDEW9

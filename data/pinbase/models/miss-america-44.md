@@ -1,5 +1,4 @@
 ---
-slug: miss-america-44
 name: Miss America '44
 title_slug: miss-america-44
 ipdb_id: 3410

@@ -1,5 +1,4 @@
 ---
-slug: cosmic
 name: Cosmic
 title_slug: galaxy-stern
 opdb_id: GrdDB-MP3jX

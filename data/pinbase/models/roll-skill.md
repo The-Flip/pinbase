@@ -1,5 +1,4 @@
 ---
-slug: roll-skill
 name: Roll Skill
 title_slug: roll-skill
 ipdb_id: 2000

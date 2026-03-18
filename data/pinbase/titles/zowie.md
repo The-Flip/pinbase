@@ -1,4 +1,3 @@
 ---
-slug: zowie
 name: Zowie
 ---

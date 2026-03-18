@@ -1,5 +1,4 @@
 ---
-slug: golden-bells
 name: Golden Bells
 title_slug: golden-bells
 opdb_id: GRK9W-MLBdE

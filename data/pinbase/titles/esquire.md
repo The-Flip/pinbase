@@ -1,4 +1,3 @@
 ---
-slug: esquire
 name: Esquire
 ---

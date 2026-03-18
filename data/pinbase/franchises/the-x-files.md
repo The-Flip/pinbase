@@ -1,5 +1,4 @@
 ---
-slug: the-x-files
 name: The X-Files
 ---
 

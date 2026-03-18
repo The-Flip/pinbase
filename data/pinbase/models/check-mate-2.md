@@ -1,5 +1,4 @@
 ---
-slug: check-mate-2
 name: Check Mate
 title_slug: check-mate-check-jake-mate
 opdb_id: GRBOy-MDb6y-A1B4b

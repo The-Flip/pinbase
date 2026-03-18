@@ -1,5 +1,4 @@
 ---
-slug: sea-raider
 name: Sea Raider
 title_slug: sea-raider
 ipdb_id: 3362

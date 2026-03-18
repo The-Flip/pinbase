@@ -1,4 +1,3 @@
 ---
-slug: boxing
 name: Boxing
 ---

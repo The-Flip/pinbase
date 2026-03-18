@@ -1,5 +1,4 @@
 ---
-slug: the-flintstones-2
 name: The Flintstones
 title_slug: the-flintstones-innovative-concepts-ice
 opdb_id: G6lWl-M7Zrd

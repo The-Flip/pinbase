@@ -1,5 +1,4 @@
 ---
-slug: majestic-jr
 name: Majestic (Jr)
 title_slug: majestic-jr
 ipdb_id: 1522

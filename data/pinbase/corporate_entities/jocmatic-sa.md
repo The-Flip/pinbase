@@ -1,5 +1,4 @@
 ---
-slug: jocmatic-sa
 name: Jocmatic S.A.
 manufacturer_slug: jocmatic-sa
 ipdb_manufacturer_id: 699

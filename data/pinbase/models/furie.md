@@ -1,5 +1,4 @@
 ---
-slug: furie
 name: Furie
 title_slug: furie
 ipdb_id: 5599

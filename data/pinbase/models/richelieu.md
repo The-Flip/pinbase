@@ -1,5 +1,4 @@
 ---
-slug: richelieu
 name: Richelieu
 title_slug: richelieu
 opdb_id: Gxv21-M1rp4

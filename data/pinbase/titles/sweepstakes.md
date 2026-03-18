@@ -1,4 +1,3 @@
 ---
-slug: sweepstakes
 name: Sweepstakes
 ---

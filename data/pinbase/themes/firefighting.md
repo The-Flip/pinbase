@@ -1,4 +1,3 @@
 ---
-slug: firefighting
 name: Firefighting
 ---

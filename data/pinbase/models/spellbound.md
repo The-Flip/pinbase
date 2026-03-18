@@ -1,5 +1,4 @@
 ---
-slug: spellbound
 name: Spellbound
 title_slug: spellbound
 ipdb_id: 2284

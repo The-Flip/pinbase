@@ -1,5 +1,4 @@
 ---
-slug: riverboat-gambler-2
 name: Riverboat Gambler
 title_slug: riverboat-gambler-2
 ipdb_id: 6511

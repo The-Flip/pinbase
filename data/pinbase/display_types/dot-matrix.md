@@ -1,5 +1,4 @@
 ---
-slug: dot-matrix
 name: Dot Matrix Display
 display_order: 5
 ---

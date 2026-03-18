@@ -1,5 +1,4 @@
 ---
-slug: grand-slam-8
 name: Grand Slam
 title_slug: grand-slam-6
 ipdb_id: 4804

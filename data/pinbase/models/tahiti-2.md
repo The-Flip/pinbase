@@ -1,5 +1,4 @@
 ---
-slug: tahiti-2
 name: Tahiti
 title_slug: tahiti-2
 ipdb_id: 2491

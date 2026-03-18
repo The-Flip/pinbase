@@ -1,5 +1,4 @@
 ---
-slug: flash-gordon
 name: Flash Gordon
 title_slug: flash-gordon
 opdb_id: G5728-MDbjD

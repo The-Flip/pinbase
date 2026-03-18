@@ -1,5 +1,4 @@
 ---
-slug: honey-2
 name: Honey
 title_slug: honey-3
 ipdb_id: 1229

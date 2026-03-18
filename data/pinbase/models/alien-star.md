@@ -1,5 +1,4 @@
 ---
-slug: alien-star
 name: Alien Star
 title_slug: alien-star
 opdb_id: G4xwQ-MQpVO

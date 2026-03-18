@@ -1,5 +1,4 @@
 ---
-slug: jolly-roger
 name: Jolly Roger
 title_slug: jolly-roger
 opdb_id: G4djP-MLnz0

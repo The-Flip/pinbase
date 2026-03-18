@@ -1,5 +1,4 @@
 ---
-slug: flapper-migs
 name: Flapper Migs
 title_slug: flapper-migs
 ipdb_id: 5137

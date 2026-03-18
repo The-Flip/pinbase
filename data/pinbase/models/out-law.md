@@ -1,5 +1,4 @@
 ---
-slug: out-law
 name: Out Law
 title_slug: out-law
 opdb_id: G41N8-MNEEk

@@ -1,5 +1,4 @@
 ---
-slug: drum-major
 name: Drum Major
 title_slug: drum-major
 ipdb_id: 736

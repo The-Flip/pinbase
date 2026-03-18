@@ -1,5 +1,4 @@
 ---
-slug: baby-flip
 name: Baby Flip
 title_slug: baby-flip
 ipdb_id: 6677

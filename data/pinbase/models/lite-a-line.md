@@ -1,5 +1,4 @@
 ---
-slug: lite-a-line
 name: Lite-A-Line
 title_slug: lite-a-line
 ipdb_id: 1454

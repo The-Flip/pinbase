@@ -1,5 +1,4 @@
 ---
-slug: stardust
 name: Stardust
 title_slug: stardust
 opdb_id: G4qO8-MJ6x3

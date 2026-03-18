@@ -1,5 +1,4 @@
 ---
-slug: tura-circus
 name: Tura-Circus
 title_slug: tura-circus
 ipdb_id: 4751

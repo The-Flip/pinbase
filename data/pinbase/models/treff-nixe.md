@@ -1,5 +1,4 @@
 ---
-slug: treff-nixe
 name: Treff Nixe
 title_slug: treff-nixe
 ipdb_id: 4419

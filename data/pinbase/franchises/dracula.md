@@ -1,5 +1,4 @@
 ---
-slug: dracula
 name: Dracula
 ---
 

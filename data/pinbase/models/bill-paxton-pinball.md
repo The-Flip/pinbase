@@ -1,5 +1,4 @@
 ---
-slug: bill-paxton-pinball
 name: Bill Paxton Pinball
 title_slug: bill-paxton-pinball
 ipdb_id: 5555

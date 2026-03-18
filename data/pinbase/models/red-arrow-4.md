@@ -1,5 +1,4 @@
 ---
-slug: red-arrow-4
 name: Red Arrow
 title_slug: red-arrow-3
 ipdb_id: 6960

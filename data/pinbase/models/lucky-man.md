@@ -1,5 +1,4 @@
 ---
-slug: lucky-man
 name: Lucky Man
 title_slug: lucky-man-monte-carlo
 opdb_id: G5wLN-MJ2YO

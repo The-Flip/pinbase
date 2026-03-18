@@ -1,5 +1,4 @@
 ---
-slug: taps
 name: Taps
 title_slug: taps
 ipdb_id: 2499

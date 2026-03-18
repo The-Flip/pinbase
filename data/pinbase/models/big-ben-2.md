@@ -1,5 +1,4 @@
 ---
-slug: big-ben-2
 name: Big Ben
 title_slug: big-ben-3
 ipdb_id: 229

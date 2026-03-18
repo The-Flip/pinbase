@@ -1,5 +1,4 @@
 ---
-slug: major-league-baseball
 name: Major League Baseball
 title_slug: major-league-baseball
 opdb_id: GvBeO-M1rN4

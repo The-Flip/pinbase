@@ -1,4 +1,3 @@
 ---
-slug: tout
 name: Tout
 ---

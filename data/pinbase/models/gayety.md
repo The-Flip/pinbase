@@ -1,5 +1,4 @@
 ---
-slug: gayety
 name: Gayety
 title_slug: gayety
 ipdb_id: 993

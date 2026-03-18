@@ -1,4 +1,3 @@
 ---
-slug: emagar
 name: EMAGAR
 ---

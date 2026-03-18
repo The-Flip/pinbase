@@ -1,5 +1,4 @@
 ---
-slug: 3-in-a-row
 name: 3-In-A-Row
 title_slug: 3-in-a-row
 ipdb_id: 4324

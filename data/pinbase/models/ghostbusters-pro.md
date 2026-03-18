@@ -1,5 +1,4 @@
 ---
-slug: ghostbusters-pro
 name: Ghostbusters (Pro)
 title_slug: ghostbusters
 opdb_id: GR9Nr-Mz2dY

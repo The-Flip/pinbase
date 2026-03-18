@@ -1,4 +1,3 @@
 ---
-slug: bunnyboard
 name: Bunnyboard
 ---

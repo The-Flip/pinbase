@@ -1,5 +1,4 @@
 ---
-slug: golden-wheel
 name: Golden Wheel
 title_slug: golden-wheel
 ipdb_id: 1056

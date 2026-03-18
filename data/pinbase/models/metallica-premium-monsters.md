@@ -1,5 +1,4 @@
 ---
-slug: metallica-premium-monsters
 name: Metallica Monsters (Premium)
 title_slug: metallica
 opdb_id: GRBE4-MJ9rE-ARZYO

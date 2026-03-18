@@ -1,5 +1,4 @@
 ---
-slug: trailer
 name: Trailer
 title_slug: trailer
 opdb_id: G4qx7-MnK4w

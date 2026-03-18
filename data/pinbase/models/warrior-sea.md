@@ -1,5 +1,4 @@
 ---
-slug: warrior-sea
 name: Warrior Sea
 title_slug: warrior-sea
 opdb_id: G9z9p-MYeN2

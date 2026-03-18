@@ -1,5 +1,4 @@
 ---
-slug: counter-knock-out
 name: Counter Knock-Out
 title_slug: counter-knock-out
 ipdb_id: 5591

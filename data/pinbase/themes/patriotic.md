@@ -1,4 +1,3 @@
 ---
-slug: patriotic
 name: Patriotic
 ---

@@ -1,5 +1,4 @@
 ---
-slug: criterium-2000
 name: Criterium 2000
 title_slug: criterium-2000
 opdb_id: GrNNL-MJpZl

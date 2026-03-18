@@ -1,5 +1,4 @@
 ---
-slug: velvet
 name: Velvet
 title_slug: velvet
 ipdb_id: 2727

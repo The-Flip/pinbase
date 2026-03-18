@@ -1,5 +1,4 @@
 ---
-slug: lucky-dice
 name: Lucky Dice
 title_slug: lucky-dice
 ipdb_id: 6883

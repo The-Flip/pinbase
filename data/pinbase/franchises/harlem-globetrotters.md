@@ -1,5 +1,4 @@
 ---
-slug: harlem-globetrotters
 name: Harlem Globetrotters
 ---
 

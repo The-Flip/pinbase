@@ -1,5 +1,4 @@
 ---
-slug: asteroid-killer
 name: Asteroid Killer
 title_slug: asteroid-killer
 ipdb_id: 3810

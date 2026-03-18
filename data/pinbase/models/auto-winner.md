@@ -1,5 +1,4 @@
 ---
-slug: auto-winner
 name: Auto Winner
 title_slug: auto-winner
 ipdb_id: 4302

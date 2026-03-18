@@ -1,5 +1,4 @@
 ---
-slug: beauty-contest
 name: Beauty Contest
 title_slug: beauty-contest
 ipdb_id: 217

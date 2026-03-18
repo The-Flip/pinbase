@@ -1,5 +1,4 @@
 ---
-slug: nemesis
 name: Nemesis
 title_slug: nemesis
 opdb_id: GrOLe-MQK3d

@@ -1,5 +1,4 @@
 ---
-slug: boom-town
 name: Boom Town
 title_slug: boom-town
 ipdb_id: 355

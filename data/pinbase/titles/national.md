@@ -1,4 +1,3 @@
 ---
-slug: national
 name: National
 ---

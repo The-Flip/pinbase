@@ -1,5 +1,4 @@
 ---
-slug: dutch-pool
 name: Dutch Pool
 title_slug: dutch-pool
 ipdb_id: 747

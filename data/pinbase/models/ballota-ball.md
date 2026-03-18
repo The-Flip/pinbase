@@ -1,5 +1,4 @@
 ---
-slug: ballota-ball
 name: Ballota-Ball
 title_slug: ballota-ball
 ipdb_id: 5373

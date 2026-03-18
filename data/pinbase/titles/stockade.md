@@ -1,4 +1,3 @@
 ---
-slug: stockade
 name: Stockade
 ---

@@ -1,5 +1,4 @@
 ---
-slug: four-million-bc
 name: Four Million B.C.
 title_slug: four-million-bc
 opdb_id: GRVZ8-M5RO0

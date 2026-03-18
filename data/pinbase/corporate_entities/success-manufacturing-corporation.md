@@ -1,5 +1,4 @@
 ---
-slug: success-manufacturing-corporation
 name: Success Manufacturing Corporation
 manufacturer_slug: success-manufacturing-corporation
 ipdb_manufacturer_id: 399

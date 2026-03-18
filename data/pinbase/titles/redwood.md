@@ -1,4 +1,3 @@
 ---
-slug: redwood
 name: Redwood
 ---

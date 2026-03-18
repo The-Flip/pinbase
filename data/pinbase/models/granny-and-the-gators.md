@@ -1,5 +1,4 @@
 ---
-slug: granny-and-the-gators
 name: Granny and the Gators
 title_slug: granny-and-the-gators
 opdb_id: G4OKd-Mb51r

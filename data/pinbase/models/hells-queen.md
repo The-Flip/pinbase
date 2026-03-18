@@ -1,5 +1,4 @@
 ---
-slug: hells-queen
 name: Hell's Queen
 title_slug: hell
 opdb_id: G2LEp-MZeYx-AObZq

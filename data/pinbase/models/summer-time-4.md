@@ -1,5 +1,4 @@
 ---
-slug: summer-time-4
 name: Summer Time
 title_slug: summer-time-3
 ipdb_id: 4072

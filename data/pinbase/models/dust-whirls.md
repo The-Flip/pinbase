@@ -1,5 +1,4 @@
 ---
-slug: dust-whirls
 name: Dust Whirls
 title_slug: dust-whirls
 ipdb_id: 746

@@ -1,5 +1,4 @@
 ---
-slug: life
 name: Life
 title_slug: life
 ipdb_id: 3984

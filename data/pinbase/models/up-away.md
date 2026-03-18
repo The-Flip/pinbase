@@ -1,5 +1,4 @@
 ---
-slug: up-away
 name: Up Away
 title_slug: up-away
 opdb_id: G4jOe-M3d1V

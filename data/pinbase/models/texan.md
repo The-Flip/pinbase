@@ -1,5 +1,4 @@
 ---
-slug: texan
 name: Texan
 title_slug: texan
 opdb_id: GR9nJ-M1rb3

@@ -1,5 +1,4 @@
 ---
-slug: safety-zone
 name: Safety Zone
 title_slug: safety-zone
 ipdb_id: 2045

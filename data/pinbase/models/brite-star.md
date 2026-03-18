@@ -1,5 +1,4 @@
 ---
-slug: brite-star
 name: Brite Star
 title_slug: brite-star
 opdb_id: G5wdV-ME0O8

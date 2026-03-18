@@ -1,5 +1,4 @@
 ---
-slug: regates
 name: Regates
 title_slug: regates
 ipdb_id: 5369

@@ -1,4 +1,3 @@
 ---
-slug: tennis
 name: Tennis
 ---

@@ -1,5 +1,4 @@
 ---
-slug: spot-a-card-2
 name: Spot-A-Card
 title_slug: spot-a-card
 opdb_id: GRoYp-MDlXy

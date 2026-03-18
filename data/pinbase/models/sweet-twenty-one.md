@@ -1,5 +1,4 @@
 ---
-slug: sweet-twenty-one
 name: '"Sweet Twenty One"'
 title_slug: sweet-twenty-one
 ipdb_id: 6959

@@ -1,5 +1,4 @@
 ---
-slug: sky-star
 name: Sky Star
 title_slug: sky-dive
 opdb_id: G4xlK-MQkWr

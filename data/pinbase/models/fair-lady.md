@@ -1,5 +1,4 @@
 ---
-slug: fair-lady
 name: Fair Lady
 title_slug: sea-belles-fair-lady
 opdb_id: G41OP-MDvEj

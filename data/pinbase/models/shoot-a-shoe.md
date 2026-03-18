@@ -1,5 +1,4 @@
 ---
-slug: shoot-a-shoe
 name: Shoot-A-Shoe
 title_slug: shoot-a-shoe
 ipdb_id: 3943

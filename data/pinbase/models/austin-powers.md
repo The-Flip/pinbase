@@ -1,5 +1,4 @@
 ---
-slug: austin-powers
 name: Austin Powers
 title_slug: austin-powers
 opdb_id: G43BW-M3dKV

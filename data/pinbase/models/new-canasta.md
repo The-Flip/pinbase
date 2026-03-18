@@ -1,5 +1,4 @@
 ---
-slug: new-canasta
 name: New Canasta
 title_slug: new-canasta
 opdb_id: Gr18d-M5R11

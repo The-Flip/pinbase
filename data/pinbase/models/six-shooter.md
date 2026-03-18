@@ -1,5 +1,4 @@
 ---
-slug: six-shooter
 name: Six Shooter
 title_slug: six-shooter
 opdb_id: GreYQ-M4ovO

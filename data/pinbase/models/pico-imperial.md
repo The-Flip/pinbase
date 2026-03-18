@@ -1,5 +1,4 @@
 ---
-slug: pico-imperial
 name: Pico Imperial
 title_slug: pico-imperial
 ipdb_id: 5630

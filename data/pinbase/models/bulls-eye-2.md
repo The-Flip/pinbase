@@ -1,5 +1,4 @@
 ---
-slug: bulls-eye-2
 name: Bull's Eye
 title_slug: bulls-eye
 opdb_id: Gr8vX-MW9yd

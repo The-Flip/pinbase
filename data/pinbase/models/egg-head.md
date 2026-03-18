@@ -1,5 +1,4 @@
 ---
-slug: egg-head
 name: Egg Head
 title_slug: egg-head
 opdb_id: GrOx6-MLOV0

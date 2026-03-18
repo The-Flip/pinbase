@@ -1,5 +1,4 @@
 ---
-slug: twister-3
 name: Twister
 title_slug: twister
 opdb_id: GRwbv-MkPP0

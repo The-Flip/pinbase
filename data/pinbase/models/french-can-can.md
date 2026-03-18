@@ -1,5 +1,4 @@
 ---
-slug: french-can-can
 name: French Can Can
 title_slug: french-can-can
 ipdb_id: 6061

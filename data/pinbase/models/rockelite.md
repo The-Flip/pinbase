@@ -1,5 +1,4 @@
 ---
-slug: rockelite
 name: Rockelite
 title_slug: rockelite
 ipdb_id: 1984

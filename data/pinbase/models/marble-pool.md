@@ -1,5 +1,4 @@
 ---
-slug: marble-pool
 name: Marble Pool
 title_slug: marble-pool
 ipdb_id: 6339

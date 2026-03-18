@@ -1,4 +1,3 @@
 ---
-slug: girls
 name: Girls
 ---

@@ -1,5 +1,4 @@
 ---
-slug: super-alben
 name: Super Alben
 title_slug: super-alben
 ipdb_id: 4472

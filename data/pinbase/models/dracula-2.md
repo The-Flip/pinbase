@@ -1,5 +1,4 @@
 ---
-slug: dracula-2
 name: Dracula
 title_slug: dracula-3
 ipdb_id: 6325

@@ -1,5 +1,4 @@
 ---
-slug: future-queen
 name: Future Queen
 title_slug: future-queen
 opdb_id: GRpBV-MrRbE

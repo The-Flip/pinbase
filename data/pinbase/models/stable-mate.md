@@ -1,5 +1,4 @@
 ---
-slug: stable-mate
 name: Stable Mate
 title_slug: stable-mate
 ipdb_id: 2332

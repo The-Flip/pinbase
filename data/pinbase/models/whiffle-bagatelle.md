@@ -1,5 +1,4 @@
 ---
-slug: whiffle-bagatelle
 name: Whiffle Bagatelle
 title_slug: whiffle-bagatelle
 ipdb_id: 4541

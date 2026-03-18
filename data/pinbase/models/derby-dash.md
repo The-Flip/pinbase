@@ -1,5 +1,4 @@
 ---
-slug: derby-dash
 name: Derby Dash
 title_slug: derby-dash
 ipdb_id: 5282

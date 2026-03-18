@@ -1,5 +1,4 @@
 ---
-slug: wing-ding
 name: Wing Ding
 title_slug: zig-zag-wing-ding
 opdb_id: GRoL9-ME0Yb

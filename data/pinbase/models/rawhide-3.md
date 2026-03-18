@@ -1,5 +1,4 @@
 ---
-slug: rawhide-3
 name: Rawhide
 title_slug: rawhide
 ipdb_id: 6713

@@ -1,4 +1,3 @@
 ---
-slug: daisy
 name: Daisy
 ---

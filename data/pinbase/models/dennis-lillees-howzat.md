@@ -1,5 +1,4 @@
 ---
-slug: dennis-lillees-howzat
 name: Dennis Lillee's Howzat!
 title_slug: dennis-lillees-howzat
 opdb_id: GRzz6-MJN6K

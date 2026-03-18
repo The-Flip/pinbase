@@ -1,5 +1,4 @@
 ---
-slug: skyline-2
 name: Sky·Line
 title_slug: skyline
 opdb_id: GRQ6d-MDRlL

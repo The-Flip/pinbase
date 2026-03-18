@@ -1,5 +1,4 @@
 ---
-slug: shoot-n-scoot
 name: Shoot 'n Scoot
 title_slug: shoot-n-scoot
 opdb_id: GN66q-MeP0V

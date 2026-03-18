@@ -1,5 +1,4 @@
 ---
-slug: merry-go-round
 name: Merry-Go-Round
 title_slug: merry-go-round
 opdb_id: G4xj0-MJrNB

@@ -1,5 +1,4 @@
 ---
-slug: the-incredible-hulk
 name: The Incredible Hulk
 title_slug: the-incredible-hulk
 opdb_id: GRQW7-MLW5P

@@ -1,5 +1,4 @@
 ---
-slug: puddin-head
 name: Puddin' Head
 title_slug: puddin-head
 opdb_id: G2LYd-Ml95y

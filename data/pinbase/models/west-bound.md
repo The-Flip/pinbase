@@ -1,5 +1,4 @@
 ---
-slug: west-bound
 name: West Bound
 title_slug: west-bound
 ipdb_id: 3924

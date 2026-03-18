@@ -1,5 +1,4 @@
 ---
-slug: pinbot
 name: Pinbot
 title_slug: pinbot
 opdb_id: G41Z8-MJKvP

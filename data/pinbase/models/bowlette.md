@@ -1,5 +1,4 @@
 ---
-slug: bowlette
 name: Bowlette
 title_slug: bowlette
 ipdb_id: 3661

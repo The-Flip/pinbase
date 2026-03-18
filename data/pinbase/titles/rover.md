@@ -1,4 +1,3 @@
 ---
-slug: rover
 name: Rover
 ---

@@ -1,4 +1,3 @@
 ---
-slug: majorette
 name: Majorette
 ---

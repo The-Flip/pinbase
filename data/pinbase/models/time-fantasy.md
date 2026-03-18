@@ -1,5 +1,4 @@
 ---
-slug: time-fantasy
 name: Time Fantasy
 title_slug: time-fantasy
 opdb_id: G42Nz-MNEpl

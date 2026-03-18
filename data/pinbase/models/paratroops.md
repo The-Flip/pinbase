@@ -1,5 +1,4 @@
 ---
-slug: paratroops
 name: Paratroops
 title_slug: paratroops
 ipdb_id: 3836

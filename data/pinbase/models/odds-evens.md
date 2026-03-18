@@ -1,5 +1,4 @@
 ---
-slug: odds-evens
 name: Odds & Evens
 title_slug: monte-carlo-odds-evens
 opdb_id: G4NnZ-MD3vq

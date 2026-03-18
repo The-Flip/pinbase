@@ -1,5 +1,4 @@
 ---
-slug: round-n-round
 name: Round 'n' Round
 title_slug: round-n-round
 ipdb_id: 2025

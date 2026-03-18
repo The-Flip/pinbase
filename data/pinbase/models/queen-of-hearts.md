@@ -1,5 +1,4 @@
 ---
-slug: queen-of-hearts
 name: Queen of Hearts
 title_slug: queen-of-hearts
 opdb_id: G5YNB-MLxdV

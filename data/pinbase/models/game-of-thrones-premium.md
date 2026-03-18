@@ -1,10 +1,11 @@
 ---
-slug: game-of-thrones-premium
 name: Game of Thrones (Premium)
 title_slug: game-of-thrones
 corporate_entity_slug: stern-pinball-incorporated
 opdb_id: G41d5-M0ovk
 ipdb_id: 6308
+display_type_slug: dot-matrix
+technology_generation_slug: solid-state
 credit_refs:
 - person_slug: steve-ritchie
   role: Design

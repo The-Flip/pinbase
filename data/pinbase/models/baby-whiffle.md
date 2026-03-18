@@ -1,5 +1,4 @@
 ---
-slug: baby-whiffle
 name: Baby Whiffle
 title_slug: baby-whiffle
 ipdb_id: 4452

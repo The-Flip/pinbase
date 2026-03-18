@@ -1,5 +1,4 @@
 ---
-slug: star-continental-2000
 name: Star Continental 2000
 title_slug: star-continental-2000
 ipdb_id: 5851

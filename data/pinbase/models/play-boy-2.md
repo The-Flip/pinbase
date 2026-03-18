@@ -1,5 +1,4 @@
 ---
-slug: play-boy-2
 name: Play Boy
 title_slug: play-boy
 ipdb_id: 1824

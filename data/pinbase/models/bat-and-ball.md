@@ -1,5 +1,4 @@
 ---
-slug: bat-and-ball
 name: Bat and Ball
 title_slug: bat-and-ball
 ipdb_id: 2909

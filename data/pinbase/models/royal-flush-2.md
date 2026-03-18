@@ -1,5 +1,4 @@
 ---
-slug: royal-flush-2
 name: Royal Flush
 title_slug: royal-flush-card-whiz
 opdb_id: GrEWx-MJNpE

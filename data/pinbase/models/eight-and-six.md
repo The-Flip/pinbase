@@ -1,5 +1,4 @@
 ---
-slug: eight-and-six
 name: Eight and Six
 title_slug: eight-and-six
 ipdb_id: 759

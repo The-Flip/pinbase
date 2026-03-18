@@ -1,5 +1,4 @@
 ---
-slug: big-parade
 name: Big Parade
 title_slug: big-parade
 ipdb_id: 265

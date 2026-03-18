@@ -1,5 +1,4 @@
 ---
-slug: ripepi
 name: Ripepi
 manufacturer_slug: ripepi
 ipdb_manufacturer_id: 457

@@ -1,5 +1,4 @@
 ---
-slug: punch
 name: Punch
 title_slug: punch
 ipdb_id: 1875

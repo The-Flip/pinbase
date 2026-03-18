@@ -1,5 +1,4 @@
 ---
-slug: miss-america-deluxe
 name: Miss America Deluxe
 title_slug: miss-america-deluxe
 ipdb_id: 3403

@@ -1,5 +1,4 @@
 ---
-slug: nifty
 name: Nifty
 title_slug: nifty
 opdb_id: G57Q0-MDxo2

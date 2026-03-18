@@ -1,5 +1,4 @@
 ---
-slug: mademoiselle
 name: Mademoiselle
 title_slug: mademoiselle
 opdb_id: GrNVz-MLERP

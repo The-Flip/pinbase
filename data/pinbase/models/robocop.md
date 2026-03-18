@@ -1,5 +1,4 @@
 ---
-slug: robocop
 name: Robocop
 title_slug: robocop
 opdb_id: Grlxe-MJ916

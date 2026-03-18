@@ -1,5 +1,4 @@
 ---
-slug: gypsy-queen
 name: Gypsy Queen
 title_slug: gypsy-queen
 opdb_id: GR63e-MJVKR

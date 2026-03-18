@@ -1,5 +1,4 @@
 ---
-slug: invasion
 name: Invasion
 title_slug: invasion
 ipdb_id: 1269

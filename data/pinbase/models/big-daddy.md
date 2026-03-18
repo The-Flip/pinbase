@@ -1,5 +1,4 @@
 ---
-slug: big-daddy
 name: Big Daddy
 title_slug: big-daddy
 opdb_id: G50e1-MP3yq

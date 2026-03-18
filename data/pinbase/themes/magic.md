@@ -1,4 +1,3 @@
 ---
-slug: magic
 name: Magic
 ---

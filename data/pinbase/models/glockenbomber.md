@@ -1,5 +1,4 @@
 ---
-slug: glockenbomber
 name: Glockenbomber
 title_slug: glockenbomber
 ipdb_id: 3999

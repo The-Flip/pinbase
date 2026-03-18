@@ -1,5 +1,4 @@
 ---
-slug: stern-pinball-incorporated
 name: Stern Pinball, Incorporated
 manufacturer_slug: stern-pinball
 ipdb_manufacturer_id: 303

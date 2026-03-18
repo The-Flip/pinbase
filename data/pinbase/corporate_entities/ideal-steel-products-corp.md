@@ -1,5 +1,4 @@
 ---
-slug: ideal-steel-products-corp
 name: Ideal Steel Products Corp.
 manufacturer_slug: ideal-steel-products-corp
 ipdb_manufacturer_id: 631

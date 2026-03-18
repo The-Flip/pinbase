@@ -1,5 +1,4 @@
 ---
-slug: hay-ride
 name: Hay-Ride
 title_slug: harvest-hay-ride
 opdb_id: GR90K-MQw2y

@@ -1,5 +1,4 @@
 ---
-slug: samba-2
 name: Samba
 title_slug: samba
 opdb_id: G43pk-ML047

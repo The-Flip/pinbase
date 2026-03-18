@@ -1,4 +1,3 @@
 ---
-slug: space
 name: Space
 ---

@@ -1,5 +1,4 @@
 ---
-slug: blackstone-2
 name: Blackstone
 title_slug: blackstone-2
 ipdb_id: 3628

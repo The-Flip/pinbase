@@ -1,5 +1,4 @@
 ---
-slug: travel-round-the-world
 name: Travel Round The World
 title_slug: travel-round-the-world
 ipdb_id: 2635

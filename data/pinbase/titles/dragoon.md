@@ -1,4 +1,3 @@
 ---
-slug: dragoon
 name: Dragoon
 ---

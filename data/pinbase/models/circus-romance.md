@@ -1,5 +1,4 @@
 ---
-slug: circus-romance
 name: Circus Romance
 title_slug: circus-romance
 ipdb_id: 5444

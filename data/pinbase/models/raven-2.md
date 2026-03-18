@@ -1,5 +1,4 @@
 ---
-slug: raven-2
 name: Raven
 title_slug: raven-2
 ipdb_id: 6686

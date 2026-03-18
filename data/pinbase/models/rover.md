@@ -1,5 +1,4 @@
 ---
-slug: rover
 name: Rover
 title_slug: rover
 ipdb_id: 2030

@@ -1,5 +1,4 @@
 ---
-slug: rainbo
 name: Rainbo
 title_slug: rainbo
 ipdb_id: 1908

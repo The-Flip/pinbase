@@ -1,5 +1,4 @@
 ---
-slug: piccadilly-junior
 name: Piccadilly Junior
 title_slug: piccadilly-junior
 ipdb_id: 5575

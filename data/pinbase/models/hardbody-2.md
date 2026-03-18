@@ -1,5 +1,4 @@
 ---
-slug: hardbody-2
 name: Hardbody
 title_slug: hardbody-2
 ipdb_id: 3137

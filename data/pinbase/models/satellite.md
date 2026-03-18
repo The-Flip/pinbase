@@ -1,5 +1,4 @@
 ---
-slug: satellite
 name: Satellite
 title_slug: satellite-2
 opdb_id: Grqwp-MQ626

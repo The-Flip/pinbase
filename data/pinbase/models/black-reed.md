@@ -1,5 +1,4 @@
 ---
-slug: black-reed
 name: Black Reed
 title_slug: black-reed
 opdb_id: G41DL-MD8NK

@@ -1,5 +1,4 @@
 ---
-slug: far-out
 name: Far Out
 title_slug: out-of-sight-far-out
 opdb_id: G5zQO-MLqjR

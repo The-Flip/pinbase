@@ -1,5 +1,4 @@
 ---
-slug: card-trix-2
 name: Card Trix
 title_slug: flip-a-card-card-trix
 opdb_id: GRWZN-MDv6X

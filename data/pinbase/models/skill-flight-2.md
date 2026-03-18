@@ -1,5 +1,4 @@
 ---
-slug: skill-flight-2
 name: Skill Flight
 title_slug: skill-flight-2
 ipdb_id: 4488

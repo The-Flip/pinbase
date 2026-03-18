@@ -1,5 +1,4 @@
 ---
-slug: atlantic-city-2
 name: Atlantic City
 title_slug: atlantic-city-2
 ipdb_id: 104

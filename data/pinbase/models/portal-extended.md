@@ -1,5 +1,4 @@
 ---
-slug: portal-extended
 name: Portal (Extended)
 title_slug: portal
 opdb_id: GpebN-M5RNp

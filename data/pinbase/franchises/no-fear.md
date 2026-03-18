@@ -1,5 +1,4 @@
 ---
-slug: no-fear
 name: No Fear
 ---
 

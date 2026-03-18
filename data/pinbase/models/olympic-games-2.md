@@ -1,5 +1,4 @@
 ---
-slug: olympic-games-2
 name: Olympic Games
 title_slug: olympic-games-2
 ipdb_id: 4254

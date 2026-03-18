@@ -1,5 +1,4 @@
 ---
-slug: houdini-master-of-mystery
 name: 'Houdini: Master of Mystery'
 title_slug: houdini
 opdb_id: GvBQX-M0ody

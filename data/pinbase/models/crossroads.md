@@ -1,5 +1,4 @@
 ---
-slug: crossroads
 name: Crossroads
 title_slug: crossroads
 opdb_id: GR97v-MJwq4

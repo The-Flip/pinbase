@@ -1,5 +1,4 @@
 ---
-slug: fascinating
 name: Fascinating
 title_slug: fascinating
 ipdb_id: 5296

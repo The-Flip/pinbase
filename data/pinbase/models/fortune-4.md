@@ -1,5 +1,4 @@
 ---
-slug: fortune-4
 name: Fortune
 title_slug: fortune
 opdb_id: GrEEy-MQ5pv

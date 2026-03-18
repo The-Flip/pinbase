@@ -1,5 +1,4 @@
 ---
-slug: twilight-zone
 name: Twilight Zone
 title_slug: twilight-zone
 opdb_id: GrXzD-MjBPX

@@ -1,4 +1,3 @@
 ---
-slug: speedy
 name: Speedy
 ---

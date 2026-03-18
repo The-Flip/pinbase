@@ -1,4 +1,3 @@
 ---
-slug: lido
 name: Lido
 ---

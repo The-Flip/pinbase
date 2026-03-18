@@ -1,5 +1,4 @@
 ---
-slug: double-feature-2
 name: Double-Feature
 title_slug: double-feature
 opdb_id: GRLoV-MQ4Ex

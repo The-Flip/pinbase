@@ -1,5 +1,4 @@
 ---
-slug: new-dixie-bonus
 name: New Dixie Bonus
 title_slug: new-dixie-bonus
 ipdb_id: 4056

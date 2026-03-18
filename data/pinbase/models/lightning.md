@@ -1,5 +1,4 @@
 ---
-slug: lightning
 name: Lightning
 title_slug: lightning-stern-electronics
 opdb_id: G5pQ8-Mq14e

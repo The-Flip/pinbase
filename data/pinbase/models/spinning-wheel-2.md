@@ -1,5 +1,4 @@
 ---
-slug: spinning-wheel-2
 name: Spinning Wheel
 title_slug: spinning-wheel-2
 ipdb_id: 6402

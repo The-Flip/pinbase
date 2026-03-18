@@ -1,5 +1,4 @@
 ---
-slug: six-stars
 name: Six Stars
 title_slug: six-stars
 ipdb_id: 3253

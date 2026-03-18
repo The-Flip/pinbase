@@ -1,5 +1,4 @@
 ---
-slug: draw-ball-2
 name: Draw Ball
 title_slug: draw-ball-2
 ipdb_id: 4287

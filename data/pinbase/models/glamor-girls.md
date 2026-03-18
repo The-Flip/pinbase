@@ -1,5 +1,4 @@
 ---
-slug: glamor-girls
 name: Glamor-Girls
 title_slug: glamor-girls
 ipdb_id: 3120

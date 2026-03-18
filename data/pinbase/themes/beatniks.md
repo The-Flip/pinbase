@@ -1,4 +1,3 @@
 ---
-slug: beatniks
 name: Beatniks
 ---

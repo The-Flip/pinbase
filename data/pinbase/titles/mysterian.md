@@ -1,4 +1,3 @@
 ---
-slug: mysterian
 name: Mysterian
 ---

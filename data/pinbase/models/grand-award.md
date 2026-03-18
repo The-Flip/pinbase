@@ -1,5 +1,4 @@
 ---
-slug: grand-award
 name: Grand Award
 title_slug: grand-award
 opdb_id: GoEZ3-MYe2B

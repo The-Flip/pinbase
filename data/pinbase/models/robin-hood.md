@@ -1,5 +1,4 @@
 ---
-slug: robin-hood
 name: Robin Hood
 title_slug: robin-hood
 opdb_id: G4XW0-MDe5d

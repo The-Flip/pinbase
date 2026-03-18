@@ -1,5 +1,4 @@
 ---
-slug: panther-roulette-ii
 name: Panther Roulette II
 title_slug: panther-roulette-ii
 ipdb_id: 6190

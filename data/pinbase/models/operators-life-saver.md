@@ -1,5 +1,4 @@
 ---
-slug: operators-life-saver
 name: Operators' Life Saver
 title_slug: operators-life-saver
 ipdb_id: 4926

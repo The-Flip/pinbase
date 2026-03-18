@@ -1,5 +1,4 @@
 ---
-slug: cueball
 name: Cueball
 title_slug: cueball
 ipdb_id: 6026

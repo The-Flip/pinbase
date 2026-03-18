@@ -1,5 +1,4 @@
 ---
-slug: corinthian-21s
 name: '"Corinthian" 21S'
 title_slug: corinthian-21s
 ipdb_id: 4945

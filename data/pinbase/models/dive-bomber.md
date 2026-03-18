@@ -1,5 +1,4 @@
 ---
-slug: dive-bomber
 name: Dive Bomber
 title_slug: dive-bomber
 ipdb_id: 3849

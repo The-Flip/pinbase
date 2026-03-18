@@ -1,5 +1,4 @@
 ---
-slug: register-2
 name: Register
 title_slug: register
 opdb_id: G5WEb-MJjBX

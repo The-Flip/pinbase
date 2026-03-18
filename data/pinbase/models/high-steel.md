@@ -1,5 +1,4 @@
 ---
-slug: high-steel
 name: High Steel
 title_slug: high-steel
 ipdb_id: 3710

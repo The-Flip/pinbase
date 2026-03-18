@@ -1,4 +1,3 @@
 ---
-slug: airways
 name: Airways
 ---

@@ -1,5 +1,4 @@
 ---
-slug: fathom-revisited
 name: Fathom Revisited
 title_slug: fathom
 opdb_id: GrPO3-M9Rpx-ARXxN

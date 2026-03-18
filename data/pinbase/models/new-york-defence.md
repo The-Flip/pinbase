@@ -1,5 +1,4 @@
 ---
-slug: new-york-defence
 name: New York Defence
 title_slug: new-york-defence
 ipdb_id: 3920

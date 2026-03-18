@@ -1,5 +1,4 @@
 ---
-slug: good-year
 name: Good Year
 title_slug: good-year
 ipdb_id: 4071

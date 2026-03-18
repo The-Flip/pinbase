@@ -1,5 +1,4 @@
 ---
-slug: texas-ranger
 name: Texas Ranger
 title_slug: lawman
 opdb_id: GrEXx-MYeBw

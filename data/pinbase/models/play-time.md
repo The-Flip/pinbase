@@ -1,5 +1,4 @@
 ---
-slug: play-time
 name: Play Time
 title_slug: play-time
 opdb_id: G5Koz-M61e0

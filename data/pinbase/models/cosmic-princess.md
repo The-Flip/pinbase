@@ -1,5 +1,4 @@
 ---
-slug: cosmic-princess
 name: Cosmic Princess
 title_slug: cosmic-princess
 opdb_id: G4d9B-MJk65

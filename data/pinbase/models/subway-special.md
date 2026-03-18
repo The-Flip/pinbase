@@ -1,5 +1,4 @@
 ---
-slug: subway-special
 name: Subway Special
 title_slug: subway-special
 ipdb_id: 2413

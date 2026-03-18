@@ -1,5 +1,4 @@
 ---
-slug: time-out-2
 name: Time Out
 title_slug: time-out-2
 ipdb_id: 5075

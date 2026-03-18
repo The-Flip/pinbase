@@ -1,5 +1,4 @@
 ---
-slug: criss-cross-wild-west-gallery
 name: Criss Cross Wild West Gallery
 title_slug: criss-cross-wild-west-gallery
 ipdb_id: 7009

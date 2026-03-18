@@ -1,5 +1,4 @@
 ---
-slug: five-star-final-sr
 name: Five Star Final Sr.
 title_slug: five-star-final-sr
 ipdb_id: 3098

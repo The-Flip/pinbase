@@ -1,5 +1,4 @@
 ---
-slug: paul-bunyan
 name: Paul Bunyan
 title_slug: big-jack
 opdb_id: GR937-MQjK5

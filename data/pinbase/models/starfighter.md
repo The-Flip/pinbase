@@ -1,5 +1,4 @@
 ---
-slug: starfighter
 name: Starfighter
 title_slug: starfighter
 ipdb_id: 3729

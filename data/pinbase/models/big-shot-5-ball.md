@@ -1,5 +1,4 @@
 ---
-slug: big-shot-5-ball
 name: Big Shot (5-Ball)
 title_slug: big-shot-5-ball
 ipdb_id: 6906

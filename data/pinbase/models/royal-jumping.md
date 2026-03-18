@@ -1,5 +1,4 @@
 ---
-slug: royal-jumping
 name: Royal Jumping
 title_slug: royal-jumping
 ipdb_id: 6142

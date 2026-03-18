@@ -1,5 +1,4 @@
 ---
-slug: program
 name: Program
 title_slug: program
 ipdb_id: 3314

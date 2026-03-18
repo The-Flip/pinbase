@@ -1,5 +1,4 @@
 ---
-slug: casino-5
 name: Casino
 title_slug: casino-5
 ipdb_id: 6710

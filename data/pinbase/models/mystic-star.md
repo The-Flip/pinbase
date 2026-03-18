@@ -1,5 +1,4 @@
 ---
-slug: mystic-star
 name: Mystic Star
 title_slug: mystic-star-devil-king
 opdb_id: G5QOw-M61dY

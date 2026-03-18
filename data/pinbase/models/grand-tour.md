@@ -1,5 +1,4 @@
 ---
-slug: grand-tour
 name: Grand Tour
 title_slug: grand-tour-happy-tour
 opdb_id: GrNx1-MJ6q9

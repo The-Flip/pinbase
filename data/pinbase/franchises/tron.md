@@ -1,5 +1,4 @@
 ---
-slug: tron
 name: TRON
 ---
 

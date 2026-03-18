@@ -1,5 +1,4 @@
 ---
-slug: green-diamond
 name: Green Diamond
 title_slug: green-diamond
 ipdb_id: 4144

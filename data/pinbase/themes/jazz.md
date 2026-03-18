@@ -1,4 +1,3 @@
 ---
-slug: jazz
 name: Jazz
 ---

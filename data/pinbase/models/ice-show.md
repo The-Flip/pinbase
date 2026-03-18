@@ -1,5 +1,4 @@
 ---
-slug: ice-show
 name: Ice Show
 title_slug: ice-revue-ice-show
 opdb_id: GRnYX-ML0l2

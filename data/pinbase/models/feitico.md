@@ -1,5 +1,4 @@
 ---
-slug: feitico
 name: Feitiço
 title_slug: feitico
 ipdb_id: 6517

@@ -1,5 +1,4 @@
 ---
-slug: curling
 name: Curling
 title_slug: curling
 opdb_id: Grl29-MQkR9

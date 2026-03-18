@@ -1,5 +1,4 @@
 ---
-slug: granada-3
 name: Granada
 title_slug: granada
 opdb_id: GPBdK-MjBlR

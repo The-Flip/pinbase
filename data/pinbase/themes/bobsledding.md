@@ -1,4 +1,3 @@
 ---
-slug: bobsledding
 name: Bobsledding
 ---

@@ -1,4 +1,3 @@
 ---
-slug: zombie
 name: Zombie
 ---

@@ -1,5 +1,4 @@
 ---
-slug: pamco-casino
 name: Pamco Casino
 title_slug: pamco-casino
 ipdb_id: 464

@@ -1,5 +1,4 @@
 ---
-slug: casino-royale
 name: Casino Royale
 title_slug: casino-royale
 opdb_id: GrEn8-MJ6yX

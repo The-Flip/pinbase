@@ -1,5 +1,4 @@
 ---
-slug: medieval-madness
 name: Medieval Madness
 title_slug: medieval-madness
 opdb_id: G5pe4-MePZv

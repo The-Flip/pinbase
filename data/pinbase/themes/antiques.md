@@ -1,4 +1,3 @@
 ---
-slug: antiques
 name: Antiques
 ---

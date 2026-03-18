@@ -1,5 +1,4 @@
 ---
-slug: hawthorne
 name: Hawthorne
 title_slug: hawthorne
 ipdb_id: 1140

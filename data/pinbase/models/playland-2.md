@@ -1,5 +1,4 @@
 ---
-slug: playland-2
 name: Playland (プレイランド)
 title_slug: playland-2
 ipdb_id: 6776

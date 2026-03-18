@@ -1,5 +1,4 @@
 ---
-slug: acdc-let-there-be-rock-limited-edition
 name: AC/DC (Let There Be Rock Limited Edition)
 title_slug: ac-dc
 opdb_id: G43W4-MrRpw-AOPQR

@@ -1,5 +1,4 @@
 ---
-slug: starship-troopers
 name: Starship Troopers
 ---
 

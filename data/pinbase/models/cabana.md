@@ -1,5 +1,4 @@
 ---
-slug: cabana
 name: Cabana
 title_slug: cabana
 ipdb_id: 414

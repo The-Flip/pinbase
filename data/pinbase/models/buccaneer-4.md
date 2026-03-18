@@ -1,5 +1,4 @@
 ---
-slug: buccaneer-4
 name: Buccaneer
 title_slug: buccaneer-3
 ipdb_id: 6289

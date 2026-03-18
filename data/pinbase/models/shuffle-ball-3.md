@@ -1,5 +1,4 @@
 ---
-slug: shuffle-ball-3
 name: Shuffle Ball
 title_slug: shuffle-ball-3
 ipdb_id: 5686

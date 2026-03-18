@@ -1,5 +1,4 @@
 ---
-slug: pleasure-island
 name: Pleasure-Island
 title_slug: pleasure-island-2
 ipdb_id: 4199

@@ -1,5 +1,4 @@
 ---
-slug: keen-a-ball
 name: Keen-A-Ball
 title_slug: keen-a-ball
 ipdb_id: 1350

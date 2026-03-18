@@ -1,5 +1,4 @@
 ---
-slug: hi-lo-ace
 name: Hi-Lo Ace
 title_slug: hi-lo-ace
 opdb_id: G5V3y-MQjo3

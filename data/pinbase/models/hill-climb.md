@@ -1,5 +1,4 @@
 ---
-slug: hill-climb
 name: Hill Climb
 title_slug: hill-climb
 ipdb_id: 5333

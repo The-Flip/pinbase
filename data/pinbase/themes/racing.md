@@ -1,4 +1,3 @@
 ---
-slug: racing
 name: Racing
 ---

@@ -1,5 +1,4 @@
 ---
-slug: seaboard-new-york-corporation
 name: Seaboard New York Corporation
 manufacturer_slug: seaboard-new-york-corporation
 ipdb_manufacturer_id: 548

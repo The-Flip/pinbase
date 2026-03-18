@@ -1,4 +1,3 @@
 ---
-slug: lightning
 name: Lightning
 ---

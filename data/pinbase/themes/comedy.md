@@ -1,4 +1,3 @@
 ---
-slug: comedy
 name: Comedy
 ---

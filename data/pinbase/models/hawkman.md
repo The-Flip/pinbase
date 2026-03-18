@@ -1,5 +1,4 @@
 ---
-slug: hawkman
 name: Hawkman
 title_slug: fathom
 opdb_id: GrPO3-Mx0Pb

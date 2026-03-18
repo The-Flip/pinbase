@@ -1,5 +1,4 @@
 ---
-slug: cue
 name: Cue
 title_slug: cue
 opdb_id: G4kqd-MDB6w

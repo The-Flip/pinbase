@@ -1,5 +1,4 @@
 ---
-slug: texas-leaguer
 name: Texas Leaguer
 title_slug: texas-leaguer
 ipdb_id: 5507

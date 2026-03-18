@@ -1,4 +1,3 @@
 ---
-slug: bosco
 name: Bosco
 ---

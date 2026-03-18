@@ -1,5 +1,4 @@
 ---
-slug: poolette
 name: Poolette
 title_slug: poolette
 ipdb_id: 4522

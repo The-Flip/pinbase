@@ -1,4 +1,3 @@
 ---
-slug: swimming
 name: Swimming
 ---

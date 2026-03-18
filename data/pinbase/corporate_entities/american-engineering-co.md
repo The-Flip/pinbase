@@ -1,5 +1,4 @@
 ---
-slug: american-engineering-co
 name: American Engineering Co.
 manufacturer_slug: american-engineering-co
 ipdb_manufacturer_id: 648

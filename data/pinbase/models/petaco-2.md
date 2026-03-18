@@ -1,5 +1,4 @@
 ---
-slug: petaco-2
 name: Petaco 2
 title_slug: petaco-2
 ipdb_id: 5257

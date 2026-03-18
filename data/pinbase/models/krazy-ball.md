@@ -1,5 +1,4 @@
 ---
-slug: krazy-ball
 name: Krazy Ball
 title_slug: krazy-ball
 ipdb_id: 6956

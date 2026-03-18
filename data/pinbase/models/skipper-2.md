@@ -1,5 +1,4 @@
 ---
-slug: skipper-2
 name: Skipper
 title_slug: skipper-3
 ipdb_id: 2188
