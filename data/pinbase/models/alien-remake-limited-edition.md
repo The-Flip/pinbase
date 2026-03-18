@@ -1,6 +1,6 @@
 ---
-slug: alien-remake-le
-name: Alien (Remake LE)
+slug: alien-remake-limited-edition
+name: Alien (Remake Limited Edition)
 title_slug: alien
 opdb_id: G4PBO-MyNeb-A9pVL
 corporate_entity_slug: pinball-brothers

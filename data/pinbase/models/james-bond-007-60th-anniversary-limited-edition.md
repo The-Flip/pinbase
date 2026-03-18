@@ -1,6 +1,6 @@
 ---
-slug: james-bond-007-60th-anniversary-le
-name: James Bond 007 (60th Anniversary LE)
+slug: james-bond-007-60th-anniversary-limited-edition
+name: James Bond 007 (60th Anniversary Limited Edition)
 title_slug: james-bond-007-60th-anniversary
 opdb_id: Ge1Dy-M9Rrp
 corporate_entity_slug: stern-pinball-incorporated

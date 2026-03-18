@@ -1,6 +1,6 @@
 ---
 slug: monster-bash-remake-special-edition
-name: Monster Bash (Remake Special)
+name: Monster Bash (Remake Special Edition)
 title_slug: monster-bash
 opdb_id: Gr3EW-MXryE
 ipdb_id: 6571

@@ -1,6 +1,6 @@
 ---
-slug: spider-man-black-suited
-name: Spider-Man (Black Suited LE)
+slug: spider-man-black-suited-limited-edition
+name: Spider-Man (Black Suited Limited Edition)
 title_slug: spider-man
 opdb_id: G5D94-MyNBN
 ipdb_id: 5650
