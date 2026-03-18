@@ -1,4 +1,4 @@
--- 03_compare.sql — Cross-source comparison views and slug quality analysis.
+-- 04_compare.sql — Cross-source comparison views, gap analysis, and slug quality.
 -- Depends on: 01_raw.sql, 02_staging.sql
 
 ------------------------------------------------------------
@@ -221,3 +221,121 @@ LEFT JOIN ipdb_machines AS di ON d.ipdb_id = di.IpdbId
 LEFT JOIN ipdb_machines AS pi ON p.ipdb_id = pi.IpdbId
 WHERE p.model_slug IS NOT NULL
 ORDER BY COALESCE(di.ProductionNumber, 0) DESC;
+
+------------------------------------------------------------
+-- Missing: IPDB machines not yet in Pinbase
+-- Anti-join on ipdb_id to find machines we haven't imported.
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW missing_models_ipdb AS
+SELECT
+  i.IpdbId,
+  i.Title,
+  i.ManufacturerShortName AS ipdb_manufacturer,
+  i.ManufacturerId AS ipdb_manufacturer_id,
+  i.Type AS ipdb_type,
+  i.TypeShortName AS ipdb_type_short,
+  TRY_CAST(i.DateOfManufacture AS INTEGER) AS ipdb_year,
+  i.Players AS ipdb_players,
+  i.ProductionNumber AS ipdb_production,
+  i.AverageFunRating AS ipdb_rating,
+  i.technology_generation_slug,
+  i.system_slug
+FROM ipdb_machines_staged AS i
+LEFT JOIN models AS m ON m.ipdb_id = i.IpdbId
+WHERE m.ipdb_id IS NULL
+ORDER BY i.IpdbId;
+
+------------------------------------------------------------
+-- Missing: IPDB corporate entities not yet in Pinbase
+-- Distinct ManufacturerId values with no matching corporate entity.
+-- IPDB's ManufacturerId maps to our corporate_entities (not manufacturers),
+-- since one manufacturer brand can have multiple corporate entities.
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW missing_corporate_entities_ipdb AS
+SELECT DISTINCT
+  i.ManufacturerId AS ipdb_manufacturer_id,
+  i.ManufacturerShortName AS ipdb_manufacturer_name,
+  i.Manufacturer AS ipdb_manufacturer_full,
+  count(*) OVER (PARTITION BY i.ManufacturerId) AS machine_count
+FROM ipdb_machines_staged AS i
+LEFT JOIN corporate_entities AS ce ON ce.ipdb_manufacturer_id = i.ManufacturerId
+WHERE ce.slug IS NULL
+  AND i.ManufacturerId IS NOT NULL
+  AND i.ManufacturerId != 0
+  AND i.Manufacturer IS NOT NULL
+  AND i.Manufacturer != 'Unknown Manufacturer'
+ORDER BY machine_count DESC, i.ManufacturerId;
+
+------------------------------------------------------------
+-- Missing: IPDB manufacturers (brands) not yet in Pinbase
+-- Corporate entities that DO exist but whose manufacturer_slug
+-- doesn't match any row in manufacturers.
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW missing_manufacturers_ipdb AS
+SELECT DISTINCT
+  ce.manufacturer_slug,
+  ce.slug AS corporate_entity_slug,
+  ce.name AS corporate_entity_name
+FROM corporate_entities AS ce
+LEFT JOIN manufacturers AS mfr ON mfr.slug = ce.manufacturer_slug
+WHERE mfr.slug IS NULL
+  AND ce.ipdb_manufacturer_id IS NOT NULL
+ORDER BY ce.manufacturer_slug;
+
+------------------------------------------------------------
+-- Missing: IPDB credited people not yet in Pinbase
+-- Flattens all IPDB credit fields, resolves against people + aliases,
+-- and returns names that don't match any known person.
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW missing_people_ipdb AS
+WITH
+person_lookup AS (
+  SELECT slug, LOWER(name) AS lookup_name FROM people
+  UNION ALL
+  SELECT slug, LOWER(UNNEST(aliases)) FROM people WHERE aliases IS NOT NULL
+),
+ipdb_credits_raw AS (
+  SELECT IpdbId, 'Design' AS role, TRIM(UNNEST(string_split(DesignBy, ','))) AS person_name FROM ipdb_machines WHERE DesignBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Art', TRIM(UNNEST(string_split(ArtBy, ','))) FROM ipdb_machines WHERE ArtBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Dots/Animation', TRIM(UNNEST(string_split(DotsAnimationBy, ','))) FROM ipdb_machines WHERE DotsAnimationBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Mechanics', TRIM(UNNEST(string_split(MechanicsBy, ','))) FROM ipdb_machines WHERE MechanicsBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Music', TRIM(UNNEST(string_split(MusicBy, ','))) FROM ipdb_machines WHERE MusicBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Sound', TRIM(UNNEST(string_split(SoundBy, ','))) FROM ipdb_machines WHERE SoundBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Software', TRIM(UNNEST(string_split(SoftwareBy, ','))) FROM ipdb_machines WHERE SoftwareBy <> ''
+),
+ipdb_credits_filtered AS (
+  SELECT * FROM ipdb_credits_raw
+  WHERE LOWER(person_name) NOT IN (
+    '(undisclosed)', 'undisclosed', 'unknown', 'missing', 'null', 'undefined',
+    'n/a', 'none', 'tbd', 'tba', '?', ''
+  )
+    AND person_name NOT ILIKE '%(undisclosed)%'
+    AND person_name NOT ILIKE '%unknown%'
+),
+unresolved AS (
+  SELECT
+    ic.person_name,
+    ic.role,
+    ic.IpdbId
+  FROM ipdb_credits_filtered ic
+  LEFT JOIN person_lookup pl ON LOWER(ic.person_name) = pl.lookup_name
+  WHERE pl.slug IS NULL
+)
+SELECT
+  person_name,
+  list(DISTINCT role ORDER BY role) AS roles,
+  count(DISTINCT IpdbId) AS machine_count,
+  list(DISTINCT IpdbId ORDER BY IpdbId)[:5] AS sample_ipdb_ids
+FROM unresolved
+GROUP BY person_name
+ORDER BY machine_count DESC, person_name;

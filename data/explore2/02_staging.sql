@@ -96,7 +96,8 @@ WHERE len(keywords) > 0;
 -- IPDB staged
 ------------------------------------------------------------
 
--- Add technology generation slug and system/subgeneration via MPU match
+-- Add technology generation slug and system/subgeneration via MPU match.
+-- Filters out unknown/null manufacturers (ManufacturerId 0 or 328).
 CREATE OR REPLACE VIEW ipdb_machines_staged AS
 SELECT
   im.*,
@@ -109,7 +110,8 @@ LEFT JOIN ref_ipdb_technology_generation AS tg1
 LEFT JOIN ref_ipdb_technology_generation AS tg2
   ON im."Type" = tg2.type_full AND tg2.type_full IS NOT NULL
 LEFT JOIN systems AS ps
-  ON list_contains(ps.mpu_strings, im.MPU);
+  ON list_contains(ps.mpu_strings, im.MPU)
+WHERE im.ManufacturerId NOT IN (0, 328);
 
 -- Distinct corporate entities parsed from IPDB manufacturer strings.
 -- Splits the structured string into company name, trade name, years, and location.

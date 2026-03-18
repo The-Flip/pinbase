@@ -298,10 +298,10 @@ SELECT
   images
 FROM read_json_auto('data/dump1/opdb_export_machines.json');
 
--- IPDB (Internet Pinball Database) export
+-- IPDB (Internet Pinball Database) export — xantari/Ipdb.Database scrape
 CREATE OR REPLACE TABLE ipdb_machines AS
 SELECT d.*
 FROM (
   SELECT unnest("Data") AS d
-  FROM read_json_auto('data/dump1/ipdbdatabase.json', (maximum_object_size = 67108864))
+  FROM read_json_auto('data/dump1/ipdb_xantari.json', (maximum_object_size = 67108864))
 );
