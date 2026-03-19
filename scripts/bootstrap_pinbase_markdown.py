@@ -5,8 +5,8 @@ Phase 2 of the AllTheData migration: converts existing Pinbase-authored
 JSON records into per-entity Markdown files with YAML frontmatter.
 
 Usage:
-    python scripts/bootstrap_pinbase_markdown.py
-    python scripts/bootstrap_pinbase_markdown.py --dry-run
+    uv run --directory backend python ../scripts/bootstrap_pinbase_markdown.py
+    uv run --directory backend python ../scripts/bootstrap_pinbase_markdown.py --dry-run
 """
 
 from __future__ import annotations

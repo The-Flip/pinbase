@@ -1,38 +1,7 @@
--- 02_staging.sql — Per-source transforms.
+-- 03_staging.sql — Per-source transforms.
 -- Makes each source independently queryable with normalized slugs.
 -- No cross-source joins.
--- Depends on: 01_raw.sql
-
-------------------------------------------------------------
--- Reference lookup tables (static mappings)
-------------------------------------------------------------
-
--- OPDB type code -> technology generation slug
-CREATE OR REPLACE VIEW ref_opdb_technology_generation AS
-SELECT * FROM (VALUES
-  ('em', 'electromechanical'),
-  ('ss', 'solid-state'),
-  ('me', 'pure-mechanical')
-) AS t(opdb_type, slug);
-
--- OPDB display code -> display type slug
-CREATE OR REPLACE VIEW ref_opdb_display_type AS
-SELECT * FROM (VALUES
-  ('reels',        'score-reels'),
-  ('lights',       'backglass-lights'),
-  ('alphanumeric', 'alphanumeric'),
-  ('cga',          'cga'),
-  ('dmd',          'dot-matrix'),
-  ('lcd',          'lcd')
-) AS t(opdb_display, slug);
-
--- IPDB TypeShortName/Type -> technology generation slug
-CREATE OR REPLACE VIEW ref_ipdb_technology_generation AS
-SELECT * FROM (VALUES
-  ('EM', NULL,                    'electromechanical'),
-  ('SS', NULL,                    'solid-state'),
-  (NULL, 'Pure Mechanical (PM)',  'pure-mechanical')
-) AS t(type_short_name, type_full, slug);
+-- Depends on: 01_reference.sql, 02_raw.sql
 
 ------------------------------------------------------------
 -- OPDB staged
@@ -114,61 +83,58 @@ LEFT JOIN systems AS ps
 WHERE im.ManufacturerId NOT IN (0, 328);
 
 -- Distinct corporate entities parsed from IPDB manufacturer strings.
--- Splits the structured string into company name, trade name, years, and location.
+-- Splits the structured string into company name, trade name, years, location,
+-- and HQ city/state/country (with US state detection and override handling).
 CREATE OR REPLACE VIEW ipdb_corporate_entities AS
-WITH ice AS (
-SELECT DISTINCT
-  ManufacturerId AS ipdb_manufacturer_id,
-  Manufacturer AS raw_name,
-  ManufacturerShortName AS short_name,
+WITH parsed AS (
+  SELECT DISTINCT
+    ManufacturerId AS ipdb_manufacturer_id,
+    Manufacturer AS raw_name,
+    ManufacturerShortName AS short_name,
 
-  -- Company name: strip trade-name bracket, years, and ", of ..." location
-  trim(trailing ',' FROM trim(
-    regexp_replace(
+    -- Company name: strip trade-name bracket, years, and ", of ..." location
+    trim(trailing ',' FROM trim(
       regexp_replace(
-        regexp_replace(Manufacturer, '\s*\[Trade Name:.*?\]', ''),
-        '\s*\(\d+.*?\)', ''),
-      ',\s*of\s+.*$', '')
-  )) AS company_name,
+        regexp_replace(
+          regexp_replace(Manufacturer, '\s*\[Trade Name:.*?\]', ''),
+          '\s*\(\d+.*?\)', ''),
+        ',\s*of\s+.*$', '')
+    )) AS company_name,
 
-  -- Trade name from [Trade Name: X]
-  regexp_extract(Manufacturer, '\[Trade Name:\s*(.+?)\]', 1) AS trade_name,
+    -- Trade name from [Trade Name: X]
+    regexp_extract(Manufacturer, '\[Trade Name:\s*(.+?)\]', 1) AS trade_name,
 
-  -- Year range: YYYY-YYYY or YYYY-now or YYYY-present
-  CASE WHEN regexp_extract(Manufacturer, '\((\d{4})-', 1) != '' THEN
-    CAST(regexp_extract(Manufacturer, '\((\d{4})-', 1) AS INTEGER)
-  END AS year_start,
+    -- Year range
+    CASE WHEN regexp_extract(Manufacturer, '\((\d{4})-', 1) != '' THEN
+      CAST(regexp_extract(Manufacturer, '\((\d{4})-', 1) AS INTEGER)
+    END AS year_start,
+    CASE WHEN regexp_extract(Manufacturer, '\(\d{4}-(\d{4})\)', 1) != '' THEN
+      CAST(regexp_extract(Manufacturer, '\(\d{4}-(\d{4})\)', 1) AS INTEGER)
+    END AS year_end,
+    CASE WHEN regexp_extract(Manufacturer, '\((\d{4})\)', 1) != ''
+          AND Manufacturer NOT LIKE '%-%(%' THEN
+      CAST(regexp_extract(Manufacturer, '\((\d{4})\)', 1) AS INTEGER)
+    END AS single_year,
 
-  CASE WHEN regexp_extract(Manufacturer, '\(\d{4}-(\d{4})\)', 1) != '' THEN
-    CAST(regexp_extract(Manufacturer, '\(\d{4}-(\d{4})\)', 1) AS INTEGER)
-  END AS year_end,
-  -- year_end is NULL when "now" or "present"
+    -- Full location string from ", of ..."
+    COALESCE(
+      trim(trailing ',' FROM
+        regexp_extract(Manufacturer, ',\s*of\s+(.+?)(?:\s*\(\d|\s*\[Trade|\s*$)', 1)
+      ),
+      ''
+    ) AS location
 
-  -- Single year: (YYYY) with no hyphen — needs further analysis
-  CASE WHEN regexp_extract(Manufacturer, '\((\d{4})\)', 1) != ''
-        AND Manufacturer NOT LIKE '%-%(%' THEN
-    CAST(regexp_extract(Manufacturer, '\((\d{4})\)', 1) AS INTEGER)
-  END AS single_year,
-
-  -- Full location string from ", of ..." (not split into city/state/country)
-  COALESCE(
-    trim(trailing ',' FROM
-      regexp_extract(Manufacturer, ',\s*of\s+(.+?)(?:\s*\(\d|\s*\[Trade|\s*$)', 1)
-    ),
-    ''
-  ) AS location
-
-FROM ipdb_machines
-WHERE Manufacturer IS NOT NULL
-  AND Manufacturer != 'Unknown Manufacturer'
-ORDER BY company_name),
--- Parse location into raw city/state/country, then apply overrides and normalization
-parsed AS (
+  FROM ipdb_machines
+  WHERE Manufacturer IS NOT NULL
+    AND Manufacturer != 'Unknown Manufacturer'
+),
+-- Split location into raw city/state/country with US state detection
+with_location AS (
   SELECT
-    ice.*,
-    string_split(ice.location, ', ') AS parts,
-    len(string_split(ice.location, ', ')) AS nparts
-  FROM ice
+    p.*,
+    string_split(p.location, ', ') AS parts,
+    len(string_split(p.location, ', ')) AS nparts
+  FROM parsed p
 ),
 with_raw_hq AS (
   SELECT
@@ -193,7 +159,7 @@ with_raw_hq AS (
       WHEN p.nparts = 1 AND st1.canonical_name IS NOT NULL THEN 'USA'
       ELSE p.location
     END AS _raw_country
-  FROM parsed p
+  FROM with_location p
   LEFT JOIN ref_us_states st2
     ON p.nparts = 2 AND lower(st2.state_name) = lower(p.parts[2])
   LEFT JOIN ref_us_states st1
@@ -202,7 +168,6 @@ with_raw_hq AS (
 SELECT
   h.ipdb_manufacturer_id, h.raw_name, h.short_name,
   h.company_name, h.trade_name,
-  -- The brand name: trade name if given, otherwise the company name
   CASE WHEN h.trade_name != '' THEN h.trade_name ELSE h.company_name END AS manufacturer_name,
   h.year_start, h.year_end, h.single_year, h.location,
 
@@ -213,16 +178,11 @@ SELECT
   ) AS headquarters_country,
 
   -- Manufacturer resolution — derived purely from IPDB data + pinbase manufacturers.
-  -- No dependency on existing corporate_entities table.
-  -- manufacturer_name = COALESCE(trade_name, company_name)
+  -- No dependency on existing corporate_entities or models tables.
   -- 1. Exact match: manufacturer_name → manufacturer.name
   -- 2. Normalized match (unambiguous): strip business suffixes, match if unique
-  -- 3. Model-based: majority manufacturer_slug from pinbase models for this IPDB manufacturer
-  COALESCE(
-    mfr_exact.slug,
-    mfr_normalized.slug,
-    mfr_from_models.manufacturer_slug
-  ) AS manufacturer_slug,
+  -- NULL if neither matches — that's a gap to investigate, not paper over.
+  COALESCE(mfr_exact.slug, mfr_normalized.slug) AS manufacturer_slug,
 
   model_years.year_of_first_model,
   model_years.year_of_last_model
@@ -231,12 +191,10 @@ LEFT JOIN ref_ipdb_location_overrides ovr
   ON ovr.ipdb_manufacturer_id = h.ipdb_manufacturer_id
 LEFT JOIN ref_country_normalization cn
   ON cn.raw_country = COALESCE(ovr.headquarters_country, h._raw_country)
--- Priority 1: exact match on manufacturer_name
 LEFT JOIN manufacturers mfr_exact
   ON lower(mfr_exact.name) = lower(
     CASE WHEN h.trade_name != '' THEN h.trade_name ELSE h.company_name END
   )
--- Priority 2: normalized match (unambiguous only)
 LEFT JOIN (
   SELECT slug, normalize_mfr_name(name) AS norm_name
   FROM manufacturers
@@ -247,21 +205,6 @@ LEFT JOIN (
     CASE WHEN h.trade_name != '' THEN h.trade_name ELSE h.company_name END
   )
   AND mfr_exact.slug IS NULL
--- Priority 3: majority vote from models (via corporate_entity → manufacturer)
-LEFT JOIN (
-  SELECT
-    im.ManufacturerId,
-    ce.manufacturer_slug,
-    count(*) AS cnt
-  FROM ipdb_machines im
-  JOIN models mod ON mod.ipdb_id = im.IpdbId
-  JOIN corporate_entities ce ON ce.slug = mod.corporate_entity_slug
-  WHERE ce.manufacturer_slug IS NOT NULL
-  GROUP BY im.ManufacturerId, ce.manufacturer_slug
-  QUALIFY row_number() OVER (PARTITION BY im.ManufacturerId ORDER BY count(*) DESC) = 1
-) mfr_from_models
-  ON mfr_from_models.ManufacturerId = h.ipdb_manufacturer_id
-  AND mfr_exact.slug IS NULL AND mfr_normalized.slug IS NULL
 LEFT JOIN (
   SELECT
     ManufacturerId,
@@ -317,3 +260,43 @@ SELECT
   unnest(m.credit_refs)."role" AS "role"
 FROM models AS m
 WHERE m.credit_refs IS NOT NULL AND len(m.credit_refs) > 0;
+
+------------------------------------------------------------
+-- Shared materialized tables (used by checks + compare)
+------------------------------------------------------------
+
+-- Person name/alias lookup: maps lowercase name → slug.
+-- Materialized once; referenced by checks and compare layers.
+CREATE OR REPLACE TABLE _person_lookup AS
+SELECT slug, LOWER(name) AS lookup_name FROM people
+UNION ALL
+SELECT slug, LOWER(UNNEST(aliases)) FROM people WHERE aliases IS NOT NULL;
+
+-- IPDB credits flattened + sentinel-filtered, with person resolution.
+-- Materializes the 7-branch UNION ALL + sentinel filter that was previously
+-- duplicated across checks and compare files.
+CREATE OR REPLACE TABLE _ipdb_credits AS
+WITH raw AS (
+  SELECT IpdbId, 'Design' AS role, TRIM(UNNEST(string_split(DesignBy, ','))) AS person_name FROM ipdb_machines WHERE DesignBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Art', TRIM(UNNEST(string_split(ArtBy, ','))) FROM ipdb_machines WHERE ArtBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Dots/Animation', TRIM(UNNEST(string_split(DotsAnimationBy, ','))) FROM ipdb_machines WHERE DotsAnimationBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Mechanics', TRIM(UNNEST(string_split(MechanicsBy, ','))) FROM ipdb_machines WHERE MechanicsBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Music', TRIM(UNNEST(string_split(MusicBy, ','))) FROM ipdb_machines WHERE MusicBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Sound', TRIM(UNNEST(string_split(SoundBy, ','))) FROM ipdb_machines WHERE SoundBy <> ''
+  UNION ALL
+  SELECT IpdbId, 'Software', TRIM(UNNEST(string_split(SoftwareBy, ','))) FROM ipdb_machines WHERE SoftwareBy <> ''
+)
+SELECT r.IpdbId, r.role, r.person_name, pl.slug AS person_slug
+FROM raw r
+LEFT JOIN _person_lookup pl ON LOWER(r.person_name) = pl.lookup_name
+WHERE LOWER(r.person_name) NOT IN (
+  '(undisclosed)', 'undisclosed', 'unknown', 'missing', 'null', 'undefined',
+  'n/a', 'none', 'tbd', 'tba', '?', ''
+)
+  AND r.person_name NOT ILIKE '%(undisclosed)%'
+  AND r.person_name NOT ILIKE '%unknown%';

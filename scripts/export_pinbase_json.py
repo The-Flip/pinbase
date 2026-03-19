@@ -2,15 +2,15 @@
 """Export data/pinbase/**/*.md to JSON files.
 
 Reads all Markdown records via the shared loader and writes normalized
-JSON arrays to data/explore/pinbase_export/. These files serve two
+JSON arrays to data/ingest_sources/pinbase_export/. These files serve two
 consumers:
 
 - Django ingest_pinbase command (canonical ingest path, with field
   mapping applied at ingest time)
-- DuckDB views in 01_raw.sql (exploration/comparison)
+- DuckDB tables in 02_raw.sql (exploration/comparison)
 
 Usage:
-    python scripts/export_pinbase_json.py
+    uv run --directory backend python ../scripts/export_pinbase_json.py
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
 from apps.catalog.ingestion.pinbase_loader import iter_all  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-EXPORT_DIR = REPO_ROOT / "data" / "explore" / "pinbase_export"
+EXPORT_DIR = REPO_ROOT / "data" / "ingest_sources" / "pinbase_export"
 
 
 def main() -> int:

@@ -23,7 +23,7 @@ enrichment commands (Fandom, Wikidata) run separately.
 | `resolve_claims`                    | Re-resolves all catalog entities from claims    |
 
 Internal seed data lives in `data/*.json`. External source files live in
-`data/dump1/` and are **not committed** to the repo. They are stored in a
+`data/ingest_sources/` and are **not committed** to the repo. They are stored in a
 private GitHub Gist:
 `https://gist.github.com/deanmoses/03aaee1bc83da6d7db8030d40538ed2d`
 
@@ -59,7 +59,7 @@ replay without network calls.
 
 ## Running locally
 
-With the data files present in `data/dump1/`:
+With the data files present in `data/ingest_sources/`:
 
 ```bash
 cd backend
@@ -84,7 +84,7 @@ railway ssh --service pinbase
 `curl` is not available in the container; use Python:
 
 ```bash
-mkdir -p /tmp/dump1
+mkdir -p /tmp/ingest_sources
 python3 -c "
 import urllib.request
 base = 'https://gist.githubusercontent.com/deanmoses/03aaee1bc83da6d7db8030d40538ed2d/raw/'
@@ -98,7 +98,7 @@ files = [
     'fandom_manufacturers.json',
     'fandom_persons.json',
 ]
-[urllib.request.urlretrieve(base + f, '/tmp/dump1/' + f) or print('Downloaded', f) for f in files]
+[urllib.request.urlretrieve(base + f, '/tmp/ingest_sources/' + f) or print('Downloaded', f) for f in files]
 "
 ```
 
@@ -106,20 +106,20 @@ files = [
 
 ```bash
 uv run python manage.py ingest_all \
-  --ipdb /tmp/dump1/ipdbdatabase.json \
-  --opdb /tmp/dump1/opdb_export_machines.json \
-  --opdb-groups /tmp/dump1/opdb_export_groups.json \
-  --opdb-changelog /tmp/dump1/opdb_changelog.json \
-  --csv /tmp/dump1/machine_sign_copy.csv
+  --ipdb /tmp/ingest_sources/ipdbdatabase.json \
+  --opdb /tmp/ingest_sources/opdb_export_machines.json \
+  --opdb-groups /tmp/ingest_sources/opdb_export_groups.json \
+  --opdb-changelog /tmp/ingest_sources/opdb_changelog.json \
+  --csv /tmp/ingest_sources/machine_sign_copy.csv
 ```
 
 ### 4. Run optional enrichment (if needed)
 
 ```bash
 uv run python manage.py ingest_fandom \
-  --from-dump /tmp/dump1/fandom_games.json \
-  --from-dump-persons /tmp/dump1/fandom_persons.json \
-  --from-dump-manufacturers /tmp/dump1/fandom_manufacturers.json
+  --from-dump /tmp/ingest_sources/fandom_games.json \
+  --from-dump-persons /tmp/ingest_sources/fandom_persons.json \
+  --from-dump-manufacturers /tmp/ingest_sources/fandom_manufacturers.json
 
 uv run python manage.py ingest_wikidata
 uv run python manage.py ingest_wikidata_manufacturers

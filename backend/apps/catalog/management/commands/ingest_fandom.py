@@ -14,15 +14,15 @@ Usage::
 
     # Live fetch (saves dumps for later re-use):
     python manage.py ingest_fandom \\
-        --dump data/dump1/fandom_games.json \\
-        --dump-persons data/dump1/fandom_persons.json \\
-        --dump-manufacturers data/dump1/fandom_manufacturers.json
+        --dump data/ingest_sources/fandom_games.json \\
+        --dump-persons data/ingest_sources/fandom_persons.json \\
+        --dump-manufacturers data/ingest_sources/fandom_manufacturers.json
 
     # Re-run from existing dumps (no network calls):
     python manage.py ingest_fandom \\
-        --from-dump data/dump1/fandom_games.json \\
-        --from-dump-persons data/dump1/fandom_persons.json \\
-        --from-dump-manufacturers data/dump1/fandom_manufacturers.json
+        --from-dump data/ingest_sources/fandom_games.json \\
+        --from-dump-persons data/ingest_sources/fandom_persons.json \\
+        --from-dump-manufacturers data/ingest_sources/fandom_manufacturers.json
 """
 
 from __future__ import annotations

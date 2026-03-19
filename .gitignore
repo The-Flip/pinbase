@@ -61,7 +61,4 @@ backend/cache/
 *.duckdb.wal
 
 # Data dumps (large source files, not committed)
-data/dump1/
-
-# Derived pinbase export (regenerated from markdown)
-data/explore/pinbase_export/
+data/ingest_sources/

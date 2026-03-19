@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Apply batched updates to data/pinbase/**/*.md files.
 
-Reads proposed backfills from DuckDB views in data/explore2/explore2.duckdb
+Reads proposed backfills from DuckDB views in data/explore/explore.duckdb
 and inserts missing frontmatter fields into the corresponding markdown files.
 
 Current backfills:
@@ -26,7 +26,7 @@ import duckdb
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PINBASE_DIR = REPO_ROOT / "data" / "pinbase"
-DB_PATH = REPO_ROOT / "data" / "explore2" / "explore2.duckdb"
+DB_PATH = REPO_ROOT / "data" / "explore" / "explore.duckdb"
 
 # Canonical field order for model frontmatter.  When inserting a new field,
 # it goes after the last present field that precedes it in this list.
@@ -61,8 +61,8 @@ MODEL_FIELD_ORDER = [
 def _load_backfills(db: duckdb.DuckDBPyConnection) -> tuple[dict, dict, dict]:
     """Load proposed backfills from DuckDB views."""
 
-    # -- Completed backfills (views removed from explore2 SQL layer) --
-    # -- To add a new backfill: create a view in 04_compare.sql, then
+    # -- Completed backfills (views removed from explore SQL layer) --
+    # -- To add a new backfill: create a view in 05_compare.sql, then
     # -- query it here.  Let DuckDB raise CatalogException if the view
     # -- is missing — never silently return empty results.
     #

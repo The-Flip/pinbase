@@ -91,6 +91,8 @@ backend/          Django project (uv, pyproject.toml)
 frontend/         SvelteKit project (pnpm)
   src/lib/api/    Generated types (schema.d.ts) + hand-written client (client.ts)
   src/routes/     SvelteKit routes
+data/pinbase/     Catalog records — one Markdown file per entity (see docs/Catalog.md)
+data/explore/     DuckDB SQL layers for validation and exploration (see docs/Explore.md)
 scripts/          POSIX shell scripts
 docs/             Documentation source files
 ```
@@ -136,7 +138,11 @@ GitHub access:
 
 ## Data Ingestion
 
-The catalog app has management commands for importing from external data sources (IPDB, OPDB, Fandom wiki, etc.). Run `make ingest` or `uv run python manage.py ingest_all` with data files in `data/dump1/`. See [docs/Ingest.md](Ingest.md) for sources, file formats, and production ingestion steps.
+The catalog app has management commands for importing from external data sources (IPDB, OPDB, Fandom wiki, etc.). Run `make ingest` or `uv run python manage.py ingest_all` with data files in `data/ingest_sources/`. See [docs/Ingest.md](Ingest.md) for sources, file formats, and production ingestion steps.
+
+## DuckDB Explore Database
+
+The best way to explore the data in Pinbase is via DuckDB. `make explore` rebuilds a DuckDB database at `data/explore/explore.duckdb` for validating pinbase data, comparing against external sources, and finding gaps. Query it with `duckdb data/explore/explore.duckdb`. See [docs/Explore.md](Explore.md) for the full layer reference.
 
 ## Pre-commit Hooks
 

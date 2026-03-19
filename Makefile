@@ -30,8 +30,7 @@ superuser:
 	cd backend && DJANGO_SUPERUSER_EMAIL="" uv run python manage.py createsuperuser --noinput
 
 pinbase-export:
-	python scripts/export_pinbase_json.py
+	uv run --directory backend python ../scripts/export_pinbase_json.py
 
-explore: pinbase-export
-	rm -f data/explore/explore.duckdb
-	duckdb data/explore/explore.duckdb < data/explore/explore.sql
+explore:
+	./scripts/rebuild_explore.sh

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Generate pinbase markdown files for IPDB data missing from the catalog.
 
-Reads the missing_* views from data/explore2/explore2.duckdb and writes
+Reads the missing_* views from data/explore/explore.duckdb and writes
 markdown files for manufacturers, corporate entities, titles, and models
 that don't yet exist in data/pinbase/.
 
 All name parsing and manufacturer resolution live in the DuckDB views
-(02_staging.sql, 04_compare.sql).  This script just reads them, slugifies,
+(03_staging.sql, 05_compare.sql).  This script just reads them, slugifies,
 and writes markdown.
 
 Usage:
-    python scripts/generate_missing_ipdb_data.py [--dry-run]
+    uv run --directory backend python ../scripts/generate_missing_ipdb_data.py [--dry-run]
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ import yaml  # noqa: E402
 from django.utils.text import slugify  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = REPO_ROOT / "data" / "explore2" / "explore2.duckdb"
+DB_PATH = REPO_ROOT / "data" / "explore" / "explore.duckdb"
 PINBASE_DIR = REPO_ROOT / "data" / "pinbase"
 MFR_DIR = PINBASE_DIR / "manufacturers"
 CE_DIR = PINBASE_DIR / "corporate_entities"

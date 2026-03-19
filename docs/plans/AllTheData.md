@@ -22,7 +22,7 @@ Pinbase should stop growing the large aggregate files like `data/models.json` an
 
 Instead, Pinbase should move to a three-layer architecture:
 
-1. `data/dump1/` remains immutable third-party evidence.
+1. `data/ingest_sources/` remains immutable third-party evidence.
 2. `data/pinbase/` becomes the Pinbase-authored canonical layer, stored as one Markdown file per entity with YAML frontmatter.
 3. The Django SQLite database remains the operational source of truth after ingestion and claim resolution.
 
@@ -59,7 +59,7 @@ Pinbase-authored entities each get their own file:
 
 ```text
 data/
-  dump1/                          # immutable third-party inputs
+  ingest_sources/                 # immutable third-party inputs
   pinbase/
     titles/
       medieval-madness.md
@@ -110,7 +110,7 @@ data/
 The format rule should be simple:
 
 - `data/pinbase/` contains authored Markdown records only
-- `data/dump1/` contains raw third-party dumps in their original formats
+- `data/ingest_sources/` contains raw third-party dumps in their original formats
 - generated exports for explore/validation may use JSON, but they are build artifacts, not authored canon
 
 ### Why Markdown with frontmatter
@@ -239,7 +239,7 @@ This part matters most.
 
 ### Third-party data is evidence, not canon
 
-Files in `data/dump1/` remain raw snapshots from OPDB, IPDB, Fandom, and other external sources. They are not edited by hand.
+Files in `data/ingest_sources/` remain raw snapshots from OPDB, IPDB, Fandom, and other external sources. They are not edited by hand.
 
 ### Pinbase files are the authored canonical layer
 
@@ -768,7 +768,7 @@ Recommended commands:
 - `make pinbase-validate`
   - validate frontmatter schemas and relationship integrity
 - `make explore`
-  - rebuild DuckDB from exported JSON + dump1 files
+  - rebuild DuckDB from exported JSON + ingest_sources files
 - `uv run python manage.py ingest_pinbase_titles`
 - `uv run python manage.py ingest_pinbase_models`
 - `uv run python manage.py ingest_opdb`
@@ -790,7 +790,7 @@ The following ingestion commands are not affected by this migration and should c
 
 These are non-relational enrichment sources that assert claims through the normal provenance pipeline. Nothing in this plan changes their behavior.
 
-Pinball Map data (`data/dump1/pinballmap_*.json`) does not have a Django ingest command, but is already imported into DuckDB as `pinballmap_machines` and `pinballmap_machine_groups` views. That should continue unchanged — DuckDB is a valid enrichment path for exploration and reconciliation data that doesn't need to flow through the claims pipeline.
+Pinball Map data (`data/ingest_sources/pinballmap_*.json`) does not have a Django ingest command, but is already imported into DuckDB as `pinballmap_machines` and `pinballmap_machine_groups` views. That should continue unchanged — DuckDB is a valid enrichment path for exploration and reconciliation data that doesn't need to flow through the claims pipeline.
 
 ### `ingest_pinbase_signs` is retired
 
@@ -804,7 +804,7 @@ After migration:
 
 - absorb MainText descriptions into title Markdown files
 - remove `ingest_pinbase_signs` from `ingest_all` orchestration
-- the raw CSV (`data/dump1/machine_sign_copy.csv`) remains in dump1 as archival evidence
+- the raw CSV (`data/ingest_sources/machine_sign_copy.csv`) remains in ingest_sources as archival evidence
 
 ### `ingest_all` orchestration
 
