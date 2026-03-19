@@ -289,6 +289,7 @@ JOIN ipdb_machines AS im ON m.ipdb_id = im.IpdbId
 LEFT JOIN corporate_entities AS ce ON ce.slug = m.corporate_entity_slug
 WHERE m.corporate_entity_slug IS NOT NULL
   AND im.ManufacturerId != 328  -- exclude Unknown Manufacturer
+  AND im.ManufacturerId != 0    -- exclude missing/null manufacturer
   AND (ce.ipdb_manufacturer_id IS NULL OR ce.ipdb_manufacturer_id != im.ManufacturerId);
 
 -- If OPDB has a manufacturer ID for a model, the model's CE must point at
@@ -375,9 +376,33 @@ FROM models AS m
 WHERE m.ipdb_id IS NOT NULL
   AND NOT EXISTS (SELECT 1 FROM ipdb_machines AS i WHERE i.IpdbId = m.ipdb_id);
 
+-- Models missing CE where an external source has manufacturer data
+INSERT INTO _violations
+SELECT 'model_missing_ce_with_external_mfr', m.slug
+FROM models m
+LEFT JOIN ipdb_machines i ON m.ipdb_id = i.IpdbId
+LEFT JOIN opdb_machines om ON m.opdb_id = om.opdb_id
+WHERE m.corporate_entity_slug IS NULL
+  AND (
+    (i.ManufacturerId IS NOT NULL AND i.ManufacturerId != 0 AND i.ManufacturerId != 328)
+    OR om.manufacturer.name IS NOT NULL
+  );
+
+-- Remaining models missing CE (no external manufacturer data available)
 INSERT INTO _warnings
 SELECT 'models_missing_corporate_entity', count(*)
-FROM models WHERE corporate_entity_slug IS NULL;
+FROM models m
+WHERE m.corporate_entity_slug IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM ipdb_machines i
+    WHERE m.ipdb_id = i.IpdbId
+      AND i.ManufacturerId IS NOT NULL AND i.ManufacturerId != 0 AND i.ManufacturerId != 328
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM opdb_machines om
+    WHERE m.opdb_id = om.opdb_id
+      AND om.manufacturer.name IS NOT NULL
+  );
 
 INSERT INTO _warnings
 SELECT 'titles_missing_opdb_group', count(*)

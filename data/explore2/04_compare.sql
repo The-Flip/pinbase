@@ -660,8 +660,89 @@ WHERE candidate_count = 1
    OR title_slug IS NULL
 ORDER BY match_method NULLS LAST, fandom_name;
 
--- Fandom games not matched to any pinbase title
-CREATE OR REPLACE VIEW missing_games_fandom AS
+------------------------------------------------------------
+-- Proposed backfill: corporate_entity_slug on models
+-- Models missing CE where an external source has manufacturer data.
+-- Resolution priority: IPDB CE match > variant parent > OPDB mfr ID > OPDB mfr name (most-used CE)
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW proposed_ce_backfill AS
+WITH target_models AS (
+  SELECT DISTINCT m.slug, m.name, m.ipdb_id, m.opdb_id, m.variant_of
+  FROM models m
+  LEFT JOIN ipdb_machines i ON m.ipdb_id = i.IpdbId
+  LEFT JOIN opdb_machines om ON m.opdb_id = om.opdb_id
+  WHERE m.corporate_entity_slug IS NULL
+    AND (
+      (i.ManufacturerId IS NOT NULL AND i.ManufacturerId != 0 AND i.ManufacturerId != 328)
+      OR om.manufacturer.name IS NOT NULL
+    )
+),
+-- Direct IPDB manufacturer ID -> CE
+ipdb_ce AS (
+  SELECT t.slug AS model_slug, ce.slug AS ce_slug
+  FROM target_models t
+  JOIN ipdb_machines i ON t.ipdb_id = i.IpdbId
+  JOIN corporate_entities ce ON i.ManufacturerId = ce.ipdb_manufacturer_id
+),
+-- Inherit from variant parent
+parent_ce AS (
+  SELECT t.slug AS model_slug, parent.corporate_entity_slug AS ce_slug
+  FROM target_models t
+  JOIN models parent ON t.variant_of = parent.slug
+  WHERE parent.corporate_entity_slug IS NOT NULL
+),
+-- OPDB manufacturer ID -> pinbase manufacturer -> most-used CE
+opdb_id_ce AS (
+  SELECT t.slug AS model_slug, pop.ce_slug
+  FROM target_models t
+  JOIN opdb_machines om ON t.opdb_id = om.opdb_id
+  JOIN manufacturers mfr ON mfr.opdb_manufacturer_id = (om.manufacturer ->> 'manufacturer_id')::INT
+  JOIN (
+    SELECT ce.manufacturer_slug, m2.corporate_entity_slug AS ce_slug
+    FROM models m2
+    JOIN corporate_entities ce ON m2.corporate_entity_slug = ce.slug
+    GROUP BY ce.manufacturer_slug, m2.corporate_entity_slug
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY ce.manufacturer_slug ORDER BY count(*) DESC) = 1
+  ) pop ON pop.manufacturer_slug = mfr.slug
+  WHERE om.manufacturer IS NOT NULL
+),
+-- OPDB manufacturer name -> pinbase manufacturer -> most-used CE (fallback)
+opdb_name_ce AS (
+  SELECT t.slug AS model_slug, pop.ce_slug
+  FROM target_models t
+  JOIN opdb_machines om ON t.opdb_id = om.opdb_id
+  JOIN manufacturers mfr ON LOWER(mfr.name) = LOWER(om.manufacturer.name)
+  JOIN (
+    SELECT ce.manufacturer_slug, m2.corporate_entity_slug AS ce_slug
+    FROM models m2
+    JOIN corporate_entities ce ON m2.corporate_entity_slug = ce.slug
+    GROUP BY ce.manufacturer_slug, m2.corporate_entity_slug
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY ce.manufacturer_slug ORDER BY count(*) DESC) = 1
+  ) pop ON pop.manufacturer_slug = mfr.slug
+  WHERE om.manufacturer.name IS NOT NULL
+)
+SELECT
+  t.slug AS model_slug,
+  t.name AS model_name,
+  COALESCE(
+    ipdb_ce.ce_slug,
+    parent_ce.ce_slug,
+    opdb_id_ce.ce_slug,
+    opdb_name_ce.ce_slug
+  ) AS proposed_ce_slug,
+  CASE
+    WHEN ipdb_ce.ce_slug IS NOT NULL THEN 'ipdb_direct'
+    WHEN parent_ce.ce_slug IS NOT NULL THEN 'variant_parent'
+    WHEN opdb_id_ce.ce_slug IS NOT NULL THEN 'opdb_mfr_id'
+    WHEN opdb_name_ce.ce_slug IS NOT NULL THEN 'opdb_mfr_name'
+    ELSE 'unresolved'
+  END AS resolution_method
+FROM target_models t
+LEFT JOIN ipdb_ce ON t.slug = ipdb_ce.model_slug
+LEFT JOIN parent_ce ON t.slug = parent_ce.model_slug
+LEFT JOIN opdb_id_ce ON t.slug = opdb_id_ce.model_slug
+LEFT JOIN opdb_name_ce ON t.slug = opdb_name_ce.model_slug;
 SELECT fandom_page_id, fandom_name, fandom_manufacturer, fandom_year, fandom_wikitext
 FROM compare_games_fandom
 WHERE match_method IS NULL
