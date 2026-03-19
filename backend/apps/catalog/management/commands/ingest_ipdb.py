@@ -10,6 +10,7 @@ written in bulk after all records are processed.
 from __future__ import annotations
 
 import json
+from apps.catalog.ingestion.constants import DEFAULT_IPDB_PATH
 import logging
 import re
 from html import unescape
@@ -265,7 +266,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--ipdb",
-            default="../data/dump1/ipdb_xantari.json",
+            default=DEFAULT_IPDB_PATH,
             help="Path to IPDB JSON dump.",
         )
 

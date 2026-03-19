@@ -14,6 +14,13 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 
+from apps.catalog.ingestion.constants import (
+    DEFAULT_EXPORT_DIR,
+    DEFAULT_IPDB_PATH,
+    DEFAULT_OPDB_CHANGELOG_PATH,
+    DEFAULT_OPDB_PATH,
+)
+
 STEPS = [
     # Phase 1: Pinbase curated data — bootstrap entities.
     "ingest_pinbase",
@@ -32,22 +39,22 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--ipdb",
-            default="../data/dump1/ipdb_xantari.json",
+            default=DEFAULT_IPDB_PATH,
             help="Path to IPDB JSON dump.",
         )
         parser.add_argument(
             "--opdb",
-            default="../data/dump1/opdb_export_machines.json",
+            default=DEFAULT_OPDB_PATH,
             help="Path to OPDB JSON dump.",
         )
         parser.add_argument(
             "--opdb-changelog",
-            default="../data/dump1/opdb_changelog.json",
+            default=DEFAULT_OPDB_CHANGELOG_PATH,
             help="Path to OPDB changelog JSON dump.",
         )
         parser.add_argument(
             "--export-dir",
-            default="../data/explore/pinbase_export/",
+            default=DEFAULT_EXPORT_DIR,
             help="Path to exported Pinbase JSON directory.",
         )
         parser.add_argument(

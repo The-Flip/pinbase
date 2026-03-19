@@ -10,6 +10,7 @@ Claims are collected during the main loop and written in bulk afterward.
 from __future__ import annotations
 
 import json
+from apps.catalog.ingestion.constants import DEFAULT_OPDB_PATH
 import logging
 
 from django.core.management.base import BaseCommand, CommandError
@@ -37,7 +38,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--opdb",
-            default="../data/dump1/opdb_export_machines.json",
+            default=DEFAULT_OPDB_PATH,
             help="Path to OPDB JSON dump.",
         )
         parser.add_argument(
