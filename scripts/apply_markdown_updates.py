@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """Apply batched updates to data/pinbase/**/*.md files.
 
-Changes applied:
-1. Remove `slug:` from frontmatter in all markdown files (slug is the filename).
-2. Backfill `display_type_slug` on models from OPDB data.
-3. Backfill `technology_generation_slug` on models from IPDB/OPDB data.
+Reads proposed backfills from DuckDB views in data/explore2/explore2.duckdb
+and inserts missing frontmatter fields into the corresponding markdown files.
 
-Reads proposed changes from the DuckDB database at data/explore2/explore2.duckdb.
+Current backfills:
+- corporate_entity_slug on models (from proposed_ce_backfill view)
+
+Completed (code commented out):
+- slug removal from all entity frontmatter
+- display_type_slug on models (from proposed_display_type_backfill view)
+- technology_generation_slug on models (from proposed_tech_gen_backfill view)
 
 Usage:
     uv run python scripts/apply_markdown_updates.py [--dry-run]
@@ -54,28 +58,48 @@ MODEL_FIELD_ORDER = [
 ]
 
 
-def _load_backfills(db: duckdb.DuckDBPyConnection) -> tuple[dict, dict]:
+def _load_backfills(db: duckdb.DuckDBPyConnection) -> tuple[dict, dict, dict]:
     """Load proposed backfills from DuckDB views."""
+
+    # -- Completed backfills (views removed from explore2 SQL layer) --
+    # -- To add a new backfill: create a view in 04_compare.sql, then
+    # -- query it here.  Let DuckDB raise CatalogException if the view
+    # -- is missing — never silently return empty results.
+    #
+    # display = {}
+    # for slug, value in db.execute(
+    #     "SELECT model_slug, proposed_display_type_slug FROM proposed_display_type_backfill"
+    # ).fetchall():
+    #     display[slug] = value
+    #
+    # tech_gen = {}
+    # for slug, value in db.execute(
+    #     "SELECT model_slug, proposed_technology_generation_slug FROM proposed_tech_gen_backfill"
+    # ).fetchall():
+    #     tech_gen[slug] = value
     display = {}
-    for slug, value in db.execute(
-        "SELECT model_slug, proposed_display_type_slug FROM proposed_display_type_backfill"
-    ).fetchall():
-        display[slug] = value
-
     tech_gen = {}
-    for slug, value in db.execute(
-        "SELECT model_slug, proposed_technology_generation_slug FROM proposed_tech_gen_backfill"
-    ).fetchall():
-        tech_gen[slug] = value
 
-    return display, tech_gen
+    ce = {}
+    for slug, value in db.execute(
+        "SELECT model_slug, proposed_ce_slug FROM proposed_ce_backfill WHERE proposed_ce_slug IS NOT NULL"
+    ).fetchall():
+        ce[slug] = value
+
+    return display, tech_gen, ce
 
 
 def _insert_field(lines: list[str], field_name: str, field_value: str) -> list[str]:
     """Insert a YAML field into frontmatter lines in canonical order.
 
     `lines` are the frontmatter lines between the --- delimiters (no delimiters).
+    Skips insertion if the field already exists (idempotent).
     """
+    # Guard: don't insert if the field already exists.
+    for line in lines:
+        if re.match(rf"^{re.escape(field_name)}:", line):
+            return lines
+
     # Find the position of each existing field in canonical order.
     target_idx = MODEL_FIELD_ORDER.index(field_name)
 
@@ -104,6 +128,7 @@ def _process_file(
     *,
     display_backfills: dict,
     tech_gen_backfills: dict,
+    ce_backfills: dict,
     is_model: bool,
 ) -> tuple[bool, list[str]]:
     """Process a single markdown file.  Returns (changed, change_descriptions)."""
@@ -146,6 +171,11 @@ def _process_file(
             )
             changes.append(f"added technology_generation_slug: {tech_gen_value}")
 
+        ce_value = ce_backfills.get(slug)
+        if ce_value:
+            fm_lines = _insert_field(fm_lines, "corporate_entity_slug", ce_value)
+            changes.append(f"added corporate_entity_slug: {ce_value}")
+
     if not changes:
         return False, []
 
@@ -166,15 +196,16 @@ def main() -> None:
     args = parser.parse_args()
 
     db = duckdb.connect(str(DB_PATH), read_only=True)
-    display_backfills, tech_gen_backfills = _load_backfills(db)
+    display_backfills, tech_gen_backfills, ce_backfills = _load_backfills(db)
     db.close()
 
-    print(f"Loaded backfills: {len(display_backfills)} display_type, {len(tech_gen_backfills)} technology_generation")
+    print(f"Loaded backfills: {len(display_backfills)} display_type, {len(tech_gen_backfills)} technology_generation, {len(ce_backfills)} corporate_entity")
 
     total_changed = 0
     slug_removed = 0
     display_added = 0
     tech_gen_added = 0
+    ce_added = 0
 
     for entity_dir in sorted(PINBASE_DIR.iterdir()):
         if not entity_dir.is_dir():
@@ -197,6 +228,9 @@ def main() -> None:
                     if slug in tech_gen_backfills:
                         would_change = True
                         tech_gen_added += 1
+                    if slug in ce_backfills:
+                        would_change = True
+                        ce_added += 1
                 if would_change:
                     total_changed += 1
                 continue
@@ -205,6 +239,7 @@ def main() -> None:
                 md_file,
                 display_backfills=display_backfills,
                 tech_gen_backfills=tech_gen_backfills,
+                ce_backfills=ce_backfills,
                 is_model=is_model,
             )
             if changed:
@@ -216,12 +251,15 @@ def main() -> None:
                         display_added += 1
                     elif "technology_generation_slug" in c:
                         tech_gen_added += 1
+                    elif "corporate_entity_slug" in c:
+                        ce_added += 1
 
     prefix = "Would update" if args.dry_run else "Updated"
     print(f"{prefix} {total_changed} files:")
     print(f"  slug removed: {slug_removed}")
     print(f"  display_type_slug added: {display_added}")
     print(f"  technology_generation_slug added: {tech_gen_added}")
+    print(f"  corporate_entity_slug added: {ce_added}")
 
 
 if __name__ == "__main__":
