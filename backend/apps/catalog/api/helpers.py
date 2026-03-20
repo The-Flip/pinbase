@@ -77,12 +77,13 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
             if thumbnail or hero:
                 return thumbnail, hero
 
-    # Fall back to IPDB flat URL list.
-    image_urls = extra_data.get("ipdb.image_urls")
-    if image_urls and isinstance(image_urls, list):
-        first = image_urls[0]
-        if isinstance(first, str) and first:
-            return first, first
+    # Fall back to flat URL list (IPDB-sourced or scraped).
+    for key in ("ipdb.image_urls", "image_urls"):
+        image_urls = extra_data.get(key)
+        if image_urls and isinstance(image_urls, list):
+            first = image_urls[0]
+            if isinstance(first, str) and first:
+                return first, first
 
     return None, None
 
