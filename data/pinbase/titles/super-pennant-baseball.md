@@ -1,3 +1,0 @@
----
-name: Super Pennant Baseball
----

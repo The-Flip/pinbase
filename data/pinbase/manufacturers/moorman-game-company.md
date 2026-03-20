@@ -1,3 +1,0 @@
----
-name: Moorman Game Company
----

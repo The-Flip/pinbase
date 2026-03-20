@@ -1,3 +1,0 @@
----
-name: Nelson Manufacturing Company
----

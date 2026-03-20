@@ -1,3 +1,0 @@
----
-name: Safari De Luxe
----

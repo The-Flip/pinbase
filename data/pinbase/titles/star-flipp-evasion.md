@@ -1,3 +1,0 @@
----
-name: Star FLIPP evasion
----

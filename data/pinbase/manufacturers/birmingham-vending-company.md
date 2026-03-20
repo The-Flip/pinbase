@@ -1,3 +1,0 @@
----
-name: Birmingham Vending Company
----

@@ -1,3 +1,0 @@
----
-name: Baffle Ball Sr.
----

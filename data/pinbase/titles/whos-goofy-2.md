@@ -1,3 +1,0 @@
----
-name: Who's Goofy
----

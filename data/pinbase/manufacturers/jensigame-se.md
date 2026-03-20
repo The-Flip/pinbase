@@ -1,3 +1,0 @@
----
-name: JENSIgame S.E.
----

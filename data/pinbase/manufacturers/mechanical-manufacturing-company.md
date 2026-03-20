@@ -1,3 +1,0 @@
----
-name: Mechanical Manufacturing Company
----

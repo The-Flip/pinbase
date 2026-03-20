@@ -1,3 +1,0 @@
----
-name: Gatter Novelty Company
----

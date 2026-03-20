@@ -1,9 +1,0 @@
----
-name: Ske-Dad-Del
-title_slug: ske-dad-del
-ipdb_id: 2171
-corporate_entity_slug: midwest-sales-corporation
-year: 1932
-player_count: 1
-technology_generation_slug: pure-mechanical
----

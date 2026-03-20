@@ -1,3 +1,0 @@
----
-name: Peerless Products Company
----

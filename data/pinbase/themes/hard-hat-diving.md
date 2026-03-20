@@ -1,3 +1,0 @@
----
-name: Hard Hat Diving
----

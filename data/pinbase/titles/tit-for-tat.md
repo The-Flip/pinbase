@@ -1,3 +1,0 @@
----
-name: Tit For Tat
----

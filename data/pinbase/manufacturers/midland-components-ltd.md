@@ -1,3 +1,0 @@
----
-name: Midland Components, Ltd.
----

@@ -1,3 +1,0 @@
----
-name: Lonnie D. Ropp
----

@@ -1,3 +1,0 @@
----
-name: De Luxe Preakness
----

@@ -1,3 +1,0 @@
----
-name: Atari Arcade Classics
----

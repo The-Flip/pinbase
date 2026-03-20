@@ -1,3 +1,0 @@
----
-name: Advertising Craft Ltd.
----

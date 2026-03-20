@@ -1,3 +1,0 @@
----
-name: Spelling Bee
----

@@ -1,3 +1,0 @@
----
-name: Incredible Technologies, Incorporated
----

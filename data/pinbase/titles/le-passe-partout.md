@@ -1,3 +1,0 @@
----
-name: Le Passe Partout
----

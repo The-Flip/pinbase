@@ -1,3 +1,0 @@
----
-name: Iron Maiden II
----

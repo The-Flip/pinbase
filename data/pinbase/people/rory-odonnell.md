@@ -1,3 +1,0 @@
----
-name: Rory O'Donnell
----

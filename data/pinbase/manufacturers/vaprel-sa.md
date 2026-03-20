@@ -1,3 +1,0 @@
----
-name: Vaprel S.A.
----

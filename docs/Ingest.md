@@ -4,6 +4,16 @@ Pinbase is populated via Django management commands. The main pipeline
 (`ingest_all`) seeds internal data then imports external sources. Optional
 enrichment commands (Fandom, Wikidata) run separately.
 
+## Data sources
+
+Catalog data and external source files are maintained in the
+[pindata](https://github.com/deanmoses/pindata) repo and published to
+Cloudflare R2. Pinbase pulls them locally before running the ingest pipeline:
+
+```bash
+make pull-ingest   # download R2 → local data/ingest_sources/
+```
+
 ## Pipeline overview
 
 `ingest_all` runs these steps in order:
@@ -21,15 +31,6 @@ enrichment commands (Fandom, Wikidata) run separately.
 | `ingest_pinbase_titles`             | Sets Title franchise and Series memberships     |
 | `ingest_pinbase_signs`              | Imports museum sign copy from CSV               |
 | `resolve_claims`                    | Re-resolves all catalog entities from claims    |
-
-Internal seed data lives in `data/*.json`. External source files live in
-`data/ingest_sources/` and are **not committed** to the repo. They are stored in
-Cloudflare R2 at `https://pub-8f33ea1ac628450298edd0d3243ecf5a.r2.dev/`.
-
-```bash
-make pull-ingest   # download R2 → local data/ingest_sources/
-make push-ingest   # upload local → R2 (requires R2 credentials in .env)
-```
 
 ## External data sources
 
@@ -63,11 +64,16 @@ replay without network calls.
 
 ## Running locally
 
-With the data files present in `data/ingest_sources/`:
+```bash
+make pull-ingest   # download data from R2
+make ingest        # run the full pipeline
+```
+
+Or as a single command:
 
 ```bash
 cd backend
-uv run python manage.py ingest_all
+uv run python manage.py pull_and_ingest --dest ../data/ingest_sources
 ```
 
 ## Running against production (Railway)
@@ -77,32 +83,18 @@ uv run python manage.py ingest_all
 - Railway CLI installed and logged in (`railway login`)
 - Project linked (`railway link`)
 
-### 1. SSH into the Railway service
+### 1. Pull data and run ingest
 
 ```bash
 railway ssh --service pinbase
+.venv/bin/python manage.py pull_and_ingest
 ```
 
-### 2. Download ingest sources from R2
+This pulls ingest sources from R2 (with SHA-256 verification, skipping
+unchanged files), then runs the full `ingest_all` pipeline. Add `--dry-run`
+to verify without committing changes.
 
-```bash
-.venv/bin/python manage.py pull_ingest_sources --dest /tmp/ingest_sources
-```
-
-This fetches the manifest from R2, downloads files (with SHA-256 verification),
-and skips files already present with matching checksums.
-
-### 3. Run the ingest pipeline
-
-```bash
-.venv/bin/python manage.py ingest_all --write \
-  --ipdb /tmp/ingest_sources/ipdb_xantari.json \
-  --opdb /tmp/ingest_sources/opdb_export_machines.json \
-  --opdb-changelog /tmp/ingest_sources/opdb_changelog.json \
-  --export-dir /tmp/ingest_sources/pinbase_export/
-```
-
-### 4. Run optional enrichment (if needed)
+### 2. Run optional enrichment (if needed)
 
 ```bash
 .venv/bin/python manage.py ingest_fandom \

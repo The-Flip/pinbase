@@ -1,3 +1,0 @@
----
-name: Left or Right
----

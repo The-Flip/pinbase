@@ -1,9 +1,0 @@
----
-name: Daytona
-title_slug: daytona-2
-ipdb_id: 4048
-corporate_entity_slug: sirmo-games-sa
-year: 1990
-player_count: 1
-technology_generation_slug: solid-state
----

@@ -1,3 +1,0 @@
----
-name: Allied Amusement Company
----

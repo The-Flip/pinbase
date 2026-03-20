@@ -1,9 +1,0 @@
----
-name: Tee-Off
-title_slug: tee-off-2
-ipdb_id: 6738
-corporate_entity_slug: standard-novelty-co
-year: 1935
-player_count: 1
-technology_generation_slug: electromechanical
----

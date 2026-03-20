@@ -1,3 +1,0 @@
----
-name: Arcadia Novelty Company
----

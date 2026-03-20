@@ -1,3 +1,0 @@
----
-name: Fussball Europa Flipper
----

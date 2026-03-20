@@ -1,9 +1,0 @@
----
-name: Petaco 2
-title_slug: petaco-2
-ipdb_id: 5257
-corporate_entity_slug: juegos-populares-sa
-year: 1985
-player_count: 4
-technology_generation_slug: solid-state
----

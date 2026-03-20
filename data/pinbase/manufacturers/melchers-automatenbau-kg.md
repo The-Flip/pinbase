@@ -1,3 +1,0 @@
----
-name: Melchers Automatenbau KG
----

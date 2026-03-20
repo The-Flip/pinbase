@@ -1,3 +1,0 @@
----
-name: Mat-Cha-Skor
----

@@ -1,3 +1,0 @@
----
-name: Ak-Sar-Ben
----

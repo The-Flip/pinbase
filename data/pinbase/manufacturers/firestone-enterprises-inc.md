@@ -1,3 +1,0 @@
----
-name: Firestone Enterprises, Inc.
----

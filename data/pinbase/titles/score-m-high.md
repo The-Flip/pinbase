@@ -1,3 +1,0 @@
----
-name: Score-M-High
----

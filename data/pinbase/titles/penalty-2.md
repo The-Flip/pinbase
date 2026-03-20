@@ -1,3 +1,0 @@
----
-name: Penalty 2
----

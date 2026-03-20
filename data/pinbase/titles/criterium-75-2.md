@@ -1,3 +1,0 @@
----
-name: Criterium 75
----

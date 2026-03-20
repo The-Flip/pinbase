@@ -1,3 +1,0 @@
----
-name: Counter Knock-Out
----

@@ -1,3 +1,0 @@
----
-name: Gatter Manufacturing Company
----

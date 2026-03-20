@@ -1,3 +1,0 @@
----
-name: Atlas Manufacturing Company
----

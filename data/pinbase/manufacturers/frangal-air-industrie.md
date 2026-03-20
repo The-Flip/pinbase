@@ -1,3 +1,0 @@
----
-name: FRANGAL-AIR Industrie
----

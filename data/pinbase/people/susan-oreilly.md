@@ -1,3 +1,0 @@
----
-name: Susan O'Reilly
----

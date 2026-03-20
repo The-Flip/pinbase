@@ -1,3 +1,0 @@
----
-name: Kenyon Mfg. Co.
----

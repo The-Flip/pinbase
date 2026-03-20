@@ -1,3 +1,0 @@
----
-name: Shoot!.. Shoot Again
----

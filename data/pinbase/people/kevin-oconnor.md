@@ -1,3 +1,0 @@
----
-name: Kevin O'Connor
----

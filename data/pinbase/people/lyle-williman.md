@@ -1,3 +1,0 @@
----
-name: Lyle Williman
----

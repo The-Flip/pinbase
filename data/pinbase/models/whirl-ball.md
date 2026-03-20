@@ -1,8 +1,0 @@
----
-name: Whirl-Ball
-title_slug: whirl-ball
-ipdb_id: 6806
-corporate_entity_slug: gotham-pressed-steel-corporation
-player_count: 2
-technology_generation_slug: pure-mechanical
----

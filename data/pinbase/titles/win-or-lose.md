@@ -1,3 +1,0 @@
----
-name: Win or Lose
----

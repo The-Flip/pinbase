@@ -1,3 +1,0 @@
----
-name: C. E. Hoagland
----

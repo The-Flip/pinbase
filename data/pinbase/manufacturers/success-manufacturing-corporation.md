@@ -1,3 +1,0 @@
----
-name: Success Manufacturing Corporation
----

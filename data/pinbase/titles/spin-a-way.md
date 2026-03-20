@@ -1,3 +1,0 @@
----
-name: Spin-A-Way
----

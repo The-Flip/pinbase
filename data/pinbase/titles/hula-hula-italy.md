@@ -1,3 +1,0 @@
----
-name: Hula-Hula (Italy)
----

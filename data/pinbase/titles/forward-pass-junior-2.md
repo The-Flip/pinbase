@@ -1,3 +1,0 @@
----
-name: Forward Pass (Junior)
----

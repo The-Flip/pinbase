@@ -1,3 +1,0 @@
----
-name: Ride "M" Cowboy
----

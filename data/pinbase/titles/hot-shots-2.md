@@ -1,3 +1,0 @@
----
-name: Hot Shots
----

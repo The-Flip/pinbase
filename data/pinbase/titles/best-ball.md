@@ -1,3 +1,0 @@
----
-name: Best Ball
----

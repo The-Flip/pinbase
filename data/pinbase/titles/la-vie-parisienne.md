@@ -1,3 +1,0 @@
----
-name: La Vie Parisienne
----

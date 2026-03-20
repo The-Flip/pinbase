@@ -1,3 +1,0 @@
----
-name: Warren Novelty Co.
----

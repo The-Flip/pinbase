@@ -1,3 +1,0 @@
----
-name: Terpsichorean Entertainment
----

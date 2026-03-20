@@ -1,3 +1,0 @@
----
-name: Maba Belotte
----

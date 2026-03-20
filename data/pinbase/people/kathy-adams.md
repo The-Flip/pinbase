@@ -1,3 +1,0 @@
----
-name: Kathy Adams
----

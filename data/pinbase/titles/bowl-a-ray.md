@@ -1,3 +1,0 @@
----
-name: Bowl-A-Ray
----

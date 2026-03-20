@@ -1,3 +1,0 @@
----
-name: Hit 'N' Run
----

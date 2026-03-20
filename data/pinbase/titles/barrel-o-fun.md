@@ -1,3 +1,0 @@
----
-name: Barrel O' Fun
----

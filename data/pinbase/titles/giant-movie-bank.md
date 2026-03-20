@@ -1,3 +1,0 @@
----
-name: Giant Movie Bank
----

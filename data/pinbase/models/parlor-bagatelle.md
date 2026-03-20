@@ -1,8 +1,0 @@
----
-name: Parlor Bagatelle
-title_slug: parlor-bagatelle
-ipdb_id: 5625
-corporate_entity_slug: m-redgrave-bagatelle-company
-player_count: 1
-technology_generation_slug: pure-mechanical
----

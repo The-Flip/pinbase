@@ -1,3 +1,0 @@
----
-name: Michele "Mike" Martinelli
----

@@ -1,3 +1,0 @@
----
-name: Midwest Sales Corporation
----

@@ -1,9 +1,0 @@
----
-name: Match-A-Color
-title_slug: match-a-color
-ipdb_id: 4266
-corporate_entity_slug: pacific-amusement-manufacturing-company
-year: 1936
-player_count: 1
-technology_generation_slug: electromechanical
----

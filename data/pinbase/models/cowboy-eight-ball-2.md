@@ -1,8 +1,0 @@
----
-name: Cowboy Eight Ball 2
-title_slug: cowboy-eight-ball-2
-ipdb_id: 5734
-corporate_entity_slug: ltd-do-brasil-diverses-eletrnicas-ltda
-player_count: 4
-technology_generation_slug: solid-state
----

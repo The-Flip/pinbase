@@ -1,3 +1,0 @@
----
-name: Spark-O-Lite
----

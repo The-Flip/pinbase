@@ -1,3 +1,0 @@
----
-name: Sunnisam Games Company
----

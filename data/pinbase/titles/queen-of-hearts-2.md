@@ -1,3 +1,0 @@
----
-name: Queen of Hearts
----

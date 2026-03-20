@@ -1,3 +1,0 @@
----
-name: Twin Red Arrow
----

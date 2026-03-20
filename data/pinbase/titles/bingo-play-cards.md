@@ -1,3 +1,0 @@
----
-name: Bingo Play Cards
----

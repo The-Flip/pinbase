@@ -1,3 +1,0 @@
----
-name: Valley Dynamo
----

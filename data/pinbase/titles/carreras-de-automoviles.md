@@ -1,3 +1,0 @@
----
-name: Carreras de Automoviles
----

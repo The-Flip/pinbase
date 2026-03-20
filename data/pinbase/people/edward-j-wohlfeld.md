@@ -1,3 +1,0 @@
----
-name: Edward J. Wohlfeld
----

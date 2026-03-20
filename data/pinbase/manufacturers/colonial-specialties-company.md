@@ -1,3 +1,0 @@
----
-name: Colonial Specialties Company
----

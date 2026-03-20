@@ -1,3 +1,0 @@
----
-name: Pitch and Bat
----

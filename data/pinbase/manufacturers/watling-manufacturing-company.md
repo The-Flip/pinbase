@@ -1,3 +1,0 @@
----
-name: Watling Manufacturing Company
----

@@ -1,3 +1,0 @@
----
-name: Avengers The Pin
----

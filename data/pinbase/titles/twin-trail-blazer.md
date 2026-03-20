@@ -1,3 +1,0 @@
----
-name: Twin Trail Blazer
----

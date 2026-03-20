@@ -1,9 +1,0 @@
----
-name: Pickwick (Improved)
-title_slug: pickwick-improved
-ipdb_id: 5432
-corporate_entity_slug: pessers-moody-wraith-gurr
-year: 1914
-player_count: 1
-technology_generation_slug: pure-mechanical
----

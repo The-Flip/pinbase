@@ -1,3 +1,0 @@
----
-name: New York Defence
----

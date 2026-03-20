@@ -1,3 +1,0 @@
----
-name: Waddell Company, Incorporated
----

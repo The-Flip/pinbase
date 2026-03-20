@@ -1,3 +1,0 @@
----
-name: Tire le Bibi
----

@@ -1,3 +1,0 @@
----
-name: DYSCUS De-Luxe
----

@@ -1,3 +1,0 @@
----
-name: UFO Electronic Pinball
----

@@ -1,3 +1,0 @@
----
-name: Ice Show (Italy)
----

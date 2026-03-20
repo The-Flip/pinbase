@@ -1,3 +1,0 @@
----
-name: Tour De France
----

@@ -1,3 +1,0 @@
----
-name: International Shoot-Out
----

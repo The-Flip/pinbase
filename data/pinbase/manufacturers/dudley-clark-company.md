@@ -1,3 +1,0 @@
----
-name: Dudley-Clark Company
----

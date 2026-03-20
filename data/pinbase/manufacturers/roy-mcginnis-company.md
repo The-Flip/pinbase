@@ -1,3 +1,0 @@
----
-name: Roy McGinnis Company
----

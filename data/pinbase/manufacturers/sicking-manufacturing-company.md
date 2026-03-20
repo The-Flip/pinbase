@@ -1,3 +1,0 @@
----
-name: Sicking Manufacturing Company
----

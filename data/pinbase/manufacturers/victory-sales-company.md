@@ -1,3 +1,0 @@
----
-name: Victory Sales Company
----

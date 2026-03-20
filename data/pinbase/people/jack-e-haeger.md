@@ -1,3 +1,0 @@
----
-name: Jack E. Haeger
----

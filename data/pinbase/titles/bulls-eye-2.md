@@ -1,3 +1,0 @@
----
-name: Bull's Eye
----

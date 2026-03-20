@@ -1,3 +1,0 @@
----
-name: Fictional Character
----

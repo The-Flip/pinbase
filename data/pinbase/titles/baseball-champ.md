@@ -1,3 +1,0 @@
----
-name: Baseball Champ
----

@@ -1,3 +1,0 @@
----
-name: Bermuda Roll Down
----

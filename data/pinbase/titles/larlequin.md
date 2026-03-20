@@ -1,3 +1,0 @@
----
-name: l'arlequin
----

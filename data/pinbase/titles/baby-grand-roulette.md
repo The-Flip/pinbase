@@ -1,3 +1,0 @@
----
-name: Baby Grand (Roulette)
----

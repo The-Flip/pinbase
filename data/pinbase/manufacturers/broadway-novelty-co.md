@@ -1,3 +1,0 @@
----
-name: Broadway Novelty Co.
----

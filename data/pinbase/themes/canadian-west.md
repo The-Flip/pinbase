@@ -1,3 +1,0 @@
----
-name: Canadian West
----

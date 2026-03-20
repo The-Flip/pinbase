@@ -1,3 +1,0 @@
----
-name: Yankee Aggot-Tell!
----

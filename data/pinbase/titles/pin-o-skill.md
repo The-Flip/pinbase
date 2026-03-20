@@ -1,3 +1,0 @@
----
-name: '"Pin-O-Skill"'
----

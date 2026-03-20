@@ -1,3 +1,0 @@
----
-name: Albert J. Watling
----

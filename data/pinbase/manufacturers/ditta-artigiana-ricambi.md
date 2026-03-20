@@ -1,3 +1,0 @@
----
-name: Ditta Artigiana Ricambi
----

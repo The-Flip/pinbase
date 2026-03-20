@@ -1,3 +1,0 @@
----
-name: Hannahs Manufacturing Company
----

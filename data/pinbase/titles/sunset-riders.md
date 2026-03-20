@@ -1,3 +1,0 @@
----
-name: Sunset Riders
----

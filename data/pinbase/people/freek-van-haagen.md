@@ -1,3 +1,0 @@
----
-name: Freek van Haagen
----

@@ -1,3 +1,0 @@
----
-name: Frank K. Maitland
----

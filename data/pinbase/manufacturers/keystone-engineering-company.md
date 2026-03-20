@@ -1,3 +1,0 @@
----
-name: Keystone Engineering Company
----

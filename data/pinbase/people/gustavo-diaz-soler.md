@@ -1,3 +1,0 @@
----
-name: Gustavo Diaz Soler
----

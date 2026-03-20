@@ -1,3 +1,0 @@
----
-name: Around the World
----

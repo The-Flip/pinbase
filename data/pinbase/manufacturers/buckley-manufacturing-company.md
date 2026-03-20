@@ -1,3 +1,0 @@
----
-name: Buckley Manufacturing Company
----

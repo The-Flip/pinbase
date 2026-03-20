@@ -1,3 +1,0 @@
----
-name: Sink the Japs
----

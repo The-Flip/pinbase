@@ -1,3 +1,0 @@
----
-name: Ten Little Indians
----

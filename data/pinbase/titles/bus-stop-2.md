@@ -1,3 +1,0 @@
----
-name: Bus Stop
----

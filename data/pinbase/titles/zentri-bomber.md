@@ -1,3 +1,0 @@
----
-name: Zentri Bomber
----

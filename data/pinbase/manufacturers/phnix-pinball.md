@@ -1,3 +1,0 @@
----
-name: Ph�nix Pinball
----

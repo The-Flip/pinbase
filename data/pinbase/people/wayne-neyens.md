@@ -1,3 +1,0 @@
----
-name: Wayne Neyens
----

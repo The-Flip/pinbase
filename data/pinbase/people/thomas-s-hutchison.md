@@ -1,3 +1,0 @@
----
-name: Thomas S. Hutchison
----

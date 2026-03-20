@@ -1,3 +1,0 @@
----
-name: Power Pro Pinball
----

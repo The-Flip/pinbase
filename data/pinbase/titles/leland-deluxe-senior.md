@@ -1,3 +1,0 @@
----
-name: Leland (Deluxe Senior)
----

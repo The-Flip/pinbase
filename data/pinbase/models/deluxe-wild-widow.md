@@ -1,8 +1,0 @@
----
-name: Deluxe Wild Widow
-title_slug: deluxe-wild-widow
-ipdb_id: 5579
-corporate_entity_slug: carrohart-specialty-company
-year: 1933
-player_count: 1
----

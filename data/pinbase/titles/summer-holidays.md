@@ -1,3 +1,0 @@
----
-name: Summer Holidays
----

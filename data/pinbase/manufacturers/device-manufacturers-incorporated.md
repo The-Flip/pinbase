@@ -1,3 +1,0 @@
----
-name: Device Manufacturers, Incorporated
----

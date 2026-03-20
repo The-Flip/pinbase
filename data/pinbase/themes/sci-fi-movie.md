@@ -1,3 +1,0 @@
----
-name: Sci Fi Movie
----

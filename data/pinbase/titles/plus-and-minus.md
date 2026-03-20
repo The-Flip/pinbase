@@ -1,3 +1,0 @@
----
-name: Plus and Minus
----

@@ -1,3 +1,0 @@
----
-name: Tennyson Manufacturing Company
----

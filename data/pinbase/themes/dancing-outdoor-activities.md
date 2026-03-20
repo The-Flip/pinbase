@@ -1,3 +1,0 @@
----
-name: Dancing Outdoor Activities
----

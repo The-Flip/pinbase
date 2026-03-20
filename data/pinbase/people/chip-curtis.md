@@ -1,3 +1,0 @@
----
-name: Chip Curtis
----

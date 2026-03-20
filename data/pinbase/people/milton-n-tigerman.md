@@ -1,3 +1,0 @@
----
-name: Milton N. Tigerman
----

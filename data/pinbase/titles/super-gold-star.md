@@ -1,3 +1,0 @@
----
-name: Super Gold Star
----

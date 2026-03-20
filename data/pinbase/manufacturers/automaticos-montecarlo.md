@@ -1,3 +1,0 @@
----
-name: Automaticos MonteCarlo
----

@@ -1,3 +1,0 @@
----
-name: Salor, S.A
----

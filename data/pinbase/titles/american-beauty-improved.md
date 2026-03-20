@@ -1,3 +1,0 @@
----
-name: American Beauty (Improved)
----

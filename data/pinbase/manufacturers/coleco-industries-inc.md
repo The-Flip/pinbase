@@ -1,3 +1,0 @@
----
-name: Coleco Industries, Inc.
----

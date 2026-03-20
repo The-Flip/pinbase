@@ -1,3 +1,0 @@
----
-name: Keen Ball Jackpot
----

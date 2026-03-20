@@ -1,3 +1,0 @@
----
-name: Carlson Manufacturing Company
----

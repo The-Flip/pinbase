@@ -56,9 +56,5 @@ backend/staticfiles/
 backend/media/
 backend/cache/
 
-# DuckDB
-*.duckdb
-*.duckdb.wal
-
-# Data dumps (large source files, not committed)
+# Ingest sources (pulled from R2, not committed)
 data/ingest_sources/

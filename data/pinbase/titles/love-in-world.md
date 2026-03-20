@@ -1,3 +1,0 @@
----
-name: Love in World
----

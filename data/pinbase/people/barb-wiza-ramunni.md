@@ -1,3 +1,0 @@
----
-name: Barb Wiza Ramunni
----

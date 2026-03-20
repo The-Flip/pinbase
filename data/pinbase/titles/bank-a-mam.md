@@ -1,3 +1,0 @@
----
-name: Bank-A-Mam
----

@@ -1,3 +1,0 @@
----
-name: California Exhibit Company
----

@@ -1,3 +1,0 @@
----
-name: Camp Humor
----

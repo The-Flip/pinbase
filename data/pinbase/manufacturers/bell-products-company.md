@@ -1,3 +1,0 @@
----
-name: Bell Products Company
----

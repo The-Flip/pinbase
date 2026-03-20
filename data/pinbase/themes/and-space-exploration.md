@@ -1,3 +1,0 @@
----
-name: And Space Exploration
----

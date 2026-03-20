@@ -1,3 +1,0 @@
----
-name: Running Wild Jr.
----

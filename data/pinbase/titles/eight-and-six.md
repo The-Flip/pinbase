@@ -1,3 +1,0 @@
----
-name: Eight and Six
----

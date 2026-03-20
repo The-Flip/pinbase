@@ -1,3 +1,0 @@
----
-name: Alabama Crimson Tide
----

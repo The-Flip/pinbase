@@ -1,3 +1,0 @@
----
-name: Sun Valley
----

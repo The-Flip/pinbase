@@ -1,3 +1,0 @@
----
-name: Trick Shooter
----

@@ -1,3 +1,0 @@
----
-name: Screen Test
----

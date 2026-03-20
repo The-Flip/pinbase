@@ -1,7 +1,0 @@
----
-name: Boxing
-title_slug: boxing-2
-ipdb_id: 6834
-corporate_entity_slug: gamecol-animation-technology-co-ltd
-technology_generation_slug: solid-state
----

@@ -1,3 +1,0 @@
----
-name: Le grand Carrousel
----

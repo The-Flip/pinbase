@@ -1,3 +1,0 @@
----
-name: Empire Novelty Co.
----

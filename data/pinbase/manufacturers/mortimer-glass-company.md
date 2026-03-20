@@ -1,3 +1,0 @@
----
-name: Mortimer Glass Company
----

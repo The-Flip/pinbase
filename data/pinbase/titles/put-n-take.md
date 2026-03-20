@@ -1,3 +1,0 @@
----
-name: Put 'N' Take
----

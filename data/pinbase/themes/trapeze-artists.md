@@ -1,3 +1,0 @@
----
-name: Trapeze Artists
----

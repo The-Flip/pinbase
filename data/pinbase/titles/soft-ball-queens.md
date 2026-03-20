@@ -1,3 +1,0 @@
----
-name: Soft-Ball Queens
----

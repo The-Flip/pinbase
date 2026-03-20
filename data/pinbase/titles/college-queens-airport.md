@@ -1,4 +1,0 @@
----
-name: College Queens / Airport
-opdb_group_id: GrOQ1
----

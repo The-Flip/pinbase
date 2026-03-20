@@ -1,3 +1,0 @@
----
-name: Majestic Moving Target
----

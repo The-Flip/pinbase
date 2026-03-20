@@ -1,3 +1,0 @@
----
-name: Right or Else
----

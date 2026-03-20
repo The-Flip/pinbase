@@ -1,3 +1,0 @@
----
-name: Silver-Marshall, Incorporated
----

@@ -1,3 +1,0 @@
----
-name: Lincoln Manufacturing Company
----

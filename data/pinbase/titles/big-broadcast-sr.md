@@ -1,3 +1,0 @@
----
-name: Big Broadcast (Sr)
----

@@ -1,3 +1,0 @@
----
-name: Jeanine Mitchell
----

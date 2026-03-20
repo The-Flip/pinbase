@@ -1,3 +1,0 @@
----
-name: Cocktail Tray Bagatelle
----

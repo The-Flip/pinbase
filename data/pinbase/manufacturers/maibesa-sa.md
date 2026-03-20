@@ -1,3 +1,0 @@
----
-name: Maibesa, S.A.
----

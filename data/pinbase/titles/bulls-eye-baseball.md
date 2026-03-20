@@ -1,3 +1,0 @@
----
-name: Bulls Eye Baseball
----

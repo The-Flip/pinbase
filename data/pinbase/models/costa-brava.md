@@ -1,8 +1,0 @@
----
-name: Costa Brava
-title_slug: costa-brava
-ipdb_id: 5740
-corporate_entity_slug: iberomatic-sa
-player_count: 1
-technology_generation_slug: electromechanical
----

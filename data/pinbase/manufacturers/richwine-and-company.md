@@ -1,3 +1,0 @@
----
-name: Richwine and Company
----

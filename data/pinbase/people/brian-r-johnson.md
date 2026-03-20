@@ -1,3 +1,0 @@
----
-name: Brian R. Johnson
----

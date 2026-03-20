@@ -1,3 +1,0 @@
----
-name: Far Out
----

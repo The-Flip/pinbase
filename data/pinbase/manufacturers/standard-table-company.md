@@ -1,3 +1,0 @@
----
-name: Standard Table Company
----

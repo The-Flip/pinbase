@@ -1,3 +1,0 @@
----
-name: Lundick Mfg., Inc.
----

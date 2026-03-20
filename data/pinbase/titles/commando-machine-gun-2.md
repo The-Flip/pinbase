@@ -1,3 +1,0 @@
----
-name: Commando Machine Gun
----

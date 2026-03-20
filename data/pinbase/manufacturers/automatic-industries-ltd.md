@@ -1,3 +1,0 @@
----
-name: Automatic Industries, Ltd.
----

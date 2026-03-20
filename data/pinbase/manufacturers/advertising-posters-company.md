@@ -1,3 +1,0 @@
----
-name: Advertising Posters Company
----

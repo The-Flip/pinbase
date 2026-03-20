@@ -1,3 +1,0 @@
----
-name: DeLo Specialty Co.
----

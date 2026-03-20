@@ -1,3 +1,0 @@
----
-name: Kenneth C. Shyvers
----

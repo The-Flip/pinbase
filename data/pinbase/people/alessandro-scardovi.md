@@ -1,3 +1,0 @@
----
-name: Alessandro Scardovi
----

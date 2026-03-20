@@ -1,3 +1,0 @@
----
-name: Play a Hand
----

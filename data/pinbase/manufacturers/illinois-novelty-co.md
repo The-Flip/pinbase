@@ -1,3 +1,0 @@
----
-name: Illinois Novelty Co.
----

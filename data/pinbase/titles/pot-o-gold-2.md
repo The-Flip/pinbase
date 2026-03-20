@@ -1,3 +1,0 @@
----
-name: Pot-O-Gold
----

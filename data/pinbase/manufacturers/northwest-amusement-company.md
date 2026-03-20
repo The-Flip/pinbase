@@ -1,3 +1,0 @@
----
-name: Northwest Amusement Company
----

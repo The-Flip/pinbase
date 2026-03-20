@@ -1,3 +1,0 @@
----
-name: VIFICO S.A.
----

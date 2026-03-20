@@ -1,8 +1,0 @@
----
-name: Rallye
-title_slug: rallye
-ipdb_id: 6881
-corporate_entity_slug: magister
-player_count: 1
-technology_generation_slug: pure-mechanical
----

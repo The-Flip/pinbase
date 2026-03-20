@@ -1,3 +1,0 @@
----
-name: Strikes N' Spares
----

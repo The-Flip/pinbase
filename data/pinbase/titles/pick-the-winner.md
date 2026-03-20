@@ -1,3 +1,0 @@
----
-name: Pick the Winner
----

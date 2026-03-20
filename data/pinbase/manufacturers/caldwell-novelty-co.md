@@ -1,3 +1,0 @@
----
-name: Caldwell Novelty Co.
----

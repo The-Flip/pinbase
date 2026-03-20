@@ -1,3 +1,0 @@
----
-name: Three Point
----

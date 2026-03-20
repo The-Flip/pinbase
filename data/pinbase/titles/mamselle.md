@@ -1,3 +1,0 @@
----
-name: Mam'selle
----

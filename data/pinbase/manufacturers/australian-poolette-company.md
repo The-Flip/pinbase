@@ -1,3 +1,0 @@
----
-name: Australian Poolette Company
----

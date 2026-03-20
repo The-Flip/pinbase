@@ -1,3 +1,0 @@
----
-name: Dale Six Shooter
----

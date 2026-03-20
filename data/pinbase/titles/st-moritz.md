@@ -1,3 +1,0 @@
----
-name: St. Moritz
----

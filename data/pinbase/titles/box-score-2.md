@@ -1,3 +1,0 @@
----
-name: Box Score
----

@@ -1,3 +1,0 @@
----
-name: Shangri-La
----

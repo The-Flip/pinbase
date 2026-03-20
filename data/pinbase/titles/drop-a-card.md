@@ -1,3 +1,0 @@
----
-name: Drop-A-Card
----

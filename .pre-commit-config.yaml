@@ -35,13 +35,13 @@ repos:
         entry: npx prettier@3.8.1 --check
         language: system
         types: [markdown]
-        exclude: ^(CLAUDE|AGENTS)\.md$|^data/pinbase/
+        exclude: ^(CLAUDE|AGENTS)\.md$
       - id: markdownlint-cli2
         name: markdownlint-cli2
         entry: npx markdownlint-cli2@0.21.0
         language: system
         types: [markdown]
-        exclude: ^(CLAUDE|AGENTS)\.md$|^data/pinbase/
+        exclude: ^(CLAUDE|AGENTS)\.md$
       # Python (backend) — use project's ruff via uv so pre-commit and CI
       # always run the identical binary (avoids platform formatting drift).
       # pass_filenames: false so ruff checks all backend files every time,
@@ -72,15 +72,6 @@ repos:
         entry: scripts/check_agent_docs_edit.sh
         language: script
         files: ^(CLAUDE|AGENTS)\.md$
-        pass_filenames: false
-
-      # Validate data/*.json against schemas
-      - id: check-data-schemas
-        name: validate data JSON schemas
-        entry: scripts/check_data_schemas.sh
-        language: script
-        files: ^data/
-        exclude: ^data/(schemas/|ingest_sources/|explore/)
         pass_filenames: false
 
       # Frontend lint + type check

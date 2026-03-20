@@ -1,3 +1,0 @@
----
-name: Binks Industries, Inc.
----

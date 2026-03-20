@@ -1,3 +1,0 @@
----
-name: Rand Paulin
----

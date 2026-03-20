@@ -1,3 +1,0 @@
----
-name: O.K. Twins
----

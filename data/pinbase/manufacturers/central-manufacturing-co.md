@@ -1,3 +1,0 @@
----
-name: Central Manufacturing Co.
----

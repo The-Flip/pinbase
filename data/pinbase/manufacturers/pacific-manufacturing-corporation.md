@@ -1,3 +1,0 @@
----
-name: Pacific Manufacturing Corporation
----

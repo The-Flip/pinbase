@@ -1,3 +1,0 @@
----
-name: Turf King
----

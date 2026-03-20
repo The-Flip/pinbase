@@ -1,3 +1,0 @@
----
-name: Texas Novelty Company
----

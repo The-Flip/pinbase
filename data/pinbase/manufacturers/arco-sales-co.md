@@ -1,3 +1,0 @@
----
-name: Arco Sales Co.
----

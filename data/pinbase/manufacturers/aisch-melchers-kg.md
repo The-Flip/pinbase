@@ -1,3 +1,0 @@
----
-name: Aisch & Melchers KG
----

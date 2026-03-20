@@ -1,3 +1,0 @@
----
-name: Art Deco
----

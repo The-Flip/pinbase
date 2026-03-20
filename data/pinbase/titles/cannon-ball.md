@@ -1,3 +1,0 @@
----
-name: Cannon Ball
----

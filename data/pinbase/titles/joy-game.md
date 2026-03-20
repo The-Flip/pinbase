@@ -1,3 +1,0 @@
----
-name: Joy Game
----

@@ -1,3 +1,0 @@
----
-name: Strat-O-Liner
----

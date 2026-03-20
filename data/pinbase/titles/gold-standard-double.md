@@ -1,3 +1,0 @@
----
-name: Gold Standard Double
----

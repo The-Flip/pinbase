@@ -1,3 +1,0 @@
----
-name: Tri-A-Lite
----

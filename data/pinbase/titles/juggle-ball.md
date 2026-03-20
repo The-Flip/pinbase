@@ -1,3 +1,0 @@
----
-name: Juggle Ball
----

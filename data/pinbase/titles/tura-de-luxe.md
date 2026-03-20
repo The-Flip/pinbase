@@ -1,3 +1,0 @@
----
-name: Tura De Luxe
----

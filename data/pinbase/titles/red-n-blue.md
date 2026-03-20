@@ -1,3 +1,0 @@
----
-name: Red 'n Blue
----

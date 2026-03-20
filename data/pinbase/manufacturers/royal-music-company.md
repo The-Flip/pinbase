@@ -1,3 +1,0 @@
----
-name: Royal Music Company
----

@@ -1,3 +1,0 @@
----
-name: Tv Game Show
----

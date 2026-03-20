@@ -1,3 +1,0 @@
----
-name: Cigarette Pin Game
----

@@ -1,3 +1,0 @@
----
-name: Todd Farris
----

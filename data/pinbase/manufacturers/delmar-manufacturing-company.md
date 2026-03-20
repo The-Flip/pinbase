@@ -1,3 +1,0 @@
----
-name: Delmar Manufacturing Company
----

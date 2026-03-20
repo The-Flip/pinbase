@@ -1,3 +1,0 @@
----
-name: Silver Dollar Saloon
----

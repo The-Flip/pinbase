@@ -1,3 +1,0 @@
----
-name: Provence Golf Azur
----

@@ -1,3 +1,0 @@
----
-name: Butler Specialty Company
----

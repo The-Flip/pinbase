@@ -1,3 +1,0 @@
----
-name: Chicago Vending Company
----

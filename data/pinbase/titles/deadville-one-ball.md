@@ -1,3 +1,0 @@
----
-name: Deadville One Ball
----

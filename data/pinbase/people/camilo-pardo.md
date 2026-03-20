@@ -1,3 +1,0 @@
----
-name: Camilo Pardo
----

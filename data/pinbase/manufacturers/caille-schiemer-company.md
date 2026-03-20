@@ -1,3 +1,0 @@
----
-name: Caille-Schiemer Company
----

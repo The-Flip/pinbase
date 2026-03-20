@@ -1,3 +1,0 @@
----
-name: Charlie Emery
----

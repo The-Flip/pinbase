@@ -1,3 +1,0 @@
----
-name: Donald E Hooker
----

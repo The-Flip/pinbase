@@ -1,3 +1,0 @@
----
-name: Carrohart Specialty Company
----

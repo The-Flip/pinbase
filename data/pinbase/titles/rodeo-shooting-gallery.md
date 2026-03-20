@@ -1,3 +1,0 @@
----
-name: Rodeo Shooting Gallery
----

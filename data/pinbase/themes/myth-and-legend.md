@@ -1,3 +1,0 @@
----
-name: Myth And Legend
----

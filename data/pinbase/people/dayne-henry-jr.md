@@ -1,3 +1,0 @@
----
-name: Dayne Henry Jr.
----

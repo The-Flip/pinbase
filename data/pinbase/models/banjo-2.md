@@ -1,9 +1,0 @@
----
-name: Banjo
-title_slug: banjo-2
-ipdb_id: 2897
-corporate_entity_slug: buckley-manufacturing-company
-year: 1936
-player_count: 1
-technology_generation_slug: electromechanical
----

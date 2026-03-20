@@ -1,3 +1,0 @@
----
-name: Timothy T.
----

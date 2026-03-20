@@ -1,3 +1,0 @@
----
-name: Osbrink Games Company
----

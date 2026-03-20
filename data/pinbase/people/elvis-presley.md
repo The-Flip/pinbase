@@ -1,3 +1,0 @@
----
-name: Elvis Presley
----

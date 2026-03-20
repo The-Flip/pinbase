@@ -1,3 +1,0 @@
----
-name: Habilin-Snooker
----

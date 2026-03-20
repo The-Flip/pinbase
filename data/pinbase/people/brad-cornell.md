@@ -1,3 +1,0 @@
----
-name: Brad Cornell
----

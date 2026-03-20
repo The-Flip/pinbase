@@ -1,3 +1,0 @@
----
-name: Artistic Novelty Works
----

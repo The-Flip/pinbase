@@ -1,3 +1,0 @@
----
-name: Just-Rite Monarch
----

@@ -1,3 +1,0 @@
----
-name: Roll-O Company
----

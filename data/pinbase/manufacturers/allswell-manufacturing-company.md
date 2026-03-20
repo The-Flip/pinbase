@@ -1,3 +1,0 @@
----
-name: Allswell Manufacturing Company
----

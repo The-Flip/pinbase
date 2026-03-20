@@ -1,3 +1,0 @@
----
-name: Zoo Park MariSali
----

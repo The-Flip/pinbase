@@ -1,3 +1,0 @@
----
-name: Bing Bang Game
----

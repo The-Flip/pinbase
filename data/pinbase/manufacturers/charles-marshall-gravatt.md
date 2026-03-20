@@ -1,3 +1,0 @@
----
-name: Charles Marshall Gravatt
----

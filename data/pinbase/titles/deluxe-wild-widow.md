@@ -1,3 +1,0 @@
----
-name: Deluxe Wild Widow
----

@@ -1,3 +1,0 @@
----
-name: Southland Engineering, Incorporated
----

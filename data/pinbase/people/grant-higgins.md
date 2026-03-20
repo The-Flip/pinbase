@@ -1,3 +1,0 @@
----
-name: Grant Higgins
----

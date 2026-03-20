@@ -1,3 +1,0 @@
----
-name: Culp Products Company
----

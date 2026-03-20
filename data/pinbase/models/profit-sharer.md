@@ -1,8 +1,0 @@
----
-name: Profit Sharer
-title_slug: profit-sharer
-ipdb_id: 6256
-corporate_entity_slug: electra-mfg-co
-year: 1932
-technology_generation_slug: pure-mechanical
----

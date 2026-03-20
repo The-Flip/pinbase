@@ -1,3 +1,0 @@
----
-name: Man-O-War
----

@@ -1,9 +1,0 @@
----
-name: Whifflette
-title_slug: whifflette
-ipdb_id: 5264
-corporate_entity_slug: automatic-industries-incorporated
-year: 1932
-player_count: 1
-technology_generation_slug: pure-mechanical
----

@@ -1,3 +1,0 @@
----
-name: Rube Gross & Company
----

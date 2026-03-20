@@ -1,3 +1,0 @@
----
-name: Go Cart Racing
----

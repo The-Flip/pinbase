@@ -1,3 +1,0 @@
----
-name: Bat-A-Ball
----

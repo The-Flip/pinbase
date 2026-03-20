@@ -1,3 +1,0 @@
----
-name: Race Day
----

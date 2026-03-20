@@ -1,3 +1,0 @@
----
-name: Six-Sixty-Six
----

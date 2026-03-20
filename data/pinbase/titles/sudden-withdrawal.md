@@ -1,3 +1,0 @@
----
-name: Sudden Withdrawal
----

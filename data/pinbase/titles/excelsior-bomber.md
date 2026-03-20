@@ -1,3 +1,0 @@
----
-name: Excelsior Bomber
----

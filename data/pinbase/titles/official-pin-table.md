@@ -1,3 +1,0 @@
----
-name: Official (Pin Table)
----

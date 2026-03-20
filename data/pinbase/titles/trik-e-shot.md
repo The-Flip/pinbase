@@ -1,3 +1,0 @@
----
-name: Trik-E-Shot
----

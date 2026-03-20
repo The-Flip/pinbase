@@ -1,3 +1,0 @@
----
-name: Irons and Woods
----

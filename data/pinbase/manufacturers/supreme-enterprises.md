@@ -1,3 +1,0 @@
----
-name: Supreme Enterprises
----

@@ -1,3 +1,0 @@
----
-name: Ye-Ye Club
----

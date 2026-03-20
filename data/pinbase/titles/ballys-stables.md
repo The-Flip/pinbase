@@ -1,3 +1,0 @@
----
-name: Bally's Stables
----

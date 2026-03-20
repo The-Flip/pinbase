@@ -1,3 +1,0 @@
----
-name: Son of Fireball
----

@@ -1,3 +1,0 @@
----
-name: Precision Automatics, Ltd.
----

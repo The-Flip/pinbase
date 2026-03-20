@@ -1,3 +1,0 @@
----
-name: Deluxe Special Baseball
----

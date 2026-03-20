@@ -1,3 +1,0 @@
----
-name: Ted Zale
----

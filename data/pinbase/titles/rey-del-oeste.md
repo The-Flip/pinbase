@@ -1,3 +1,0 @@
----
-name: Rey del Oeste
----

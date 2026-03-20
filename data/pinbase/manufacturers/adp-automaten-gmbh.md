@@ -1,3 +1,0 @@
----
-name: ADP Automaten GmbH
----

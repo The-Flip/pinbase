@@ -1,3 +1,0 @@
----
-name: Bookmaker's
----

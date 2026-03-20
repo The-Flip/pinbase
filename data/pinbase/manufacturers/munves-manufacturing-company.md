@@ -1,3 +1,0 @@
----
-name: Munves Manufacturing Company
----

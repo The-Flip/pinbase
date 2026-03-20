@@ -1,3 +1,0 @@
----
-name: Gillispie Games Company
----

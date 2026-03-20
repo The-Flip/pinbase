@@ -1,3 +1,0 @@
----
-name: Bonzini et Sopransi
----

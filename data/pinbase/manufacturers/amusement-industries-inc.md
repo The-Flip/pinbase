@@ -1,3 +1,0 @@
----
-name: Amusement Industries, Inc.
----

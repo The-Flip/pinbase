@@ -1,3 +1,0 @@
----
-name: Bacardi Cuba Libre
----

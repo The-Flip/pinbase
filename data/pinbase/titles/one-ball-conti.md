@@ -1,3 +1,0 @@
----
-name: One Ball Conti
----

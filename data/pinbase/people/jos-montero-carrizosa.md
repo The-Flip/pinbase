@@ -1,3 +1,0 @@
----
-name: Jos� Montero Carrizosa
----

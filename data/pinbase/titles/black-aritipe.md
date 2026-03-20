@@ -1,3 +1,0 @@
----
-name: Black Aritipe?
----

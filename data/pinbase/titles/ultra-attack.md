@@ -1,3 +1,0 @@
----
-name: Ultra Attack (ウルトラアタック)
----

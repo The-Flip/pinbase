@@ -1,3 +1,0 @@
----
-name: Whir-Pool Jr.
----

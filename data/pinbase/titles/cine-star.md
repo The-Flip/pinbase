@@ -1,3 +1,0 @@
----
-name: Cine Star
----

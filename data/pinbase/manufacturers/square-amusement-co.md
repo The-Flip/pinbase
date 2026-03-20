@@ -1,3 +1,0 @@
----
-name: Square Amusement Co.
----

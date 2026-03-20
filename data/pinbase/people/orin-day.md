@@ -1,3 +1,0 @@
----
-name: Orin Day
----

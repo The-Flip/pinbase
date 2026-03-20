@@ -1,3 +1,0 @@
----
-name: Richard Ditton
----

@@ -1,3 +1,0 @@
----
-name: Rocket III (Italy)
----

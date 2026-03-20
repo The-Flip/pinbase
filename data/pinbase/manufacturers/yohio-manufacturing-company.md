@@ -1,3 +1,0 @@
----
-name: Yohio Manufacturing Company
----

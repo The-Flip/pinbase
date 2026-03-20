@@ -1,3 +1,0 @@
----
-name: Clinton Berle Allen
----

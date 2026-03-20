@@ -1,8 +1,0 @@
----
-name: Africa Queen
-title_slug: africa-queen
-ipdb_id: 5114
-corporate_entity_slug: europlay
-player_count: 1
-technology_generation_slug: electromechanical
----

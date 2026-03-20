@@ -1,3 +1,0 @@
----
-name: Edward Tomaszewski
----

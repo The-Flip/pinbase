@@ -1,3 +1,0 @@
----
-name: Bow and Arrow
----

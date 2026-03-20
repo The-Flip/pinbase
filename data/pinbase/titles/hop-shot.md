@@ -1,3 +1,0 @@
----
-name: Hop Shot
----

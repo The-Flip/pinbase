@@ -1,9 +1,0 @@
----
-name: Midnight Marauders
-title_slug: midnight-marauders
-ipdb_id: 6498
-corporate_entity_slug: bally-midway-manufacturing-company
-year: 1984
-player_count: 1
-technology_generation_slug: solid-state
----

@@ -1,3 +1,0 @@
----
-name: Wheel of Fortune
----

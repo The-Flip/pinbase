@@ -1,3 +1,0 @@
----
-name: Katie Gyarmaty
----

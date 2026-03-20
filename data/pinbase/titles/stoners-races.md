@@ -1,3 +1,0 @@
----
-name: Stoner's Races
----

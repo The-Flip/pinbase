@@ -1,3 +1,0 @@
----
-name: Keen-A-Ball
----

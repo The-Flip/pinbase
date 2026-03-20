@@ -1,3 +1,0 @@
----
-name: Roly Poly
----

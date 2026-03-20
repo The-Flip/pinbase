@@ -1,3 +1,0 @@
----
-name: Bubbles Pop
----

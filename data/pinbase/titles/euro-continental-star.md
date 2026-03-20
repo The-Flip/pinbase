@@ -1,3 +1,0 @@
----
-name: Euro Continental Star
----

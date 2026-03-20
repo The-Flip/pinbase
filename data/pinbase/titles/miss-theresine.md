@@ -1,3 +1,0 @@
----
-name: Miss Theresine
----

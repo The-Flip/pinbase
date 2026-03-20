@@ -1,3 +1,0 @@
----
-name: Kozak Specialty Company
----

@@ -1,3 +1,0 @@
----
-name: Chain-A-Light
----

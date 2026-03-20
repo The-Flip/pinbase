@@ -1,3 +1,0 @@
----
-name: Zingy Bingy
----

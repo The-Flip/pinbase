@@ -1,3 +1,0 @@
----
-name: Outer Space Fantasy
----

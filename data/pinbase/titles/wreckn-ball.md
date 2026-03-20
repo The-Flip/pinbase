@@ -1,3 +1,0 @@
----
-name: Wreck'n Ball
----

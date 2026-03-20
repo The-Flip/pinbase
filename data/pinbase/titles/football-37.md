@@ -1,3 +1,0 @@
----
-name: Football '37
----

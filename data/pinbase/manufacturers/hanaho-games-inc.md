@@ -1,3 +1,0 @@
----
-name: HanaHo Games, Inc.
----

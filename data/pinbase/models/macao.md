@@ -1,9 +1,0 @@
----
-name: Macao
-title_slug: macao
-ipdb_id: 3966
-corporate_entity_slug: elettrocoin
-year: 1968
-player_count: 1
-technology_generation_slug: electromechanical
----

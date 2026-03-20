@@ -1,3 +1,0 @@
----
-name: Wizard Ball Game
----

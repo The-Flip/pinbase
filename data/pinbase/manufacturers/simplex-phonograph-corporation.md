@@ -1,3 +1,0 @@
----
-name: Simplex Phonograph Corporation
----

@@ -78,7 +78,7 @@ def _winning_claims(content_type, field_name: str) -> list[Claim]:
 
 # Default location for golden records. Overridden in tests via monkeypatch.
 GOLDEN_RECORDS_PATH = (
-    Path(__file__).resolve().parents[5] / "data" / "golden_records.json"
+    Path(__file__).resolve().parents[2] / "fixtures" / "golden_records.json"
 )
 
 

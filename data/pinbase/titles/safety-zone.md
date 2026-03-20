@@ -1,3 +1,0 @@
----
-name: Safety Zone
----

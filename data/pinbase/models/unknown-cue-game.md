@@ -1,8 +1,0 @@
----
-name: Unknown (Cue Game)
-title_slug: unknown-cue-game
-ipdb_id: 6779
-corporate_entity_slug: sams-brothers-ltd
-player_count: 2
-technology_generation_slug: electromechanical
----

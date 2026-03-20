@@ -1,3 +1,0 @@
----
-name: Gianni Maccagnani
----

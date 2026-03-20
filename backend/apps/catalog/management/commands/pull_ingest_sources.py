@@ -1,7 +1,8 @@
 """Download ingest source files from Cloudflare R2.
 
 Uses only stdlib (urllib.request) so it works on Railway's slim Python image.
-Fetches manifest.json, then downloads files whose size or SHA-256 don't match.
+Fetches manifest.json, then downloads only the files needed by the ingest
+pipeline (IPDB, OPDB, and pinbase_export/).
 
 Usage (local):
     uv run python manage.py pull_ingest_sources --dest ../data/ingest_sources
@@ -21,6 +22,14 @@ from django.core.management.base import BaseCommand
 
 _OPENER = urllib.request.build_opener()
 _OPENER.addheaders = [("User-Agent", "pinbase/1.0")]
+
+# Only download files the ingest pipeline needs.
+_NEEDED_FILES = {
+    "ipdb_xantari.json",
+    "opdb_export_machines.json",
+    "opdb_changelog.json",
+}
+_NEEDED_PREFIXES = ("pinbase_export/",)
 
 
 def _urlopen(url: str):
@@ -64,9 +73,16 @@ class Command(BaseCommand):
 
         downloaded = 0
         skipped = 0
+        ignored = 0
 
         for entry in manifest:
             rel_path = entry["path"]
+
+            if rel_path not in _NEEDED_FILES and not rel_path.startswith(
+                _NEEDED_PREFIXES
+            ):
+                ignored += 1
+                continue
             expected_size = entry["size"]
             expected_sha = entry["sha256"]
             local_path = os.path.join(dest, rel_path)
@@ -96,5 +112,7 @@ class Command(BaseCommand):
             downloaded += 1
 
         self.stdout.write(
-            self.style.SUCCESS(f"Done. {downloaded} downloaded, {skipped} up-to-date.")
+            self.style.SUCCESS(
+                f"Done. {downloaded} downloaded, {skipped} up-to-date, {ignored} skipped."
+            )
         )

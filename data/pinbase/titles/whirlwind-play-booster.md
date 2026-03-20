@@ -1,3 +1,0 @@
----
-name: Whirlwind Play Booster
----

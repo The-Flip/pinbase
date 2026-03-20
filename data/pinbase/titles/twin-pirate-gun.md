@@ -1,3 +1,0 @@
----
-name: Twin Pirate Gun
----

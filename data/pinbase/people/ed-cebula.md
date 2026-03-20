@@ -1,3 +1,0 @@
----
-name: Ed Cebula
----

@@ -1,3 +1,0 @@
----
-name: Gran Parada
----

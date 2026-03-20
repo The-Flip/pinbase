@@ -1,3 +1,0 @@
----
-name: Sams Bros Ltd
----

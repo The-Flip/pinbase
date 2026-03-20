@@ -1,3 +1,0 @@
----
-name: Shuffle Pool Rotation
----

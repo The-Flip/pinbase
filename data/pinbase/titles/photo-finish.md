@@ -1,3 +1,0 @@
----
-name: Photo Finish
----

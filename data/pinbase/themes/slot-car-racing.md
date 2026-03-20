@@ -1,3 +1,0 @@
----
-name: Slot Car Racing
----

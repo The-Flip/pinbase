@@ -1,3 +1,0 @@
----
-name: Ferris Wheels
----

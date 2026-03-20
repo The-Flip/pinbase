@@ -1,3 +1,0 @@
----
-name: Wild Horse Saloon
----

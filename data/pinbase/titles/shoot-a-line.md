@@ -1,3 +1,0 @@
----
-name: Shoot-A-Line
----

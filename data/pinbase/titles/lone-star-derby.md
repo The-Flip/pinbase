@@ -1,3 +1,0 @@
----
-name: Lone Star Derby
----

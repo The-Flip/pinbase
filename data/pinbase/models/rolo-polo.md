@@ -1,8 +1,0 @@
----
-name: Rolo-Polo
-title_slug: rolo-polo
-ipdb_id: 5786
-corporate_entity_slug: the-rolo-polo-company
-player_count: 1
-technology_generation_slug: pure-mechanical
----

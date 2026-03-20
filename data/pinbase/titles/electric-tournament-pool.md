@@ -1,3 +1,0 @@
----
-name: Electric Tournament Pool
----

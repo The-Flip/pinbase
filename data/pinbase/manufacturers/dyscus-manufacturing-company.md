@@ -1,3 +1,0 @@
----
-name: Dyscus Manufacturing Company
----

@@ -1,3 +1,0 @@
----
-name: Ticket Tac Toe
----

@@ -1,3 +1,0 @@
----
-name: Continental Top Game
----

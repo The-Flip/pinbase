@@ -1,3 +1,0 @@
----
-name: Boop-A-Doop
----

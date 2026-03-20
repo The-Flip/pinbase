@@ -1,3 +1,0 @@
----
-name: Ske-Dad-Del
----

@@ -1,3 +1,0 @@
----
-name: The Ball Fan
----

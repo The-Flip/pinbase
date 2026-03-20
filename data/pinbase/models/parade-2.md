@@ -1,6 +1,0 @@
----
-name: Parade
-title_slug: parade-2
-ipdb_id: 5353
-corporate_entity_slug: advertising-posters-company
----

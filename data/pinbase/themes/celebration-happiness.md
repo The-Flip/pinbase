@@ -1,3 +1,0 @@
----
-name: Celebration Happiness
----

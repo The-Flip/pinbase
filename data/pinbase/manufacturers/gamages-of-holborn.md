@@ -1,3 +1,0 @@
----
-name: Gamages of Holborn
----

@@ -1,3 +1,0 @@
----
-name: Deluxe Red Arrow
----

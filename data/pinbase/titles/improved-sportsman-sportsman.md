@@ -1,3 +1,0 @@
----
-name: Improved Sportsman ("Sportsman")
----

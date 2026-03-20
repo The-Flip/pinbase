@@ -1,3 +1,0 @@
----
-name: Van-Scho Corp
----

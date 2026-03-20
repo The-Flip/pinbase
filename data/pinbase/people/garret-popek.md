@@ -1,3 +1,0 @@
----
-name: Garret Popek
----

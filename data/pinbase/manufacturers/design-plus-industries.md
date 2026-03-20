@@ -1,3 +1,0 @@
----
-name: Design Plus Industries
----

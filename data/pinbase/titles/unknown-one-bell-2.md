@@ -1,3 +1,0 @@
----
-name: Unknown ("One Bell")
----

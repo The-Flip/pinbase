@@ -1,3 +1,0 @@
----
-name: Witzig's Limited
----

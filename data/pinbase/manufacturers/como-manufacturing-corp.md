@@ -1,3 +1,0 @@
----
-name: Como Manufacturing Corp.
----

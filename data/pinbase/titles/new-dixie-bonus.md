@@ -1,3 +1,0 @@
----
-name: New Dixie Bonus
----

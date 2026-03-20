@@ -1,3 +1,0 @@
----
-name: Johnson and Johnson
----

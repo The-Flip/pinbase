@@ -1,3 +1,0 @@
----
-name: ALIEN (Standard Version)
----

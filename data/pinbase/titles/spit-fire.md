@@ -1,3 +1,0 @@
----
-name: Spit Fire
----

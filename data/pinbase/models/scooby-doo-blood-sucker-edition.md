@@ -1,9 +1,0 @@
----
-name: Scooby-Doo (Blood Sucker Edition)
-title_slug: scooby-doo
-opdb_id: GllPz-MBRrV-ARZo2
-corporate_entity_slug: spooky-pinball-llc
-year: 2023
-month: 2
-variant_of: scooby-doo-standard-edition
----

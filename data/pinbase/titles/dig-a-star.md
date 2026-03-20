@@ -1,3 +1,0 @@
----
-name: Dig-A-Star
----

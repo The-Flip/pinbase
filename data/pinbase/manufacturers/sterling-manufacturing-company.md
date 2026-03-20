@@ -1,3 +1,0 @@
----
-name: Sterling Manufacturing Company
----

@@ -1,3 +1,0 @@
----
-name: Sportsman (Non-payout)
----

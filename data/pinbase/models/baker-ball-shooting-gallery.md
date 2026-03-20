@@ -1,8 +1,0 @@
----
-name: Baker Ball Shooting Gallery
-title_slug: baker-ball-shooting-gallery
-ipdb_id: 6654
-corporate_entity_slug: baker-amusement-machine-co
-player_count: 1
-technology_generation_slug: electromechanical
----

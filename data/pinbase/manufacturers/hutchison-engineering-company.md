@@ -1,3 +1,0 @@
----
-name: Hutchison Engineering Company
----

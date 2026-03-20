@@ -1,3 +1,0 @@
----
-name: Vee-A-Lite
----

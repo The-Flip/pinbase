@@ -1,3 +1,0 @@
----
-name: Operators' Life Saver
----

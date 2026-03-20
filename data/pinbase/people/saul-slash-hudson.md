@@ -1,3 +1,0 @@
----
-name: Saul "Slash" Hudson
----

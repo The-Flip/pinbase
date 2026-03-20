@@ -1,3 +1,0 @@
----
-name: Tic Tac Toe
----

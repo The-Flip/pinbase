@@ -1,3 +1,0 @@
----
-name: French Can Can
----

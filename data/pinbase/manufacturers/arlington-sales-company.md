@@ -1,3 +1,0 @@
----
-name: Arlington Sales Company
----

@@ -1,3 +1,0 @@
----
-name: Les Deux As
----

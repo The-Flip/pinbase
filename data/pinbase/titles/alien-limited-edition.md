@@ -1,3 +1,0 @@
----
-name: ALIEN Limited Edition
----

@@ -1,3 +1,0 @@
----
-name: Ace Is High
----

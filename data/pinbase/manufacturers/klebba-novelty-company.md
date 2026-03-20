@@ -1,3 +1,0 @@
----
-name: Klebba Novelty Company
----

@@ -1,3 +1,0 @@
----
-name: Phillips Electronics, Ltd.
----

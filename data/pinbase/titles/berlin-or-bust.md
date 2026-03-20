@@ -1,3 +1,0 @@
----
-name: Berlin Or Bust
----

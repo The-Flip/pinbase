@@ -1,3 +1,0 @@
----
-name: United Specialty Company
----

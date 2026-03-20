@@ -1,3 +1,0 @@
----
-name: Treff Automaten
----

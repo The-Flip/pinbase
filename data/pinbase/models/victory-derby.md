@@ -1,9 +1,0 @@
----
-name: Victory Derby
-title_slug: victory-derby
-ipdb_id: 2735
-corporate_entity_slug: bally-manufacturing-corporation
-year: 1946
-player_count: 1
-technology_generation_slug: electromechanical
----

@@ -1,3 +1,0 @@
----
-name: Bump-A-Lite
----

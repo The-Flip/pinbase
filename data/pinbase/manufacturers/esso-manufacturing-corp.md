@@ -1,3 +1,0 @@
----
-name: Esso Manufacturing Corp.
----

@@ -1,8 +1,0 @@
----
-name: Play the Joker
-title_slug: play-the-joker-2
-ipdb_id: 1820
-corporate_entity_slug: sterling-manufacturing-company
-year: 1932
-technology_generation_slug: pure-mechanical
----

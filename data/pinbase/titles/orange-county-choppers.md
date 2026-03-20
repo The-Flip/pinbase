@@ -1,3 +1,0 @@
----
-name: Orange County Choppers
----

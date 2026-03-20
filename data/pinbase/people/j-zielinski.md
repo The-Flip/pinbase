@@ -1,3 +1,0 @@
----
-name: J. Zielinski
----

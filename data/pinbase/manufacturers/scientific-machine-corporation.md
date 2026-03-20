@@ -1,3 +1,0 @@
----
-name: Scientific Machine Corporation
----

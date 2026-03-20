@@ -1,3 +1,0 @@
----
-name: Niemer S.A.
----

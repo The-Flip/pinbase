@@ -1,3 +1,0 @@
----
-name: Irving Bromberg Company
----

@@ -1,3 +1,0 @@
----
-name: Acorn Vending Company
----

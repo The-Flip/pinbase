@@ -1,9 +1,0 @@
----
-name: TV Flipper
-title_slug: tv-flipper
-ipdb_id: 6547
-corporate_entity_slug: midway-manufacturing-company
-year: 1975
-player_count: 2
-technology_generation_slug: solid-state
----

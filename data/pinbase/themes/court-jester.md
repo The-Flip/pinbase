@@ -1,3 +1,0 @@
----
-name: Court Jester
----

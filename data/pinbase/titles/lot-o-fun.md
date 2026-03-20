@@ -1,3 +1,0 @@
----
-name: Lot-O-Fun
----

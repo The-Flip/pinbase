@@ -1,3 +1,0 @@
----
-name: Rally Montecarlo
----

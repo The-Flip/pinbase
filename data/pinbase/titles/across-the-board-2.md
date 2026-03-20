@@ -1,3 +1,0 @@
----
-name: Across the Board
----

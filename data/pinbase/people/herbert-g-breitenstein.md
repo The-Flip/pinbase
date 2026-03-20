@@ -1,3 +1,0 @@
----
-name: Herbert G. Breitenstein
----

@@ -1,3 +1,0 @@
----
-name: Yo-Ho (Junior)
----

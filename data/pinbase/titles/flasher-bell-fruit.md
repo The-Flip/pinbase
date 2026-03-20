@@ -1,3 +1,0 @@
----
-name: Flasher (Bell Fruit)
----

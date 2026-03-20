@@ -1,3 +1,0 @@
----
-name: Unnamed Baseball Game
----

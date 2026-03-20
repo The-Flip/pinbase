@@ -1,3 +1,0 @@
----
-name: Spot A Ball
----

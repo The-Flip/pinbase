@@ -1,3 +1,0 @@
----
-name: Adolph A. Caille
----

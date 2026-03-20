@@ -1,3 +1,0 @@
----
-name: E. Grulet & Cie
----

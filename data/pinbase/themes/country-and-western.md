@@ -1,3 +1,0 @@
----
-name: Country And Western
----

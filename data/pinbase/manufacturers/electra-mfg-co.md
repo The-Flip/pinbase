@@ -1,3 +1,0 @@
----
-name: Electra Mfg. Co.
----

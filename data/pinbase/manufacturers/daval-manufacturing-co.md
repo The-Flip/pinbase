@@ -1,3 +1,0 @@
----
-name: Daval Manufacturing Co.
----

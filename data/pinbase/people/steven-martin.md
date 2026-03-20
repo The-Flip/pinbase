@@ -1,3 +1,0 @@
----
-name: Steven Martin
----

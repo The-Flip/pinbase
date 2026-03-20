@@ -1,3 +1,0 @@
----
-name: Hooey-Ball Jr.
----

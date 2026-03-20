@@ -1,9 +1,0 @@
----
-name: Crack Shot
-title_slug: crack-shot-2
-ipdb_id: 4289
-corporate_entity_slug: california-exhibit-company
-year: 1936
-month: 8
-technology_generation_slug: electromechanical
----

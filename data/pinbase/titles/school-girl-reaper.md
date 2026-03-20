@@ -1,3 +1,0 @@
----
-name: School Girl Reaper
----

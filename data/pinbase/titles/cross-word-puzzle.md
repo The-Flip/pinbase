@@ -1,3 +1,0 @@
----
-name: Cross Word Puzzle
----

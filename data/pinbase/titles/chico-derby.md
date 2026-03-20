@@ -1,3 +1,0 @@
----
-name: Chico Derby
----

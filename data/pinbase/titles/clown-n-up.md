@@ -1,3 +1,0 @@
----
-name: Clown-N-Up
----

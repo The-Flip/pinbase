@@ -1,3 +1,0 @@
----
-name: Golden Continental Turbo
----

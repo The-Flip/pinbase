@@ -1,3 +1,0 @@
----
-name: Len Vedeen
----

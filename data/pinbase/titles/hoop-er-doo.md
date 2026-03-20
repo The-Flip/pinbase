@@ -1,3 +1,0 @@
----
-name: Hoop-Er-Doo
----

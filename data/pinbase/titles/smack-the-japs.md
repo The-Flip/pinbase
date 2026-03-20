@@ -1,3 +1,0 @@
----
-name: Smack The Japs
----

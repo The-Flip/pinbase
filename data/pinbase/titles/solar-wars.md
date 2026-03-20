@@ -1,3 +1,0 @@
----
-name: Solar Wars
----

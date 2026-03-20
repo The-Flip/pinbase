@@ -1,3 +1,0 @@
----
-name: De-Ta Corporation
----

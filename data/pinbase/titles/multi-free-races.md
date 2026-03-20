@@ -1,3 +1,0 @@
----
-name: Multi-Free-Races
----

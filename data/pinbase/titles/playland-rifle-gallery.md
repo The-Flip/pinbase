@@ -1,3 +1,0 @@
----
-name: Playland Rifle Gallery
----

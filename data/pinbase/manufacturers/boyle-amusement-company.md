@@ -1,3 +1,0 @@
----
-name: Boyle Amusement Company
----

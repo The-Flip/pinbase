@@ -1,3 +1,0 @@
----
-name: Marble Games Company
----

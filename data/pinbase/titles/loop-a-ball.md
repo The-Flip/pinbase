@@ -1,3 +1,0 @@
----
-name: Loop-A-Ball
----

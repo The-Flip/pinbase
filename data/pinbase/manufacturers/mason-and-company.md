@@ -1,3 +1,0 @@
----
-name: Mason and Company
----

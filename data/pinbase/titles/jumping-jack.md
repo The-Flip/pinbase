@@ -1,3 +1,0 @@
----
-name: Jumping Jack
----

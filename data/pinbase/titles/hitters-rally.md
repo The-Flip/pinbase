@@ -1,3 +1,0 @@
----
-name: Hitter's Rally
----

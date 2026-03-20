@@ -1,3 +1,0 @@
----
-name: Stop and Go
----

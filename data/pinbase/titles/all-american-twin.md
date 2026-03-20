@@ -1,3 +1,0 @@
----
-name: All-American Twin
----

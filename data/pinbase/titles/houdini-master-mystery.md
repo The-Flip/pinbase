@@ -1,3 +1,0 @@
----
-name: Houdini "Master Mystery"
----

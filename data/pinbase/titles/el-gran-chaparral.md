@@ -1,3 +1,0 @@
----
-name: El Gran Chaparral
----

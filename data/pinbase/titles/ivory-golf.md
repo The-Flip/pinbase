@@ -1,3 +1,0 @@
----
-name: Ivory Golf
----

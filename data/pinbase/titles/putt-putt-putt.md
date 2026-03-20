@@ -1,3 +1,0 @@
----
-name: Putt-Putt-Putt
----
