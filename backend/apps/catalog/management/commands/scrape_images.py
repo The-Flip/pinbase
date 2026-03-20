@@ -62,9 +62,10 @@ MANUAL_IMAGES: dict[str, list[str]] = {
 
 def _has_images(extra_data: dict) -> bool:
     """Check if extra_data already contains usable image URLs."""
-    if extra_data.get("image_urls"):
-        return True
-    images = extra_data.get("images")
+    for key in ("image_urls", "ipdb.image_urls"):
+        if extra_data.get(key):
+            return True
+    images = extra_data.get("opdb.images")
     if images and isinstance(images, list):
         return True
     return False
