@@ -126,7 +126,10 @@ _NARRATIVE_FEATURE_PATTERNS: list[tuple[re.Pattern, str]] = [
 _PERIOD_UPPERCASE_RE = re.compile(r"\.(?=[A-Z])")
 
 # Regex for extracting "feature name (count)" from a segment.
-_COUNT_SEGMENT_RE = re.compile(r"^(.+?)\s*\(\d+.*\)$")
+# Requires a bare integer in parens — \(\d+\) — matching only "Flippers (2)",
+# not narrative like "(42 inches long...)" or "(5-ball mode)".
+# No $ anchor so trailing description text is ignored.
+_COUNT_SEGMENT_RE = re.compile(r"^(.+?)\s*\(\d+\)")
 
 
 def _extract_ipdb_gameplay_features(
@@ -137,10 +140,11 @@ def _extract_ipdb_gameplay_features(
     Uses a structured 4-step pipeline:
     1. Clean: strip prefix, normalize mojibake, insert comma before period+uppercase.
     2. Split: on comma or period+whitespace; strip preamble before colon.
-    3. Validate: quoted segments, segments with "feature", segments > 60 chars
-       are ingest-blocking (CommandError).
-    4. Parse + classify: only process segments matching "Feature (N)" count
-       pattern; look up in feature_map. Also apply _NARRATIVE_FEATURE_PATTERNS.
+    3. Parse: only process segments that contain a bare parenthesized integer,
+       i.e. matching _COUNT_SEGMENT_RE ("Feature (N)").  Narrative text and
+       segments with compound parens like "(5-ball mode)" are skipped.
+    4. Classify: look up extracted feature name in feature_map.
+       Also apply _NARRATIVE_FEATURE_PATTERNS to the full cleaned text.
 
     Returns (slugs, unmatched_terms).
     """
@@ -172,28 +176,9 @@ def _extract_ipdb_gameplay_features(
         if segment:
             segments.append(segment)
 
-    # Step 3 + 4: Validate then parse/classify.
+    # Step 3 + 4: Parse then classify.
     for segment in segments:
-        # Validation (ingest-blocking).
-        if (segment.startswith('"') and segment.endswith('"')) or (
-            segment.startswith("'") and segment.endswith("'")
-        ):
-            raise CommandError(
-                f"IPDB gameplay feature extraction: quoted segment found — "
-                f"extraction logic needs updating.\nSegment: {segment!r}\nRaw: {raw!r}"
-            )
-        if re.search(r"\bfeature\b", segment, re.IGNORECASE):
-            raise CommandError(
-                f"IPDB gameplay feature extraction: segment contains 'feature' — "
-                f"extraction logic needs updating.\nSegment: {segment!r}\nRaw: {raw!r}"
-            )
-        if len(segment) > 60:
-            raise CommandError(
-                f"IPDB gameplay feature extraction: segment longer than 60 chars — "
-                f"extraction logic needs updating.\nSegment: {segment!r}\nRaw: {raw!r}"
-            )
-
-        # Only process segments matching "Term (N)" count pattern.
+        # Only process segments with a bare parenthesized integer: "Term (N)".
         m = _COUNT_SEGMENT_RE.match(segment)
         if not m:
             continue

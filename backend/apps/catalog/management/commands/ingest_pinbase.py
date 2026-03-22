@@ -16,6 +16,7 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand, CommandError
@@ -113,6 +114,58 @@ TAXONOMY_REGISTRY = [
 ]
 
 
+def validate_cross_entity_wikilinks(export_dir: Path, stdout, stderr) -> None:
+    """Validate cross-entity [[type:slug]] wikilinks in all taxonomy descriptions.
+
+    Called by ingest_all after the full pipeline so all entities (manufacturers,
+    titles, systems) are in the DB.  Broken references are printed as warnings;
+    nothing is raised so a stale pindata link never aborts a completed ingest.
+    """
+    import json
+    import re
+
+    from django.apps import apps
+
+    linkable_models: dict[str, Any] = {}
+    for model in apps.get_models():
+        if hasattr(model, "link_url_pattern") and hasattr(model, "slug"):
+            link_type = getattr(
+                model,
+                "link_type_name",
+                model._meta.model_name.replace("_", "-"),
+            )
+            linkable_models[link_type] = model
+
+    pattern = re.compile(r"\[\[([a-z0-9-]+):([a-zA-Z0-9_-]+)\]\]")
+    broken: list[str] = []
+
+    for json_file, _, _, _ in TAXONOMY_REGISTRY:
+        path = export_dir / json_file
+        if not path.exists():
+            continue
+        data = json.loads(path.read_text())
+        for entry in data:
+            description = entry.get("description", "")
+            if not description:
+                continue
+            for link_type, slug in pattern.findall(description):
+                target_model = linkable_models.get(link_type)
+                if target_model is None:
+                    broken.append(
+                        f"  {json_file} {entry['slug']}: unknown link type {link_type!r}"
+                    )
+                elif not target_model.objects.filter(slug=slug).exists():
+                    broken.append(
+                        f"  {json_file} {entry['slug']}: [[{link_type}:{slug}]] not found"
+                    )
+
+    if broken:
+        stderr.write(
+            f"Wikilink warnings ({len(broken)} broken references):\n"
+            + "\n".join(broken)
+        )
+
+
 class Command(BaseCommand):
     help = "Ingest all Pinbase-authored data from exported JSON files."
 
@@ -155,7 +208,6 @@ class Command(BaseCommand):
         )
 
         self._ingest_taxonomy()
-        self._validate_description_wikilinks()
         self._sync_theme_parents_and_aliases()
         self._sync_gameplay_feature_parents_and_aliases()
         self._ingest_manufacturers()
@@ -330,61 +382,8 @@ class Command(BaseCommand):
             )
 
     # ------------------------------------------------------------------
-    # Phase 1b: Wikilink validation (runs after full taxonomy is ingested)
     # ------------------------------------------------------------------
-
-    def _validate_description_wikilinks(self):
-        """Validate [[type:slug]] wikilinks in all taxonomy descriptions.
-
-        Runs after the full TAXONOMY_REGISTRY loop so forward references within
-        the same JSON file are already in the DB before validation runs.
-        Raises CommandError listing all invalid references found.
-        """
-        import re
-
-        from django.apps import apps
-
-        # Map link type names to model classes.
-        linkable_models = {}
-        for model in apps.get_models():
-            if hasattr(model, "link_url_pattern") and hasattr(model, "slug"):
-                link_type = getattr(
-                    model,
-                    "link_type_name",
-                    model._meta.model_name.replace("_", "-"),
-                )
-                linkable_models[link_type] = model
-
-        pattern = re.compile(r"\[\[([a-z0-9-]+):([a-zA-Z0-9_-]+)\]\]")
-        errors: list[str] = []
-
-        for json_file, model_class, _, _ in TAXONOMY_REGISTRY:
-            data = self._load(json_file)
-            for entry in data:
-                description = entry.get("description", "")
-                if not description:
-                    continue
-                for link_type, slug in pattern.findall(description):
-                    target_model = linkable_models.get(link_type)
-                    if target_model is None:
-                        errors.append(
-                            f"{json_file} {entry['slug']}: unknown link type {link_type!r}"
-                        )
-                        continue
-                    if not target_model.objects.filter(slug=slug).exists():
-                        errors.append(
-                            f"{json_file} {entry['slug']}: "
-                            f"[[{link_type}:{slug}]] target not found"
-                        )
-
-        if errors:
-            raise CommandError(
-                "Invalid wikilinks in taxonomy descriptions:\n"
-                + "\n".join(f"  {e}" for e in errors)
-            )
-
-    # ------------------------------------------------------------------
-    # Phase 1c: Theme parents & aliases (claim-controlled)
+    # Phase 1b: Theme parents & aliases (claim-controlled)
     # ------------------------------------------------------------------
 
     def _sync_theme_parents_and_aliases(self):
