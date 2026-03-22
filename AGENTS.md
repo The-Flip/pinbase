@@ -174,9 +174,21 @@ Single Railway service: Django/Gunicorn serves both the API and the static Svelt
 ## Testing
 
 - For any change, identify and run the smallest meaningful test set.
-- **TDD**
-  - When fixing a bug, write a failing test first that reproduces the bug, then fix the code to make it pass.
-  - For new behavior, include tests. Consider writing the test first, though sometimes that's more trouble than it's worth.
+
+### Bug Fixes Require TDD — Non-Negotiable
+
+When fixing a bug, you **MUST** follow this exact order:
+
+1. **Write a failing test first** that reproduces the bug.
+2. **Run the test** and confirm it fails for the expected reason.
+3. **Then fix the code** to make the test pass.
+4. **Run the test again** and confirm it passes.
+
+Do NOT skip step 1. Do NOT write the fix first "to understand the problem" and backfill tests after. The failing test _is_ how you understand the problem.
+
+### New Features
+
+For new behavior, include tests. Consider writing the test first, though sometimes that's more trouble than it's worth.
 
 ## Rules
 
