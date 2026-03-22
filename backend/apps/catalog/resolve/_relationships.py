@@ -678,8 +678,10 @@ def _resolve_aliases(
     """Bulk-resolve alias claims into alias model rows.
 
     Reads claim_field_name claims on parent_model instances, diffs against
-    current alias rows, creates missing rows, deletes stale rows.
-    Alias values in claims are already lowercased (normalized at ingest time).
+    current alias rows, creates missing rows, updates display-case changes,
+    and deletes stale rows.
+    Claims store lowercase alias_value (for key stability) and an optional
+    alias_display (original case) for user-facing display.
     """
     from django.contrib.contenttypes.models import ContentType
 
@@ -710,40 +712,49 @@ def _resolve_aliases(
             seen.add(key)
             winners_by_parent.setdefault(claim.object_id, []).append(claim)
 
-    # Build desired alias values per parent (lowercased).
-    desired_by_parent: dict[int, set[str]] = {}
+    # Build desired aliases per parent: {lower_val → display_val}.
+    # alias_display (original case) is preferred; falls back to alias_value.
+    desired_by_parent: dict[int, dict[str, str]] = {}
     for parent_id, claims_list in winners_by_parent.items():
-        desired: set[str] = set()
+        desired: dict[str, str] = {}
         for claim in claims_list:
             val = claim.value
             if not val.get("exists", True):
                 continue
             alias_val = val.get("alias_value", "")
             if alias_val:
-                desired.add(alias_val)
+                display = val.get("alias_display") or alias_val
+                desired[alias_val] = display  # alias_val is already lowercase
         desired_by_parent[parent_id] = desired
 
-    # Pre-fetch existing alias rows, keyed by lowercase value.
+    # Pre-fetch existing alias rows, keyed by lowercase value: {lower → (pk, stored_value)}.
     fk_col = parent_fk_attr + "_id"
     all_parent_ids = set(parent_model.objects.values_list("pk", flat=True))
-    existing_by_parent: dict[int, dict[str, int]] = {}
+    existing_by_parent: dict[int, dict[str, tuple[int, str]]] = {}
     for row in alias_model.objects.values_list("pk", fk_col, "value"):
         pk_val, parent_id, value = row
-        existing_by_parent.setdefault(parent_id, {})[value.lower()] = pk_val
+        existing_by_parent.setdefault(parent_id, {})[value.lower()] = (pk_val, value)
 
     to_create = []
     to_delete_pks: list[int] = []
+    to_update: list[tuple[int, str]] = []  # (pk, new_display_value)
 
     for parent_id in all_parent_ids:
-        desired = desired_by_parent.get(parent_id, set())
+        desired = desired_by_parent.get(parent_id, {})
         existing = existing_by_parent.get(parent_id, {})
 
-        for alias_val in desired:
-            if alias_val not in existing:
-                to_create.append(alias_model(**{fk_col: parent_id, "value": alias_val}))
+        for lower_val, display_val in desired.items():
+            if lower_val not in existing:
+                to_create.append(
+                    alias_model(**{fk_col: parent_id, "value": display_val})
+                )
+            else:
+                existing_pk, stored_val = existing[lower_val]
+                if stored_val != display_val:
+                    to_update.append((existing_pk, display_val))
 
-        for alias_val, alias_pk in existing.items():
-            if alias_val not in desired:
+        for lower_val, (alias_pk, _) in existing.items():
+            if lower_val not in desired:
                 to_delete_pks.append(alias_pk)
 
     if to_delete_pks:
@@ -752,6 +763,8 @@ def _resolve_aliases(
         alias_model.objects.bulk_create(
             to_create, batch_size=2000, ignore_conflicts=True
         )
+    for pk, display_val in to_update:
+        alias_model.objects.filter(pk=pk).update(value=display_val)
 
 
 def resolve_theme_aliases() -> None:

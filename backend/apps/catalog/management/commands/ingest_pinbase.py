@@ -192,7 +192,7 @@ class Command(BaseCommand):
             for alias_str in alias_values:
                 lower = alias_str.lower()
                 claim_key, value = build_relationship_claim(
-                    field_name, {"alias_value": lower}
+                    field_name, {"alias_value": lower, "alias_display": alias_str}
                 )
                 pending.append(
                     Claim(
@@ -442,9 +442,7 @@ class Command(BaseCommand):
             theme = themes_by_name.get(entry["name"])
             if theme is None:
                 continue
-            aliases = entry.get("aliases", [])
-            if aliases:
-                aliases_by_pk[theme.pk] = aliases
+            aliases_by_pk[theme.pk] = entry.get("aliases", [])
 
         alias_stats = self._assert_alias_claims(
             source, ct_id, aliases_by_pk, "theme_alias"
@@ -513,9 +511,7 @@ class Command(BaseCommand):
             feature = features_by_slug.get(entry["slug"])
             if feature is None:
                 continue
-            aliases = entry.get("aliases", [])
-            if aliases:
-                aliases_by_pk[feature.pk] = aliases
+            aliases_by_pk[feature.pk] = entry.get("aliases", [])
 
         alias_stats = self._assert_alias_claims(
             source, ct_id, aliases_by_pk, "gameplay_feature_alias"
@@ -536,9 +532,7 @@ class Command(BaseCommand):
                 rt = rt_by_slug.get(entry["slug"])
                 if rt is None:
                     continue
-                aliases = entry.get("aliases", [])
-                if aliases:
-                    rt_aliases_by_pk[rt.pk] = aliases
+                rt_aliases_by_pk[rt.pk] = entry.get("aliases", [])
 
             rt_alias_stats = self._assert_alias_claims(
                 source, rt_ct_id, rt_aliases_by_pk, "reward_type_alias"
@@ -623,9 +617,7 @@ class Command(BaseCommand):
             mfr = mfr_by_slug.get(entry["slug"])
             if not mfr:
                 continue
-            alias_values = entry.get("aliases", [])
-            if alias_values:
-                aliases_by_pk[mfr.pk] = alias_values
+            aliases_by_pk[mfr.pk] = entry.get("aliases", [])
 
         alias_stats = self._assert_alias_claims(
             source, mfr_ct_id, aliases_by_pk, "manufacturer_alias"
@@ -915,9 +907,7 @@ class Command(BaseCommand):
             person = persons_by_slug.get(entry["slug"])
             if not person:
                 continue
-            aliases = entry.get("aliases", [])
-            if aliases:
-                person_aliases_by_pk[person.pk] = aliases
+            person_aliases_by_pk[person.pk] = entry.get("aliases", [])
 
         alias_stats = self._assert_alias_claims(
             source, person_ct_id, person_aliases_by_pk, "person_alias"
