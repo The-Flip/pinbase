@@ -833,17 +833,22 @@ def resolve_all_aliases() -> None:
 # ------------------------------------------------------------------
 
 
-def _resolve_parents(parent_model) -> None:
+def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> None:
     """Resolve parent hierarchy claims into self-referential M2M rows.
 
-    Reads {model_name}_parent claims on parent_model instances.
+    Reads {claim_field_prefix}_parent claims on parent_model instances.
     Each claim value contains {"parent_slug": slug}.
     Materializes the self-referential parents M2M.
+
+    *claim_field_prefix* defaults to model_name but must be overridden when
+    the model name differs from the claim field convention (e.g.
+    ``gameplayfeature`` vs ``gameplay_feature``).
     """
     from django.contrib.contenttypes.models import ContentType
 
     model_name = parent_model._meta.model_name
-    claim_field_name = f"{model_name}_parent"
+    prefix = claim_field_prefix or model_name
+    claim_field_name = f"{prefix}_parent"
     ct = ContentType.objects.get_for_model(parent_model)
 
     claims_qs = (
@@ -934,4 +939,4 @@ def resolve_theme_parents() -> None:
 
 
 def resolve_gameplay_feature_parents() -> None:
-    _resolve_parents(GameplayFeature)
+    _resolve_parents(GameplayFeature, claim_field_prefix="gameplay_feature")
