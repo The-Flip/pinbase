@@ -5,6 +5,8 @@
 	import { resolveHref } from '$lib/utils';
 	import { auth } from '$lib/auth.svelte';
 	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
+	import ExpandableSidebarList from '$lib/components/ExpandableSidebarList.svelte';
+	import LocationLink from '$lib/components/LocationLink.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import SidebarList from '$lib/components/SidebarList.svelte';
 	import SidebarListItem from '$lib/components/SidebarListItem.svelte';
@@ -28,6 +30,8 @@
 		auth.load();
 	});
 
+	let hasEntityAddresses = $derived(mfr.entities.some((e) => e.addresses.length > 0));
+
 	let isDetail = $derived(
 		!page.url.pathname.endsWith('/edit') &&
 			!page.url.pathname.endsWith('/activity') &&
@@ -35,6 +39,14 @@
 	);
 	let isEdit = $derived(page.url.pathname.endsWith('/edit'));
 	let isActivity = $derived(page.url.pathname.endsWith('/activity'));
+
+	function websiteHostname(url: string): string {
+		try {
+			return new URL(url).hostname;
+		} catch {
+			return url;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -98,25 +110,20 @@
 										</span>
 									{/if}
 									{#each entity.addresses as addr, i (i)}
-										<span class="muted location">
-											{#if addr.city}<a
-													href={resolveHref(
-														`/locations/${addr.country_slug}/${addr.state_slug}/${addr.city_slug}`
-													)}>{addr.city}</a
-												>,{/if}
-											{#if addr.state}<a
-													href={resolveHref(`/locations/${addr.country_slug}/${addr.state_slug}`)}
-													>{addr.state}</a
-												>,{/if}
-											{#if addr.country}<a href={resolveHref(`/locations/${addr.country_slug}`)}
-													>{addr.country}</a
-												>{/if}
-										</span>
+										<LocationLink {addr} />
 									{/each}
 								</div>
 							</SidebarListItem>
 						{/each}
 					</SidebarList>
+				</SidebarSection>
+			{/if}
+
+			{#if !hasEntityAddresses && (mfr.headquarters || mfr.country)}
+				<SidebarSection heading="Location">
+					<p class="sidebar-value">
+						{[mfr.headquarters, mfr.country].filter(Boolean).join(', ')}
+					</p>
 				</SidebarSection>
 			{/if}
 
@@ -134,16 +141,16 @@
 
 			{#if mfr.persons.length > 0}
 				<SidebarSection heading="Notable People">
-					<SidebarList>
-						{#each mfr.persons as person (person.slug)}
+					<ExpandableSidebarList items={mfr.persons} limit={10} key={(p) => p.slug}>
+						{#snippet children(person)}
 							<SidebarListItem>
 								<a href={resolveHref(`/people/${person.slug}`)}>{person.name}</a>
 								{#if person.roles.length > 0}
 									<span class="muted">{person.roles.join(', ')}</span>
 								{/if}
 							</SidebarListItem>
-						{/each}
-					</SidebarList>
+						{/snippet}
+					</ExpandableSidebarList>
 				</SidebarSection>
 			{/if}
 
@@ -151,8 +158,7 @@
 				<SidebarSection heading="Links">
 					<SidebarList>
 						<SidebarListItem>
-							<a href={mfr.website} target="_blank" rel="noopener"
-								>{new URL(mfr.website).hostname}</a
+							<a href={mfr.website} target="_blank" rel="noopener">{websiteHostname(mfr.website)}</a
 							>
 						</SidebarListItem>
 					</SidebarList>
@@ -203,10 +209,6 @@
 	.muted {
 		color: var(--color-text-muted);
 		font-size: var(--font-size-0);
-	}
-
-	.location {
-		font-style: italic;
 	}
 
 	.sidebar-value {

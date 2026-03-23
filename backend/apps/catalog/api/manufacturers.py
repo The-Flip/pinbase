@@ -157,10 +157,13 @@ def _serialize_manufacturer_detail(mfr) -> dict:
                 if credit.role:
                     person_roles[p.slug]["roles"].add(credit.role.name)
 
-    persons = [
-        {"name": v["name"], "slug": v["slug"], "roles": sorted(v["roles"])}
-        for v in person_roles.values()
-    ]
+    persons = sorted(
+        (
+            {"name": v["name"], "slug": v["slug"], "roles": sorted(v["roles"])}
+            for v in person_roles.values()
+        ),
+        key=lambda p: p["name"],
+    )
 
     return {
         "name": mfr.name,
