@@ -2,12 +2,22 @@
 
 import pytest
 
-from apps.catalog.models import Manufacturer, Title
+from apps.catalog.claims import build_relationship_claim
+from apps.catalog.models import (
+    CreditRole,
+    MachineModel,
+    Manufacturer,
+    Person,
+    Theme,
+    Title,
+)
 from apps.catalog.resolve import (
     TITLE_DIRECT_FIELDS,
     _resolve_bulk,
     resolve_manufacturer,
+    resolve_themes,
 )
+from apps.catalog.resolve._relationships import resolve_all_credits
 from apps.provenance.models import Claim, Source
 
 
@@ -108,3 +118,82 @@ class TestIsEnabledUserClaims:
         resolve_manufacturer(mfr)
         mfr.refresh_from_db()
         assert mfr.name == "User Claim"
+
+
+@pytest.mark.django_db
+class TestIsEnabledRelationshipResolution:
+    def test_disabled_source_theme_excluded(self, source_a):
+        """Theme claims from a disabled source should not materialize."""
+        theme = Theme.objects.create(name="Medieval", slug="medieval")
+        pm = MachineModel.objects.create(name="Test", slug="test-pm")
+
+        claim_key, value = build_relationship_claim("theme", {"theme_slug": "medieval"})
+        Claim.objects.assert_claim(
+            pm,
+            "theme",
+            value,
+            source=source_a,
+            claim_key=claim_key,
+        )
+
+        # With source enabled, theme should resolve.
+        resolve_themes(pm)
+        assert theme in pm.themes.all()
+
+        # Disable source; theme should be removed.
+        source_a.is_enabled = False
+        source_a.save()
+
+        resolve_themes(pm)
+        assert theme not in pm.themes.all()
+
+    def test_disabled_source_credit_excluded(self, source_a):
+        """Credit claims from a disabled source should not materialize."""
+        role = CreditRole.objects.create(name="Design", slug="design")
+        person = Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
+        pm = MachineModel.objects.create(name="Test", slug="test-pm")
+
+        claim_key, value = build_relationship_claim(
+            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+        )
+        Claim.objects.assert_claim(
+            pm,
+            "credit",
+            value,
+            source=source_a,
+            claim_key=claim_key,
+        )
+
+        # With source enabled, credit should resolve.
+        resolve_all_credits([pm])
+        assert pm.credits.filter(person=person, role=role).exists()
+
+        # Disable source; credit should be removed.
+        source_a.is_enabled = False
+        source_a.save()
+
+        resolve_all_credits([pm])
+        assert not pm.credits.filter(person=person, role=role).exists()
+
+
+@pytest.mark.django_db
+class TestIsEnabledActivityPrefetch:
+    def test_claims_prefetch_excludes_disabled_source(self, source_a, source_b):
+        """_claims_prefetch() should not include claims from disabled sources."""
+        from apps.catalog.api.helpers import _claims_prefetch
+
+        mfr = Manufacturer.objects.create(name="", slug="test-mfr")
+        Claim.objects.assert_claim(mfr, "name", "From A", source=source_a)
+        Claim.objects.assert_claim(mfr, "description", "From B", source=source_b)
+
+        source_a.is_enabled = False
+        source_a.save()
+
+        prefetched = Manufacturer.objects.prefetch_related(_claims_prefetch()).get(
+            pk=mfr.pk
+        )
+
+        claims = prefetched.active_claims
+        source_slugs = {c.source.slug for c in claims if c.source}
+        assert "source-a" not in source_slugs
+        assert "source-b" in source_slugs
