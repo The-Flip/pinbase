@@ -13,24 +13,26 @@ from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from apps.core.markdown import render_markdown_fields
-
 from ..cache import MODELS_ALL_KEY, invalidate_all
 from .constants import DEFAULT_PAGE_SIZE
 from .helpers import (
     _build_activity,
+    _build_rich_text,
     _claims_prefetch,
+    _extract_image_attribution,
     _extract_image_urls,
     _extract_variant_features,
     _get_feature_descendant_slugs,
     _serialize_title_machine,
 )
 from .schemas import (
+    AttributionSchema,
     ClaimPatchSchema,
     ClaimSchema,
     FranchiseRefSchema,
     GameplayFeatureSchema,
     RewardTypeSchema,
+    RichTextSchema,
     SeriesRefSchema,
     ThemeSchema,
     TitleMachineSchema,
@@ -115,8 +117,7 @@ class MachineModelDetailSchema(Schema):
     pinside_id: Optional[int] = None
     ipdb_rating: Optional[float] = None
     pinside_rating: Optional[float] = None
-    description: str = ""
-    description_html: str = ""
+    description: RichTextSchema = RichTextSchema()
     title_description: str = ""
     abbreviations: list[str] = []
     extra_data: dict
@@ -124,6 +125,7 @@ class MachineModelDetailSchema(Schema):
     activity: list[ClaimSchema]
     thumbnail_url: Optional[str] = None
     hero_image_url: Optional[str] = None
+    image_attribution: Optional[AttributionSchema] = None
     variant_features: list[str] = []
     variants: list[VariantSchema] = []
     title_name: Optional[str] = None
@@ -310,6 +312,8 @@ def _serialize_model_detail(pm) -> dict:
     activity = _build_activity(activity_claims)
 
     thumbnail_url, hero_image_url = _extract_image_urls(pm.extra_data or {})
+    image_attribution = _extract_image_attribution(pm.extra_data or {})
+    description = _build_rich_text(pm, "description", activity_claims)
     variant_features = _extract_variant_features(pm.extra_data or {})
 
     variants = [
@@ -339,8 +343,7 @@ def _serialize_model_detail(pm) -> dict:
     return {
         "name": pm.name,
         "slug": pm.slug,
-        "description": pm.description,
-        **render_markdown_fields(pm),
+        "description": description,
         "manufacturer_name": (
             pm.corporate_entity.manufacturer.name
             if pm.corporate_entity and pm.corporate_entity.manufacturer
@@ -399,6 +402,7 @@ def _serialize_model_detail(pm) -> dict:
         "activity": activity,
         "thumbnail_url": thumbnail_url,
         "hero_image_url": hero_image_url,
+        "image_attribution": image_attribution,
         "variant_features": variant_features,
         "variants": variants,
         "variant_of_name": pm.variant_of.name if pm.variant_of else None,

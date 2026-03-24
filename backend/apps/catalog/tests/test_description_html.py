@@ -38,14 +38,14 @@ class TestManufacturerDescriptionHtml:
         resp = client.get("/api/manufacturers/williams")
         assert resp.status_code == 200
         data = resp.json()
-        assert "description_html" in data
-        assert "<strong>legendary</strong>" in data["description_html"]
+        assert "html" in data["description"]
+        assert "<strong>legendary</strong>" in data["description"]["html"]
 
     def test_empty_description_returns_empty_html(self, client, db):
         Manufacturer.objects.create(name="Stern", slug="stern")
         resp = client.get("/api/manufacturers/stern")
         data = resp.json()
-        assert data["description_html"] == ""
+        assert data["description"]["html"] == ""
 
     @pytest.mark.django_db
     def test_entity_link_in_description(self, client, db):

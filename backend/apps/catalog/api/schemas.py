@@ -22,6 +22,27 @@ class ClaimPatchSchema(Schema):
     fields: dict[str, Any]
 
 
+class AttributionSchema(Schema):
+    """License and attribution info for a piece of content (image, description, etc.)."""
+
+    license_slug: Optional[str] = None
+    license_name: Optional[str] = None
+    license_url: Optional[str] = None
+    permissiveness_rank: Optional[int] = None
+    requires_attribution: bool = False
+    source_name: Optional[str] = None
+    source_url: Optional[str] = None
+    attribution_text: Optional[str] = None
+
+
+class RichTextSchema(Schema):
+    """A text field bundled with its rendered HTML and attribution."""
+
+    text: str = ""
+    html: str = ""
+    attribution: Optional[AttributionSchema] = None
+
+
 class ThemeSchema(Schema):
     name: str
     slug: str

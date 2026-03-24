@@ -11,13 +11,17 @@ from ninja import Router, Schema
 from ninja.decorators import decorate_view
 from ninja.pagination import PageNumberPagination, paginate
 
-from apps.core.markdown import render_markdown_fields
-
 from .constants import DEFAULT_PAGE_SIZE
-from .helpers import _extract_image_urls, _serialize_title_machine
+from .helpers import (
+    _build_rich_text,
+    _claims_prefetch,
+    _extract_image_urls,
+    _serialize_title_machine,
+)
 from .machine_models import CreditSchema, MachineModelDetailSchema
 from .schemas import (
     GameplayFeatureSchema,
+    RichTextSchema,
     SeriesRefSchema,
     ThemeSchema,
     TitleMachineSchema,
@@ -91,8 +95,7 @@ class TitleDetailSchema(Schema):
     name: str
     slug: str
     abbreviations: list[str] = []
-    description: str = ""
-    description_html: str = ""
+    description: RichTextSchema = RichTextSchema()
     needs_review: bool = False
     needs_review_notes: str = ""
     review_links: list[ReviewLinkSchema] = []
@@ -400,12 +403,15 @@ def _serialize_title_detail(title) -> dict:
         pm = _model_detail_qs().get(slug=machines[0]["slug"])
         model_detail = _serialize_model_detail(pm)
 
+    description = _build_rich_text(
+        title, "description", getattr(title, "active_claims", [])
+    )
+
     return {
         "name": title.name,
         "slug": title.slug,
         "abbreviations": [a.value for a in title.abbreviations.all()],
-        "description": title.description,
-        **render_markdown_fields(title),
+        "description": description,
         "needs_review": title.needs_review,
         "needs_review_notes": title.needs_review_notes,
         "review_links": review_links,
@@ -521,7 +527,10 @@ def get_title(request, slug: str):
 
     title = get_object_or_404(
         Title.objects.prefetch_related(
-            _title_models_prefetch(), "series", "abbreviations"
+            _title_models_prefetch(),
+            "series",
+            "abbreviations",
+            _claims_prefetch(),
         ),
         slug=slug,
     )

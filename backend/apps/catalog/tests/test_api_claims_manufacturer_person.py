@@ -100,7 +100,7 @@ class TestPatchManufacturerClaimsPersistence:
             content_type="application/json",
         )
         data = resp.json()
-        assert data["description"] == "WMS"
+        assert data["description"]["text"] == "WMS"
         mfr.refresh_from_db()
         assert mfr.description == "WMS"
 
@@ -142,7 +142,7 @@ class TestPatchManufacturerClaimsPersistence:
             content_type="application/json",
         )
         assert resp.status_code == 200
-        assert resp.json()["description"] == "User Name"
+        assert resp.json()["description"]["text"] == "User Name"
 
     def test_response_includes_activity(self, client, user, mfr):
         client.force_login(user)
