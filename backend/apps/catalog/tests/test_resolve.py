@@ -13,7 +13,7 @@ from apps.catalog.models import (
     Theme,
     Title,
 )
-from apps.catalog.resolve import resolve_all, resolve_model, resolve_themes
+from apps.catalog.resolve import resolve_machine_models, resolve_model, resolve_themes
 from apps.catalog.resolve._relationships import resolve_all_corporate_entity_locations
 from apps.provenance.models import Claim, Source
 
@@ -158,7 +158,7 @@ class TestResolveAll:
         )
 
         before = timezone.now()
-        count = resolve_all()
+        count = resolve_machine_models()
         assert count == 3
 
         pm1.refresh_from_db()
@@ -205,7 +205,7 @@ class TestResolveAll:
         resolve_model(pm_single)
         pm_single.refresh_from_db()
 
-        resolve_all()
+        resolve_machine_models()
         pm_bulk.refresh_from_db()
 
         assert pm_bulk.name == pm_single.name
@@ -224,7 +224,7 @@ class TestResolveAll:
         Claim.objects.assert_claim(pm_a, "opdb_id", "GCONFLICT-M1", source=ipdb)
         Claim.objects.assert_claim(pm_b, "opdb_id", "GCONFLICT-M1", source=ipdb)
 
-        resolve_all()
+        resolve_machine_models()
         pm_a.refresh_from_db()
         pm_b.refresh_from_db()
 
@@ -239,13 +239,13 @@ class TestResolveAll:
 
         Claim.objects.assert_claim(pm, "year", 1997, source=ipdb)
         Claim.objects.assert_claim(pm, "player_count", 4, source=ipdb)
-        resolve_all()
+        resolve_machine_models()
         pm.refresh_from_db()
         assert pm.year == 1997
         assert pm.player_count == 4
 
         pm.claims.filter(is_active=True).update(is_active=False)
-        resolve_all()
+        resolve_machine_models()
         pm.refresh_from_db()
         assert pm.year is None
         assert pm.player_count is None
@@ -261,7 +261,7 @@ class TestResolveAll:
             Claim.objects.assert_claim(pm, "year", 2000 + i, source=ipdb)
 
         with django_assert_max_num_queries(120):
-            resolve_all()
+            resolve_machine_models()
 
 
 @pytest.mark.django_db
@@ -344,7 +344,7 @@ class TestResolveThemes:
                     pm, "theme", value, source=ipdb, claim_key=claim_key
                 )
 
-        resolve_all()
+        resolve_machine_models()
         assert set(pm1.themes.values_list("slug", flat=True)) == {
             "sports",
             "baseball",

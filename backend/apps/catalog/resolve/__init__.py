@@ -201,12 +201,14 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     return machine_model
 
 
-def resolve_all(stdout=None) -> int:
-    """Re-resolve every MachineModel from its claims (bulk-optimized).
+def resolve_machine_models(stdout=None) -> int:
+    """Re-resolve every MachineModel and its dependencies from claims (bulk-optimized).
 
+    Resolves in dependency order: locations → taxonomy → titles → machine models
+    + their relationships (credits, themes, gameplay features, etc.).
+    Does NOT resolve manufacturers, corporate entities, or people.
     Pre-fetches all lookup tables and claims in ~4 queries, resolves
     in memory, then writes back with a single bulk_update().
-    Also resolves taxonomy models.
     """
 
     def _status(msg: str) -> None:
@@ -219,8 +221,8 @@ def resolve_all(stdout=None) -> int:
     _status("Locations resolved")
 
     # 0a. Resolve taxonomy models (they are FK targets for MachineModel).
+    # Includes themes, gameplay features, and all other taxonomy entities.
     _resolve_all_taxonomy()
-    resolve_all_gameplay_feature_entities()
     _status("Taxonomy resolved")
 
     # 0a2. Resolve entity hierarchy and aliases.
@@ -312,7 +314,7 @@ def resolve_all(stdout=None) -> int:
 
 
 # ------------------------------------------------------------------
-# Bulk resolution helpers (used by resolve_all)
+# Bulk resolution helpers (used by resolve_machine_models)
 # ------------------------------------------------------------------
 
 
