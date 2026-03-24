@@ -67,10 +67,10 @@
 
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if title.description_html}
+			{#if title.description?.html}
 				<section class="prose">
 					<h2>About</h2>
-					<Markdown html={title.description_html} />
+					<Markdown html={title.description.html} />
 				</section>
 			{/if}
 

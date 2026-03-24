@@ -61,9 +61,9 @@
 
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if mfr.description_html}
+			{#if mfr.description?.html}
 				<div class="description">
-					<Markdown html={mfr.description_html} />
+					<Markdown html={mfr.description.html} />
 				</div>
 			{/if}
 

@@ -10,7 +10,7 @@
 	function mfrToFormFields(m: typeof mfr) {
 		return {
 			name: m.name,
-			description: m.description ?? '',
+			description: m.description?.text ?? '',
 			year_start: m.year_start ?? '',
 			year_end: m.year_end ?? '',
 			country: m.country ?? '',
