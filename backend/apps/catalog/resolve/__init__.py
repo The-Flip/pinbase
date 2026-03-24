@@ -100,6 +100,7 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     """
     claims = (
         machine_model.claims.filter(is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(
@@ -310,6 +311,7 @@ def _build_claims_by_model() -> dict[int, dict[str, Claim]]:
     ct = ContentType.objects.get_for_model(MachineModel)
     claims = (
         Claim.objects.filter(is_active=True, content_type=ct)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(

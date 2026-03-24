@@ -197,6 +197,7 @@ def _pick_relationship_winners(
 
     claims = (
         obj.claims.filter(is_active=True, field_name=field_name)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(

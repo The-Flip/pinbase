@@ -118,7 +118,7 @@ def _resolve_all_m2m(
     # Pre-fetch active claims with priority annotation.
     claims_qs = Claim.objects.filter(
         is_active=True, content_type=ct, field_name=spec.field_name
-    )
+    ).exclude(source__is_enabled=False)
     if model_ids is not None:
         claims_qs = claims_qs.filter(object_id__in=model_ids)
     claims = (
@@ -291,7 +291,7 @@ def resolve_all_gameplay_features(
 
     claims_qs = Claim.objects.filter(
         is_active=True, content_type=ct, field_name="gameplay_feature"
-    )
+    ).exclude(source__is_enabled=False)
     if model_ids is not None:
         claims_qs = claims_qs.filter(object_id__in=model_ids)
     claims = (
@@ -486,7 +486,7 @@ def resolve_all_credits(
 
     credit_qs = Claim.objects.filter(
         is_active=True, content_type=ct, field_name="credit"
-    )
+    ).exclude(source__is_enabled=False)
     if model_ids is not None:
         credit_qs = credit_qs.filter(object_id__in=model_ids)
     credit_claims = (
@@ -634,7 +634,7 @@ def resolve_all_title_abbreviations(
 
     abbr_qs = Claim.objects.filter(
         is_active=True, content_type=ct, field_name="abbreviation"
-    )
+    ).exclude(source__is_enabled=False)
     if title_ids is not None:
         abbr_qs = abbr_qs.filter(object_id__in=title_ids)
     abbr_claims = (
@@ -738,7 +738,7 @@ def resolve_all_model_abbreviations(
 
     abbr_qs = Claim.objects.filter(
         is_active=True, content_type=ct, field_name="abbreviation"
-    )
+    ).exclude(source__is_enabled=False)
     if model_ids is not None:
         abbr_qs = abbr_qs.filter(object_id__in=model_ids)
     abbr_claims = (
@@ -836,6 +836,7 @@ def _resolve_aliases(
         Claim.objects.filter(
             is_active=True, content_type=ct, field_name=claim_field_name
         )
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(
@@ -999,6 +1000,7 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
         Claim.objects.filter(
             is_active=True, content_type=ct, field_name=claim_field_name
         )
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(
@@ -1114,9 +1116,11 @@ def resolve_all_corporate_entity_locations() -> dict[str, int]:
     ce_ct = ContentType.objects.get_for_model(CorporateEntity)
     loc_by_path = {loc.location_path: loc for loc in Location.objects.all()}
 
-    active_claims = Claim.objects.filter(
-        content_type=ce_ct, field_name="location", is_active=True
-    ).values("object_id", "value")
+    active_claims = (
+        Claim.objects.filter(content_type=ce_ct, field_name="location", is_active=True)
+        .exclude(source__is_enabled=False)
+        .values("object_id", "value")
+    )
 
     desired: dict[int, set[str]] = defaultdict(set)
     for row in active_claims:

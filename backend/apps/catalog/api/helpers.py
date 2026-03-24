@@ -40,6 +40,7 @@ def _claims_prefetch(to_attr: str = "active_claims"):
     return Prefetch(
         "claims",
         queryset=Claim.objects.filter(is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user")
         .annotate(
             effective_priority=Case(

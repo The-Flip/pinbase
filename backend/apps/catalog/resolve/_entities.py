@@ -168,6 +168,7 @@ def _resolve_single(
     """
     claims = (
         obj.claims.filter(is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(
@@ -238,6 +239,7 @@ def _resolve_bulk(
     # 1. Pre-fetch all active claims for this model class.
     claims_qs = (
         Claim.objects.filter(content_type=ct, is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(
@@ -401,6 +403,7 @@ def resolve_title(title: Title) -> Title:
     # Handle franchise FK.
     franchise_claim = (
         title.claims.filter(field_name="franchise", is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user__profile")
         .annotate(
             effective_priority=Case(

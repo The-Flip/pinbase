@@ -295,6 +295,7 @@ def _serialize_model_detail(pm) -> dict:
     if activity_claims is None:
         activity_claims = list(
             pm.claims.filter(is_active=True)
+            .exclude(source__is_enabled=False)
             .select_related("source", "user")
             .annotate(
                 effective_priority=Case(
