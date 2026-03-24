@@ -62,6 +62,18 @@ class Source(TimeStampedModel):
     )
     url = models.URLField(blank=True)
     description = models.TextField(blank=True)
+    is_enabled = models.BooleanField(
+        default=True,
+        help_text="Disabled sources are excluded from claim resolution.",
+    )
+    default_license = models.ForeignKey(
+        "core.License",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="sources",
+        help_text="Default license for claims from this source.",
+    )
 
     class Meta:
         ordering = ["-priority", "name"]
@@ -73,6 +85,33 @@ class Source(TimeStampedModel):
         if not self.slug:
             self.slug = unique_slug(self, self.name, "source")
         super().save(*args, **kwargs)
+
+
+class SourceFieldLicense(models.Model):
+    """Per-field license override for a source.
+
+    Wiki-style sources typically have different licenses for text vs images
+    (e.g., Fandom: text is CC BY-SA 3.0, images are fair use / not reusable).
+    This model captures that relationship without denormalizing to per-claim.
+    """
+
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.CASCADE,
+        related_name="field_licenses",
+    )
+    field_name = models.CharField(max_length=255)
+    license = models.ForeignKey(
+        "core.License",
+        on_delete=models.CASCADE,
+        related_name="+",
+    )
+
+    class Meta:
+        unique_together = [("source", "field_name")]
+
+    def __str__(self) -> str:
+        return f"{self.source.name}: {self.field_name} → {self.license.short_name}"
 
 
 class ClaimManager(models.Manager):
@@ -285,6 +324,14 @@ class Claim(models.Model):
     )
     value = models.JSONField()
     citation = models.TextField(blank=True)
+    license = models.ForeignKey(
+        "core.License",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="claims",
+        help_text="Per-claim license override. Null inherits from source field license or source default.",
+    )
     is_active = models.BooleanField(default=True)
     needs_review = models.BooleanField(
         default=False,

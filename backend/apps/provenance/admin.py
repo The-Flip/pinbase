@@ -1,14 +1,28 @@
 from django.contrib import admin
 
-from .models import Claim, Source
+from .models import Claim, Source, SourceFieldLicense
+
+
+class SourceFieldLicenseInline(admin.TabularInline):
+    model = SourceFieldLicense
+    extra = 1
 
 
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
-    list_display = ("name", "source_type", "priority", "url")
-    list_filter = ("source_type",)
+    list_display = (
+        "name",
+        "source_type",
+        "priority",
+        "is_enabled",
+        "default_license",
+        "url",
+    )
+    list_editable = ("is_enabled", "default_license")
+    list_filter = ("source_type", "is_enabled")
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
+    inlines = [SourceFieldLicenseInline]
 
 
 @admin.register(Claim)
