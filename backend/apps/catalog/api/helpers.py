@@ -60,10 +60,22 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
 
     Tries OPDB structured images first (with size variants), then falls back
     to IPDB flat URL list (same URL used for both thumbnail and hero).
+
+    Respects the global Constance display threshold: skips image sources
+    whose ``__permissiveness_rank`` is below the minimum.
     """
+    from apps.core.licensing import UNKNOWN_LICENSE_RANK, get_minimum_display_rank
+
+    min_rank = get_minimum_display_rank()
+
+    def _rank_ok(key: str) -> bool:
+        rank = extra_data.get(f"{key}.__permissiveness_rank")
+        effective = rank if rank is not None else UNKNOWN_LICENSE_RANK
+        return effective >= min_rank
+
     # Try OPDB structured images first (have size variants).
     images = extra_data.get("opdb.images")
-    if images and isinstance(images, list):
+    if images and isinstance(images, list) and _rank_ok("opdb.images"):
         img = None
         for candidate in images:
             if isinstance(candidate, dict) and candidate.get("primary"):
@@ -81,7 +93,7 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
     # Fall back to flat URL list (IPDB-sourced or scraped).
     for key in ("ipdb.image_urls", "image_urls"):
         image_urls = extra_data.get(key)
-        if image_urls and isinstance(image_urls, list):
+        if image_urls and isinstance(image_urls, list) and _rank_ok(key):
             first = image_urls[0]
             if isinstance(first, str) and first:
                 return first, first

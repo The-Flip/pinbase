@@ -13,6 +13,11 @@ from typing import Any
 from django.db.models import Case, F, IntegerField, Value, When
 from django.utils import timezone
 
+from apps.core.licensing import (
+    IMAGE_FIELDS,
+    build_source_field_license_map,
+    resolve_effective_license,
+)
 from apps.provenance.models import Claim
 
 from ..claims import RELATIONSHIP_NAMESPACES
@@ -101,7 +106,7 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     claims = (
         machine_model.claims.filter(is_active=True)
         .exclude(source__is_enabled=False)
-        .select_related("source", "user__profile")
+        .select_related("source", "source__default_license", "user__profile")
         .annotate(
             effective_priority=Case(
                 When(source__isnull=False, then=F("source__priority")),
@@ -127,6 +132,7 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
         setattr(machine_model, attr, default)
 
     fk_lookups = build_fk_lookups()
+    sfl_map = build_source_field_license_map()
     extra_data: dict = {}
 
     # Apply winners to the model.
@@ -147,6 +153,14 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
             setattr(machine_model, attr, _coerce(MachineModel, attr, claim.value))
         else:
             extra_data[claim.field_name] = claim.value
+            if claim.field_name in IMAGE_FIELDS:
+                lic = resolve_effective_license(claim, sfl_map)
+                extra_data[f"{claim.field_name}.__license_slug"] = (
+                    lic.slug if lic else None
+                )
+                extra_data[f"{claim.field_name}.__permissiveness_rank"] = (
+                    lic.permissiveness_rank if lic else None
+                )
 
     machine_model.extra_data = extra_data
 
@@ -234,6 +248,7 @@ def resolve_all(stdout=None) -> int:
     # 1. Pre-fetch lookup tables.
     fk_lookups = build_fk_lookups()
     field_defaults = get_field_defaults(MachineModel, DIRECT_FIELDS)
+    sfl_map = build_source_field_license_map()
 
     # 2. Pre-fetch all active claims, grouped by object_id (~1 query).
     claims_by_model = _build_claims_by_model()
@@ -245,7 +260,7 @@ def resolve_all(stdout=None) -> int:
     # 4. Resolve each model in memory.
     for pm in all_models:
         winners = claims_by_model.get(pm.pk, {})
-        _apply_resolution(pm, winners, field_defaults, fk_lookups)
+        _apply_resolution(pm, winners, field_defaults, fk_lookups, sfl_map)
 
     # 5. Conversions are not variants: clear variant_of on conversion models.
     for pm in all_models:
@@ -312,7 +327,7 @@ def _build_claims_by_model() -> dict[int, dict[str, Claim]]:
     claims = (
         Claim.objects.filter(is_active=True, content_type=ct)
         .exclude(source__is_enabled=False)
-        .select_related("source", "user__profile")
+        .select_related("source", "source__default_license", "user__profile")
         .annotate(
             effective_priority=Case(
                 When(source__isnull=False, then=F("source__priority")),
@@ -339,6 +354,7 @@ def _apply_resolution(
     winners: dict[str, Claim],
     field_defaults: dict[str, Any],
     fk_lookups: dict[str, dict[str, Any]],
+    sfl_map: dict | None = None,
 ) -> None:
     """Apply claim winners to a MachineModel instance in memory."""
     # Reset FK fields.
@@ -370,6 +386,14 @@ def _apply_resolution(
             setattr(pm, attr, _coerce(MachineModel, attr, claim.value))
         else:
             extra_data[claim.field_name] = claim.value
+            if claim.field_name in IMAGE_FIELDS:
+                lic = resolve_effective_license(claim, sfl_map)
+                extra_data[f"{claim.field_name}.__license_slug"] = (
+                    lic.slug if lic else None
+                )
+                extra_data[f"{claim.field_name}.__permissiveness_rank"] = (
+                    lic.permissiveness_rank if lic else None
+                )
 
     pm.extra_data = extra_data
 

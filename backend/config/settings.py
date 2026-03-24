@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 import dj_database_url
@@ -181,6 +182,8 @@ if not DEBUG:
 # Constance (runtime-configurable settings)
 # ---------------------------------------------------------------------------
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+if "pytest" in sys.modules:
+    CONSTANCE_BACKEND = "constance.backends.memory.MemoryBackend"
 
 DISPLAY_POLICY_CHOICES = (
     ("show-all", "Show all content (including Not Allowed — internal demos only)"),
