@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { faBars, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 	import FaIcon from './FaIcon.svelte';
+	import CoffeeStain from './effects/CoffeeStain.svelte';
 	import { SITE_NAME } from '$lib/constants';
 	import { resolveHref } from '$lib/utils';
 	import { auth } from '$lib/auth.svelte';
@@ -30,7 +31,34 @@
 		await auth.logout();
 		await goto(resolveHref('/'));
 	}
+
+	const randInt = (max: number) => Math.floor(Math.random() * max);
+
+	// Stain seeds (one per stain strip)
+	const stainSeed1 = randInt(1000);
+	const stainSeed2 = randInt(1000);
+	const stainSeed3 = randInt(1000);
+
+	// Torn bottom edge
+	const tornId = `tear-${crypto.randomUUID()}`;
+	const tornSeed = randInt(1000);
 </script>
+
+<!-- Torn edge filter definition -->
+<svg class="svg-filters" aria-hidden="true">
+	<defs>
+		<filter id={tornId} x="-2%" y="-2%" width="104%" height="120%">
+			<feTurbulence
+				type="turbulence"
+				baseFrequency="0.06 0.02"
+				numOctaves="4"
+				seed={tornSeed}
+				result="warp"
+			/>
+			<feDisplacementMap in="SourceGraphic" in2="warp" scale="6" yChannelSelector="R" />
+		</filter>
+	</defs>
+</svg>
 
 <header class="site-header">
 	<div class="header-inner">
@@ -78,30 +106,108 @@
 			</button>
 		</div>
 	</div>
+
+	<!-- Coffee stain overlays — three strips covering full width -->
+	<CoffeeStain
+		seed={stainSeed1}
+		frequency={0.03}
+		opacity={0.12}
+		blur={4}
+		threshold="0 0 0 0 0 0 0.5 0.7"
+		x="0%"
+		width="40%"
+	/>
+	<CoffeeStain
+		seed={stainSeed2}
+		frequency={0.04}
+		octaves={4}
+		opacity={0.08}
+		blur={5}
+		threshold="0 0 0 0 0 0 0 0.4"
+		color="rgb(100, 65, 20)"
+		x="30%"
+		width="40%"
+	/>
+	<CoffeeStain
+		seed={stainSeed3}
+		frequency={0.025}
+		opacity={0.1}
+		blur={3}
+		threshold="0 0 0 0 0 0.4 0.6 0.8"
+		color="rgb(130, 90, 35)"
+		x="60%"
+		width="40%"
+	/>
+
+	<!-- Torn bottom edge -->
+	<div class="torn-edge" style:filter="url(#{tornId})"></div>
 </header>
 
 <style>
+	.svg-filters {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
 	.site-header {
-		background-color: var(--color-surface);
-		border-bottom: 1px solid var(--color-border-soft);
+		/* Color tokens — overridden in dark mode */
+		--header-bg: #efe8dc;
+		--header-ink: #3d3529;
+		--header-ink-muted: #6b5d4d;
+
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		background-color: var(--header-bg);
+		border-bottom: none;
+	}
+
+	/* Subtle paper grain via repeating gradient */
+	.site-header::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(0, 0, 0, 0.01) 2px,
+			rgba(0, 0, 0, 0.01) 4px
+		);
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	/* Torn paper bottom edge — shares background color via token */
+	.torn-edge {
+		position: absolute;
+		bottom: -4px;
+		left: 0;
+		right: 0;
+		height: 8px;
+		background: var(--header-bg);
+		pointer-events: none;
+		z-index: 3;
 	}
 
 	.header-inner {
+		position: relative;
 		max-width: 72rem;
 		margin: 0 auto;
 		padding: var(--size-3) var(--size-5);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		z-index: 10;
 	}
 
 	.site-title {
 		font-size: var(--font-size-4);
 		font-weight: 700;
-		color: var(--color-text-primary);
+		color: var(--header-ink);
 		text-decoration: none;
 	}
 
@@ -115,7 +221,7 @@
 	}
 
 	.nav-link {
-		color: var(--color-text-muted);
+		color: var(--header-ink-muted);
 		text-decoration: none;
 		font-size: var(--font-size-2);
 		font-weight: 500;
@@ -127,7 +233,7 @@
 	}
 
 	.nav-link:hover {
-		color: var(--color-text-primary);
+		color: var(--header-ink);
 	}
 
 	.nav-link.active {
@@ -142,7 +248,7 @@
 	}
 
 	.search-link {
-		color: var(--color-text-muted);
+		color: var(--header-ink-muted);
 		padding: var(--size-1);
 		display: flex;
 		align-items: center;
@@ -150,7 +256,7 @@
 	}
 
 	.search-link:hover {
-		color: var(--color-text-primary);
+		color: var(--header-ink);
 	}
 
 	.search-link.active {
@@ -164,12 +270,12 @@
 
 	.auth-user {
 		font-size: var(--font-size-2);
-		color: var(--color-text-muted);
+		color: var(--header-ink-muted);
 	}
 
 	.auth-link {
 		font-size: var(--font-size-2);
-		color: var(--color-text-muted);
+		color: var(--header-ink-muted);
 		text-decoration: none;
 		background: none;
 		border: none;
@@ -180,14 +286,14 @@
 	}
 
 	.auth-link:hover {
-		color: var(--color-text-primary);
+		color: var(--header-ink);
 	}
 
 	.mobile-toggle {
 		display: none;
 		background: none;
 		border: none;
-		color: var(--color-text-primary);
+		color: var(--header-ink);
 		cursor: pointer;
 		padding: var(--size-1);
 	}
@@ -209,14 +315,33 @@
 			top: 100%;
 			left: 0;
 			right: 0;
-			background-color: var(--color-surface);
-			border-bottom: 1px solid var(--color-border-soft);
+			background-color: var(--header-bg);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 			padding: var(--size-3) var(--size-5);
 			gap: var(--size-2);
 		}
 
 		.site-nav.open {
 			display: flex;
+		}
+	}
+
+	/* ---- Dark mode ---- */
+	@media (prefers-color-scheme: dark) {
+		.site-header {
+			--header-bg: #26221d;
+			--header-ink: var(--color-text-primary);
+			--header-ink-muted: var(--color-text-muted);
+		}
+
+		.site-header::before {
+			background: none;
+		}
+
+		@media (max-width: 640px) {
+			.site-nav {
+				border-bottom-color: var(--color-border-soft);
+			}
 		}
 	}
 </style>
