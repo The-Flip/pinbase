@@ -10,23 +10,26 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from django.db.models import Case, F, IntegerField, Value, When
 from django.utils import timezone
 
+from apps.core.licensing import (
+    IMAGE_FIELDS,
+    build_source_field_license_map,
+    resolve_effective_license,
+)
 from apps.provenance.models import Claim
 
 from ..claims import RELATIONSHIP_NAMESPACES
 from ..models import (
-    Franchise,
     MachineModel,
     Title,
 )
 from ._helpers import (
-    DIRECT_FIELDS,
-    FK_FIELDS,
+    FKInfo,
+    _annotate_priority,
     _coerce,
-    _resolve_fk,
-    build_fk_lookups,
+    _resolve_fk_generic,
+    build_fk_info,
     get_field_defaults,
 )
 from ._relationships import (  # noqa: F401
@@ -41,50 +44,20 @@ from ._relationships import (  # noqa: F401
     resolve_all_themes,
     resolve_all_title_abbreviations,
     resolve_corporate_entity_aliases,
-    resolve_credits,
     resolve_gameplay_feature_aliases,
     resolve_gameplay_feature_parents,
-    resolve_gameplay_features,
     resolve_manufacturer_aliases,
-    resolve_model_abbreviations,
     resolve_person_aliases,
     resolve_reward_type_aliases,
-    resolve_reward_types,
-    resolve_tags,
     resolve_theme_aliases,
     resolve_theme_parents,
-    resolve_themes,
 )
 
-# Re-exports: explicit `as` aliases satisfy ruff F401 for public API.
 from ._entities import (  # noqa: F401
-    CORPORATE_ENTITY_DIRECT_FIELDS as CORPORATE_ENTITY_DIRECT_FIELDS,
-    FRANCHISE_DIRECT_FIELDS as FRANCHISE_DIRECT_FIELDS,
-    GAMEPLAY_FEATURE_DIRECT_FIELDS as GAMEPLAY_FEATURE_DIRECT_FIELDS,
-    LOCATION_DIRECT_FIELDS as LOCATION_DIRECT_FIELDS,
-    MANUFACTURER_DIRECT_FIELDS as MANUFACTURER_DIRECT_FIELDS,
-    PERSON_DIRECT_FIELDS as PERSON_DIRECT_FIELDS,
-    SERIES_DIRECT_FIELDS as SERIES_DIRECT_FIELDS,
-    SYSTEM_DIRECT_FIELDS as SYSTEM_DIRECT_FIELDS,
-    TAXONOMY_DIRECT_FIELDS as TAXONOMY_DIRECT_FIELDS,
-    TAXONOMY_MODELS as TAXONOMY_MODELS,
-    THEME_DIRECT_FIELDS as THEME_DIRECT_FIELDS,
-    TITLE_DIRECT_FIELDS as TITLE_DIRECT_FIELDS,
-    _resolve_all_taxonomy,
     _resolve_bulk as _resolve_bulk,
     _resolve_single as _resolve_single,
-    resolve_all_gameplay_feature_entities as resolve_all_gameplay_feature_entities,
-    resolve_all_locations as resolve_all_locations,
-    resolve_corporate_entity as resolve_corporate_entity,
-    resolve_franchise as resolve_franchise,
-    resolve_gameplay_feature as resolve_gameplay_feature,
-    resolve_manufacturer as resolve_manufacturer,
-    resolve_person as resolve_person,
-    resolve_series as resolve_series,
-    resolve_system as resolve_system,
-    resolve_taxonomy as resolve_taxonomy,
-    resolve_theme as resolve_theme,
-    resolve_title as resolve_title,
+    resolve_all_entities as resolve_all_entities,
+    resolve_entity as resolve_entity,
 )
 
 logger = logging.getLogger(__name__)
@@ -93,68 +66,39 @@ logger = logging.getLogger(__name__)
 def resolve_model(machine_model: MachineModel) -> MachineModel:
     """Resolve all active claims into the given MachineModel's fields.
 
-    Picks the winning claim per field_name: highest effective priority
+    Picks the winning claim per claim_key: highest effective priority
     (from source or user profile), then most recent created_at as tiebreaker.
+    Delegates field application to ``_apply_resolution()`` (shared with the
+    bulk path in ``resolve_machine_models()``).
 
     Returns the saved MachineModel.
     """
+    # Fetch and pick winners (single-object).
     claims = (
-        machine_model.claims.filter(is_active=True)
-        .select_related("source", "user__profile")
-        .annotate(
-            effective_priority=Case(
-                When(source__isnull=False, then=F("source__priority")),
-                When(user__isnull=False, then=F("user__profile__priority")),
-                default=Value(0),
-                output_field=IntegerField(),
-            )
-        )
+        _annotate_priority(machine_model.claims.all())
+        .select_related("source__default_license")
         .order_by("claim_key", "-effective_priority", "-created_at")
     )
-
-    # Group by claim_key — first claim per group is the winner.
     winners: dict[str, Claim] = {}
     for claim in claims:
         if claim.claim_key not in winners:
             winners[claim.claim_key] = claim
 
-    # Reset all resolvable fields to defaults before applying winners.
-    for spec in FK_FIELDS.values():
-        setattr(machine_model, spec.model_attr, None)
-    field_defaults = get_field_defaults(MachineModel, DIRECT_FIELDS)
-    for attr, default in field_defaults.items():
-        setattr(machine_model, attr, default)
+    # Apply field values (shared with bulk path).
+    from apps.core.models import get_claim_fields
 
-    fk_lookups = build_fk_lookups()
-    extra_data: dict = {}
+    claim_fields = get_claim_fields(MachineModel)
+    field_defaults = get_field_defaults(MachineModel, claim_fields)
+    fk_info = build_fk_info(MachineModel, claim_fields)
+    sfl_map = build_source_field_license_map()
+    _apply_resolution(
+        machine_model, winners, claim_fields, field_defaults, fk_info, sfl_map
+    )
 
-    # Apply winners to the model.
-    for claim_key, claim in winners.items():
-        if claim.field_name in RELATIONSHIP_NAMESPACES:
-            continue
-        if claim.field_name in FK_FIELDS:
-            spec = FK_FIELDS[claim.field_name]
-            setattr(
-                machine_model,
-                spec.model_attr,
-                _resolve_fk(
-                    claim.field_name, claim.value, fk_lookups[claim.field_name]
-                ),
-            )
-        elif claim.field_name in DIRECT_FIELDS:
-            attr = DIRECT_FIELDS[claim.field_name]
-            setattr(machine_model, attr, _coerce(MachineModel, attr, claim.value))
-        else:
-            extra_data[claim.field_name] = claim.value
-
-    machine_model.extra_data = extra_data
-
-    # Conversions are not variants.
+    # Post-resolution guards (single-object only — the bulk path handles
+    # these differently via _resolve_opdb_conflicts and a separate loop).
     if machine_model.is_conversion and machine_model.variant_of_id is not None:
         machine_model.variant_of = None
-
-    # Guard against UNIQUE constraint on opdb_id: if another model already
-    # owns this opdb_id, clear it rather than crashing.
     if machine_model.opdb_id:
         conflict = (
             MachineModel.objects.filter(opdb_id=machine_model.opdb_id)
@@ -176,63 +120,95 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     machine_model.save()
 
     # Resolve relationship claims after scalar save.
-    resolve_credits(machine_model)
-    resolve_themes(machine_model)
-    resolve_gameplay_features(machine_model)
-    resolve_reward_types(machine_model)
-    resolve_tags(machine_model)
-    resolve_model_abbreviations(machine_model)
+    model_ids = {machine_model.pk}
+    resolve_all_credits(model_ids=model_ids)
+    resolve_all_themes(model_ids=model_ids)
+    resolve_all_gameplay_features(model_ids=model_ids)
+    resolve_all_reward_types(model_ids=model_ids)
+    resolve_all_tags(model_ids=model_ids)
+    resolve_all_model_abbreviations(model_ids=model_ids)
 
     return machine_model
 
 
-def resolve_all(stdout=None) -> int:
-    """Re-resolve every MachineModel from its claims (bulk-optimized).
+def resolve_machine_models(stdout=None) -> int:
+    """Re-resolve every MachineModel and its dependencies from claims (bulk-optimized).
 
+    Resolves in dependency order: locations → taxonomy → titles → machine models
+    + their relationships (credits, themes, gameplay features, etc.).
+    Does NOT resolve manufacturers, corporate entities, or people.
     Pre-fetches all lookup tables and claims in ~4 queries, resolves
     in memory, then writes back with a single bulk_update().
-    Also resolves taxonomy models.
     """
 
     def _status(msg: str) -> None:
         if stdout:
             stdout.write(f"  {msg}")
 
-    # 0. Resolve locations first (they are FK targets for CorporateEntityLocation).
-    resolve_all_locations()
+    # 0. Resolve entity scalars in dependency order (FK targets first).
+    from ..models import (
+        Location,
+        Theme,
+        GameplayFeature,
+    )
+    from ..models.taxonomy import (
+        TechnologyGeneration,
+        TechnologySubgeneration,
+        DisplayType,
+        DisplaySubtype,
+        Cabinet,
+        GameFormat,
+        RewardType,
+        Tag,
+        CreditRole,
+    )
+
+    resolve_all_entities(Location)
     resolve_all_location_aliases()
     _status("Locations resolved")
 
-    # 0a. Resolve taxonomy models (they are FK targets for MachineModel).
-    _resolve_all_taxonomy()
-    resolve_all_gameplay_feature_entities()
-    _status("Taxonomy resolved")
+    from ..models import Franchise, Series, System
 
-    # 0a2. Resolve entity hierarchy and aliases.
+    for tax_model in [
+        TechnologyGeneration,
+        TechnologySubgeneration,
+        DisplayType,
+        DisplaySubtype,
+        Cabinet,
+        GameFormat,
+        RewardType,
+        Tag,
+        CreditRole,
+        Franchise,
+        Series,
+        System,
+    ]:
+        resolve_all_entities(tax_model)
+    resolve_all_entities(Theme)
+    resolve_all_entities(GameplayFeature)
+    _status("Taxonomy, themes, gameplay features resolved")
+
     resolve_theme_parents()
     resolve_gameplay_feature_parents()
     resolve_all_aliases()
     _status("Hierarchy and aliases resolved")
 
-    # 0a3. Sync CorporateEntityLocation rows from location claims.
     resolve_all_corporate_entity_locations()
     _status("Corporate entity locations resolved")
 
-    # 0b. Resolve titles (they are FK targets for MachineModel).
-    franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
-    _resolve_bulk(
-        Title,
-        TITLE_DIRECT_FIELDS,
-        fk_handlers={"franchise": ("franchise", franchise_lookup)},
-    )
+    resolve_all_entities(Title)
     _status("Titles resolved")
 
     # 0c. Resolve title abbreviations.
     resolve_all_title_abbreviations(list(Title.objects.all()))
 
     # 1. Pre-fetch lookup tables.
-    fk_lookups = build_fk_lookups()
-    field_defaults = get_field_defaults(MachineModel, DIRECT_FIELDS)
+    from apps.core.models import get_claim_fields
+
+    claim_fields = get_claim_fields(MachineModel)
+    field_defaults = get_field_defaults(MachineModel, claim_fields)
+    fk_info = build_fk_info(MachineModel, claim_fields)
+    sfl_map = build_source_field_license_map()
 
     # 2. Pre-fetch all active claims, grouped by object_id (~1 query).
     claims_by_model = _build_claims_by_model()
@@ -244,7 +220,7 @@ def resolve_all(stdout=None) -> int:
     # 4. Resolve each model in memory.
     for pm in all_models:
         winners = claims_by_model.get(pm.pk, {})
-        _apply_resolution(pm, winners, field_defaults, fk_lookups)
+        _apply_resolution(pm, winners, claim_fields, field_defaults, fk_info, sfl_map)
 
     # 5. Conversions are not variants: clear variant_of on conversion models.
     for pm in all_models:
@@ -260,11 +236,7 @@ def resolve_all(stdout=None) -> int:
         pm.updated_at = now
 
     # 8. Bulk write (~1 query, batched).
-    update_fields = (
-        list(DIRECT_FIELDS.values())
-        + [f"{spec.model_attr}_id" for spec in FK_FIELDS.values()]
-        + ["extra_data", "updated_at"]
-    )
+    update_fields = list(claim_fields.values()) + ["extra_data", "updated_at"]
     # batch_size=100 is optimal for SQLite (CASE WHEN overhead grows with
     # batch size × field count). PostgreSQL uses a more efficient UPDATE FROM
     # VALUES syntax and handles larger batches fine.
@@ -296,7 +268,7 @@ def resolve_all(stdout=None) -> int:
 
 
 # ------------------------------------------------------------------
-# Bulk resolution helpers (used by resolve_all)
+# Bulk resolution helpers (used by resolve_machine_models)
 # ------------------------------------------------------------------
 
 
@@ -309,16 +281,8 @@ def _build_claims_by_model() -> dict[int, dict[str, Claim]]:
 
     ct = ContentType.objects.get_for_model(MachineModel)
     claims = (
-        Claim.objects.filter(is_active=True, content_type=ct)
-        .select_related("source", "user__profile")
-        .annotate(
-            effective_priority=Case(
-                When(source__isnull=False, then=F("source__priority")),
-                When(user__isnull=False, then=F("user__profile__priority")),
-                default=Value(0),
-                output_field=IntegerField(),
-            )
-        )
+        _annotate_priority(Claim.objects.filter(content_type=ct))
+        .select_related("source__default_license")
         .order_by("object_id", "claim_key", "-effective_priority", "-created_at")
     )
 
@@ -335,15 +299,13 @@ def _build_claims_by_model() -> dict[int, dict[str, Claim]]:
 def _apply_resolution(
     pm: MachineModel,
     winners: dict[str, Claim],
+    claim_fields: dict[str, str],
     field_defaults: dict[str, Any],
-    fk_lookups: dict[str, dict[str, Any]],
+    fk_info: FKInfo,
+    sfl_map: dict | None = None,
 ) -> None:
     """Apply claim winners to a MachineModel instance in memory."""
-    # Reset FK fields.
-    for spec in FK_FIELDS.values():
-        setattr(pm, spec.model_attr, None)
-
-    # Reset all DIRECT_FIELDS to defaults.
+    # Reset all claim-controlled fields to defaults.
     for attr, default in field_defaults.items():
         setattr(pm, attr, default)
 
@@ -354,20 +316,31 @@ def _apply_resolution(
     for claim_key, claim in winners.items():
         if claim.field_name in RELATIONSHIP_NAMESPACES:
             continue
-        if claim.field_name in FK_FIELDS:
-            spec = FK_FIELDS[claim.field_name]
-            setattr(
-                pm,
-                spec.model_attr,
-                _resolve_fk(
-                    claim.field_name, claim.value, fk_lookups.get(claim.field_name)
-                ),
-            )
-        elif claim.field_name in DIRECT_FIELDS:
-            attr = DIRECT_FIELDS[claim.field_name]
-            setattr(pm, attr, _coerce(MachineModel, attr, claim.value))
+        if claim.field_name in claim_fields:
+            attr = claim_fields[claim.field_name]
+            if attr in fk_info.fk_fields:
+                setattr(
+                    pm,
+                    attr,
+                    _resolve_fk_generic(
+                        MachineModel,
+                        attr,
+                        claim.value,
+                        lookup=fk_info.lookups.get(attr),
+                    ),
+                )
+            else:
+                setattr(pm, attr, _coerce(MachineModel, attr, claim.value))
         else:
             extra_data[claim.field_name] = claim.value
+            if claim.field_name in IMAGE_FIELDS:
+                lic = resolve_effective_license(claim, sfl_map)
+                extra_data[f"{claim.field_name}.__license_slug"] = (
+                    lic.slug if lic else None
+                )
+                extra_data[f"{claim.field_name}.__permissiveness_rank"] = (
+                    lic.permissiveness_rank if lic else None
+                )
 
     pm.extra_data = extra_data
 

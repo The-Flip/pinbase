@@ -1,17 +1,15 @@
-"""Tests for _resolve_bulk and resolve_title."""
+"""Tests for _resolve_single, _resolve_bulk, and resolve_entity."""
 
 import pytest
 from django.contrib.contenttypes.models import ContentType
 
 from apps.catalog.models import Franchise, Manufacturer, System, Tag, Title
 from apps.catalog.resolve import (
-    MANUFACTURER_DIRECT_FIELDS,
-    TAXONOMY_DIRECT_FIELDS,
-    TITLE_DIRECT_FIELDS,
     _resolve_bulk,
-    resolve_title,
+    _resolve_single,
+    resolve_entity,
 )
-from apps.core.models import RecordReference
+from apps.core.models import RecordReference, get_claim_fields
 from apps.provenance.models import Claim, Source
 
 
@@ -38,7 +36,7 @@ class TestResolveBulkTitle:
         Claim.objects.assert_claim(t1, "name", "Godzilla", source=opdb)
         Claim.objects.assert_claim(t2, "name", "Blackout", source=opdb)
 
-        _resolve_bulk(Title, TITLE_DIRECT_FIELDS)
+        _resolve_bulk(Title, get_claim_fields(Title))
 
         t1.refresh_from_db()
         t2.refresh_from_db()
@@ -51,7 +49,7 @@ class TestResolveBulkTitle:
         Claim.objects.assert_claim(t, "name", "Low Priority", source=opdb)
         Claim.objects.assert_claim(t, "name", "High Priority", source=editorial)
 
-        _resolve_bulk(Title, TITLE_DIRECT_FIELDS)
+        _resolve_bulk(Title, get_claim_fields(Title))
 
         t.refresh_from_db()
         assert t.name == "High Priority"
@@ -60,38 +58,32 @@ class TestResolveBulkTitle:
         t = Title.objects.create(opdb_id="G1", name="Stale Name", slug="t1")
 
         # No claims — resolution should blank the name.
-        _resolve_bulk(Title, TITLE_DIRECT_FIELDS)
+        _resolve_bulk(Title, get_claim_fields(Title))
 
         t.refresh_from_db()
         assert t.name == ""
 
-    def test_fk_handler_resolves_franchise(self, opdb):
+    def test_fk_resolves_franchise(self, opdb):
+        from apps.catalog.resolve import resolve_all_entities
+
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
         t = Title.objects.create(opdb_id="G1", name="", slug="t1")
 
         Claim.objects.assert_claim(t, "franchise", "godzilla", source=opdb)
 
-        franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
-        _resolve_bulk(
-            Title,
-            TITLE_DIRECT_FIELDS,
-            fk_handlers={"franchise": ("franchise", franchise_lookup)},
-        )
+        resolve_all_entities(Title)
 
         t.refresh_from_db()
         assert t.franchise == franchise
 
-    def test_fk_handler_resets_when_no_claim(self, opdb):
+    def test_fk_resets_when_no_claim(self, opdb):
+        from apps.catalog.resolve import resolve_all_entities
+
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
         t = Title.objects.create(opdb_id="G1", name="", slug="t1", franchise=franchise)
 
         # No franchise claim — should reset to None.
-        franchise_lookup = {f.slug: f for f in Franchise.objects.all()}
-        _resolve_bulk(
-            Title,
-            TITLE_DIRECT_FIELDS,
-            fk_handlers={"franchise": ("franchise", franchise_lookup)},
-        )
+        resolve_all_entities(Title)
 
         t.refresh_from_db()
         assert t.franchise is None
@@ -103,7 +95,7 @@ class TestResolveBulkTitle:
         Claim.objects.assert_claim(t2, "name", "Resolved", source=opdb)
 
         # Only resolve t2.
-        _resolve_bulk(Title, TITLE_DIRECT_FIELDS, object_ids={t2.pk})
+        _resolve_bulk(Title, get_claim_fields(Title), object_ids={t2.pk})
 
         t1.refresh_from_db()
         t2.refresh_from_db()
@@ -115,7 +107,7 @@ class TestResolveBulkTitle:
         old_updated_at = t.updated_at
 
         Claim.objects.assert_claim(t, "name", "New Name", source=opdb)
-        _resolve_bulk(Title, TITLE_DIRECT_FIELDS)
+        _resolve_bulk(Title, get_claim_fields(Title))
 
         t.refresh_from_db()
         assert t.updated_at > old_updated_at
@@ -125,7 +117,6 @@ class TestResolveBulkTitle:
 class TestResolveBulkManufacturer:
     def test_resolves_with_int_fields(self, opdb):
         from apps.catalog.models import CorporateEntity
-        from apps.catalog.resolve._entities import CORPORATE_ENTITY_DIRECT_FIELDS
 
         m = Manufacturer.objects.create(name="Stern Pinball", slug="stern")
         ce = CorporateEntity.objects.create(
@@ -137,7 +128,7 @@ class TestResolveBulkManufacturer:
 
         _resolve_bulk(
             CorporateEntity,
-            CORPORATE_ENTITY_DIRECT_FIELDS,
+            get_claim_fields(CorporateEntity),
         )
 
         ce.refresh_from_db()
@@ -160,7 +151,7 @@ class TestResolveBulkMarkdownReferences:
             source=opdb,
         )
 
-        _resolve_bulk(Manufacturer, MANUFACTURER_DIRECT_FIELDS)
+        _resolve_bulk(Manufacturer, get_claim_fields(Manufacturer))
 
         mfr_ct = ContentType.objects.get_for_model(Manufacturer)
         refs = RecordReference.objects.filter(source_type=mfr_ct, source_id=mfr.pk)
@@ -181,7 +172,7 @@ class TestResolveBulkMarkdownReferences:
             f"Uses [[system:id:{system.pk}]].",
             source=opdb,
         )
-        _resolve_bulk(Manufacturer, MANUFACTURER_DIRECT_FIELDS)
+        _resolve_bulk(Manufacturer, get_claim_fields(Manufacturer))
 
         mfr_ct = ContentType.objects.get_for_model(Manufacturer)
         assert (
@@ -193,12 +184,89 @@ class TestResolveBulkMarkdownReferences:
         Claim.objects.filter(
             content_type=mfr_ct, object_id=mfr.pk, field_name="description"
         ).update(is_active=False)
-        _resolve_bulk(Manufacturer, MANUFACTURER_DIRECT_FIELDS)
+        _resolve_bulk(Manufacturer, get_claim_fields(Manufacturer))
 
         assert (
             RecordReference.objects.filter(source_type=mfr_ct, source_id=mfr.pk).count()
             == 0
         )
+
+
+@pytest.mark.django_db
+class TestResolveBulkUniqueFieldSafety:
+    """UNIQUE fields must not be reset when no claim exists, or bulk_update
+    will crash with an IntegrityError when multiple objects share the default."""
+
+    def test_unique_name_preserved_when_no_claim(self, opdb):
+        """Objects without a name claim keep their existing name."""
+        from apps.catalog.models import Theme
+
+        t1 = Theme.objects.create(name="Horror", slug="horror")
+        t2 = Theme.objects.create(name="Sports", slug="sports")
+
+        # Only t1 gets a name claim; t2 has none.
+        Claim.objects.assert_claim(t1, "name", "Horror Movies", source=opdb)
+
+        _resolve_bulk(Theme, get_claim_fields(Theme))
+
+        t1.refresh_from_db()
+        t2.refresh_from_db()
+        assert t1.name == "Horror Movies"  # Updated by claim.
+        assert t2.name == "Sports"  # Preserved — not reset to "".
+
+    def test_non_unique_field_still_resets(self, opdb):
+        """Non-unique fields are still reset to default when no claim exists."""
+        from apps.catalog.models import Theme
+
+        t = Theme.objects.create(name="Horror", slug="horror", description="Old desc")
+
+        # Name claim but no description claim.
+        Claim.objects.assert_claim(t, "name", "Horror", source=opdb)
+
+        _resolve_bulk(Theme, get_claim_fields(Theme))
+
+        t.refresh_from_db()
+        assert t.description == ""  # Reset to default.
+
+    def test_single_preserves_unique_name_without_claim(self, opdb):
+        """_resolve_single also preserves UNIQUE fields without claims (parity)."""
+        from apps.catalog.models import Theme
+
+        t = Theme.objects.create(name="Horror", slug="horror", description="Old desc")
+
+        # Description claim but no name claim.
+        Claim.objects.assert_claim(t, "description", "Scary stuff", source=opdb)
+
+        _resolve_single(t, get_claim_fields(Theme))
+
+        assert t.name == "Horror"  # Preserved — not reset to "".
+        assert t.description == "Scary stuff"  # Applied from claim.
+
+    def test_single_and_bulk_produce_same_result(self, opdb):
+        """Single and bulk resolution must agree on partial-claim entities."""
+        from apps.catalog.models import Theme
+
+        # Two identical themes, one resolved single, one bulk.
+        t_single = Theme.objects.create(
+            name="Horror", slug="horror", description="Old desc"
+        )
+        t_bulk = Theme.objects.create(
+            name="Horror Copy", slug="horror-copy", description="Old desc"
+        )
+
+        # Both get only a description claim, no name claim.
+        Claim.objects.assert_claim(t_single, "description", "Scary stuff", source=opdb)
+        Claim.objects.assert_claim(t_bulk, "description", "Scary stuff", source=opdb)
+
+        _resolve_single(t_single, get_claim_fields(Theme))
+        t_single.save()
+
+        _resolve_bulk(Theme, get_claim_fields(Theme), object_ids={t_bulk.pk})
+        t_bulk.refresh_from_db()
+
+        assert t_single.name == "Horror"  # Preserved.
+        assert t_bulk.name == "Horror Copy"  # Preserved.
+        assert t_single.description == t_bulk.description == "Scary stuff"
 
 
 @pytest.mark.django_db
@@ -210,7 +278,7 @@ class TestResolveBulkTaxonomy:
         Claim.objects.assert_claim(tag, "name", "Test Tag", source=opdb)
         Claim.objects.assert_claim(tag, "display_order", "abc", source=opdb)
 
-        _resolve_bulk(Tag, TAXONOMY_DIRECT_FIELDS, object_ids={tag.pk})
+        _resolve_bulk(Tag, get_claim_fields(Tag), object_ids={tag.pk})
 
         tag.refresh_from_db()
         assert tag.name == "Test Tag"
@@ -227,7 +295,7 @@ class TestResolveTitle:
         Claim.objects.assert_claim(t, "description", "A monster game.", source=opdb)
         Claim.objects.assert_claim(t, "franchise", "godzilla", source=opdb)
 
-        result = resolve_title(t)
+        result = resolve_entity(t)
 
         assert result.name == "Godzilla"
         assert result.description == "A monster game."
@@ -239,6 +307,6 @@ class TestResolveTitle:
 
         # Only a name claim, no franchise.
         Claim.objects.assert_claim(t, "name", "Godzilla", source=opdb)
-        result = resolve_title(t)
+        result = resolve_entity(t)
 
         assert result.franchise is None

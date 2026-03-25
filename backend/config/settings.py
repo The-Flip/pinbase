@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 import dj_database_url
@@ -31,6 +32,8 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.catalog",
     "apps.provenance",
+    "constance",
+    "constance.backends.database",
 ]
 
 MIDDLEWARE = [
@@ -174,3 +177,40 @@ if not DEBUG:
     SESSION_COOKIE_SAMESITE = "Lax"
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
+
+# ---------------------------------------------------------------------------
+# Constance (runtime-configurable settings)
+# ---------------------------------------------------------------------------
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+if "pytest" in sys.modules:
+    CONSTANCE_BACKEND = "constance.backends.memory.MemoryBackend"
+
+DISPLAY_POLICY_CHOICES = (
+    ("show-all", "Show all content (including Not Allowed — internal demos only)"),
+    ("include-unknown", "Show unknown + licensed content (e.g., OPDB images)"),
+    ("licensed-only", "Show only licensed content (excludes unknown and not-allowed)"),
+    ("public-domain-only", "Show only Public Domain / CC0 content"),
+)
+
+CONSTANCE_CONFIG = {
+    "CONTENT_DISPLAY_POLICY": (
+        "licensed-only",
+        "Controls which content is shown based on license status",
+        str,
+    ),
+}
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    "display_policy_select": [
+        "django.forms.fields.ChoiceField",
+        {"widget": "django.forms.Select", "choices": DISPLAY_POLICY_CHOICES},
+    ],
+}
+
+CONSTANCE_CONFIG["CONTENT_DISPLAY_POLICY"] = (
+    "licensed-only",
+    "Controls which content is shown based on license status",
+    "display_policy_select",
+)
+
+CONSTANCE_CONFIG_FIELDSETS = (("Content Display", ("CONTENT_DISPLAY_POLICY",)),)

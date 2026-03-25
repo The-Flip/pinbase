@@ -15,12 +15,15 @@ from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from apps.core.markdown import render_markdown_fields
-
 from ..cache import PEOPLE_ALL_KEY, invalidate_all
 from .constants import DEFAULT_PAGE_SIZE
-from .helpers import _build_activity, _claims_prefetch, _extract_image_urls
-from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema
+from .helpers import (
+    _build_activity,
+    _build_rich_text,
+    _claims_prefetch,
+    _extract_image_urls,
+)
+from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema, RichTextSchema
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -47,8 +50,7 @@ class PersonTitleSchema(RelatedTitleSchema):
 class PersonDetailSchema(Schema):
     name: str
     slug: str
-    description: str
-    description_html: str = ""
+    description: RichTextSchema = RichTextSchema()
     birth_year: int | None = None
     birth_month: int | None = None
     birth_day: int | None = None
@@ -105,8 +107,9 @@ def _serialize_person_detail(person) -> dict:
     return {
         "name": person.name,
         "slug": person.slug,
-        "description": person.description,
-        **render_markdown_fields(person),
+        "description": _build_rich_text(
+            person, "description", getattr(person, "active_claims", [])
+        ),
         "birth_year": person.birth_year,
         "birth_month": person.birth_month,
         "birth_day": person.birth_day,
@@ -213,9 +216,11 @@ def patch_person_claims(request, slug: str, data: ClaimPatchSchema):
     from apps.provenance.models import Claim
 
     from ..models import Person
-    from ..resolve import PERSON_DIRECT_FIELDS, resolve_person
+    from apps.core.models import get_claim_fields
 
-    editable_fields = set(PERSON_DIRECT_FIELDS.keys())
+    from ..resolve import resolve_entity
+
+    editable_fields = set(get_claim_fields(Person))
     unknown = set(data.fields.keys()) - editable_fields
     if unknown:
         raise HttpError(422, f"Unknown or non-editable fields: {sorted(unknown)}")
@@ -229,7 +234,7 @@ def patch_person_claims(request, slug: str, data: ClaimPatchSchema):
             raise HttpError(422, "; ".join(exc.messages)) from exc
         Claim.objects.assert_claim(person, field_name, value, user=request.user)
 
-    resolve_person(person)
+    resolve_entity(person)
     invalidate_all()
 
     person = get_object_or_404(_person_qs(), slug=person.slug)

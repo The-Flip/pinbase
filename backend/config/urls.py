@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.http import Http404, HttpResponse
 from django.urls import URLPattern, URLResolver, path, re_path
 
+from .admin_views import resolve_view
 from .api import api
 
 # Extensions that indicate a static asset request. If a request ends with one
@@ -78,6 +79,7 @@ def frontend_spa(request, path=""):
 
 
 urlpatterns: list[URLPattern | URLResolver] = [
+    path("admin/resolve/", resolve_view, name="admin-resolve"),
     path("admin/", admin.site.urls),
     path("api/", api.urls),
 ]

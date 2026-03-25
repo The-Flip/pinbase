@@ -6,25 +6,41 @@ interface AuthState {
 	username: string | null;
 }
 
+const ANONYMOUS: AuthState = { isAuthenticated: false, id: null, username: null };
+
 function createAuthStore() {
-	let state = $state<AuthState>({
-		isAuthenticated: false,
-		id: null,
-		username: null
-	});
+	let state = $state<AuthState>({ ...ANONYMOUS });
 	let loaded = $state(false);
+
+	function set(data: { is_authenticated: boolean; id?: number | null; username?: string | null }) {
+		state = {
+			isAuthenticated: data.is_authenticated,
+			id: data.id ?? null,
+			username: data.username ?? null
+		};
+		loaded = true;
+	}
 
 	async function load() {
 		if (loaded) return;
 		const { data } = await client.GET('/api/auth/me/');
+		if (data) set(data);
+	}
+
+	async function login(username: string, password: string): Promise<string | null> {
+		const { data, error } = await client.POST('/api/auth/login/', {
+			body: { username, password }
+		});
 		if (data) {
-			state = {
-				isAuthenticated: data.is_authenticated,
-				id: data.id ?? null,
-				username: data.username ?? null
-			};
+			set(data);
+			return null;
 		}
-		loaded = true;
+		return (error as { detail?: string })?.detail ?? 'Login failed.';
+	}
+
+	async function logout() {
+		const { data } = await client.POST('/api/auth/logout/');
+		if (data) set(data);
 	}
 
 	return {
@@ -40,7 +56,9 @@ function createAuthStore() {
 		get loaded() {
 			return loaded;
 		},
-		load
+		load,
+		login,
+		logout
 	};
 }
 

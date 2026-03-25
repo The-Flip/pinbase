@@ -1,17 +1,18 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import AttributionLine from './AttributionLine.svelte';
 	import Breadcrumb from './Breadcrumb.svelte';
 	import Markdown from './Markdown.svelte';
 	import { pageTitle } from '$lib/constants';
 
 	let {
 		name,
-		descriptionHtml = null,
+		description = null,
 		breadcrumbs = null,
 		children
 	}: {
 		name: string;
-		descriptionHtml?: string | null;
+		description?: { text?: string; html?: string; attribution?: object | null } | null;
 		breadcrumbs?: { label: string; href: string }[] | null;
 		children: Snippet;
 	} = $props();
@@ -27,8 +28,9 @@
 			<Breadcrumb crumbs={breadcrumbs} current={name} />
 		{/if}
 		<h1>{name}</h1>
-		{#if descriptionHtml}
-			<Markdown html={descriptionHtml} />
+		{#if description?.html}
+			<Markdown html={description.html} />
+			<AttributionLine attribution={description.attribution} />
 		{/if}
 	</header>
 

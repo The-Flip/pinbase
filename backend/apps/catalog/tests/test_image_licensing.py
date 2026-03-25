@@ -1,0 +1,216 @@
+"""Tests for image license denormalization and display threshold filtering."""
+
+import pytest
+
+from apps.catalog.api.helpers import _extract_image_urls
+from apps.catalog.models import MachineModel, Title
+from apps.catalog.resolve import resolve_model
+from apps.core.licensing import resolve_effective_license
+from apps.core.models import License
+from apps.provenance.models import Claim, Source, SourceFieldLicense
+
+
+@pytest.fixture
+def cc_by_sa():
+    return License.objects.get(slug="cc-by-sa-4-0")
+
+
+@pytest.fixture
+def not_allowed():
+    return License.objects.get(slug="not-allowed")
+
+
+@pytest.fixture
+def opdb(cc_by_sa):
+    return Source.objects.create(
+        name="OPDB",
+        slug="opdb",
+        source_type="database",
+        priority=200,
+        default_license=None,  # unknown
+    )
+
+
+@pytest.fixture
+def ipdb(not_allowed):
+    return Source.objects.create(
+        name="IPDB",
+        slug="ipdb",
+        source_type="database",
+        priority=100,
+        default_license=not_allowed,
+    )
+
+
+@pytest.mark.django_db
+class TestEffectiveLicenseResolution:
+    def test_claim_license_overrides_all(self, opdb, cc_by_sa):
+        """Per-claim license takes precedence over source defaults."""
+        title = Title.objects.create(name="", slug="t1")
+        claim = Claim.objects.assert_claim(title, "description", "text", source=opdb)
+        claim.license = cc_by_sa
+        claim.save()
+        claim.refresh_from_db()
+        # Need source loaded for resolution
+        claim.source = opdb
+
+        lic = resolve_effective_license(claim)
+        assert lic == cc_by_sa
+
+    def test_source_field_license_used(self, opdb, cc_by_sa):
+        """SourceFieldLicense overrides source default for matching field."""
+        SourceFieldLicense.objects.create(
+            source=opdb, field_name="description", license=cc_by_sa
+        )
+        title = Title.objects.create(name="", slug="t1")
+        claim = Claim.objects.assert_claim(title, "description", "text", source=opdb)
+        claim.source = opdb
+
+        from apps.core.licensing import build_source_field_license_map
+
+        sfl_map = build_source_field_license_map()
+        lic = resolve_effective_license(claim, sfl_map)
+        assert lic == cc_by_sa
+
+    def test_source_default_license_fallback(self, ipdb, not_allowed):
+        """Falls back to source.default_license when no overrides exist."""
+        title = Title.objects.create(name="", slug="t1")
+        claim = Claim.objects.assert_claim(title, "description", "text", source=ipdb)
+        claim.source = ipdb
+
+        lic = resolve_effective_license(claim)
+        assert lic == not_allowed
+
+    def test_all_null_returns_none(self, opdb):
+        """Returns None when no license is set anywhere."""
+        title = Title.objects.create(name="", slug="t1")
+        claim = Claim.objects.assert_claim(title, "description", "text", source=opdb)
+        claim.source = opdb
+
+        lic = resolve_effective_license(claim)
+        assert lic is None
+
+
+@pytest.mark.django_db
+class TestImageLicenseDenormalization:
+    def test_resolution_stores_permissiveness_rank_in_extra_data(self, opdb, cc_by_sa):
+        """Resolution should denormalize license rank into extra_data for image fields."""
+        opdb.default_license = cc_by_sa
+        opdb.save()
+
+        pm = MachineModel.objects.create(name="Test", slug="test-pm")
+        Claim.objects.assert_claim(
+            pm,
+            "opdb.images",
+            [
+                {
+                    "primary": True,
+                    "urls": {"small": "s.jpg", "medium": "m.jpg", "large": "l.jpg"},
+                }
+            ],
+            source=opdb,
+        )
+
+        resolve_model(pm)
+        pm.refresh_from_db()
+
+        assert pm.extra_data.get("opdb.images.__license_slug") == "cc-by-sa-4-0"
+        assert pm.extra_data.get("opdb.images.__permissiveness_rank") == 85
+
+    def test_null_license_stores_null_rank(self, opdb):
+        """Null license should store null rank in extra_data."""
+        pm = MachineModel.objects.create(name="Test", slug="test-pm")
+        Claim.objects.assert_claim(
+            pm,
+            "opdb.images",
+            [
+                {
+                    "primary": True,
+                    "urls": {"small": "s.jpg", "medium": "m.jpg", "large": "l.jpg"},
+                }
+            ],
+            source=opdb,
+        )
+
+        resolve_model(pm)
+        pm.refresh_from_db()
+
+        assert pm.extra_data.get("opdb.images.__license_slug") is None
+        assert pm.extra_data.get("opdb.images.__permissiveness_rank") is None
+
+
+@pytest.mark.django_db
+class TestExtractImageUrlsWithThreshold:
+    @pytest.fixture(autouse=True)
+    def _licensed_only_policy(self):
+        from constance.test import override_config
+
+        with override_config(CONTENT_DISPLAY_POLICY="licensed-only"):
+            yield
+
+    def test_skips_images_below_threshold(self):
+        """Images with rank below display threshold should be skipped."""
+        extra_data = {
+            "opdb.images": [
+                {"primary": True, "urls": {"medium": "m.jpg", "large": "l.jpg"}}
+            ],
+            "opdb.images.__license_slug": "not-allowed",
+            "opdb.images.__permissiveness_rank": 0,
+        }
+        thumb, hero = _extract_image_urls(extra_data)
+        assert thumb is None
+        assert hero is None
+
+    def test_falls_through_to_licensed_source(self):
+        """When first source is below threshold, fall through to next."""
+        extra_data = {
+            "opdb.images": [
+                {"primary": True, "urls": {"medium": "opdb.jpg", "large": "opdb-l.jpg"}}
+            ],
+            "opdb.images.__permissiveness_rank": 0,  # below threshold
+            "ipdb.image_urls": ["ipdb.jpg"],
+            "ipdb.image_urls.__permissiveness_rank": 85,  # above threshold
+        }
+        thumb, hero = _extract_image_urls(extra_data)
+        assert thumb == "ipdb.jpg"
+
+    def test_null_rank_uses_unknown_rank(self):
+        """Null permissiveness_rank (unknown license) should use UNKNOWN_LICENSE_RANK."""
+        extra_data = {
+            "opdb.images": [
+                {"primary": True, "urls": {"medium": "m.jpg", "large": "l.jpg"}}
+            ],
+            "opdb.images.__permissiveness_rank": None,  # unknown
+        }
+        # With "licensed-only" (min_rank=38), unknown (rank 5) should be hidden.
+        thumb, hero = _extract_image_urls(extra_data)
+        assert thumb is None
+        assert hero is None
+
+    def test_show_all_displays_everything(self):
+        """With show-all policy, even Not Allowed images display."""
+        from constance.test import override_config
+
+        extra_data = {
+            "opdb.images": [
+                {"primary": True, "urls": {"medium": "m.jpg", "large": "l.jpg"}}
+            ],
+            "opdb.images.__permissiveness_rank": 0,
+        }
+        with override_config(CONTENT_DISPLAY_POLICY="show-all"):
+            thumb, hero = _extract_image_urls(extra_data)
+        assert thumb == "m.jpg"
+
+    def test_include_unknown_shows_null_rank(self):
+        """With include-unknown policy, null-rank images display."""
+        from constance.test import override_config
+
+        extra_data = {
+            "opdb.images": [
+                {"primary": True, "urls": {"medium": "m.jpg", "large": "l.jpg"}}
+            ],
+            "opdb.images.__permissiveness_rank": None,
+        }
+        with override_config(CONTENT_DISPLAY_POLICY="include-unknown"):
+            thumb, hero = _extract_image_urls(extra_data)
+        assert thumb == "m.jpg"

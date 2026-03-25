@@ -6,6 +6,7 @@
 	import ModelSpecsSidebar from '$lib/components/ModelSpecsSidebar.svelte';
 	import CreditsList from '$lib/components/CreditsList.svelte';
 	import ExternalLinksSidebarSection from '$lib/components/ExternalLinksSidebarSection.svelte';
+	import AttributionLine from '$lib/components/AttributionLine.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import HeroHeader from '$lib/components/HeroHeader.svelte';
 	import RatingsSidebarSection from '$lib/components/RatingsSidebarSection.svelte';
@@ -33,10 +34,10 @@
 	let metaItems = $derived.by(() => {
 		if (!md) return [];
 		const items: Array<{ text: string; href?: string }> = [];
-		if (md.manufacturer_name) {
+		if (md.manufacturer) {
 			items.push({
-				text: md.manufacturer_name,
-				href: resolve(`/manufacturers/${md.manufacturer_slug}`)
+				text: md.manufacturer.name,
+				href: resolve(`/manufacturers/${md.manufacturer.slug}`)
 			});
 		}
 		if (md.year) {
@@ -67,10 +68,11 @@
 
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if title.description_html}
+			{#if title.description?.html}
 				<section class="prose">
 					<h2>About</h2>
-					<Markdown html={title.description_html} />
+					<Markdown html={title.description.html} />
+					<AttributionLine attribution={title.description.attribution} />
 				</section>
 			{/if}
 
@@ -103,7 +105,7 @@
 									slug={machine.slug}
 									name={machine.name}
 									thumbnailUrl={machine.thumbnail_url}
-									manufacturerName={machine.manufacturer_name}
+									manufacturerName={machine.manufacturer?.name}
 									year={machine.year}
 								/>
 								{#if machine.variants.length > 0}
@@ -156,22 +158,22 @@
 				/>
 			{:else}
 				<!-- Multi-model: agreed specs across all models -->
-				{#if specs.technology_generation_slug || specs.display_type_slug || specs.player_count || specs.system_slug || specs.cabinet_slug || specs.game_format_slug || specs.display_subtype_slug || specs.production_quantity || (specs.themes && specs.themes.length > 0) || title.abbreviations.length > 0}
+				{#if specs.technology_generation || specs.display_type || specs.player_count || specs.system || specs.cabinet || specs.game_format || specs.display_subtype || specs.production_quantity || (specs.themes && specs.themes.length > 0) || title.abbreviations.length > 0}
 					<SidebarSection heading="Specifications">
 						<dl>
-							{#if specs.technology_generation_slug}
+							{#if specs.technology_generation}
 								<dt>Generation</dt>
 								<dd>
-									<a href={resolve(`/technology-generations/${specs.technology_generation_slug}`)}
-										>{specs.technology_generation_name}</a
+									<a href={resolve(`/technology-generations/${specs.technology_generation.slug}`)}
+										>{specs.technology_generation.name}</a
 									>
 								</dd>
 							{/if}
-							{#if specs.display_type_slug}
+							{#if specs.display_type}
 								<dt>Display Type</dt>
 								<dd>
-									<a href={resolve(`/display-types/${specs.display_type_slug}`)}
-										>{specs.display_type_name}</a
+									<a href={resolve(`/display-types/${specs.display_type.slug}`)}
+										>{specs.display_type.name}</a
 									>
 								</dd>
 							{/if}
@@ -187,10 +189,10 @@
 								<dt>Units Made</dt>
 								<dd>{specs.production_quantity}</dd>
 							{/if}
-							{#if specs.system_slug}
+							{#if specs.system}
 								<dt>System</dt>
 								<dd>
-									<a href={resolve(`/systems/${specs.system_slug}`)}>{specs.system_name}</a>
+									<a href={resolve(`/systems/${specs.system.slug}`)}>{specs.system.name}</a>
 								</dd>
 							{/if}
 							{#if specs.themes && specs.themes.length > 0}
@@ -232,25 +234,25 @@
 								<dt>Abbrs</dt>
 								<dd>{title.abbreviations.join(', ')}</dd>
 							{/if}
-							{#if specs.cabinet_slug}
+							{#if specs.cabinet}
 								<dt>Cabinet</dt>
 								<dd>
-									<a href={resolve(`/cabinets/${specs.cabinet_slug}`)}>{specs.cabinet_name}</a>
+									<a href={resolve(`/cabinets/${specs.cabinet.slug}`)}>{specs.cabinet.name}</a>
 								</dd>
 							{/if}
-							{#if specs.game_format_slug}
+							{#if specs.game_format}
 								<dt>Format</dt>
 								<dd>
-									<a href={resolve(`/game-formats/${specs.game_format_slug}`)}
-										>{specs.game_format_name}</a
+									<a href={resolve(`/game-formats/${specs.game_format.slug}`)}
+										>{specs.game_format.name}</a
 									>
 								</dd>
 							{/if}
-							{#if specs.display_subtype_slug}
+							{#if specs.display_subtype}
 								<dt>Display</dt>
 								<dd>
-									<a href={resolve(`/display-subtypes/${specs.display_subtype_slug}`)}
-										>{specs.display_subtype_name}</a
+									<a href={resolve(`/display-subtypes/${specs.display_subtype.slug}`)}
+										>{specs.display_subtype.name}</a
 									>
 								</dd>
 							{/if}

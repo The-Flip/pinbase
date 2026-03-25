@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AttributionLine from '$lib/components/AttributionLine.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import { pageTitle } from '$lib/constants';
 
@@ -13,8 +14,9 @@
 <article>
 	<header>
 		<h1>{profile.name}</h1>
-		{#if profile.description_html}
-			<Markdown html={profile.description_html} />
+		{#if profile.description?.html}
+			<Markdown html={profile.description.html} />
+			<AttributionLine attribution={profile.description.attribution} />
 		{/if}
 	</header>
 </article>

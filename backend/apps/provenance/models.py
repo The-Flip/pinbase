@@ -62,6 +62,18 @@ class Source(TimeStampedModel):
     )
     url = models.URLField(blank=True)
     description = models.TextField(blank=True)
+    is_enabled = models.BooleanField(
+        default=True,
+        help_text="Disabled sources are excluded from claim resolution.",
+    )
+    default_license = models.ForeignKey(
+        "core.License",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="sources",
+        help_text="Default license for claims from this source.",
+    )
 
     class Meta:
         ordering = ["-priority", "name"]
@@ -75,6 +87,33 @@ class Source(TimeStampedModel):
         super().save(*args, **kwargs)
 
 
+class SourceFieldLicense(models.Model):
+    """Per-field license override for a source.
+
+    Wiki-style sources typically have different licenses for text vs images
+    (e.g., Fandom: text is CC BY-SA 3.0, images are fair use / not reusable).
+    This model captures that relationship without denormalizing to per-claim.
+    """
+
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.CASCADE,
+        related_name="field_licenses",
+    )
+    field_name = models.CharField(max_length=255)
+    license = models.ForeignKey(
+        "core.License",
+        on_delete=models.CASCADE,
+        related_name="+",
+    )
+
+    class Meta:
+        unique_together = [("source", "field_name")]
+
+    def __str__(self) -> str:
+        return f"{self.source.name}: {self.field_name} → {self.license.short_name}"
+
+
 class ClaimManager(models.Manager):
     def assert_claim(
         self,
@@ -86,12 +125,14 @@ class ClaimManager(models.Manager):
         source: Source | None = None,
         user=None,
         claim_key: str = "",
+        license=None,
     ) -> "Claim":
         """Create a claim, deactivating any existing active claim for the same claim_key+author.
 
         ``subject`` can be any model instance (MachineModel, Manufacturer, Person, …).
         Exactly one of ``source`` or ``user`` must be provided.
         ``claim_key`` defaults to ``field_name`` for scalar claims.
+        ``license`` is an optional per-claim License override (null inherits from source).
         Runs in a transaction to ensure the old claim is deactivated atomically.
         """
         if (source is None) == (user is None):
@@ -118,6 +159,7 @@ class ClaimManager(models.Manager):
                 claim_key=claim_key,
                 value=value,
                 citation=citation,
+                license=license,
             )
 
     def bulk_assert_claims(
@@ -175,9 +217,10 @@ class ClaimManager(models.Manager):
             "citation",
             "needs_review",
             "needs_review_notes",
+            "license_id",
         ):
-            pk, ct_id, obj_id, ck, val, cit, nr, nrn = row
-            existing[(ct_id, obj_id, ck)] = (val, cit, nr, nrn, pk)
+            pk, ct_id, obj_id, ck, val, cit, nr, nrn, lic_id = row
+            existing[(ct_id, obj_id, ck)] = (val, cit, nr, nrn, lic_id, pk)
 
         # 3. Diff: skip unchanged, collect superseded + new.
         to_deactivate_ids: list[int] = []
@@ -186,12 +229,13 @@ class ClaimManager(models.Manager):
             key = (new_claim.content_type_id, new_claim.object_id, new_claim.claim_key)
             old = existing.get(key)
             if old:
-                old_val, old_cit, old_nr, old_nrn, old_pk = old
+                old_val, old_cit, old_nr, old_nrn, old_lic_id, old_pk = old
                 if (
                     old_val == new_claim.value
                     and old_cit == new_claim.citation
                     and old_nr == new_claim.needs_review
                     and old_nrn == new_claim.needs_review_notes
+                    and old_lic_id == new_claim.license_id
                 ):
                     continue  # Already correct
                 to_deactivate_ids.append(old_pk)
@@ -285,6 +329,14 @@ class Claim(models.Model):
     )
     value = models.JSONField()
     citation = models.TextField(blank=True)
+    license = models.ForeignKey(
+        "core.License",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="claims",
+        help_text="Per-claim license override. Null inherits from source field license or source default.",
+    )
     is_active = models.BooleanField(default=True)
     needs_review = models.BooleanField(
         default=False,

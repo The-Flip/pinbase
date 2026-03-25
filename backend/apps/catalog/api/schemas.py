@@ -7,6 +7,13 @@ from typing import Any, Optional
 from ninja import Schema
 
 
+class Ref(Schema):
+    """A reference to a named entity with a slug."""
+
+    name: str
+    slug: str
+
+
 class ClaimSchema(Schema):
     source_name: Optional[str] = None
     source_slug: Optional[str] = None
@@ -20,6 +27,27 @@ class ClaimSchema(Schema):
 
 class ClaimPatchSchema(Schema):
     fields: dict[str, Any]
+
+
+class AttributionSchema(Schema):
+    """License and attribution info for a piece of content (image, description, etc.)."""
+
+    license_slug: Optional[str] = None
+    license_name: Optional[str] = None
+    license_url: Optional[str] = None
+    permissiveness_rank: Optional[int] = None
+    requires_attribution: bool = False
+    source_name: Optional[str] = None
+    source_url: Optional[str] = None
+    attribution_text: Optional[str] = None
+
+
+class RichTextSchema(Schema):
+    """A text field bundled with its rendered HTML and attribution."""
+
+    text: str = ""
+    html: str = ""
+    attribution: Optional[AttributionSchema] = None
 
 
 class ThemeSchema(Schema):
@@ -42,8 +70,7 @@ class TitleMachineSchema(Schema):
     name: str
     slug: str
     year: Optional[int] = None
-    manufacturer_name: Optional[str] = None
-    manufacturer_slug: Optional[str] = None
+    manufacturer: Optional[Ref] = None
     technology_generation_name: Optional[str] = None
     thumbnail_url: Optional[str] = None
     variants: list[TitleMachineVariantSchema] = []

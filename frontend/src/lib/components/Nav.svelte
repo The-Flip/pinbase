@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import { goto } from '$app/navigation';
 	import { faBars, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 	import FaIcon from './FaIcon.svelte';
 	import { SITE_NAME } from '$lib/constants';
 	import { resolveHref } from '$lib/utils';
+	import { auth } from '$lib/auth.svelte';
 
 	let mobileNavOpen = $state(false);
 
 	const navItems = [
 		{ href: '/titles' as const, label: 'Titles' },
 		{ href: '/manufacturers' as const, label: 'Manufacturers' },
-		{ href: '/people' as const, label: 'People' },
-		{ href: '/api-docs' as const, label: 'API' }
+		{ href: '/people' as const, label: 'People' }
 	];
 
 	function isActive(href: string) {
@@ -20,6 +21,15 @@
 	}
 
 	let toggleIcon = $derived(mobileNavOpen ? faXmark : faBars);
+
+	$effect(() => {
+		auth.load();
+	});
+
+	async function handleLogout() {
+		await auth.logout();
+		await goto(resolveHref('/'));
+	}
 </script>
 
 <header class="site-header">
@@ -48,6 +58,15 @@
 			>
 				<FaIcon icon={faMagnifyingGlass} />
 			</a>
+
+			{#if auth.loaded}
+				{#if auth.isAuthenticated}
+					<span class="auth-user">{auth.username}</span>
+					<button class="auth-link" onclick={handleLogout}>Sign out</button>
+				{:else}
+					<a href={resolveHref('/login')} class="auth-link">Sign in</a>
+				{/if}
+			{/if}
 
 			<button
 				class="mobile-toggle"
@@ -141,6 +160,27 @@
 	.search-link :global(svg) {
 		width: 1.1rem;
 		height: 1.1rem;
+	}
+
+	.auth-user {
+		font-size: var(--font-size-2);
+		color: var(--color-text-muted);
+	}
+
+	.auth-link {
+		font-size: var(--font-size-2);
+		color: var(--color-text-muted);
+		text-decoration: none;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		font-weight: 500;
+		transition: color 0.15s var(--ease-2);
+	}
+
+	.auth-link:hover {
+		color: var(--color-text-primary);
 	}
 
 	.mobile-toggle {

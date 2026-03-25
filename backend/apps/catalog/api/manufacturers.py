@@ -18,8 +18,13 @@ from ninja.security import django_auth
 
 from ..cache import MANUFACTURERS_ALL_KEY, invalidate_all
 from .constants import DEFAULT_PAGE_SIZE
-from .helpers import _build_activity, _claims_prefetch, _extract_image_urls
-from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema
+from .helpers import (
+    _build_activity,
+    _build_rich_text,
+    _claims_prefetch,
+    _extract_image_urls,
+)
+from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema, RichTextSchema
 from .titles import FacetRef, _dedup_facet_refs
 
 # ---------------------------------------------------------------------------
@@ -81,8 +86,7 @@ class ManufacturerPersonSchema(Schema):
 class ManufacturerDetailSchema(Schema):
     name: str
     slug: str
-    description: str = ""
-    description_html: str = ""
+    description: RichTextSchema = RichTextSchema()
     year_start: int | None = None
     year_end: int | None = None
     country: str | None = None
@@ -151,7 +155,6 @@ def _serialize_manufacturer_detail(mfr) -> dict:
     Expects *mfr* to have been fetched with prefetch_related for entities,
     non_variant_models, credits, and claims (to_attr="active_claims").
     """
-    from apps.core.markdown import render_markdown_fields
 
     # Collect persons with roles and compute year range across entities.
     person_roles: dict[str, dict] = {}  # slug -> {name, roles set}
@@ -186,8 +189,9 @@ def _serialize_manufacturer_detail(mfr) -> dict:
     return {
         "name": mfr.name,
         "slug": mfr.slug,
-        "description": mfr.description,
-        **render_markdown_fields(mfr),
+        "description": _build_rich_text(
+            mfr, "description", getattr(mfr, "active_claims", [])
+        ),
         "year_start": min(year_starts) if year_starts else None,
         "year_end": max(year_ends) if year_ends else None,
         "logo_url": mfr.logo_url,
@@ -397,9 +401,11 @@ def patch_manufacturer_claims(request, slug: str, data: ClaimPatchSchema):
     from apps.provenance.models import Claim
 
     from ..models import Manufacturer
-    from ..resolve import MANUFACTURER_DIRECT_FIELDS, resolve_manufacturer
+    from apps.core.models import get_claim_fields
 
-    editable_fields = set(MANUFACTURER_DIRECT_FIELDS.keys())
+    from ..resolve import resolve_entity
+
+    editable_fields = set(get_claim_fields(Manufacturer))
     unknown = set(data.fields.keys()) - editable_fields
     if unknown:
         raise HttpError(422, f"Unknown or non-editable fields: {sorted(unknown)}")
@@ -413,7 +419,7 @@ def patch_manufacturer_claims(request, slug: str, data: ClaimPatchSchema):
             raise HttpError(422, "; ".join(exc.messages)) from exc
         Claim.objects.assert_claim(mfr, field_name, value, user=request.user)
 
-    resolve_manufacturer(mfr)
+    resolve_entity(mfr)
     invalidate_all()
 
     mfr = get_object_or_404(_manufacturer_qs(), slug=mfr.slug)

@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 	import ClientFilteredGrid from '$lib/components/grid/ClientFilteredGrid.svelte';
+	import AttributionLine from '$lib/components/AttributionLine.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import SidebarList from '$lib/components/SidebarList.svelte';
 	import SidebarListItem from '$lib/components/SidebarListItem.svelte';
@@ -26,8 +27,9 @@
 
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if system.description_html}
-				<Markdown html={system.description_html} />
+			{#if system.description?.html}
+				<Markdown html={system.description.html} />
+				<AttributionLine attribution={system.description.attribution} />
 			{/if}
 
 			{#if system.titles.length === 0}
@@ -51,10 +53,10 @@
 		{/snippet}
 
 		{#snippet sidebar()}
-			{#if system.manufacturer_name}
+			{#if system.manufacturer}
 				<SidebarSection heading="Manufacturer">
-					<a href={resolve(`/manufacturers/${system.manufacturer_slug}`)}
-						>{system.manufacturer_name}</a
+					<a href={resolve(`/manufacturers/${system.manufacturer.slug}`)}
+						>{system.manufacturer.name}</a
 					>
 				</SidebarSection>
 			{/if}

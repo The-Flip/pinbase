@@ -38,14 +38,14 @@ class TestManufacturerDescriptionHtml:
         resp = client.get("/api/manufacturers/williams")
         assert resp.status_code == 200
         data = resp.json()
-        assert "description_html" in data
-        assert "<strong>legendary</strong>" in data["description_html"]
+        assert "html" in data["description"]
+        assert "<strong>legendary</strong>" in data["description"]["html"]
 
     def test_empty_description_returns_empty_html(self, client, db):
         Manufacturer.objects.create(name="Stern", slug="stern")
         resp = client.get("/api/manufacturers/stern")
         data = resp.json()
-        assert data["description_html"] == ""
+        assert data["description"]["html"] == ""
 
     @pytest.mark.django_db
     def test_entity_link_in_description(self, client, db):
@@ -58,8 +58,8 @@ class TestManufacturerDescriptionHtml:
         )
         resp = client.get("/api/systems/wpc-95")
         data = resp.json()
-        assert "/manufacturers/williams" in data["description_html"]
-        assert "Williams" in data["description_html"]
+        assert "/manufacturers/williams" in data["description"]["html"]
+        assert "Williams" in data["description"]["html"]
 
 
 class TestSystemDescriptionHtml:
@@ -67,13 +67,13 @@ class TestSystemDescriptionHtml:
         resp = client.get("/api/systems/wpc-95")
         assert resp.status_code == 200
         data = resp.json()
-        assert "description_html" in data
-        assert data["description_html"] != ""
+        assert "html" in data["description"]
+        assert data["description"]["html"] != ""
 
     def test_raw_description_also_present(self, client, system_with_description):
         resp = client.get("/api/systems/wpc-95")
         data = resp.json()
-        assert data["description"] == "The final WPC generation."
+        assert data["description"]["text"] == "The final WPC generation."
 
 
 @pytest.mark.django_db
@@ -105,7 +105,7 @@ class TestReferenceSync:
         """Resolving a manufacturer with links creates RecordReference rows."""
         from django.contrib.contenttypes.models import ContentType
 
-        from apps.catalog.resolve import resolve_manufacturer
+        from apps.catalog.resolve import resolve_entity
         from apps.provenance.models import Claim, Source
 
         mfr = Manufacturer.objects.create(name="Williams", slug="williams")
@@ -117,7 +117,7 @@ class TestReferenceSync:
             f"Uses [[system:id:{system.pk}]].",
             source=source,
         )
-        resolve_manufacturer(mfr)
+        resolve_entity(mfr)
 
         mfr_ct = ContentType.objects.get_for_model(Manufacturer)
         refs = RecordReference.objects.filter(source_type=mfr_ct, source_id=mfr.pk)
@@ -130,7 +130,7 @@ class TestReferenceSync:
         """When a description is blanked, stale RecordReference rows are removed."""
         from django.contrib.contenttypes.models import ContentType
 
-        from apps.catalog.resolve import resolve_manufacturer
+        from apps.catalog.resolve import resolve_entity
         from apps.provenance.models import Claim, Source
 
         mfr = Manufacturer.objects.create(name="Williams", slug="williams")
@@ -144,7 +144,7 @@ class TestReferenceSync:
             f"Uses [[system:id:{system.pk}]].",
             source=source,
         )
-        resolve_manufacturer(mfr)
+        resolve_entity(mfr)
         mfr_ct = ContentType.objects.get_for_model(Manufacturer)
         assert (
             RecordReference.objects.filter(source_type=mfr_ct, source_id=mfr.pk).count()
@@ -155,7 +155,7 @@ class TestReferenceSync:
         Claim.objects.filter(
             content_type=mfr_ct, object_id=mfr.pk, field_name="description"
         ).update(is_active=False)
-        resolve_manufacturer(mfr)
+        resolve_entity(mfr)
 
         assert mfr.description == ""
         assert (

@@ -16,7 +16,7 @@
 	});
 </script>
 
-<EntityDetailLayout name={profile.name} descriptionHtml={profile.description_html}>
+<EntityDetailLayout name={profile.name} description={profile.description}>
 	<PaginatedSection
 		loader={machines}
 		heading="Machines"
@@ -27,7 +27,7 @@
 				slug={machine.slug}
 				name={machine.name}
 				thumbnailUrl={machine.thumbnail_url}
-				manufacturerName={machine.manufacturer_name}
+				manufacturerName={machine.manufacturer?.name}
 				year={machine.year}
 			/>
 		{/snippet}

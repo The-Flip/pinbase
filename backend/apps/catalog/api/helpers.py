@@ -40,6 +40,7 @@ def _claims_prefetch(to_attr: str = "active_claims"):
     return Prefetch(
         "claims",
         queryset=Claim.objects.filter(is_active=True)
+        .exclude(source__is_enabled=False)
         .select_related("source", "user")
         .annotate(
             effective_priority=Case(
@@ -59,10 +60,22 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
 
     Tries OPDB structured images first (with size variants), then falls back
     to IPDB flat URL list (same URL used for both thumbnail and hero).
+
+    Respects the global Constance display threshold: skips image sources
+    whose ``__permissiveness_rank`` is below the minimum.
     """
+    from apps.core.licensing import UNKNOWN_LICENSE_RANK, get_minimum_display_rank
+
+    min_rank = get_minimum_display_rank()
+
+    def _rank_ok(key: str) -> bool:
+        rank = extra_data.get(f"{key}.__permissiveness_rank")
+        effective = rank if rank is not None else UNKNOWN_LICENSE_RANK
+        return effective >= min_rank
+
     # Try OPDB structured images first (have size variants).
     images = extra_data.get("opdb.images")
-    if images and isinstance(images, list):
+    if images and isinstance(images, list) and _rank_ok("opdb.images"):
         img = None
         for candidate in images:
             if isinstance(candidate, dict) and candidate.get("primary"):
@@ -80,12 +93,90 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
     # Fall back to flat URL list (IPDB-sourced or scraped).
     for key in ("ipdb.image_urls", "image_urls"):
         image_urls = extra_data.get(key)
-        if image_urls and isinstance(image_urls, list):
+        if image_urls and isinstance(image_urls, list) and _rank_ok(key):
             first = image_urls[0]
             if isinstance(first, str) and first:
                 return first, first
 
     return None, None
+
+
+def _extract_image_attribution(extra_data: dict) -> dict | None:
+    """Return AttributionSchema-shaped dict for the displayed image, or None.
+
+    Checks each image source in priority order (same as _extract_image_urls)
+    and returns info for the first source that passes the display threshold.
+    """
+    from apps.core.licensing import UNKNOWN_LICENSE_RANK, get_minimum_display_rank
+
+    min_rank = get_minimum_display_rank()
+
+    for key in ("opdb.images", "ipdb.image_urls", "image_urls"):
+        data = extra_data.get(key)
+        if not data:
+            continue
+        rank = extra_data.get(f"{key}.__permissiveness_rank")
+        effective = rank if rank is not None else UNKNOWN_LICENSE_RANK
+        if effective >= min_rank:
+            return {
+                "license_slug": extra_data.get(f"{key}.__license_slug"),
+                "permissiveness_rank": rank,
+            }
+
+    return None
+
+
+def _extract_description_attribution(active_claims) -> dict | None:
+    """Return AttributionSchema-shaped dict for the winning description claim, or None.
+
+    Expects active_claims to be ordered by claim_key, -priority, -created_at
+    (the standard prefetch ordering).
+    """
+    from apps.core.licensing import (
+        build_source_field_license_map,
+        resolve_effective_license,
+    )
+
+    sfl_map = None
+    for claim in active_claims:
+        if claim.field_name == "description":
+            if sfl_map is None:
+                sfl_map = build_source_field_license_map()
+            lic = resolve_effective_license(claim, sfl_map)
+            return {
+                "license_slug": lic.slug if lic else None,
+                "license_name": lic.short_name if lic else None,
+                "license_url": lic.url if lic else None,
+                "permissiveness_rank": (lic.permissiveness_rank if lic else None),
+                "requires_attribution": (lic.requires_attribution if lic else False),
+                "source_name": claim.source.name if claim.source else None,
+                "source_url": claim.source.url if claim.source else None,
+                "attribution_text": claim.citation or None,
+            }
+    return None
+
+
+def _build_rich_text(obj, field_name: str, active_claims=None) -> dict:
+    """Build a RichTextSchema-shaped dict for a text field with attribution.
+
+    Reads the raw text from obj.{field_name}, renders HTML via
+    render_markdown_fields, and extracts attribution from the winning claim.
+    """
+    from apps.core.markdown import render_markdown_fields
+
+    text = getattr(obj, field_name, "") or ""
+    html_fields = render_markdown_fields(obj)
+    html = html_fields.get(f"{field_name}_html", "")
+
+    attribution = None
+    if active_claims is not None:
+        attribution = _extract_description_attribution(active_claims)
+
+    return {
+        "text": text,
+        "html": html,
+        "attribution": attribution,
+    }
 
 
 def _extract_variant_features(extra_data: dict) -> list[str]:
@@ -142,20 +233,16 @@ def _serialize_title_machine(pm) -> dict:
         for v in variant_qs
     ]
 
+    mfr = (
+        pm.corporate_entity.manufacturer
+        if pm.corporate_entity and pm.corporate_entity.manufacturer
+        else None
+    )
     return {
         "name": pm.name,
         "slug": pm.slug,
         "year": pm.year,
-        "manufacturer_name": (
-            pm.corporate_entity.manufacturer.name
-            if pm.corporate_entity and pm.corporate_entity.manufacturer
-            else None
-        ),
-        "manufacturer_slug": (
-            pm.corporate_entity.manufacturer.slug
-            if pm.corporate_entity and pm.corporate_entity.manufacturer
-            else None
-        ),
+        "manufacturer": {"name": mfr.name, "slug": mfr.slug} if mfr else None,
         "technology_generation_name": (
             pm.technology_generation.name if pm.technology_generation else None
         ),

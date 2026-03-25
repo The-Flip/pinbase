@@ -18,7 +18,7 @@
 
 <EntityDetailLayout
 	name={profile.name}
-	descriptionHtml={profile.description_html}
+	description={profile.description}
 	breadcrumbs={[{ label: 'Display Types', href: '/display-types' }]}
 >
 	<PaginatedSection
@@ -31,7 +31,7 @@
 				slug={title.slug}
 				name={title.name}
 				thumbnailUrl={title.thumbnail_url}
-				manufacturerName={title.manufacturer_name}
+				manufacturerName={title.manufacturer?.name}
 				year={title.year}
 			/>
 		{/snippet}

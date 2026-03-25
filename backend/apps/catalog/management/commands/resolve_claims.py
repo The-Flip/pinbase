@@ -6,7 +6,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from apps.catalog.resolve import resolve_all
+from apps.catalog.resolve import resolve_machine_models
 
 
 class Command(BaseCommand):
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         logging.getLogger("django.db.backends").setLevel(logging.WARNING)
 
         self.stdout.write("Resolving machine model claims...")
-        model_count = resolve_all(stdout=self.stdout)
+        model_count = resolve_machine_models(stdout=self.stdout)
         self.stdout.write(self.style.SUCCESS(f"Resolved {model_count} models."))
 
         from apps.catalog.cache import invalidate_all

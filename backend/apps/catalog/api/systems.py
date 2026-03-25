@@ -10,8 +10,8 @@ from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
 
-from .helpers import _extract_image_urls
-from .schemas import RelatedTitleSchema
+from .helpers import _build_rich_text, _claims_prefetch, _extract_image_urls
+from .schemas import Ref, RelatedTitleSchema, RichTextSchema
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -21,8 +21,7 @@ from .schemas import RelatedTitleSchema
 class SystemListSchema(Schema):
     name: str
     slug: str
-    manufacturer_name: Optional[str] = None
-    manufacturer_slug: Optional[str] = None
+    manufacturer: Optional[Ref] = None
     machine_count: int = 0
 
 
@@ -34,10 +33,8 @@ class SiblingSystemSchema(Schema):
 class SystemDetailSchema(Schema):
     name: str
     slug: str
-    description: str = ""
-    description_html: str = ""
-    manufacturer_name: Optional[str] = None
-    manufacturer_slug: Optional[str] = None
+    description: RichTextSchema = RichTextSchema()
+    manufacturer: Optional[Ref] = None
     titles: list[RelatedTitleSchema]
     sibling_systems: list[SiblingSystemSchema] = []
 
@@ -68,8 +65,11 @@ def list_all_systems(request):
         {
             "name": s.name,
             "slug": s.slug,
-            "manufacturer_name": s.manufacturer.name if s.manufacturer else None,
-            "manufacturer_slug": s.manufacturer.slug if s.manufacturer else None,
+            "manufacturer": (
+                {"name": s.manufacturer.name, "slug": s.manufacturer.slug}
+                if s.manufacturer
+                else None
+            ),
             "machine_count": s.machine_count,
         }
         for s in qs
@@ -83,12 +83,13 @@ def get_system(request, slug: str):
 
     system = get_object_or_404(
         System.objects.select_related("manufacturer").prefetch_related(
+            _claims_prefetch(),
             Prefetch(
                 "machine_models",
                 queryset=MachineModel.objects.filter(variant_of__isnull=True)
                 .select_related("corporate_entity__manufacturer", "title")
                 .order_by(F("year").desc(nulls_last=True), "name"),
-            )
+            ),
         ),
         slug=slug,
     )
@@ -124,15 +125,17 @@ def get_system(request, slug: str):
             .values("name", "slug")
         )
 
-    from apps.core.markdown import render_markdown_fields
-
     return {
         "name": system.name,
         "slug": system.slug,
-        "description": system.description,
-        **render_markdown_fields(system),
-        "manufacturer_name": system.manufacturer.name if system.manufacturer else None,
-        "manufacturer_slug": system.manufacturer.slug if system.manufacturer else None,
+        "description": _build_rich_text(
+            system, "description", getattr(system, "active_claims", [])
+        ),
+        "manufacturer": (
+            {"name": system.manufacturer.name, "slug": system.manufacturer.slug}
+            if system.manufacturer
+            else None
+        ),
         "titles": list(titles.values()),
         "sibling_systems": sibling_systems,
     }
