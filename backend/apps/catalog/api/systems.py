@@ -55,6 +55,78 @@ class SystemDetailSchema(Schema):
 
 
 # ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _system_detail_qs():
+    from ..models import MachineModel, System
+
+    return System.objects.select_related("manufacturer").prefetch_related(
+        _claims_prefetch(),
+        Prefetch(
+            "machine_models",
+            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            .select_related("corporate_entity__manufacturer", "title")
+            .order_by(F("year").desc(nulls_last=True), "name"),
+        ),
+    )
+
+
+def _serialize_system_detail(system) -> dict:
+    from ..models import System
+
+    titles: dict[str, dict] = {}
+    for m in system.machine_models.all():
+        if m.title is None:
+            continue
+        key = m.title.slug
+        if key not in titles:
+            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
+            titles[key] = {
+                "name": m.title.name,
+                "slug": m.title.slug,
+                "year": m.year,
+                "manufacturer_name": (
+                    m.corporate_entity.manufacturer.name
+                    if m.corporate_entity and m.corporate_entity.manufacturer
+                    else None
+                ),
+                "thumbnail_url": thumbnail_url,
+            }
+        elif titles[key]["thumbnail_url"] is None:
+            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
+            if thumbnail_url:
+                titles[key]["thumbnail_url"] = thumbnail_url
+
+    sibling_systems = []
+    if system.manufacturer:
+        sibling_systems = list(
+            System.objects.filter(manufacturer=system.manufacturer)
+            .exclude(pk=system.pk)
+            .annotate(latest_year=Max("machine_models__year"))
+            .order_by(F("latest_year").desc(nulls_last=True), "name")
+            .values("name", "slug")
+        )
+
+    return {
+        "name": system.name,
+        "slug": system.slug,
+        "description": _build_rich_text(
+            system, "description", getattr(system, "active_claims", [])
+        ),
+        "manufacturer": (
+            {"name": system.manufacturer.name, "slug": system.manufacturer.slug}
+            if system.manufacturer
+            else None
+        ),
+        "titles": list(titles.values()),
+        "sibling_systems": sibling_systems,
+        "activity": _build_activity(getattr(system, "active_claims", [])),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
 
@@ -94,67 +166,8 @@ def list_all_systems(request):
 @systems_router.get("/{slug}", response=SystemDetailSchema)
 @decorate_view(cache_control(no_cache=True))
 def get_system(request, slug: str):
-    from ..models import MachineModel, System
-
-    system = get_object_or_404(
-        System.objects.select_related("manufacturer").prefetch_related(
-            _claims_prefetch(),
-            Prefetch(
-                "machine_models",
-                queryset=MachineModel.objects.filter(variant_of__isnull=True)
-                .select_related("corporate_entity__manufacturer", "title")
-                .order_by(F("year").desc(nulls_last=True), "name"),
-            ),
-        ),
-        slug=slug,
-    )
-    titles: dict[str, dict] = {}
-    for m in system.machine_models.all():
-        if m.title is None:
-            continue
-        key = m.title.slug
-        if key not in titles:
-            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
-            titles[key] = {
-                "name": m.title.name,
-                "slug": m.title.slug,
-                "year": m.year,
-                "manufacturer_name": (
-                    m.corporate_entity.manufacturer.name
-                    if m.corporate_entity and m.corporate_entity.manufacturer
-                    else None
-                ),
-                "thumbnail_url": thumbnail_url,
-            }
-        elif titles[key]["thumbnail_url"] is None:
-            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
-            if thumbnail_url:
-                titles[key]["thumbnail_url"] = thumbnail_url
-    sibling_systems = []
-    if system.manufacturer:
-        sibling_systems = list(
-            System.objects.filter(manufacturer=system.manufacturer)
-            .exclude(pk=system.pk)
-            .annotate(latest_year=Max("machine_models__year"))
-            .order_by(F("latest_year").desc(nulls_last=True), "name")
-            .values("name", "slug")
-        )
-
-    return {
-        "name": system.name,
-        "slug": system.slug,
-        "description": _build_rich_text(
-            system, "description", getattr(system, "active_claims", [])
-        ),
-        "manufacturer": (
-            {"name": system.manufacturer.name, "slug": system.manufacturer.slug}
-            if system.manufacturer
-            else None
-        ),
-        "titles": list(titles.values()),
-        "sibling_systems": sibling_systems,
-        "activity": _build_activity(getattr(system, "active_claims", [])),
-    }
+    system = get_object_or_404(_system_detail_qs(), slug=slug)
+    return _serialize_system_detail(system)
 
 
 @systems_router.patch(
@@ -174,17 +187,5 @@ def patch_system_claims(request, slug: str, data: ClaimPatchSchema):
 
     execute_claims(system, specs, user=request.user)
 
-    system = get_object_or_404(
-        System.objects.prefetch_related(_claims_prefetch()), slug=system.slug
-    )
-    return {
-        "name": system.name,
-        "slug": system.slug,
-        "description": _build_rich_text(
-            system, "description", getattr(system, "active_claims", [])
-        ),
-        "manufacturer": None,
-        "titles": [],
-        "sibling_systems": [],
-        "activity": _build_activity(getattr(system, "active_claims", [])),
-    }
+    system = get_object_or_404(_system_detail_qs(), slug=system.slug)
+    return _serialize_system_detail(system)

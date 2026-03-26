@@ -85,6 +85,62 @@ def _serialize_title_list(title) -> dict:
     }
 
 
+def _series_titles_qs():
+    from ..models import MachineModel, Title
+
+    return Title.objects.annotate(
+        machine_count=Count(
+            "machine_models",
+            filter=Q(machine_models__variant_of__isnull=True),
+        )
+    ).prefetch_related(
+        "abbreviations",
+        Prefetch(
+            "machine_models",
+            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            .select_related("corporate_entity__manufacturer")
+            .order_by("year", "name"),
+        ),
+    )
+
+
+def _series_credits_qs():
+    from ..models import Credit
+
+    return Credit.objects.filter(series__isnull=False).select_related("person", "role")
+
+
+def _series_detail_qs():
+    from ..models import Series
+
+    return Series.objects.prefetch_related(
+        Prefetch("titles", queryset=_series_titles_qs()),
+        Prefetch("credits", queryset=_series_credits_qs()),
+        _claims_prefetch(),
+    )
+
+
+def _serialize_series_detail(series) -> dict:
+    return {
+        "name": series.name,
+        "slug": series.slug,
+        "description": _build_rich_text(
+            series, "description", getattr(series, "active_claims", [])
+        ),
+        "titles": [_serialize_title_list(t) for t in series.titles.all()],
+        "credits": [
+            {
+                "person": {"name": c.person.name, "slug": c.person.slug},
+                "role": c.role.slug,
+                "role_display": c.role.name,
+                "role_sort_order": c.role.display_order,
+            }
+            for c in series.credits.all()
+        ],
+        "activity": _build_activity(getattr(series, "active_claims", [])),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
@@ -133,51 +189,8 @@ def list_series(request):
 @series_router.get("/{slug}", response=SeriesDetailSchema)
 @decorate_view(cache_control(no_cache=True))
 def get_series(request, slug: str):
-    from ..models import Credit, MachineModel, Series, Title
-
-    titles_qs = Title.objects.annotate(
-        machine_count=Count(
-            "machine_models",
-            filter=Q(machine_models__variant_of__isnull=True),
-        )
-    ).prefetch_related(
-        "abbreviations",
-        Prefetch(
-            "machine_models",
-            queryset=MachineModel.objects.filter(variant_of__isnull=True)
-            .select_related("corporate_entity__manufacturer")
-            .order_by("year", "name"),
-        ),
-    )
-    credits_qs = Credit.objects.filter(
-        series__isnull=False,
-    ).select_related("person", "role")
-    series = get_object_or_404(
-        Series.objects.prefetch_related(
-            Prefetch("titles", queryset=titles_qs),
-            Prefetch("credits", queryset=credits_qs),
-            _claims_prefetch(),
-        ),
-        slug=slug,
-    )
-    return {
-        "name": series.name,
-        "slug": series.slug,
-        "description": _build_rich_text(
-            series, "description", getattr(series, "active_claims", [])
-        ),
-        "titles": [_serialize_title_list(t) for t in series.titles.all()],
-        "credits": [
-            {
-                "person": {"name": c.person.name, "slug": c.person.slug},
-                "role": c.role.slug,
-                "role_display": c.role.name,
-                "role_sort_order": c.role.display_order,
-            }
-            for c in series.credits.all()
-        ],
-        "activity": _build_activity(getattr(series, "active_claims", [])),
-    }
+    series = get_object_or_404(_series_detail_qs(), slug=slug)
+    return _serialize_series_detail(series)
 
 
 @series_router.patch(
@@ -197,17 +210,5 @@ def patch_series_claims(request, slug: str, data: ClaimPatchSchema):
 
     execute_claims(series, specs, user=request.user)
 
-    series = get_object_or_404(
-        Series.objects.prefetch_related(_claims_prefetch()),
-        slug=series.slug,
-    )
-    return {
-        "name": series.name,
-        "slug": series.slug,
-        "description": _build_rich_text(
-            series, "description", getattr(series, "active_claims", [])
-        ),
-        "titles": [],
-        "credits": [],
-        "activity": _build_activity(getattr(series, "active_claims", [])),
-    }
+    series = get_object_or_404(_series_detail_qs(), slug=series.slug)
+    return _serialize_series_detail(series)
