@@ -293,6 +293,29 @@ class RewardTypeDetailSchema(TaxonomySchema):
 reward_types_router = Router(tags=["reward-types"])
 
 
+def _reward_type_detail_qs():
+    from ..models import MachineModel, RewardType
+
+    return RewardType.objects.prefetch_related(
+        _claims_prefetch(),
+        Prefetch(
+            "machine_models",
+            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            .select_related("corporate_entity__manufacturer", "technology_generation")
+            .order_by(F("year").desc(nulls_last=True), "name"),
+        ),
+    )
+
+
+def _serialize_reward_type_detail(rt) -> dict:
+    from .helpers import _serialize_title_machine
+
+    return {
+        **_serialize_taxonomy(rt),
+        "machines": [_serialize_title_machine(pm) for pm in rt.machine_models.all()],
+    }
+
+
 @reward_types_router.get("/", response=list[TaxonomySchema])
 @decorate_view(cache_control(no_cache=True))
 def list_reward_types(request):
@@ -307,27 +330,8 @@ def list_reward_types(request):
 @reward_types_router.get("/{slug}", response=RewardTypeDetailSchema)
 @decorate_view(cache_control(no_cache=True))
 def get_reward_type(request, slug: str):
-    from ..models import MachineModel, RewardType
-    from .helpers import _serialize_title_machine
-
-    rt = get_object_or_404(
-        RewardType.objects.prefetch_related(
-            _claims_prefetch(),
-            Prefetch(
-                "machine_models",
-                queryset=MachineModel.objects.filter(variant_of__isnull=True)
-                .select_related(
-                    "corporate_entity__manufacturer", "technology_generation"
-                )
-                .order_by(F("year").desc(nulls_last=True), "name"),
-            ),
-        ),
-        slug=slug,
-    )
-    return {
-        **_serialize_taxonomy(rt),
-        "machines": [_serialize_title_machine(pm) for pm in rt.machine_models.all()],
-    }
+    rt = get_object_or_404(_reward_type_detail_qs(), slug=slug)
+    return _serialize_reward_type_detail(rt)
 
 
 @reward_types_router.patch(
@@ -337,8 +341,7 @@ def get_reward_type(request, slug: str):
     tags=["private"],
 )
 def patch_reward_type(request, slug: str, data: ClaimPatchSchema):
-    from ..models import MachineModel, RewardType
-    from .helpers import _serialize_title_machine
+    from ..models import RewardType
 
     if not data.fields:
         raise HttpError(422, "No changes provided.")
@@ -350,24 +353,8 @@ def patch_reward_type(request, slug: str, data: ClaimPatchSchema):
 
     execute_claims(obj, specs, user=request.user)
 
-    rt = get_object_or_404(
-        RewardType.objects.prefetch_related(
-            _claims_prefetch(),
-            Prefetch(
-                "machine_models",
-                queryset=MachineModel.objects.filter(variant_of__isnull=True)
-                .select_related(
-                    "corporate_entity__manufacturer", "technology_generation"
-                )
-                .order_by(F("year").desc(nulls_last=True), "name"),
-            ),
-        ),
-        slug=obj.slug,
-    )
-    return {
-        **_serialize_taxonomy(rt),
-        "machines": [_serialize_title_machine(pm) for pm in rt.machine_models.all()],
-    }
+    rt = get_object_or_404(_reward_type_detail_qs(), slug=obj.slug)
+    return _serialize_reward_type_detail(rt)
 
 
 # ---------------------------------------------------------------------------
