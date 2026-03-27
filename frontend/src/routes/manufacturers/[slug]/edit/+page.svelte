@@ -5,53 +5,31 @@
 	import EditFormShell from '$lib/components/form/EditFormShell.svelte';
 	import TextField from '$lib/components/form/TextField.svelte';
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
+	import { buildManufacturerPatchBody, manufacturerToFormFields } from './manufacturer-edit';
 
 	let { data } = $props();
 	let mfr = $derived(data.manufacturer);
 
-	function mfrToFormFields(m: typeof mfr) {
-		return {
-			name: m.name,
-			description: m.description?.text ?? '',
-			logo_url: m.logo_url ?? '',
-			website: m.website ?? ''
-		};
-	}
-
 	// untrack: intentional one-time capture; re-synced explicitly after save
-	let editFields = $state(untrack(() => mfrToFormFields(data.manufacturer)));
+	let editFields = $state(untrack(() => manufacturerToFormFields(data.manufacturer)));
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
 
-	function getChangedFields(): Record<string, unknown> {
-		const original = mfrToFormFields(mfr);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			// Number inputs return NaN when cleared; treat as empty
-			let val: unknown = editFields[key];
-			if (typeof val === 'number' && isNaN(val)) val = '';
-			if (String(val) !== String(original[key])) {
-				changed[key] = val === '' ? null : val;
-			}
-		}
-		return changed;
-	}
-
 	async function saveChanges() {
-		const fields = getChangedFields();
-		if (Object.keys(fields).length === 0) return;
+		const body = buildManufacturerPatchBody(editFields, mfr);
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/manufacturers/{slug}/claims/', {
 			params: { path: { slug: mfr.slug } },
-			body: { fields }
+			body
 		});
 
 		if (updated) {
-			editFields = mfrToFormFields(updated);
+			editFields = manufacturerToFormFields(updated);
 			await invalidateAll();
 			saveStatus = 'saved';
 			setTimeout(() => (saveStatus = 'idle'), 3000);

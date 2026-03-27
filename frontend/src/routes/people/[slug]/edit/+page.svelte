@@ -8,25 +8,10 @@
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import MonthSelect from '$lib/components/form/MonthSelect.svelte';
 	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
+	import { buildPersonPatchBody, personToFormFields } from './person-edit';
 
 	let { data } = $props();
 	let person = $derived(data.person);
-
-	function personToFormFields(p: typeof person) {
-		return {
-			name: p.name,
-			description: p.description?.text ?? '',
-			nationality: p.nationality ?? '',
-			birth_year: p.birth_year ?? '',
-			birth_month: p.birth_month ?? '',
-			birth_day: p.birth_day ?? '',
-			death_year: p.death_year ?? '',
-			death_month: p.death_month ?? '',
-			death_day: p.death_day ?? '',
-			birth_place: p.birth_place ?? '',
-			photo_url: p.photo_url ?? ''
-		};
-	}
 
 	// untrack: intentional one-time capture; re-synced explicitly after save
 	let editFields = $state(untrack(() => personToFormFields(data.person)));
@@ -42,30 +27,16 @@
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
 
-	function getChangedFields(): Record<string, unknown> {
-		const original = personToFormFields(person);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			// Number inputs return NaN when cleared; treat as empty
-			let val: unknown = editFields[key];
-			if (typeof val === 'number' && isNaN(val)) val = '';
-			if (String(val) !== String(original[key])) {
-				changed[key] = val === '' ? null : val;
-			}
-		}
-		return changed;
-	}
-
 	async function saveChanges() {
-		const fields = getChangedFields();
-		if (Object.keys(fields).length === 0) return;
+		const body = buildPersonPatchBody(editFields, person);
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/people/{slug}/claims/', {
 			params: { path: { slug: person.slug } },
-			body: { fields }
+			body
 		});
 
 		if (updated) {

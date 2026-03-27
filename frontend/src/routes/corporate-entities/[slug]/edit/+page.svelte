@@ -8,47 +8,17 @@
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
+	import {
+		buildCorporateEntityPatchBody,
+		corporateEntityToFormFields
+	} from './corporate-entity-edit';
 
 	let { data } = $props();
 	let ce = $derived(data.corporateEntity);
 
-	// --- Form state ---
-
-	function toFormFields(e: typeof ce) {
-		return {
-			name: e.name,
-			description: e.description?.text ?? '',
-			year_start: e.year_start ?? '',
-			year_end: e.year_end ?? ''
-		};
-	}
-
-	let editFields = $state(untrack(() => toFormFields(data.corporateEntity)));
+	let editFields = $state(untrack(() => corporateEntityToFormFields(data.corporateEntity)));
 	let editAliases = $state<string[]>(untrack(() => [...(data.corporateEntity.aliases ?? [])]));
 	let editNote = $state('');
-
-	// --- Change detection ---
-
-	function getChangedScalarFields(): Record<string, unknown> {
-		const original = toFormFields(ce);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			let val: unknown = editFields[key];
-			if (typeof val === 'number' && isNaN(val)) val = '';
-			if (String(val) !== String(original[key])) {
-				changed[key] = val === '' ? null : val;
-			}
-		}
-		return changed;
-	}
-
-	function aliasesChanged(): boolean {
-		const original = [...(ce.aliases ?? [])].sort();
-		const current = [...editAliases].sort();
-		return JSON.stringify(original) !== JSON.stringify(current);
-	}
-
-	// --- Save ---
 
 	let constraints = $state<FieldConstraints>({});
 
@@ -62,26 +32,22 @@
 	let saveError = $state('');
 
 	async function saveChanges() {
-		const fields = getChangedScalarFields();
-		const hasFields = Object.keys(fields).length > 0;
-		const hasAliases = aliasesChanged();
-
-		if (!hasFields && !hasAliases) return;
+		const body = buildCorporateEntityPatchBody(
+			{ fields: editFields, aliases: editAliases, note: editNote },
+			ce
+		);
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/corporate-entities/{slug}/claims/', {
 			params: { path: { slug: ce.slug } },
-			body: {
-				fields: hasFields ? fields : {},
-				aliases: hasAliases ? editAliases : null,
-				note: editNote.trim()
-			}
+			body
 		});
 
 		if (updated) {
-			editFields = toFormFields(updated);
+			editFields = corporateEntityToFormFields(updated);
 			editAliases = [...(updated.aliases ?? [])];
 			editNote = '';
 			await invalidateAll();
