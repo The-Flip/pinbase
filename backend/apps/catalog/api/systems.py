@@ -9,10 +9,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.errors import HttpError
 from ninja.security import django_auth
 
-from .edit_claims import execute_claims, validate_scalar_fields
+from .edit_claims import execute_claims
 from .helpers import (
     _build_activity,
     _build_edit_history,
@@ -178,14 +177,10 @@ def get_system(request, slug: str):
 def patch_system_claims(request, slug: str, data: ClaimPatchSchema):
     """Assert per-field claims from the authenticated user, then re-resolve."""
     from ..models import System
-
-    if not data.fields:
-        raise HttpError(422, "No changes provided.")
+    from .edit_claims import plan_scalar_field_claims
 
     system = get_object_or_404(System, slug=slug)
-    specs = validate_scalar_fields(System, data.fields)
-    if not specs:
-        raise HttpError(422, "No changes provided.")
+    specs = plan_scalar_field_claims(System, data.fields)
 
     execute_claims(system, specs, user=request.user)
 

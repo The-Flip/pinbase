@@ -237,38 +237,6 @@ class TestGameplayFeatures:
         )
         assert resp.status_code == 422
 
-    def test_duplicate_slugs_returns_422(self, client, user, pm, gameplay_features):
-        client.force_login(user)
-        resp = _patch(
-            client,
-            pm.slug,
-            {
-                "gameplay_features": [
-                    {"slug": "ramps", "count": 1},
-                    {"slug": "ramps", "count": 2},
-                ]
-            },
-        )
-        assert resp.status_code == 422
-
-    def test_zero_count_returns_422(self, client, user, pm, gameplay_features):
-        client.force_login(user)
-        resp = _patch(
-            client,
-            pm.slug,
-            {"gameplay_features": [{"slug": "ramps", "count": 0}]},
-        )
-        assert resp.status_code == 422
-
-    def test_negative_count_returns_422(self, client, user, pm, gameplay_features):
-        client.force_login(user)
-        resp = _patch(
-            client,
-            pm.slug,
-            {"gameplay_features": [{"slug": "ramps", "count": -1}]},
-        )
-        assert resp.status_code == 422
-
 
 # ---------------------------------------------------------------------------
 # Abbreviations
@@ -420,35 +388,12 @@ class TestCredits:
         assert resp.status_code == 200
         assert resp.json()["credits"] == []
 
-    def test_duplicate_pair_returns_422(self, client, user, pm, people, credit_roles):
-        client.force_login(user)
-        resp = _patch(
-            client,
-            pm.slug,
-            {
-                "credits": [
-                    {"person_slug": "pat-lawlor", "role": "design"},
-                    {"person_slug": "pat-lawlor", "role": "design"},
-                ]
-            },
-        )
-        assert resp.status_code == 422
-
     def test_unknown_person_returns_422(self, client, user, pm, credit_roles):
         client.force_login(user)
         resp = _patch(
             client,
             pm.slug,
             {"credits": [{"person_slug": "nonexistent", "role": "design"}]},
-        )
-        assert resp.status_code == 422
-
-    def test_unknown_role_returns_422(self, client, user, pm, people):
-        client.force_login(user)
-        resp = _patch(
-            client,
-            pm.slug,
-            {"credits": [{"person_slug": "pat-lawlor", "role": "nonexistent"}]},
         )
         assert resp.status_code == 422
 

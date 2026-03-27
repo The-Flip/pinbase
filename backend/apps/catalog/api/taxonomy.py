@@ -7,10 +7,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.errors import HttpError
 from ninja.security import django_auth
 
-from .edit_claims import execute_claims, validate_scalar_fields
+from .edit_claims import execute_claims, plan_scalar_field_claims
 from .helpers import _build_activity, _build_rich_text, _claims_prefetch
 from .schemas import ClaimPatchSchema, ClaimSchema, RichTextSchema, TitleMachineSchema
 
@@ -38,13 +37,8 @@ def _taxonomy_detail_qs(model_class):
 
 def _patch_taxonomy(request, model_class, slug, data):
     """Shared PATCH handler for all taxonomy entities."""
-    if not data.fields:
-        raise HttpError(422, "No changes provided.")
-
     obj = get_object_or_404(model_class, slug=slug)
-    specs = validate_scalar_fields(model_class, data.fields)
-    if not specs:
-        raise HttpError(422, "No changes provided.")
+    specs = plan_scalar_field_claims(model_class, data.fields)
 
     execute_claims(obj, specs, user=request.user)
 
@@ -343,13 +337,8 @@ def get_reward_type(request, slug: str):
 def patch_reward_type(request, slug: str, data: ClaimPatchSchema):
     from ..models import RewardType
 
-    if not data.fields:
-        raise HttpError(422, "No changes provided.")
-
     obj = get_object_or_404(RewardType, slug=slug)
-    specs = validate_scalar_fields(RewardType, data.fields)
-    if not specs:
-        raise HttpError(422, "No changes provided.")
+    specs = plan_scalar_field_claims(RewardType, data.fields)
 
     execute_claims(obj, specs, user=request.user)
 

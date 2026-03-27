@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
@@ -352,15 +351,13 @@ def get_manufacturer(request, slug: str):
 )
 def patch_manufacturer_claims(request, slug: str, data: ClaimPatchSchema):
     """Assert per-field claims from the authenticated user, then re-resolve."""
-    from .edit_claims import execute_claims, validate_scalar_fields
+    from .edit_claims import execute_claims, plan_scalar_field_claims
 
     from ..models import Manufacturer
 
     mfr = get_object_or_404(Manufacturer, slug=slug)
 
-    specs = validate_scalar_fields(Manufacturer, data.fields)
-    if not specs:
-        raise HttpError(422, "No changes provided.")
+    specs = plan_scalar_field_claims(Manufacturer, data.fields)
 
     execute_claims(mfr, specs, user=request.user)
 

@@ -25,6 +25,20 @@ class ClaimSpec:
     claim_key: str = ""
 
 
+def plan_scalar_field_claims(model_class, fields: dict) -> list[ClaimSpec]:
+    """Validate scalar fields and reject empty/no-op field payloads.
+
+    Shared by PATCH endpoints that only accept scalar ``fields`` payloads.
+    """
+    if not fields:
+        raise HttpError(422, "No changes provided.")
+
+    specs = validate_scalar_fields(model_class, fields)
+    if not specs:
+        raise HttpError(422, "No changes provided.")
+    return specs
+
+
 def get_field_constraints(model_class) -> dict[str, dict]:
     """Extract min/max/step constraints from numeric claim fields.
 
@@ -265,31 +279,127 @@ def plan_m2m_claims(
 
     Raises HttpError 422 on unknown slugs.
     """
-    from apps.catalog.claims import build_relationship_claim
-
     if desired_slugs:
         existing = set(
             target_model.objects.filter(slug__in=desired_slugs).values_list(
                 "slug", flat=True
             )
         )
-        missing = desired_slugs - existing
-        if missing:
-            raise HttpError(422, f"Unknown {claim_field_name} slugs: {sorted(missing)}")
+        desired = normalize_slug_set_inputs(
+            desired_slugs,
+            available_slugs=existing,
+            error_label=claim_field_name,
+        )
+    else:
+        desired = normalize_slug_set_inputs(desired_slugs, error_label=claim_field_name)
 
     current_slugs = {obj.slug for obj in getattr(entity, m2m_attr).all()}
+    return build_m2m_claim_specs(
+        current=current_slugs,
+        desired=desired,
+        claim_field_name=claim_field_name,
+        slug_key=slug_key,
+    )
+
+
+def normalize_slug_set_inputs(
+    desired_slugs: set[str],
+    *,
+    available_slugs: set[str] | None = None,
+    error_label: str,
+) -> set[str]:
+    """Validate a slug-set relationship input against optional available slugs."""
+    if available_slugs is not None:
+        missing = desired_slugs - available_slugs
+        if missing:
+            raise HttpError(422, f"Unknown {error_label} slugs: {sorted(missing)}")
+    return desired_slugs
+
+
+def build_m2m_claim_specs(
+    *,
+    current: set[str],
+    desired: set[str],
+    claim_field_name: str,
+    slug_key: str,
+) -> list[ClaimSpec]:
+    """Build diff-based ClaimSpecs for simple slug-set M2M relationships."""
+    from apps.catalog.claims import build_relationship_claim
+
     specs: list[ClaimSpec] = []
-    for slug in desired_slugs - current_slugs:
+    for slug in desired - current:
         claim_key, value = build_relationship_claim(claim_field_name, {slug_key: slug})
         specs.append(
             ClaimSpec(field_name=claim_field_name, value=value, claim_key=claim_key)
         )
-    for slug in current_slugs - desired_slugs:
+    for slug in current - desired:
         claim_key, value = build_relationship_claim(
             claim_field_name, {slug_key: slug}, exists=False
         )
         specs.append(
             ClaimSpec(field_name=claim_field_name, value=value, claim_key=claim_key)
+        )
+    return specs
+
+
+def normalize_gameplay_feature_inputs(
+    desired_features: list[tuple[str, int | None]],
+    *,
+    available_slugs: set[str] | None = None,
+) -> dict[str, int | None]:
+    """Normalize gameplay feature input into a slug->count map.
+
+    Duplicate slugs are rejected. Counts, when provided, must be positive.
+    When ``available_slugs`` is provided, unknown slugs are rejected without
+    touching the database.
+    """
+    desired: dict[str, int | None] = {}
+    for slug, count in desired_features:
+        if slug in desired:
+            raise HttpError(422, f"Duplicate gameplay feature slug: {slug!r}")
+        if count is not None and count <= 0:
+            raise HttpError(422, f"Count must be positive for {slug!r}, got {count}")
+        desired[slug] = count
+
+    if available_slugs is not None:
+        missing = set(desired.keys()) - available_slugs
+        if missing:
+            raise HttpError(422, f"Unknown gameplay_feature slugs: {sorted(missing)}")
+
+    return desired
+
+
+def build_gameplay_feature_claim_specs(
+    current: dict[str, int | None],
+    desired: dict[str, int | None],
+) -> list[ClaimSpec]:
+    """Build diff-based ClaimSpecs for gameplay feature relationship changes."""
+    from apps.catalog.claims import build_relationship_claim
+
+    specs: list[ClaimSpec] = []
+    for slug, count in desired.items():
+        if slug not in current or current[slug] != count:
+            claim_key, value = build_relationship_claim(
+                "gameplay_feature", {"gameplay_feature_slug": slug}
+            )
+            value["count"] = count
+            specs.append(
+                ClaimSpec(
+                    field_name="gameplay_feature",
+                    value=value,
+                    claim_key=claim_key,
+                )
+            )
+    for slug in current.keys() - desired.keys():
+        claim_key, value = build_relationship_claim(
+            "gameplay_feature", {"gameplay_feature_slug": slug}, exists=False
+        )
+        specs.append(
+            ClaimSpec(
+                field_name="gameplay_feature",
+                value=value,
+                claim_key=claim_key,
+            )
         )
     return specs
 
@@ -308,63 +418,27 @@ def plan_gameplay_feature_claims(
 
     Raises HttpError 422 on invalid input.
     """
-    from apps.catalog.claims import build_relationship_claim
     from apps.catalog.models import GameplayFeature
 
-    # Normalise input into {slug: count} and validate.
-    desired: dict[str, int | None] = {}
-    for feat in desired_features:
-        slug = feat.slug
-        count = feat.count
-        if slug in desired:
-            raise HttpError(422, f"Duplicate gameplay feature slug: {slug!r}")
-        if count is not None and count <= 0:
-            raise HttpError(422, f"Count must be positive for {slug!r}, got {count}")
-        desired[slug] = count
-
-    if desired:
+    raw_desired = [(feat.slug, feat.count) for feat in desired_features]
+    if raw_desired:
         existing = set(
-            GameplayFeature.objects.filter(slug__in=desired.keys()).values_list(
-                "slug", flat=True
-            )
+            GameplayFeature.objects.filter(
+                slug__in={slug for slug, _ in raw_desired}
+            ).values_list("slug", flat=True)
         )
-        missing = set(desired.keys()) - existing
-        if missing:
-            raise HttpError(422, f"Unknown gameplay_feature slugs: {sorted(missing)}")
+        desired = normalize_gameplay_feature_inputs(
+            raw_desired, available_slugs=existing
+        )
+    else:
+        desired = normalize_gameplay_feature_inputs(raw_desired)
 
     # Current state from prefetched through-table.
     current: dict[str, int | None] = {}
     for row in entity.machinemodelgameplayfeature_set.all():
         current[row.gameplayfeature.slug] = row.count
 
-    specs: list[ClaimSpec] = []
-    # Adds and count changes.
-    for slug, count in desired.items():
-        if slug not in current or current[slug] != count:
-            claim_key, value = build_relationship_claim(
-                "gameplay_feature", {"gameplay_feature_slug": slug}
-            )
-            value["count"] = count
-            specs.append(
-                ClaimSpec(
-                    field_name="gameplay_feature",
-                    value=value,
-                    claim_key=claim_key,
-                )
-            )
-    # Removes.
-    for slug in set(current.keys()) - set(desired.keys()):
-        claim_key, value = build_relationship_claim(
-            "gameplay_feature", {"gameplay_feature_slug": slug}, exists=False
-        )
-        specs.append(
-            ClaimSpec(
-                field_name="gameplay_feature",
-                value=value,
-                claim_key=claim_key,
-            )
-        )
-    return specs
+    return build_gameplay_feature_claim_specs(current, desired)
 
 
 def plan_abbreviation_claims(
@@ -416,45 +490,79 @@ def plan_credit_claims(
 
     Raises HttpError 422 on invalid input.
     """
-    from apps.catalog.claims import build_relationship_claim
     from apps.catalog.models import CreditRole, Person
 
-    # Normalise input into a set of (person_slug, role_slug) and validate.
-    desired: set[tuple[str, str]] = set()
-    for credit in desired_credits:
-        pair = (credit.person_slug, credit.role)
-        if pair in desired:
-            raise HttpError(
-                422,
-                f"Duplicate credit: person={credit.person_slug!r}, role={credit.role!r}",
-            )
-        desired.add(pair)
+    raw_desired = [(credit.person_slug, credit.role) for credit in desired_credits]
 
-    if desired:
-        desired_person_slugs = {p for p, _ in desired}
+    if raw_desired:
+        desired_person_slugs = {p for p, _ in raw_desired}
         existing_people = set(
             Person.objects.filter(slug__in=desired_person_slugs).values_list(
                 "slug", flat=True
             )
         )
-        missing_people = desired_person_slugs - existing_people
-        if missing_people:
-            raise HttpError(422, f"Unknown person slugs: {sorted(missing_people)}")
-
-        desired_role_slugs = {r for _, r in desired}
+        desired_role_slugs = {r for _, r in raw_desired}
         existing_roles = set(
             CreditRole.objects.filter(slug__in=desired_role_slugs).values_list(
                 "slug", flat=True
             )
         )
-        missing_roles = desired_role_slugs - existing_roles
-        if missing_roles:
-            raise HttpError(422, f"Unknown credit role slugs: {sorted(missing_roles)}")
+        desired = normalize_credit_inputs(
+            raw_desired,
+            available_people=existing_people,
+            available_roles=existing_roles,
+        )
+    else:
+        desired = normalize_credit_inputs(raw_desired)
 
     # Current state from prefetched credits.
     current: set[tuple[str, str]] = set()
     for credit in entity.credits.all():
         current.add((credit.person.slug, credit.role.slug))
+
+    return build_credit_claim_specs(current, desired)
+
+
+def normalize_credit_inputs(
+    desired_credits: list[tuple[str, str]],
+    *,
+    available_people: set[str] | None = None,
+    available_roles: set[str] | None = None,
+) -> set[tuple[str, str]]:
+    """Normalize credits into unique (person_slug, role_slug) pairs.
+
+    When available slug sets are provided, unknown people or roles are rejected
+    without touching the database.
+    """
+    desired: set[tuple[str, str]] = set()
+    for person_slug, role in desired_credits:
+        pair = (person_slug, role)
+        if pair in desired:
+            raise HttpError(
+                422,
+                f"Duplicate credit: person={person_slug!r}, role={role!r}",
+            )
+        desired.add(pair)
+
+    if available_people is not None:
+        missing_people = {p for p, _ in desired} - available_people
+        if missing_people:
+            raise HttpError(422, f"Unknown person slugs: {sorted(missing_people)}")
+
+    if available_roles is not None:
+        missing_roles = {r for _, r in desired} - available_roles
+        if missing_roles:
+            raise HttpError(422, f"Unknown credit role slugs: {sorted(missing_roles)}")
+
+    return desired
+
+
+def build_credit_claim_specs(
+    current: set[tuple[str, str]],
+    desired: set[tuple[str, str]],
+) -> list[ClaimSpec]:
+    """Build diff-based ClaimSpecs for credit relationship changes."""
+    from apps.catalog.claims import build_relationship_claim
 
     specs: list[ClaimSpec] = []
     for person_slug, role in desired - current:

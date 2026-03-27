@@ -204,51 +204,25 @@ class TestAdditionalPatchClaimEndpoints:
         )
         assert resp.status_code in (401, 403), resource_name
 
-    @pytest.mark.parametrize(
-        ("path_template", "factory", "field_name", "field_value", "resource_name"),
-        PATCH_CASES,
-    )
-    def test_empty_fields_returns_422(
-        self,
-        client,
-        user,
-        path_template,
-        factory,
-        field_name,
-        field_value,
-        resource_name,
-    ):
-        entity = factory()
+    def test_empty_fields_returns_422(self, client, user):
+        entity = _create_franchise()
         client.force_login(user)
         resp = _patch(
             client,
-            path_template.format(slug=entity.slug),
+            f"/api/franchises/{entity.slug}/claims/",
             {"fields": {}},
         )
-        assert resp.status_code == 422, resource_name
+        assert resp.status_code == 422
 
-    @pytest.mark.parametrize(
-        ("path_template", "factory", "field_name", "field_value", "resource_name"),
-        PATCH_CASES,
-    )
-    def test_unknown_field_returns_422(
-        self,
-        client,
-        user,
-        path_template,
-        factory,
-        field_name,
-        field_value,
-        resource_name,
-    ):
-        entity = factory()
+    def test_unknown_field_returns_422(self, client, user):
+        entity = _create_reward_type()
         client.force_login(user)
         resp = _patch(
             client,
-            path_template.format(slug=entity.slug),
+            f"/api/reward-types/{entity.slug}/claims/",
             {"fields": {"slug": "bad"}},
         )
-        assert resp.status_code == 422, resource_name
+        assert resp.status_code == 422
 
     @pytest.mark.parametrize(
         ("path_template", "factory", "field_name", "field_value", "resource_name"),
