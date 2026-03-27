@@ -23,6 +23,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
 from apps.catalog.ingestion.bulk_utils import generate_unique_slug
+from apps.core.validators import bulk_create_validated
 from apps.catalog.models import (
     Cabinet,
     CorporateEntity,
@@ -379,7 +380,8 @@ class Command(BaseCommand):
         )
 
         # Pass 1: upsert Location rows (slug + display fields).
-        objs = Location.objects.bulk_create(
+        objs = bulk_create_validated(
+            Location,
             [
                 Location(
                     location_path=e["location_path"],
@@ -543,7 +545,8 @@ class Command(BaseCommand):
                 fk_field, _, _ = parent_config
                 update_fields.append(fk_field)
 
-            objs = model_class.objects.bulk_create(
+            objs = bulk_create_validated(
+                model_class,
                 objs,
                 update_conflicts=True,
                 unique_fields=["slug"],
@@ -606,7 +609,8 @@ class Command(BaseCommand):
             Theme(slug=e["slug"], name=e["name"], description=e.get("description", ""))
             for e in entries
         ]
-        objs = Theme.objects.bulk_create(
+        objs = bulk_create_validated(
+            Theme,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -720,7 +724,8 @@ class Command(BaseCommand):
             )
             for e in entries
         ]
-        objs = GameplayFeature.objects.bulk_create(
+        objs = bulk_create_validated(
+            GameplayFeature,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -865,7 +870,8 @@ class Command(BaseCommand):
             )
             for e in entries
         ]
-        objs = Manufacturer.objects.bulk_create(
+        objs = bulk_create_validated(
+            Manufacturer,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -973,7 +979,8 @@ class Command(BaseCommand):
             )
             valid_entries.append(entry)
 
-        objs = CorporateEntity.objects.bulk_create(
+        objs = bulk_create_validated(
+            CorporateEntity,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -1119,7 +1126,8 @@ class Command(BaseCommand):
                 )
             )
 
-        objs = System.objects.bulk_create(
+        objs = bulk_create_validated(
+            System,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -1181,7 +1189,7 @@ class Command(BaseCommand):
 
         mpu_created = len(mpu_to_create)
         if mpu_to_create:
-            SystemMpuString.objects.bulk_create(mpu_to_create)
+            bulk_create_validated(SystemMpuString, mpu_to_create)
         mpu_deleted = 0
         for sys_pk, values in mpu_to_delete.items():
             mpu_deleted += SystemMpuString.objects.filter(
@@ -1207,7 +1215,8 @@ class Command(BaseCommand):
         existing_slugs = set(Person.objects.values_list("slug", flat=True))
 
         objs = [Person(slug=e["slug"], name=e["name"]) for e in entries]
-        objs = Person.objects.bulk_create(
+        objs = bulk_create_validated(
+            Person,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -1280,7 +1289,8 @@ class Command(BaseCommand):
             )
             for e in series_entries
         ]
-        objs = Series.objects.bulk_create(
+        objs = bulk_create_validated(
+            Series,
             objs,
             update_conflicts=True,
             unique_fields=["slug"],
@@ -1341,8 +1351,8 @@ class Command(BaseCommand):
                 )
 
         if credits_to_create:
-            created_credits = Credit.objects.bulk_create(
-                credits_to_create, ignore_conflicts=True
+            created_credits = bulk_create_validated(
+                Credit, credits_to_create, ignore_conflicts=True
             )
             self.stdout.write(
                 f"  Credits: {len(created_credits)} created, {credits_skipped} skipped"
@@ -1390,7 +1400,7 @@ class Command(BaseCommand):
 
         titles_created = len(new_titles)
         if new_titles:
-            Title.objects.bulk_create(new_titles)
+            bulk_create_validated(Title, new_titles)
 
         # Re-fetch lookups after creation.
         titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
@@ -1668,7 +1678,7 @@ class Command(BaseCommand):
 
         models_created = len(new_models)
         if new_models:
-            MachineModel.objects.bulk_create(new_models)
+            bulk_create_validated(MachineModel, new_models)
         if models_needing_update:
             MachineModel.objects.bulk_update(
                 models_needing_update, ["opdb_id", "ipdb_id"]

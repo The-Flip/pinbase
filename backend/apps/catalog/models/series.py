@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
+from apps.core.validators import validate_no_mojibake
 
 __all__ = ["Franchise", "Series"]
 
@@ -18,7 +19,9 @@ class Franchise(Linkable, TimeStampedModel):
 
     link_url_pattern = "/franchises/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, validators=[validate_no_mojibake], unique=True
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
 
@@ -47,7 +50,7 @@ class Series(Linkable, TimeStampedModel):
 
     link_url_pattern = "/series/{slug}"
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, validators=[validate_no_mojibake])
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
     titles = models.ManyToManyField(

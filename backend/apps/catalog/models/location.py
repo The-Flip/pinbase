@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.functions import Lower
 
 from apps.core.models import AliasBase
+from apps.core.validators import validate_no_mojibake
 
 __all__ = [
     "Location",
@@ -34,7 +35,9 @@ class Location(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     location_path = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=200)
-    name = models.CharField(max_length=300, blank=True)  # claim-controlled
+    name = models.CharField(
+        max_length=300, blank=True, validators=[validate_no_mojibake]
+    )  # claim-controlled
     location_type = models.CharField(max_length=50, blank=True)  # claim-controlled
     code = models.CharField(max_length=20, blank=True)  # claim-controlled
     short_name = models.CharField(

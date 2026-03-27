@@ -5,6 +5,8 @@ from __future__ import annotations
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from apps.core.validators import validate_no_mojibake
 from django.db.models.functions import Lower
 
 from apps.core.models import (
@@ -34,7 +36,9 @@ class Manufacturer(Linkable, TimeStampedModel):
     link_url_pattern = "/manufacturers/{slug}"
     claims_exempt = frozenset({"opdb_manufacturer_id", "wikidata_id"})
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     opdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,
@@ -108,6 +112,7 @@ class CorporateEntity(Linkable, TimeStampedModel):
     name = models.CharField(
         max_length=300,
         help_text='Full corporate name, e.g., "D. Gottlieb & Company"',
+        validators=[validate_no_mojibake],
     )
     ipdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,

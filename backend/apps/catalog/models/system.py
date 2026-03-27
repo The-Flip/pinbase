@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
+from apps.core.validators import validate_no_mojibake
 
 __all__ = ["System", "SystemMpuString"]
 
@@ -20,7 +21,9 @@ class System(Linkable, TimeStampedModel):
     link_url_pattern = "/systems/{slug}"
     claims_exempt = frozenset({"manufacturer", "technology_subgeneration"})
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
     manufacturer = models.ForeignKey(

@@ -7,6 +7,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
 
+from apps.core.validators import validate_no_mojibake
+
 from apps.core.models import (
     AliasBase,
     Linkable,
@@ -27,7 +29,9 @@ class GameplayFeature(Linkable, TimeStampedModel):
 
     link_url_pattern = "/gameplay-features/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
     parents = models.ManyToManyField(

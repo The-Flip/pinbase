@@ -16,6 +16,7 @@ import logging
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
+from apps.core.validators import bulk_create_validated
 from apps.catalog.ingestion.bulk_utils import (
     format_names,
     generate_unique_slug,
@@ -281,7 +282,7 @@ class Command(BaseCommand):
             machine_models.append((pm, rec))
 
         if new_models:
-            MachineModel.objects.bulk_create(new_models)
+            bulk_create_validated(MachineModel, new_models)
         if models_needing_opdb_update:
             MachineModel.objects.bulk_update(models_needing_opdb_update, ["opdb_id"])
 
@@ -328,7 +329,7 @@ class Command(BaseCommand):
             machine_models.append((pm, rec))
 
         if new_alias_models:
-            MachineModel.objects.bulk_create(new_alias_models)
+            bulk_create_validated(MachineModel, new_alias_models)
 
         self.stdout.write(
             f"  Aliases — Linked: {alias_linked}, Created: {alias_created}, "

@@ -6,6 +6,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from apps.core.validators import validate_no_mojibake
+
 from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
 
 __all__ = ["MachineModel", "ModelAbbreviation"]
@@ -21,7 +23,7 @@ class MachineModel(Linkable, TimeStampedModel):
     link_url_pattern = "/models/{slug}"
 
     # Identity
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, validators=[validate_no_mojibake])
     slug = models.SlugField(max_length=300, unique=True, blank=True)
 
     # Cross-reference IDs
