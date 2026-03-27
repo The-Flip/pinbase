@@ -18,8 +18,8 @@ class Franchise(Linkable, TimeStampedModel):
 
     link_url_pattern = "/franchises/{slug}"
 
-    name = models.CharField(max_length=300, unique=True)
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
+    name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
 
     claims = GenericRelation("provenance.Claim")
@@ -47,8 +47,8 @@ class Series(Linkable, TimeStampedModel):
 
     link_url_pattern = "/series/{slug}"
 
-    name = models.CharField(max_length=300)
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
     titles = models.ManyToManyField(
         "Title",

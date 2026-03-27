@@ -7,6 +7,7 @@
 	import TextField from '$lib/components/form/TextField.svelte';
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
+	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
 
 	let { data } = $props();
 	let ce = $derived(data.corporateEntity);
@@ -48,6 +49,14 @@
 	}
 
 	// --- Save ---
+
+	let constraints = $state<FieldConstraints>({});
+
+	$effect(() => {
+		fetchFieldConstraints('corporate-entity').then((c) => {
+			constraints = c;
+		});
+	});
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
@@ -92,12 +101,15 @@
 	<fieldset class="date-group">
 		<legend>Years active</legend>
 		<div class="date-row">
-			<NumberField label="Established" bind:value={editFields.year_start} min={1800} max={2100} />
+			<NumberField
+				label="Established"
+				bind:value={editFields.year_start}
+				{...fc(constraints, 'year_start')}
+			/>
 			<NumberField
 				label="Ceased operations"
 				bind:value={editFields.year_end}
-				min={1800}
-				max={2100}
+				{...fc(constraints, 'year_end')}
 			/>
 		</div>
 	</fieldset>

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
 
@@ -35,7 +36,7 @@ class Manufacturer(Linkable, TimeStampedModel):
 
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    opdb_manufacturer_id = models.IntegerField(
+    opdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,
@@ -108,17 +109,23 @@ class CorporateEntity(Linkable, TimeStampedModel):
         max_length=300,
         help_text='Full corporate name, e.g., "D. Gottlieb & Company"',
     )
-    ipdb_manufacturer_id = models.IntegerField(
+    ipdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,
         help_text="IPDB ManufacturerId for this corporate entity.",
     )
-    year_start = models.IntegerField(
-        null=True, blank=True, help_text="Year this corporate entity was established."
+    year_start = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Year this corporate entity was established.",
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
     )
-    year_end = models.IntegerField(
-        null=True, blank=True, help_text="Year this corporate entity ceased operations."
+    year_end = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Year this corporate entity ceased operations.",
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
     )
 
     claims = GenericRelation("provenance.Claim")

@@ -10,6 +10,7 @@
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import MonthSelect from '$lib/components/form/MonthSelect.svelte';
+	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
 	import {
 		buildModelPatchBody,
 		modelToFormFields,
@@ -65,6 +66,13 @@
 	type EditOptions = Record<string, OptionItem[]>;
 
 	let editOptions = $state<EditOptions>({});
+	let constraints = $state<FieldConstraints>({});
+
+	$effect(() => {
+		fetchFieldConstraints('machine-model').then((c) => {
+			constraints = c;
+		});
+	});
 
 	$effect(() => {
 		client.GET('/api/models/edit-options/').then(({ data: opts }) => {
@@ -185,7 +193,7 @@
 	<fieldset class="field-group">
 		<legend>Date</legend>
 		<div class="date-row">
-			<NumberField label="Year" bind:value={editFields.year} min={1800} max={2100} />
+			<NumberField label="Year" bind:value={editFields.year} {...fc(constraints, 'year')} />
 			<MonthSelect label="Month" bind:value={editFields.month} />
 		</div>
 	</fieldset>
@@ -224,8 +232,16 @@
 
 	<!-- Specs -->
 	<div class="row-2">
-		<NumberField label="Players" bind:value={editFields.player_count} min={1} max={8} />
-		<NumberField label="Flippers" bind:value={editFields.flipper_count} min={0} max={20} />
+		<NumberField
+			label="Players"
+			bind:value={editFields.player_count}
+			{...fc(constraints, 'player_count')}
+		/>
+		<NumberField
+			label="Flippers"
+			bind:value={editFields.flipper_count}
+			{...fc(constraints, 'flipper_count')}
+		/>
 	</div>
 	<NumberField label="Production quantity" bind:value={editFields.production_quantity} min={0} />
 
@@ -357,9 +373,17 @@
 	<fieldset class="field-group">
 		<legend>Cross-reference IDs</legend>
 		<div class="row-3">
-			<NumberField label="IPDB ID" bind:value={editFields.ipdb_id} min={1} />
+			<NumberField
+				label="IPDB ID"
+				bind:value={editFields.ipdb_id}
+				{...fc(constraints, 'ipdb_id')}
+			/>
 			<TextField label="OPDB ID" bind:value={editFields.opdb_id} />
-			<NumberField label="Pinside ID" bind:value={editFields.pinside_id} min={1} />
+			<NumberField
+				label="Pinside ID"
+				bind:value={editFields.pinside_id}
+				{...fc(constraints, 'pinside_id')}
+			/>
 		</div>
 	</fieldset>
 
@@ -370,16 +394,12 @@
 			<NumberField
 				label="IPDB rating"
 				bind:value={editFields.ipdb_rating}
-				min={0}
-				max={10}
-				step={0.01}
+				{...fc(constraints, 'ipdb_rating')}
 			/>
 			<NumberField
 				label="Pinside rating"
 				bind:value={editFields.pinside_rating}
-				min={0}
-				max={10}
-				step={0.01}
+				{...fc(constraints, 'pinside_rating')}
 			/>
 		</div>
 	</fieldset>

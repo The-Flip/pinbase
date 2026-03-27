@@ -48,7 +48,7 @@ class Title(Linkable, TimeStampedModel):
         null=True,
         blank=True,
     )
-    fandom_page_id = models.IntegerField(
+    fandom_page_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,

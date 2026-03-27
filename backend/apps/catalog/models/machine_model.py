@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
@@ -25,13 +26,21 @@ class MachineModel(Linkable, TimeStampedModel):
 
     # Cross-reference IDs
     ipdb_id = models.PositiveIntegerField(
-        unique=True, null=True, blank=True, verbose_name="IPDB ID"
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name="IPDB ID",
+        validators=[MinValueValidator(1)],
     )
     opdb_id = models.CharField(
         max_length=50, unique=True, null=True, blank=True, verbose_name="OPDB ID"
     )
     pinside_id = models.PositiveIntegerField(
-        unique=True, null=True, blank=True, verbose_name="Pinside ID"
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name="Pinside ID",
+        validators=[MinValueValidator(1)],
     )
 
     # Hierarchy
@@ -79,8 +88,16 @@ class MachineModel(Linkable, TimeStampedModel):
         blank=True,
         help_text="Specific corporate incarnation that produced this model (resolved from claims).",
     )
-    year = models.PositiveSmallIntegerField(null=True, blank=True)
-    month = models.PositiveSmallIntegerField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+    )
+    month = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+    )
     technology_generation = models.ForeignKey(
         "TechnologyGeneration",
         on_delete=models.SET_NULL,
@@ -129,7 +146,11 @@ class MachineModel(Linkable, TimeStampedModel):
         blank=True,
         help_text="Game format (resolved from claims).",
     )
-    player_count = models.PositiveSmallIntegerField(null=True, blank=True)
+    player_count = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(8)],
+    )
     themes = models.ManyToManyField(
         "Theme",
         blank=True,
@@ -164,14 +185,26 @@ class MachineModel(Linkable, TimeStampedModel):
         blank=True,
         help_text="Hardware system (resolved from system claims).",
     )
-    flipper_count = models.PositiveSmallIntegerField(null=True, blank=True)
+    flipper_count = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(20)],
+    )
 
     # Ratings
     ipdb_rating = models.DecimalField(
-        max_digits=4, decimal_places=2, null=True, blank=True
+        max_digits=4,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
     )
     pinside_rating = models.DecimalField(
-        max_digits=4, decimal_places=2, null=True, blank=True
+        max_digits=4,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
     )
 
     # Catch-all for fields without dedicated columns

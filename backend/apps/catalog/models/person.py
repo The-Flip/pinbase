@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
 
@@ -38,12 +39,36 @@ class Person(Linkable, TimeStampedModel):
     )
 
     # Birth / death dates — claimed fields, resolved from provenance
-    birth_year = models.IntegerField(null=True, blank=True)
-    birth_month = models.IntegerField(null=True, blank=True)
-    birth_day = models.IntegerField(null=True, blank=True)
-    death_year = models.IntegerField(null=True, blank=True)
-    death_month = models.IntegerField(null=True, blank=True)
-    death_day = models.IntegerField(null=True, blank=True)
+    birth_year = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+    )
+    birth_month = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+    )
+    birth_day = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(31)],
+    )
+    death_year = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+    )
+    death_month = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+    )
+    death_day = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(31)],
+    )
 
     # Biography context — claimed fields, resolved from provenance
     birth_place = models.CharField(max_length=200, null=True, blank=True)

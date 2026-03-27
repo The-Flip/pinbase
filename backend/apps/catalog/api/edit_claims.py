@@ -25,6 +25,54 @@ class ClaimSpec:
     claim_key: str = ""
 
 
+def get_field_constraints(model_class) -> dict[str, dict]:
+    """Extract min/max/step constraints from numeric claim fields.
+
+    Returns a dict like ``{"year": {"min": 1800, "max": 2100, "step": 1}}``.
+    Only fields with at least one validator-derived constraint are included.
+    Step is derived from ``DecimalField.decimal_places``.
+    """
+    from django.core.validators import MaxValueValidator, MinValueValidator
+    from django.db import models as db_models
+
+    from apps.core.models import get_claim_fields
+
+    numeric_types = (
+        db_models.IntegerField,
+        db_models.SmallIntegerField,
+        db_models.PositiveIntegerField,
+        db_models.PositiveSmallIntegerField,
+        db_models.DecimalField,
+        db_models.FloatField,
+    )
+    editable = get_claim_fields(model_class)
+    constraints: dict[str, dict] = {}
+
+    for field_name in editable:
+        field = model_class._meta.get_field(field_name)
+        if not isinstance(field, numeric_types):
+            continue
+
+        entry: dict[str, float | int] = {}
+        # Use _validators (explicitly declared) rather than .validators
+        # (which includes DB-range validators like max=9223372036854775807).
+        for v in field._validators:
+            if isinstance(v, MinValueValidator):
+                entry["min"] = v.limit_value
+            elif isinstance(v, MaxValueValidator):
+                entry["max"] = v.limit_value
+
+        if not entry:
+            continue
+        if isinstance(field, db_models.DecimalField) and field.decimal_places:
+            entry["step"] = float(f"1e-{field.decimal_places}")
+        else:
+            entry["step"] = 1
+        constraints[field_name] = entry
+
+    return constraints
+
+
 def validate_scalar_fields(model_class, fields: dict) -> list[ClaimSpec]:
     """Validate scalar fields and return ClaimSpecs.
 
@@ -57,6 +105,21 @@ def validate_scalar_fields(model_class, fields: dict) -> list[ClaimSpec]:
             value = prepare_markdown_claim_value(field_name, value, model_class)
         except ValidationError as exc:
             raise HttpError(422, "; ".join(exc.messages)) from exc
+        # Run all Django field validators (range, URL format, etc.)
+        if value != "" and field.validators:
+            try:
+                typed = field.to_python(value)
+            except (ValueError, ValidationError) as exc:
+                if isinstance(exc, ValidationError):
+                    raise HttpError(422, "; ".join(exc.messages)) from exc
+                raise HttpError(
+                    422, f"Invalid value for '{field_name}': {exc}"
+                ) from exc
+            for validator in field.validators:
+                try:
+                    validator(typed)
+                except ValidationError as exc:
+                    raise HttpError(422, "; ".join(exc.messages)) from exc
         specs.append(ClaimSpec(field_name=field_name, value=value))
     return specs
 

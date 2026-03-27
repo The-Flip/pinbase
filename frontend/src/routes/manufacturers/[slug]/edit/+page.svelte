@@ -5,7 +5,6 @@
 	import EditFormShell from '$lib/components/form/EditFormShell.svelte';
 	import TextField from '$lib/components/form/TextField.svelte';
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
-	import NumberField from '$lib/components/form/NumberField.svelte';
 
 	let { data } = $props();
 	let mfr = $derived(data.manufacturer);
@@ -14,10 +13,6 @@
 		return {
 			name: m.name,
 			description: m.description?.text ?? '',
-			year_start: m.year_start ?? '',
-			year_end: m.year_end ?? '',
-			country: m.country ?? '',
-			headquarters: m.headquarters ?? '',
 			logo_url: m.logo_url ?? '',
 			website: m.website ?? ''
 		};
@@ -70,39 +65,6 @@
 <EditFormShell {saveStatus} {saveError} onsave={saveChanges}>
 	<TextField label="Name" bind:value={editFields.name} />
 	<TextAreaField label="Description" bind:value={editFields.description} />
-
-	<fieldset class="date-group">
-		<legend>Years active</legend>
-		<div class="date-row">
-			<NumberField label="Founded" bind:value={editFields.year_start} min={1800} max={2100} />
-			<NumberField label="Dissolved" bind:value={editFields.year_end} min={1800} max={2100} />
-		</div>
-	</fieldset>
-
-	<TextField label="Country" bind:value={editFields.country} />
-	<TextField label="Headquarters" bind:value={editFields.headquarters} />
 	<TextField label="Website" bind:value={editFields.website} type="url" />
 	<TextField label="Logo URL" bind:value={editFields.logo_url} type="url" />
 </EditFormShell>
-
-<style>
-	.date-group {
-		border: 1px solid var(--color-border-soft);
-		border-radius: var(--radius-2);
-		padding: var(--size-3);
-		margin: 0;
-	}
-
-	.date-group legend {
-		font-size: var(--font-size-1);
-		font-weight: 500;
-		color: var(--color-text-muted);
-		padding: 0 var(--size-1);
-	}
-
-	.date-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--size-3);
-	}
-</style>

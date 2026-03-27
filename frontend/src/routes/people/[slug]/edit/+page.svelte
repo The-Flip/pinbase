@@ -7,6 +7,7 @@
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import MonthSelect from '$lib/components/form/MonthSelect.svelte';
+	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
 
 	let { data } = $props();
 	let person = $derived(data.person);
@@ -29,6 +30,14 @@
 
 	// untrack: intentional one-time capture; re-synced explicitly after save
 	let editFields = $state(untrack(() => personToFormFields(data.person)));
+
+	let constraints = $state<FieldConstraints>({});
+
+	$effect(() => {
+		fetchFieldConstraints('person').then((c) => {
+			constraints = c;
+		});
+	});
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
@@ -78,9 +87,17 @@
 	<fieldset class="date-group">
 		<legend>Born</legend>
 		<div class="date-row">
-			<NumberField label="Year" bind:value={editFields.birth_year} min={1800} max={2100} />
+			<NumberField
+				label="Year"
+				bind:value={editFields.birth_year}
+				{...fc(constraints, 'birth_year')}
+			/>
 			<MonthSelect label="Month" bind:value={editFields.birth_month} />
-			<NumberField label="Day" bind:value={editFields.birth_day} min={1} max={31} />
+			<NumberField
+				label="Day"
+				bind:value={editFields.birth_day}
+				{...fc(constraints, 'birth_day')}
+			/>
 		</div>
 	</fieldset>
 
@@ -89,9 +106,17 @@
 	<fieldset class="date-group">
 		<legend>Died</legend>
 		<div class="date-row">
-			<NumberField label="Year" bind:value={editFields.death_year} min={1800} max={2100} />
+			<NumberField
+				label="Year"
+				bind:value={editFields.death_year}
+				{...fc(constraints, 'death_year')}
+			/>
 			<MonthSelect label="Month" bind:value={editFields.death_month} />
-			<NumberField label="Day" bind:value={editFields.death_day} min={1} max={31} />
+			<NumberField
+				label="Day"
+				bind:value={editFields.death_day}
+				{...fc(constraints, 'death_day')}
+			/>
 		</div>
 	</fieldset>
 

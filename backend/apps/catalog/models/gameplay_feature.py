@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
 
@@ -60,6 +61,7 @@ class MachineModelGameplayFeature(TimeStampedModel):
         null=True,
         blank=True,
         help_text="Quantity from source data, e.g. Flippers (2) → count=2.",
+        validators=[MinValueValidator(1)],
     )
 
     class Meta:
