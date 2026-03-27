@@ -1,3 +1,5 @@
+import { stringSetChanged } from '$lib/edit-helpers';
+
 export type TitleEditView = {
 	slug: string;
 	name: string;
@@ -71,9 +73,10 @@ function buildChangedTitleFields(
 }
 
 function abbreviationsChanged(form: TitleEditFormState, title: TitleEditView): boolean {
-	const current = [...normalizeAbbreviations(title.abbreviations)].sort();
-	const desired = [...parseAbbreviations(form.abbreviationsText)].sort();
-	return JSON.stringify(current) !== JSON.stringify(desired);
+	return stringSetChanged(
+		parseAbbreviations(form.abbreviationsText),
+		normalizeAbbreviations(title.abbreviations)
+	);
 }
 
 export function buildTitlePatchBody(

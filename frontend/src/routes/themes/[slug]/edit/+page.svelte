@@ -7,20 +7,14 @@
 	import TagInput from '$lib/components/form/TagInput.svelte';
 	import TextField from '$lib/components/form/TextField.svelte';
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
+	import { buildHierarchyPatchBody, hierarchyToFormFields } from '$lib/hierarchy-edit';
 
 	let { data } = $props();
 	let theme = $derived(data.theme);
 
 	// --- Form state ---
 
-	function toFormFields(t: typeof theme) {
-		return {
-			name: t.name,
-			description: t.description?.text ?? ''
-		};
-	}
-
-	let editFields = $state(untrack(() => toFormFields(data.theme)));
+	let editFields = $state(untrack(() => hierarchyToFormFields(data.theme)));
 	let selectedParents = $state<string[]>(
 		untrack(() => (data.theme.parents ?? []).map((p: { slug: string }) => p.slug))
 	);
@@ -42,59 +36,34 @@
 		});
 	});
 
-	// --- Change detection ---
-
-	function getChangedScalarFields(): Record<string, unknown> {
-		const original = toFormFields(theme);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			if (String(editFields[key]) !== String(original[key])) {
-				changed[key] = editFields[key] === '' ? null : editFields[key];
-			}
-		}
-		return changed;
-	}
-
-	function parentsChanged(): boolean {
-		const original = (theme.parents ?? []).map((p: { slug: string }) => p.slug).sort();
-		const current = [...selectedParents].sort();
-		return JSON.stringify(original) !== JSON.stringify(current);
-	}
-
-	function aliasesChanged(): boolean {
-		const original = [...(theme.aliases ?? [])].sort();
-		const current = [...editAliases].sort();
-		return JSON.stringify(original) !== JSON.stringify(current);
-	}
-
 	// --- Save ---
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
 
 	async function saveChanges() {
-		const fields = getChangedScalarFields();
-		const hasFields = Object.keys(fields).length > 0;
-		const hasParents = parentsChanged();
-		const hasAliases = aliasesChanged();
+		const body = buildHierarchyPatchBody(
+			{
+				fields: editFields,
+				parents: selectedParents,
+				aliases: editAliases,
+				note: editNote
+			},
+			theme
+		);
 
-		if (!hasFields && !hasParents && !hasAliases) return;
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/themes/{slug}/claims/', {
 			params: { path: { slug: theme.slug } },
-			body: {
-				fields: hasFields ? fields : {},
-				parents: hasParents ? selectedParents : null,
-				aliases: hasAliases ? editAliases : null,
-				note: editNote.trim()
-			}
+			body
 		});
 
 		if (updated) {
-			editFields = toFormFields(updated);
+			editFields = hierarchyToFormFields(updated);
 			selectedParents = (updated.parents ?? []).map((p) => p.slug);
 			editAliases = [...(updated.aliases ?? [])];
 			editNote = '';

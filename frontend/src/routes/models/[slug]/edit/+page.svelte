@@ -10,36 +10,12 @@
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import MonthSelect from '$lib/components/form/MonthSelect.svelte';
+	import { buildModelPatchBody, modelToFormFields } from './model-edit';
 
 	let { data } = $props();
 	let model = $derived(data.model);
 
 	// --- Scalar form state ---
-
-	function modelToFormFields(m: typeof model) {
-		return {
-			name: m.name,
-			description: m.description?.text ?? '',
-			year: m.year ?? '',
-			month: m.month ?? '',
-			player_count: m.player_count ?? '',
-			flipper_count: m.flipper_count ?? '',
-			production_quantity: m.production_quantity,
-			ipdb_id: m.ipdb_id ?? '',
-			opdb_id: m.opdb_id ?? '',
-			pinside_id: m.pinside_id ?? '',
-			ipdb_rating: m.ipdb_rating ?? '',
-			pinside_rating: m.pinside_rating ?? '',
-			corporate_entity: m.corporate_entity?.slug ?? '',
-			technology_generation: m.technology_generation?.slug ?? '',
-			technology_subgeneration: m.technology_subgeneration?.slug ?? '',
-			display_type: m.display_type?.slug ?? '',
-			display_subtype: m.display_subtype?.slug ?? '',
-			cabinet: m.cabinet?.slug ?? '',
-			game_format: m.game_format?.slug ?? '',
-			system: m.system?.slug ?? ''
-		};
-	}
 
 	// untrack: intentional one-time capture; re-synced explicitly after save
 	let editFields = $state(untrack(() => modelToFormFields(data.model)));
@@ -91,82 +67,33 @@
 		});
 	});
 
-	// --- Change detection ---
-
-	function getChangedScalarFields(): Record<string, unknown> {
-		const original = modelToFormFields(model);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			let val: unknown = editFields[key];
-			if (typeof val === 'number' && isNaN(val)) val = '';
-			if (String(val) !== String(original[key])) {
-				changed[key] = val === '' ? null : val;
-			}
-		}
-		return changed;
-	}
-
-	function slugsChanged(current: string[], original: { slug: string }[]): boolean {
-		const a = [...current].sort();
-		const b = original.map((o) => o.slug).sort();
-		return JSON.stringify(a) !== JSON.stringify(b);
-	}
-
-	function themesChanged(): boolean {
-		return slugsChanged(selectedThemes, model.themes);
-	}
-	function rewardTypesChanged(): boolean {
-		return slugsChanged(selectedRewardTypes, model.reward_types);
-	}
-	function tagsChanged(): boolean {
-		return slugsChanged(selectedTags, model.tags ?? []);
-	}
-	function gameplayFeaturesChanged(): boolean {
-		const orig = model.gameplay_features.map((gf) => `${gf.slug}:${gf.count ?? null}`).sort();
-		const curr = editGameplayFeatures.map((gf) => `${gf.slug}:${gf.count}`).sort();
-		return JSON.stringify(orig) !== JSON.stringify(curr);
-	}
-	function abbreviationsChanged(): boolean {
-		const orig = [...model.abbreviations].sort();
-		const curr = [...editAbbreviations].sort();
-		return JSON.stringify(orig) !== JSON.stringify(curr);
-	}
-
 	// --- Save ---
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
 
 	async function saveChanges() {
-		const fields = getChangedScalarFields();
-		const hasFields = Object.keys(fields).length > 0;
-		const hasThemes = themesChanged();
-		const hasTags = tagsChanged();
-		const hasRewardTypes = rewardTypesChanged();
-		const hasFeatures = gameplayFeaturesChanged();
-		const hasAbbrevs = abbreviationsChanged();
+		const body = buildModelPatchBody(
+			{
+				fields: editFields,
+				themes: selectedThemes,
+				tags: selectedTags,
+				rewardTypes: selectedRewardTypes,
+				gameplayFeatures: editGameplayFeatures,
+				abbreviations: editAbbreviations,
+				note: editNote
+			},
+			model
+		);
 
-		if (!hasFields && !hasThemes && !hasTags && !hasRewardTypes && !hasFeatures && !hasAbbrevs)
-			return;
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/models/{slug}/claims/', {
 			params: { path: { slug: model.slug } },
-			body: {
-				fields: hasFields ? fields : {},
-				themes: hasThemes ? selectedThemes : null,
-				tags: hasTags ? selectedTags : null,
-				reward_types: hasRewardTypes ? selectedRewardTypes : null,
-				gameplay_features: hasFeatures
-					? editGameplayFeatures
-							.filter((gf) => gf.slug !== '')
-							.map(({ slug, count }) => ({ slug, count }))
-					: null,
-				abbreviations: hasAbbrevs ? editAbbreviations : null,
-				note: editNote.trim()
-			}
+			body
 		});
 
 		if (updated) {

@@ -7,21 +7,15 @@
 	import TagInput from '$lib/components/form/TagInput.svelte';
 	import TextField from '$lib/components/form/TextField.svelte';
 	import TextAreaField from '$lib/components/form/TextAreaField.svelte';
+	import { buildHierarchyPatchBody, hierarchyToFormFields } from '$lib/hierarchy-edit';
 
 	let { data } = $props();
 	let profile = $derived(data.profile);
 
 	// --- Form state ---
 
-	function toFormFields(p: typeof profile) {
-		return {
-			name: p.name,
-			description: p.description?.text ?? ''
-		};
-	}
-
 	// untrack: intentional one-time capture; re-synced explicitly after save
-	let editFields = $state(untrack(() => toFormFields(data.profile)));
+	let editFields = $state(untrack(() => hierarchyToFormFields(data.profile)));
 	let selectedParents = $state<string[]>(
 		untrack(() => (data.profile.parents ?? []).map((p: { slug: string }) => p.slug))
 	);
@@ -44,59 +38,34 @@
 		});
 	});
 
-	// --- Change detection ---
-
-	function getChangedScalarFields(): Record<string, unknown> {
-		const original = toFormFields(profile);
-		const changed: Record<string, unknown> = {};
-		for (const key of Object.keys(editFields) as (keyof typeof editFields)[]) {
-			if (String(editFields[key]) !== String(original[key])) {
-				changed[key] = editFields[key] === '' ? null : editFields[key];
-			}
-		}
-		return changed;
-	}
-
-	function parentsChanged(): boolean {
-		const original = (profile.parents ?? []).map((p: { slug: string }) => p.slug).sort();
-		const current = [...selectedParents].sort();
-		return JSON.stringify(original) !== JSON.stringify(current);
-	}
-
-	function aliasesChanged(): boolean {
-		const original = [...(profile.aliases ?? [])].sort();
-		const current = [...editAliases].sort();
-		return JSON.stringify(original) !== JSON.stringify(current);
-	}
-
 	// --- Save ---
 
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
 	let saveError = $state('');
 
 	async function saveChanges() {
-		const fields = getChangedScalarFields();
-		const hasFields = Object.keys(fields).length > 0;
-		const hasParents = parentsChanged();
-		const hasAliases = aliasesChanged();
+		const body = buildHierarchyPatchBody(
+			{
+				fields: editFields,
+				parents: selectedParents,
+				aliases: editAliases,
+				note: editNote
+			},
+			profile
+		);
 
-		if (!hasFields && !hasParents && !hasAliases) return;
+		if (!body) return;
 
 		saveStatus = 'saving';
 		saveError = '';
 
 		const { data: updated, error } = await client.PATCH('/api/gameplay-features/{slug}/claims/', {
 			params: { path: { slug: profile.slug } },
-			body: {
-				fields: hasFields ? fields : {},
-				parents: hasParents ? selectedParents : null,
-				aliases: hasAliases ? editAliases : null,
-				note: editNote.trim()
-			}
+			body
 		});
 
 		if (updated) {
-			editFields = toFormFields(updated);
+			editFields = hierarchyToFormFields(updated);
 			selectedParents = (updated.parents ?? []).map((p) => p.slug);
 			editAliases = [...(updated.aliases ?? [])];
 			editNote = '';

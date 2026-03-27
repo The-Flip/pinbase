@@ -241,19 +241,6 @@
 		margin-bottom: var(--size-5);
 	}
 
-	.prose h2 {
-		font-size: var(--font-size-3);
-		font-weight: 600;
-		color: var(--color-text-primary);
-		margin-bottom: var(--size-3);
-	}
-
-	.prose p {
-		font-size: var(--font-size-2);
-		color: var(--color-text-primary);
-		line-height: var(--font-lineheight-3);
-	}
-
 	.muted {
 		color: var(--color-text-muted);
 		font-size: var(--font-size-0);

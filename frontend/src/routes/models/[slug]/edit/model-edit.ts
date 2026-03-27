@@ -1,0 +1,169 @@
+/**
+ * Pure helper functions for MachineModel edit state.
+ *
+ * No Svelte imports, no component state — just plain-object transforms
+ * that the Svelte page calls with current values.
+ */
+
+import { diffScalarFields, slugSetChanged, stringSetChanged } from '$lib/edit-helpers';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export type ModelEditView = {
+	name: string;
+	description?: { text: string } | null;
+	year?: number | null;
+	month?: number | null;
+	player_count?: number | null;
+	flipper_count?: number | null;
+	production_quantity: string;
+	ipdb_id?: number | null;
+	opdb_id?: string | null;
+	pinside_id?: number | null;
+	ipdb_rating?: number | null;
+	pinside_rating?: number | null;
+	corporate_entity?: { slug: string } | null;
+	technology_generation?: { slug: string } | null;
+	technology_subgeneration?: { slug: string } | null;
+	display_type?: { slug: string } | null;
+	display_subtype?: { slug: string } | null;
+	cabinet?: { slug: string } | null;
+	game_format?: { slug: string } | null;
+	system?: { slug: string } | null;
+	themes: { slug: string }[];
+	tags?: { slug: string }[];
+	reward_types: { slug: string }[];
+	gameplay_features: { slug: string; count?: number | null }[];
+	abbreviations: string[];
+};
+
+export type ModelFormFields = {
+	name: string;
+	description: string;
+	year: string | number;
+	month: string | number;
+	player_count: string | number;
+	flipper_count: string | number;
+	production_quantity: string | number;
+	ipdb_id: string | number;
+	opdb_id: string;
+	pinside_id: string | number;
+	ipdb_rating: string | number;
+	pinside_rating: string | number;
+	corporate_entity: string;
+	technology_generation: string;
+	technology_subgeneration: string;
+	display_type: string;
+	display_subtype: string;
+	cabinet: string;
+	game_format: string;
+	system: string;
+};
+
+export type GameplayFeatureRow = {
+	slug: string;
+	count: number | null;
+};
+
+export type ModelEditState = {
+	fields: ModelFormFields;
+	themes: string[];
+	tags: string[];
+	rewardTypes: string[];
+	gameplayFeatures: GameplayFeatureRow[];
+	abbreviations: string[];
+	note: string;
+};
+
+export type ModelPatchBody = {
+	fields: Record<string, unknown>;
+	themes: string[] | null;
+	tags: string[] | null;
+	reward_types: string[] | null;
+	gameplay_features: { slug: string; count: number | null }[] | null;
+	abbreviations: string[] | null;
+	note: string;
+};
+
+// ---------------------------------------------------------------------------
+// Model → form state
+// ---------------------------------------------------------------------------
+
+export function modelToFormFields(m: ModelEditView): ModelFormFields {
+	return {
+		name: m.name,
+		description: m.description?.text ?? '',
+		year: m.year ?? '',
+		month: m.month ?? '',
+		player_count: m.player_count ?? '',
+		flipper_count: m.flipper_count ?? '',
+		production_quantity: m.production_quantity,
+		ipdb_id: m.ipdb_id ?? '',
+		opdb_id: m.opdb_id ?? '',
+		pinside_id: m.pinside_id ?? '',
+		ipdb_rating: m.ipdb_rating ?? '',
+		pinside_rating: m.pinside_rating ?? '',
+		corporate_entity: m.corporate_entity?.slug ?? '',
+		technology_generation: m.technology_generation?.slug ?? '',
+		technology_subgeneration: m.technology_subgeneration?.slug ?? '',
+		display_type: m.display_type?.slug ?? '',
+		display_subtype: m.display_subtype?.slug ?? '',
+		cabinet: m.cabinet?.slug ?? '',
+		game_format: m.game_format?.slug ?? '',
+		system: m.system?.slug ?? ''
+	};
+}
+
+// ---------------------------------------------------------------------------
+// Change detection (private helpers)
+// ---------------------------------------------------------------------------
+
+function gameplayFeaturesChanged(
+	current: GameplayFeatureRow[],
+	original: { slug: string; count?: number | null }[]
+): boolean {
+	const orig = original.map((gf) => `${gf.slug}:${gf.count ?? null}`).sort();
+	const curr = current
+		.filter((gf) => gf.slug !== '')
+		.map((gf) => `${gf.slug}:${gf.count}`)
+		.sort();
+	return JSON.stringify(orig) !== JSON.stringify(curr);
+}
+
+// ---------------------------------------------------------------------------
+// Build PATCH body
+// ---------------------------------------------------------------------------
+
+export function buildModelPatchBody(
+	state: ModelEditState,
+	model: ModelEditView
+): ModelPatchBody | null {
+	const original = modelToFormFields(model);
+	const fields = diffScalarFields(state.fields, original);
+	const hasFields = Object.keys(fields).length > 0;
+	const hasThemes = slugSetChanged(state.themes, model.themes);
+	const hasTags = slugSetChanged(state.tags, model.tags ?? []);
+	const hasRewardTypes = slugSetChanged(state.rewardTypes, model.reward_types);
+	const hasFeatures = gameplayFeaturesChanged(state.gameplayFeatures, model.gameplay_features);
+	const hasAbbrevs = stringSetChanged(state.abbreviations, model.abbreviations);
+
+	if (!hasFields && !hasThemes && !hasTags && !hasRewardTypes && !hasFeatures && !hasAbbrevs) {
+		return null;
+	}
+
+	return {
+		fields: hasFields ? fields : {},
+		themes: hasThemes ? state.themes : null,
+		tags: hasTags ? state.tags : null,
+		reward_types: hasRewardTypes ? state.rewardTypes : null,
+		gameplay_features: hasFeatures
+			? state.gameplayFeatures
+					.filter((gf) => gf.slug !== '')
+					.map(({ slug, count }) => ({ slug, count }))
+			: null,
+		abbreviations: hasAbbrevs ? state.abbreviations : null,
+		note: state.note.trim()
+	};
+}

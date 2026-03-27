@@ -251,13 +251,6 @@
 		margin-bottom: var(--size-5);
 	}
 
-	.prose h2 {
-		font-size: var(--font-size-3);
-		font-weight: 600;
-		color: var(--color-text-primary);
-		margin-bottom: var(--size-3);
-	}
-
 	dl {
 		display: grid;
 		grid-template-columns: auto 1fr;
