@@ -34,6 +34,7 @@ from apps.catalog.ingestion.parsers import (
     parse_ipdb_manufacturer_string,
 )
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
+from apps.core.validators import bulk_create_validated, validate_no_mojibake
 from apps.catalog.ingestion.vocabulary import (
     build_feature_slug_map,
     build_reward_type_map,
@@ -501,7 +502,7 @@ class Command(BaseCommand):
         created = len(new_models)
         matched = len(record_models) - created
         if new_models:
-            MachineModel.objects.bulk_create(new_models)
+            bulk_create_validated(MachineModel, new_models)
 
         self.stdout.write(
             f"  Models — Matched: {matched}, Created: {created}, Skipped: {skipped}"
@@ -701,6 +702,7 @@ class Command(BaseCommand):
                 mfr = resolver.get_by_slug(slug)
 
                 ce_slug = generate_unique_slug(company, ce_slugs)
+                validate_no_mojibake(company)
                 ce = CorporateEntity.objects.create(
                     manufacturer=mfr,
                     slug=ce_slug,
@@ -875,7 +877,7 @@ class Command(BaseCommand):
 
         persons_created = len(new_persons)
         if new_persons:
-            Person.objects.bulk_create(new_persons)
+            bulk_create_validated(Person, new_persons)
             # Refresh to get PKs (includes aliases).
             existing_persons = build_person_lookup()
 
@@ -972,7 +974,7 @@ class Command(BaseCommand):
             name = slug.replace("-", " ").title()
             new_themes.append(Theme(name=name, slug=slug))
         if new_themes:
-            Theme.objects.bulk_create(new_themes)
+            bulk_create_validated(Theme, new_themes)
             for t in Theme.objects.filter(slug__in=all_slugs):
                 existing_themes[t.slug] = t
 

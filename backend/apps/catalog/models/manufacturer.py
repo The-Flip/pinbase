@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from apps.core.validators import validate_no_mojibake
 from django.db.models.functions import Lower
 
 from apps.core.models import (
@@ -33,9 +36,11 @@ class Manufacturer(Linkable, TimeStampedModel):
     link_url_pattern = "/manufacturers/{slug}"
     claims_exempt = frozenset({"opdb_manufacturer_id", "wikidata_id"})
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    opdb_manufacturer_id = models.IntegerField(
+    opdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,
@@ -87,13 +92,14 @@ class ManufacturerAlias(AliasBase):
         ]
 
 
-class CorporateEntity(TimeStampedModel):
+class CorporateEntity(Linkable, TimeStampedModel):
     """A specific corporate incarnation of a manufacturer brand.
 
     IPDB tracks corporate entities (e.g., four separate entries for Gottlieb
     across its ownership eras). Each entity maps to one brand-level Manufacturer.
     """
 
+    link_url_pattern = "/corporate-entities/{slug}"
     claims_exempt = frozenset({"manufacturer", "ipdb_manufacturer_id"})
 
     manufacturer = models.ForeignKey(
@@ -106,18 +112,25 @@ class CorporateEntity(TimeStampedModel):
     name = models.CharField(
         max_length=300,
         help_text='Full corporate name, e.g., "D. Gottlieb & Company"',
+        validators=[validate_no_mojibake],
     )
-    ipdb_manufacturer_id = models.IntegerField(
+    ipdb_manufacturer_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,
         help_text="IPDB ManufacturerId for this corporate entity.",
     )
-    year_start = models.IntegerField(
-        null=True, blank=True, help_text="Year this corporate entity was established."
+    year_start = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Year this corporate entity was established.",
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
     )
-    year_end = models.IntegerField(
-        null=True, blank=True, help_text="Year this corporate entity ceased operations."
+    year_end = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Year this corporate entity ceased operations.",
+        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
     )
 
     claims = GenericRelation("provenance.Claim")

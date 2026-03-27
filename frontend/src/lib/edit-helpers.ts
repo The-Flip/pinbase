@@ -1,0 +1,45 @@
+/**
+ * Shared pure helpers for edit-page change detection.
+ *
+ * No Svelte imports — plain comparisons used by entity-specific
+ * build*PatchBody functions.
+ */
+
+/**
+ * Generic scalar field diff.  Compares each key by string coercion,
+ * treats NaN and '' as equivalent, and maps '' → null for cleared fields.
+ */
+export function diffScalarFields<T extends Record<string, unknown>>(
+	current: T,
+	original: T
+): Record<string, unknown> {
+	const changed: Record<string, unknown> = {};
+	for (const key of Object.keys(current) as (keyof T & string)[]) {
+		let val: unknown = current[key];
+		if (typeof val === 'number' && isNaN(val)) val = '';
+		if (String(val) !== String(original[key])) {
+			changed[key] = val === '' ? null : val;
+		}
+	}
+	return changed;
+}
+
+/**
+ * Compare a current slug array against an original array of {slug} objects.
+ * Order-independent (both sides sorted before comparison).
+ */
+export function slugSetChanged(current: string[], original: { slug: string }[]): boolean {
+	const a = [...current].sort();
+	const b = original.map((o) => o.slug).sort();
+	return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+/**
+ * Compare two string arrays, order-independent.
+ * Used for aliases, abbreviations, and similar string lists.
+ */
+export function stringSetChanged(current: string[], original: string[]): boolean {
+	const a = [...current].sort();
+	const b = [...original].sort();
+	return JSON.stringify(a) !== JSON.stringify(b);
+}

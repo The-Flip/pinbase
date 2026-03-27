@@ -5,25 +5,30 @@ from __future__ import annotations
 from typing import Optional
 
 from django.core.cache import cache
-from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from ..cache import PEOPLE_ALL_KEY, invalidate_all
+from ..cache import PEOPLE_ALL_KEY
 from .constants import DEFAULT_PAGE_SIZE
 from .helpers import (
     _build_activity,
+    _build_edit_history,
     _build_rich_text,
     _claims_prefetch,
     _extract_image_urls,
 )
-from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema, RichTextSchema
+from .schemas import (
+    ChangeSetSchema,
+    ClaimPatchSchema,
+    ClaimSchema,
+    RelatedTitleSchema,
+    RichTextSchema,
+)
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -160,7 +165,7 @@ def list_people(request):
 
 
 @people_router.get("/all/", response=list[PersonGridSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_all_people(request):
     """Return every person with credit count and thumbnail (no pagination)."""
     result = cache.get(PEOPLE_ALL_KEY)
@@ -201,7 +206,7 @@ def list_all_people(request):
 
 
 @people_router.get("/{slug}", response=PersonDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_person(request, slug: str):
     person = get_object_or_404(_person_qs(), slug=slug)
     return _serialize_person_detail(person)
@@ -212,30 +217,25 @@ def get_person(request, slug: str):
 )
 def patch_person_claims(request, slug: str, data: ClaimPatchSchema):
     """Assert per-field claims from the authenticated user, then re-resolve."""
-    from apps.core.markdown_links import prepare_markdown_claim_value
-    from apps.provenance.models import Claim
+    from .edit_claims import execute_claims, plan_scalar_field_claims
 
     from ..models import Person
-    from apps.core.models import get_claim_fields
-
-    from ..resolve import resolve_entity
-
-    editable_fields = set(get_claim_fields(Person))
-    unknown = set(data.fields.keys()) - editable_fields
-    if unknown:
-        raise HttpError(422, f"Unknown or non-editable fields: {sorted(unknown)}")
 
     person = get_object_or_404(Person, slug=slug)
 
-    for field_name, value in data.fields.items():
-        try:
-            value = prepare_markdown_claim_value(field_name, value, Person)
-        except ValidationError as exc:
-            raise HttpError(422, "; ".join(exc.messages)) from exc
-        Claim.objects.assert_claim(person, field_name, value, user=request.user)
+    specs = plan_scalar_field_claims(Person, data.fields)
 
-    resolve_entity(person)
-    invalidate_all()
+    execute_claims(person, specs, user=request.user)
 
     person = get_object_or_404(_person_qs(), slug=person.slug)
     return _serialize_person_detail(person)
+
+
+@people_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_person_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import Person
+
+    person = get_object_or_404(Person, slug=slug)
+    return _build_edit_history(person)

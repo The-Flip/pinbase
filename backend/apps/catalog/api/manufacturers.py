@@ -5,26 +5,33 @@ from __future__ import annotations
 from typing import Optional
 
 from django.core.cache import cache
-from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
 
-from ..cache import MANUFACTURERS_ALL_KEY, invalidate_all
+from ..cache import MANUFACTURERS_ALL_KEY
 from .constants import DEFAULT_PAGE_SIZE
 from .helpers import (
     _build_activity,
+    _build_edit_history,
     _build_rich_text,
     _claims_prefetch,
+    _collect_titles,
     _extract_image_urls,
+    _serialize_locations,
 )
-from .schemas import ClaimPatchSchema, ClaimSchema, RelatedTitleSchema, RichTextSchema
+from .schemas import (
+    ChangeSetSchema,
+    ClaimPatchSchema,
+    ClaimSchema,
+    RelatedTitleSchema,
+    RichTextSchema,
+)
 from .titles import FacetRef, _dedup_facet_refs
 
 # ---------------------------------------------------------------------------
@@ -105,50 +112,6 @@ class ManufacturerDetailSchema(Schema):
 # ---------------------------------------------------------------------------
 
 
-def _collect_titles(models, *, include_manufacturer: bool = False) -> list[dict]:
-    """Group models by title into a deduplicated title list."""
-    titles: dict[str, dict] = {}
-    for m in models:
-        if m.title is None:
-            continue
-        key = m.title.slug
-        if key not in titles:
-            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
-            entry: dict = {
-                "name": m.title.name,
-                "slug": m.title.slug,
-                "year": m.year,
-                "thumbnail_url": thumbnail_url,
-            }
-            if include_manufacturer:
-                entry["manufacturer_name"] = (
-                    m.corporate_entity.manufacturer.name
-                    if m.corporate_entity and m.corporate_entity.manufacturer
-                    else None
-                )
-            titles[key] = entry
-        elif titles[key]["thumbnail_url"] is None:
-            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
-            if thumbnail_url:
-                titles[key]["thumbnail_url"] = thumbnail_url
-    return sorted(titles.values(), key=lambda t: (t["year"] is None, -(t["year"] or 0)))
-
-
-def _location_ancestors(loc) -> list[dict]:
-    """Return ancestor locations from immediate parent up to root, in order."""
-    ancestors = []
-    current = loc.parent
-    while current is not None:
-        ancestors.append(
-            {
-                "display_name": current.short_name or current.name,
-                "location_path": current.location_path,
-            }
-        )
-        current = current.parent
-    return ancestors
-
-
 def _serialize_manufacturer_detail(mfr) -> dict:
     """Serialize a Manufacturer into the detail response dict.
 
@@ -202,16 +165,7 @@ def _serialize_manufacturer_detail(mfr) -> dict:
                 "slug": e.slug,
                 "year_start": e.year_start,
                 "year_end": e.year_end,
-                "locations": [
-                    {
-                        "location_path": cel.location.location_path,
-                        "location_type": cel.location.location_type,
-                        "display_name": cel.location.short_name or cel.location.name,
-                        "slug": cel.location.slug,
-                        "ancestors": _location_ancestors(cel.location),
-                    }
-                    for cel in e.locations.all()
-                ],
+                "locations": _serialize_locations(e),
             }
             for e in mfr.entities.all()
         ],
@@ -289,7 +243,7 @@ def list_manufacturers(request):
 
 
 @manufacturers_router.get("/all/", response=list[ManufacturerGridSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_all_manufacturers(request):
     """Return every manufacturer with model count and thumbnail (no pagination)."""
     result = cache.get(MANUFACTURERS_ALL_KEY)
@@ -383,7 +337,7 @@ def list_all_manufacturers(request):
 
 
 @manufacturers_router.get("/{slug}", response=ManufacturerDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_manufacturer(request, slug: str):
     mfr = get_object_or_404(_manufacturer_qs(), slug=slug)
     return _serialize_manufacturer_detail(mfr)
@@ -397,30 +351,25 @@ def get_manufacturer(request, slug: str):
 )
 def patch_manufacturer_claims(request, slug: str, data: ClaimPatchSchema):
     """Assert per-field claims from the authenticated user, then re-resolve."""
-    from apps.core.markdown_links import prepare_markdown_claim_value
-    from apps.provenance.models import Claim
+    from .edit_claims import execute_claims, plan_scalar_field_claims
 
     from ..models import Manufacturer
-    from apps.core.models import get_claim_fields
-
-    from ..resolve import resolve_entity
-
-    editable_fields = set(get_claim_fields(Manufacturer))
-    unknown = set(data.fields.keys()) - editable_fields
-    if unknown:
-        raise HttpError(422, f"Unknown or non-editable fields: {sorted(unknown)}")
 
     mfr = get_object_or_404(Manufacturer, slug=slug)
 
-    for field_name, value in data.fields.items():
-        try:
-            value = prepare_markdown_claim_value(field_name, value, Manufacturer)
-        except ValidationError as exc:
-            raise HttpError(422, "; ".join(exc.messages)) from exc
-        Claim.objects.assert_claim(mfr, field_name, value, user=request.user)
+    specs = plan_scalar_field_claims(Manufacturer, data.fields)
 
-    resolve_entity(mfr)
-    invalidate_all()
+    execute_claims(mfr, specs, user=request.user)
 
     mfr = get_object_or_404(_manufacturer_qs(), slug=mfr.slug)
     return _serialize_manufacturer_detail(mfr)
+
+
+@manufacturers_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_manufacturer_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import Manufacturer
+
+    mfr = get_object_or_404(Manufacturer, slug=slug)
+    return _build_edit_history(mfr)

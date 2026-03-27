@@ -1,4 +1,4 @@
-"""Gameplay features router — list and detail endpoints."""
+"""Gameplay features router — list, detail, and claims endpoints."""
 
 from __future__ import annotations
 
@@ -6,9 +6,28 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
+from ninja.errors import HttpError
+from ninja.security import django_auth
 
-from .helpers import _build_rich_text, _claims_prefetch
-from .schemas import GameplayFeatureSchema, RichTextSchema
+from .edit_claims import (
+    execute_claims,
+    plan_alias_claims,
+    plan_parent_claims,
+    validate_scalar_fields,
+)
+from .helpers import (
+    _build_activity,
+    _build_edit_history,
+    _build_rich_text,
+    _claims_prefetch,
+)
+from .schemas import (
+    ChangeSetSchema,
+    ClaimSchema,
+    HierarchyClaimPatchSchema,
+    GameplayFeatureSchema,
+    RichTextSchema,
+)
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -29,6 +48,36 @@ class GameplayFeatureDetailSchema(Schema):
     aliases: list[str] = []
     parents: list[GameplayFeatureSchema] = []
     children: list[GameplayFeatureSchema] = []
+    activity: list[ClaimSchema] = []
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _detail_qs():
+    from ..models import GameplayFeature
+
+    return GameplayFeature.objects.prefetch_related(
+        "parents", "children", "aliases", _claims_prefetch()
+    )
+
+
+def _serialize_detail(feature) -> dict:
+    return {
+        "name": feature.name,
+        "slug": feature.slug,
+        "description": _build_rich_text(
+            feature, "description", getattr(feature, "active_claims", [])
+        ),
+        "aliases": [a.value for a in feature.aliases.all()],
+        "parents": [{"name": p.name, "slug": p.slug} for p in feature.parents.all()],
+        "children": [
+            {"name": c.name, "slug": c.slug} for c in feature.children.order_by("name")
+        ],
+        "activity": _build_activity(getattr(feature, "active_claims", [])),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +88,7 @@ gameplay_features_router = Router(tags=["gameplay-features"])
 
 
 @gameplay_features_router.get("/", response=list[GameplayFeatureListSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_gameplay_features(request):
     from ..models import GameplayFeature, MachineModel
 
@@ -89,38 +138,71 @@ def list_gameplay_features(request):
 
 
 @gameplay_features_router.get("/{slug}", response=GameplayFeatureDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_gameplay_feature(request, slug: str):
-    from ..models import GameplayFeature
+    feature = get_object_or_404(_detail_qs(), slug=slug)
+    return _serialize_detail(feature)
 
-    feature = get_object_or_404(
-        GameplayFeature.objects.prefetch_related(
-            "parents", "children", "aliases", _claims_prefetch()
-        ),
-        slug=slug,
+
+@gameplay_features_router.patch(
+    "/{slug}/claims/",
+    auth=django_auth,
+    response=GameplayFeatureDetailSchema,
+    tags=["private"],
+)
+def patch_gameplay_feature_claims(request, slug: str, data: HierarchyClaimPatchSchema):
+    """Assert per-field claims from the authenticated user, then re-resolve."""
+    from ..models import GameplayFeature
+    from ..resolve._relationships import (
+        resolve_gameplay_feature_aliases,
+        resolve_gameplay_feature_parents,
     )
 
-    # Display-worthy aliases: exclude those that normalize to the canonical name.
-    def _normalize(s: str) -> str:
-        s = s.lower().replace("-", "").replace(" ", "")
-        if s.endswith("s"):
-            s = s[:-1]
-        return s
+    if not data.fields and data.parents is None and data.aliases is None:
+        raise HttpError(422, "No changes provided.")
 
-    canonical_norm = _normalize(feature.name)
-    display_aliases = [
-        a.value for a in feature.aliases.all() if _normalize(a.value) != canonical_norm
-    ]
+    feature = get_object_or_404(GameplayFeature, slug=slug)
 
-    return {
-        "name": feature.name,
-        "slug": feature.slug,
-        "description": _build_rich_text(
-            feature, "description", getattr(feature, "active_claims", [])
-        ),
-        "aliases": display_aliases,
-        "parents": [{"name": p.name, "slug": p.slug} for p in feature.parents.all()],
-        "children": [
-            {"name": c.name, "slug": c.slug} for c in feature.children.order_by("name")
-        ],
-    }
+    specs = validate_scalar_fields(GameplayFeature, data.fields)
+
+    resolvers = []
+    if data.parents is not None:
+        parent_specs = plan_parent_claims(
+            feature,
+            set(data.parents),
+            model_class=GameplayFeature,
+            claim_field_name="gameplay_feature_parent",
+        )
+        specs.extend(parent_specs)
+        if parent_specs:
+            resolvers.append(resolve_gameplay_feature_parents)
+
+    if data.aliases is not None:
+        alias_specs = plan_alias_claims(
+            feature,
+            data.aliases,
+            claim_field_name="gameplay_feature_alias",
+        )
+        specs.extend(alias_specs)
+        if alias_specs:
+            resolvers.append(resolve_gameplay_feature_aliases)
+
+    if not specs:
+        raise HttpError(422, "No changes provided.")
+
+    execute_claims(
+        feature, specs, user=request.user, note=data.note, resolvers=resolvers
+    )
+
+    feature = get_object_or_404(_detail_qs(), slug=feature.slug)
+    return _serialize_detail(feature)
+
+
+@gameplay_features_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_gameplay_feature_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import GameplayFeature
+
+    feature = get_object_or_404(GameplayFeature, slug=slug)
+    return _build_edit_history(feature)

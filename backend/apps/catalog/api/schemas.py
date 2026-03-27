@@ -23,10 +23,68 @@ class ClaimSchema(Schema):
     citation: str
     created_at: str
     is_winner: bool
+    changeset_note: Optional[str] = None
 
 
 class ClaimPatchSchema(Schema):
     fields: dict[str, Any]
+
+
+class HierarchyClaimPatchSchema(Schema):
+    fields: dict[str, Any] = {}
+    parents: list[str] | None = None
+    aliases: list[str] | None = None
+    note: str = ""
+
+
+class CorporateEntityClaimPatchSchema(Schema):
+    fields: dict[str, Any] = {}
+    aliases: list[str] | None = None
+    note: str = ""
+
+
+class GameplayFeatureInput(Schema):
+    slug: str
+    count: int | None = None
+
+
+class CreditInput(Schema):
+    person_slug: str
+    role: str
+
+
+class ModelClaimPatchSchema(Schema):
+    fields: dict[str, Any] = {}
+    themes: list[str] | None = None
+    tags: list[str] | None = None
+    reward_types: list[str] | None = None
+    gameplay_features: list[GameplayFeatureInput] | None = None
+    credits: list[CreditInput] | None = None
+    abbreviations: list[str] | None = None
+    note: str = ""
+
+
+class EditOptionItem(Schema):
+    slug: str
+    label: str
+
+
+class ModelEditOptionsSchema(Schema):
+    themes: list[EditOptionItem]
+    tags: list[EditOptionItem]
+    reward_types: list[EditOptionItem]
+    gameplay_features: list[EditOptionItem]
+    technology_generations: list[EditOptionItem]
+    technology_subgenerations: list[EditOptionItem]
+    display_types: list[EditOptionItem]
+    display_subtypes: list[EditOptionItem]
+    cabinets: list[EditOptionItem]
+    game_formats: list[EditOptionItem]
+    systems: list[EditOptionItem]
+    corporate_entities: list[EditOptionItem]
+    people: list[EditOptionItem]
+    credit_roles: list[EditOptionItem]
+    models: list[EditOptionItem]
 
 
 class AttributionSchema(Schema):
@@ -100,6 +158,25 @@ class GameplayFeatureSchema(Schema):
 class RewardTypeSchema(Schema):
     name: str
     slug: str
+
+
+class FieldChangeSchema(Schema):
+    """A single field change within a ChangeSet (old → new)."""
+
+    field_name: str
+    claim_key: str
+    old_value: Optional[object] = None
+    new_value: object
+
+
+class ChangeSetSchema(Schema):
+    """A grouped edit session with per-field diffs."""
+
+    id: int
+    user_display: str
+    note: str
+    created_at: str
+    changes: list[FieldChangeSchema]
 
 
 class FranchiseRefSchema(Schema):

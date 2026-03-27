@@ -1,18 +1,26 @@
-"""Titles router — list and detail endpoints."""
+"""Titles router — list, detail, and claims endpoints."""
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from django.db.models import Count, F, Max, Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
+from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
+from ninja.security import django_auth
 
 from .constants import DEFAULT_PAGE_SIZE
+from .edit_claims import (
+    execute_claims,
+    plan_abbreviation_claims,
+)
 from .helpers import (
+    _build_activity,
+    _build_edit_history,
     _build_rich_text,
     _claims_prefetch,
     _extract_image_urls,
@@ -20,6 +28,8 @@ from .helpers import (
 )
 from .machine_models import CreditSchema, MachineModelDetailSchema
 from .schemas import (
+    ChangeSetSchema,
+    ClaimSchema,
     GameplayFeatureSchema,
     RichTextSchema,
     SeriesRefSchema,
@@ -99,6 +109,13 @@ class TitleDetailSchema(Schema):
     credits: list[CreditSchema] = []
     agreed_specs: AgreedSpecsSchema = AgreedSpecsSchema()
     model_detail: Optional[MachineModelDetailSchema] = None
+    activity: list[ClaimSchema] = []
+
+
+class TitleClaimPatchSchema(Schema):
+    fields: dict[str, Any] = {}
+    abbreviations: list[str] | None = None
+    note: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -412,6 +429,7 @@ def _serialize_title_detail(title) -> dict:
         "credits": credits,
         "agreed_specs": agreed_specs,
         "model_detail": model_detail,
+        "activity": _build_activity(getattr(title, "active_claims", [])),
     }
 
 
@@ -448,6 +466,17 @@ def _title_models_prefetch():
     )
 
 
+def _detail_qs():
+    from ..models import Title
+
+    return Title.objects.select_related("franchise").prefetch_related(
+        _title_models_prefetch(),
+        "series",
+        "abbreviations",
+        _claims_prefetch(),
+    )
+
+
 # ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
@@ -476,7 +505,7 @@ def list_titles(request, display: str = ""):
 
 
 @titles_router.get("/all/", response=list[TitleListSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_all_titles(request):
     """Return every title with minimal fields (no pagination)."""
     from django.core.cache import cache
@@ -507,17 +536,55 @@ def list_all_titles(request):
 
 
 @titles_router.get("/{slug}", response=TitleDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_title(request, slug: str):
+    title = get_object_or_404(_detail_qs(), slug=slug)
+    return _serialize_title_detail(title)
+
+
+@titles_router.patch(
+    "/{slug}/claims/",
+    auth=django_auth,
+    response=TitleDetailSchema,
+    tags=["private"],
+)
+def patch_title_claims(request, slug: str, data: TitleClaimPatchSchema):
+    """Assert title-owned claims and return the refreshed title detail."""
     from ..models import Title
+    from ..resolve._relationships import resolve_all_title_abbreviations
+    from .edit_claims import plan_scalar_field_claims
+
+    if not data.fields and data.abbreviations is None:
+        raise HttpError(422, "No changes provided.")
 
     title = get_object_or_404(
-        Title.objects.prefetch_related(
-            _title_models_prefetch(),
-            "series",
-            "abbreviations",
-            _claims_prefetch(),
-        ),
-        slug=slug,
+        Title.objects.prefetch_related("abbreviations"), slug=slug
     )
+    specs = plan_scalar_field_claims(Title, data.fields) if data.fields else []
+
+    resolvers = []
+    if data.abbreviations is not None:
+        abbreviation_specs = plan_abbreviation_claims(title, data.abbreviations)
+        specs.extend(abbreviation_specs)
+        if abbreviation_specs:
+            resolvers.append(
+                lambda: resolve_all_title_abbreviations([title], title_ids={title.pk})
+            )
+
+    if not specs:
+        raise HttpError(422, "No changes provided.")
+
+    execute_claims(title, specs, user=request.user, note=data.note, resolvers=resolvers)
+
+    title = get_object_or_404(_detail_qs(), slug=title.slug)
     return _serialize_title_detail(title)
+
+
+@titles_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_title_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import Title
+
+    title = get_object_or_404(Title, slug=slug)
+    return _build_edit_history(title)

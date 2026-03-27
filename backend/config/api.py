@@ -1,9 +1,11 @@
 from django.conf import settings
 from ninja import NinjaAPI, Schema
+from ninja.errors import HttpError
 
 from apps.accounts.api import auth_router
 from apps.catalog.api import (
     cabinets_router,
+    corporate_entities_router,
     credit_roles_router,
     display_subtypes_router,
     display_types_router,
@@ -68,6 +70,7 @@ def health(request):
 
 
 api.add_router("/auth/", auth_router)
+api.add_router("/corporate-entities/", corporate_entities_router)
 api.add_router("/display-types/", display_types_router)
 api.add_router("/technology-generations/", technology_generations_router)
 api.add_router("/models/", models_router)
@@ -89,3 +92,29 @@ api.add_router("/tags/", tags_router)
 api.add_router("/technology-subgenerations/", technology_subgenerations_router)
 api.add_router("/sources/", sources_router)
 api.add_router("/review/", review_router)
+
+
+# ---------------------------------------------------------------------------
+# Field constraints — single source of truth for numeric validation
+# ---------------------------------------------------------------------------
+
+_ENTITY_MODEL_MAP = {
+    "machine-model": "MachineModel",
+    "person": "Person",
+    "corporate-entity": "CorporateEntity",
+    "manufacturer": "Manufacturer",
+}
+
+
+@api.get("/field-constraints/{entity_type}", tags=["private"])
+def get_field_constraints(request, entity_type: str):
+    """Return numeric field constraints derived from model validators."""
+    from apps.catalog import models as catalog_models
+    from apps.catalog.api.edit_claims import get_field_constraints as _get
+
+    class_name = _ENTITY_MODEL_MAP.get(entity_type)
+    if not class_name:
+        raise HttpError(404, f"Unknown entity type: {entity_type}")
+
+    model_class = getattr(catalog_models, class_name)
+    return _get(model_class)

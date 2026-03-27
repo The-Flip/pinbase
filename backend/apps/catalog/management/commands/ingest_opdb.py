@@ -16,6 +16,7 @@ import logging
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
+from apps.core.validators import bulk_create_validated
 from apps.catalog.ingestion.bulk_utils import (
     format_names,
     generate_unique_slug,
@@ -72,19 +73,17 @@ def _classify_opdb_features(
     reward_map: dict[str, str],
     tag_map: dict[str, str],
     cabinet_map: dict[str, str],
-) -> tuple[list[str], list[str], list[str], str | None, bool, list[str]]:
+) -> tuple[list[str], list[str], list[str], str | None, list[str]]:
     """Classify OPDB features array terms against vocabulary maps.
 
     Priority: reward types first, then gameplay features, then tags, then cabinets.
-    Also detects is_conversion from "Conversion kit" / "Converted game".
 
-    Returns (gameplay_slugs, reward_slugs, tag_slugs, cabinet_slug, is_conversion, unmatched).
+    Returns (gameplay_slugs, reward_slugs, tag_slugs, cabinet_slug, unmatched).
     """
     gameplay_slugs: list[str] = []
     reward_slugs: list[str] = []
     tag_slugs: list[str] = []
     cabinet_slug: str | None = None
-    is_conversion = False
     unmatched: list[str] = []
 
     seen_gameplay: set[str] = set()
@@ -92,10 +91,6 @@ def _classify_opdb_features(
     seen_tag: set[str] = set()
 
     for term in features:
-        # is_conversion detection (before skip check).
-        if term in ("Conversion kit", "Converted game"):
-            is_conversion = True
-
         lower = term.lower()
 
         # Reward type takes priority.
@@ -138,7 +133,6 @@ def _classify_opdb_features(
         reward_slugs,
         tag_slugs,
         cabinet_slug,
-        is_conversion,
         unmatched,
     )
 
@@ -288,7 +282,7 @@ class Command(BaseCommand):
             machine_models.append((pm, rec))
 
         if new_models:
-            MachineModel.objects.bulk_create(new_models)
+            bulk_create_validated(MachineModel, new_models)
         if models_needing_opdb_update:
             MachineModel.objects.bulk_update(models_needing_opdb_update, ["opdb_id"])
 
@@ -335,7 +329,7 @@ class Command(BaseCommand):
             machine_models.append((pm, rec))
 
         if new_alias_models:
-            MachineModel.objects.bulk_create(new_alias_models)
+            bulk_create_validated(MachineModel, new_alias_models)
 
         self.stdout.write(
             f"  Aliases — Linked: {alias_linked}, Created: {alias_created}, "
@@ -362,7 +356,6 @@ class Command(BaseCommand):
                     reward_slugs,
                     tag_slugs,
                     cabinet_slug,
-                    is_conversion,
                     unmatched,
                 ) = _classify_opdb_features(
                     rec.features, feature_map, reward_map, tag_map, cabinet_map
@@ -383,16 +376,6 @@ class Command(BaseCommand):
                             value=cabinet_slug,
                         )
                     )
-                if is_conversion:
-                    pending_claims.append(
-                        Claim(
-                            content_type_id=ct_id,
-                            object_id=pm.pk,
-                            field_name="is_conversion",
-                            value=True,
-                        )
-                    )
-
         claim_stats = Claim.objects.bulk_assert_claims(source, pending_claims)
         self.stdout.write(
             f"  Claims: {claim_stats['unchanged']} unchanged, "

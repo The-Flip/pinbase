@@ -27,10 +27,92 @@ def _build_activity(active_claims) -> list[dict]:
                 "citation": claim.citation,
                 "created_at": claim.created_at.isoformat(),
                 "is_winner": is_winner,
+                "changeset_note": claim.changeset.note if claim.changeset else None,
             }
         )
     activity.sort(key=lambda c: c["created_at"], reverse=True)
     return activity
+
+
+def _build_edit_history(entity) -> list[dict]:
+    """Build changeset-grouped edit history with old→new diffs for an entity.
+
+    Returns a list of dicts matching ChangeSetSchema, newest first.
+    Uses two queries to avoid N+1: one for changesets with their claims,
+    one for all inactive user claims (to look up previous values).
+    """
+    from collections import defaultdict
+
+    from django.contrib.contenttypes.models import ContentType
+    from django.db.models import Prefetch as DjPrefetch
+
+    from apps.provenance.models import ChangeSet, Claim
+
+    ct = ContentType.objects.get_for_model(entity)
+
+    # 1. Fetch changesets that have claims for this entity.
+    changesets = (
+        ChangeSet.objects.filter(
+            claims__content_type=ct,
+            claims__object_id=entity.pk,
+        )
+        .distinct()
+        .select_related("user")
+        .prefetch_related(
+            DjPrefetch(
+                "claims",
+                queryset=Claim.objects.filter(
+                    content_type=ct, object_id=entity.pk
+                ).order_by("field_name"),
+            )
+        )
+        .order_by("-created_at")
+    )
+
+    # 2. Fetch ALL user claims for this entity (active + inactive) to build
+    #    a history chain for old-value lookups.
+    all_user_claims = list(
+        Claim.objects.filter(
+            content_type=ct,
+            object_id=entity.pk,
+            user__isnull=False,
+        ).order_by("claim_key", "user_id", "-created_at")
+    )
+
+    # Build lookup: (claim_key, user_id) → list of claims ordered newest-first.
+    history: dict[tuple[str, int], list] = defaultdict(list)
+    for c in all_user_claims:
+        history[(c.claim_key, c.user_id)].append(c)
+
+    # 3. Build response.
+    result: list[dict] = []
+    for cs in changesets:
+        changes: list[dict] = []
+        for claim in cs.claims.all():
+            chain = history.get((claim.claim_key, claim.user_id), [])
+            old_value = None
+            for i, c in enumerate(chain):
+                if c.pk == claim.pk and i + 1 < len(chain):
+                    old_value = chain[i + 1].value
+                    break
+            changes.append(
+                {
+                    "field_name": claim.field_name,
+                    "claim_key": claim.claim_key,
+                    "old_value": old_value,
+                    "new_value": claim.value,
+                }
+            )
+        result.append(
+            {
+                "id": cs.pk,
+                "user_display": cs.user.username if cs.user else "system",
+                "note": cs.note,
+                "created_at": cs.created_at.isoformat(),
+                "changes": changes,
+            }
+        )
+    return result
 
 
 def _claims_prefetch(to_attr: str = "active_claims"):
@@ -41,7 +123,7 @@ def _claims_prefetch(to_attr: str = "active_claims"):
         "claims",
         queryset=Claim.objects.filter(is_active=True)
         .exclude(source__is_enabled=False)
-        .select_related("source", "user")
+        .select_related("source", "user", "changeset")
         .annotate(
             effective_priority=Case(
                 When(source__isnull=False, then=F("source__priority")),
@@ -177,6 +259,64 @@ def _build_rich_text(obj, field_name: str, active_claims=None) -> dict:
         "html": html,
         "attribution": attribution,
     }
+
+
+def _collect_titles(models, *, include_manufacturer: bool = False) -> list[dict]:
+    """Group models by title into a deduplicated title list."""
+    titles: dict[str, dict] = {}
+    for m in models:
+        if m.title is None:
+            continue
+        key = m.title.slug
+        if key not in titles:
+            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
+            entry: dict = {
+                "name": m.title.name,
+                "slug": m.title.slug,
+                "year": m.year,
+                "thumbnail_url": thumbnail_url,
+            }
+            if include_manufacturer:
+                entry["manufacturer_name"] = (
+                    m.corporate_entity.manufacturer.name
+                    if m.corporate_entity and m.corporate_entity.manufacturer
+                    else None
+                )
+            titles[key] = entry
+        elif titles[key]["thumbnail_url"] is None:
+            thumbnail_url = _extract_image_urls(m.extra_data or {})[0]
+            if thumbnail_url:
+                titles[key]["thumbnail_url"] = thumbnail_url
+    return sorted(titles.values(), key=lambda t: (t["year"] is None, -(t["year"] or 0)))
+
+
+def _location_ancestors(loc) -> list[dict]:
+    """Return ancestor locations from immediate parent up to root, in order."""
+    ancestors = []
+    current = loc.parent
+    while current is not None:
+        ancestors.append(
+            {
+                "display_name": current.short_name or current.name,
+                "location_path": current.location_path,
+            }
+        )
+        current = current.parent
+    return ancestors
+
+
+def _serialize_locations(entity) -> list[dict]:
+    """Serialize CorporateEntityLocation rows with ancestor chains."""
+    return [
+        {
+            "location_path": cel.location.location_path,
+            "location_type": cel.location.location_type,
+            "display_name": cel.location.short_name or cel.location.name,
+            "slug": cel.location.slug,
+            "ancestors": _location_ancestors(cel.location),
+        }
+        for cel in entity.locations.all()
+    ]
 
 
 def _extract_variant_features(extra_data: dict) -> list[str]:

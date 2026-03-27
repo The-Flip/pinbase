@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.core.models import Linkable, MarkdownField, TimeStampedModel, unique_slug
+from apps.core.validators import validate_no_mojibake
 
 __all__ = ["Title", "TitleAbbreviation"]
 
@@ -38,7 +39,7 @@ class Title(Linkable, TimeStampedModel):
         verbose_name="OPDB group ID",
         help_text='OPDB group ID (e.g., "G5pe4"). Null for titles without an OPDB group.',
     )
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, validators=[validate_no_mojibake])
     slug = models.SlugField(max_length=300, unique=True, blank=True)
     description = MarkdownField(blank=True)
     franchise = models.ForeignKey(
@@ -48,7 +49,7 @@ class Title(Linkable, TimeStampedModel):
         null=True,
         blank=True,
     )
-    fandom_page_id = models.IntegerField(
+    fandom_page_id = models.PositiveIntegerField(
         unique=True,
         null=True,
         blank=True,

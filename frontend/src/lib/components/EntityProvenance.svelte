@@ -41,6 +41,17 @@
 	}
 </script>
 
+{#snippet claimDetail(claim: Claim)}
+	<span class="source-badge">{claimAttribution(claim)}</span>
+	{formatValue(claim.value)}
+	{#if claim.is_winner}
+		<span class="badge-used">used</span>
+	{/if}
+	{#if claim.changeset_note}
+		<span class="changeset-note">{claim.changeset_note}</span>
+	{/if}
+{/snippet}
+
 {#if activity.length > 0}
 	{@const { conflicts, agreed, single } = activityGroups}
 	{@const contributorNames = [
@@ -70,11 +81,7 @@
 							<dd>
 								{#each claims as claim, i (i)}
 									<span class="claim" class:used={claim.is_winner}>
-										<span class="source-badge">{claimAttribution(claim)}</span>
-										{formatValue(claim.value)}
-										{#if claim.is_winner}
-											<span class="badge-used">used</span>
-										{/if}
+										{@render claimDetail(claim)}
 									</span>
 								{/each}
 							</dd>
@@ -118,8 +125,7 @@
 							<dt>{field}</dt>
 							<dd>
 								<span class="claim used">
-									<span class="source-badge">{claimAttribution(claims[0])}</span>
-									{formatValue(claims[0].value)}
+									{@render claimDetail(claims[0])}
 								</span>
 							</dd>
 						</div>
@@ -225,6 +231,13 @@
 		font-size: var(--font-size-00, 0.7rem);
 		font-weight: 600;
 		color: var(--color-accent);
+	}
+
+	.changeset-note {
+		width: 100%;
+		font-size: var(--font-size-00, 0.7rem);
+		font-style: italic;
+		color: var(--color-text-muted);
 	}
 
 	.source-list {

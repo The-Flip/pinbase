@@ -4,6 +4,7 @@
 	import { pageTitle } from '$lib/constants';
 	import { auth } from '$lib/auth.svelte';
 	import ExternalLinksSidebarSection from '$lib/components/ExternalLinksSidebarSection.svelte';
+	import Markdown from '$lib/components/Markdown.svelte';
 	import HeroHeader from '$lib/components/HeroHeader.svelte';
 	import ModelHierarchy from '$lib/components/ModelHierarchy.svelte';
 	import ModelSpecsSidebar from '$lib/components/ModelSpecsSidebar.svelte';
@@ -25,10 +26,13 @@
 
 	let isOnlyModelInTitle = $derived(model.title_models.length <= 1);
 	let isDetail = $derived(
-		!page.url.pathname.endsWith('/edit') && !page.url.pathname.endsWith('/activity')
+		!page.url.pathname.endsWith('/edit') &&
+			!page.url.pathname.endsWith('/activity') &&
+			!page.url.pathname.endsWith('/edit-history')
 	);
 	let isEdit = $derived(page.url.pathname.endsWith('/edit'));
 	let isActivity = $derived(page.url.pathname.endsWith('/activity'));
+	let isEditHistory = $derived(page.url.pathname.endsWith('/edit-history'));
 
 	let parentLink = $derived(
 		model.title ? { text: model.title.name, href: resolve(`/titles/${model.title.slug}`) } : null
@@ -67,10 +71,14 @@
 
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if model.title_description && isOnlyModelInTitle}
+			{#if (model.title_description?.html && isOnlyModelInTitle) || model.description?.html}
 				<section class="prose">
-					<h2>About</h2>
-					<p>{model.title_description}</p>
+					{#if model.title_description?.html && isOnlyModelInTitle}
+						<Markdown html={model.title_description.html} />
+					{/if}
+					{#if model.description?.html}
+						<Markdown html={model.description.html} />
+					{/if}
 				</section>
 			{/if}
 
@@ -80,6 +88,8 @@
 					<Tab active={isEdit} href={resolve(`/models/${slug}/edit`)}>Edit</Tab>
 				{/if}
 				<Tab active={isActivity} href={resolve(`/models/${slug}/activity`)}>Activity</Tab>
+				<Tab active={isEditHistory} href={resolve(`/models/${slug}/edit-history`)}>Edit History</Tab
+				>
 			</TabNav>
 
 			{@render children()}
@@ -229,19 +239,6 @@
 	/* Main column */
 	.prose {
 		margin-bottom: var(--size-5);
-	}
-
-	.prose h2 {
-		font-size: var(--font-size-3);
-		font-weight: 600;
-		color: var(--color-text-primary);
-		margin-bottom: var(--size-3);
-	}
-
-	.prose p {
-		font-size: var(--font-size-2);
-		color: var(--color-text-primary);
-		line-height: var(--font-lineheight-3);
 	}
 
 	.muted {

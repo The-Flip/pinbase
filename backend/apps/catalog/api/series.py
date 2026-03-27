@@ -1,4 +1,4 @@
-"""Series router — list and detail endpoints."""
+"""Series router — list, detail, and claims endpoints."""
 
 from __future__ import annotations
 
@@ -9,10 +9,18 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
+from ninja.security import django_auth
 
-from .helpers import _build_rich_text, _claims_prefetch, _extract_image_urls
-from .schemas import RichTextSchema
+from .edit_claims import execute_claims
+from .helpers import (
+    _build_activity,
+    _build_edit_history,
+    _build_rich_text,
+    _claims_prefetch,
+    _extract_image_urls,
+)
 from .machine_models import CreditSchema
+from .schemas import ChangeSetSchema, ClaimPatchSchema, ClaimSchema, RichTextSchema
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -43,6 +51,7 @@ class SeriesDetailSchema(Schema):
     description: RichTextSchema = RichTextSchema()
     titles: list[TitleRefSchema]
     credits: list[CreditSchema] = []
+    activity: list[ClaimSchema] = []
 
 
 # ---------------------------------------------------------------------------
@@ -76,6 +85,62 @@ def _serialize_title_list(title) -> dict:
     }
 
 
+def _series_titles_qs():
+    from ..models import MachineModel, Title
+
+    return Title.objects.annotate(
+        machine_count=Count(
+            "machine_models",
+            filter=Q(machine_models__variant_of__isnull=True),
+        )
+    ).prefetch_related(
+        "abbreviations",
+        Prefetch(
+            "machine_models",
+            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            .select_related("corporate_entity__manufacturer")
+            .order_by("year", "name"),
+        ),
+    )
+
+
+def _series_credits_qs():
+    from ..models import Credit
+
+    return Credit.objects.filter(series__isnull=False).select_related("person", "role")
+
+
+def _series_detail_qs():
+    from ..models import Series
+
+    return Series.objects.prefetch_related(
+        Prefetch("titles", queryset=_series_titles_qs()),
+        Prefetch("credits", queryset=_series_credits_qs()),
+        _claims_prefetch(),
+    )
+
+
+def _serialize_series_detail(series) -> dict:
+    return {
+        "name": series.name,
+        "slug": series.slug,
+        "description": _build_rich_text(
+            series, "description", getattr(series, "active_claims", [])
+        ),
+        "titles": [_serialize_title_list(t) for t in series.titles.all()],
+        "credits": [
+            {
+                "person": {"name": c.person.name, "slug": c.person.slug},
+                "role": c.role.slug,
+                "role_display": c.role.name,
+                "role_sort_order": c.role.display_order,
+            }
+            for c in series.credits.all()
+        ],
+        "activity": _build_activity(getattr(series, "active_claims", [])),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
@@ -84,7 +149,7 @@ series_router = Router(tags=["series"])
 
 
 @series_router.get("/", response=list[SeriesListSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_series(request):
     """Return all series with title count and thumbnail."""
     from ..models import MachineModel, Series
@@ -122,49 +187,34 @@ def list_series(request):
 
 
 @series_router.get("/{slug}", response=SeriesDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_series(request, slug: str):
-    from ..models import Credit, MachineModel, Series, Title
+    series = get_object_or_404(_series_detail_qs(), slug=slug)
+    return _serialize_series_detail(series)
 
-    titles_qs = Title.objects.annotate(
-        machine_count=Count(
-            "machine_models",
-            filter=Q(machine_models__variant_of__isnull=True),
-        )
-    ).prefetch_related(
-        "abbreviations",
-        Prefetch(
-            "machine_models",
-            queryset=MachineModel.objects.filter(variant_of__isnull=True)
-            .select_related("corporate_entity__manufacturer")
-            .order_by("year", "name"),
-        ),
-    )
-    credits_qs = Credit.objects.filter(
-        series__isnull=False,
-    ).select_related("person", "role")
-    series = get_object_or_404(
-        Series.objects.prefetch_related(
-            Prefetch("titles", queryset=titles_qs),
-            Prefetch("credits", queryset=credits_qs),
-            _claims_prefetch(),
-        ),
-        slug=slug,
-    )
-    return {
-        "name": series.name,
-        "slug": series.slug,
-        "description": _build_rich_text(
-            series, "description", getattr(series, "active_claims", [])
-        ),
-        "titles": [_serialize_title_list(t) for t in series.titles.all()],
-        "credits": [
-            {
-                "person": {"name": c.person.name, "slug": c.person.slug},
-                "role": c.role.slug,
-                "role_display": c.role.name,
-                "role_sort_order": c.role.display_order,
-            }
-            for c in series.credits.all()
-        ],
-    }
+
+@series_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=SeriesDetailSchema, tags=["private"]
+)
+def patch_series_claims(request, slug: str, data: ClaimPatchSchema):
+    """Assert per-field claims from the authenticated user, then re-resolve."""
+    from ..models import Series
+    from .edit_claims import plan_scalar_field_claims
+
+    series = get_object_or_404(Series, slug=slug)
+    specs = plan_scalar_field_claims(Series, data.fields)
+
+    execute_claims(series, specs, user=request.user)
+
+    series = get_object_or_404(_series_detail_qs(), slug=series.slug)
+    return _serialize_series_detail(series)
+
+
+@series_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_series_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import Series
+
+    series_obj = get_object_or_404(Series, slug=slug)
+    return _build_edit_history(series_obj)

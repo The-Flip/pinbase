@@ -7,6 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.signals import post_delete
 
+from .validators import validate_no_mojibake as _validate_no_mojibake
+
 
 class TimeStampedModel(models.Model):
     """Abstract base adding created_at / updated_at timestamps."""
@@ -112,7 +114,12 @@ class MarkdownField(models.TextField):
     The system introspects models for MarkdownField instances to:
     - Auto-discover which fields need reference syncing
     - Auto-generate ``{field}_html`` rendered output in API responses
+
+    Includes ``validate_no_mojibake`` as a default validator to reject
+    encoding-corrupted text at the model level.
     """
+
+    default_validators = [_validate_no_mojibake]
 
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
+
+from apps.core.validators import validate_no_mojibake
 
 from apps.core.models import (
     AliasBase,
@@ -26,7 +29,9 @@ class GameplayFeature(Linkable, TimeStampedModel):
 
     link_url_pattern = "/gameplay-features/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = MarkdownField(blank=True)
     parents = models.ManyToManyField(
@@ -60,6 +65,7 @@ class MachineModelGameplayFeature(TimeStampedModel):
         null=True,
         blank=True,
         help_text="Quantity from source data, e.g. Flippers (2) → count=2.",
+        validators=[MinValueValidator(1)],
     )
 
     class Meta:

@@ -13,10 +13,11 @@ from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from ..cache import MODELS_ALL_KEY, invalidate_all
+from ..cache import MODELS_ALL_KEY
 from .constants import DEFAULT_PAGE_SIZE
 from .helpers import (
     _build_activity,
+    _build_edit_history,
     _build_rich_text,
     _claims_prefetch,
     _extract_image_attribution,
@@ -27,10 +28,12 @@ from .helpers import (
 )
 from .schemas import (
     AttributionSchema,
-    ClaimPatchSchema,
+    ChangeSetSchema,
     ClaimSchema,
     FranchiseRefSchema,
     GameplayFeatureSchema,
+    ModelClaimPatchSchema,
+    ModelEditOptionsSchema,
     Ref,
     RewardTypeSchema,
     RichTextSchema,
@@ -102,6 +105,7 @@ class MachineModelDetailSchema(Schema):
     name: str
     slug: str
     manufacturer: Optional[Ref] = None
+    corporate_entity: Optional[Ref] = None
     year: Optional[int] = None
     month: Optional[int] = None
     technology_generation: Optional[Ref] = None
@@ -118,7 +122,7 @@ class MachineModelDetailSchema(Schema):
     ipdb_rating: Optional[float] = None
     pinside_rating: Optional[float] = None
     description: RichTextSchema = RichTextSchema()
-    title_description: str = ""
+    title_description: RichTextSchema = RichTextSchema()
     abbreviations: list[str] = []
     extra_data: dict
     credits: list[CreditSchema]
@@ -133,15 +137,14 @@ class MachineModelDetailSchema(Schema):
     game_format: Optional[Ref] = None
     display_subtype: Optional[Ref] = None
     gameplay_features: list[GameplayFeatureSchema] = []
+    tags: list[Ref] = []
     reward_types: list[RewardTypeSchema] = []
     franchise: Optional[FranchiseRefSchema] = None
     series: list[SeriesRefSchema] = []
     variant_of: Optional[ModelRefSchema] = None
     variant_siblings: list[VariantSchema] = []
-    is_conversion: bool = False
     converted_from: Optional[ModelRefSchema] = None
     conversions: list[ConversionSchema] = []
-    is_remake: bool = False
     remake_of: Optional[ModelRefSchema] = None
     remakes: list[ConversionSchema] = []
     title_models: list[TitleMachineSchema] = []
@@ -178,7 +181,7 @@ def _build_model_list_qs(
             "title",
         )
         .prefetch_related("themes")
-        .filter(variant_of__isnull=True)
+        .filter(Q(variant_of__isnull=True) | Q(converted_from__isnull=False))
     )
 
     if manufacturer:
@@ -348,6 +351,11 @@ def _serialize_model_detail(pm) -> dict:
         "slug": pm.slug,
         "description": description,
         "manufacturer": {"name": mfr.name, "slug": mfr.slug} if mfr else None,
+        "corporate_entity": (
+            {"name": pm.corporate_entity.name, "slug": pm.corporate_entity.slug}
+            if pm.corporate_entity
+            else None
+        ),
         "year": pm.year,
         "month": pm.month,
         "technology_generation": (
@@ -380,7 +388,9 @@ def _serialize_model_detail(pm) -> dict:
         "pinside_rating": float(pm.pinside_rating)
         if pm.pinside_rating is not None
         else None,
-        "title_description": pm.title.description if pm.title else "",
+        "title_description": _build_rich_text(pm.title, "description")
+        if pm.title
+        else {},
         "abbreviations": [a.value for a in pm.abbreviations.all()],
         "extra_data": pm.extra_data or {},
         "credits": credits,
@@ -400,7 +410,6 @@ def _serialize_model_detail(pm) -> dict:
             else None
         ),
         "variant_siblings": variant_siblings,
-        "is_conversion": pm.is_conversion,
         "converted_from": (
             {
                 "name": pm.converted_from.name,
@@ -414,7 +423,6 @@ def _serialize_model_detail(pm) -> dict:
             {"name": c.name, "slug": c.slug, "year": c.year}
             for c in pm.conversions.all()
         ],
-        "is_remake": pm.is_remake,
         "remake_of": (
             {
                 "name": pm.remake_of.name,
@@ -449,6 +457,7 @@ def _serialize_model_detail(pm) -> dict:
             }
             for t in pm.machinemodelgameplayfeature_set.all()
         ],
+        "tags": [{"name": t.name, "slug": t.slug} for t in pm.tags.all()],
         "reward_types": [
             {"name": rt.name, "slug": rt.slug} for rt in pm.reward_types.all()
         ],
@@ -500,12 +509,15 @@ def _model_detail_qs():
                 "gameplayfeature"
             ).order_by("gameplayfeature__name"),
         ),
+        "tags",
         "reward_types",
         "abbreviations",
         "title__series",
         Prefetch(
             "title__machine_models",
-            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            queryset=MachineModel.objects.filter(
+                Q(variant_of__isnull=True) | Q(converted_from__isnull=False)
+            )
             .select_related("corporate_entity__manufacturer", "technology_generation")
             .prefetch_related("variants")
             .order_by("year", "name"),
@@ -613,13 +625,15 @@ class ModelRecentSchema(Schema):
 
 
 @models_router.get("/recent/", response=list[ModelRecentSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_recent_models(request):
     """Return the 3 newest non-variant models, one per title."""
     from ..models import MachineModel
 
     qs = (
-        MachineModel.objects.filter(variant_of__isnull=True)
+        MachineModel.objects.filter(
+            Q(variant_of__isnull=True) | Q(converted_from__isnull=False)
+        )
         .select_related("corporate_entity__manufacturer")
         .order_by(
             F("year").desc(nulls_last=True),
@@ -654,7 +668,7 @@ def list_recent_models(request):
 
 
 @models_router.get("/all/", response=list[MachineModelGridSchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_all_models(request):
     """Return every model (including variants) with minimal fields (no pagination)."""
     from django.core.cache import cache
@@ -718,11 +732,70 @@ def list_all_models(request):
     return result
 
 
+@models_router.get("/edit-options/", response=ModelEditOptionsSchema)
+@decorate_view(cache_control(no_cache=True))
+def get_model_edit_options(request):
+    """Return all dropdown options for the MachineModel edit form."""
+    from ..models import (
+        Cabinet,
+        CorporateEntity,
+        CreditRole,
+        DisplaySubtype,
+        DisplayType,
+        GameFormat,
+        GameplayFeature,
+        MachineModel,
+        Person,
+        RewardType,
+        System,
+        Tag,
+        TechnologyGeneration,
+        TechnologySubgeneration,
+        Theme,
+    )
+
+    def _opts(qs):
+        return [{"slug": obj.slug, "label": obj.name} for obj in qs]
+
+    return {
+        "themes": _opts(Theme.objects.order_by("name")),
+        "tags": _opts(Tag.objects.order_by("name")),
+        "reward_types": _opts(RewardType.objects.order_by("display_order", "name")),
+        "gameplay_features": _opts(GameplayFeature.objects.order_by("name")),
+        "technology_generations": _opts(
+            TechnologyGeneration.objects.order_by("display_order", "name")
+        ),
+        "technology_subgenerations": _opts(
+            TechnologySubgeneration.objects.order_by("display_order", "name")
+        ),
+        "display_types": _opts(DisplayType.objects.order_by("display_order", "name")),
+        "display_subtypes": _opts(
+            DisplaySubtype.objects.order_by("display_order", "name")
+        ),
+        "cabinets": _opts(Cabinet.objects.order_by("display_order", "name")),
+        "game_formats": _opts(GameFormat.objects.order_by("display_order", "name")),
+        "systems": _opts(System.objects.order_by("name")),
+        "corporate_entities": _opts(CorporateEntity.objects.order_by("name")),
+        "people": _opts(Person.objects.order_by("name")),
+        "credit_roles": _opts(CreditRole.objects.order_by("display_order", "name")),
+        "models": [
+            {
+                "slug": obj.slug,
+                "label": f"{obj.name} ({obj.year})" if obj.year else obj.name,
+            }
+            for obj in MachineModel.objects.order_by("name")
+        ],
+    }
+
+
 @models_router.get("/{slug}", response=MachineModelDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_model(request, slug: str):
     pm = get_object_or_404(_model_detail_qs(), slug=slug)
     return _serialize_model_detail(pm)
+
+
+_SELF_REF_FIELDS = frozenset({"variant_of", "converted_from", "remake_of"})
 
 
 @models_router.patch(
@@ -731,27 +804,99 @@ def get_model(request, slug: str):
     response=MachineModelDetailSchema,
     tags=["private"],
 )
-def patch_model_claims(request, slug: str, data: ClaimPatchSchema):
+def patch_model_claims(request, slug: str, data: ModelClaimPatchSchema):
     """Assert per-field claims from the authenticated user, then re-resolve the model."""
-    from apps.provenance.models import Claim
+    from .edit_claims import (
+        execute_claims,
+        plan_abbreviation_claims,
+        plan_credit_claims,
+        plan_gameplay_feature_claims,
+        plan_m2m_claims,
+        plan_scalar_field_claims,
+    )
 
-    from ..models import MachineModel
-    from apps.core.models import get_claim_fields
-
+    from ..models import MachineModel, RewardType, Tag, Theme
     from ..resolve import resolve_model
 
-    editable_fields = set(get_claim_fields(MachineModel))
-    unknown = set(data.fields.keys()) - editable_fields
-    if unknown:
-        raise HttpError(422, f"Unknown or non-editable fields: {sorted(unknown)}")
+    pm = get_object_or_404(
+        MachineModel.objects.prefetch_related(
+            "themes",
+            "tags",
+            "reward_types",
+            "machinemodelgameplayfeature_set__gameplayfeature",
+            "abbreviations",
+            "credits__person",
+            "credits__role",
+        ),
+        slug=slug,
+    )
 
-    pm = get_object_or_404(MachineModel, slug=slug)
+    specs = plan_scalar_field_claims(MachineModel, data.fields) if data.fields else []
 
     for field_name, value in data.fields.items():
-        Claim.objects.assert_claim(pm, field_name, value, user=request.user)
+        if field_name in _SELF_REF_FIELDS and value == slug:
+            raise HttpError(
+                422, f"Field '{field_name}' cannot reference the model itself."
+            )
 
-    resolve_model(pm)
-    invalidate_all()
+    if data.themes is not None:
+        specs.extend(
+            plan_m2m_claims(
+                pm,
+                set(data.themes),
+                target_model=Theme,
+                claim_field_name="theme",
+                slug_key="theme_slug",
+                m2m_attr="themes",
+            )
+        )
+    if data.tags is not None:
+        specs.extend(
+            plan_m2m_claims(
+                pm,
+                set(data.tags),
+                target_model=Tag,
+                claim_field_name="tag",
+                slug_key="tag_slug",
+                m2m_attr="tags",
+            )
+        )
+    if data.reward_types is not None:
+        specs.extend(
+            plan_m2m_claims(
+                pm,
+                set(data.reward_types),
+                target_model=RewardType,
+                claim_field_name="reward_type",
+                slug_key="reward_type_slug",
+                m2m_attr="reward_types",
+            )
+        )
+    if data.gameplay_features is not None:
+        specs.extend(plan_gameplay_feature_claims(pm, data.gameplay_features))
+    if data.credits is not None:
+        specs.extend(plan_credit_claims(pm, data.credits))
+    if data.abbreviations is not None:
+        specs.extend(plan_abbreviation_claims(pm, data.abbreviations))
+
+    if not specs:
+        raise HttpError(422, "No changes provided.")
+
+    # MachineModel uses resolve_model (handles relationship claims + opdb_id
+    # conflicts) instead of the generic resolve_entity.
+    execute_claims(
+        pm, specs, user=request.user, note=data.note, resolve_fn=resolve_model
+    )
 
     pm = get_object_or_404(_model_detail_qs(), slug=slug)
     return _serialize_model_detail(pm)
+
+
+@models_router.get("/{slug}/edit-history/", response=list[ChangeSetSchema])
+@decorate_view(cache_control(no_cache=True))
+def get_model_edit_history(request, slug: str):
+    """Return changeset-grouped edit history with old/new diffs."""
+    from ..models import MachineModel
+
+    pm = get_object_or_404(MachineModel, slug=slug)
+    return _build_edit_history(pm)

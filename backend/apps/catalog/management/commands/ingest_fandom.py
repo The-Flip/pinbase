@@ -45,6 +45,7 @@ from apps.catalog.ingestion.fandom_wiki import (
     parse_person_pages,
 )
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
+from apps.core.validators import validate_no_mojibake
 from apps.catalog.models import MachineModel, Manufacturer, Person
 from apps.catalog.resolve import (
     resolve_all_credits,
@@ -333,6 +334,7 @@ class Command(BaseCommand):
                     continue
 
                 # Safe to create.
+                validate_no_mojibake(fp.title)
                 person = Person.objects.create(name=fp.title)
                 existing_persons[fp.title.lower()] = person
                 persons_created += 1

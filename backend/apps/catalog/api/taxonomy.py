@@ -7,9 +7,11 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
+from ninja.security import django_auth
 
-from .helpers import _build_rich_text
-from .schemas import RichTextSchema, TitleMachineSchema
+from .edit_claims import execute_claims, plan_scalar_field_claims
+from .helpers import _build_activity, _build_rich_text, _claims_prefetch
+from .schemas import ClaimPatchSchema, ClaimSchema, RichTextSchema, TitleMachineSchema
 
 
 # ---------------------------------------------------------------------------
@@ -22,8 +24,26 @@ def _serialize_taxonomy(obj) -> dict:
         "name": obj.name,
         "slug": obj.slug,
         "display_order": obj.display_order,
-        "description": _build_rich_text(obj, "description"),
+        "description": _build_rich_text(
+            obj, "description", getattr(obj, "active_claims", [])
+        ),
+        "activity": _build_activity(getattr(obj, "active_claims", [])),
     }
+
+
+def _taxonomy_detail_qs(model_class):
+    return model_class.objects.prefetch_related(_claims_prefetch())
+
+
+def _patch_taxonomy(request, model_class, slug, data):
+    """Shared PATCH handler for all taxonomy entities."""
+    obj = get_object_or_404(model_class, slug=slug)
+    specs = plan_scalar_field_claims(model_class, data.fields)
+
+    execute_claims(obj, specs, user=request.user)
+
+    obj = get_object_or_404(_taxonomy_detail_qs(model_class), slug=obj.slug)
+    return _serialize_taxonomy(obj)
 
 
 # ---------------------------------------------------------------------------
@@ -36,6 +56,7 @@ class TaxonomySchema(Schema):
     slug: str
     display_order: int
     description: RichTextSchema = RichTextSchema()
+    activity: list[ClaimSchema] = []
 
 
 # ---------------------------------------------------------------------------
@@ -46,7 +67,7 @@ technology_generations_router = Router(tags=["technology-generations"])
 
 
 @technology_generations_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_technology_generations(request):
     from ..models import TechnologyGeneration
 
@@ -57,11 +78,22 @@ def list_technology_generations(request):
 
 
 @technology_generations_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_technology_generation(request, slug: str):
     from ..models import TechnologyGeneration
 
-    return _serialize_taxonomy(get_object_or_404(TechnologyGeneration, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(TechnologyGeneration), slug=slug)
+    )
+
+
+@technology_generations_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_technology_generation(request, slug: str, data: ClaimPatchSchema):
+    from ..models import TechnologyGeneration
+
+    return _patch_taxonomy(request, TechnologyGeneration, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -72,7 +104,7 @@ display_types_router = Router(tags=["display-types"])
 
 
 @display_types_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_display_types(request):
     from ..models import DisplayType
 
@@ -82,11 +114,22 @@ def list_display_types(request):
 
 
 @display_types_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_display_type(request, slug: str):
     from ..models import DisplayType
 
-    return _serialize_taxonomy(get_object_or_404(DisplayType, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(DisplayType), slug=slug)
+    )
+
+
+@display_types_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_display_type(request, slug: str, data: ClaimPatchSchema):
+    from ..models import DisplayType
+
+    return _patch_taxonomy(request, DisplayType, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -97,7 +140,7 @@ technology_subgenerations_router = Router(tags=["technology-subgenerations"])
 
 
 @technology_subgenerations_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_technology_subgenerations(request):
     from ..models import TechnologySubgeneration
 
@@ -108,11 +151,22 @@ def list_technology_subgenerations(request):
 
 
 @technology_subgenerations_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_technology_subgeneration(request, slug: str):
     from ..models import TechnologySubgeneration
 
-    return _serialize_taxonomy(get_object_or_404(TechnologySubgeneration, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(TechnologySubgeneration), slug=slug)
+    )
+
+
+@technology_subgenerations_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_technology_subgeneration(request, slug: str, data: ClaimPatchSchema):
+    from ..models import TechnologySubgeneration
+
+    return _patch_taxonomy(request, TechnologySubgeneration, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -123,7 +177,7 @@ display_subtypes_router = Router(tags=["display-subtypes"])
 
 
 @display_subtypes_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_display_subtypes(request):
     from ..models import DisplaySubtype
 
@@ -133,11 +187,22 @@ def list_display_subtypes(request):
 
 
 @display_subtypes_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_display_subtype(request, slug: str):
     from ..models import DisplaySubtype
 
-    return _serialize_taxonomy(get_object_or_404(DisplaySubtype, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(DisplaySubtype), slug=slug)
+    )
+
+
+@display_subtypes_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_display_subtype(request, slug: str, data: ClaimPatchSchema):
+    from ..models import DisplaySubtype
+
+    return _patch_taxonomy(request, DisplaySubtype, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -148,7 +213,7 @@ cabinets_router = Router(tags=["cabinets"])
 
 
 @cabinets_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_cabinets(request):
     from ..models import Cabinet
 
@@ -156,11 +221,22 @@ def list_cabinets(request):
 
 
 @cabinets_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_cabinet(request, slug: str):
     from ..models import Cabinet
 
-    return _serialize_taxonomy(get_object_or_404(Cabinet, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(Cabinet), slug=slug)
+    )
+
+
+@cabinets_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_cabinet(request, slug: str, data: ClaimPatchSchema):
+    from ..models import Cabinet
+
+    return _patch_taxonomy(request, Cabinet, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -171,7 +247,7 @@ game_formats_router = Router(tags=["game-formats"])
 
 
 @game_formats_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_game_formats(request):
     from ..models import GameFormat
 
@@ -181,11 +257,22 @@ def list_game_formats(request):
 
 
 @game_formats_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_game_format(request, slug: str):
     from ..models import GameFormat
 
-    return _serialize_taxonomy(get_object_or_404(GameFormat, slug=slug))
+    return _serialize_taxonomy(
+        get_object_or_404(_taxonomy_detail_qs(GameFormat), slug=slug)
+    )
+
+
+@game_formats_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_game_format(request, slug: str, data: ClaimPatchSchema):
+    from ..models import GameFormat
+
+    return _patch_taxonomy(request, GameFormat, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -200,8 +287,31 @@ class RewardTypeDetailSchema(TaxonomySchema):
 reward_types_router = Router(tags=["reward-types"])
 
 
+def _reward_type_detail_qs():
+    from ..models import MachineModel, RewardType
+
+    return RewardType.objects.prefetch_related(
+        _claims_prefetch(),
+        Prefetch(
+            "machine_models",
+            queryset=MachineModel.objects.filter(variant_of__isnull=True)
+            .select_related("corporate_entity__manufacturer", "technology_generation")
+            .order_by(F("year").desc(nulls_last=True), "name"),
+        ),
+    )
+
+
+def _serialize_reward_type_detail(rt) -> dict:
+    from .helpers import _serialize_title_machine
+
+    return {
+        **_serialize_taxonomy(rt),
+        "machines": [_serialize_title_machine(pm) for pm in rt.machine_models.all()],
+    }
+
+
 @reward_types_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_reward_types(request):
     from ..models import RewardType
 
@@ -212,28 +322,28 @@ def list_reward_types(request):
 
 
 @reward_types_router.get("/{slug}", response=RewardTypeDetailSchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_reward_type(request, slug: str):
-    from ..models import MachineModel, RewardType
-    from .helpers import _serialize_title_machine
+    rt = get_object_or_404(_reward_type_detail_qs(), slug=slug)
+    return _serialize_reward_type_detail(rt)
 
-    rt = get_object_or_404(
-        RewardType.objects.prefetch_related(
-            Prefetch(
-                "machine_models",
-                queryset=MachineModel.objects.filter(variant_of__isnull=True)
-                .select_related(
-                    "corporate_entity__manufacturer", "technology_generation"
-                )
-                .order_by(F("year").desc(nulls_last=True), "name"),
-            )
-        ),
-        slug=slug,
-    )
-    return {
-        **_serialize_taxonomy(rt),
-        "machines": [_serialize_title_machine(pm) for pm in rt.machine_models.all()],
-    }
+
+@reward_types_router.patch(
+    "/{slug}/claims/",
+    auth=django_auth,
+    response=RewardTypeDetailSchema,
+    tags=["private"],
+)
+def patch_reward_type(request, slug: str, data: ClaimPatchSchema):
+    from ..models import RewardType
+
+    obj = get_object_or_404(RewardType, slug=slug)
+    specs = plan_scalar_field_claims(RewardType, data.fields)
+
+    execute_claims(obj, specs, user=request.user)
+
+    rt = get_object_or_404(_reward_type_detail_qs(), slug=obj.slug)
+    return _serialize_reward_type_detail(rt)
 
 
 # ---------------------------------------------------------------------------
@@ -244,7 +354,7 @@ tags_router = Router(tags=["tags"])
 
 
 @tags_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_tags(request):
     from ..models import Tag
 
@@ -252,11 +362,20 @@ def list_tags(request):
 
 
 @tags_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_tag(request, slug: str):
     from ..models import Tag
 
-    return _serialize_taxonomy(get_object_or_404(Tag, slug=slug))
+    return _serialize_taxonomy(get_object_or_404(_taxonomy_detail_qs(Tag), slug=slug))
+
+
+@tags_router.patch(
+    "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
+)
+def patch_tag(request, slug: str, data: ClaimPatchSchema):
+    from ..models import Tag
+
+    return _patch_taxonomy(request, Tag, slug, data)
 
 
 # ---------------------------------------------------------------------------
@@ -267,7 +386,7 @@ credit_roles_router = Router(tags=["credit-roles"])
 
 
 @credit_roles_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def list_credit_roles(request):
     from ..models import CreditRole
 
@@ -277,7 +396,7 @@ def list_credit_roles(request):
 
 
 @credit_roles_router.get("/{slug}", response=TaxonomySchema)
-@decorate_view(cache_control(public=True, max_age=300))
+@decorate_view(cache_control(no_cache=True))
 def get_credit_role(request, slug: str):
     from ..models import CreditRole
 

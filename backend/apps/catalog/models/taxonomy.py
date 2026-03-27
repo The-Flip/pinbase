@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-
 from django.db.models.functions import Lower
+
+from apps.core.validators import validate_no_mojibake
 
 from apps.core.models import (
     AliasBase,
@@ -37,7 +38,9 @@ class TechnologyGeneration(Linkable, TimeStampedModel):
 
     link_url_pattern = "/technology-generations/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -65,7 +68,7 @@ class TechnologySubgeneration(Linkable, TimeStampedModel):
     link_url_pattern = "/technology-subgenerations/{slug}"
     claims_exempt = frozenset({"technology_generation"})
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, validators=[validate_no_mojibake])
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -97,7 +100,9 @@ class DisplayType(Linkable, TimeStampedModel):
 
     link_url_pattern = "/display-types/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -125,7 +130,7 @@ class DisplaySubtype(Linkable, TimeStampedModel):
     link_url_pattern = "/display-subtypes/{slug}"
     claims_exempt = frozenset({"display_type"})
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, validators=[validate_no_mojibake])
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -154,7 +159,9 @@ class Cabinet(Linkable, TimeStampedModel):
 
     link_url_pattern = "/cabinets/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -178,7 +185,9 @@ class GameFormat(Linkable, TimeStampedModel):
 
     link_url_pattern = "/game-formats/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -206,7 +215,9 @@ class RewardType(Linkable, TimeStampedModel):
 
     link_url_pattern = "/reward-types/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -249,7 +260,9 @@ class Tag(Linkable, TimeStampedModel):
 
     link_url_pattern = "/tags/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
@@ -273,7 +286,9 @@ class CreditRole(Linkable, TimeStampedModel):
 
     link_url_pattern = "/credit-roles/{slug}"
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
