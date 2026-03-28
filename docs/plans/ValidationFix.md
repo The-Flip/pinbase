@@ -106,17 +106,19 @@ Finally, there is an operational decision that also simplifies the migration:
 
 That removes a large class of migration/backfill complexity. The plan can optimize for achieving a coherent architecture in the codebase rather than preserving every historical intermediate state in-place.
 
-## Remove Admin as a Catalog-Truth Writer
+## Remove Admin as a Catalog-Truth Writer ✓
 
-Catalog models should be unregistered from Django admin entirely. Read-only admin requires overriding `has_add_permission`, `has_change_permission`, and `has_delete_permission` on every `ModelAdmin` and maintaining that discipline for every new model added — it is boilerplate that leaks. Unregistering is enforced by absence with nothing to misconfigure.
+All 20 catalog models are unregistered from Django admin. `catalog/admin.py` contains only a docstring explaining the rationale. A test (`TestCatalogModelsNotInAdmin`) enforces this — any future registration will fail CI.
+
+`ProvenanceSaveMixin` has been removed from the codebase entirely.
 
 Admin remains registered for:
 
-- `Source`
-- provenance inspection (`Claim`, `ChangeSet`)
-- internal infrastructure/configuration models
-
-This eliminates the strangest human write path in the system without introducing new maintenance surface.
+- `Source` (write — managing ingest sources)
+- `ChangeSet` (write — grouping user edits)
+- `Claim` (read-only inspection — `has_add/change/delete_permission` all return `False`, enforced by `TestClaimAdminIsReadOnly`)
+- `License` (write — content licensing configuration)
+- `User` (write — account management)
 
 ## Component A — Fix Coverage Gaps First
 
@@ -148,7 +150,7 @@ WritePathMatrix is the authoritative field inventory for this work.
 
 `get_claim_fields()` uses a global `_CLAIMS_EXEMPT_NAMES` set that excludes `slug` and `extra_data` from claim discovery on every model. `extra_data` is legitimately exempt — it is the resolver's output bag, not an asserted fact. `slug` is not legitimately exempt.
 
-`slug` must be removed from `_CLAIMS_EXEMPT_NAMES`. The intended behaviour: when a user enters a name in the edit UI, the system proposes a slug which the user can modify and approve. The approved slug becomes a claim. Ingest commands also assert slug claims. The resolver materialises the winning slug claim onto the model row, with conflict handling matching the existing `opdb_id` pattern.
+`slug` is still in `_CLAIMS_EXEMPT_NAMES` as of this writing. It must be removed. The intended behaviour: when a user enters a name in the edit UI, the system proposes a slug which the user can modify and approve. The approved slug becomes a claim. Ingest commands also assert slug claims. The resolver materialises the winning slug claim onto the model row, with conflict handling matching the existing `opdb_id` pattern.
 
 This requires:
 
@@ -215,7 +217,7 @@ The broader principle: **claims that reference another object's identity must be
 
 Some ingest commands write fields directly before asserting claims for those same fields in the same pass — for example, `MachineModel.objects.bulk_update([...], ["opdb_id", "ipdb_id"])` in `ingest_pinbase` and `ingest_opdb`, followed immediately by `bulk_assert_claims()` for the same values. This pattern is acceptable: the bootstrap write and the claim assertion travel together in the same ingest run, so the claim always catches up.
 
-No change is required for these writes. Add an inline comment making the dependency explicit, so future maintainers do not break the pairing.
+No change is required for these writes. Inline comments documenting the bootstrap write dependency have not been added yet — this is a documentation-only task.
 
 ## Component B — Reuse Existing Validation Logic at the Claim Boundary
 
@@ -300,8 +302,8 @@ For ingest (`validate_claims_batch` inside `bulk_assert_claims`):
 1. ✓ **Use WritePathMatrix as the source inventory.**
    Enumerate and confirm every remaining bypass and every field/relationship that still fails to go through claims.
 
-2. **Remove admin as a catalog-truth writer.**
-   Unregister catalog models from admin. Keep admin only for infrastructure/configuration and provenance inspection.
+2. ✓ **Remove admin as a catalog-truth writer.**
+   All catalog models unregistered, `ProvenanceSaveMixin` removed, test enforcement in place.
 
 3. ✓ (slug remaining) **Fix Component A.**
    Remove non-justified `claims_exempt`, migrate direct writes, and bring claim-managed facts onto claims. Slug migration is in progress separately.
@@ -316,7 +318,18 @@ For ingest (`validate_claims_batch` inside `bulk_assert_claims`):
    Batch-validate slug references inside relationship claim dicts. Deferred because the resolver already logs warnings for unmatched targets.
 
 7. **Trim `validate_catalog` and review resolver guard rails.**
-   Remove correctness checks from `validate_catalog` that are now guaranteed upstream. Review the resolver's defensive coercions — once upstream validation ensures only valid values reach claims, the resolver should not need to compensate for invalid data.
+   Review the resolver's defensive coercions — once upstream validation ensures only valid values reach claims, the resolver should not need to compensate for invalid data.
+
+   `validate_catalog` checks fall into three categories after Component B:
+
+   **Genuinely post-resolution** (keep):
+   `check_golden_records` (end-to-end regression), `check_self_referential_variant`, `check_variant_chains` (structural invariants), `check_orphan_claims`, `check_unresolved_fk_claims`, `check_unresolved_credit_claims`, `check_unresolved_m2m_claims`, `check_credits_without_matching_claims` (referential integrity after resolution)
+
+   **Potentially redundant with claim boundary** (review):
+   `check_nameless_models`, `check_nameless_titles`, `check_nameless_persons` — these check for empty names after resolution. The claim boundary validates name _values_ but does not enforce that a name claim _exists_. These remain useful as resolution-outcome checks until we enforce required-claim coverage.
+
+   **Info/data quality only** (keep as-is):
+   `check_summary_stats`, `check_duplicate_persons`, `check_duplicate_manufacturers`, `check_models_without_corporate_entity`, `check_models_without_year`, `check_titles_needing_review`, `check_uncurated_themes`
 
 8. **Only after that, decide whether new abstractions are warranted.**
 
@@ -324,9 +337,7 @@ For ingest (`validate_claims_batch` inside `bulk_assert_claims`):
 
 ### Slug editing UI
 
-After A1 slug migration, the backend fully supports slug claims: `get_claim_fields()` returns `slug`, `execute_claims()` can process slug claims via PATCH, and the resolver materializes and conflict-checks them. Ingest slugs are fully claim-controlled with source attribution.
-
-What remains is the frontend UX: a propose/approve flow where the UI auto-generates a slug proposal from the name, the user can see, modify, and approve it, and it is submitted as a claim. This also applies to entity creation — the user needs to see and confirm the slug before the record is created. This is a UX feature that builds on the backend infrastructure but is separate from the coverage-gap work in this plan.
+Blocked on A1 slug migration (slug is still in `_CLAIMS_EXEMPT_NAMES`). Once slug is claim-controlled in the backend, the edit UI needs a propose/approve flow: when the user enters a name, the system auto-generates a slug proposal which the user can see, modify, and approve before it is submitted as a claim. This also applies to entity creation — the user needs to see and confirm the slug before the record is created. This is a UX feature that builds on the backend infrastructure but is separate from the coverage-gap work in this plan.
 
 ### Taxonomy edit UIs
 
@@ -341,7 +352,7 @@ This is a separate feature project, not a prerequisite for this plan.
 This plan is successful when:
 
 - all intended catalog facts flow through claims
-- catalog models are unregistered from Django admin
+- ✓ catalog models are unregistered from Django admin
 - remaining direct writes are either removed or explicitly documented as true bootstrap exceptions
 - ✓ `bulk_assert_claims()` validates direct-field claim values using shared logic extracted from the interactive edit path
 - ✓ FK existence checks run at claim-write time in ingest using batched lookups

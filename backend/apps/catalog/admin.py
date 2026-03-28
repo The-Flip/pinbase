@@ -6,4 +6,4 @@
 #   - License                   (core/admin.py)
 #   - User                      (accounts/admin.py)
 #
-# See docs/plans/ValidationFix3.md for the rationale.
+# See docs/plans/ValidationFix.md for the rationale.
