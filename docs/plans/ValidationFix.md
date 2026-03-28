@@ -125,17 +125,17 @@ This eliminates the strangest human write path in the system without introducing
 
 Make every intended catalog fact go through claims. This is mechanical work and should be done before extracting new abstractions.
 
-### A1. Remove non-justified `claims_exempt` declarations
+### A1. Remove non-justified `claims_exempt` declarations ✓
 
 Every `claims_exempt` declaration on every model was reviewed. The architectural rule is: every field set by a human or data source requires a claim. The only legitimate exemptions are fields set exclusively by the database engine: `id`/`uuid`, `created_at`, `updated_at`.
 
-All other per-model exemptions are wrong and must be removed:
+All per-model exemptions have been removed and claim assertions added:
 
-| Model                     | Fields to migrate                                                 |
+| Model                     | Fields migrated                                                   |
 | ------------------------- | ----------------------------------------------------------------- |
 | `Person`                  | `wikidata_id`                                                     |
 | `Manufacturer`            | `wikidata_id`, `opdb_manufacturer_id`                             |
-| `CorporateEntity`         | `ipdb_manufacturer_id`                                            |
+| `CorporateEntity`         | `manufacturer`, `ipdb_manufacturer_id`                            |
 | `Title`                   | `opdb_id`, `fandom_page_id`, `needs_review`, `needs_review_notes` |
 | `TechnologySubgeneration` | `technology_generation` (parent FK)                               |
 | `DisplaySubtype`          | `display_type` (parent FK)                                        |
@@ -143,9 +143,9 @@ All other per-model exemptions are wrong and must be removed:
 
 `Location.location_path` is exempt and correctly so — it is a computed hierarchical path derived from the location hierarchy, not an editorially asserted value.
 
-For each field in the table: add claim assertions in the relevant ingest command or management command path, remove the `claims_exempt` entry, update resolution to materialise from the claim.
-
 WritePathMatrix is the authoritative field inventory for this work.
+
+**Resolver prerequisite: `preserve_when_unclaimed`.** The resolver resets all claim-controlled fields to defaults before applying winners. For UNIQUE fields and non-nullable FKs, the default is invalid (shared `""` causes IntegrityError or FK descriptor crash). The resolver already preserved UNIQUE fields, but the logic was named `unique_attrs` — hiding the invariant. This was renamed to `preserve_when_unclaimed` and widened to also cover non-nullable FK fields (`field.many_to_one and not field.null`). `get_field_defaults()` was also fixed to return `None` (not `""`) for FK fields, since Django's FK descriptor rejects `""` on assignment. Without this fix, resolving a `TechnologySubgeneration` via API PATCH (or in tests) without a `technology_generation` claim would crash.
 
 **The global exemption list in `core/models.py`.**
 
@@ -158,16 +158,16 @@ This requires:
 1. Remove `slug` from `_CLAIMS_EXEMPT_NAMES` so the resolver discovers and materialises slug claims.
 2. Add slug resolution and conflict handling to the resolver (a slug claimed by one object cannot be applied to another).
 3. Assert slug claims in all ingest commands that currently write slugs directly.
-4. The edit UI propose/approve flow for slug management is a separate feature — see Follow-ups.
+4. Replace direct slug writes (`QuerySet.update()` for renames, slug assignments at creation time) with claim assertions — this is the remaining A2 work.
+5. The edit UI propose/approve flow for slug management is a separate feature — see Follow-ups.
 
-### A2. Replace direct ORM writes to claim-controlled data
+**Test impact warning.** Slug is UNIQUE, so `preserve_when_unclaimed` will prevent the resolver from crashing on objects without a slug claim. But every test that creates an object also creates a slug — and once slug is claim-controlled, any resolution triggered by a PATCH or `resolve_all_entities` will preserve the existing slug only as long as no _other_ object's slug claim conflicts with it. More importantly, the slug migration will touch every ingest command and every model, making it the widest A1-style change. Consider a test fixture or helper that creates an object with its corresponding slug claim, to avoid updating dozens of tests individually.
 
-Replace direct writes such as:
+### A2. Replace direct ORM writes to claim-controlled data — subsumed
 
-- `save(update_fields=[...])` on claim-controlled fields
-- `QuerySet.update(...)` on claim-controlled fields
+A1 added claim assertions alongside existing direct writes. Those direct writes are now bootstrap writes covered by A4 (the claim and the direct write travel together in the same ingest pass). The remaining direct writes that lack claims are all slug-related (`QuerySet.update()` for slug renames in `_ingest_titles`, slug assignments at `bulk_create_validated` time). These are blocked on the slug migration — they will be addressed when `slug` is removed from `_CLAIMS_EXEMPT_NAMES`.
 
-with `bulk_assert_claims()` calls using the correct source attribution.
+No separate A2 step is needed.
 
 ### A3. Bring remaining editorial relationships under claims ✓
 
@@ -185,9 +185,9 @@ The known case was `series.titles.add(*titles)` in `ingest_pinbase`, which wrote
 
 If WritePathMatrix identifies further direct M2M writes for editorial relationships, apply the same treatment using the standalone resolver pattern.
 
-### Implementation pitfalls for A1–A3
+### Implementation pitfalls for A1–A3 (resolved)
 
-Two bug classes emerged during A3 implementation that apply to all remaining Component A work.
+Two bug classes emerged during A3 implementation. Both have been structurally fixed during A1 work.
 
 **Wrong content type.** Every `Claim` object must be created with the content type for the model that _owns_ the claim, not the model being iterated. When a single ingest method touches multiple model types (e.g. `_ingest_titles` creates claims on both `Title` and `Series`), each model needs its own `ct_id` captured separately. Reusing `ct_id` across model types produces claims attached to the wrong object silently — no error, wrong data.
 
@@ -204,13 +204,13 @@ Claim.for_object(series, field_name=..., value=...)
 
 `ContentType.objects.get_for_model()` is cached by Django after the first call per model type, so there is no performance concern inside loops. The call-site form also reads more naturally — "a claim about this series" rather than "a claim with this content type ID and this object ID."
 
-Add `Claim.for_object()` early in A1 work, apply it to all new claim construction sites, and update existing sites opportunistically in the same files being touched. Do not leave two construction patterns in the codebase indefinitely.
+`Claim.for_object()` has been applied to all claim construction sites in files touched during A1. Remaining files still use the old `Claim(content_type_id=ct_id, ...)` pattern — migrate opportunistically when those files are touched for other work.
 
 **Claims built against unstable identity values.** When a claim value references another object's slug (or any identity value that might change later in the same ingest pass), the claim must use the effective post-operation value, not the pre-operation value. In `_ingest_titles`, series-title claims were initially built using `title.slug` before the slug rename loop ran, producing claims that referenced a slug that no longer existed in the DB after the rename.
 
 The structural fix for `_ingest_titles` is a **two-pass refactor**: split the method into a collect phase (gather `(title, entry)` pairs, pending slug renames, pending fandom updates, series memberships) followed by the rename/transform phase, then an assert phase that builds all claims using stable post-rename slugs. This eliminates the need for the `pending_slugs.get(title.pk, title.slug)` workaround and makes the phase dependency explicit. The cost is low — the intermediate state is a list of `(title, entry)` pairs.
 
-Do this two-pass refactor as part of A1 when `_ingest_titles` is being modified to add new claim assertions for `fandom_page_id` and `opdb_id`. It is a net clarity improvement, not just a bug fix.
+This two-pass refactor was completed as part of A1 when `_ingest_titles` was modified to add claim assertions for `fandom_page_id` and `opdb_id`. The method is now wrapped in `transaction.atomic()` for phase-level atomicity.
 
 The broader principle: **claims that reference another object's identity must be built after all identity updates in the same pass have been applied.**
 
