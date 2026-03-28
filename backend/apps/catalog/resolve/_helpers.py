@@ -184,3 +184,92 @@ def get_field_defaults(
         else:
             defaults[attr] = ""
     return defaults
+
+
+def get_preserve_fields(
+    model_class: type[models.Model],
+    direct_fields: dict[str, str],
+) -> set[str]:
+    """Identify fields that must keep their existing value when no claim exists.
+
+    These fields cannot safely be reset to a shared default during resolution:
+
+    * **UNIQUE** — resetting multiple objects to ``""`` causes IntegrityError.
+    * **Non-nullable FK** — Django's FK descriptor rejects ``""`` on assignment,
+      and ``None`` violates the NOT NULL constraint.
+
+    Returns a set of attribute names (values from *direct_fields*).
+    """
+    preserve: set[str] = set()
+    for attr in direct_fields.values():
+        field = model_class._meta.get_field(attr)
+        if field.unique or (field.many_to_one and not field.null):
+            preserve.add(attr)
+    return preserve
+
+
+def resolve_unique_conflicts(
+    all_objs,
+    field_name: str,
+    model_class: type[models.Model],
+    pre_values: dict[int, Any] | None = None,
+) -> None:
+    """Detect and fix duplicate values for a UNIQUE field after resolution.
+
+    Handles both nullable and non-nullable fields:
+
+    * **Nullable** (e.g. ``opdb_id``): loser is cleared to ``None``.
+    * **Non-nullable** (e.g. ``slug``): loser reverts to its pre-resolution
+      value. Requires *pre_values* (``{pk: value}`` captured before resolution).
+      When a preserver (unchanged value) conflicts with a changer (new value),
+      the preserver wins — it's the rightful owner. Pre-resolution values are
+      guaranteed unique by the DB constraint, so reverting never creates a
+      secondary conflict.
+
+    Mutates objects in place. The losing claim stays in the DB for manual
+    inspection.
+    """
+    nullable = model_class._meta.get_field(field_name).null
+    seen: dict[Any, object] = {}
+    for obj in all_objs:
+        value = getattr(obj, field_name)
+        if not value:
+            continue
+        if value not in seen:
+            seen[value] = obj
+            continue
+
+        owner = seen[value]
+        if nullable:
+            # Nullable: first encountered wins, loser clears to None.
+            logger.warning(
+                "Cannot resolve %s=%r onto '%s' (pk=%s): already owned by '%s' (pk=%s)",
+                field_name,
+                value,
+                obj.name,
+                obj.pk,
+                owner.name,
+                owner.pk,
+            )
+            setattr(obj, field_name, None)
+        else:
+            # Non-nullable: preserver wins over changer.
+            owner_changed = getattr(owner, field_name) != pre_values[owner.pk]
+            obj_changed = value != pre_values[obj.pk]
+            if owner_changed and not obj_changed:
+                loser, winner = owner, obj
+            else:
+                loser, winner = obj, owner
+            logger.warning(
+                "%s conflict %r: keeping on '%s' (pk=%s), "
+                "reverting '%s' (pk=%s) to previous value %r",
+                field_name,
+                getattr(winner, field_name),
+                winner.name,
+                winner.pk,
+                loser.name,
+                loser.pk,
+                pre_values[loser.pk],
+            )
+            setattr(loser, field_name, pre_values[loser.pk])
+            seen[getattr(winner, field_name)] = winner

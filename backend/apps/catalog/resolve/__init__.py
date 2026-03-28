@@ -31,6 +31,8 @@ from ._helpers import (
     _resolve_fk_generic,
     build_fk_info,
     get_field_defaults,
+    get_preserve_fields,
+    resolve_unique_conflicts,
 )
 from ._relationships import (  # noqa: F401
     resolve_all_aliases,
@@ -57,7 +59,6 @@ from ._relationships import (  # noqa: F401
 from ._entities import (  # noqa: F401
     _resolve_bulk as _resolve_bulk,
     _resolve_single as _resolve_single,
-    _resolve_slug_conflicts as _resolve_slug_conflicts,
     resolve_all_entities as resolve_all_entities,
     resolve_entity as resolve_entity,
 )
@@ -93,12 +94,9 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     field_defaults = get_field_defaults(MachineModel, claim_fields)
     fk_info = build_fk_info(MachineModel, claim_fields)
     sfl_map = build_source_field_license_map()
-    preserve_when_unclaimed: set[str] = set()
-    for attr in claim_fields.values():
-        field = MachineModel._meta.get_field(attr)
-        if field.unique or (field.many_to_one and not field.null):
-            preserve_when_unclaimed.add(attr)
+    preserve_when_unclaimed = get_preserve_fields(MachineModel, claim_fields)
     original_slug = machine_model.slug
+    original_opdb_id = machine_model.opdb_id
     _apply_resolution(
         machine_model,
         winners,
@@ -109,44 +107,33 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
         preserve_when_unclaimed,
     )
 
-    # Post-resolution guards (single-object only — the bulk path handles
-    # these conflicts differently via _resolve_opdb_conflicts / _resolve_slug_conflicts).
-    if machine_model.slug and machine_model.slug != original_slug:
+    # Post-resolution guards for cross-reference fields only (slug, opdb_id).
+    # Other unique fields (e.g. name) rely on save() → IntegrityError which
+    # execute_claims() catches and returns as 422.
+    _CONFLICT_FIELDS = [
+        ("slug", original_slug, original_slug),  # (attr, check_original, revert_to)
+        ("opdb_id", original_opdb_id, None),  # nullable — clear to None
+    ]
+    for attr, original, revert in _CONFLICT_FIELDS:
+        value = getattr(machine_model, attr)
+        if not value or value == original:
+            continue
         conflict = (
-            MachineModel.objects.filter(slug=machine_model.slug)
+            MachineModel.objects.filter(**{attr: value})
             .exclude(pk=machine_model.pk)
             .first()
         )
         if conflict:
             logger.warning(
-                "Slug conflict %r: already owned by '%s' (pk=%s), "
-                "reverting '%s' (pk=%s) to previous slug %r",
-                machine_model.slug,
-                conflict.name,
-                conflict.pk,
-                machine_model.name,
-                machine_model.pk,
-                original_slug,
-            )
-            machine_model.slug = original_slug
-
-    if machine_model.opdb_id:
-        conflict = (
-            MachineModel.objects.filter(opdb_id=machine_model.opdb_id)
-            .exclude(pk=machine_model.pk)
-            .first()
-        )
-        if conflict:
-            logger.warning(
-                "Cannot resolve opdb_id=%s onto '%s' (pk=%s): "
-                "already owned by '%s' (pk=%s)",
-                machine_model.opdb_id,
+                "Cannot resolve %s=%r onto '%s' (pk=%s): already owned by '%s' (pk=%s)",
+                attr,
+                value,
                 machine_model.name,
                 machine_model.pk,
                 conflict.name,
                 conflict.pk,
             )
-            machine_model.opdb_id = None
+            setattr(machine_model, attr, revert)
 
     machine_model.save()
 
@@ -242,14 +229,7 @@ def resolve_machine_models(stdout=None) -> int:
     field_defaults = get_field_defaults(MachineModel, claim_fields)
     fk_info = build_fk_info(MachineModel, claim_fields)
     sfl_map = build_source_field_license_map()
-
-    # Fields whose computed default is invalid — preserve existing value
-    # when no winning claim exists (matches _resolve_bulk logic).
-    preserve_when_unclaimed: set[str] = set()
-    for attr in claim_fields.values():
-        field = MachineModel._meta.get_field(attr)
-        if field.unique or (field.many_to_one and not field.null):
-            preserve_when_unclaimed.add(attr)
+    preserve_when_unclaimed = get_preserve_fields(MachineModel, claim_fields)
 
     # 2. Pre-fetch all active claims, grouped by object_id (~1 query).
     claims_by_model = _build_claims_by_model()
@@ -272,9 +252,9 @@ def resolve_machine_models(stdout=None) -> int:
             preserve_when_unclaimed,
         )
 
-    # 5. Detect opdb_id and slug conflicts across all resolved models.
-    _resolve_opdb_conflicts(all_models)
-    _resolve_slug_conflicts(all_models, pre_slugs)
+    # 5. Detect unique-field conflicts across all resolved models.
+    resolve_unique_conflicts(all_models, "opdb_id", MachineModel)
+    resolve_unique_conflicts(all_models, "slug", MachineModel, pre_slugs)
 
     # 7. Set updated_at (auto_now not triggered by bulk_update).
     now = timezone.now()
@@ -399,28 +379,3 @@ def _apply_resolution(
                 )
 
     pm.extra_data = extra_data
-
-
-def _resolve_opdb_conflicts(all_models: list[MachineModel]) -> None:
-    """Clear opdb_id on models that would cause UNIQUE constraint violations.
-
-    First model encountered (by queryset order) wins ownership.
-    """
-    seen_opdb_ids: dict[str, MachineModel] = {}
-    for pm in all_models:
-        if not pm.opdb_id:
-            continue
-        if pm.opdb_id in seen_opdb_ids:
-            owner = seen_opdb_ids[pm.opdb_id]
-            logger.warning(
-                "Cannot resolve opdb_id=%s onto '%s' (pk=%s): "
-                "already owned by '%s' (pk=%s)",
-                pm.opdb_id,
-                pm.name,
-                pm.pk,
-                owner.name,
-                owner.pk,
-            )
-            pm.opdb_id = None
-        else:
-            seen_opdb_ids[pm.opdb_id] = pm

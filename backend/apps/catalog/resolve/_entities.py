@@ -20,6 +20,8 @@ from ._helpers import (
     _resolve_fk_generic,
     build_fk_info,
     get_field_defaults,
+    get_preserve_fields,
+    resolve_unique_conflicts,
 )
 
 logger = logging.getLogger(__name__)
@@ -73,11 +75,7 @@ def _resolve_single(
     # existing value when no winning claim exists — see _resolve_bulk().
     model_class = type(obj)
     field_defaults = get_field_defaults(model_class, direct_fields)
-    preserve_when_unclaimed: set[str] = set()
-    for attr in direct_fields.values():
-        field = model_class._meta.get_field(attr)
-        if field.unique or (field.many_to_one and not field.null):
-            preserve_when_unclaimed.add(attr)
+    preserve_when_unclaimed = get_preserve_fields(model_class, direct_fields)
     winner_attrs = {direct_fields[fn] for fn in winners if fn in direct_fields}
     for attr, default in field_defaults.items():
         if attr in preserve_when_unclaimed and attr not in winner_attrs:
@@ -170,15 +168,7 @@ def _resolve_bulk(
     # 3. Compute field defaults once.
     field_defaults = get_field_defaults(model_class, direct_fields)
 
-    # Fields whose computed default is invalid — preserve existing value
-    # when no winning claim exists rather than resetting.
-    #  • UNIQUE: shared default causes IntegrityError across objects
-    #  • Non-nullable FK: default "" is not a valid FK assignment
-    preserve_when_unclaimed: set[str] = set()
-    for attr in direct_fields.values():
-        field = model_class._meta.get_field(attr)
-        if field.unique or (field.many_to_one and not field.null):
-            preserve_when_unclaimed.add(attr)
+    preserve_when_unclaimed = get_preserve_fields(model_class, direct_fields)
 
     # Identify FK fields and pre-build lookups.
     fk_info = build_fk_info(model_class, direct_fields)
@@ -228,9 +218,9 @@ def _resolve_bulk(
 
         obj.updated_at = now
 
-    # 4b. Detect slug conflicts across resolved objects.
+    # 4b. Detect unique-field conflicts across resolved objects.
     if has_slug:
-        _resolve_slug_conflicts(all_objs, pre_slugs)
+        resolve_unique_conflicts(all_objs, "slug", model_class, pre_slugs)
 
     # 5. Bulk write.
     update_fields = list(set(direct_fields.values())) + ["updated_at"]
@@ -249,54 +239,6 @@ def _resolve_bulk(
 
 
 # ------------------------------------------------------------------
-# Slug conflict detection
-# ------------------------------------------------------------------
-
-
-def _resolve_slug_conflicts(all_objs, pre_slugs: dict[int, str]) -> None:
-    """Detect duplicate slugs after resolution, revert losers to pre-resolution value.
-
-    Unlike ``_resolve_opdb_conflicts`` (which clears the loser to ``None``),
-    slug is NOT NULL so the loser reverts to its previous working slug.
-    Pre-resolution slugs are guaranteed unique (DB constraint), so reverting
-    never creates a secondary conflict.
-
-    When a conflict is between an object that preserved its slug (no claim
-    changed it) and one that changed TO that slug, the preserver wins —
-    it's the rightful owner. When both changed, first encountered wins.
-    """
-    seen: dict[str, object] = {}
-    for obj in all_objs:
-        if not obj.slug:
-            continue
-        if obj.slug in seen:
-            owner = seen[obj.slug]
-            owner_changed = owner.slug != pre_slugs[owner.pk]
-            obj_changed = obj.slug != pre_slugs[obj.pk]
-            if owner_changed and not obj_changed:
-                # obj had this slug all along — it's the rightful owner.
-                # Revert the previous occupant (the changer).
-                loser, winner = owner, obj
-            else:
-                # Default: preserver/first-encountered wins.
-                loser, winner = obj, owner
-            logger.warning(
-                "Slug conflict %r: keeping on '%s' (pk=%s), "
-                "reverting '%s' (pk=%s) to previous slug %r",
-                winner.slug,
-                winner.name,
-                winner.pk,
-                loser.name,
-                loser.pk,
-                pre_slugs[loser.pk],
-            )
-            loser.slug = pre_slugs[loser.pk]
-            seen[winner.slug] = winner
-        else:
-            seen[obj.slug] = obj
-
-
-# ------------------------------------------------------------------
 # Generic entity resolvers (model-driven)
 # ------------------------------------------------------------------
 
@@ -310,21 +252,25 @@ def resolve_entity(obj):
     """
     from apps.core.models import get_claim_fields
 
-    fields = get_claim_fields(type(obj))
+    model_class = type(obj)
+    fields = get_claim_fields(model_class)
     original_slug = getattr(obj, "slug", None)
     _resolve_single(obj, fields)
 
-    # Single-object slug conflict guard — check DB before save.
+    # Single-object slug conflict guard — only slug gets silent revert.
+    # Other unique fields (e.g. name) rely on save() → IntegrityError
+    # which execute_claims() catches and returns as 422.
     if (
         "slug" in fields
         and obj.slug
         and obj.slug != original_slug
-        and type(obj).objects.filter(slug=obj.slug).exclude(pk=obj.pk).exists()
+        and model_class.objects.filter(slug=obj.slug).exclude(pk=obj.pk).exists()
     ):
         logger.warning(
-            "Slug conflict %r on %s pk=%s: reverting to %r",
+            "Cannot resolve slug=%r on %s pk=%s: "
+            "already owned by another object, reverting to %r",
             obj.slug,
-            type(obj).__name__,
+            model_class.__name__,
             obj.pk,
             original_slug,
         )
