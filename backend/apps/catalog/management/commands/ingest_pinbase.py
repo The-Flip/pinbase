@@ -20,6 +20,7 @@ from typing import Any
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
 from apps.catalog.ingestion.bulk_utils import generate_unique_slug
@@ -1368,8 +1369,10 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        ct_id = ContentType.objects.get_for_model(Title).pk
+        with transaction.atomic():
+            self._ingest_titles_body(entries)
 
+    def _ingest_titles_body(self, entries):
         titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
         titles_by_slug = {t.slug: t for t in Title.objects.all()}
         existing_slugs: set[str] = set(Title.objects.values_list("slug", flat=True))
@@ -1407,14 +1410,11 @@ class Command(BaseCommand):
         titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
         titles_by_slug = {t.slug: t for t in Title.objects.all()}
 
-        membership_set = slug_set = skipped = 0
-        pending_claims: list[Claim] = []
+        # Pass 2 (collect): find each title, detect transforms — no claim building yet.
+        collected: list[tuple[Title, dict]] = []
         pending_slugs: dict[int, str] = {}
         pending_fandom_updates: list[Title] = []
-        series_title_claims: dict[int, list[Claim]] = defaultdict(
-            list
-        )  # series pk → claims
-        touched_ids: set[int] = set()
+        skipped = 0
 
         for entry in entries:
             opdb_group_id = entry.get("opdb_group_id")
@@ -1429,117 +1429,23 @@ class Command(BaseCommand):
                 skipped += 1
                 continue
 
-            # Slug override (direct write, not claim-controlled).
+            # Slug override — direct write, not yet claim-controlled (see A1).
             if slug and title.slug != slug:
                 pending_slugs[title.pk] = slug
 
-            # Fandom page ID (direct write, batched below).
+            # Fandom page ID — direct write, not yet claim-controlled (see A1).
             fandom_page_id = entry.get("fandom_page_id")
             if fandom_page_id and title.fandom_page_id != fandom_page_id:
                 title.fandom_page_id = fandom_page_id
                 pending_fandom_updates.append(title)
 
-            # Name claim.
-            name = entry.get("name")
-            if name:
-                touched_ids.add(title.pk)
-                pending_claims.append(
-                    Claim(
-                        content_type_id=ct_id,
-                        object_id=title.pk,
-                        field_name="name",
-                        value=name,
-                    )
-                )
+            collected.append((title, entry))
 
-            # Description claim.
-            description = entry.get("description")
-            if description:
-                touched_ids.add(title.pk)
-                pending_claims.append(
-                    Claim(
-                        content_type_id=ct_id,
-                        object_id=title.pk,
-                        field_name="description",
-                        value=description,
-                    )
-                )
-
-            # Franchise claim.
-            franchise_slug = entry.get("franchise_slug")
-            if franchise_slug:
-                franchise = franchises_by_slug.get(franchise_slug)
-                if franchise is None:
-                    logger.warning(
-                        "Franchise slug %r not found — skipping", franchise_slug
-                    )
-                else:
-                    touched_ids.add(title.pk)
-                    pending_claims.append(
-                        Claim(
-                            content_type_id=ct_id,
-                            object_id=title.pk,
-                            field_name="franchise",
-                            value=franchise_slug,
-                        )
-                    )
-
-            # Abbreviation claims.
-            for abbr in entry.get("abbreviations", []):
-                claim_key, value = build_relationship_claim(
-                    "abbreviation", {"value": abbr}
-                )
-                touched_ids.add(title.pk)
-                pending_claims.append(
-                    Claim(
-                        content_type_id=ct_id,
-                        object_id=title.pk,
-                        field_name="abbreviation",
-                        claim_key=claim_key,
-                        value=value,
-                    )
-                )
-
-            # Series membership claims.
-            series_slug = entry.get("series_slug")
-            if series_slug:
-                series = series_by_slug.get(series_slug)
-                if series is None:
-                    logger.warning("Series slug %r not found — skipping", series_slug)
-                else:
-                    # Use the post-rename slug if this title is being renamed
-                    # in the same run, so the claim value matches the slug that
-                    # will be in the DB when resolve_all_series_titles runs.
-                    effective_slug = pending_slugs.get(title.pk, title.slug)
-                    claim_key, value = build_relationship_claim(
-                        "series_title", {"title_slug": effective_slug}
-                    )
-                    series_title_claims[series.pk].append(
-                        Claim.for_object(
-                            series,
-                            field_name="series_title",
-                            claim_key=claim_key,
-                            value=value,
-                        )
-                    )
-                    membership_set += 1
-
-        # Assert claims.
-        claim_stats: dict = {}
-        if pending_claims:
-            claim_stats = self._assert_claims_split_descriptions(Title, pending_claims)
-
-        # Resolve touched titles.
-        if touched_ids:
-            resolve_all_entities(
-                Title,
-                object_ids=touched_ids,
-            )
-            resolve_all_title_abbreviations(
-                list(Title.objects.all()), title_ids=touched_ids
-            )
-
-        # Two-pass slug rename.
+        # Apply slug renames before building claims so claim values always
+        # reference the final post-rename slug.  safe_slugs contains only
+        # renames that were actually applied (conflicts are skipped).
+        slug_set = 0
+        safe_slugs: dict[int, str] = {}
         if pending_slugs:
             pks_being_renamed = set(pending_slugs.keys())
             desired_slugs = set(pending_slugs.values())
@@ -1571,6 +1477,90 @@ class Command(BaseCommand):
         # Batch fandom_page_id updates.
         if pending_fandom_updates:
             Title.objects.bulk_update(pending_fandom_updates, ["fandom_page_id"])
+
+        # Pass 3 (assert): build and assert all claims against stable post-rename state.
+        membership_set = 0
+        pending_claims: list[Claim] = []
+        series_title_claims: dict[int, list[Claim]] = defaultdict(list)
+        touched_ids: set[int] = set()
+
+        for title, entry in collected:
+            # final_slug is the slug that now exists in the DB for this title.
+            final_slug = safe_slugs.get(title.pk, title.slug)
+
+            name = entry.get("name")
+            if name:
+                touched_ids.add(title.pk)
+                pending_claims.append(
+                    Claim.for_object(title, field_name="name", value=name)
+                )
+
+            description = entry.get("description")
+            if description:
+                touched_ids.add(title.pk)
+                pending_claims.append(
+                    Claim.for_object(title, field_name="description", value=description)
+                )
+
+            franchise_slug = entry.get("franchise_slug")
+            if franchise_slug:
+                franchise = franchises_by_slug.get(franchise_slug)
+                if franchise is None:
+                    logger.warning(
+                        "Franchise slug %r not found — skipping", franchise_slug
+                    )
+                else:
+                    touched_ids.add(title.pk)
+                    pending_claims.append(
+                        Claim.for_object(
+                            title, field_name="franchise", value=franchise_slug
+                        )
+                    )
+
+            for abbr in entry.get("abbreviations", []):
+                claim_key, value = build_relationship_claim(
+                    "abbreviation", {"value": abbr}
+                )
+                touched_ids.add(title.pk)
+                pending_claims.append(
+                    Claim.for_object(
+                        title,
+                        field_name="abbreviation",
+                        claim_key=claim_key,
+                        value=value,
+                    )
+                )
+
+            series_slug = entry.get("series_slug")
+            if series_slug:
+                series = series_by_slug.get(series_slug)
+                if series is None:
+                    logger.warning("Series slug %r not found — skipping", series_slug)
+                else:
+                    claim_key, value = build_relationship_claim(
+                        "series_title", {"title_slug": final_slug}
+                    )
+                    series_title_claims[series.pk].append(
+                        Claim.for_object(
+                            series,
+                            field_name="series_title",
+                            claim_key=claim_key,
+                            value=value,
+                        )
+                    )
+                    membership_set += 1
+
+        # Assert title claims.
+        claim_stats: dict = {}
+        if pending_claims:
+            claim_stats = self._assert_claims_split_descriptions(Title, pending_claims)
+
+        # Resolve touched titles.
+        if touched_ids:
+            resolve_all_entities(Title, object_ids=touched_ids)
+            resolve_all_title_abbreviations(
+                list(Title.objects.all()), title_ids=touched_ids
+            )
 
         # Assert series_title claims and resolve.
         # Scope covers ALL series in the DB (series_by_slug is fetched from
