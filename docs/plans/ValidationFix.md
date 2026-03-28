@@ -129,7 +129,7 @@ Make every intended catalog fact go through claims. This is mechanical work and 
 
 Every `claims_exempt` declaration on every model was reviewed. The architectural rule is: every field set by a human or data source requires a claim. The only legitimate exemptions are fields set exclusively by the database engine: `id`/`uuid`, `created_at`, `updated_at`.
 
-All other exemptions are wrong and must be removed:
+All other per-model exemptions are wrong and must be removed:
 
 | Model                     | Fields to migrate                                                 |
 | ------------------------- | ----------------------------------------------------------------- |
@@ -141,9 +141,24 @@ All other exemptions are wrong and must be removed:
 | `DisplaySubtype`          | `display_type` (parent FK)                                        |
 | `System`                  | `manufacturer`, `technology_subgeneration`                        |
 
-For each field: add claim assertions in the relevant ingest command or management command path, remove the `claims_exempt` entry, update resolution to materialise from the claim.
+`Location.location_path` is exempt and correctly so — it is a computed hierarchical path derived from the location hierarchy, not an editorially asserted value.
+
+For each field in the table: add claim assertions in the relevant ingest command or management command path, remove the `claims_exempt` entry, update resolution to materialise from the claim.
 
 WritePathMatrix is the authoritative field inventory for this work.
+
+**The global exemption list in `core/models.py`.**
+
+`get_claim_fields()` uses a global `_CLAIMS_EXEMPT_NAMES` set that excludes `slug` and `extra_data` from claim discovery on every model. `extra_data` is legitimately exempt — it is the resolver's output bag, not an asserted fact. `slug` is not legitimately exempt.
+
+`slug` must be removed from `_CLAIMS_EXEMPT_NAMES`. The intended behaviour: when a user enters a name in the edit UI, the system proposes a slug which the user can modify and approve. The approved slug becomes a claim. Ingest commands also assert slug claims. The resolver materialises the winning slug claim onto the model row, with conflict handling matching the existing `opdb_id` pattern.
+
+This requires:
+
+1. Remove `slug` from `_CLAIMS_EXEMPT_NAMES` so the resolver discovers and materialises slug claims.
+2. Add slug resolution and conflict handling to the resolver (a slug claimed by one object cannot be applied to another).
+3. Assert slug claims in all ingest commands that currently write slugs directly.
+4. The edit UI propose/approve flow for slug management is a separate feature — see Follow-ups.
 
 ### A2. Replace direct ORM writes to claim-controlled data
 
@@ -291,13 +306,17 @@ We do not need one monolithic validator service with one failure behaviour. We n
 
 ## Follow-ups Out of Scope for This Plan
 
+### Slug editing UI
+
+Once slug is claim-controlled in the backend (A1), the edit UI needs a propose/approve flow: when the user enters a name, the system auto-generates a slug proposal which the user can see, modify, and approve before it is submitted as a claim. This is a UX feature that builds on the backend infrastructure but is separate from the coverage-gap work in this plan.
+
 ### Taxonomy edit UIs
 
 All taxonomy/vocabulary models (TechnologyGeneration, TechnologySubgeneration, DisplayType, DisplaySubtype, Cabinet, GameFormat, CreditRole, Franchise, RewardType, Tag, Theme, GameplayFeature) are currently fully ingest-managed from pindata JSON. Removing admin write access is safe today.
 
 However, these models will need user-facing edit UIs. Taxonomy values are editorial decisions — adding a new technology generation, renaming a credit role, or reorganising display subtypes should go through the same claims-based edit path as other catalog truth, not require a pindata JSON edit and re-ingest.
 
-This is a separate feature project, not a prerequisite for ValidationFix3.
+This is a separate feature project, not a prerequisite for this plan.
 
 ## Acceptance Criteria
 
