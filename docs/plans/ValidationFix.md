@@ -308,7 +308,9 @@ We do not need one monolithic validator service with one failure behaviour. We n
 
 ### Slug editing UI
 
-Once slug is claim-controlled in the backend (A1), the edit UI needs a propose/approve flow: when the user enters a name, the system auto-generates a slug proposal which the user can see, modify, and approve before it is submitted as a claim. This is a UX feature that builds on the backend infrastructure but is separate from the coverage-gap work in this plan.
+After A1 slug migration, the backend fully supports slug claims: `get_claim_fields()` returns `slug`, `execute_claims()` can process slug claims via PATCH, and the resolver materializes and conflict-checks them. Ingest slugs are fully claim-controlled with source attribution.
+
+What remains is the frontend UX: a propose/approve flow where the UI auto-generates a slug proposal from the name, the user can see, modify, and approve it, and it is submitted as a claim. This also applies to entity creation — the user needs to see and confirm the slug before the record is created. This is a UX feature that builds on the backend infrastructure but is separate from the coverage-gap work in this plan.
 
 ### Taxonomy edit UIs
 

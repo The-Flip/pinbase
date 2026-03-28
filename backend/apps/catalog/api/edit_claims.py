@@ -97,8 +97,8 @@ def validate_scalar_fields(model_class, fields: dict) -> list[ClaimSpec]:
 
     Raises HttpError 422 on unknown fields or invalid markdown.
     """
-    from apps.core.markdown_links import prepare_markdown_claim_value
     from apps.core.models import get_claim_fields
+    from apps.provenance.validation import validate_claim_value
 
     editable = set(get_claim_fields(model_class))
     unknown = set(fields.keys()) - editable
@@ -116,24 +116,9 @@ def validate_scalar_fields(model_class, fields: dict) -> list[ClaimSpec]:
                 raise HttpError(422, f"Field '{field_name}' cannot be cleared.")
             value = ""
         try:
-            value = prepare_markdown_claim_value(field_name, value, model_class)
+            value = validate_claim_value(field_name, value, model_class)
         except ValidationError as exc:
             raise HttpError(422, "; ".join(exc.messages)) from exc
-        # Run all Django field validators (range, URL format, etc.)
-        if value != "" and field.validators:
-            try:
-                typed = field.to_python(value)
-            except (ValueError, ValidationError) as exc:
-                if isinstance(exc, ValidationError):
-                    raise HttpError(422, "; ".join(exc.messages)) from exc
-                raise HttpError(
-                    422, f"Invalid value for '{field_name}': {exc}"
-                ) from exc
-            for validator in field.validators:
-                try:
-                    validator(typed)
-                except ValidationError as exc:
-                    raise HttpError(422, "; ".join(exc.messages)) from exc
         specs.append(ClaimSpec(field_name=field_name, value=value))
     return specs
 

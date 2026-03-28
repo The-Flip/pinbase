@@ -11,38 +11,6 @@ from .changeset import ChangeSet
 from .source import Source
 
 
-def _get_mojibake_checked_fields() -> set[tuple[int, str]]:
-    """Return {(content_type_id, field_name)} for fields with validate_no_mojibake.
-
-    Cached after first call — model metadata doesn't change at runtime.
-    """
-    if _get_mojibake_checked_fields._cache is not None:
-        return _get_mojibake_checked_fields._cache
-
-    from django.apps import apps
-
-    from apps.core.validators import validate_no_mojibake
-
-    result: set[tuple[int, str]] = set()
-    for model in apps.get_models():
-        try:
-            ct = ContentType.objects.get_for_model(model)
-        except Exception:
-            continue
-        for field in model._meta.get_fields():
-            if (
-                hasattr(field, "validators")
-                and validate_no_mojibake in field.validators
-            ):
-                result.add((ct.pk, field.name))
-
-    _get_mojibake_checked_fields._cache = result
-    return result
-
-
-_get_mojibake_checked_fields._cache = None
-
-
 def _escape_claim_value(s: str) -> str:
     """Percent-escape reserved delimiters in claim key identity values."""
     return s.replace("%", "%25").replace("|", "%7C").replace(":", "%3A")
@@ -153,16 +121,10 @@ class ClaimManager(models.Manager):
         must cover every entity this source is authoritative for, not just a
         partial batch. Omit sweep_field for incremental ingests.
         """
-        # 0. Validate string claim values for mojibake on fields that require it.
-        from apps.core.validators import validate_no_mojibake
+        # 0. Validate claim values (scalars, FK targets, field name recognition).
+        from apps.provenance.validation import validate_claims_batch
 
-        mojibake_fields = _get_mojibake_checked_fields()
-        for claim in pending_claims:
-            if (
-                isinstance(claim.value, str)
-                and (claim.content_type_id, claim.field_name) in mojibake_fields
-            ):
-                validate_no_mojibake(claim.value)
+        pending_claims, validation_rejected = validate_claims_batch(pending_claims)
 
         # 1. Deduplicate: last-write-wins per (content_type_id, object_id, claim_key),
         #    matching assert_claim() semantics where later calls overwrite.
@@ -256,6 +218,7 @@ class ClaimManager(models.Manager):
             "superseded": len(to_deactivate_ids) - swept,
             "swept": swept,
             "duplicates_removed": duplicates_removed,
+            "validation_rejected": validation_rejected,
         }
 
 

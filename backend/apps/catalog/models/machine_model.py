@@ -209,7 +209,9 @@ class MachineModel(Linkable, TimeStampedModel):
         validators=[MinValueValidator(0), MaxValueValidator(10)],
     )
 
-    # Catch-all for fields without dedicated columns
+    # Free-form staging area for source-specific data that doesn't have a
+    # dedicated column yet. Claims provide provenance but no validation is
+    # applied. Promote keys to real fields when needed.
     extra_data = models.JSONField(default=dict, blank=True)
 
     # Reverse access to provenance claims for this model.

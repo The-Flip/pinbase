@@ -75,6 +75,7 @@ def _write_models_json(entries):
 
 
 @pytest.mark.django_db
+@pytest.mark.usefixtures("ingest_taxonomy")
 class TestIngestPinbaseModels:
     def test_creates_name_claim(self, model_with_opdb_name_simple):
         mm = model_with_opdb_name_simple

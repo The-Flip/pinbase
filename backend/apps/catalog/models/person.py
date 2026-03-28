@@ -76,7 +76,9 @@ class Person(Linkable, TimeStampedModel):
     nationality = models.CharField(max_length=200, null=True, blank=True)
     photo_url = models.URLField(null=True, blank=True)
 
-    # Catch-all for fields without dedicated columns (e.g. fandom.bio)
+    # Free-form staging area for source-specific data that doesn't have a
+    # dedicated column yet (e.g. fandom.bio). Claims provide provenance
+    # but no validation is applied. Promote keys to real fields when needed.
     extra_data = models.JSONField(default=dict, blank=True)
 
     claims = GenericRelation("provenance.Claim")

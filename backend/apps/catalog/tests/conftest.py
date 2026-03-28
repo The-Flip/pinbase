@@ -5,6 +5,7 @@ from apps.catalog.models import (
     CorporateEntity,
     CorporateEntityLocation,
     CreditRole,
+    DisplayType,
     GameplayFeature,
     Location,
     MachineModel,
@@ -81,6 +82,43 @@ def person(db):
 @pytest.fixture
 def solid_state(db):
     return TechnologyGeneration.objects.create(name="Solid State", slug="solid-state")
+
+
+_TECHNOLOGY_GENERATIONS = [
+    ("solid-state", "Solid State"),
+    ("electromechanical", "Electromechanical"),
+    ("pure-mechanical", "Pure Mechanical"),
+]
+
+_DISPLAY_TYPES = [
+    ("dot-matrix", "Dot Matrix"),
+    ("lcd", "LCD"),
+    ("score-reels", "Score Reels"),
+    ("alphanumeric", "Alphanumeric"),
+    ("backglass-lights", "Backglass Lights"),
+    ("cga", "CGA"),
+]
+
+
+@pytest.fixture
+def ingest_taxonomy(db):
+    """Seed TechnologyGeneration and DisplayType rows needed by ingest tests.
+
+    FK claims for technology_generation and display_type are validated at the
+    claim boundary — the target rows must exist or the claims are rejected.
+    """
+    TechnologyGeneration.objects.bulk_create(
+        [TechnologyGeneration(slug=s, name=n) for s, n in _TECHNOLOGY_GENERATIONS],
+        update_conflicts=True,
+        unique_fields=["slug"],
+        update_fields=["name"],
+    )
+    DisplayType.objects.bulk_create(
+        [DisplayType(slug=s, name=n) for s, n in _DISPLAY_TYPES],
+        update_conflicts=True,
+        unique_fields=["slug"],
+        update_fields=["name"],
+    )
 
 
 @pytest.fixture

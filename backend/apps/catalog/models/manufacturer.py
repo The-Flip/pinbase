@@ -56,7 +56,9 @@ class Manufacturer(Linkable, TimeStampedModel):
     logo_url = models.URLField(null=True, blank=True)
     website = models.URLField(blank=True)
 
-    # Catch-all for fields without dedicated columns (e.g. fandom.description)
+    # Free-form staging area for source-specific data that doesn't have a
+    # dedicated column yet (e.g. fandom.description). Claims provide provenance
+    # but no validation is applied. Promote keys to real fields when needed.
     extra_data = models.JSONField(default=dict, blank=True)
 
     claims = GenericRelation("provenance.Claim")

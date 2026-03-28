@@ -124,8 +124,10 @@ class TestMojibakeBulkAssertClaims:
                 value="MediÃ©val Madness",
             ),
         ]
-        with pytest.raises(ValidationError, match="mojibake"):
-            Claim.objects.bulk_assert_claims(source, pending)
+        # Batch validation logs and skips mojibake claims instead of raising.
+        result = Claim.objects.bulk_assert_claims(source, pending)
+        assert result["validation_rejected"] == 1
+        assert result["created"] == 0
 
     def test_allows_valid_accented_name_claim(self, source, pm):
         from apps.provenance.models import Claim
