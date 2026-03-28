@@ -54,6 +54,12 @@ class TestValidateClaimValue:
         result = validate_claim_value("ipdb_id", "", MachineModel)
         assert result == ""
 
+    def test_float_decimal_field_not_rejected(self):
+        # JSON has no Decimal type — values arrive as float. Ensure float 8.95
+        # is not rejected by DecimalValidator due to IEEE 754 artifacts.
+        result = validate_claim_value("ipdb_rating", 8.95, MachineModel)
+        assert result == 8.95
+
     def test_fk_field_passes_through(self):
         # System.manufacturer is a FK to Manufacturer — should return unchanged.
         result = validate_claim_value("manufacturer", "some-slug", System)

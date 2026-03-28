@@ -58,24 +58,17 @@ def validate_claim_value(
 
     # Type coercion + Django field validators.
     if value != "" and field.validators:
+        # JSON has no Decimal type — numeric values arrive as float.
+        # to_python(float) produces Decimal with IEEE 754 artifacts
+        # (e.g. 8.95 → Decimal('8.950')), which DecimalValidator rejects.
+        # Stringify first so to_python("8.95") → Decimal("8.95") cleanly.
+        coerce_value = str(value) if isinstance(value, float) else value
         try:
-            typed = field.to_python(value)
+            typed = field.to_python(coerce_value)
         except (ValueError, ValidationError) as exc:
             if isinstance(exc, ValidationError):
                 raise
             raise ValidationError(f"Invalid value for '{field_name}': {exc}") from exc
-        # DecimalField.to_python on a float can produce trailing-zero
-        # artifacts (e.g. 8.95 → Decimal('8.950')), which the
-        # DecimalValidator rejects. Quantize to the field's decimal_places
-        # to match what Django forms do.
-        if (
-            typed is not None
-            and hasattr(field, "decimal_places")
-            and field.decimal_places is not None
-        ):
-            import decimal
-
-            typed = typed.quantize(decimal.Decimal(10) ** -field.decimal_places)
         for validator in field.validators:
             validator(typed)
 
