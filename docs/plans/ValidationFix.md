@@ -120,6 +120,7 @@ All 20 catalog models are unregistered from Django admin. `catalog/admin.py` con
 Admin remains registered for:
 
 - `Source` (write — managing ingest sources)
+- `IngestRun` (write — run-level audit trail for source ingestion)
 - `ChangeSet` (write — grouping user edits)
 - `Claim` (read-only inspection — `has_add/change/delete_permission` all return `False`, enforced by `TestClaimAdminIsReadOnly`)
 - `License` (write — content licensing configuration)
