@@ -60,9 +60,7 @@ class ClaimManager(models.Manager):
         """
         if (source is None) == (user is None):
             raise ValueError("Exactly one of source or user must be provided.")
-        if changeset is not None:
-            if source is not None:
-                raise ValueError("Source-attributed claims cannot use ChangeSets yet.")
+        if changeset is not None and user is not None:
             if changeset.user_id != user.pk:
                 raise ValueError("ChangeSet user must match the claim user.")
         if not claim_key:
@@ -289,6 +287,14 @@ class Claim(models.Model):
         null=True,
         blank=True,
         help_text="Optional grouping of claims from a single edit session.",
+    )
+    retracted_by_changeset = models.ForeignKey(
+        ChangeSet,
+        on_delete=models.SET_NULL,
+        related_name="retracted_claims",
+        null=True,
+        blank=True,
+        help_text="The changeset that deactivated this claim (full_sync retraction).",
     )
     value = models.JSONField()
     citation = models.TextField(blank=True)

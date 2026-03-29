@@ -62,13 +62,13 @@ class TestChangeSetClaimGrouping:
         claim = Claim.objects.assert_claim(mfr, "name", "Williams", user=user)
         assert claim.changeset is None
 
-    def test_source_claim_with_changeset_rejected(self, source, mfr, user):
-        """Source-attributed claims cannot use ChangeSets (not yet designed)."""
-        cs = ChangeSet.objects.create(user=user)
-        with pytest.raises(ValueError, match="Source-attributed claims"):
-            Claim.objects.assert_claim(
-                mfr, "name", "Williams", source=source, changeset=cs
-            )
+    def test_source_claim_with_changeset_accepted(self, source, mfr):
+        """Source-attributed claims can use ChangeSets (for ingest provenance)."""
+        cs = ChangeSet.objects.create()
+        claim = Claim.objects.assert_claim(
+            mfr, "name", "Williams", source=source, changeset=cs
+        )
+        assert claim.changeset == cs
 
     def test_changeset_user_mismatch_rejected(self, user, mfr):
         """ChangeSet user must match the claim user."""

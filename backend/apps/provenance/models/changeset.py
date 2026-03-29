@@ -25,7 +25,15 @@ class ChangeSet(models.Model):
         related_name="changesets",
         null=True,
         blank=True,
-        help_text="The user who made this edit. Null for future source-level changesets.",
+        help_text="The user who made this edit. Null for source-level changesets.",
+    )
+    ingest_run = models.ForeignKey(
+        "provenance.IngestRun",
+        on_delete=models.CASCADE,
+        related_name="changesets",
+        null=True,
+        blank=True,
+        help_text="The ingest run that produced this changeset. Null for user edits.",
     )
     note = models.TextField(
         blank=True,
@@ -38,5 +46,10 @@ class ChangeSet(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        actor = self.user.username if self.user else "system"
+        if self.user_id:
+            actor = self.user.username
+        elif self.ingest_run_id:
+            actor = f"ingest:{self.ingest_run.source.name}"
+        else:
+            actor = "system"
         return f"ChangeSet #{self.pk} by {actor}"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ChangeSet, Claim, Source, SourceFieldLicense
+from .models import ChangeSet, Claim, IngestRun, Source, SourceFieldLicense
 
 
 class SourceFieldLicenseInline(admin.TabularInline):
@@ -23,6 +23,12 @@ class SourceAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
     inlines = [SourceFieldLicenseInline]
+
+
+@admin.register(IngestRun)
+class IngestRunAdmin(admin.ModelAdmin):
+    list_display = ("pk", "source", "status", "started_at", "finished_at")
+    list_filter = ("source", "status")
 
 
 @admin.register(ChangeSet)
