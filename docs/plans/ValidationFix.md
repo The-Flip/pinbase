@@ -53,7 +53,7 @@ This is the most complete validation logic in the codebase today.
 - ✓ mojibake checks (subsumed from the old step-0 check)
 - ✓ markdown cross-reference validation
 - ✓ FK target existence (batched, one query per field group)
-- relationship target existence (deferred — resolver logs warnings)
+- ✓ relationship target existence (batched, one query per namespace+key group)
 - cycle detection (remains a PATCH-only check)
 
 ### 4. Some writes still bypass claims entirely
@@ -267,7 +267,7 @@ This covers, for direct-field claims:
 `bulk_assert_claims()` now calls `validate_claims_batch()` before persisting claims. This function uses `classify_claim()` — a structural classifier in `provenance/validation.py` that derives claim type from data already on the claim, with no catalog-specific imports:
 
 - **DIRECT** — `field_name` in `get_claim_fields(model_class)` → scalar validation or FK batch check
-- **RELATIONSHIP** — compound `claim_key` + dict value with `exists` key → pass through
+- **RELATIONSHIP** — compound `claim_key` + dict value with `exists` key → batch target validation (step 6)
 - **EXTRA** — unrecognized field on a model with a concrete `extra_data` JSONField → pass through
 - **UNRECOGNIZED** — none of the above → reject with warning
 
@@ -285,7 +285,7 @@ FK claims are validated in batch by `validate_fk_claims_batch()`:
 - uses the `claim_fk_lookups` convention from the resolver to determine the lookup key
 - rejects claims referencing non-existent targets
 
-**Relationship target validation is deferred.** Relationship claims are now structurally identifiable via `classify_claim()` without catalog imports. The remaining work is concrete, not architectural: add a provenance-owned registry mapping relationship namespace + target slug key to model class, then batch-validate those targets using the same grouped-query pattern as FK validation. The resolver already logs warnings for unmatched relationship slugs, so this is a follow-up, not a prerequisite.
+**Relationship target validation is now implemented** — see step 6. `validate_relationship_claims_batch()` uses a provenance-owned registry populated by the catalog layer at startup, keeping the same architectural boundary as FK validation.
 
 ### B4. Validate `assert_claim()` callers ✓
 
@@ -335,8 +335,10 @@ For ingest (`validate_claims_batch` inside `bulk_assert_claims`):
 5. ✓ **Validate `assert_claim()` callers** (B4).
    `assert_claim()` now validates DIRECT claims and rejects UNRECOGNIZED claims via `classify_claim()`.
 
-6. **Extend B3 to relationship target validation** (optional).
-   Batch-validate slug references inside relationship claim dicts. `classify_claim()` already identifies relationship claims structurally; the remaining implementation is a provenance-owned registry mapping namespace + slug key to target model, plus grouped existence checks. Deferred because the resolver already logs warnings for unmatched targets.
+6. ✓ **Extend B3 to relationship target validation.**
+   `validate_relationship_claims_batch()` batch-validates slug references inside relationship claim value dicts. A provenance-owned registry (`_relationship_target_registry`) maps namespace + value key to target model and lookup field; catalog populates it via `register_relationship_targets()` in `CatalogConfig.ready()`. Groups claims by `(namespace, value_key)` and issues one existence query per group — same pattern as FK validation. Retractions (`exists: False`) skip target validation. Alias and abbreviation namespaces are not registered (literal values, nothing to existence-check).
+
+   **Remaining gap: `assert_claim()`.** The single-claim `assert_claim()` path does not call `validate_relationship_claims_batch()`. The interactive PATCH path has its own relationship target validation in the API layer, so this is not a correctness hole today. However, one-off management commands that use `assert_claim()` for relationship claims (if any exist) would bypass the check. This should be addressed when `assert_claim()` validation is next revisited — either by adding inline relationship target validation or by routing through `validate_claims_batch()` for a single-element list.
 
 7. ✓ **Audit model field validators.**
    Audited every catalog model field on claims-bearing models (models with a `claims` GenericRelation). Three categories of missing validators were identified and fixed:
@@ -401,7 +403,7 @@ This plan is successful when:
 - ✓ provenance layer has no architectural imports from catalog (structural `classify_claim()` replaces `RELATIONSHIP_NAMESPACES` import)
 - ✓ catalog models no longer auto-generate slugs; explicit non-empty slugs are enforced in schema and tests
 - ✓ the codebase can be recreated cleanly from a reset initial migration set
-- relationship target existence checks run at claim-write time (deferred — resolver logs warnings for now)
+- ✓ relationship target existence checks run at claim-write time in `bulk_assert_claims()` using batched lookups (`assert_claim()` gap noted in step 6)
 - ✓ catalog model fields carry adequate validators so `validate_claim_value()` and the model layer both enforce correctness (step 7)
 - remaining direct writes in ingest are eliminated by the ingest architecture redesign (see [IngestRefactor.md](IngestRefactor.md))
 - `validate_catalog` no longer carries correctness rules that should have been enforced upstream (deferred to post-ingest-refactor)

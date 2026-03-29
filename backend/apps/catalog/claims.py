@@ -46,6 +46,44 @@ RELATIONSHIP_SCHEMAS: dict[str, dict[str, str]] = {
 RELATIONSHIP_NAMESPACES = frozenset(RELATIONSHIP_SCHEMAS)
 
 
+def register_relationship_targets() -> None:
+    """Push catalog target-model knowledge into the provenance registry.
+
+    Called once from ``CatalogConfig.ready()``.  Only namespaces whose value
+    dicts reference an external model are registered — aliases and
+    abbreviations store literal values, so there is nothing to existence-check.
+    """
+    from apps.catalog.models import (
+        CreditRole,
+        GameplayFeature,
+        Location,
+        Person,
+        RewardType,
+        Tag,
+        Theme,
+        Title,
+    )
+    from apps.provenance.validation import register_relationship_targets as _register
+
+    _register(
+        {
+            "credit": [("person_slug", Person, "slug"), ("role", CreditRole, "slug")],
+            "theme": [("theme_slug", Theme, "slug")],
+            "tag": [("tag_slug", Tag, "slug")],
+            "gameplay_feature": [
+                ("gameplay_feature_slug", GameplayFeature, "slug"),
+            ],
+            "reward_type": [("reward_type_slug", RewardType, "slug")],
+            "theme_parent": [("parent_slug", Theme, "slug")],
+            "gameplay_feature_parent": [
+                ("parent_slug", GameplayFeature, "slug"),
+            ],
+            "series_title": [("title_slug", Title, "slug")],
+            "location": [("location_path", Location, "location_path")],
+        }
+    )
+
+
 # ---------------------------------------------------------------------------
 # Claim construction helpers
 # ---------------------------------------------------------------------------

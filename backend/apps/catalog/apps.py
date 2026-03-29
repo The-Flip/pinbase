@@ -8,8 +8,10 @@ class CatalogConfig(AppConfig):
 
     def ready(self):
         from . import signals
+        from .claims import register_relationship_targets
 
         signals.connect()
+        register_relationship_targets()
         self._register_link_types()
         self._register_reference_cleanup()
 

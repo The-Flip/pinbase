@@ -4,7 +4,9 @@ Provides ``classify_claim`` for structural claim classification,
 ``validate_claim_value`` for per-field scalar validation (used by both the
 interactive PATCH path and bulk ingest), ``validate_claims_batch`` for
 batch-mode validation inside ``bulk_assert_claims``, and
-``validate_fk_claims_batch`` for batched FK target existence checks.
+``validate_fk_claims_batch`` for batched FK target existence checks,
+and ``validate_relationship_claims_batch`` for batched relationship
+target checks.
 """
 
 from __future__ import annotations
@@ -23,6 +25,28 @@ DIRECT = "direct"
 RELATIONSHIP = "relationship"
 EXTRA = "extra"
 UNRECOGNIZED = "unrecognized"
+
+# ---------------------------------------------------------------------------
+# Relationship target registry
+# ---------------------------------------------------------------------------
+# Populated by catalog.apps.CatalogConfig.ready() — the provenance layer owns
+# the data structure, the catalog layer provides the concrete mappings.
+#
+# Format: {namespace: [(value_key, target_model, lookup_field), ...]}
+#   e.g. {"credit": [("person_slug", Person, "slug"), ("role", CreditRole, "slug")]}
+_relationship_target_registry: dict[str, list[tuple[str, type[models.Model], str]]] = {}
+
+
+def register_relationship_targets(
+    mapping: dict[str, list[tuple[str, type[models.Model], str]]],
+) -> None:
+    """Register target models for relationship claim validation.
+
+    Called once from ``CatalogConfig.ready()``.  Each entry maps a
+    relationship namespace to the value-dict keys that reference external
+    models and the field used for the existence check.
+    """
+    _relationship_target_registry.update(mapping)
 
 
 def classify_claim(
@@ -122,7 +146,9 @@ def validate_claim_value(
     value = prepare_markdown_claim_value(field_name, value, model_class)
 
     # Type coercion + Django field validators.
-    if value != "" and field.validators:
+    # Always run to_python() for type checking (e.g. BooleanField rejects
+    # "maybe"), even on fields with no explicit validators.
+    if value != "":
         # JSON has no Decimal type — numeric values arrive as float.
         # to_python(float) produces Decimal with IEEE 754 artifacts
         # (e.g. 8.95 → Decimal('8.950')), which DecimalValidator rejects.
@@ -153,7 +179,7 @@ def validate_claims_batch(
 
     - **DIRECT** scalar → validate via ``validate_claim_value()``
     - **DIRECT** FK → collect for ``validate_fk_claims_batch()``
-    - **RELATIONSHIP** → pass through (target validation is a future step)
+    - **RELATIONSHIP** → collect for ``validate_relationship_claims_batch()``
     - **EXTRA** → pass through (free-form staging data)
     - **UNRECOGNIZED** → reject with warning
     """
@@ -163,6 +189,7 @@ def validate_claims_batch(
 
     rejected: list = []
     fk_claims: list[tuple] = []  # (claim, model_class) pairs
+    rel_claims: list = []  # relationship claims
 
     # Cache model_class and claim_fields per content_type_id.
     model_cache: dict[int, type[models.Model]] = {}
@@ -187,6 +214,7 @@ def validate_claims_batch(
         )
 
         if ct == RELATIONSHIP:
+            rel_claims.append(claim)
             continue
         if ct == EXTRA:
             continue
@@ -222,6 +250,10 @@ def validate_claims_batch(
     # Batch FK validation.
     if fk_claims:
         rejected.extend(validate_fk_claims_batch(fk_claims))
+
+    # Batch relationship target validation.
+    if rel_claims:
+        rejected.extend(validate_relationship_claims_batch(rel_claims))
 
     rejected_set = set(id(c) for c in rejected)
     valid = [c for c in pending_claims if id(c) not in rejected_set]
@@ -281,5 +313,77 @@ def validate_fk_claims_batch(
                     slug,
                 )
                 rejected.append(claim)
+
+    return rejected
+
+
+def validate_relationship_claims_batch(
+    rel_claims: list,
+) -> list:
+    """Batch-validate relationship claim targets. Returns list of rejected claims.
+
+    Groups claims by ``(namespace, value_key)``, then issues one existence
+    query per group — the same grouped-query pattern used by
+    ``validate_fk_claims_batch`` for FK claims.
+
+    Only namespaces registered via ``register_relationship_targets`` are
+    checked. Unregistered namespaces (aliases, abbreviations) pass through
+    because their value dicts contain literal data, not foreign references.
+    """
+    if not _relationship_target_registry:
+        return []
+
+    # (namespace, value_key) → [(claim, slug_value), ...]
+    groups: dict[tuple[str, str], list[tuple]] = defaultdict(list)
+    # Track which (namespace, value_key) → (target_model, lookup_field)
+    group_meta: dict[tuple[str, str], tuple[type[models.Model], str]] = {}
+
+    for claim in rel_claims:
+        namespace = claim.field_name
+        targets = _relationship_target_registry.get(namespace)
+        if not targets:
+            continue
+        value = claim.value
+        if not isinstance(value, dict):
+            continue
+        # Retractions (exists=False) don't need target validation — the
+        # target may have been deleted, and the claim is being removed.
+        if not value.get("exists", True):
+            continue
+        for value_key, target_model, lookup_field in targets:
+            slug = value.get(value_key)
+            if slug is not None and slug != "":
+                key = (namespace, value_key)
+                groups[key].append((claim, str(slug).strip()))
+                if key not in group_meta:
+                    group_meta[key] = (target_model, lookup_field)
+
+    rejected: list = []
+    rejected_ids: set[int] = set()
+
+    for key, group in groups.items():
+        target_model, lookup_field = group_meta[key]
+        namespace, value_key = key
+
+        slugs = {slug for _, slug in group}
+        existing = set(
+            target_model.objects.filter(**{f"{lookup_field}__in": slugs}).values_list(
+                lookup_field, flat=True
+            )
+        )
+
+        for claim, slug in group:
+            if slug not in existing and id(claim) not in rejected_ids:
+                logger.warning(
+                    "Rejected relationship claim %s (object_id=%s): "
+                    "target %s with %s=%r does not exist",
+                    claim.claim_key or namespace,
+                    claim.object_id,
+                    target_model.__name__,
+                    lookup_field,
+                    slug,
+                )
+                rejected.append(claim)
+                rejected_ids.add(id(claim))
 
     return rejected

@@ -3,7 +3,7 @@
 import pytest
 from django.contrib.contenttypes.models import ContentType
 
-from apps.catalog.models import MachineModel, Manufacturer
+from apps.catalog.models import CreditRole, MachineModel, Manufacturer, Person
 from apps.provenance.models import Claim, Source
 
 
@@ -256,6 +256,14 @@ class TestBulkAssertClaimsSourceSet:
 
 class TestBulkAssertClaimsSweep:
     """sweep_field + authoritative_scope deactivate stale claims."""
+
+    @pytest.fixture(autouse=True)
+    def _credit_targets(self, db):
+        """Create Person/CreditRole rows referenced by credit claims."""
+        Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
+        Person.objects.create(name="John Youssi", slug="john-youssi")
+        CreditRole.objects.create(name="Design", slug="design")
+        CreditRole.objects.create(name="Art", slug="art")
 
     def test_sweep_deactivates_stale_claim(self, source, ct_id, pm1):
         """A claim no longer in the pending set is swept (deactivated)."""
