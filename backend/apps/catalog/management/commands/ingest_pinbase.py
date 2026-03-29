@@ -414,20 +414,13 @@ class Command(BaseCommand):
 
         for obj, entry in zip(objs, entries_sorted):
             pending_claims.append(
-                Claim(
-                    content_type_id=ct.pk,
-                    object_id=obj.pk,
-                    field_name="name",
-                    value=entry["name"],
-                )
+                Claim.for_object(obj, field_name="slug", value=entry["slug"])
             )
             pending_claims.append(
-                Claim(
-                    content_type_id=ct.pk,
-                    object_id=obj.pk,
-                    field_name="location_type",
-                    value=entry["type"],
-                )
+                Claim.for_object(obj, field_name="name", value=entry["name"])
+            )
+            pending_claims.append(
+                Claim.for_object(obj, field_name="location_type", value=entry["type"])
             )
             if entry.get("code"):
                 pending_claims.append(
@@ -557,6 +550,9 @@ class Command(BaseCommand):
             pending_claims: list[Claim] = []
             for obj, entry in zip(objs, entries_used):
                 pending_claims.append(
+                    Claim.for_object(obj, field_name="slug", value=obj.slug)
+                )
+                pending_claims.append(
                     Claim.for_object(obj, field_name="name", value=obj.name)
                 )
                 if has_display_order:
@@ -616,6 +612,9 @@ class Command(BaseCommand):
         # --- Entity claims ---
         pending_claims: list[Claim] = []
         for obj, entry in zip(objs, entries):
+            pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
             pending_claims.append(
                 Claim(
                     content_type_id=ct.pk,
@@ -731,6 +730,9 @@ class Command(BaseCommand):
         # --- Entity claims ---
         pending_claims: list[Claim] = []
         for obj, entry in zip(objs, entries):
+            pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
             pending_claims.append(
                 Claim(
                     content_type_id=ct.pk,
@@ -881,6 +883,9 @@ class Command(BaseCommand):
         pending_claims: list[Claim] = []
         for obj, entry in zip(objs, entries):
             pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
+            pending_claims.append(
                 Claim.for_object(obj, field_name="name", value=obj.name)
             )
             if obj.opdb_manufacturer_id is not None:
@@ -993,6 +998,9 @@ class Command(BaseCommand):
         # Assert claims and resolve.
         pending_claims: list[Claim] = []
         for obj in objs:
+            pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
             pending_claims.append(
                 Claim.for_object(obj, field_name="name", value=obj.name)
             )
@@ -1136,6 +1144,9 @@ class Command(BaseCommand):
 
         pending_claims: list[Claim] = []
         for obj, entry in zip(objs, entries):
+            pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
             for field in ("name", "description"):
                 value = entry.get(field, "")
                 if value:
@@ -1232,6 +1243,9 @@ class Command(BaseCommand):
             person = persons_by_slug.get(entry["slug"])
             if not person:
                 continue
+            pending_claims.append(
+                Claim.for_object(person, field_name="slug", value=person.slug)
+            )
             for field in ("name", "description"):
                 value = entry.get(field, "")
                 if value:
@@ -1303,6 +1317,9 @@ class Command(BaseCommand):
         # Assert claims.
         pending_claims: list[Claim] = []
         for obj, entry in zip(objs, series_entries):
+            pending_claims.append(
+                Claim.for_object(obj, field_name="slug", value=obj.slug)
+            )
             for field in ("name", "description"):
                 value = entry.get(field, "")
                 if value:
@@ -1485,9 +1502,13 @@ class Command(BaseCommand):
             # final_slug is the slug that now exists in the DB for this title.
             final_slug = safe_slugs.get(title.pk, title.slug)
 
+            touched_ids.add(title.pk)
+            pending_claims.append(
+                Claim.for_object(title, field_name="slug", value=final_slug)
+            )
+
             opdb_id = entry.get("opdb_group_id")
             if opdb_id:
-                touched_ids.add(title.pk)
                 pending_claims.append(
                     Claim.for_object(title, field_name="opdb_id", value=opdb_id)
                 )
@@ -1768,6 +1789,10 @@ class Command(BaseCommand):
 
             matched += 1
             matched_pks.add(mm.pk)
+
+            pending_claims.append(
+                Claim.for_object(mm, field_name="slug", value=mm.slug)
+            )
 
             for claim_field, json_key in self.MODEL_CLAIM_FIELDS.items():
                 value = entry.get(json_key)

@@ -67,6 +67,26 @@ class ClaimManager(models.Manager):
                 raise ValueError("ChangeSet user must match the claim user.")
         if not claim_key:
             claim_key = field_name
+
+        # Classify and validate. Direct claims get scalar/FK validation.
+        # Relationship and extra-data claims pass through. Unrecognized
+        # claims are rejected outright.
+        from apps.provenance.validation import (
+            DIRECT,
+            UNRECOGNIZED,
+            classify_claim,
+            validate_claim_value,
+        )
+
+        model_class = type(subject)
+        ct_result = classify_claim(model_class, field_name, claim_key, value)
+        if ct_result == UNRECOGNIZED:
+            raise ValueError(
+                f"Unrecognized claim field_name {field_name!r} on {model_class.__name__}"
+            )
+        if ct_result == DIRECT:
+            value = validate_claim_value(field_name, value, model_class)
+
         ct = ContentType.objects.get_for_model(subject)
         with transaction.atomic():
             self.filter(

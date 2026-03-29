@@ -133,7 +133,7 @@ def get_markdown_fields(model: type[models.Model]) -> list[str]:
 
 # Infrastructure fields exempt from claims on every model.
 _CLAIMS_EXEMPT_NAMES = frozenset(
-    {"id", "uuid", "created_at", "updated_at", "slug", "extra_data"}
+    {"id", "uuid", "created_at", "updated_at", "extra_data"}
 )
 
 

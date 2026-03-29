@@ -1,8 +1,9 @@
 """Claim-boundary validation: shared rules for all claim write paths.
 
-Provides ``validate_claim_value`` for per-field scalar validation (used by
-both the interactive PATCH path and bulk ingest), ``validate_claims_batch``
-for batch-mode validation inside ``bulk_assert_claims``, and
+Provides ``classify_claim`` for structural claim classification,
+``validate_claim_value`` for per-field scalar validation (used by both the
+interactive PATCH path and bulk ingest), ``validate_claims_batch`` for
+batch-mode validation inside ``bulk_assert_claims``, and
 ``validate_fk_claims_batch`` for batched FK target existence checks.
 """
 
@@ -12,10 +13,74 @@ import logging
 from collections import defaultdict
 from typing import Any
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import FieldDoesNotExist, ValidationError
 from django.db import models
 
 logger = logging.getLogger(__name__)
+
+# Claim classification constants.
+DIRECT = "direct"
+RELATIONSHIP = "relationship"
+EXTRA = "extra"
+UNRECOGNIZED = "unrecognized"
+
+
+def classify_claim(
+    model_class: type[models.Model],
+    field_name: str,
+    claim_key: str,
+    value: Any,
+    *,
+    claim_fields: dict[str, str] | None = None,
+) -> str:
+    """Classify a claim from its structural properties.
+
+    Returns one of ``DIRECT``, ``RELATIONSHIP``, ``EXTRA``, or
+    ``UNRECOGNIZED``. Uses only generic provenance conventions — no
+    catalog-specific imports.
+
+    - **DIRECT**: ``field_name`` is a concrete claim-controlled Django field.
+    - **RELATIONSHIP**: compound ``claim_key``, dict value with ``exists`` key.
+    - **EXTRA**: unrecognized field on a model with an ``extra_data`` JSONField.
+    - **UNRECOGNIZED**: none of the above — likely a typo or stale field name.
+
+    Pass ``claim_fields`` to avoid repeated ``get_claim_fields()`` calls in
+    batch contexts. When omitted, it is computed on each call (fine for
+    single-claim use in ``assert_claim``).
+    """
+    if claim_fields is None:
+        from apps.core.models import get_claim_fields
+
+        claim_fields = get_claim_fields(model_class)
+
+    if field_name in claim_fields:
+        return DIRECT
+
+    if (
+        claim_key
+        and claim_key != field_name
+        and isinstance(value, dict)
+        and "exists" in value
+    ):
+        return RELATIONSHIP
+
+    if _has_extra_data(model_class):
+        return EXTRA
+
+    return UNRECOGNIZED
+
+
+def _has_extra_data(model_class: type[models.Model]) -> bool:
+    """Check whether a model has a concrete ``extra_data`` field.
+
+    Uses ``_meta`` field introspection rather than ``hasattr`` to avoid
+    matching non-field attributes (properties, methods, etc.).
+    """
+    try:
+        model_class._meta.get_field("extra_data")
+        return True
+    except FieldDoesNotExist:
+        return False
 
 
 def validate_claim_value(
@@ -84,26 +149,24 @@ def validate_claims_batch(
     Valid scalar claims may have transformed values (e.g. markdown link
     conversion written back to ``claim.value``).
 
-    Claims are classified by ``field_name``:
+    Uses ``classify_claim`` to classify each claim structurally, then:
 
-    1. **Relationship namespace** — in ``RELATIONSHIP_NAMESPACES`` → pass through
-    2. **Scalar claim field** — in ``get_claim_fields`` and not a relation → validate
-    3. **FK claim field** — in ``get_claim_fields`` and is a relation → batch FK check
-    4. **Extra-data** — not in claim fields, but model has ``extra_data`` → pass through
-    5. **Unrecognized** — not in claim fields, no ``extra_data`` fallback → reject
+    - **DIRECT** scalar → validate via ``validate_claim_value()``
+    - **DIRECT** FK → collect for ``validate_fk_claims_batch()``
+    - **RELATIONSHIP** → pass through (target validation is a future step)
+    - **EXTRA** → pass through (free-form staging data)
+    - **UNRECOGNIZED** → reject with warning
     """
     from django.contrib.contenttypes.models import ContentType
 
-    from apps.catalog.claims import RELATIONSHIP_NAMESPACES
     from apps.core.models import get_claim_fields
 
     rejected: list = []
     fk_claims: list[tuple] = []  # (claim, model_class) pairs
 
-    # Cache model_class, claim_fields, and has_extra_data per content_type_id.
+    # Cache model_class and claim_fields per content_type_id.
     model_cache: dict[int, type[models.Model]] = {}
     fields_cache: dict[int, dict[str, str]] = {}
-    extra_data_cache: dict[int, bool] = {}
 
     for claim in pending_claims:
         ct_id = claim.content_type_id
@@ -111,25 +174,23 @@ def validate_claims_batch(
         if ct_id not in model_cache:
             model_cache[ct_id] = ContentType.objects.get_for_id(ct_id).model_class()
             fields_cache[ct_id] = get_claim_fields(model_cache[ct_id])
-            extra_data_cache[ct_id] = hasattr(model_cache[ct_id], "extra_data")
 
         model_class = model_cache[ct_id]
-        claim_fields = fields_cache[ct_id]
         fn = claim.field_name
 
-        # Category 3: relationship namespace.
-        if fn in RELATIONSHIP_NAMESPACES:
-            continue
+        ct = classify_claim(
+            model_class,
+            fn,
+            claim.claim_key,
+            claim.value,
+            claim_fields=fields_cache[ct_id],
+        )
 
-        # Category 4: extra-data claims. These are claims whose field_name
-        # doesn't match a concrete Django field — they resolve into the
-        # model's extra_data JSONField. Includes dotted namespaces like
-        # "wikidata.description" and undotted names like "manufacturer" on
-        # MachineModel (where it's not a concrete field).
-        if fn not in claim_fields:
-            if extra_data_cache[ct_id]:
-                continue
-            # Category 5: unrecognized — model has no extra_data fallback.
+        if ct == RELATIONSHIP:
+            continue
+        if ct == EXTRA:
+            continue
+        if ct == UNRECOGNIZED:
             logger.warning(
                 "Rejected claim with unrecognized field_name %r on %s (object_id=%s)",
                 fn,
@@ -139,14 +200,13 @@ def validate_claims_batch(
             rejected.append(claim)
             continue
 
-        # Determine scalar vs FK.
+        # DIRECT — determine scalar vs FK.
         field = model_class._meta.get_field(fn)
         if field.is_relation:
-            # Category 2: FK claim — collect for batch validation.
             fk_claims.append((claim, model_class))
             continue
 
-        # Category 1: scalar claim — validate value.
+        # Scalar — validate value.
         try:
             claim.value = validate_claim_value(fn, claim.value, model_class)
         except ValidationError as exc:

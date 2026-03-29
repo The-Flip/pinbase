@@ -33,7 +33,7 @@ import logging
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-from apps.catalog.ingestion.bulk_utils import ManufacturerResolver
+from apps.catalog.ingestion.bulk_utils import ManufacturerResolver, generate_unique_slug
 from apps.catalog.ingestion.person_lookup import build_person_lookup
 from apps.catalog.ingestion.fandom_wiki import (
     FandomManufacturer,
@@ -292,6 +292,9 @@ class Command(BaseCommand):
         persons_skipped_no_credits = 0
         persons_skipped_near_dupe: list[str] = []
         pending_person_claims: list[Claim] = []
+        existing_person_slugs: set[str] = set(
+            Person.objects.values_list("slug", flat=True)
+        )
 
         # Refresh existing_persons after any credits-section changes.
         existing_persons = build_person_lookup()
@@ -335,19 +338,30 @@ class Command(BaseCommand):
 
                 # Safe to create.
                 validate_no_mojibake(fp.title)
-                person = Person.objects.create(name=fp.title)
+                slug = generate_unique_slug(fp.title, existing_person_slugs)
+                person = Person.objects.create(name=fp.title, slug=slug)
                 existing_persons[fp.title.lower()] = person
                 persons_created += 1
 
-            # Assert name + bio claims. Name is asserted so that resolve_person()
-            # does not reset the name field (it resets all resolvable fields before
-            # applying winning claims; without a name claim, name becomes "").
+            # Assert name + slug + bio claims. Name is asserted so that
+            # resolve_person() does not reset the name field (it resets all
+            # resolvable fields before applying winning claims; without a
+            # name claim, name becomes "").
             pending_person_claims.append(
                 Claim(
                     content_type_id=person_ct_id,
                     object_id=person.pk,
                     field_name="name",
                     value=fp.title,
+                    citation=fp.citation_url,
+                )
+            )
+            pending_person_claims.append(
+                Claim(
+                    content_type_id=person_ct_id,
+                    object_id=person.pk,
+                    field_name="slug",
+                    value=person.slug,
                     citation=fp.citation_url,
                 )
             )

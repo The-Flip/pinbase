@@ -110,10 +110,12 @@ class TestResolveModel:
         resolved = resolve_model(pm)
         assert resolved.year is None
 
-    def test_invalid_int_coercion(self, pm, ipdb):
-        Claim.objects.assert_claim(pm, "year", "not-a-number", source=ipdb)
-        resolved = resolve_model(pm)
-        assert resolved.year is None
+    def test_invalid_int_coercion_rejected_at_claim_boundary(self, pm, ipdb):
+        """Invalid values are now rejected by assert_claim validation."""
+        from django.core.exceptions import ValidationError
+
+        with pytest.raises(ValidationError, match="must be an integer"):
+            Claim.objects.assert_claim(pm, "year", "not-a-number", source=ipdb)
 
     def test_stale_values_cleared_on_re_resolve(self, pm, ipdb):
         Claim.objects.assert_claim(pm, "year", 1997, source=ipdb)

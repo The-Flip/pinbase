@@ -371,18 +371,15 @@ class TestPreserveNotNullFK:
 
 @pytest.mark.django_db
 class TestResolveBulkTaxonomy:
-    def test_malformed_int_claim_uses_default(self, opdb):
-        """Non-parseable integer on a non-null field should fall back to 0, not None."""
+    def test_malformed_int_claim_rejected_at_boundary(self, opdb):
+        """Invalid integer values are now rejected by assert_claim validation."""
+        from django.core.exceptions import ValidationError
+
         tag = Tag.objects.create(name="", slug="test-tag")
 
         Claim.objects.assert_claim(tag, "name", "Test Tag", source=opdb)
-        Claim.objects.assert_claim(tag, "display_order", "abc", source=opdb)
-
-        _resolve_bulk(Tag, get_claim_fields(Tag), object_ids={tag.pk})
-
-        tag.refresh_from_db()
-        assert tag.name == "Test Tag"
-        assert tag.display_order == 0  # default, not None
+        with pytest.raises(ValidationError, match="must be an integer"):
+            Claim.objects.assert_claim(tag, "display_order", "abc", source=opdb)
 
 
 @pytest.mark.django_db

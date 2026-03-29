@@ -6,8 +6,13 @@ import pytest
 from django.core.exceptions import ValidationError
 
 from apps.catalog.models import MachineModel, Manufacturer, Person, System, Theme
-from apps.provenance.models import Claim
+from apps.provenance.models import Claim, Source
 from apps.provenance.validation import (
+    DIRECT,
+    EXTRA,
+    RELATIONSHIP,
+    UNRECOGNIZED,
+    classify_claim,
     validate_claim_value,
     validate_claims_batch,
     validate_fk_claims_batch,
@@ -217,3 +222,118 @@ class TestValidateFkClaimsBatch:
                 ]
             )
         assert len(rejected) == 1
+
+
+# ---------------------------------------------------------------------------
+# classify_claim
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestClassifyClaim:
+    def test_scalar_field_is_direct(self):
+        assert classify_claim(MachineModel, "name", "", "Test") == DIRECT
+
+    def test_fk_field_is_direct(self):
+        assert classify_claim(System, "manufacturer", "", "williams") == DIRECT
+
+    def test_relationship_claim_detected(self):
+        """Compound claim_key + dict value with 'exists' → RELATIONSHIP."""
+        assert (
+            classify_claim(
+                MachineModel,
+                "credit",
+                "credit|person:pat-lawlor|role:design",
+                {"person_slug": "pat-lawlor", "role": "design", "exists": True},
+            )
+            == RELATIONSHIP
+        )
+
+    def test_extra_data_on_model_with_extra_data(self):
+        """Unknown field on a model with extra_data → EXTRA."""
+        assert classify_claim(MachineModel, "opdb.description", "", "text") == EXTRA
+
+    def test_unrecognized_on_model_without_extra_data(self):
+        """Unknown field on a model without extra_data → UNRECOGNIZED."""
+        assert classify_claim(Theme, "nonexistent", "", "whatever") == UNRECOGNIZED
+
+    def test_undotted_extra_data_on_model_with_extra_data(self):
+        """Undotted unknown field on model with extra_data → EXTRA."""
+        assert classify_claim(MachineModel, "manufacturer", "", "williams") == EXTRA
+
+    def test_relationship_convention_enforced(self):
+        """Every namespace in RELATIONSHIP_SCHEMAS produces a RELATIONSHIP claim.
+
+        This turns the structural convention into a tested invariant: if
+        build_relationship_claim ever stops producing compound claim_key
+        or dict values with 'exists', this test breaks.
+        """
+        from apps.catalog.claims import RELATIONSHIP_SCHEMAS, build_relationship_claim
+
+        # Build a minimal identity dict for each namespace.
+        for namespace, schema in RELATIONSHIP_SCHEMAS.items():
+            identity = {key: "test-value" for key in schema}
+            claim_key, value = build_relationship_claim(namespace, identity)
+
+            # Determine a model class that hosts this namespace. For the
+            # purpose of this test, the model doesn't matter — what matters
+            # is that the claim_key/value structure classifies as RELATIONSHIP
+            # on any model (since field_name won't be in get_claim_fields).
+            result = classify_claim(MachineModel, namespace, claim_key, value)
+            assert result == RELATIONSHIP, (
+                f"Namespace {namespace!r} classified as {result!r}, expected RELATIONSHIP. "
+                f"claim_key={claim_key!r}, value={value!r}"
+            )
+
+
+# ---------------------------------------------------------------------------
+# assert_claim validation (B4)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestAssertClaimValidation:
+    @pytest.fixture
+    def source(self):
+        return Source.objects.create(
+            name="test-source", source_type="database", priority=10
+        )
+
+    def test_rejects_invalid_direct_claim(self, source):
+        """assert_claim should reject invalid scalar values."""
+        model = MachineModel.objects.create(name="Test")
+        with pytest.raises(ValidationError, match="must be an integer"):
+            Claim.objects.assert_claim(model, "ipdb_id", "not-a-number", source=source)
+
+    def test_allows_valid_direct_claim(self, source):
+        model = MachineModel.objects.create(name="Test")
+        claim = Claim.objects.assert_claim(model, "ipdb_id", 42, source=source)
+        assert claim.value == 42
+
+    def test_allows_relationship_claim(self, source):
+        """Relationship claims should pass through without validation."""
+        model = MachineModel.objects.create(name="Test")
+        claim = Claim.objects.assert_claim(
+            model,
+            "credit",
+            {"person_slug": "pat-lawlor", "role": "design", "exists": True},
+            source=source,
+            claim_key="credit|person:pat-lawlor|role:design",
+        )
+        assert claim.field_name == "credit"
+
+    def test_allows_extra_data_claim(self, source):
+        """Extra-data claims should pass through without validation."""
+        model = MachineModel.objects.create(name="Test")
+        claim = Claim.objects.assert_claim(
+            model, "opdb.description", "A great game", source=source
+        )
+        assert claim.value == "A great game"
+
+    def test_rejects_unrecognized_claim(self, source):
+        """Unrecognized field on a model without extra_data is rejected."""
+        theme = Theme.objects.create(name="Medieval", slug="medieval")
+        with pytest.raises(ValueError, match="Unrecognized claim field_name"):
+            Claim.objects.assert_claim(
+                theme, "nonexistent_field", "whatever", source=source
+            )

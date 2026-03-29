@@ -648,6 +648,18 @@ class Command(BaseCommand):
                 )
             )
 
+        # Slug claim — only for models IPDB created (IPDB has no slug
+        # opinion for pre-existing models).
+        if was_created:
+            pending_claims.append(
+                Claim(
+                    content_type_id=ct_id,
+                    object_id=pm.pk,
+                    field_name="slug",
+                    value=pm.slug,
+                )
+            )
+
         # Common abbreviations: each abbreviation becomes its own relationship claim.
         if rec.common_abbreviations:
             for abbrev in rec.common_abbreviations.split(","):
@@ -680,8 +692,8 @@ class Command(BaseCommand):
             # Priority: match by IPDB manufacturer ID first, then by name.
             ce = ce_by_ipdb_id.get(mfr_id) or ce_by_name.get(company.lower())
             if ce:
-                # Ensure existing CE has a manufacturer claim (may have
-                # been created before claims were required on this field).
+                # IPDB confirms the CE-manufacturer relationship (valuable
+                # even for pre-existing CEs — provenance records agreement).
                 pending_ce_claims.append(
                     Claim.for_object(
                         ce,
@@ -742,6 +754,9 @@ class Command(BaseCommand):
                 ce_by_name[company.lower()] = ce
                 pending_ce_claims.append(
                     Claim.for_object(ce, field_name="manufacturer", value=mfr.slug)
+                )
+                pending_ce_claims.append(
+                    Claim.for_object(ce, field_name="slug", value=ce.slug)
                 )
                 pending_ce_claims.append(
                     Claim.for_object(
@@ -926,18 +941,28 @@ class Command(BaseCommand):
         # Assert name claims for all unique persons referenced in this ingest.
         # Use the person's canonical name (from pindata), not the raw IPDB
         # credit string which may contain encoding corruption.
+        # Slug claims are only for persons IPDB created (IPDB has no slug
+        # opinion for pre-existing persons).
         ct_person = ContentType.objects.get_for_model(Person)
         unique_keys = {name.lower() for _, name, _ in credit_queue}
-        person_claims: list[Claim] = [
-            Claim(
-                content_type_id=ct_person.pk,
-                object_id=existing_persons[key].pk,
-                field_name="name",
-                value=existing_persons[key].name,
+        created_names = {p.name.lower() for p in new_persons}
+        person_claims: list[Claim] = []
+        for key in unique_keys:
+            if key not in existing_persons:
+                continue
+            p = existing_persons[key]
+            person_claims.append(
+                Claim(
+                    content_type_id=ct_person.pk,
+                    object_id=p.pk,
+                    field_name="name",
+                    value=p.name,
+                )
             )
-            for key in unique_keys
-            if key in existing_persons
-        ]
+            if key in created_names:
+                person_claims.append(
+                    Claim.for_object(p, field_name="slug", value=p.slug)
+                )
         person_claim_stats = Claim.objects.bulk_assert_claims(source, person_claims)
         self.stdout.write(
             f"  Person claims: {person_claim_stats['unchanged']} unchanged, "
@@ -1022,6 +1047,17 @@ class Command(BaseCommand):
             f"  Themes: {len(existing_themes) - themes_created} existing, "
             f"{themes_created} created"
         )
+
+        # Assert slug claims for themes IPDB created (not pre-existing ones).
+        if new_themes:
+            theme_slug_claims = [
+                Claim.for_object(
+                    existing_themes[t.slug], field_name="slug", value=t.slug
+                )
+                for t in new_themes
+                if t.slug in existing_themes
+            ]
+            Claim.objects.bulk_assert_claims(source, theme_slug_claims)
 
         # Build theme relationship claims.
         ct_machine = ContentType.objects.get_for_model(MachineModel).pk

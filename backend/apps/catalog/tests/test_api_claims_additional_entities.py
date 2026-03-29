@@ -220,7 +220,7 @@ class TestAdditionalPatchClaimEndpoints:
         resp = _patch(
             client,
             f"/api/reward-types/{entity.slug}/claims/",
-            {"fields": {"slug": "bad"}},
+            {"fields": {"nonexistent_field": "bad"}},
         )
         assert resp.status_code == 422
 

@@ -270,6 +270,7 @@ class Command(BaseCommand):
                         pm.opdb_id,
                         rec.opdb_id,
                     )
+                machine_models.append((pm, rec, False))
             else:
                 created += 1
                 slug = generate_unique_slug(rec.name, existing_slugs)
@@ -278,8 +279,7 @@ class Command(BaseCommand):
                 by_opdb_id[rec.opdb_id] = pm
                 if rec.ipdb_id:
                     by_ipdb_id[rec.ipdb_id] = pm
-
-            machine_models.append((pm, rec))
+                machine_models.append((pm, rec, True))
 
         if new_models:
             bulk_create_validated(MachineModel, new_models)
@@ -307,6 +307,7 @@ class Command(BaseCommand):
 
             if pm:
                 alias_linked += 1
+                machine_models.append((pm, rec, False))
             else:
                 # Parent must exist to create a new alias model.
                 parent = by_opdb_id.get(rec.parent_opdb_id)
@@ -325,8 +326,7 @@ class Command(BaseCommand):
                 pm = MachineModel(name=rec.name, opdb_id=rec.opdb_id, slug=slug)
                 new_alias_models.append(pm)
                 by_opdb_id[rec.opdb_id] = pm
-
-            machine_models.append((pm, rec))
+                machine_models.append((pm, rec, True))
 
         if new_alias_models:
             bulk_create_validated(MachineModel, new_alias_models)
@@ -347,8 +347,8 @@ class Command(BaseCommand):
         tag_queue: list[tuple[int, list[str]]] = []
         unmatched_opdb_terms: list[str] = []
 
-        for pm, rec in machine_models:
-            self._collect_claims(pm, rec, ct_id, pending_claims)
+        for pm, rec, was_created in machine_models:
+            self._collect_claims(pm, rec, ct_id, pending_claims, was_created)
 
             if rec.features:
                 (
@@ -399,7 +399,7 @@ class Command(BaseCommand):
             )
 
         # --- Assert gameplay feature claims ---
-        all_model_ids = {pm.pk for pm, _ in machine_models}
+        all_model_ids = {pm.pk for pm, _, _ in machine_models}
         self._bulk_create_gameplay_features(
             gameplay_feature_queue, source, all_model_ids
         )
@@ -505,6 +505,7 @@ class Command(BaseCommand):
         rec: OpdbRecord,
         ct_id: int,
         pending_claims: list[Claim],
+        was_created: bool = False,
     ) -> None:
         """Collect scalar claim objects for a machine or alias record."""
 
@@ -520,6 +521,8 @@ class Command(BaseCommand):
 
         if rec.name:
             _add("name", rec.name)
+        if was_created:
+            _add("slug", pm.slug)
         if rec.opdb_id:
             _add("opdb_id", rec.opdb_id)
 
