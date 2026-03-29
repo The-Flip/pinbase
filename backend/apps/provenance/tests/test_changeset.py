@@ -2,9 +2,11 @@
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
+from django.utils import timezone
 
 from apps.catalog.models import Manufacturer
-from apps.provenance.models import ChangeSet, Claim, Source
+from apps.provenance.models import ChangeSet, Claim, IngestRun, Source
 
 User = get_user_model()
 
@@ -38,7 +40,7 @@ class TestChangeSetModel:
         assert cs.note == ""
 
     def test_changeset_without_user(self):
-        """ChangeSet with null user is allowed (future: source-level changesets)."""
+        """ChangeSet with null user is allowed (source-level changesets)."""
         cs = ChangeSet.objects.create()
         assert cs.user is None
 
@@ -63,12 +65,33 @@ class TestChangeSetClaimGrouping:
         assert claim.changeset is None
 
     def test_source_claim_with_changeset_accepted(self, source, mfr):
-        """Source-attributed claims can use ChangeSets (for ingest provenance)."""
-        cs = ChangeSet.objects.create()
+        """Source-attributed claims can use ChangeSets linked to matching ingest run."""
+        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        cs = ChangeSet.objects.create(ingest_run=run)
         claim = Claim.objects.assert_claim(
             mfr, "name", "Williams", source=source, changeset=cs
         )
         assert claim.changeset == cs
+
+    def test_source_claim_changeset_source_mismatch_rejected(self, source, mfr):
+        """ChangeSet's ingest run source must match the claim source."""
+        other_source = Source.objects.create(
+            name="OtherSource", slug="other-source", priority=5
+        )
+        run = IngestRun.objects.create(source=other_source, started_at=timezone.now())
+        cs = ChangeSet.objects.create(ingest_run=run)
+        with pytest.raises(ValueError, match="same source"):
+            Claim.objects.assert_claim(
+                mfr, "name", "Williams", source=source, changeset=cs
+            )
+
+    def test_source_claim_changeset_without_ingest_run_rejected(self, source, mfr):
+        """Source-attributed claims require a changeset with an ingest run."""
+        cs = ChangeSet.objects.create()
+        with pytest.raises(ValueError, match="IngestRun"):
+            Claim.objects.assert_claim(
+                mfr, "name", "Williams", source=source, changeset=cs
+            )
 
     def test_changeset_user_mismatch_rejected(self, user, mfr):
         """ChangeSet user must match the claim user."""
@@ -94,3 +117,24 @@ class TestChangeSetClaimGrouping:
         assert c1.changeset == cs1
         assert c2.is_active is True
         assert c2.changeset == cs2
+
+
+@pytest.mark.django_db
+class TestChangeSetConstraints:
+    def test_user_only(self, user):
+        cs = ChangeSet.objects.create(user=user)
+        assert cs.pk is not None
+
+    def test_ingest_run_only(self, source):
+        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        cs = ChangeSet.objects.create(ingest_run=run)
+        assert cs.pk is not None
+
+    def test_neither_user_nor_ingest_run(self):
+        cs = ChangeSet.objects.create()
+        assert cs.pk is not None
+
+    def test_both_user_and_ingest_run_rejected(self, user, source):
+        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        with pytest.raises(IntegrityError):
+            ChangeSet.objects.create(user=user, ingest_run=run)

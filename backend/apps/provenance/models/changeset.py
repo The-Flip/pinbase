@@ -15,8 +15,9 @@ class ChangeSet(models.Model):
     snapshot.
 
     All claims in a ChangeSet must share the same actor (same user or same
-    source). This invariant is enforced by the code that creates ChangeSets,
-    not by database constraints.
+    source). A CheckConstraint enforces that user and ingest_run are mutually
+    exclusive; same-actor consistency within those groups is enforced by
+    assert_claim().
     """
 
     user = models.ForeignKey(
@@ -44,6 +45,16 @@ class ChangeSet(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(user__isnull=False, ingest_run__isnull=True)
+                    | models.Q(user__isnull=True, ingest_run__isnull=False)
+                    | models.Q(user__isnull=True, ingest_run__isnull=True)
+                ),
+                name="provenance_changeset_user_xor_ingest_run",
+            ),
+        ]
 
     def __str__(self) -> str:
         if self.user_id:

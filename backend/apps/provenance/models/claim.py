@@ -60,9 +60,16 @@ class ClaimManager(models.Manager):
         """
         if (source is None) == (user is None):
             raise ValueError("Exactly one of source or user must be provided.")
-        if changeset is not None and user is not None:
-            if changeset.user_id != user.pk:
+        if changeset is not None:
+            if user is not None and changeset.user_id != user.pk:
                 raise ValueError("ChangeSet user must match the claim user.")
+            if source is not None and (
+                not changeset.ingest_run_id
+                or changeset.ingest_run.source_id != source.pk
+            ):
+                raise ValueError(
+                    "ChangeSet must belong to an IngestRun from the same source."
+                )
         if not claim_key:
             claim_key = field_name
 
