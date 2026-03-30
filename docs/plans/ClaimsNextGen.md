@@ -1,27 +1,32 @@
-# Ingest Architecture
+# Claims Next Generation
 
 ## The Problem
 
-Pinbase's ingest layer is a set of Django management commands that import catalog data from external sources (IPDB, OPDB, Fandom wiki, Wikidata) and from Pinbase's own editorial data (pindata JSON exports). Each command was written independently and evolved to handle its source's unique data shape.
+Pinbase's catalog truth is claims-based: sources and users assert claims, claim resolution picks winners, and resolved model tables materialise the current catalog state. That architecture is sound in principle, but it was not designed as one coherent system from the beginning. Provenance, validation, entity lifecycle, and ingest were added incrementally, and the result is that correctness depends on _how_ data enters the system rather than being enforced uniformly at the claims boundary.
 
-The commands are fragile, hard to maintain, and a persistent source of bugs — especially for AI agents working on them. The root cause is not that the code is messy (though some of it is). The root cause is that the commands are imperative programs that mix several distinct responsibilities in one place: parsing, entity matching, claim-intent policy, direct ORM mutation, claim assertion, and resolver invocation. These concerns are interleaved in per-command control flow with no shared contracts or boundaries.
+Three areas need to be addressed together:
 
-This makes it hard to answer basic questions about any given ingest write:
+### Claims system gaps
 
-- Is this write provenance-backed?
-- If the command fails halfway through, what state remains?
-- If a source stops asserting a value, does the old claim get retracted?
-- Should this source be asserting this field for this entity at all?
+**Entity existence has no provenance.** Entity creation is a direct ORM write. Once a row exists, there is no claims-based mechanism to mark it as invalid, remove it, or record that it's a duplicate. A source asserting "this machine exists" should be no different from asserting "this machine's year is 1992" — both are facts attributed to a source, and both should be disputable.
 
-The answers are buried in per-command control flow, variable names, tuple positions, and comments. They are not represented in the type system or enforced by shared infrastructure.
+**No retraction mechanism.** There is no explicit way to retract a claim or mark an entity as deleted through the claims system. The current relationship sweep machinery infers retraction from omission, but the project currently rebuilds from a bare DB each time, so sweep is effectively a no-op.
 
-### Concrete failure modes
+**Relationship claims use slugs as identity.** Relationship claims store target entity slugs in their value dicts (e.g. `{"person_slug": "pat-lawlor"}`). This couples the claims system to editorial slug choices, means slug renames can invalidate existing claims, and uses an identity mechanism that no external source actually has. Only pindata uses slugs as identity; external sources use their own IDs, names, and aliases.
+
+### Validation gaps
+
+Prior work ([ValidationFix.md](ValidationFix.md)) established claim-boundary validation (`validate_claim_value()`, `validate_claims_batch()`, `classify_claim()`) and audited model field validators. That work is complete for scalar and FK claims. The remaining gaps are:
+
+**Resolver and audit carry too much burden.** The resolver has defensive coercions that compensate for upstream validation inconsistencies. `validate_catalog` carries correctness checks that should have been enforced at the claim boundary. Both should be reviewed and trimmed after the ingest redesign, when it's clear which guard rails are still reachable.
+
+**`assert_claim()` lacks relationship target validation.** The bulk path (`bulk_assert_claims`) validates relationship targets. The single-claim path (`assert_claim()`) does not. The interactive PATCH path has its own validation upstream, so this is not a correctness hole today, but one-off management commands using `assert_claim()` for relationship claims would bypass the check.
+
+### Ingest layer problems
 
 **Non-atomic execution.** None of the individual ingest commands wrap their `handle()` in `transaction.atomic()`. (`ingest_all` wraps the full pipeline, but individual commands run without protection during development and debugging.) A command that fails after creating entity rows but before finishing claim assertion leaves partial state that is hard to diagnose and may not be safe to retry.
 
 **Direct writes bypass claims.** Despite the project rule that all catalog fields are claims-based, ingest still has multiple direct-write paths: `QuerySet.update()` for title slugs, `save(update_fields=...)` for wikidata IDs (which are also asserted as claims — a dual-write), direct `opdb_id` rewrites in changelog processing, and `ManufacturerResolver.resolve_or_create()` which creates `Manufacturer` rows with no claim provenance at all.
-
-**No retraction mechanism.** There is no explicit way to retract a claim or mark an entity as deleted through the claims system. The current relationship sweep machinery infers retraction from omission, but this is only meaningful during incremental re-ingest — and the project currently rebuilds from a bare DB each time, so sweep is effectively a no-op.
 
 **Snowflake claim collection.** The same conceptual operations (match or create entities, collect scalar claims, gate slug claims on source attribution, assert relationship claims with sweep) are reimplemented with different variable names, data structures, parameter conventions, and control flow in each command. During the slug migration, this caused an agent to assert slug claims for entities a source didn't create, a human reviewer to miss the same error for two entity types, and a tuple-arity change to break an unpack site that couldn't be found by grep.
 
@@ -33,7 +38,7 @@ The answers are buried in per-command control flow, variable names, tuple positi
 
 **Additive-only ingest.** The project is pre-launch. The normal workflow is to delete the database and rebuild from scratch. Ingest is a positive assertion process: sources assert what they currently provide. Absence from a source payload has no deletion semantics. The system does not infer what a source has deleted from what it didn't include.
 
-**Explicit operations only.** The system has three primitive write operations: `create_entity`, `assert_claim`, `retract_claim`. These are intentionally narrow and explicit. There is no omission-based retraction — if a claim needs to be retracted, the planner emits an explicit `retract_claim` operation. Retraction is available from day one as a primitive (entity lifecycle needs it), but near-term ingest adapters will rarely use it.
+**Explicit operations only.** The system has three primitive write operations: `create_entity`, `assert_claim`, `retract_claim`. These are intentionally narrow and explicit. `create_entity` creates a catalog row and automatically asserts `status=active` attributed to the source — this is the entity's creation provenance. There is no omission-based retraction — if a claim needs to be retracted, the planner emits an explicit `retract_claim` operation. Retraction is available from day one as a primitive (entity lifecycle needs it), but near-term ingest adapters will rarely use it.
 
 **One write path.** Every catalog fact enters the system through claims. No direct ORM writes to claim-controlled fields. Entity creation and claim persistence both happen in the apply layer's transaction — the planner never writes to the database.
 
@@ -106,8 +111,8 @@ Claim value validation is not a concern of the source adapter. The apply layer r
 
 The apply layer processes three primitive operations:
 
-- **`create_entity`** — create a new catalog entity row
-- **`assert_claim`** — record a positive source- or user-attributed fact about an entity
+- **`create_entity`** — create a new catalog entity row with the model class and required field values (slug, name, any non-nullable FKs, etc.). Automatically asserts `status=active` attributed to the source that triggered the creation. This is the entity's creation provenance — "who created Medieval Madness?" is answered by looking at the `status=active` claim: the source, changeset, ingest run, and timestamp.
+- **`assert_claim`** — record a positive source- or user-attributed fact about an entity (scalar field, relationship, or status)
 - **`retract_claim`** — explicitly withdraw a previously active claim
 
 These are intentionally narrow. The apply layer does not infer operations from absence — if a source wants to retract something, the planner must emit an explicit `retract_claim`.
@@ -147,15 +152,9 @@ A source may be disallowed from asserting a category of facts regardless of retr
 
 Ingest provenance is recorded at two levels:
 
-**IngestRun** — one record per source invocation. This is the run-level audit trail:
+**IngestRun** — one record per source invocation. This is the run-level audit trail: which source, when it ran, what input it used (fingerprint), whether it succeeded, and structured counts of records parsed/matched/created and claims asserted/retracted/rejected. Warnings and errors are captured as JSON arrays.
 
-- source (FK to Source, on_delete=PROTECT)
-- start/end timestamps
-- input fingerprint (CharField)
-- git SHA (CharField)
-- counts (JSONField: parsed, matched, created, asserted, retracted, rejected)
-- status (running, success, partial, failed)
-- warnings and errors (JSONField lists)
+Status is one of `running`, `success`, `failed` — enforced by a DB-level CHECK constraint. All defaults (status, counts) are DB-level. The admin is read-only.
 
 **ChangeSet** — one per target entity touched in the run. Groups all claims the source asserted about that entity (scalar claims, relationship claims) into a coherent unit. Each ChangeSet has a nullable FK to its IngestRun (on_delete=CASCADE — deleting a run deletes its ChangeSets). User-edit ChangeSets have a null ingest_run.
 
@@ -182,7 +181,7 @@ The apply layer is source-agnostic. It processes the three primitive operations 
 
 1. **Create IngestRun** (before transaction) — record source, start time, input fingerprint, status=`running`
 2. **Open transaction:**
-   a. **Create entities** — execute `create_entity` operations, capture PKs, patch them into associated claims
+   a. **Create entities** — execute `create_entity` operations, capture PKs, patch them into associated claims, assert `status=active` for each new entity attributed to the source
    b. **Validate** — run `validate_claims_batch` on planned `assert_claim` operations (see [ValidationFix.md](ValidationFix.md) Component B). Invalid claims are rejected with warnings, not persisted.
    c. **Persist assertions** — bulk-create a ChangeSet per target entity, bulk-create new Claim rows linked to their ChangeSet. Unchanged claims (same value already active for this source) are skipped. ChangeSet creation must be batched (`bulk_create`), not one `create()` per entity in a loop.
    d. **Persist retractions** — for any `retract_claim` operations, deactivate the targeted claims (set `is_active=False` and `retracted_by_changeset` to the entity's ChangeSet)
@@ -245,6 +244,8 @@ Every catalog entity gets a `status` field with three values:
 
 `status` is claim-controlled like any other catalog field. Resolution picks the winner by source priority. An editorial claim (priority 300) asserting `status=deleted` overrides any external source's implicit `status=active`.
 
+Every entity gets a `status=active` claim at creation time — the `create_entity` operation asserts it automatically, attributed to the source that triggered the creation. This means every entity has creation provenance from birth: who created it, when, and as part of which ingest run or user action.
+
 ### Duplicate handling
 
 Entities marked `status=duplicate` also have a `duplicate_of` relationship claim pointing to the canonical entity. This follows the same pattern as `variant_of`, `conversion_of`, and `remake_of` — a relationship claim pointing to another entity of the same type.
@@ -289,16 +290,26 @@ This also supports restoration — if a deletion was wrong, re-asserting `status
 - Run reporting
 - The "collect into a list, then bulk_assert, then resolve" boilerplate that every command currently reimplements
 
-## Relationship to ValidationFix
+## Prior work
 
-[ValidationFix.md](ValidationFix.md) established the claim boundary as the place where validation happens and built the machinery (`validate_claim_value()`, `validate_claims_batch()`, `classify_claim()`). This plan reuses that machinery in the apply layer — it does not replace or duplicate it.
+[ValidationFix.md](ValidationFix.md) established the claim boundary as the place where validation happens and built the machinery this plan reuses:
 
-The two plans address different layers of the same problem:
+- `validate_claim_value()` — per-field validation using Django's field validator chain
+- `validate_claims_batch()` — batch validation with structural claim classification
+- `classify_claim()` — structural classifier (DIRECT, RELATIONSHIP, EXTRA, UNRECOGNIZED)
+- `validate_fk_claims_batch()` — batched FK target existence checks
+- `validate_relationship_claims_batch()` — batched relationship target existence checks
+- Field validator audit — catalog model fields now carry adequate validators (range checks, format validators, mojibake checks)
 
-- **ValidationFix** answers: "given a claim, is it valid?" (claim-content validation at the boundary)
-- **IngestRefactor** answers: "should this claim exist at all, and how does it get to the boundary?" (claim-intent policy, source permissions, transaction management)
+The apply layer calls `validate_claims_batch()` on all planned claims. It does not replace or duplicate the validation machinery.
 
-ValidationFix step 7 adds a field validator audit to ensure model fields carry adequate validators. This complements the ingest redesign — the apply layer's validation step is stronger when the fields carry adequate validators, but the refactor does not depend on it. The two can proceed in parallel.
+[IngestRefactor.md](IngestRefactor.md) contains the earlier iteration of the ingest architecture design, including analysis of snowflake patterns and the original sync modes proposal. This document supersedes it.
+
+### Remaining validation work
+
+**Trim `validate_catalog` and review resolver guard rails** (after ingest redesign). Some resolver defensive coercions exist to compensate for the current ingest's lack of validation. After the redesign, the apply layer validates everything before persisting, making it clearer which guard rails are still reachable vs. dead code. `validate_catalog` checks should then be triaged into genuinely post-resolution checks (keep), checks redundant with claim boundary (remove), and info/data quality (keep as-is).
+
+**Wire relationship target validation into `assert_claim()`.** The bulk path validates relationship targets; the single-claim path does not. Not a correctness hole today (the PATCH path validates upstream), but a gap for one-off management commands.
 
 ## Non-Goals
 
@@ -308,3 +319,23 @@ This document defines the target architecture. It does not:
 - Define every dataclass or module in final detail
 - Choose a storage format for planned entity identities or run metadata
 - Decide exact package layout beyond the architectural split into source adapters and apply layer
+
+## Acceptance Criteria
+
+This plan is successful when:
+
+- The claims system has three explicit primitive operations: `create_entity`, `assert_claim`, `retract_claim`
+- Entity existence is provenance-backed via a claim-controlled `status` field (`active`, `deleted`, `duplicate`)
+- `duplicate_of` is a relationship claim following the `variant_of` pattern
+- Entity rows are never hard-deleted; catalog queries filter on `status=active`
+- Relationship claims reference target entities by PK, not by slug
+- All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields
+- Every ingest run is recorded as an IngestRun with structured run metadata
+- Every entity touched in an ingest run has a ChangeSet grouping its claims
+- Retractions are linked to ChangeSets via `retracted_by_changeset`
+- The apply layer is source-agnostic — it processes explicit operations with no source-specific logic
+- The planner is non-mutating — dry run produces a report without writing to the database
+- Running the same ingest twice produces identical database state (idempotency)
+- Source adapters replace the current imperative ingest commands
+- `validate_catalog` and resolver guard rails have been reviewed and trimmed post-redesign
+- `assert_claim()` validates relationship targets

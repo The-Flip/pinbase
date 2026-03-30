@@ -27,8 +27,34 @@ class SourceAdmin(admin.ModelAdmin):
 
 @admin.register(IngestRun)
 class IngestRunAdmin(admin.ModelAdmin):
+    """Read-only inspection view. IngestRun records are created by the apply layer."""
+
     list_display = ("pk", "source", "status", "started_at", "finished_at")
     list_filter = ("source", "status")
+    readonly_fields = (
+        "source",
+        "status",
+        "started_at",
+        "finished_at",
+        "input_fingerprint",
+        "records_parsed",
+        "records_matched",
+        "records_created",
+        "claims_asserted",
+        "claims_retracted",
+        "claims_rejected",
+        "warnings",
+        "errors",
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(ChangeSet)

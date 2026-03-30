@@ -3,7 +3,6 @@
 import pytest
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
-from django.utils import timezone
 
 from apps.catalog.models import Manufacturer
 from apps.provenance.models import ChangeSet, Claim, IngestRun, Source
@@ -66,7 +65,7 @@ class TestChangeSetClaimGrouping:
 
     def test_source_claim_with_changeset_accepted(self, source, mfr):
         """Source-attributed claims can use ChangeSets linked to matching ingest run."""
-        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
         cs = ChangeSet.objects.create(ingest_run=run)
         claim = Claim.objects.assert_claim(
             mfr, "name", "Williams", source=source, changeset=cs
@@ -78,7 +77,9 @@ class TestChangeSetClaimGrouping:
         other_source = Source.objects.create(
             name="OtherSource", slug="other-source", priority=5
         )
-        run = IngestRun.objects.create(source=other_source, started_at=timezone.now())
+        run = IngestRun.objects.create(
+            source=other_source, input_fingerprint="sha256:abc"
+        )
         cs = ChangeSet.objects.create(ingest_run=run)
         with pytest.raises(ValueError, match="same source"):
             Claim.objects.assert_claim(
@@ -126,7 +127,7 @@ class TestChangeSetConstraints:
         assert cs.pk is not None
 
     def test_ingest_run_only(self, source):
-        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
         cs = ChangeSet.objects.create(ingest_run=run)
         assert cs.pk is not None
 
@@ -135,6 +136,6 @@ class TestChangeSetConstraints:
         assert cs.pk is not None
 
     def test_both_user_and_ingest_run_rejected(self, user, source):
-        run = IngestRun.objects.create(source=source, started_at=timezone.now())
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
         with pytest.raises(IntegrityError):
             ChangeSet.objects.create(user=user, ingest_run=run)

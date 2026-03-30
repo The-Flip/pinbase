@@ -24,52 +24,90 @@ class TestIngestRunModel:
         now = timezone.now()
         run = IngestRun.objects.create(
             source=source,
-            started_at=now,
             finished_at=now,
             input_fingerprint="abc123def456",
-            git_sha="a" * 40,  # pragma: allowlist secret
             status=IngestRun.Status.SUCCESS,
-            counts={
-                "parsed": 100,
-                "matched": 95,
-                "created": 5,
-                "asserted": 200,
-                "retracted": 3,
-                "rejected": 2,
-            },
+            records_parsed=100,
+            records_matched=95,
+            records_created=5,
+            claims_asserted=200,
+            claims_retracted=3,
+            claims_rejected=2,
             warnings=["minor issue"],
             errors=[],
         )
         assert run.pk is not None
         assert run.source == source
+        assert run.started_at is not None
         assert run.status == "success"
-        assert run.counts["parsed"] == 100
+        assert run.records_parsed == 100
+        assert run.records_matched == 95
+        assert run.records_created == 5
+        assert run.claims_asserted == 200
+        assert run.claims_retracted == 3
+        assert run.claims_rejected == 2
         assert run.input_fingerprint == "abc123def456"
-        assert run.git_sha == "a" * 40
         assert run.warnings == ["minor issue"]
         assert run.errors == []
 
     def test_defaults(self, source):
         run = IngestRun.objects.create(
             source=source,
-            started_at=timezone.now(),
+            input_fingerprint="sha256:abc",
         )
+        assert run.started_at is not None
         assert run.finished_at is None
-        assert run.input_fingerprint == ""
-        assert run.git_sha == ""
         assert run.status == "running"
-        assert run.counts == {}
+        assert run.records_parsed == 0
+        assert run.records_matched == 0
+        assert run.records_created == 0
+        assert run.claims_asserted == 0
+        assert run.claims_retracted == 0
+        assert run.claims_rejected == 0
         assert run.warnings == []
         assert run.errors == []
 
     def test_str(self, source):
         run = IngestRun.objects.create(
             source=source,
-            started_at=timezone.now(),
+            input_fingerprint="sha256:abc",
             status=IngestRun.Status.FAILED,
         )
         assert "TestSource" in str(run)
         assert "failed" in str(run)
+
+    def test_status_constraint_rejects_invalid(self, source):
+        """DB-level CHECK constraint rejects invalid status values."""
+        from django.db import IntegrityError, connection
+
+        run = IngestRun.objects.create(
+            source=source,
+            input_fingerprint="sha256:abc",
+        )
+        with connection.cursor() as cursor:
+            with pytest.raises(IntegrityError):
+                cursor.execute(
+                    "UPDATE provenance_ingestrun SET status = %s WHERE id = %s",
+                    ["bogus", run.pk],
+                )
+
+    def test_negative_count_rejected(self, source):
+        """DB-level CHECK constraint rejects negative count values."""
+        from django.db import IntegrityError
+
+        with pytest.raises(IntegrityError):
+            IngestRun.objects.create(
+                source=source,
+                input_fingerprint="sha256:abc",
+                records_parsed=-1,
+            )
+
+    def test_input_fingerprint_required(self, source):
+        """input_fingerprint is NOT NULL with no default — omitting it is an error."""
+        from django.db import IntegrityError
+
+        with pytest.raises(IntegrityError):
+            IngestRun.objects.create(source=source)
 
 
 @pytest.mark.django_db
@@ -77,7 +115,7 @@ class TestChangeSetIngestRunFK:
     def test_changeset_linked_to_ingest_run(self, source):
         run = IngestRun.objects.create(
             source=source,
-            started_at=timezone.now(),
+            input_fingerprint="sha256:abc",
         )
         cs = ChangeSet.objects.create(ingest_run=run)
         assert cs.ingest_run == run
@@ -90,7 +128,7 @@ class TestChangeSetIngestRunFK:
     def test_delete_run_cascades_to_changesets(self, source):
         run = IngestRun.objects.create(
             source=source,
-            started_at=timezone.now(),
+            input_fingerprint="sha256:abc",
         )
         ChangeSet.objects.create(ingest_run=run)
         ChangeSet.objects.create(ingest_run=run)

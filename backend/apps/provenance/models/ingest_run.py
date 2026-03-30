@@ -19,7 +19,6 @@ class IngestRun(models.Model):
     class Status(models.TextChoices):
         RUNNING = "running", "Running"
         SUCCESS = "success", "Success"
-        PARTIAL = "partial", "Partial"
         FAILED = "failed", "Failed"
 
     source = models.ForeignKey(
@@ -27,34 +26,32 @@ class IngestRun(models.Model):
         on_delete=models.PROTECT,
         related_name="ingest_runs",
     )
-    started_at = models.DateTimeField()
-    finished_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text="Set on completion (success, partial, or failure).",
-    )
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
     input_fingerprint = models.CharField(
         max_length=255,
-        blank=True,
-        default="",
-        help_text="Hash of the source dump used as input.",
-    )
-    git_sha = models.CharField(
-        max_length=40,
-        blank=True,
-        default="",
-        help_text="Code version (git commit SHA) at run time.",
+        help_text="Hash of the source data file.",
     )
     status = models.CharField(
         max_length=10,
         choices=Status.choices,
-        default=Status.RUNNING,
+        db_default=Status.RUNNING,
+        help_text=(
+            "running — set at creation; a stale running record with an old "
+            "timestamp indicates a crash. "
+            "success — transaction committed, all data persisted. "
+            "failed — exception caught, transaction rolled back."
+        ),
     )
-    counts = models.JSONField(
-        default=dict,
-        blank=True,
-        help_text="Run statistics: parsed, matched, created, asserted, retracted, rejected.",
-    )
+
+    # ── Run statistics ──────────────────────────────────────────────
+    records_parsed = models.PositiveIntegerField(db_default=0)
+    records_matched = models.PositiveIntegerField(db_default=0)
+    records_created = models.PositiveIntegerField(db_default=0)
+    claims_asserted = models.PositiveIntegerField(db_default=0)
+    claims_retracted = models.PositiveIntegerField(db_default=0)
+    claims_rejected = models.PositiveIntegerField(db_default=0)
+
     warnings = models.JSONField(
         default=list,
         blank=True,
@@ -66,6 +63,16 @@ class IngestRun(models.Model):
 
     class Meta:
         ordering = ["-started_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(status__in=["running", "success", "failed"]),
+                name="provenance_ingestrun_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=~models.Q(input_fingerprint=""),
+                name="provenance_ingestrun_fingerprint_nonempty",
+            ),
+        ]
 
     def __str__(self) -> str:
         return f"IngestRun #{self.pk} ({self.source.name}, {self.status})"
