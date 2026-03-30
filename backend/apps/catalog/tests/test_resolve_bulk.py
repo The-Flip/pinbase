@@ -39,8 +39,8 @@ def editorial():
 @pytest.mark.django_db
 class TestResolveBulkTitle:
     def test_resolves_multiple_titles(self, opdb):
-        t1 = Title.objects.create(opdb_id="G1", name="", slug="t1")
-        t2 = Title.objects.create(opdb_id="G2", name="", slug="t2")
+        t1 = Title.objects.create(opdb_id="G1", name="Title One", slug="t1")
+        t2 = Title.objects.create(opdb_id="G2", name="Title Two", slug="t2")
 
         Claim.objects.assert_claim(t1, "name", "Godzilla", source=opdb)
         Claim.objects.assert_claim(t2, "name", "Blackout", source=opdb)
@@ -53,7 +53,7 @@ class TestResolveBulkTitle:
         assert t2.name == "Blackout"
 
     def test_winner_by_priority(self, opdb, editorial):
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1")
+        t = Title.objects.create(opdb_id="G1", name="Placeholder", slug="t1")
 
         Claim.objects.assert_claim(t, "name", "Low Priority", source=opdb)
         Claim.objects.assert_claim(t, "name", "High Priority", source=editorial)
@@ -64,20 +64,24 @@ class TestResolveBulkTitle:
         assert t.name == "High Priority"
 
     def test_no_claims_resets_to_default(self, opdb):
-        t = Title.objects.create(opdb_id="G1", name="Stale Name", slug="t1")
+        t = Title.objects.create(
+            opdb_id="G1", name="Stale Name", slug="t1", description="Stale desc"
+        )
 
-        # No claims — resolution should blank the name.
+        # Name claim to satisfy the NOT-blank constraint; no description claim.
+        Claim.objects.assert_claim(t, "name", "Stale Name", source=opdb)
         _resolve_bulk(Title, get_claim_fields(Title))
 
         t.refresh_from_db()
-        assert t.name == ""
+        assert t.description == ""  # Non-constrained field resets to default.
 
     def test_fk_resolves_franchise(self, opdb):
         from apps.catalog.resolve import resolve_all_entities
 
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1")
+        t = Title.objects.create(opdb_id="G1", name="Placeholder", slug="t1")
 
+        Claim.objects.assert_claim(t, "name", "Godzilla", source=opdb)
         Claim.objects.assert_claim(t, "franchise", "godzilla", source=opdb)
 
         resolve_all_entities(Title)
@@ -89,9 +93,12 @@ class TestResolveBulkTitle:
         from apps.catalog.resolve import resolve_all_entities
 
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1", franchise=franchise)
+        t = Title.objects.create(
+            opdb_id="G1", name="Placeholder", slug="t1", franchise=franchise
+        )
 
-        # No franchise claim — should reset to None.
+        # Name claim but no franchise claim — franchise should reset to None.
+        Claim.objects.assert_claim(t, "name", "Godzilla", source=opdb)
         resolve_all_entities(Title)
 
         t.refresh_from_db()
@@ -99,7 +106,7 @@ class TestResolveBulkTitle:
 
     def test_object_ids_scoping(self, opdb):
         t1 = Title.objects.create(opdb_id="G1", name="Untouched", slug="t1")
-        t2 = Title.objects.create(opdb_id="G2", name="", slug="t2")
+        t2 = Title.objects.create(opdb_id="G2", name="Placeholder", slug="t2")
 
         Claim.objects.assert_claim(t2, "name", "Resolved", source=opdb)
 
@@ -112,7 +119,7 @@ class TestResolveBulkTitle:
         assert t2.name == "Resolved"
 
     def test_updated_at_is_set(self, opdb):
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1")
+        t = Title.objects.create(opdb_id="G1", name="Placeholder", slug="t1")
         old_updated_at = t.updated_at
 
         Claim.objects.assert_claim(t, "name", "New Name", source=opdb)
@@ -149,7 +156,7 @@ class TestResolveBulkManufacturer:
 class TestResolveBulkMarkdownReferences:
     def test_bulk_resolve_syncs_record_references(self, opdb):
         """_resolve_bulk populates RecordReference for markdown link fields."""
-        mfr = Manufacturer.objects.create(name="", slug="williams")
+        mfr = Manufacturer.objects.create(name="Williams", slug="williams")
         system = System.objects.create(name="WPC-95", slug="wpc-95", manufacturer=mfr)
 
         Claim.objects.assert_claim(mfr, "name", "Williams", source=opdb)
@@ -171,7 +178,7 @@ class TestResolveBulkMarkdownReferences:
 
     def test_bulk_resolve_cleans_stale_references(self, opdb):
         """_resolve_bulk removes RecordReference when markdown links are removed."""
-        mfr = Manufacturer.objects.create(name="", slug="williams")
+        mfr = Manufacturer.objects.create(name="Williams", slug="williams")
         system = System.objects.create(name="WPC-95", slug="wpc-95", manufacturer=mfr)
 
         # First resolve with a link
@@ -375,7 +382,7 @@ class TestResolveBulkTaxonomy:
         """Invalid integer values are now rejected by assert_claim validation."""
         from django.core.exceptions import ValidationError
 
-        tag = Tag.objects.create(name="", slug="test-tag")
+        tag = Tag.objects.create(name="Test Tag", slug="test-tag")
 
         Claim.objects.assert_claim(tag, "name", "Test Tag", source=opdb)
         with pytest.raises(ValidationError, match="must be an integer"):
@@ -386,7 +393,7 @@ class TestResolveBulkTaxonomy:
 class TestResolveTitle:
     def test_single_object_wrapper(self, opdb):
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1")
+        t = Title.objects.create(opdb_id="G1", name="Placeholder", slug="t1")
 
         Claim.objects.assert_claim(t, "name", "Godzilla", source=opdb)
         Claim.objects.assert_claim(t, "description", "A monster game.", source=opdb)
@@ -400,7 +407,9 @@ class TestResolveTitle:
 
     def test_resets_franchise_when_no_claim(self, opdb):
         franchise = Franchise.objects.create(name="Godzilla", slug="godzilla")
-        t = Title.objects.create(opdb_id="G1", name="", slug="t1", franchise=franchise)
+        t = Title.objects.create(
+            opdb_id="G1", name="Placeholder", slug="t1", franchise=franchise
+        )
 
         # Only a name claim, no franchise.
         Claim.objects.assert_claim(t, "name", "Godzilla", source=opdb)

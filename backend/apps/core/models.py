@@ -5,6 +5,7 @@ from __future__ import annotations
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.functions import Now
 from django.db.models.signals import post_delete
 
 from .validators import validate_no_mojibake as _validate_no_mojibake
@@ -13,7 +14,7 @@ from .validators import validate_no_mojibake as _validate_no_mojibake
 class TimeStampedModel(models.Model):
     """Abstract base adding created_at / updated_at timestamps."""
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_default=Now())
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -40,6 +41,14 @@ class AliasBase(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.value
+
+
+def field_not_blank(field_name):
+    """CHECK constraint: field != ''. Use in concrete model Meta.constraints."""
+    return models.CheckConstraint(
+        condition=~models.Q(**{field_name: ""}),
+        name=f"%(app_label)s_%(class)s_{field_name}_not_blank",
+    )
 
 
 class License(TimeStampedModel):
@@ -76,6 +85,10 @@ class License(TimeStampedModel):
 
     class Meta:
         ordering = ["-permissiveness_rank", "name"]
+        constraints = [
+            field_not_blank("name"),
+            field_not_blank("short_name"),
+        ]
 
     def __str__(self) -> str:
         return self.short_name
@@ -248,7 +261,12 @@ class RecordReference(models.Model):
     target = GenericForeignKey("target_type", "target_id")
 
     class Meta:
-        unique_together = [["source_type", "source_id", "target_type", "target_id"]]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_type", "source_id", "target_type", "target_id"],
+                name="core_recordreference_unique_source_target",
+            ),
+        ]
         indexes = [
             models.Index(fields=["target_type", "target_id"]),  # "What links here"
             models.Index(fields=["source_type", "source_id"]),  # Cleanup on delete

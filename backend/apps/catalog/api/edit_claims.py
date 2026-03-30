@@ -632,6 +632,8 @@ def execute_claims(
             for resolver in resolvers or []:
                 resolver()
             resolve_fn(entity)
+    except ValidationError as exc:
+        raise HttpError(422, "; ".join(exc.messages)) from exc
     except IntegrityError as exc:
         raise HttpError(422, f"Unique constraint violation: {exc}") from exc
 

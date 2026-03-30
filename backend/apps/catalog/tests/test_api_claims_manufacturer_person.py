@@ -15,13 +15,17 @@ def user(db):
 
 
 @pytest.fixture
-def mfr(db):
-    return Manufacturer.objects.create(name="Williams", slug="williams")
+def mfr(db, _bootstrap_source):
+    m = Manufacturer.objects.create(name="Williams", slug="williams")
+    Claim.objects.assert_claim(m, "name", "Williams", source=_bootstrap_source)
+    return m
 
 
 @pytest.fixture
-def person(db):
-    return Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
+def person(db, _bootstrap_source):
+    p = Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
+    Claim.objects.assert_claim(p, "name", "Pat Lawlor", source=_bootstrap_source)
+    return p
 
 
 # ---------------------------------------------------------------------------

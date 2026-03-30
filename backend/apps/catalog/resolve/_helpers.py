@@ -15,6 +15,27 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def validate_check_constraints(obj):
+    """Validate cross-field CheckConstraints before save/bulk_update.
+
+    Only validates constraints tagged with ``violation_error_code`` — these
+    are cross-field invariants (year ordering, month-requires-year, self-ref
+    anti-cycle) that the resolver can violate by combining independent claim
+    winners.  Single-field constraints (non-blank, range) are DB safety nets
+    for external writes and are not checked here — the resolver legitimately
+    resets unclaimed fields to defaults like ``""``.
+
+    Skips UniqueConstraints entirely — their ``validate()`` fires a DB query
+    per constraint, which is O(n * constraints) in a bulk loop.
+    """
+    for constraint in obj._meta.constraints:
+        if (
+            isinstance(constraint, models.CheckConstraint)
+            and constraint.violation_error_code is not None
+        ):
+            constraint.validate(type(obj), obj)
+
+
 @dataclass
 class FKInfo:
     """FK field metadata and pre-fetched lookups for bulk resolution."""

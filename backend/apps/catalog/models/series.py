@@ -10,6 +10,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -34,7 +35,7 @@ class Franchise(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -64,7 +65,7 @@ class Series(SluggedModel, LinkableModel, TimeStampedModel):
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "series"
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name

@@ -10,6 +10,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -49,7 +50,7 @@ class System(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -73,6 +74,7 @@ class SystemMpuString(TimeStampedModel):
                 fields=["value"],
                 name="catalog_unique_system_mpu_string",
             ),
+            field_not_blank("value"),
         ]
 
     def __str__(self) -> str:

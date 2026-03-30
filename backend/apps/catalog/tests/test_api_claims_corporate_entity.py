@@ -13,7 +13,7 @@ from apps.catalog.models import (
     Manufacturer,
     Title,
 )
-from apps.provenance.models import ChangeSet
+from apps.provenance.models import ChangeSet, Claim
 
 User = get_user_model()
 
@@ -24,30 +24,40 @@ def user(db):
 
 
 @pytest.fixture
-def mfr(db):
-    return Manufacturer.objects.create(name="Gottlieb", slug="gottlieb")
+def mfr(db, _bootstrap_source):
+    m = Manufacturer.objects.create(name="Gottlieb", slug="gottlieb")
+    Claim.objects.assert_claim(m, "name", "Gottlieb", source=_bootstrap_source)
+    return m
 
 
 @pytest.fixture
-def entity(db, mfr):
-    return CorporateEntity.objects.create(
+def entity(db, mfr, _bootstrap_source):
+    ce = CorporateEntity.objects.create(
         name="D. Gottlieb & Company",
         slug="d-gottlieb-company",
         manufacturer=mfr,
         year_start=1927,
         year_end=1983,
     )
+    Claim.objects.assert_claim(
+        ce, "name", "D. Gottlieb & Company", source=_bootstrap_source
+    )
+    return ce
 
 
 @pytest.fixture
-def other_entity(db, mfr):
-    return CorporateEntity.objects.create(
+def other_entity(db, mfr, _bootstrap_source):
+    ce = CorporateEntity.objects.create(
         name="Mylstar Electronics",
         slug="mylstar-electronics",
         manufacturer=mfr,
         year_start=1983,
         year_end=1984,
     )
+    Claim.objects.assert_claim(
+        ce, "name", "Mylstar Electronics", source=_bootstrap_source
+    )
+    return ce
 
 
 def _patch(client, slug, body):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from django.db import models
+from django.db.models.functions import Now
 
 from .source import Source
 
@@ -26,7 +27,7 @@ class IngestRun(models.Model):
         on_delete=models.PROTECT,
         related_name="ingest_runs",
     )
-    started_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(auto_now_add=True, db_default=Now())
     finished_at = models.DateTimeField(null=True, blank=True)
     input_fingerprint = models.CharField(
         max_length=255,
@@ -71,6 +72,16 @@ class IngestRun(models.Model):
             models.CheckConstraint(
                 condition=~models.Q(input_fingerprint=""),
                 name="provenance_ingestrun_fingerprint_nonempty",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(finished_at__isnull=True) | ~models.Q(status="running")
+                ),
+                name="provenance_ingestrun_finished_requires_not_running",
+                violation_error_message=(
+                    "finished_at is only allowed when status is not 'running'."
+                ),
+                violation_error_code="cross_field",
             ),
         ]
 

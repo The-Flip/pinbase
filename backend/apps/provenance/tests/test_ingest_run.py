@@ -122,27 +122,31 @@ class TestChangeSetIngestRunFK:
         assert run.changesets.count() == 1
 
     def test_changeset_without_ingest_run(self):
-        cs = ChangeSet.objects.create()
+        from django.contrib.auth import get_user_model
+
+        user = get_user_model().objects.create(username="editor")
+        cs = ChangeSet.objects.create(user=user)
         assert cs.ingest_run is None
 
-    def test_delete_run_cascades_to_changesets(self, source):
+    def test_delete_run_blocked_by_changesets(self, source):
+        """PROTECT prevents deleting an IngestRun that has ChangeSets."""
+        from django.db.models import ProtectedError
+
         run = IngestRun.objects.create(
             source=source,
             input_fingerprint="sha256:abc",
         )
         ChangeSet.objects.create(ingest_run=run)
-        ChangeSet.objects.create(ingest_run=run)
-        run_pk = run.pk
-        assert ChangeSet.objects.filter(ingest_run_id=run_pk).count() == 2
-        run.delete()
-        assert ChangeSet.objects.filter(ingest_run_id=run_pk).count() == 0
+        with pytest.raises(ProtectedError):
+            run.delete()
 
 
 @pytest.mark.django_db
 class TestClaimRetractedByChangeset:
     def test_retracted_by_changeset_set(self, source, mfr):
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
         claim = Claim.objects.assert_claim(mfr, "name", "Williams", source=source)
-        cs = ChangeSet.objects.create()
+        cs = ChangeSet.objects.create(ingest_run=run)
         claim.retracted_by_changeset = cs
         claim.is_active = False
         claim.save()
@@ -156,13 +160,16 @@ class TestClaimRetractedByChangeset:
         claim = Claim.objects.assert_claim(mfr, "name", "Williams", source=source)
         assert claim.retracted_by_changeset is None
 
-    def test_delete_changeset_nullifies_retracted_by(self, source, mfr):
+    def test_delete_changeset_blocked_by_retracted_claims(self, source, mfr):
+        """PROTECT prevents deleting a ChangeSet referenced by retracted claims."""
+        from django.db.models import ProtectedError
+
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:ret")
         claim = Claim.objects.assert_claim(mfr, "name", "Williams", source=source)
-        cs = ChangeSet.objects.create()
+        cs = ChangeSet.objects.create(ingest_run=run)
         claim.retracted_by_changeset = cs
         claim.is_active = False
         claim.save()
 
-        cs.delete()
-        claim.refresh_from_db()
-        assert claim.retracted_by_changeset is None
+        with pytest.raises(ProtectedError):
+            cs.delete()

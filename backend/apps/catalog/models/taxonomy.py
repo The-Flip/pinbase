@@ -12,6 +12,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -48,7 +49,7 @@ class TechnologyGeneration(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -75,7 +76,7 @@ class TechnologySubgeneration(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -99,7 +100,7 @@ class DisplayType(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -126,7 +127,7 @@ class DisplaySubtype(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -147,7 +148,7 @@ class Cabinet(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -168,7 +169,7 @@ class GameFormat(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -193,7 +194,7 @@ class RewardType(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order", "name"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -208,6 +209,7 @@ class RewardTypeAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 name="catalog_unique_reward_type_alias_lower",
@@ -233,7 +235,7 @@ class Tag(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -254,7 +256,7 @@ class CreditRole(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["display_order"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name

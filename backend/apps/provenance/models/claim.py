@@ -6,6 +6,9 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
+from django.db.models.functions import Now
+
+from apps.core.models import field_not_blank
 
 from .changeset import ChangeSet
 from .source import Source
@@ -259,7 +262,7 @@ class Claim(models.Model):
 
     objects = ClaimManager()
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     subject = GenericForeignKey("content_type", "object_id")
 
@@ -272,7 +275,7 @@ class Claim(models.Model):
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="claims",
         null=True,
         blank=True,
@@ -280,7 +283,6 @@ class Claim(models.Model):
     field_name = models.CharField(max_length=255)
     claim_key = models.CharField(
         max_length=255,
-        default="",
         help_text=(
             "Identity key for uniqueness. Equals field_name for scalar claims. "
             "For relationship claims, encodes the relationship identity "
@@ -289,7 +291,7 @@ class Claim(models.Model):
     )
     changeset = models.ForeignKey(
         ChangeSet,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="claims",
         null=True,
         blank=True,
@@ -297,32 +299,39 @@ class Claim(models.Model):
     )
     retracted_by_changeset = models.ForeignKey(
         ChangeSet,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="retracted_claims",
         null=True,
         blank=True,
         help_text="The changeset that deactivated this claim (full_sync retraction).",
     )
     value = models.JSONField()
-    citation = models.TextField(blank=True)
+    citation = models.TextField(blank=True, default="", db_default="")
     license = models.ForeignKey(
         "core.License",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True,
         blank=True,
         related_name="claims",
         help_text="Per-claim license override. Null inherits from source field license or source default.",
     )
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(
+        default=True,
+        db_default=True,
+        help_text="Current assertion from this author for this claim_key on this subject. False = superseded or retracted.",
+    )
     needs_review = models.BooleanField(
         default=False,
+        db_default=False,
         help_text="Flag for low-confidence claims that need human review.",
     )
     needs_review_notes = models.TextField(
         blank=True,
+        default="",
+        db_default="",
         help_text="Context for reviewers about why this claim needs attention.",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_default=Now())
 
     class Meta:
         indexes = [
@@ -350,6 +359,19 @@ class Claim(models.Model):
                 fields=["content_type", "object_id", "user", "claim_key"],
                 condition=models.Q(is_active=True, user__isnull=False),
                 name="provenance_unique_active_claim_per_user",
+            ),
+            field_not_blank("field_name"),
+            field_not_blank("claim_key"),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(retracted_by_changeset__isnull=True)
+                    | models.Q(is_active=False)
+                ),
+                name="provenance_claim_retracted_requires_inactive",
+                violation_error_message=(
+                    "retracted_by_changeset is only allowed when is_active=False."
+                ),
+                violation_error_code="cross_field",
             ),
         ]
 

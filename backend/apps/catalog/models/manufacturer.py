@@ -13,6 +13,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -23,6 +24,9 @@ __all__ = [
     "CorporateEntity",
     "CorporateEntityAlias",
 ]
+
+YEAR_MIN, YEAR_MAX = 1800, 2100
+EXTERNAL_ID_MIN = 1
 
 
 class Manufacturer(SluggedModel, LinkableModel, TimeStampedModel):
@@ -43,7 +47,7 @@ class Manufacturer(SluggedModel, LinkableModel, TimeStampedModel):
         null=True,
         blank=True,
         help_text="OPDB manufacturer_id for this brand.",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(EXTERNAL_ID_MIN)],
     )
     wikidata_id = models.CharField(
         max_length=20,
@@ -71,7 +75,15 @@ class Manufacturer(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [
+            slug_not_blank(),
+            field_not_blank("name"),
+            models.CheckConstraint(
+                condition=models.Q(opdb_manufacturer_id__isnull=True)
+                | models.Q(opdb_manufacturer_id__gte=EXTERNAL_ID_MIN),
+                name="catalog_manufacturer_opdb_manufacturer_id_min",
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name
@@ -88,6 +100,7 @@ class ManufacturerAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 name="catalog_unique_manufacturer_alias_lower",
@@ -121,19 +134,19 @@ class CorporateEntity(SluggedModel, LinkableModel, TimeStampedModel):
         null=True,
         blank=True,
         help_text="IPDB ManufacturerId for this corporate entity.",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(EXTERNAL_ID_MIN)],
     )
     year_start = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         help_text="Year this corporate entity was established.",
-        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+        validators=[MinValueValidator(YEAR_MIN), MaxValueValidator(YEAR_MAX)],
     )
     year_end = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         help_text="Year this corporate entity ceased operations.",
-        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+        validators=[MinValueValidator(YEAR_MIN), MaxValueValidator(YEAR_MAX)],
     )
 
     claims = GenericRelation("provenance.Claim")
@@ -142,7 +155,35 @@ class CorporateEntity(SluggedModel, LinkableModel, TimeStampedModel):
         ordering = ["manufacturer", "year_start"]
         verbose_name = "corporate entity"
         verbose_name_plural = "corporate entities"
-        constraints = [slug_not_blank()]
+        constraints = [
+            slug_not_blank(),
+            field_not_blank("name"),
+            models.CheckConstraint(
+                condition=models.Q(year_start__isnull=True)
+                | models.Q(year_start__gte=YEAR_MIN, year_start__lte=YEAR_MAX),
+                name="catalog_corporateentity_year_start_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(year_end__isnull=True)
+                | models.Q(year_end__gte=YEAR_MIN, year_end__lte=YEAR_MAX),
+                name="catalog_corporateentity_year_end_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(ipdb_manufacturer_id__isnull=True)
+                | models.Q(ipdb_manufacturer_id__gte=EXTERNAL_ID_MIN),
+                name="catalog_corporateentity_ipdb_manufacturer_id_min",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(year_start__isnull=True)
+                    | models.Q(year_end__isnull=True)
+                    | models.Q(year_start__lte=models.F("year_end"))
+                ),
+                name="catalog_corporateentity_year_start_lte_year_end",
+                violation_error_message="year_start must be <= year_end.",
+                violation_error_code="cross_field",
+            ),
+        ]
 
     def __str__(self) -> str:
         if self.year_start:
@@ -162,6 +203,7 @@ class CorporateEntityAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 name="catalog_unique_corporate_entity_alias_lower",

@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from apps.catalog.models import Manufacturer
+from apps.core.models import License
 from apps.provenance.models import ChangeSet, Claim, IngestRun, Source
 
 User = get_user_model()
@@ -38,10 +39,12 @@ class TestChangeSetModel:
         cs = ChangeSet.objects.create(user=user)
         assert cs.note == ""
 
-    def test_changeset_without_user(self):
-        """ChangeSet with null user is allowed (source-level changesets)."""
-        cs = ChangeSet.objects.create()
+    def test_changeset_with_ingest_run(self, source):
+        """ChangeSet with ingest_run (no user) is allowed."""
+        run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
+        cs = ChangeSet.objects.create(ingest_run=run)
         assert cs.user is None
+        assert cs.ingest_run == run
 
 
 @pytest.mark.django_db
@@ -86,14 +89,6 @@ class TestChangeSetClaimGrouping:
                 mfr, "name", "Williams", source=source, changeset=cs
             )
 
-    def test_source_claim_changeset_without_ingest_run_rejected(self, source, mfr):
-        """Source-attributed claims require a changeset with an ingest run."""
-        cs = ChangeSet.objects.create()
-        with pytest.raises(ValueError, match="IngestRun"):
-            Claim.objects.assert_claim(
-                mfr, "name", "Williams", source=source, changeset=cs
-            )
-
     def test_changeset_user_mismatch_rejected(self, user, mfr):
         """ChangeSet user must match the claim user."""
         other_user = User.objects.create(username="other")
@@ -131,11 +126,55 @@ class TestChangeSetConstraints:
         cs = ChangeSet.objects.create(ingest_run=run)
         assert cs.pk is not None
 
-    def test_neither_user_nor_ingest_run(self):
-        cs = ChangeSet.objects.create()
-        assert cs.pk is not None
+    def test_neither_user_nor_ingest_run_rejected(self):
+        with pytest.raises(IntegrityError):
+            ChangeSet.objects.create()
 
     def test_both_user_and_ingest_run_rejected(self, user, source):
         run = IngestRun.objects.create(source=source, input_fingerprint="sha256:abc")
         with pytest.raises(IntegrityError):
             ChangeSet.objects.create(user=user, ingest_run=run)
+
+
+@pytest.mark.django_db
+class TestClaimConstraints:
+    def test_empty_claim_key_rejected(self, source, mfr):
+        """DB-level CHECK constraint rejects empty claim_key."""
+        from django.db import IntegrityError, connection
+
+        claim = Claim.objects.assert_claim(mfr, "name", "Williams", source=source)
+        with connection.cursor() as cursor:
+            with pytest.raises(IntegrityError):
+                cursor.execute(
+                    "UPDATE provenance_claim SET claim_key = '' WHERE id = %s",
+                    [claim.pk],
+                )
+
+
+@pytest.mark.django_db
+class TestClaimProtect:
+    def test_delete_user_blocked_by_claims(self, user, mfr):
+        """PROTECT prevents deleting a user who has claims."""
+        from django.db.models import ProtectedError
+
+        Claim.objects.assert_claim(mfr, "name", "Williams", user=user)
+        with pytest.raises(ProtectedError):
+            user.delete()
+
+    def test_delete_changeset_blocked_by_claims(self, user, mfr):
+        """PROTECT prevents deleting a ChangeSet that has claims."""
+        from django.db.models import ProtectedError
+
+        cs = ChangeSet.objects.create(user=user)
+        Claim.objects.assert_claim(mfr, "name", "Williams", user=user, changeset=cs)
+        with pytest.raises(ProtectedError):
+            cs.delete()
+
+    def test_delete_license_blocked_by_claims(self, source, mfr):
+        """PROTECT prevents deleting a License referenced by claims."""
+        from django.db.models import ProtectedError
+
+        lic = License.objects.create(name="Test License", short_name="test-lic")
+        Claim.objects.assert_claim(mfr, "name", "Williams", source=source, license=lic)
+        with pytest.raises(ProtectedError):
+            lic.delete()

@@ -363,6 +363,7 @@ class TestOpdbStaleRelationshipCleanup:
             object_id=pm.pk,
             source=source,
             field_name="variant_of",
+            claim_key="variant_of",
             value="some-parent",
             is_active=True,
         )
@@ -393,6 +394,7 @@ class TestOpdbStaleRelationshipCleanup:
             object_id=pm.pk,
             source=source,
             field_name="title",
+            claim_key="title",
             value="some-title",
             is_active=True,
         )

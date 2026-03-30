@@ -196,10 +196,15 @@ class TestIngestPinbaseModels:
         )
         export_dir = _write_models_json(
             [
-                {"slug": "parent-model", "opdb_id": "Gtest-Mparent"},
+                {
+                    "slug": "parent-model",
+                    "opdb_id": "Gtest-Mparent",
+                    "name": "Parent Model",
+                },
                 {
                     "slug": "child-model",
                     "opdb_id": "Gtest-Mchild",
+                    "name": "Child Model",
                     "variant_of": "parent-model",
                 },
             ]
@@ -227,10 +232,15 @@ class TestIngestPinbaseModels:
         )
         export_dir = _write_models_json(
             [
-                {"slug": "right-parent", "opdb_id": "Gtest-Mright"},
+                {
+                    "slug": "right-parent",
+                    "opdb_id": "Gtest-Mright",
+                    "name": "Right Parent",
+                },
                 {
                     "slug": "child-model",
                     "opdb_id": "Gtest-Mchild",
+                    "name": "Child",
                     "variant_of": "right-parent",
                 },
             ]
@@ -257,10 +267,15 @@ class TestIngestPinbaseModels:
         # models.json says B is the real parent, A is the variant.
         export_dir = _write_models_json(
             [
-                {"slug": "model-b-le", "opdb_id": "Gtest-Mb"},
+                {
+                    "slug": "model-b-le",
+                    "opdb_id": "Gtest-Mb",
+                    "name": "Model B (LE)",
+                },
                 {
                     "slug": "model-a-ce",
                     "opdb_id": "Gtest-Ma",
+                    "name": "Model A (CE)",
                     "variant_of": "model-b-le",
                 },
             ]
@@ -366,6 +381,7 @@ class TestIngestPinbaseModels:
                 {
                     "slug": "test-model",
                     "opdb_id": "Gtest-Mtest",
+                    "name": "Test Model",
                     "title_slug": "test-title",
                 },
             ]

@@ -22,6 +22,7 @@ from ._helpers import (
     get_field_defaults,
     get_preserve_fields,
     resolve_unique_conflicts,
+    validate_check_constraints,
 )
 
 logger = logging.getLogger(__name__)
@@ -222,6 +223,10 @@ def _resolve_bulk(
     if has_slug:
         resolve_unique_conflicts(all_objs, "slug", model_class, pre_slugs)
 
+    # 4c. Validate check constraints before writing.
+    for obj in all_objs:
+        validate_check_constraints(obj)
+
     # 5. Bulk write.
     update_fields = list(set(direct_fields.values())) + ["updated_at"]
     if has_extra_data:
@@ -276,6 +281,7 @@ def resolve_entity(obj):
         )
         obj.slug = original_slug
 
+    validate_check_constraints(obj)
     obj.save()
     _sync_markdown_references(obj)
     return obj

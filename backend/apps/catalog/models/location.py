@@ -6,7 +6,9 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.functions import Lower
 
-from apps.core.models import AliasBase
+from django.db.models.functions import Now
+
+from apps.core.models import AliasBase, field_not_blank
 from apps.core.validators import validate_no_mojibake
 
 __all__ = [
@@ -31,7 +33,7 @@ class Location(models.Model):
     claims_exempt = frozenset({"location_path"})
     claim_fk_lookups = {"parent": "location_path"}
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_default=Now())
     updated_at = models.DateTimeField(auto_now=True)
     location_path = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=200)
@@ -64,6 +66,17 @@ class Location(models.Model):
 
     class Meta:
         ordering = ["location_path"]
+        constraints = [
+            field_not_blank("location_path"),
+            field_not_blank("slug"),
+            models.CheckConstraint(
+                condition=models.Q(parent__isnull=True)
+                | ~models.Q(parent=models.F("pk")),
+                name="catalog_location_parent_not_self",
+                violation_error_message="A location cannot be its own parent.",
+                violation_error_code="cross_field",
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name or self.location_path
@@ -82,11 +95,12 @@ class LocationAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 "location",
                 name="catalog_unique_location_alias_per_location",
-            )
+            ),
         ]
 
 
@@ -113,7 +127,12 @@ class CorporateEntityLocation(models.Model):
     )
 
     class Meta:
-        unique_together = [("corporate_entity", "location")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["corporate_entity", "location"],
+                name="catalog_corporateentitylocation_unique_pair",
+            ),
+        ]
         verbose_name = "corporate entity location"
         verbose_name_plural = "corporate entity locations"
 

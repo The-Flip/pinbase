@@ -44,12 +44,31 @@ def _patch(client, path: str, body: dict):
     )
 
 
+def _get_bootstrap_source():
+    """Get or create a low-priority source for bootstrap name claims."""
+    src, _ = Source.objects.get_or_create(
+        slug="bootstrap",
+        defaults={"name": "Bootstrap", "source_type": "editorial", "priority": 1},
+    )
+    return src
+
+
+def _assert_name_claim(entity):
+    """Assert a bootstrap name claim for entities with non-unique name fields."""
+    Claim.objects.assert_claim(
+        entity, "name", entity.name, source=_get_bootstrap_source()
+    )
+    return entity
+
+
 def _create_franchise():
     return Franchise.objects.create(name="Star Trek", slug="star-trek")
 
 
 def _create_series():
-    return Series.objects.create(name="Eight Ball", slug="eight-ball")
+    return _assert_name_claim(
+        Series.objects.create(name="Eight Ball", slug="eight-ball")
+    )
 
 
 def _create_conflicting_franchise():
@@ -57,7 +76,9 @@ def _create_conflicting_franchise():
 
 
 def _create_conflicting_series():
-    return Series.objects.create(name="Eight Ball Classics", slug="eight-ball-classics")
+    return _assert_name_claim(
+        Series.objects.create(name="Eight Ball Classics", slug="eight-ball-classics")
+    )
 
 
 def _create_system():
@@ -72,10 +93,12 @@ def _create_technology_subgeneration():
     gen = TechnologyGeneration.objects.create(
         name="Electromechanical", slug="electromechanical"
     )
-    return TechnologySubgeneration.objects.create(
-        name="Late EM",
-        slug="late-em",
-        technology_generation=gen,
+    return _assert_name_claim(
+        TechnologySubgeneration.objects.create(
+            name="Late EM",
+            slug="late-em",
+            technology_generation=gen,
+        )
     )
 
 
@@ -85,10 +108,12 @@ def _create_display_type():
 
 def _create_display_subtype():
     display_type = DisplayType.objects.create(name="LCD", slug="lcd")
-    return DisplaySubtype.objects.create(
-        name="HD LCD",
-        slug="hd-lcd",
-        display_type=display_type,
+    return _assert_name_claim(
+        DisplaySubtype.objects.create(
+            name="HD LCD",
+            slug="hd-lcd",
+            display_type=display_type,
+        )
     )
 
 
@@ -348,6 +373,7 @@ class TestPatchSeriesResponseShape:
         self, client, user, williams_entity, credit_roles
     ):
         series = Series.objects.create(name="Eight Ball", slug="eight-ball")
+        _assert_name_claim(series)
         title = Title.objects.create(name="Eight Ball Deluxe", slug="eight-ball-deluxe")
         series.titles.add(title)
         MachineModel.objects.create(

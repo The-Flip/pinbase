@@ -22,10 +22,12 @@ def user(db):
 
 
 @pytest.fixture
-def title(db):
-    return Title.objects.create(
+def title(db, _bootstrap_source):
+    t = Title.objects.create(
         name="Medieval Madness", slug="medieval-madness", opdb_id="G5pe4"
     )
+    Claim.objects.assert_claim(t, "name", "Medieval Madness", source=_bootstrap_source)
+    return t
 
 
 @pytest.fixture

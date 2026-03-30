@@ -12,6 +12,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -45,7 +46,7 @@ class Theme(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
@@ -58,6 +59,7 @@ class ThemeAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 name="catalog_unique_theme_alias_lower",

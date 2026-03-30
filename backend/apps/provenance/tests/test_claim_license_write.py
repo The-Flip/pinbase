@@ -13,13 +13,25 @@ def source():
 
 
 @pytest.fixture
-def cc_by_sa():
-    return License.objects.get(slug="cc-by-sa-4-0")
+def cc_by_sa(db):
+    return License.objects.create(
+        name="CC BY-SA 4.0",
+        slug="cc-by-sa-4-0",
+        short_name="CC BY-SA",
+        permissiveness_rank=50,
+        allows_display=True,
+    )
 
 
 @pytest.fixture
-def not_allowed():
-    return License.objects.get(slug="not-allowed")
+def not_allowed(db):
+    return License.objects.create(
+        name="Not Allowed",
+        slug="not-allowed",
+        short_name="Not Allowed",
+        permissiveness_rank=0,
+        allows_display=False,
+    )
 
 
 @pytest.mark.django_db

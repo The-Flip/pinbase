@@ -21,10 +21,12 @@ def low_priority_source(db):
 
 
 @pytest.fixture
-def pm(db):
-    return MachineModel.objects.create(
+def pm(db, _bootstrap_source):
+    pm = MachineModel.objects.create(
         name="Medieval Madness", slug="medieval-madness", year=1997
     )
+    Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=_bootstrap_source)
+    return pm
 
 
 @pytest.mark.django_db
@@ -143,6 +145,9 @@ class TestPatchClaimsPersistence:
     def test_user_claim_beats_lower_priority_source(
         self, client, user, pm, low_priority_source
     ):
+        Claim.objects.assert_claim(
+            pm, "name", "Medieval Madness", source=low_priority_source
+        )
         Claim.objects.assert_claim(pm, "year", 1997, source=low_priority_source)
         resolve_model(pm)
         pm.refresh_from_db()
@@ -168,6 +173,9 @@ class TestUserClaimResolution:
     def test_user_claim_wins_over_lower_priority_source(
         self, user, pm, low_priority_source
     ):
+        Claim.objects.assert_claim(
+            pm, "name", "Medieval Madness", source=low_priority_source
+        )
         Claim.objects.assert_claim(pm, "year", 1990, source=low_priority_source)
         Claim.objects.assert_claim(pm, "year", 2000, user=user)  # priority 10000 > 10
 
@@ -178,6 +186,7 @@ class TestUserClaimResolution:
         high_source = Source.objects.create(
             name="HighPri", source_type="editorial", priority=50000
         )
+        Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=high_source)
         Claim.objects.assert_claim(pm, "year", 1990, source=high_source)
         Claim.objects.assert_claim(
             pm, "year", 2000, user=user

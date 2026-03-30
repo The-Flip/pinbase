@@ -13,6 +13,7 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
@@ -45,10 +46,13 @@ class GameplayFeature(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [slug_not_blank(), field_not_blank("name")]
 
     def __str__(self) -> str:
         return self.name
+
+
+COUNT_MIN = 1
 
 
 class MachineModelGameplayFeature(TimeStampedModel):
@@ -60,11 +64,20 @@ class MachineModelGameplayFeature(TimeStampedModel):
         null=True,
         blank=True,
         help_text="Quantity from source data, e.g. Flippers (2) → count=2.",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(COUNT_MIN)],
     )
 
     class Meta:
-        unique_together = [("machinemodel", "gameplayfeature")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["machinemodel", "gameplayfeature"],
+                name="catalog_machinemodelgameplayfeature_unique_pair",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(count__isnull=True) | models.Q(count__gte=COUNT_MIN),
+                name="catalog_machinemodelgameplayfeature_count_min",
+            ),
+        ]
 
     def __str__(self) -> str:
         label = f"{self.machinemodel} → {self.gameplayfeature}"
@@ -82,6 +95,7 @@ class GameplayFeatureAlias(AliasBase):
 
     class Meta(AliasBase.Meta):
         constraints = [
+            field_not_blank("value"),
             models.UniqueConstraint(
                 Lower("value"),
                 name="catalog_unique_gameplay_feature_alias_lower",

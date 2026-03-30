@@ -11,11 +11,14 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
 
 __all__ = ["Title", "TitleAbbreviation"]
+
+EXTERNAL_ID_MIN = 1
 
 
 class Title(SluggedModel, LinkableModel, TimeStampedModel):
@@ -54,7 +57,7 @@ class Title(SluggedModel, LinkableModel, TimeStampedModel):
         null=True,
         blank=True,
         help_text="Fandom wiki page ID for deep-linking.",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(EXTERNAL_ID_MIN)],
     )
     needs_review = models.BooleanField(
         default=False,
@@ -71,7 +74,15 @@ class Title(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [
+            slug_not_blank(),
+            field_not_blank("name"),
+            models.CheckConstraint(
+                condition=models.Q(fandom_page_id__isnull=True)
+                | models.Q(fandom_page_id__gte=EXTERNAL_ID_MIN),
+                name="catalog_title_fandom_page_id_min",
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name
@@ -91,7 +102,13 @@ class TitleAbbreviation(TimeStampedModel):
 
     class Meta:
         ordering = ["value"]
-        unique_together = [("title", "value")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["title", "value"],
+                name="catalog_titleabbreviation_unique_title_value",
+            ),
+            field_not_blank("value"),
+        ]
 
     def __str__(self) -> str:
         return self.value

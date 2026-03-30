@@ -11,11 +11,21 @@ from apps.core.models import (
     MarkdownField,
     SluggedModel,
     TimeStampedModel,
+    field_not_blank,
     slug_not_blank,
 )
 from apps.core.validators import validate_no_mojibake
 
 __all__ = ["MachineModel", "ModelAbbreviation"]
+
+# Range constants — referenced by both field validators and Meta.constraints.
+# Module-level so they're accessible inside class Meta (nested class scoping).
+YEAR_MIN, YEAR_MAX = 1800, 2100
+MONTH_MIN, MONTH_MAX = 1, 12
+PLAYER_COUNT_MIN, PLAYER_COUNT_MAX = 1, 8
+FLIPPER_COUNT_MIN, FLIPPER_COUNT_MAX = 0, 20
+RATING_MIN, RATING_MAX = 0, 10
+EXTERNAL_ID_MIN = 1
 
 
 class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
@@ -37,7 +47,7 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
         null=True,
         blank=True,
         verbose_name="IPDB ID",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(EXTERNAL_ID_MIN)],
     )
     opdb_id = models.CharField(
         max_length=50,
@@ -52,7 +62,7 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
         null=True,
         blank=True,
         verbose_name="Pinside ID",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(EXTERNAL_ID_MIN)],
     )
 
     # Hierarchy
@@ -103,12 +113,12 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
     year = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
-        validators=[MinValueValidator(1800), MaxValueValidator(2100)],
+        validators=[MinValueValidator(YEAR_MIN), MaxValueValidator(YEAR_MAX)],
     )
     month = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
-        validators=[MinValueValidator(1), MaxValueValidator(12)],
+        validators=[MinValueValidator(MONTH_MIN), MaxValueValidator(MONTH_MAX)],
     )
     technology_generation = models.ForeignKey(
         "TechnologyGeneration",
@@ -161,7 +171,10 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
     player_count = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
-        validators=[MinValueValidator(1), MaxValueValidator(8)],
+        validators=[
+            MinValueValidator(PLAYER_COUNT_MIN),
+            MaxValueValidator(PLAYER_COUNT_MAX),
+        ],
     )
     themes = models.ManyToManyField(
         "Theme",
@@ -202,7 +215,10 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
     flipper_count = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
-        validators=[MinValueValidator(0), MaxValueValidator(20)],
+        validators=[
+            MinValueValidator(FLIPPER_COUNT_MIN),
+            MaxValueValidator(FLIPPER_COUNT_MAX),
+        ],
     )
 
     # Ratings
@@ -211,14 +227,14 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        validators=[MinValueValidator(RATING_MIN), MaxValueValidator(RATING_MAX)],
     )
     pinside_rating = models.DecimalField(
         max_digits=4,
         decimal_places=2,
         null=True,
         blank=True,
-        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        validators=[MinValueValidator(RATING_MIN), MaxValueValidator(RATING_MAX)],
     )
 
     # Free-form staging area for source-specific data that doesn't have a
@@ -231,7 +247,89 @@ class MachineModel(SluggedModel, LinkableModel, TimeStampedModel):
 
     class Meta:
         ordering = ["name"]
-        constraints = [slug_not_blank()]
+        constraints = [
+            slug_not_blank(),
+            field_not_blank("name"),
+            # Range constraints
+            models.CheckConstraint(
+                condition=models.Q(year__isnull=True)
+                | models.Q(year__gte=YEAR_MIN, year__lte=YEAR_MAX),
+                name="catalog_machinemodel_year_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(month__isnull=True)
+                | models.Q(month__gte=MONTH_MIN, month__lte=MONTH_MAX),
+                name="catalog_machinemodel_month_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(player_count__isnull=True)
+                | models.Q(
+                    player_count__gte=PLAYER_COUNT_MIN,
+                    player_count__lte=PLAYER_COUNT_MAX,
+                ),
+                name="catalog_machinemodel_player_count_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(flipper_count__isnull=True)
+                | models.Q(
+                    flipper_count__gte=FLIPPER_COUNT_MIN,
+                    flipper_count__lte=FLIPPER_COUNT_MAX,
+                ),
+                name="catalog_machinemodel_flipper_count_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(ipdb_rating__isnull=True)
+                | models.Q(ipdb_rating__gte=RATING_MIN, ipdb_rating__lte=RATING_MAX),
+                name="catalog_machinemodel_ipdb_rating_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(pinside_rating__isnull=True)
+                | models.Q(
+                    pinside_rating__gte=RATING_MIN,
+                    pinside_rating__lte=RATING_MAX,
+                ),
+                name="catalog_machinemodel_pinside_rating_range",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(ipdb_id__isnull=True)
+                | models.Q(ipdb_id__gte=EXTERNAL_ID_MIN),
+                name="catalog_machinemodel_ipdb_id_min",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(pinside_id__isnull=True)
+                | models.Q(pinside_id__gte=EXTERNAL_ID_MIN),
+                name="catalog_machinemodel_pinside_id_min",
+            ),
+            # Cross-field: month requires year
+            models.CheckConstraint(
+                condition=models.Q(month__isnull=True) | models.Q(year__isnull=False),
+                name="catalog_machinemodel_month_requires_year",
+                violation_error_message="month requires year.",
+                violation_error_code="cross_field",
+            ),
+            # Self-referential anti-cycle
+            models.CheckConstraint(
+                condition=models.Q(variant_of__isnull=True)
+                | ~models.Q(variant_of=models.F("pk")),
+                name="catalog_machinemodel_variant_of_not_self",
+                violation_error_message="A machine model cannot be its own variant.",
+                violation_error_code="cross_field",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(converted_from__isnull=True)
+                | ~models.Q(converted_from=models.F("pk")),
+                name="catalog_machinemodel_converted_from_not_self",
+                violation_error_message="A machine model cannot be converted from itself.",
+                violation_error_code="cross_field",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(remake_of__isnull=True)
+                | ~models.Q(remake_of=models.F("pk")),
+                name="catalog_machinemodel_remake_of_not_self",
+                violation_error_message="A machine model cannot be a remake of itself.",
+                violation_error_code="cross_field",
+            ),
+        ]
         indexes = [
             models.Index(fields=["corporate_entity", "year"]),
             models.Index(fields=["technology_generation", "year"]),
@@ -261,7 +359,13 @@ class ModelAbbreviation(TimeStampedModel):
 
     class Meta:
         ordering = ["value"]
-        unique_together = [("machine_model", "value")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["machine_model", "value"],
+                name="catalog_modelabbreviation_unique_model_value",
+            ),
+            field_not_blank("value"),
+        ]
 
     def __str__(self) -> str:
         return self.value

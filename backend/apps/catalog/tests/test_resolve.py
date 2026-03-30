@@ -59,6 +59,7 @@ class TestResolveModel:
         assert resolved.technology_generation == ss
 
     def test_higher_priority_wins(self, pm, ipdb, editorial):
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "year", 1996, source=ipdb)
         Claim.objects.assert_claim(pm, "year", 1997, source=editorial)
 
@@ -73,6 +74,7 @@ class TestResolveModel:
         assert resolved.name == "OPDB Name"
 
     def test_extra_data_catchall(self, pm, ipdb):
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "model_number", "20021", source=ipdb)
 
         resolved = resolve_model(pm)
@@ -81,6 +83,7 @@ class TestResolveModel:
     def test_abbreviation_relationship_claim(self, pm, ipdb):
         from apps.catalog.claims import build_relationship_claim
 
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         claim_key, value = build_relationship_claim("abbreviation", {"value": "MM"})
         Claim.objects.assert_claim(
             pm, "abbreviation", value, source=ipdb, claim_key=claim_key
@@ -90,6 +93,7 @@ class TestResolveModel:
         assert list(resolved.abbreviations.values_list("value", flat=True)) == ["MM"]
 
     def test_int_coercion(self, pm, ipdb):
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "year", "1997", source=ipdb)
         Claim.objects.assert_claim(pm, "player_count", "4", source=ipdb)
 
@@ -100,12 +104,14 @@ class TestResolveModel:
     def test_decimal_coercion(self, pm, ipdb):
         from decimal import Decimal
 
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "ipdb_rating", "8.75", source=ipdb)
 
         resolved = resolve_model(pm)
         assert resolved.ipdb_rating == Decimal("8.75")
 
     def test_empty_string_coercion(self, pm, ipdb):
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "year", "", source=ipdb)
         resolved = resolve_model(pm)
         assert resolved.year is None
@@ -118,13 +124,17 @@ class TestResolveModel:
             Claim.objects.assert_claim(pm, "year", "not-a-number", source=ipdb)
 
     def test_stale_values_cleared_on_re_resolve(self, pm, ipdb):
+        Claim.objects.assert_claim(pm, "name", "Test Game", source=ipdb)
         Claim.objects.assert_claim(pm, "year", 1997, source=ipdb)
         Claim.objects.assert_claim(pm, "player_count", 4, source=ipdb)
         resolve_model(pm)
         assert pm.year == 1997
         assert pm.player_count == 4
 
-        pm.claims.filter(is_active=True).update(is_active=False)
+        # Deactivate only year and player_count claims, keep name active.
+        pm.claims.filter(
+            is_active=True, field_name__in=["year", "player_count"]
+        ).update(is_active=False)
         resolve_model(pm)
         pm.refresh_from_db()
         assert pm.year is None
@@ -187,7 +197,10 @@ class TestResolveAll:
         opdb = Source.objects.create(
             name="OPDB", slug="opdb", source_type="database", priority=20
         )
-        Title.objects.create(opdb_id="G1111", name="Medieval Madness", slug="mm")
+        title = Title.objects.create(
+            opdb_id="G1111", name="Medieval Madness", slug="mm"
+        )
+        Claim.objects.assert_claim(title, "name", "Medieval Madness", source=ipdb)
         TechnologyGeneration.objects.create(name="Solid State", slug="solid-state")
 
         pm_bulk = MachineModel.objects.create(name="P1", slug="p1")
@@ -227,6 +240,8 @@ class TestResolveAll:
         pm_a = MachineModel.objects.create(name="Alpha", slug="alpha")
         pm_b = MachineModel.objects.create(name="Beta", slug="beta")
 
+        Claim.objects.assert_claim(pm_a, "name", "Alpha", source=ipdb)
+        Claim.objects.assert_claim(pm_b, "name", "Beta", source=ipdb)
         Claim.objects.assert_claim(pm_a, "opdb_id", "GCONFLICT-M1", source=ipdb)
         Claim.objects.assert_claim(pm_b, "opdb_id", "GCONFLICT-M1", source=ipdb)
 
@@ -243,6 +258,7 @@ class TestResolveAll:
         )
         pm = MachineModel.objects.create(name="P1", slug="p1")
 
+        Claim.objects.assert_claim(pm, "name", "P1", source=ipdb)
         Claim.objects.assert_claim(pm, "year", 1997, source=ipdb)
         Claim.objects.assert_claim(pm, "player_count", 4, source=ipdb)
         resolve_machine_models()
@@ -250,7 +266,10 @@ class TestResolveAll:
         assert pm.year == 1997
         assert pm.player_count == 4
 
-        pm.claims.filter(is_active=True).update(is_active=False)
+        # Deactivate only year and player_count claims, keep name active.
+        pm.claims.filter(
+            is_active=True, field_name__in=["year", "player_count"]
+        ).update(is_active=False)
         resolve_machine_models()
         pm.refresh_from_db()
         assert pm.year is None
@@ -266,7 +285,7 @@ class TestResolveAll:
             Claim.objects.assert_claim(pm, "name", f"Resolved {i}", source=ipdb)
             Claim.objects.assert_claim(pm, "year", 2000 + i, source=ipdb)
 
-        with django_assert_max_num_queries(120):
+        with django_assert_max_num_queries(175):
             resolve_machine_models()
 
 
@@ -341,6 +360,9 @@ class TestResolveThemes:
         Theme.objects.create(name="Sports", slug="sports")
         Theme.objects.create(name="Baseball", slug="baseball")
 
+        Claim.objects.assert_claim(pm1, "name", "P1", source=ipdb)
+        Claim.objects.assert_claim(pm2, "name", "P2", source=ipdb)
+
         for pm, slugs in [(pm1, ["sports", "baseball"]), (pm2, ["sports"])]:
             for slug in slugs:
                 claim_key, value = build_relationship_claim(
@@ -368,6 +390,7 @@ class TestResolveSystem:
         pm = MachineModel.objects.create(
             name="Medieval Madness", slug="medieval-madness"
         )
+        Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=ipdb)
         Claim.objects.assert_claim(pm, "system", "wpc-95", source=ipdb)
 
         resolve_model(pm)
@@ -379,6 +402,7 @@ class TestResolveSystem:
             name="IPDB", slug="ipdb", source_type="database", priority=10
         )
         pm = MachineModel.objects.create(name="Mystery Machine", slug="mystery-machine")
+        Claim.objects.assert_claim(pm, "name", "Mystery Machine", source=ipdb)
         Claim.objects.assert_claim(pm, "system", "nonexistent-slug", source=ipdb)
 
         resolve_model(pm)
@@ -386,11 +410,15 @@ class TestResolveSystem:
         assert pm.system is None
 
     def test_stale_system_cleared(self):
+        ipdb = Source.objects.create(
+            name="IPDB", slug="ipdb", source_type="database", priority=10
+        )
         system = System.objects.create(name="Williams WPC-95", slug="wpc-95")
         pm = MachineModel.objects.create(
             name="Medieval Madness", slug="medieval-madness", system=system
         )
-        # No system claim — system should be cleared after resolve.
+        # Name claim but no system claim — system should be cleared after resolve.
+        Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=ipdb)
         resolve_model(pm)
         pm.refresh_from_db()
         assert pm.system is None

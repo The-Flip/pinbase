@@ -38,11 +38,13 @@ Prior work ([ValidationFix.md](ValidationFix.md)) established claim-boundary val
 
 **Additive-only ingest.** The project is pre-launch. The normal workflow is to delete the database and rebuild from scratch. Ingest is a positive assertion process: sources assert what they currently provide. Absence from a source payload has no deletion semantics. The system does not infer what a source has deleted from what it didn't include.
 
-**Explicit operations only.** The system has three primitive write operations: `create_entity`, `assert_claim`, `retract_claim`. These are intentionally narrow and explicit. `create_entity` creates a catalog row and automatically asserts `status=active` attributed to the source — this is the entity's creation provenance. There is no omission-based retraction — if a claim needs to be retracted, the planner emits an explicit `retract_claim` operation. Retraction is available from day one as a primitive (entity lifecycle needs it), but near-term ingest adapters will rarely use it.
+**Explicit operations only.** The system has three primitive write operations: `create_entity`, `assert_claim`, `retract_claim`. These are intentionally narrow and explicit. `create_entity` carries the field values needed to satisfy DB constraints (slug, name, non-nullable FKs); the planner must also emit matching `assert_claim` operations for every claim-controlled field it populates, including `status=active`. The apply layer validates that these pairs are present and consistent — the row values are bootstrapping, the claims are the source of truth. There is no omission-based retraction — if a claim needs to be retracted, the planner emits an explicit `retract_claim` operation. Retraction is available from day one as a primitive (entity lifecycle needs it), but near-term ingest adapters will rarely use it.
 
 **One write path.** Every catalog fact enters the system through claims. No direct ORM writes to claim-controlled fields. Entity creation and claim persistence both happen in the apply layer's transaction — the planner never writes to the database.
 
 **Claims reference entities by PK, not slug.** Relationship claims (credits, themes, gameplay features, etc.) reference their target entities by primary key, not by slug. The planner resolves "IPDB says person Pat Lawlor" to a PK during reconciliation; the claim stores the PK. This eliminates the class of bugs where slug renames invalidate existing claim values, and decouples the claims system from editorial slug choices. Only pindata uses slugs as identity; no external source has slugs.
+
+**Validation at every layer.** Field validators run at the claim boundary (Python-level, clean error messages). `CheckConstraint` enforces the same rules at the database level (safety net for any write path that bypasses Python). Both reference the same constants so they can't drift.
 
 **Source-specific complexity stays source-specific.** Parsing, matching heuristics, encoding fixes, entity-creation decisions (e.g. IPDB's corporate entity derivation) — these are inherently per-source. The architecture should not try to force them into a shared abstraction. It should give them a clear place to live and keep them out of the apply layer.
 
@@ -77,15 +79,16 @@ class MatchResult[R]:
     # possibly: match_type (exact_id, name, heuristic, ambiguous)
 ```
 
-The default reconciliation strategy is a shared fallback chain, in order:
+Reconciliation is a source adapter responsibility, not a framework feature. Shared utility functions handle the common matching strategies:
 
-1. **External source ID** — does an existing entity have an ID linking it to this source's record? (e.g. `ipdb_id`, `opdb_id`, `fandom_page_id`). This is the strongest match — it means the entity has been linked to this source before.
-2. **Exact name match** — does the source record's name match an existing entity's name exactly?
-3. **Exact alias match** — does the source record's name match an existing alias for any entity of this type?
+- `match_by_external_id(queryset, field_name, value)` — look up by source-specific ID (e.g. `ipdb_id`, `opdb_id`, `fandom_page_id`). Strongest match — means the entity has been linked to this source before.
+- `match_by_exact_name(queryset, name)` — exact name match
+- `match_by_alias(queryset, name)` — exact alias match
+- `reconcile_by_id_name_alias(model_class, external_id_field, external_id, name)` — convenience function that calls all three in order, returning the matched entity or None
 
-If none match, the entity is new (`created_by_source=True`).
+Source adapters call whichever combination makes sense. Most will use `reconcile_by_id_name_alias`. Adapters that need something different (Wikidata's cross-model chain with normalized name matching, Person disambiguation logic) write their own matching and can use the individual utilities as building blocks.
 
-This default covers most entity types. Source adapters can override it when the domain requires a more specific chain. For example, Wikidata manufacturer reconciliation needs to search across both `Manufacturer` and `CorporateEntity` with normalized name matching — a domain-specific sequence that doesn't fit the generic chain.
+Name and alias matching carry false-positive risk for entity types with non-unique names (especially Person). Adapters for those types should add disambiguation checks or limit matching to external ID only rather than risk a bad merge — particularly since relationship claims store the matched entity's PK directly, making a false match hard to undo.
 
 Only pindata (the Pinbase editorial export) uses slugs as identity. No external source has slugs. Slugs are editorial/display properties, not cross-source identity.
 
@@ -111,7 +114,7 @@ Claim value validation is not a concern of the source adapter. The apply layer r
 
 The apply layer processes three primitive operations:
 
-- **`create_entity`** — create a new catalog entity row with the model class and required field values (slug, name, any non-nullable FKs, etc.). Automatically asserts `status=active` attributed to the source that triggered the creation. This is the entity's creation provenance — "who created Medieval Madness?" is answered by looking at the `status=active` claim: the source, changeset, ingest run, and timestamp.
+- **`create_entity`** — create a new catalog entity row with the model class and required field values (slug, name, any non-nullable FKs, etc.). The planner must also emit matching `assert_claim` operations for every claim-controlled field populated in `create_entity`, including `status=active`. The apply layer validates that these pairs are present and consistent. The row values satisfy DB constraints; the claims provide provenance. All values are attributed to the source that triggered the creation — whether directly from source data (name), system-derived (slug generated from name), or resolved through reconciliation (FK values). "Who created Medieval Madness?" is answered by looking at the `status=active` claim: the source, changeset, ingest run, and timestamp.
 - **`assert_claim`** — record a positive source- or user-attributed fact about an entity (scalar field, relationship, or status)
 - **`retract_claim`** — explicitly withdraw a previously active claim
 
@@ -152,28 +155,18 @@ A source may be disallowed from asserting a category of facts regardless of retr
 
 Ingest provenance is recorded at two levels:
 
-**IngestRun** — one record per source invocation. This is the run-level audit trail: which source, when it ran, what input it used (fingerprint), whether it succeeded, and structured counts of records parsed/matched/created and claims asserted/retracted/rejected. Warnings and errors are captured as JSON arrays.
+**IngestRun** — one record per source invocation. The run-level audit trail: which source, when, what input, whether it succeeded, and structured counts. See `provenance/models/ingest_run.py`.
 
-Status is one of `running`, `success`, `failed` — enforced by a DB-level CHECK constraint. All defaults (status, counts) are DB-level. The admin is read-only.
+**ChangeSet** — one per target entity touched in a run. Groups all claims the source asserted about that entity into a coherent unit. Exactly one of user or ingest_run must be set (strict XOR). Retractions are linked to the ChangeSet via `retracted_by_changeset` so entity history shows the complete picture. See `provenance/models/changeset.py`.
 
-**ChangeSet** — one per target entity touched in the run. Groups all claims the source asserted about that entity (scalar claims, relationship claims) into a coherent unit. Each ChangeSet has a nullable FK to its IngestRun (on_delete=CASCADE — deleting a run deletes its ChangeSets). User-edit ChangeSets have a null ingest_run.
+"Per target entity" means grouped by the object the claims are about, not by the source record that triggered them. When IPDB processes one machine record, it may touch a MachineModel, a CorporateEntity, and several Persons — that's three ChangeSets. This is the right granularity because entity history is viewed per entity.
 
-Retractions are linked to the ChangeSet so entity history shows the complete picture — what was added, what was changed, and what was removed in a given run. Claim has a nullable `retracted_by_changeset` FK (on_delete=SET_NULL). When the diff deactivates a claim, the apply layer sets `is_active=False` and sets `retracted_by_changeset` to the current entity's ChangeSet. Entity history can then show both "these claims were asserted" (ChangeSet → claims) and "these claims were retracted" (ChangeSet → retracted claims via reverse FK).
-
-"Per target entity" means grouped by the object the claims are about, not by the source record that triggered them. When IPDB processes one machine record, it may assert claims against the MachineModel, create or update a CorporateEntity, and assert claims against Persons for credits. That is three ChangeSets (one per target entity), not one. This is the right granularity because entity history is viewed per entity — a user looking at Medieval Madness's history sees the claims about Medieval Madness, not about the CorporateEntity that was also updated in the same source record.
-
-Claims already have an optional FK to ChangeSet. The IngestRun is reachable through ChangeSet — claims don't need a direct FK to IngestRun.
-
-This gives two natural query levels:
+Two natural query levels:
 
 - "Show me everything IPDB said about Medieval Madness in this run" — that's the ChangeSet
 - "Show me everything that happened in the March 28 IPDB run" — that's the IngestRun
 
-ChangeSet is reused exactly as designed: a thin grouping of related claims from one actor. For user edits, the actor is a user and the ChangeSet groups a handful of manual changes. For ingest, the actor is a source and the ChangeSet groups everything a source said about one entity. The single-actor invariant holds in both cases. The scale is right — dozens of claims per entity, not thousands.
-
-**Single-actor enforcement.** A `CheckConstraint` on ChangeSet enforces that `user` and `ingest_run` are mutually exclusive (user XOR ingest_run, or neither for legacy/system). `assert_claim()` additionally checks that source-attributed claims with a changeset require `changeset.ingest_run.source == source`. Note: the apply layer uses `bulk_create` for ChangeSets and Claims, which bypasses `assert_claim()`. Source consistency on the bulk path is maintained by construction — the apply layer creates each ChangeSet from the IngestRun, then creates claims with the same source. Implementers must maintain this invariant explicitly.
-
-**Visibility.** IngestRun is an admin/system-level concept. Admins can browse runs across all sources — inspecting counts, timing, failures, and warnings. Regular users see entity history through ChangeSets, not run records. A user viewing the history of Medieval Madness sees "IPDB updated these fields on March 28" (the ChangeSet), not "IPDB run #47 processed 4,000 machines" (the IngestRun). The IngestRun is reachable from the ChangeSet for admin drill-down, but it is not part of the user-facing entity history.
+**Visibility.** IngestRun is admin-level. Regular users see entity history through ChangeSets, not run records.
 
 ### Apply layer
 
@@ -181,8 +174,8 @@ The apply layer is source-agnostic. It processes the three primitive operations 
 
 1. **Create IngestRun** (before transaction) — record source, start time, input fingerprint, status=`running`
 2. **Open transaction:**
-   a. **Create entities** — execute `create_entity` operations, capture PKs, patch them into associated claims, assert `status=active` for each new entity attributed to the source
-   b. **Validate** — run `validate_claims_batch` on planned `assert_claim` operations (see [ValidationFix.md](ValidationFix.md) Component B). Invalid claims are rejected with warnings, not persisted.
+   a. **Create entities** — execute `create_entity` operations, capture PKs, patch them into associated claims. Validate that every `create_entity` has matching `assert_claim` operations for all claim-controlled fields it populated (including `status=active`).
+   b. **Validate** — run `validate_claims_batch` on all planned `assert_claim` operations (see [ValidationFix.md](ValidationFix.md) Component B). Validation collects ALL errors across the entire batch before failing — this is deliberate, so that a single run surfaces every data quality issue rather than forcing a fix-one-rerun-discover-next cycle. If any claim is invalid, the entire transaction fails after reporting all errors. No partial persistence. This is a deliberate pre-launch choice: the project rebuilds from a bare DB, so the fix is always to correct the source data and re-run. A post-launch system with incremental ingest against live data may need to revisit this in favor of skip-and-warn for non-fatal errors.
    c. **Persist assertions** — bulk-create a ChangeSet per target entity, bulk-create new Claim rows linked to their ChangeSet. Unchanged claims (same value already active for this source) are skipped. ChangeSet creation must be batched (`bulk_create`), not one `create()` per entity in a loop.
    d. **Persist retractions** — for any `retract_claim` operations, deactivate the targeted claims (set `is_active=False` and `retracted_by_changeset` to the entity's ChangeSet)
    e. **Resolve** — materialise affected entities (same resolution layer as today)
@@ -242,9 +235,11 @@ Every catalog entity gets a `status` field with three values:
 - **`deleted`** — the entity should not exist (data entry error, bad ingest, malicious actor)
 - **`duplicate`** — the entity is a duplicate of another entity
 
-`status` is claim-controlled like any other catalog field. Resolution picks the winner by source priority. An editorial claim (priority 300) asserting `status=deleted` overrides any external source's implicit `status=active`.
+`status` is claim-controlled like any other catalog field. Resolution picks the winner by source priority. An editorial claim (priority 300) asserting `status=deleted` overrides any external source's `status=active`.
 
-Every entity gets a `status=active` claim at creation time — the `create_entity` operation asserts it automatically, attributed to the source that triggered the creation. This means every entity has creation provenance from birth: who created it, when, and as part of which ingest run or user action.
+Every entity gets a `status=active` claim at creation time — the planner explicitly emits it alongside `create_entity`, and the apply layer validates that the pair is always present. This means every entity has creation provenance from birth: who created it, when, and as part of which ingest run or user action.
+
+**When no status claim remains** (e.g. after actor revocation retracts all claims including `status=active`), status resolves to null. Catalog queries filter on `status='active'`, so a null-status entity is automatically excluded from the live catalog. It surfaces in an admin review queue of entities with no active status claim. An admin can then re-assert `status=active` (if other sources confirm the entity) or assert `status=deleted` (if the entity was fabricated).
 
 ### Duplicate handling
 
@@ -266,6 +261,72 @@ This also supports restoration — if a deletion was wrong, re-asserting `status
 
 **Actor revocation.** All claims from a bad actor are retracted. Entities they created that have since been confirmed by other sources retain their `status=active` claim from those other sources and survive. Entities with no remaining `status=active` claim from any source surface for review.
 
+## Database-level validation
+
+Python validators on model fields (`MinValueValidator`, `MaxValueValidator`, `RegexValidator`, `validate_no_mojibake`) run at the claim boundary via `validate_claim_value()` and during form/API input. But they are invisible to the database. Any write path that bypasses Python validation — `bulk_create()`, `QuerySet.update()`, `save()` without `full_clean()`, the resolver's `save(update_fields=...)` — can persist invalid data. The apply layer's fail-fast validation is the primary defense, but DB constraints are the safety net beneath it.
+
+### Approach: shared constants referenced by both validators and constraints
+
+Range limits are defined once as constants on each model class and referenced by both the field validator and a `CheckConstraint`:
+
+```python
+class MachineModel(TimeStampedModel):
+    YEAR_MIN, YEAR_MAX = 1800, 2100
+
+    year = models.IntegerField(null=True, blank=True,
+        validators=[MinValueValidator(YEAR_MIN), MaxValueValidator(YEAR_MAX)])
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(year__gte=YEAR_MIN, year__lte=YEAR_MAX)
+                         | Q(year__isnull=True),
+                name="machinemodel_year_range",
+            ),
+        ]
+```
+
+This eliminates drift between the two layers — both reference the same constant. `get_field_constraints()` (which introspects field validators to serve min/max hints to the frontend) and `validate_claim_value()` (which runs the validator chain at the claim boundary) continue to work unchanged.
+
+### Introspection complication
+
+Replacing validators with constraints (rather than adding constraints alongside them) would break two runtime systems:
+
+- `get_field_constraints()` reads `field._validators` to extract min/max for frontend form hints
+- `validate_claim_value()` iterates `field.validators` to run the validation chain at claim time
+
+Django's `CheckConstraint` conditions (`Q` objects) are not designed for introspection — parsing them to extract range limits is fragile. The shared-constants approach avoids this entirely: validators stay on the fields, constraints are added alongside them, and both reference the same source of truth.
+
+### Phasing
+
+**Phase 1: Cross-field invariants and non-blank constraints.** These have zero enforcement today — not even Python-level. Purely additive `CheckConstraint` additions, each with a human-readable `violation_error_message`:
+
+- `CorporateEntity`: `year_start <= year_end` (when both non-null)
+- `Person`: `birth_year <= death_year` (when both non-null)
+- `Person`: `birth_month` requires `birth_year`; `birth_day` requires `birth_month` (and same for death fields)
+- `MachineModel`: `month` requires `year`
+- Non-blank `CheckConstraint` on `name` for all catalog entities with `blank=False`
+
+Wire `validate_constraints()` into the resolver (before `save()`) and the apply layer (before entity persistence) so cross-field violations produce clean `ValidationError` responses, not raw `IntegrityError`.
+
+**Cross-field validation:** `validate_claim_value()` validates one claim at a time and can't check relationships between fields. But Django's `Model.validate_constraints()` evaluates `CheckConstraint` conditions against the instance's current field values in Python. After resolution applies winning claim values to the model instance (but before `save()`), calling `instance.validate_constraints()` catches cross-field violations and raises `ValidationError` with the constraint's `violation_error_message` — clean 422 response, no raw `IntegrityError`. The constraint is defined once on the model and serves as both the DB-level backstop and the Python-level check. Each `CheckConstraint` should include a human-readable `violation_error_message` (e.g. "birth_year must be <= death_year").
+
+**Phase 2: Range constants + CheckConstraints.** The systematic work:
+
+1. Define range constants on each model class
+2. Reference constants in existing validators (update `MinValueValidator(1800)` to `MinValueValidator(YEAR_MIN)`)
+3. Add `CheckConstraint` for each range using the same constants
+4. Add a drift-detection test that asserts validator limits match constraint conditions
+
+**Phase 3: Mechanical cleanup.**
+
+1. Migrate `unique_together` to `UniqueConstraint` (6 models)
+2. Add `db_default=Now()` on `created_at` fields only. `updated_at` stays Python-managed (`auto_now`) — true DB-managed update timestamps would require triggers, which is a separate concern. Verify during implementation that `db_default=Now()` alongside `auto_now_add=True` is accepted by `makemigrations` — the intent is correct (Python default for ORM inserts, DB default for non-ORM inserts) but the combination should be tested.
+3. Add `db_default` on fields with meaningful defaults (e.g. `IngestRun.status`)
+4. ~~Regex `CheckConstraint` for `wikidata_id` fields~~ — dropped. SQLite (the dev database) does not support regex in `CHECK` constraints, and conditional migration machinery for one field on two models isn't worth the complexity. The Python `RegexValidator` on the field is sufficient — it runs at the claim boundary via `validate_claim_value()`.
+
+The database is being deleted and migrations reset to `0001`, so all constraints can be declared directly on the models with no data migration.
+
 ## What This Does Not Solve
 
 **Domain modeling decisions.** The architecture enforces domain ownership but does not decide it. Which model owns which facts is a domain decision that must be made separately. The existing Fandom and Wikidata TODOs (targeting `Manufacturer` when they should target `CorporateEntity`) are domain fixes that the architecture would then enforce.
@@ -275,7 +336,7 @@ This also supports restoration — if a deletion was wrong, re-asserting `status
 ## What Stays Source-Specific
 
 - Parsing raw data into typed records
-- Which external ID field to check during reconciliation, and any domain-specific overrides to the default fallback chain
+- Reconciliation strategy (which utility functions to use, in what order, with what disambiguation)
 - Field mappings
 - Name and encoding policy
 - Entity creation decisions
@@ -284,7 +345,7 @@ This also supports restoration — if a deletion was wrong, re-asserting `status
 ## What Stops Being Source-Specific
 
 - Transaction management
-- Entity reconciliation fallback chain (external ID → exact name → exact alias)
+- Shared reconciliation utilities (match by external ID, exact name, alias)
 - Claim persistence and retraction
 - Resolution orchestration
 - Run reporting
@@ -339,3 +400,7 @@ This plan is successful when:
 - Source adapters replace the current imperative ingest commands
 - `validate_catalog` and resolver guard rails have been reviewed and trimmed post-redesign
 - `assert_claim()` validates relationship targets
+- Range limits are defined as shared constants referenced by both field validators and `CheckConstraint`
+- Cross-field invariants (year ordering, month-requires-year) are enforced at the DB level
+- Non-blank constraints exist for all `name` fields
+- `unique_together` migrated to `UniqueConstraint`

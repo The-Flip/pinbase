@@ -33,6 +33,7 @@ from ._helpers import (
     get_field_defaults,
     get_preserve_fields,
     resolve_unique_conflicts,
+    validate_check_constraints,
 )
 from ._relationships import (  # noqa: F401
     resolve_all_aliases,
@@ -135,6 +136,7 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
             )
             setattr(machine_model, attr, revert)
 
+    validate_check_constraints(machine_model)
     machine_model.save()
 
     # Resolve relationship claims after scalar save.
@@ -255,6 +257,10 @@ def resolve_machine_models(stdout=None) -> int:
     # 5. Detect unique-field conflicts across all resolved models.
     resolve_unique_conflicts(all_models, "opdb_id", MachineModel)
     resolve_unique_conflicts(all_models, "slug", MachineModel, pre_slugs)
+
+    # 6. Validate check constraints before writing.
+    for pm in all_models:
+        validate_check_constraints(pm)
 
     # 7. Set updated_at (auto_now not triggered by bulk_update).
     now = timezone.now()
