@@ -296,11 +296,11 @@ class TestResolveThemes:
             name="IPDB", slug="ipdb", source_type="database", priority=10
         )
         pm = MachineModel.objects.create(name="P1", slug="p1")
-        Theme.objects.create(name="Horror", slug="horror")
-        Theme.objects.create(name="Licensed", slug="licensed")
+        horror = Theme.objects.create(name="Horror", slug="horror")
+        licensed = Theme.objects.create(name="Licensed", slug="licensed")
 
-        for slug in ("horror", "licensed"):
-            claim_key, value = build_relationship_claim("theme", {"theme_slug": slug})
+        for theme in (horror, licensed):
+            claim_key, value = build_relationship_claim("theme", {"theme": theme.pk})
             Claim.objects.assert_claim(
                 pm, "theme", value, source=ipdb, claim_key=claim_key
             )
@@ -319,13 +319,13 @@ class TestResolveThemes:
             name="Editorial", source_type="editorial", priority=100
         )
         pm = MachineModel.objects.create(name="P1", slug="p1")
-        Theme.objects.create(name="Horror", slug="horror")
+        horror = Theme.objects.create(name="Horror", slug="horror")
 
         # IPDB says horror, editorial disputes it.
-        claim_key, value = build_relationship_claim("theme", {"theme_slug": "horror"})
+        claim_key, value = build_relationship_claim("theme", {"theme": horror.pk})
         Claim.objects.assert_claim(pm, "theme", value, source=ipdb, claim_key=claim_key)
         _, dispute_value = build_relationship_claim(
-            "theme", {"theme_slug": "horror"}, exists=False
+            "theme", {"theme": horror.pk}, exists=False
         )
         Claim.objects.assert_claim(
             pm, "theme", dispute_value, source=editorial, claim_key=claim_key
@@ -339,9 +339,9 @@ class TestResolveThemes:
             name="IPDB", slug="ipdb", source_type="database", priority=10
         )
         pm = MachineModel.objects.create(name="P1", slug="p1")
-        Theme.objects.create(name="Horror", slug="horror")
+        horror = Theme.objects.create(name="Horror", slug="horror")
 
-        claim_key, value = build_relationship_claim("theme", {"theme_slug": "horror"})
+        claim_key, value = build_relationship_claim("theme", {"theme": horror.pk})
         Claim.objects.assert_claim(pm, "theme", value, source=ipdb, claim_key=claim_key)
         resolve_all_themes(model_ids={pm.pk})
         assert pm.themes.count() == 1
@@ -357,16 +357,16 @@ class TestResolveThemes:
         )
         pm1 = MachineModel.objects.create(name="P1", slug="p1")
         pm2 = MachineModel.objects.create(name="P2", slug="p2")
-        Theme.objects.create(name="Sports", slug="sports")
-        Theme.objects.create(name="Baseball", slug="baseball")
+        sports = Theme.objects.create(name="Sports", slug="sports")
+        baseball = Theme.objects.create(name="Baseball", slug="baseball")
 
         Claim.objects.assert_claim(pm1, "name", "P1", source=ipdb)
         Claim.objects.assert_claim(pm2, "name", "P2", source=ipdb)
 
-        for pm, slugs in [(pm1, ["sports", "baseball"]), (pm2, ["sports"])]:
-            for slug in slugs:
+        for pm, themes in [(pm1, [sports, baseball]), (pm2, [sports])]:
+            for theme in themes:
                 claim_key, value = build_relationship_claim(
-                    "theme", {"theme_slug": slug}
+                    "theme", {"theme": theme.pk}
                 )
                 Claim.objects.assert_claim(
                     pm, "theme", value, source=ipdb, claim_key=claim_key
@@ -438,8 +438,8 @@ class TestResolveCorporateEntityLocations:
             location_type="city",
         )
 
-    def _assert_location(self, source, ce, path):
-        claim_key, value = build_relationship_claim("location", {"location_path": path})
+    def _assert_location(self, source, ce, loc):
+        claim_key, value = build_relationship_claim("location", {"location": loc.pk})
         Claim.objects.assert_claim(
             ce, "location", value, source=source, claim_key=claim_key
         )
@@ -448,7 +448,7 @@ class TestResolveCorporateEntityLocations:
         source = Source.objects.create(name="PB", source_type="editorial", priority=300)
         ce = self._make_ce("williams")
         loc = self._make_location("usa/il/chicago")
-        self._assert_location(source, ce, "usa/il/chicago")
+        self._assert_location(source, ce, loc)
 
         resolve_all_corporate_entity_locations()
 
@@ -459,8 +459,8 @@ class TestResolveCorporateEntityLocations:
     def test_deletes_stale_cel_when_claim_deactivated(self, db):
         source = Source.objects.create(name="PB", source_type="editorial", priority=300)
         ce = self._make_ce("williams")
-        self._make_location("usa/il/chicago")
-        self._assert_location(source, ce, "usa/il/chicago")
+        loc = self._make_location("usa/il/chicago")
+        self._assert_location(source, ce, loc)
         resolve_all_corporate_entity_locations()
         assert CorporateEntityLocation.objects.filter(corporate_entity=ce).count() == 1
 
@@ -474,10 +474,10 @@ class TestResolveCorporateEntityLocations:
         source = Source.objects.create(name="PB", source_type="editorial", priority=300)
         ce1 = self._make_ce("williams")
         ce2 = self._make_ce("bally")
-        self._make_location("usa/il/chicago")
-        self._make_location("usa/il/elk-grove-village")
-        self._assert_location(source, ce1, "usa/il/chicago")
-        self._assert_location(source, ce2, "usa/il/elk-grove-village")
+        loc1 = self._make_location("usa/il/chicago")
+        loc2 = self._make_location("usa/il/elk-grove-village")
+        self._assert_location(source, ce1, loc1)
+        self._assert_location(source, ce2, loc2)
 
         result = resolve_all_corporate_entity_locations()
 

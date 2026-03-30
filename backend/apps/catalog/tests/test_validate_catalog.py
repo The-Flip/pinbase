@@ -153,34 +153,34 @@ class TestUnresolvedFKClaims:
 
 class TestUnresolvedCreditClaims:
     def test_missing_person_in_credit_claim(self, db, ipdb, capsys):
-        CreditRole.objects.create(name="Design", slug="design")
+        role = CreditRole.objects.create(name="Design", slug="design")
         pm = MachineModel.objects.create(name="Test", slug="test-model")
         from apps.catalog.claims import build_relationship_claim
 
         claim_key, value = build_relationship_claim(
-            "credit", {"person_slug": "ghost-person", "role": "design"}
+            "credit", {"person": 99999, "role": role.pk}
         )
         Claim.objects.assert_claim(
             pm, "credit", value, source=ipdb, claim_key=claim_key
         )
         call_command("validate_catalog")
         captured = capsys.readouterr()
-        assert "missing person slugs" in captured.out
+        assert "missing person PKs" in captured.out
 
     def test_missing_role_in_credit_claim(self, db, ipdb, capsys):
-        Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
+        person = Person.objects.create(name="Pat Lawlor", slug="pat-lawlor")
         pm = MachineModel.objects.create(name="Test", slug="test-model")
         from apps.catalog.claims import build_relationship_claim
 
         claim_key, value = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "ghost-role"}
+            "credit", {"person": person.pk, "role": 99999}
         )
         Claim.objects.assert_claim(
             pm, "credit", value, source=ipdb, claim_key=claim_key
         )
         call_command("validate_catalog")
         captured = capsys.readouterr()
-        assert "missing role slugs" in captured.out
+        assert "missing role PKs" in captured.out
 
 
 class TestUncuratedThemes:

@@ -45,21 +45,15 @@ logger = logging.getLogger(__name__)
 class M2MFieldSpec:
     """Descriptor for a simple M2M relationship resolved from claims."""
 
-    field_name: str  # claim field_name: "theme", "tag", "gameplay_feature"
-    slug_key: str  # key in claim value dict: "theme_slug", "tag_slug", etc.
+    field_name: str  # claim field_name (also the value dict key): "theme", "tag"
     m2m_attr: str  # model attribute: "themes", "tags", "gameplay_features"
     target_model: type  # Theme, Tag, GameplayFeature
 
 
 M2M_FIELDS: dict[str, M2MFieldSpec] = {
-    "theme": M2MFieldSpec("theme", "theme_slug", "themes", Theme),
-    "reward_type": M2MFieldSpec(
-        "reward_type",
-        "reward_type_slug",
-        "reward_types",
-        RewardType,
-    ),
-    "tag": M2MFieldSpec("tag", "tag_slug", "tags", Tag),
+    "theme": M2MFieldSpec("theme", "themes", Theme),
+    "reward_type": M2MFieldSpec("reward_type", "reward_types", RewardType),
+    "tag": M2MFieldSpec("tag", "tags", Tag),
 }
 
 
@@ -77,11 +71,6 @@ def _resolve_machine_model_m2m(
     from django.contrib.contenttypes.models import ContentType
 
     ct = ContentType.objects.get_for_model(MachineModel)
-
-    # Pre-fetch slug→pk lookup.
-    slug_lookup: dict[str, int] = dict(
-        spec.target_model.objects.values_list("slug", "pk")
-    )
 
     # Pre-fetch active claims with priority annotation.
     claims_qs = _annotate_priority(
@@ -102,6 +91,9 @@ def _resolve_machine_model_m2m(
             seen.add(key)
             winners_by_model.setdefault(claim.object_id, []).append(claim)
 
+    # Valid PKs for existence check against stale claims.
+    valid_pks = set(spec.target_model.objects.values_list("pk", flat=True))
+
     # Desired PKs from winning claims.
     desired_by_model: dict[int, set[int]] = {}
     for model_id, claims_list in winners_by_model.items():
@@ -110,12 +102,12 @@ def _resolve_machine_model_m2m(
             val = claim.value
             if not val.get("exists", True):
                 continue
-            target_pk = slug_lookup.get(val[spec.slug_key])
-            if target_pk is None:
+            target_pk = val.get(spec.field_name)
+            if target_pk not in valid_pks:
                 logger.warning(
-                    "Unresolved %s slug %r in claim (model pk=%s)",
+                    "Unresolved %s pk %r in claim (model pk=%s)",
                     spec.field_name,
-                    val[spec.slug_key],
+                    target_pk,
                     model_id,
                 )
                 continue
@@ -190,10 +182,6 @@ def resolve_all_gameplay_features(
 
     ct = ContentType.objects.get_for_model(MachineModel)
 
-    slug_lookup: dict[str, int] = dict(
-        GameplayFeature.objects.values_list("slug", "pk")
-    )
-
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="gameplay_feature")
     )
@@ -212,6 +200,9 @@ def resolve_all_gameplay_features(
             seen.add(key)
             winners_by_model.setdefault(claim.object_id, []).append(claim)
 
+    # Valid PKs for existence check against stale claims.
+    valid_pks = set(GameplayFeature.objects.values_list("pk", flat=True))
+
     # Desired (feature_pk, count) from winning claims.
     desired_by_model: dict[int, dict[int, int | None]] = {}
     for mid, claims_list in winners_by_model.items():
@@ -220,11 +211,11 @@ def resolve_all_gameplay_features(
             val = claim.value
             if not val.get("exists", True):
                 continue
-            feature_pk = slug_lookup.get(val["gameplay_feature_slug"])
-            if feature_pk is None:
+            feature_pk = val.get("gameplay_feature")
+            if feature_pk not in valid_pks:
                 logger.warning(
-                    "Unresolved gameplay_feature slug %r in claim (model pk=%s)",
-                    val["gameplay_feature_slug"],
+                    "Unresolved gameplay_feature pk %r in claim (model pk=%s)",
+                    feature_pk,
                     mid,
                 )
                 continue
@@ -314,9 +305,6 @@ def resolve_all_series_titles(
     through = Series.titles.through
     title_id_col = "title_id"
 
-    # Pre-fetch title slug→pk lookup.
-    slug_lookup: dict[str, int] = dict(Title.objects.values_list("slug", "pk"))
-
     # Pre-fetch active claims with priority annotation.
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="series_title")
@@ -336,6 +324,9 @@ def resolve_all_series_titles(
             seen.add(key)
             winners_by_series.setdefault(claim.object_id, []).append(claim)
 
+    # Valid PKs for existence check against stale claims.
+    valid_pks = set(Title.objects.values_list("pk", flat=True))
+
     # Desired title PKs from winning claims.
     desired_by_series: dict[int, set[int]] = {}
     for series_id, claims_list in winners_by_series.items():
@@ -344,11 +335,11 @@ def resolve_all_series_titles(
             val = claim.value
             if not val.get("exists", True):
                 continue
-            title_pk = slug_lookup.get(val["title_slug"])
-            if title_pk is None:
+            title_pk = val.get("title")
+            if title_pk not in valid_pks:
                 logger.warning(
-                    "Unresolved title slug %r in series_title claim (series pk=%s)",
-                    val["title_slug"],
+                    "Unresolved title pk %r in series_title claim (series pk=%s)",
+                    title_pk,
                     series_id,
                 )
                 continue
@@ -401,9 +392,9 @@ def resolve_all_credits(
 
     ct = ContentType.objects.get_for_model(MachineModel)
 
-    person_lookup: dict[str, int] = dict(Person.objects.values_list("slug", "pk"))
-    role_lookup: dict[str, int] = dict(CreditRole.objects.values_list("slug", "pk"))
-    if not role_lookup:
+    valid_person_pks = set(Person.objects.values_list("pk", flat=True))
+    valid_role_pks = set(CreditRole.objects.values_list("pk", flat=True))
+    if not valid_role_pks:
         logger.warning(
             "CreditRole table is empty — skipping bulk credit resolution. "
             "Run ingest_pinbase_taxonomy to seed credit roles."
@@ -434,19 +425,19 @@ def resolve_all_credits(
             val = claim.value
             if not val.get("exists", True):
                 continue
-            person_pk = person_lookup.get(val["person_slug"])
-            if person_pk is None:
+            person_pk = val.get("person")
+            if person_pk not in valid_person_pks:
                 logger.warning(
-                    "Unresolved person slug %r in credit claim (model pk=%s)",
-                    val["person_slug"],
+                    "Unresolved person pk %r in credit claim (model pk=%s)",
+                    person_pk,
                     model_id,
                 )
                 continue
-            role_pk = role_lookup.get(val["role"])
-            if role_pk is None:
+            role_pk = val.get("role")
+            if role_pk not in valid_role_pks:
                 logger.warning(
-                    "Unresolved credit role %r in credit claim (model pk=%s)",
-                    val["role"],
+                    "Unresolved credit role pk %r in credit claim (model pk=%s)",
+                    role_pk,
                     model_id,
                 )
                 continue
@@ -818,7 +809,7 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
     """Resolve parent hierarchy claims into self-referential M2M rows.
 
     Reads {claim_field_prefix}_parent claims on parent_model instances.
-    Each claim value contains {"parent_slug": slug}.
+    Each claim value contains {"parent": pk}.
     Materializes the self-referential parents M2M.
 
     *claim_field_prefix* defaults to model_name but must be overridden when
@@ -845,7 +836,7 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
             seen.add(key)
             winners_by_child.setdefault(claim.object_id, []).append(claim)
 
-    slug_to_pk: dict[str, int] = dict(parent_model.objects.values_list("slug", "pk"))
+    valid_pks = set(parent_model.objects.values_list("pk", flat=True))
 
     desired_by_child: dict[int, set[int]] = {}
     for child_id, claims_list in winners_by_child.items():
@@ -854,13 +845,12 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
             val = claim.value
             if not val.get("exists", True):
                 continue
-            parent_slug = val.get("parent_slug", "")
-            parent_pk = slug_to_pk.get(parent_slug)
-            if parent_pk is None:
+            parent_pk = val.get("parent")
+            if parent_pk not in valid_pks:
                 logger.warning(
-                    "Unresolved %s parent slug %r for pk=%s",
+                    "Unresolved %s parent pk %r for pk=%s",
                     claim_field_name,
-                    parent_slug,
+                    parent_pk,
                     child_id,
                 )
                 continue
@@ -937,7 +927,7 @@ def resolve_all_corporate_entity_locations() -> dict[str, int]:
     from django.contrib.contenttypes.models import ContentType
 
     ce_ct = ContentType.objects.get_for_model(CorporateEntity)
-    loc_by_path = {loc.location_path: loc for loc in Location.objects.all()}
+    valid_loc_pks = set(Location.objects.values_list("pk", flat=True))
 
     active_claims = (
         Claim.objects.filter(content_type=ce_ct, field_name="location", is_active=True)
@@ -945,36 +935,36 @@ def resolve_all_corporate_entity_locations() -> dict[str, int]:
         .values("object_id", "value")
     )
 
-    desired: dict[int, set[str]] = defaultdict(set)
+    desired: dict[int, set[int]] = defaultdict(set)
     for row in active_claims:
-        path = (row["value"] or {}).get("location_path", "")
-        if path and path in loc_by_path:
-            desired[row["object_id"]].add(path)
+        loc_pk = (row["value"] or {}).get("location")
+        if loc_pk and loc_pk in valid_loc_pks:
+            desired[row["object_id"]].add(loc_pk)
 
     created = deleted = 0
 
     # Load ALL existing rows so stale rows for CEs with no active claims are cleaned up.
-    all_existing = CorporateEntityLocation.objects.select_related("location").all()
-    current: dict[int, dict[str, CorporateEntityLocation]] = defaultdict(dict)
+    all_existing = CorporateEntityLocation.objects.all()
+    current: dict[int, dict[int, CorporateEntityLocation]] = defaultdict(dict)
     for cel in all_existing:
-        current[cel.corporate_entity_id][cel.location.location_path] = cel
+        current[cel.corporate_entity_id][cel.location_id] = cel
 
     # Create missing rows.
-    for ce_pk, paths in desired.items():
-        for path in paths:
-            if path not in current[ce_pk]:
+    for ce_pk, loc_pks in desired.items():
+        for loc_pk in loc_pks:
+            if loc_pk not in current[ce_pk]:
                 CorporateEntityLocation.objects.create(
                     corporate_entity_id=ce_pk,
-                    location=loc_by_path[path],
+                    location_id=loc_pk,
                 )
                 created += 1
 
-    # Delete stale rows (path no longer desired, or CE lost all claims).
+    # Delete stale rows (location no longer desired, or CE lost all claims).
     stale_pks: list[int] = []
-    for ce_pk, path_map in current.items():
+    for ce_pk, loc_map in current.items():
         wanted = desired.get(ce_pk, set())
-        for path, cel in path_map.items():
-            if path not in wanted:
+        for loc_pk, cel in loc_map.items():
+            if loc_pk not in wanted:
                 stale_pks.append(cel.pk)
     if stale_pks:
         deleted = CorporateEntityLocation.objects.filter(pk__in=stale_pks).delete()[0]

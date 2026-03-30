@@ -148,10 +148,10 @@ def build_opdb_plan(
         resolve_all_tags,
     ]
 
-    # Validate vocabulary slugs once (skip missing slugs in claims).
-    valid_feature_slugs = set(GameplayFeature.objects.values_list("slug", flat=True))
-    valid_reward_slugs = set(RewardType.objects.values_list("slug", flat=True))
-    valid_tag_slugs = set(Tag.objects.values_list("slug", flat=True))
+    # Validate vocabulary slugs and build slug→PK lookups for claim building.
+    feature_slug_to_pk = dict(GameplayFeature.objects.values_list("slug", "pk"))
+    reward_slug_to_pk = dict(RewardType.objects.values_list("slug", "pk"))
+    tag_slug_to_pk = dict(Tag.objects.values_list("slug", "pk"))
 
     unmatched_opdb_terms: list[str] = []
 
@@ -209,11 +209,12 @@ def build_opdb_plan(
             target_kwargs = _target_kwargs(mr, ct_id)
 
             for slug in gameplay_slugs:
-                if slug not in valid_feature_slugs:
+                pk = feature_slug_to_pk.get(slug)
+                if pk is None:
                     continue
                 claim_key, value = build_relationship_claim(
                     "gameplay_feature",
-                    {"gameplay_feature_slug": slug},
+                    {"gameplay_feature": pk},
                 )
                 plan.assertions.append(
                     PlannedClaimAssert(
@@ -225,11 +226,12 @@ def build_opdb_plan(
                 )
 
             for slug in reward_slugs:
-                if slug not in valid_reward_slugs:
+                pk = reward_slug_to_pk.get(slug)
+                if pk is None:
                     continue
                 claim_key, value = build_relationship_claim(
                     "reward_type",
-                    {"reward_type_slug": slug},
+                    {"reward_type": pk},
                 )
                 plan.assertions.append(
                     PlannedClaimAssert(
@@ -241,11 +243,12 @@ def build_opdb_plan(
                 )
 
             for slug in tag_slugs:
-                if slug not in valid_tag_slugs:
+                pk = tag_slug_to_pk.get(slug)
+                if pk is None:
                     continue
                 claim_key, value = build_relationship_claim(
                     "tag",
-                    {"tag_slug": slug},
+                    {"tag": pk},
                 )
                 plan.assertions.append(
                     PlannedClaimAssert(

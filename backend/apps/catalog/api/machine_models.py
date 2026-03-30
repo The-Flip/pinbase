@@ -864,7 +864,6 @@ def patch_model_claims(request, slug: str, data: ModelClaimPatchSchema):
                 set(data.themes),
                 target_model=Theme,
                 claim_field_name="theme",
-                slug_key="theme_slug",
                 m2m_attr="themes",
             )
         )
@@ -875,7 +874,6 @@ def patch_model_claims(request, slug: str, data: ModelClaimPatchSchema):
                 set(data.tags),
                 target_model=Tag,
                 claim_field_name="tag",
-                slug_key="tag_slug",
                 m2m_attr="tags",
             )
         )
@@ -886,7 +884,6 @@ def patch_model_claims(request, slug: str, data: ModelClaimPatchSchema):
                 set(data.reward_types),
                 target_model=RewardType,
                 claim_field_name="reward_type",
-                slug_key="reward_type_slug",
                 m2m_attr="reward_types",
             )
         )

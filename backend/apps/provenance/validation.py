@@ -33,7 +33,7 @@ UNRECOGNIZED = "unrecognized"
 # the data structure, the catalog layer provides the concrete mappings.
 #
 # Format: {namespace: [(value_key, target_model, lookup_field), ...]}
-#   e.g. {"credit": [("person_slug", Person, "slug"), ("role", CreditRole, "slug")]}
+#   e.g. {"credit": [("person", Person, "pk"), ("role", CreditRole, "pk")]}
 _relationship_target_registry: dict[str, list[tuple[str, type[models.Model], str]]] = {}
 
 
@@ -353,7 +353,7 @@ def validate_relationship_claims_batch(
     if not _relationship_target_registry:
         return []
 
-    # (namespace, value_key) → [(claim, slug_value), ...]
+    # (namespace, value_key) → [(claim, ref_value), ...]
     groups: dict[tuple[str, str], list[tuple]] = defaultdict(list)
     # Track which (namespace, value_key) → (target_model, lookup_field)
     group_meta: dict[tuple[str, str], tuple[type[models.Model], str]] = {}
@@ -371,10 +371,10 @@ def validate_relationship_claims_batch(
         if not value.get("exists", True):
             continue
         for value_key, target_model, lookup_field in targets:
-            slug = value.get(value_key)
-            if slug is not None and slug != "":
+            ref = value.get(value_key)
+            if ref is not None:
                 key = (namespace, value_key)
-                groups[key].append((claim, str(slug).strip()))
+                groups[key].append((claim, ref))
                 if key not in group_meta:
                     group_meta[key] = (target_model, lookup_field)
 
@@ -385,15 +385,15 @@ def validate_relationship_claims_batch(
         target_model, lookup_field = group_meta[key]
         namespace, value_key = key
 
-        slugs = {slug for _, slug in group}
+        refs = {ref for _, ref in group}
         existing = set(
-            target_model.objects.filter(**{f"{lookup_field}__in": slugs}).values_list(
+            target_model.objects.filter(**{f"{lookup_field}__in": refs}).values_list(
                 lookup_field, flat=True
             )
         )
 
-        for claim, slug in group:
-            if slug not in existing and id(claim) not in rejected_ids:
+        for claim, ref in group:
+            if ref not in existing and id(claim) not in rejected_ids:
                 logger.warning(
                     "Rejected relationship claim %s (object_id=%s): "
                     "target %s with %s=%r does not exist",
@@ -401,7 +401,7 @@ def validate_relationship_claims_batch(
                     claim.object_id,
                     target_model.__name__,
                     lookup_field,
-                    slug,
+                    ref,
                 )
                 rejected.append(claim)
                 rejected_ids.add(id(claim))

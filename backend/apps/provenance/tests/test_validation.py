@@ -195,11 +195,13 @@ class TestValidateClaimsBatch:
         assert valid[0].field_name == "name"
 
     def test_relationship_with_valid_targets_passes(self, model, credit_targets):
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
-            value={"person_slug": "pat-lawlor", "role": "design", "exists": True},
-            claim_key="credit|person:pat-lawlor|role:design",
+            value={"person": pat_pk, "role": design_pk, "exists": True},
+            claim_key=f"credit|person:{pat_pk}|role:{design_pk}",
         )
         valid, rejected = validate_claims_batch([claim])
         assert rejected == 0
@@ -326,8 +328,8 @@ class TestClassifyClaim:
             classify_claim(
                 MachineModel,
                 "credit",
-                "credit|person:pat-lawlor|role:design",
-                {"person_slug": "pat-lawlor", "role": "design", "exists": True},
+                "credit|person:1|role:2",
+                {"person": 1, "role": 2, "exists": True},
             )
             == RELATIONSHIP
         )
@@ -345,17 +347,17 @@ class TestClassifyClaim:
         assert classify_claim(MachineModel, "manufacturer", "", "williams") == EXTRA
 
     def test_relationship_convention_enforced(self):
-        """Every namespace in RELATIONSHIP_SCHEMAS produces a RELATIONSHIP claim.
+        """Every relationship namespace produces a RELATIONSHIP claim.
 
         This turns the structural convention into a tested invariant: if
         build_relationship_claim ever stops producing compound claim_key
         or dict values with 'exists', this test breaks.
         """
-        from apps.catalog.claims import RELATIONSHIP_SCHEMAS, build_relationship_claim
+        from apps.catalog.claims import build_relationship_claim, get_all_namespace_keys
 
         # Build a minimal identity dict for each namespace.
-        for namespace, schema in RELATIONSHIP_SCHEMAS.items():
-            identity = {key: "test-value" for key in schema}
+        for namespace, keys in get_all_namespace_keys().items():
+            identity = {key: "test-value" for key in keys}
             claim_key, value = build_relationship_claim(namespace, identity)
 
             # Determine a model class that hosts this namespace. For the
@@ -399,9 +401,9 @@ class TestAssertClaimValidation:
         claim = Claim.objects.assert_claim(
             model,
             "credit",
-            {"person_slug": "pat-lawlor", "role": "design", "exists": True},
+            {"person": 1, "role": 2, "exists": True},
             source=source,
-            claim_key="credit|person:pat-lawlor|role:design",
+            claim_key="credit|person:1|role:2",
         )
         assert claim.field_name == "credit"
 
@@ -438,39 +440,43 @@ class TestValidateRelationshipClaimsBatch:
         return Theme.objects.create(name="Medieval", slug="medieval")
 
     def test_valid_credit_passes(self, model, credit_targets):
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
-            value={"person_slug": "pat-lawlor", "role": "design", "exists": True},
-            claim_key="credit|person:pat-lawlor|role:design",
+            value={"person": pat_pk, "role": design_pk, "exists": True},
+            claim_key=f"credit|person:{pat_pk}|role:{design_pk}",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert rejected == []
 
     def test_nonexistent_person_rejected(self, model, credit_targets):
+        design_pk = credit_targets["roles"]["design"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
             value={
-                "person_slug": "no-such-person",
-                "role": "design",
+                "person": 99999,
+                "role": design_pk,
                 "exists": True,
             },
-            claim_key="credit|person:no-such-person|role:design",
+            claim_key=f"credit|person:99999|role:{design_pk}",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert len(rejected) == 1
 
     def test_nonexistent_role_rejected(self, model, credit_targets):
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
             value={
-                "person_slug": "pat-lawlor",
-                "role": "no-such-role",
+                "person": pat_pk,
+                "role": 99999,
                 "exists": True,
             },
-            claim_key="credit|person:pat-lawlor|role:no-such-role",
+            claim_key=f"credit|person:{pat_pk}|role:99999",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert len(rejected) == 1
@@ -481,11 +487,11 @@ class TestValidateRelationshipClaimsBatch:
             model,
             field_name="credit",
             value={
-                "person_slug": "no-person",
-                "role": "no-role",
+                "person": 99998,
+                "role": 99999,
                 "exists": True,
             },
-            claim_key="credit|person:no-person|role:no-role",
+            claim_key="credit|person:99998|role:99999",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert len(rejected) == 1
@@ -494,8 +500,8 @@ class TestValidateRelationshipClaimsBatch:
         claim = Claim.for_object(
             model,
             field_name="theme",
-            value={"theme_slug": "medieval", "exists": True},
-            claim_key="theme|theme:medieval",
+            value={"theme": theme.pk, "exists": True},
+            claim_key=f"theme|theme:{theme.pk}",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert rejected == []
@@ -504,8 +510,8 @@ class TestValidateRelationshipClaimsBatch:
         claim = Claim.for_object(
             model,
             field_name="theme",
-            value={"theme_slug": "no-such-theme", "exists": True},
-            claim_key="theme|theme:no-such-theme",
+            value={"theme": 99999, "exists": True},
+            claim_key="theme|theme:99999",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert len(rejected) == 1
@@ -516,11 +522,11 @@ class TestValidateRelationshipClaimsBatch:
             model,
             field_name="credit",
             value={
-                "person_slug": "deleted-person",
-                "role": "deleted-role",
+                "person": 99998,
+                "role": 99999,
                 "exists": False,
             },
-            claim_key="credit|person:deleted-person|role:deleted-role",
+            claim_key="credit|person:99998|role:99999",
         )
         rejected = validate_relationship_claims_batch([claim])
         assert rejected == []
@@ -540,24 +546,26 @@ class TestValidateRelationshipClaimsBatch:
         self, model, credit_targets, django_assert_num_queries
     ):
         """Multiple credit claims should batch into one Person + one CreditRole query."""
-        Person.objects.create(name="Steve Ritchie", slug="steve-ritchie")
+        steve = Person.objects.create(name="Steve Ritchie", slug="steve-ritchie")
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
         c1 = Claim.for_object(
             model,
             field_name="credit",
-            value={"person_slug": "pat-lawlor", "role": "design", "exists": True},
-            claim_key="credit|person:pat-lawlor|role:design",
+            value={"person": pat_pk, "role": design_pk, "exists": True},
+            claim_key=f"credit|person:{pat_pk}|role:{design_pk}",
         )
         c2 = Claim.for_object(
             model,
             field_name="credit",
             value={
-                "person_slug": "steve-ritchie",
-                "role": "design",
+                "person": steve.pk,
+                "role": design_pk,
                 "exists": True,
             },
-            claim_key="credit|person:steve-ritchie|role:design",
+            claim_key=f"credit|person:{steve.pk}|role:{design_pk}",
         )
-        # 2 queries: one for Person slugs, one for CreditRole slugs.
+        # 2 queries: one for Person PKs, one for CreditRole PKs.
         with django_assert_num_queries(2):
             rejected = validate_relationship_claims_batch([c1, c2])
         assert rejected == []
@@ -575,44 +583,49 @@ class TestValidateClaimsBatchRelationships:
         return MachineModel.objects.create(name="Test", slug="test")
 
     def test_valid_relationship_passes_batch(self, model, credit_targets):
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
-            value={"person_slug": "pat-lawlor", "role": "design", "exists": True},
-            claim_key="credit|person:pat-lawlor|role:design",
+            value={"person": pat_pk, "role": design_pk, "exists": True},
+            claim_key=f"credit|person:{pat_pk}|role:{design_pk}",
         )
         valid, rejected = validate_claims_batch([claim])
         assert rejected == 0
         assert len(valid) == 1
 
     def test_invalid_relationship_rejected_in_batch(self, model, credit_targets):
+        design_pk = credit_targets["roles"]["design"].pk
         claim = Claim.for_object(
             model,
             field_name="credit",
             value={
-                "person_slug": "no-such-person",
-                "role": "design",
+                "person": 99999,
+                "role": design_pk,
                 "exists": True,
             },
-            claim_key="credit|person:no-such-person|role:design",
+            claim_key=f"credit|person:99999|role:{design_pk}",
         )
         valid, rejected = validate_claims_batch([claim])
         assert rejected == 1
         assert len(valid) == 0
 
     def test_mixed_scalar_and_relationship(self, model, credit_targets):
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
         good_scalar = Claim.for_object(model, field_name="name", value="Good Name")
         good_rel = Claim.for_object(
             model,
             field_name="credit",
-            value={"person_slug": "pat-lawlor", "role": "design", "exists": True},
-            claim_key="credit|person:pat-lawlor|role:design",
+            value={"person": pat_pk, "role": design_pk, "exists": True},
+            claim_key=f"credit|person:{pat_pk}|role:{design_pk}",
         )
         bad_rel = Claim.for_object(
             model,
             field_name="theme",
-            value={"theme_slug": "no-such-theme", "exists": True},
-            claim_key="theme|theme:no-such-theme",
+            value={"theme": 99999, "exists": True},
+            claim_key="theme|theme:99999",
         )
         valid, rejected = validate_claims_batch([good_scalar, good_rel, bad_rel])
         assert rejected == 1

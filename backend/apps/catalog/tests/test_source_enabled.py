@@ -129,7 +129,7 @@ class TestIsEnabledRelationshipResolution:
         theme = Theme.objects.create(name="Medieval", slug="medieval")
         pm = MachineModel.objects.create(name="Test", slug="test-pm")
 
-        claim_key, value = build_relationship_claim("theme", {"theme_slug": "medieval"})
+        claim_key, value = build_relationship_claim("theme", {"theme": theme.pk})
         Claim.objects.assert_claim(
             pm,
             "theme",
@@ -156,7 +156,7 @@ class TestIsEnabledRelationshipResolution:
         pm = MachineModel.objects.create(name="Test", slug="test-pm")
 
         claim_key, value = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+            "credit", {"person": person.pk, "role": role.pk}
         )
         Claim.objects.assert_claim(
             pm,

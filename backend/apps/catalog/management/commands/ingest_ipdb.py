@@ -43,6 +43,7 @@ from apps.catalog.models import (
     CorporateEntity,
     CorporateEntityAlias,
     CorporateEntityLocation,
+    CreditRole,
     GameplayFeature,
     MachineModel,
     Person,
@@ -972,14 +973,24 @@ class Command(BaseCommand):
 
         # Assert credit relationship claims.
         ct_machine = ContentType.objects.get_for_model(MachineModel).pk
+        role_slug_to_pk: dict[str, int] = dict(
+            CreditRole.objects.values_list("slug", "pk")
+        )
         credit_claims: list[Claim] = []
         for pm_pk, name, role in credit_queue:
             person = existing_persons.get(name.lower())
             if not person:
                 continue
+            role_slug = role.strip().lower()
+            role_pk = role_slug_to_pk.get(role_slug)
+            if role_pk is None:
+                logger.warning(
+                    "Credit role slug not found in DB (skipping): %s", role_slug
+                )
+                continue
             claim_key, value = build_relationship_claim(
                 "credit",
-                {"person_slug": person.slug, "role": role.strip().lower()},
+                {"person": person.pk, "role": role_pk},
             )
             credit_claims.append(
                 Claim(
@@ -1061,11 +1072,14 @@ class Command(BaseCommand):
 
         # Build theme relationship claims.
         ct_machine = ContentType.objects.get_for_model(MachineModel).pk
+        theme_slug_to_pk: dict[str, int] = {
+            t.slug: t.pk for t in existing_themes.values()
+        }
         theme_claims: list[Claim] = []
         for pm_pk, slugs in theme_queue:
             for slug in slugs:
                 claim_key, value = build_relationship_claim(
-                    "theme", {"theme_slug": slug}
+                    "theme", {"theme": theme_slug_to_pk[slug]}
                 )
                 theme_claims.append(
                     Claim(
@@ -1115,12 +1129,10 @@ class Command(BaseCommand):
         for _, pairs in gameplay_feature_queue:
             all_slugs.update(slug for slug, _count in pairs)
 
-        existing_slugs = set(
-            GameplayFeature.objects.filter(slug__in=all_slugs).values_list(
-                "slug", flat=True
-            )
+        feature_slug_to_pk: dict[str, int] = dict(
+            GameplayFeature.objects.filter(slug__in=all_slugs).values_list("slug", "pk")
         )
-        missing = all_slugs - existing_slugs
+        missing = all_slugs - feature_slug_to_pk.keys()
         if missing:
             logger.warning(
                 "Gameplay feature slugs not found in DB (skipping): %s",
@@ -1132,10 +1144,11 @@ class Command(BaseCommand):
         feature_claims: list[Claim] = []
         for pm_pk, pairs in gameplay_feature_queue:
             for slug, count in pairs:
-                if slug not in existing_slugs:
+                if slug not in feature_slug_to_pk:
                     continue
                 claim_key, value = build_relationship_claim(
-                    "gameplay_feature", {"gameplay_feature_slug": slug}
+                    "gameplay_feature",
+                    {"gameplay_feature": feature_slug_to_pk[slug]},
                 )
                 if count is not None:
                     value["count"] = count
@@ -1187,10 +1200,10 @@ class Command(BaseCommand):
         for _, slugs in reward_type_queue:
             all_slugs.update(slugs)
 
-        existing_slugs = set(
-            RewardType.objects.filter(slug__in=all_slugs).values_list("slug", flat=True)
+        reward_slug_to_pk: dict[str, int] = dict(
+            RewardType.objects.filter(slug__in=all_slugs).values_list("slug", "pk")
         )
-        missing = all_slugs - existing_slugs
+        missing = all_slugs - reward_slug_to_pk.keys()
         if missing:
             logger.warning(
                 "Reward type slugs not found in DB (skipping): %s",
@@ -1202,10 +1215,10 @@ class Command(BaseCommand):
         reward_type_claims: list[Claim] = []
         for pm_pk, slugs in reward_type_queue:
             for slug in slugs:
-                if slug not in existing_slugs:
+                if slug not in reward_slug_to_pk:
                     continue
                 claim_key, value = build_relationship_claim(
-                    "reward_type", {"reward_type_slug": slug}
+                    "reward_type", {"reward_type": reward_slug_to_pk[slug]}
                 )
                 reward_type_claims.append(
                     Claim(

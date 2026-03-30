@@ -12,7 +12,7 @@ Three areas need to be addressed together:
 
 **No retraction mechanism.** There is no explicit way to retract a claim or mark an entity as deleted through the claims system. The current relationship sweep machinery infers retraction from omission, but the project currently rebuilds from a bare DB each time, so sweep is effectively a no-op.
 
-**Relationship claims use slugs as identity.** Relationship claims store target entity slugs in their value dicts (e.g. `{"person_slug": "pat-lawlor"}`). This couples the claims system to editorial slug choices, means slug renames can invalidate existing claims, and uses an identity mechanism that no external source actually has. Only pindata uses slugs as identity; external sources use their own IDs, names, and aliases.
+**Relationship claims use slugs as identity. ✓ (resolved)** Relationship claims previously stored target entity slugs in their value dicts (e.g. `{"person_slug": "pat-lawlor"}`). Phase 4 migrated all relationship claims to store PKs (e.g. `{"person": 42, "role": 5}`), with slug-to-PK resolution happening at the boundary (API layer, ingest adapters) rather than at materialisation time.
 
 ### Validation gaps
 
@@ -374,11 +374,7 @@ DB-level validation (~84 `CheckConstraint` additions) established the database a
 
 [IngestRefactor.md](IngestRefactor.md) contains the earlier iteration of the ingest architecture design, including analysis of snowflake patterns and the original sync modes proposal. This document supersedes it.
 
-### Remaining validation work
-
-**Trim `validate_catalog` and review resolver guard rails** (after ingest redesign). Some resolver defensive coercions exist to compensate for the current ingest's lack of validation. After the redesign, the apply layer validates everything before persisting, making it clearer which guard rails are still reachable vs. dead code. `validate_catalog` checks should then be triaged into genuinely post-resolution checks (keep), checks redundant with claim boundary (remove), and info/data quality (keep as-is).
-
-**Wire relationship target validation into `assert_claim()`.** The bulk path validates relationship targets; the single-claim path does not. Not a correctness hole today (the PATCH path validates upstream), but a gap for one-off management commands.
+Remaining validation work (trimming `validate_catalog`, reviewing resolver guard rails, wiring relationship target validation into `assert_claim()`) is tracked in Phase 7 below.
 
 ## Implementation Phases
 
@@ -402,15 +398,17 @@ Add claim-controlled `status` field (`active`, `deleted`) to all catalog entitie
 
 Implemented via `EntityStatusMixin` in `core/models.py` with `EntityStatus` enum (`active`, `deleted`), `status_valid()` DB constraint, and null allowed for entities with no remaining status claim.
 
-### Phase 4: Relationship claim PK migration
+### Phase 4: Relationship claim PK migration ✓ (implemented)
 
-Change relationship claims from slug-based identity (`person_slug`, `theme_slug`) to PK-based identity. Update `RELATIONSHIP_SCHEMAS`, `build_relationship_claim`, validators (`validate_relationship_claims_batch`), and resolvers. Migrate pindata export format.
+Changed relationship claims from slug-based identity (`person_slug`, `theme_slug`) to PK-based identity (`person`, `theme`). Value dict keys dropped the `_slug` suffix — keys now match identity keys (e.g. `{"person": 42, "role": 5}`). Claim keys use PKs (`credit:person=42:role=5`). Location claims migrated from materialized path to PK.
 
-Depends on: Phase 2 (validates the framework with slug-based claims first, so this migration doesn't break an untested system).
+Updated: `RELATIONSHIP_SCHEMAS` and validation registry in `claims.py`, `validate_relationship_claims_batch` in `validation.py`, all resolvers in `resolve/_relationships.py` (removed slug→PK lookup dicts — claims carry PKs directly), API planning layer in `edit_claims.py` (slug→PK resolution at API boundary), OPDB adapter, all four legacy ingest commands, `validate_catalog.py` audit functions, and ~12 test files.
+
+Legacy ingest commands now build PK-based claims but remain imperative (full plan/apply conversion is Phase 5).
 
 ### Phase 5: Remaining source adapters
 
-Convert `ingest_ipdb`, `ingest_fandom`, `ingest_wikidata`, `ingest_pinbase` (compound plan). Each adapter: parse, reconcile, collect claims, produce plan. Remove old imperative commands.
+Convert `ingest_ipdb`, `ingest_fandom`, `ingest_wikidata`, `ingest_pinbase` (compound plan). Each adapter: parse, reconcile, collect claims, produce plan. Remove old imperative commands. Note: legacy commands already build PK-based claims (Phase 4), so the conversion is purely structural (plan/apply separation), not a claim format change.
 
 Depends on: Phase 1. Can proceed in parallel after Phase 2 proves the pattern. `ingest_pinbase` is last (compound plan, most complex).
 
@@ -424,7 +422,7 @@ Depends on: Phase 5.
 
 ### Phase 7: Cleanup
 
-Trim `validate_catalog` checks redundant with claim boundary validation and DB-level constraints (some range and cross-field checks may already be covered — triage before writing new code). Review resolver defensive coercions. Wire relationship target validation into `assert_claim()` single-claim path.
+Trim `validate_catalog` checks redundant with claim boundary validation and DB-level constraints (some range and cross-field checks may already be covered — triage before writing new code). Note: `validate_catalog`'s relationship audit functions (`check_unresolved_credit_claims`, `check_unresolved_m2m_claims`, `check_credits_without_matching_claims`) were already updated in Phase 4 to read PK-based claim values; the Phase 7 work is about removing checks that are now redundant with claim-boundary validation, not about fixing the value format. Review resolver defensive coercions — Phase 4 simplified resolvers significantly (removed slug→PK lookup dicts, added PK existence checks), but the remaining guard rails may still be reachable from stale claims. Wire relationship target validation into `assert_claim()` single-claim path.
 
 Depends on: Phase 5 (need all adapters converted to know which guard rails are still reachable).
 
@@ -443,7 +441,7 @@ This plan is successful when:
 - ✅ The claims system has three explicit primitive operations: `create_entity`, `assert_claim`, `retract_claim`
 - ✅ Entity existence is provenance-backed via a claim-controlled `status` field (`active`, `deleted`)
 - ✅ Entity rows are never hard-deleted; catalog queries filter on `status=active`
-- Relationship claims reference target entities by PK, not by slug
+- ✅ Relationship claims reference target entities by PK, not by slug
 - All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields (OPDB done; IPDB, Fandom, Wikidata, pinbase remain)
 - ✅ Every ingest run is recorded as an IngestRun with structured run metadata
 - ✅ Every entity touched in an ingest run has a ChangeSet grouping its claims

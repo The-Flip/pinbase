@@ -261,11 +261,16 @@ class TestBulkAssertClaimsSweep:
         """A claim no longer in the pending set is swept (deactivated)."""
         from apps.catalog.claims import build_relationship_claim
 
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        john_pk = credit_targets["persons"]["john-youssi"].pk
+        design_pk = credit_targets["roles"]["design"].pk
+        art_pk = credit_targets["roles"]["art"].pk
+
         key1, val1 = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+            "credit", {"person": pat_pk, "role": design_pk}
         )
         key2, val2 = build_relationship_claim(
-            "credit", {"person_slug": "john-youssi", "role": "art"}
+            "credit", {"person": john_pk, "role": art_pk}
         )
         pending1 = [
             Claim(
@@ -321,8 +326,11 @@ class TestBulkAssertClaimsSweep:
         """authoritative_scope ensures stale claims are swept even when pending is empty."""
         from apps.catalog.claims import build_relationship_claim
 
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
+
         key, val = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+            "credit", {"person": pat_pk, "role": design_pk}
         )
         Claim.objects.bulk_assert_claims(
             source,
@@ -358,12 +366,15 @@ class TestBulkAssertClaimsSweep:
         """Sweep only affects claims matching the sweep_field."""
         from apps.catalog.claims import build_relationship_claim
 
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
+
         # A scalar claim.
         Claim.objects.assert_claim(pm1, "name", "Medieval Madness", source=source)
 
         # A credit claim.
         key, val = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+            "credit", {"person": pat_pk, "role": design_pk}
         )
         Claim.objects.bulk_assert_claims(
             source,
@@ -407,8 +418,11 @@ class TestBulkAssertClaimsSweep:
         """Sweep only affects entities in the authoritative scope."""
         from apps.catalog.claims import build_relationship_claim
 
+        pat_pk = credit_targets["persons"]["pat-lawlor"].pk
+        design_pk = credit_targets["roles"]["design"].pk
+
         key, val = build_relationship_claim(
-            "credit", {"person_slug": "pat-lawlor", "role": "design"}
+            "credit", {"person": pat_pk, "role": design_pk}
         )
         # Create credit claims on both machines.
         for pm in (pm1, pm2):

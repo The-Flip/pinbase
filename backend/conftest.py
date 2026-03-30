@@ -10,8 +10,10 @@ def credit_targets(db):
     Relationship claim validation checks target existence at the claim
     boundary, so any test that creates credit claims needs the referenced
     Person and CreditRole rows to exist.
+
+    Returns a dict keyed by slug for convenient ``.pk`` access in tests.
     """
-    Person.objects.bulk_create(
+    persons = Person.objects.bulk_create(
         [
             Person(name="Pat Lawlor", slug="pat-lawlor"),
             Person(name="John Youssi", slug="john-youssi"),
@@ -20,7 +22,7 @@ def credit_targets(db):
         unique_fields=["slug"],
         update_fields=["name"],
     )
-    CreditRole.objects.bulk_create(
+    roles = CreditRole.objects.bulk_create(
         [
             CreditRole(name="Design", slug="design"),
             CreditRole(name="Art", slug="art"),
@@ -29,6 +31,13 @@ def credit_targets(db):
         unique_fields=["slug"],
         update_fields=["name"],
     )
+    # Re-fetch to guarantee PKs are populated (bulk_create with
+    # update_conflicts may not set pk on all backends).
+    persons = {
+        p.slug: p for p in Person.objects.filter(slug__in=["pat-lawlor", "john-youssi"])
+    }
+    roles = {r.slug: r for r in CreditRole.objects.filter(slug__in=["design", "art"])}
+    return {"persons": persons, "roles": roles}
 
 
 @pytest.fixture(autouse=True)

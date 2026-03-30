@@ -19,7 +19,7 @@ from apps.core.licensing import (
 )
 from apps.provenance.models import Claim
 
-from ..claims import RELATIONSHIP_NAMESPACES
+from ..claims import get_relationship_namespaces
 from ..models import (
     MachineModel,
     Title,
@@ -349,7 +349,7 @@ def _apply_resolution(
 
     # Apply winners.
     for claim_key, claim in winners.items():
-        if claim.field_name in RELATIONSHIP_NAMESPACES:
+        if claim.field_name in get_relationship_namespaces():
             continue
         if claim.field_name in claim_fields:
             attr = claim_fields[claim.field_name]

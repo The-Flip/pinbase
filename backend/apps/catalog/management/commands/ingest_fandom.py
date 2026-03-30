@@ -46,7 +46,7 @@ from apps.catalog.ingestion.fandom_wiki import (
 )
 from apps.catalog.claims import build_relationship_claim, make_authoritative_scope
 from apps.core.validators import validate_no_mojibake
-from apps.catalog.models import MachineModel, Manufacturer, Person
+from apps.catalog.models import CreditRole, MachineModel, Manufacturer, Person
 from apps.catalog.resolve import (
     resolve_all_credits,
     resolve_all_entities,
@@ -211,6 +211,9 @@ class Command(BaseCommand):
         matched_machine_ids: set[int] = set()
 
         ct_machine = ContentType.objects.get_for_model(MachineModel).pk
+        role_slug_to_pk: dict[str, int] = dict(
+            CreditRole.objects.values_list("slug", "pk")
+        )
 
         # Also build name → game-titles map for person near-duplicate checking.
         fandom_credits_by_name: dict[str, set[str]] = {}
@@ -239,9 +242,19 @@ class Command(BaseCommand):
                 matched_persons_credits.add(person.name)
                 credits_found += 1
 
+                role_slug = credit.role.strip().lower()
+                role_pk = role_slug_to_pk.get(role_slug)
+                if role_pk is None:
+                    logger.warning(
+                        "Unknown CreditRole slug %r for %s on %s — skipping",
+                        role_slug,
+                        person.name,
+                        machine.name,
+                    )
+                    continue
                 claim_key, value = build_relationship_claim(
                     "credit",
-                    {"person_slug": person.slug, "role": credit.role.strip().lower()},
+                    {"person": person.pk, "role": role_pk},
                 )
                 credit_claims.append(
                     Claim(

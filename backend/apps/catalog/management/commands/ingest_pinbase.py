@@ -661,7 +661,7 @@ class Command(BaseCommand):
                     )
                     continue
                 claim_key, value = build_relationship_claim(
-                    "theme_parent", {"parent_slug": parent.slug}
+                    "theme_parent", {"parent": parent.pk}
                 )
                 parent_claims.append(
                     Claim(
@@ -776,7 +776,8 @@ class Command(BaseCommand):
                         f"(referenced by {entry['slug']!r})"
                     )
                 claim_key, value = build_relationship_claim(
-                    "gameplay_feature_parent", {"parent_slug": parent_slug}
+                    "gameplay_feature_parent",
+                    {"parent": features_by_slug[parent_slug].pk},
                 )
                 parent_claims.append(
                     Claim(
@@ -1066,7 +1067,7 @@ class Command(BaseCommand):
             hq_path = _resolve_ce_location_path(entry, loc_by_path)
             if hq_path:
                 claim_key, value = build_relationship_claim(
-                    "location", {"location_path": hq_path}
+                    "location", {"location": loc_by_path[hq_path].pk}
                 )
                 location_claims.append(
                     Claim(
@@ -1572,7 +1573,7 @@ class Command(BaseCommand):
                     logger.warning("Series slug %r not found — skipping", series_slug)
                 else:
                     claim_key, value = build_relationship_claim(
-                        "series_title", {"title_slug": final_slug}
+                        "series_title", {"title": title.pk}
                     )
                     series_title_claims[series.pk].append(
                         Claim.for_object(
@@ -1769,6 +1770,14 @@ class Command(BaseCommand):
                 + "\n".join(f"  {s}" for s in bad_reward_type_slugs)
             )
 
+        # Build slug→PK lookup dicts for relationship claims.
+        person_slug_to_pk = dict(Person.objects.values_list("slug", "pk"))
+        role_slug_to_pk = dict(CreditRole.objects.values_list("slug", "pk"))
+        tag_slug_to_pk = dict(Tag.objects.values_list("slug", "pk"))
+        theme_slug_to_pk = dict(Theme.objects.values_list("slug", "pk"))
+        feature_slug_to_pk = dict(GameplayFeature.objects.values_list("slug", "pk"))
+        rt_slug_to_pk = dict(RewardType.objects.values_list("slug", "pk"))
+
         # Pass 2: assert scalar + relationship claims.
         pending_claims: list[Claim] = []
         credit_claims: list[Claim] = []
@@ -1808,9 +1817,11 @@ class Command(BaseCommand):
             for ref in entry.get("credit_refs") or []:
                 person_slug = ref.get("person_slug")
                 role = _normalize_credit_role(ref.get("role", ""))
-                if person_slug and role:
+                person_pk = person_slug_to_pk.get(person_slug) if person_slug else None
+                role_pk = role_slug_to_pk.get(role) if role else None
+                if person_pk and role_pk:
                     claim_key, value = build_relationship_claim(
-                        "credit", {"person_slug": person_slug, "role": role}
+                        "credit", {"person": person_pk, "role": role_pk}
                     )
                     credit_claims.append(
                         Claim(
@@ -1824,9 +1835,10 @@ class Command(BaseCommand):
 
             # Tag relationship claims.
             for tag_slug in entry.get("tag_slugs") or []:
-                claim_key, value = build_relationship_claim(
-                    "tag", {"tag_slug": tag_slug}
-                )
+                tag_pk = tag_slug_to_pk.get(tag_slug)
+                if tag_pk is None:
+                    continue
+                claim_key, value = build_relationship_claim("tag", {"tag": tag_pk})
                 tag_claims.append(
                     Claim(
                         content_type_id=ct_id,
@@ -1839,8 +1851,11 @@ class Command(BaseCommand):
 
             # Theme relationship claims.
             for theme_slug in entry.get("theme_slugs") or []:
+                theme_pk = theme_slug_to_pk.get(theme_slug)
+                if theme_pk is None:
+                    continue
                 claim_key, value = build_relationship_claim(
-                    "theme", {"theme_slug": theme_slug}
+                    "theme", {"theme": theme_pk}
                 )
                 theme_claims.append(
                     Claim(
@@ -1854,8 +1869,12 @@ class Command(BaseCommand):
 
             # GameplayFeature relationship claims.
             for feature_slug in entry.get("gameplay_feature_slugs") or []:
+                feature_pk = feature_slug_to_pk.get(feature_slug)
+                if feature_pk is None:
+                    continue
                 claim_key, value = build_relationship_claim(
-                    "gameplay_feature", {"gameplay_feature_slug": feature_slug}
+                    "gameplay_feature",
+                    {"gameplay_feature": feature_pk},
                 )
                 gameplay_feature_claims.append(
                     Claim(
@@ -1869,8 +1888,11 @@ class Command(BaseCommand):
 
             # RewardType relationship claims.
             for rt_slug in entry.get("reward_type_slugs") or []:
+                rt_pk = rt_slug_to_pk.get(rt_slug)
+                if rt_pk is None:
+                    continue
                 claim_key, value = build_relationship_claim(
-                    "reward_type", {"reward_type_slug": rt_slug}
+                    "reward_type", {"reward_type": rt_pk}
                 )
                 reward_type_claims.append(
                     Claim(
