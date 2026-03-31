@@ -6,14 +6,14 @@ This document proposes a media architecture for Pinbase after the database reset
 
 ## Goals
 
-- Allow Pinbase users to upload images (first PR) and video (follow-up) for MachineModel (first PR) then all catalog entity types (follow-up).
+- Allow Pinbase users to upload images (initial implementation) and video (follow-up) for MachineModel (initial implementation) then all catalog entity types (follow-up).
 - Keep third-party media external. OPDB, IPDB, Fandom, Wikidata images stay where they are (`extra_data["opdb.images"]`, etc.). Never copy external images into Pinbase storage.
 - Keep catalog truth claims-based. Media attachments, categories, and primary flags go through provenance.
 - Separate catalog truth from storage infrastructure. Binary files, renditions, storage keys are infrastructure.
 - Store relative object keys, not origin-specific URLs. CDN adoption becomes a config change.
 - Keep the initial PR small: machine model images only.
 
-## Non-Goals For The First PR
+## Non-Goals For Initial Implementation
 
 - No video upload flow.
 - No support for non-MachineModel entity media UIs.
@@ -108,8 +108,8 @@ Notes:
 
 - Not a catalog claim. Pure infrastructure.
 - `uploaded_by` is required (not nullable). Since we removed `source_kind`, every asset is a user upload.
-- The `status` field exists for video support later. For images in the first PR, assets go straight to `ready` or `failed`.
-- No `sha256` field in the first PR. Dedupe is a potential far-future follow-up.
+- The `status` field exists for video support later. For images in the initial implementation, assets go straight to `ready` or `failed`.
+- No `sha256` field in the initial implementation. Dedupe is a potential far-future follow-up.
 
 ### `MediaVariant`
 
@@ -148,7 +148,7 @@ Notes:
 
 - Shipping the variant table now avoids a migration when video support adds `poster`, `mp4`, `hls_playlist`, `hls_segment` roles.
 - Public URL = `MEDIA_PUBLIC_BASE_URL + storage_key`.
-- For images in the first PR, every successful upload creates exactly three variants: `original`, `thumb`, `display`.
+- For images in the initial implementation, every successful upload creates exactly three variants: `original`, `thumb`, `display`.
 
 ### `EntityMedia`
 
@@ -222,7 +222,7 @@ And call `register_relationship_targets()` from `CatalogConfig.ready()` as usual
 
 Image categories are entity-type-specific, not a global enum.
 
-First PR implements only `MachineModel`:
+Initial implementation covers only `MachineModel`:
 
 - `backglass`, `playfield`, `cabinet`, `other`
 
@@ -238,22 +238,23 @@ Follow-up category sets (guesses, not commitments):
 
 Implementation: a simple `MEDIA_CATEGORIES` dict mapping entity model classes to lists of allowed category strings. Validated at claim assertion time — reject unknown categories immediately, don't let them into the claims table.
 
-## Upload Flow (First PR — Images)
+## Upload Flow (Images)
 
 Upload through Django, not presigned URLs. For images (typically 1-10MB), this is one round trip and avoids the complexity of presigned URL flows, S3 CORS configuration, and partial-upload error handling. Since we use django-storages with S3 from day one, the files end up in S3 regardless — switching to presigned URLs later changes the upload _path_ but not where files are stored. No migration needed.
 
+Upload and attach happen in a single request. The user is always uploading _to_ a specific entity with a specific category — there's no use case for uploading an image without immediately attaching it. Combining them avoids orphaned assets and simplifies the UX.
+
 ### Flow
 
-1. **Client** POSTs multipart form to `POST /api/media/upload/` with the image file.
-2. **Backend** validates the file (type, size, decodability).
+1. **Client** POSTs multipart form to `POST /api/media/upload/` with the image file, target entity (content_type + object_id), category, and is_primary flag.
+2. **Backend** validates the file (type, size, decodability) and the attachment metadata (valid entity, valid category for entity type).
 3. **Backend** processes the image synchronously: generates `thumb` and `display` variants using Pillow (EXIF transpose, LANCZOS resize, WebP output).
 4. **Backend** uploads all three files (original, thumb, display) to R2 via django-storages.
-5. **Backend** creates `MediaAsset` (status=`ready`) + 3 `MediaVariant` rows in a single database transaction.
-6. **Backend** returns the asset UUID and variant URLs.
-7. **Client** creates/updates the media attachment claim on the target entity via the existing claim-patch API (or a new dedicated endpoint).
-8. **Resolution** materializes `EntityMedia`.
+5. **Backend** creates `MediaAsset` (status=`ready`) + 3 `MediaVariant` rows + media attachment claim in a single database transaction.
+6. **Resolution** materializes `EntityMedia`.
+7. **Backend** returns the asset UUID, variant URLs, and attachment metadata.
 
-Steps 1-6 are one synchronous HTTP request. No task queue, no polling, no "pending" state for images.
+Steps 1-7 are one synchronous HTTP request. No task queue, no polling, no "pending" state for images.
 
 ### Atomicity and Failure Handling
 
@@ -263,7 +264,7 @@ The upload flow must not leave orphaned state on failure:
 - **S3 write failure** (one of the three uploads fails): clean up any S3 objects already written, return error, nothing written to DB.
 - **DB write failure** (transaction fails after S3 uploads succeed): clean up all S3 objects. DB transaction rollback handles the rows.
 
-The key invariant: **DB rows are only created after all S3 objects are successfully written.** This means orphaned DB rows can't exist. Orphaned S3 objects (written but DB transaction failed) are cleaned up in the error handler. A periodic cleanup job for orphaned S3 objects is not needed in the first PR but is a reasonable follow-up if operational experience shows leakage.
+The key invariant: **DB rows are only created after all S3 objects are successfully written.** This means orphaned DB rows can't exist. Orphaned S3 objects (written but DB transaction failed) are cleaned up in the error handler. A periodic cleanup job for orphaned S3 objects is not needed in the initial implementation but is a reasonable follow-up if operational experience shows leakage.
 
 ### Why Synchronous Processing For Images
 
@@ -412,18 +413,18 @@ APIs return media metadata plus public URLs for ready variants:
 
 ### Fallback Policy
 
-1. Prefer Pinbase-owned media from `EntityMedia`.
-2. If no owned media exists for the needed slot, fall back to third-party referenced media from `extra_data` (`opdb.images`, `ipdb.image_urls`).
+1. Prefer Pinbase-owned media from `EntityMedia`. Owned images are always displayable — the uploader granted Pinbase a license at upload time, so no license threshold check is needed.
+2. If no owned media exists for the needed slot, fall back to third-party referenced media from `extra_data` (`opdb.images`, `ipdb.image_urls`). The existing Constance display threshold applies here: sources whose `__permissiveness_rank` is below `get_minimum_display_rank()` are skipped, same as today.
 
-The existing `_extract_image_urls()` helper in `catalog/api/helpers.py` handles the external fallback. The new code adds an owned-media-first layer on top.
+The existing `_extract_image_urls()` helper in `catalog/api/helpers.py` handles the external fallback and license filtering. The new code adds an owned-media-first layer on top that bypasses the license check for Pinbase-owned images.
 
 ### Ordering
 
-API responses return media in deterministic order: primary first, then by `created_at` ascending. This applies both to the `owned_media` list in entity detail responses and to any future media listing endpoint. Pagination is not needed in the first PR — MachineModel images will be single-digit counts per entity.
+API responses return media in deterministic order: primary first, then by `created_at` ascending. This applies both to the `owned_media` list in entity detail responses and to any future media listing endpoint. Pagination is not needed in the initial implementation — MachineModel images will be single-digit counts per entity.
 
 ## Authorization
 
-For the first PR, media follows the same rules as all other claim types:
+For the initial implementation, media follows the same rules as all other claim types:
 
 - **Upload**: any authenticated user. Anonymous uploads are never allowed.
 - **Attach / detach / set primary / change category**: any authenticated user, same as credits, themes, and other claim types. Claims go through provenance, and resolution picks winners by priority.
@@ -473,29 +474,23 @@ All media UI is built as decomposed SvelteKit components with logic extracted to
 #### TypeScript Modules (logic, testable without DOM)
 
 - **`media-upload.ts`** — Upload state machine, file validation, API calls. Exports reactive state and action functions.
-- **`media-api.ts`** — API client functions for media endpoints (upload, attach, delete).
-- **`media-types.ts`** — TypeScript types for media API responses, generated from OpenAPI schema.
+- **`media-api.ts`** — API client functions for media endpoints (upload, delete).
+
+Types for media API responses come from the existing OpenAPI-generated `schema.d.ts` via `make api-gen`.
 
 #### Svelte Components (thin UI wrappers)
 
-- **`MediaUploadButton.svelte`** — File picker trigger + drag-drop zone. Calls into `media-upload.ts`.
-- **`MediaUploadProgress.svelte`** — Upload progress indicator (synchronous for images, polling for future video).
+- **`MediaUploadButton.svelte`** — File picker trigger + drag-drop zone with category selection. Calls into `media-upload.ts`. Upload and attach happen in one request.
 - **`MediaGrid.svelte`** — Grid of media items with delete and set-primary actions.
 - **`MediaCard.svelte`** — Single media item card (thumbnail, category badge, primary indicator).
-- **`MediaAttachForm.svelte`** — Form for setting category and primary flag on an attachment.
 - **`HeroImage.svelte`** — Detail page hero image with owned-first/external-fallback logic.
 
 #### Interaction Flow (Image Upload)
 
-1. User clicks upload button or drags file onto drop zone.
+1. User selects category and clicks upload button (or drags file onto drop zone).
 2. `media-upload.ts` validates file client-side (type, size).
-3. `media-upload.ts` calls `POST /api/media/upload/` with the file.
-4. On success, component shows the returned thumbnail immediately.
-5. User selects category and optionally sets primary flag.
-6. `media-api.ts` calls the claim-patch endpoint to create the media attachment claim.
-7. On success, `MediaGrid` updates to show the new attachment.
-
-For the first PR, there is no polling step — image processing is synchronous. The polling pattern (`media-upload.ts` watches for status transitions via `GET /api/media/{uuid}/status/`) is scaffolded but only activated when video support lands.
+3. `media-upload.ts` calls `POST /api/media/upload/` with the file, target entity, category, and primary flag.
+4. On success, `MediaGrid` updates to show the new attachment with its thumbnail.
 
 ## Testing Strategy
 
@@ -573,24 +568,54 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_PUBLIC_BASE_URL = "/media/"
 ```
 
-## Initial PR Scope
+## Implementation Phases
 
-### Include
+The work is broken into reviewable phases. Each phase is one or more commits with a pause for review before proceeding.
 
-- `MediaAsset`, `MediaVariant`, `EntityMedia` models + migrations.
-- `media_attachment` claim namespace registration + validation.
-- Resolver support for media attachment claims (including primary enforcement).
-- Machine-model image category registry (`backglass`, `playfield`, `cabinet`, `other`).
-- Image processing module (adapted from flipfix).
-- Upload API endpoint (`POST /api/media/upload/`).
-- Media attachment claim endpoint (or extend existing claim-patch).
-- API response support: owned media first, external fallback second.
+After each phase, we review what we learned during implementation and update the remaining phases in this plan accordingly. Plans don't survive contact with code — early phases will surface questions and constraints that affect later phases.
+
+### Phase 1: Models + Constraints + Migration
+
+- `MediaAsset`, `MediaVariant`, `EntityMedia` models with all database constraints.
+- Migration.
+- No behavior yet — just the schema.
+
+### Phase 2: Image Processing Module + Tests
+
+- Image processing module adapted from flipfix (`resize_image_file`, format conversion, EXIF handling).
+- Media constants (`ALLOWED_IMAGE_EXTENSIONS`, `THUMB_MAX_DIMENSION`, `DISPLAY_MAX_DIMENSION`, `MAX_UPLOADS_PER_HOUR`).
+- Unit tests: resize, EXIF transpose, format conversion, transparency handling, HEIC support.
+- Pure library code — no API, no models, no storage.
+
+### Phase 3: R2 Storage Config + Upload API + Tests
+
 - django-storages + Cloudflare R2 configuration.
-- Frontend: `MediaUploadButton`, `MediaGrid`, `MediaCard`, `MediaAttachForm`, `HeroImage`.
-- Frontend: `media-upload.ts`, `media-api.ts` TypeScript modules.
-- Tests: image processing, upload API, claims + resolution, API responses, frontend TypeScript modules.
+- `POST /api/media/upload/` endpoint: validates file, processes image, writes to R2, creates MediaAsset + MediaVariant rows + media attachment claim in one request.
+- Rate limiting.
+- Upload API tests: valid/invalid files, storage key verification, rate limit enforcement, atomicity.
 
-### Exclude
+### Phase 4: Claims Namespace + Resolver + Tests
+
+- `media_attachment` claim namespace registration in `catalog/claims.py`.
+- Resolver support for media attachment claims in `catalog/resolve/`.
+- Primary constraint enforcement in resolution.
+- Machine-model image category registry (`backglass`, `playfield`, `cabinet`, `other`).
+- Tests: claim assertion, resolution, primary enforcement, category validation.
+
+### Phase 5: API Response Changes + Tests
+
+- Owned-media-first fallback in entity detail/list APIs.
+- Variant URLs in API responses.
+- Constance license threshold bypass for owned images.
+- Tests: owned-first fallback, external fallback with license filtering.
+
+### Phase 6: Frontend Components
+
+- `MediaUploadButton.svelte`, `MediaGrid.svelte`, `MediaCard.svelte`, `HeroImage.svelte`.
+- `media-upload.ts`, `media-api.ts` TypeScript modules.
+- Frontend tests: TypeScript module tests (vitest).
+
+### Excluded From All Phases
 
 - Videos.
 - Non-MachineModel entity media UIs.
@@ -642,16 +667,17 @@ MEDIA_PUBLIC_BASE_URL = "/media/"
 
 ## Key Design Decisions
 
-| Decision               | Choice                                    | Rationale                                                                                                                                          |
-| ---------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Upload path (first PR) | Django relay                              | One round trip, simpler than presigned URLs. Fine for images (1-10MB). Switch to presigned for video — no migration since files are already in S3. |
-| Image processing       | Synchronous in upload request             | Under 1 second for thumb + display. Avoids task queue dependency. Flipfix proves this works in production.                                         |
-| Variant storage        | `MediaVariant` table                      | Small overhead now, avoids migration when video adds poster/mp4/hls roles.                                                                         |
-| Status field           | Present but minimal                       | `ready`/`failed` for images. Full state machine activated for video follow-up.                                                                     |
-| sha256 dedupe          | Deferred (far future)                     | Adds complexity without clear near-term value.                                                                                                     |
-| Task queue             | Deferred (video follow-up)                | No async work in first PR. Evaluate options when video lands.                                                                                      |
-| Derivative format      | WebP                                      | Good compression, universal browser support. AVIF deferred.                                                                                        |
-| Storage provider       | Cloudflare R2                             | Already in use for ingest sources. Zero egress, hosting-independent, integrated CDN path (free).                                                   |
-| Third-party media      | Stays in `extra_data`                     | Not temporary — permanent fallback layer. API reads both owned and external.                                                                       |
-| Category vocabulary    | Per-entity-type registry                  | Not a global enum. `MachineModel` gets `backglass`/`playfield`/`cabinet`/`other`.                                                                  |
-| Frontend architecture  | Logic in TypeScript, thin Svelte wrappers | Testable without DOM. Follows flipfix's interaction patterns in Svelte 5 runes.                                                                    |
+| Decision              | Choice                                    | Rationale                                                                                                                                          |
+| --------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Upload path           | Django relay                              | One round trip, simpler than presigned URLs. Fine for images (1-10MB). Switch to presigned for video — no migration since files are already in S3. |
+| Upload + attach       | Combined endpoint                         | One request uploads, processes, and attaches. Avoids orphaned assets and simplifies UX.                                                            |
+| Image processing      | Synchronous in upload request             | Under 1 second for thumb + display. Avoids task queue dependency. Flipfix proves this works in production.                                         |
+| Variant storage       | `MediaVariant` table                      | Small overhead now, avoids migration when video adds poster/mp4/hls roles.                                                                         |
+| Status field          | Present but minimal                       | `ready`/`failed` for images. Full state machine activated for video follow-up.                                                                     |
+| sha256 dedupe         | Deferred (far future)                     | Adds complexity without clear near-term value.                                                                                                     |
+| Task queue            | Deferred (video follow-up)                | No async work needed. Evaluate options when video lands.                                                                                           |
+| Derivative format     | WebP                                      | Good compression, universal browser support. AVIF deferred.                                                                                        |
+| Storage provider      | Cloudflare R2                             | Already in use for ingest sources. Zero egress, hosting-independent, integrated CDN path (free).                                                   |
+| Third-party media     | Stays in `extra_data`                     | Not temporary — permanent fallback layer. API reads both owned and external.                                                                       |
+| Category vocabulary   | Per-entity-type registry                  | Not a global enum. `MachineModel` gets `backglass`/`playfield`/`cabinet`/`other`.                                                                  |
+| Frontend architecture | Logic in TypeScript, thin Svelte wrappers | Testable without DOM. Follows flipfix's interaction patterns in Svelte 5 runes.                                                                    |
