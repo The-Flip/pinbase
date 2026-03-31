@@ -137,7 +137,7 @@ Database constraints:
 - `width > 0` and `height > 0` when set — PositiveIntegerField allows 0, but a 0-pixel dimension is never valid.
 - `storage_key` must not start with `http://` or `https://` — catches accidental full URL storage. Relative keys only.
 - `storage_key` must not contain `..` — prevents path traversal.
-- `storage_key` must not contain whitespace — catches encoding issues.
+- `storage_key` must not contain whitespace — validated in application code, not a DB constraint (regex-based CHECK constraints are not portable across database backends; see `docs/DataModeling.md`).
 - UNIQUE `(asset, role)` — one variant per role per asset.
 - `storage_key` UNIQUE (field-level) — no two variants share a storage path.
 

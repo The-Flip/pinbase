@@ -197,12 +197,6 @@ class MediaVariant(TimeStampedModel):
                 name="media_mediavariant_storage_key_no_traversal",
                 violation_error_message="storage_key must not contain '..'.",
             ),
-            # --- storage_key must not contain whitespace ---
-            models.CheckConstraint(
-                condition=models.Q(storage_key__regex=r"^\S+$"),
-                name="media_mediavariant_storage_key_no_whitespace",
-                violation_error_message="storage_key must not contain whitespace.",
-            ),
             # --- one variant per role per asset ---
             models.UniqueConstraint(
                 fields=["asset", "role"],

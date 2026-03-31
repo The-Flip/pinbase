@@ -223,12 +223,6 @@ class TestMediaVariantConstraints:
                 **_variant_kwargs(asset, storage_key="media/../etc/passwd")
             )
 
-    def test_storage_key_whitespace_rejected(self, asset):
-        with pytest.raises(IntegrityError):
-            MediaVariant.objects.create(
-                **_variant_kwargs(asset, storage_key="media/my photo.jpg")
-            )
-
     def test_duplicate_asset_role_rejected(self, asset):
         MediaVariant.objects.create(**_variant_kwargs(asset, role="thumb"))
         with pytest.raises(IntegrityError):
