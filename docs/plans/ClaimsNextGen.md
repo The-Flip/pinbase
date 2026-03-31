@@ -410,21 +410,17 @@ Legacy ingest commands now build PK-based claims but remain imperative (full pla
 
 Convert `ingest_ipdb`, `ingest_fandom`, `ingest_wikidata`, `ingest_pinbase` (compound plan). Each adapter: parse, reconcile, collect claims, produce plan. Remove old imperative commands. Note: legacy commands already build PK-based claims (Phase 4), so the conversion is purely structural (plan/apply separation), not a claim format change.
 
-Depends on: Phase 1. Can proceed in parallel after Phase 2 proves the pattern. `ingest_pinbase` is last (compound plan, most complex).
+**✅ `ingest_ipdb` converted.** Adapter in `catalog/ingestion/ipdb/adapter.py`, feature extraction in `catalog/ingestion/ipdb/features.py`, management command slimmed to ~70 lines. Creates 4 entity types (CorporateEntity, MachineModel, Person, Theme). Uses `identity_refs` for deferred credit/theme relationship claims where Person/Theme entities are created in the same plan. Deliberate behavior changes: sweep dropped (additive-only), dead manufacturer claim on MachineModel replaced with informational extra_data claims, manufacturers must pre-exist, location validation skipped for new CEs.
 
-Note: the current `apply_plan` takes one flat plan. `ingest_pinbase` needs ordered sub-plans where each phase's created entities are available to the next phase's claims (e.g. titles reference manufacturers created in an earlier phase). This will require either a `list[IngestPlan]` variant that loops inside one transaction, or extending `IngestPlan` to carry ordered sub-plans. Design this when converting `ingest_pinbase`, not before — the simpler adapters don't need it.
+`ingest_pinbase` is last (compound plan, most complex). The current `apply_plan` takes one flat plan. `ingest_pinbase` needs ordered sub-plans where each phase's created entities are available to the next phase's claims (e.g. titles reference manufacturers created in an earlier phase). This will require either a `list[IngestPlan]` variant that loops inside one transaction, or extending `IngestPlan` to carry ordered sub-plans. Design this when converting `ingest_pinbase`, not before — the simpler adapters don't need it.
 
-### Phase 6: Source permission enforcement
+### Phase 6: Source permission enforcement (deferred)
 
-Add per-source model/field permission declarations. The apply layer rejects claims targeting disallowed combinations. Requires all adapters converted (Phase 5) to avoid enforcing permissions against code that can't comply yet.
+Add per-source model/field permission declarations. The apply layer rejects claims targeting disallowed combinations. Deferred: the two active ingest sources (IPDB, OPDB) are converted and working correctly, and adapter correctness is adequately covered by code review and plan-boundary tests. Revisit if/when third-party or community-contributed adapters become a concern.
 
-Depends on: Phase 5.
+### Phase 7: Cleanup (deferred)
 
-### Phase 7: Cleanup
-
-Trim `validate_catalog` checks redundant with claim boundary validation and DB-level constraints (some range and cross-field checks may already be covered — triage before writing new code). Note: `validate_catalog`'s relationship audit functions (`check_unresolved_credit_claims`, `check_unresolved_m2m_claims`, `check_credits_without_matching_claims`) were already updated in Phase 4 to read PK-based claim values; the Phase 7 work is about removing checks that are now redundant with claim-boundary validation, not about fixing the value format. Review resolver defensive coercions — Phase 4 simplified resolvers significantly (removed slug→PK lookup dicts, added PK existence checks), but the remaining guard rails may still be reachable from stale claims. Wire relationship target validation into `assert_claim()` single-claim path.
-
-Depends on: Phase 5 (need all adapters converted to know which guard rails are still reachable).
+Trim `validate_catalog` checks redundant with claim boundary validation and DB-level constraints. Triaged: 4 checks are fully redundant (`check_nameless_models/titles/persons` duplicated by `field_not_blank` CheckConstraints, `check_self_referential_variant` duplicated by DB anti-cycle constraints); the other 14 checks remain valuable for data quality, integrity, and regression testing. Resolver defensive coercions are mostly justified (type coercions handle legitimate JSON variance). Relationship validation in `assert_claim()` is not needed — all callers pre-validate targets upstream. Low priority; defer until there's a reason to touch these files.
 
 ## Non-Goals
 
@@ -442,17 +438,33 @@ This plan is successful when:
 - ✅ Entity existence is provenance-backed via a claim-controlled `status` field (`active`, `deleted`)
 - ✅ Entity rows are never hard-deleted; catalog queries filter on `status=active`
 - ✅ Relationship claims reference target entities by PK, not by slug
-- All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields (OPDB done; IPDB, Fandom, Wikidata, pinbase remain)
+- All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields (OPDB, IPDB done; Fandom, Wikidata, pinbase remain)
 - ✅ Every ingest run is recorded as an IngestRun with structured run metadata
 - ✅ Every entity touched in an ingest run has a ChangeSet grouping its claims
 - ✅ Retractions are linked to ChangeSets via `retracted_by_changeset`
 - ✅ The apply layer is source-agnostic — it processes explicit operations with no source-specific logic
 - ✅ The planner is non-mutating — dry run produces a report without writing to the database
 - ✅ Running the same ingest twice produces identical database state (idempotency)
-- Source adapters replace the current imperative ingest commands (OPDB done; IPDB, Fandom, Wikidata, pinbase remain)
+- Source adapters replace the current imperative ingest commands (OPDB, IPDB done; Fandom, Wikidata, pinbase remain)
 - `validate_catalog` and resolver guard rails have been reviewed and trimmed post-redesign
 - `assert_claim()` validates relationship targets
 - ✅ Range limits are defined as shared constants referenced by both field validators and `CheckConstraint`
 - ✅ Cross-field invariants (year ordering, month-requires-year) are enforced at the DB level
 - ✅ Non-blank constraints exist for all `name` fields
 - ✅ `unique_together` migrated to `UniqueConstraint`
+
+## Follow-Ups
+
+Items identified during implementation that are not blocking but worth tracking.
+
+### Plan-aware dry-run validation
+
+Dry-run currently skips deferred relationship claims (`identity_refs`) entirely because the relationship validation layer checks that referenced PKs exist in the DB, and planned entities don't exist yet. A proper fix would make dry-run validate deferred relationships against `plan.entities` + DB, so plan-local entities are treated as existing for validation purposes. This benefits all adapters and would close the gap where adapter mistakes in deferred relationship construction pass `--dry-run` but fail on real runs.
+
+### Full IPDB ingest verification against real data
+
+The IPDB adapter tests use a 4-record sample fixture. A manual `make pull-ingest && python manage.py ingest_ipdb` against the full IPDB dataset should be run before merging to confirm no regressions at scale.
+
+### OPDB adapter could adopt identity_refs
+
+OPDB doesn't need `identity_refs` today (it only creates MachineModels — all entities referenced in relationship claim values are pre-existing). If a future OPDB change creates entities that are also referenced in relationship claims, the primitive is ready.
