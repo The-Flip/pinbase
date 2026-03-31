@@ -81,7 +81,6 @@ Fields:
 - `byte_size` (PositiveBigIntegerField, not null)
 - `width` (PositiveIntegerField, nullable)
 - `height` (PositiveIntegerField, nullable)
-- `duration_seconds` (PositiveIntegerField, nullable — video only, future)
 - `status`: `ready`, `processing`, `failed` (CharField with choices, not null)
 - `uploaded_by` (FK to User, not null — every asset has an uploader)
 - `created_at` (auto_now_add)
@@ -97,9 +96,7 @@ Database constraints:
 - `status IN ('ready', 'processing', 'failed')` — enforced at DB level.
 - `width` and `height` must both be null or both be set — `(width IS NULL) = (height IS NULL)`.
 - `width > 0` and `height > 0` when set — PositiveIntegerField allows 0, but a 0-pixel dimension is never valid.
-- `duration_seconds > 0` when set — zero-length media is never valid.
 - When `status = 'ready'` and `kind = 'image'`, `width` and `height` must be set — a ready image always has known dimensions.
-- When `kind = 'image'`, `duration_seconds` must be null — images don't have duration.
 - When `kind = 'image'`, `status != 'processing'` — images are processed synchronously, never enter processing state.
 - `mime_type` must be consistent with `kind`: when `kind = 'image'`, `mime_type` must start with `image/`; when `kind = 'video'`, `mime_type` must start with `video/`.
 - `uuid` UNIQUE (field-level).
@@ -107,7 +104,8 @@ Database constraints:
 Notes:
 
 - Not a catalog claim. Pure infrastructure.
-- `uploaded_by` is required (not nullable). Since we removed `source_kind`, every asset is a user upload.
+- `uploaded_by` is required (not nullable, `on_delete=PROTECT`). Since we removed `source_kind`, every asset is a user upload.
+- `duration_seconds` is deferred to the video follow-up (Follow-Up 1), along with its constraints.
 - The `status` field exists for video support later. For images in the initial implementation, assets go straight to `ready` or `failed`.
 - No `sha256` field in the initial implementation. Dedupe is a potential far-future follow-up.
 
@@ -137,7 +135,6 @@ Database constraints:
 - `byte_size > 0` — zero-byte files are never valid.
 - `width` and `height` must both be null or both be set — `(width IS NULL) = (height IS NULL)`.
 - `width > 0` and `height > 0` when set — PositiveIntegerField allows 0, but a 0-pixel dimension is never valid.
-- `storage_key` must start with `catalog-media/` — enforces key prefix convention at DB level.
 - `storage_key` must not start with `http://` or `https://` — catches accidental full URL storage. Relative keys only.
 - `storage_key` must not contain `..` — prevents path traversal.
 - `storage_key` must not contain whitespace — catches encoding issues.
@@ -147,6 +144,7 @@ Database constraints:
 Notes:
 
 - Shipping the variant table now avoids a migration when video support adds `poster`, `mp4`, `hls_playlist`, `hls_segment` roles.
+- The storage key prefix (e.g. `catalog-media/`) is a convention enforced in application code (the upload flow), not a DB constraint. This keeps the storage location configurable without schema changes.
 - Public URL = `MEDIA_PUBLIC_BASE_URL + storage_key`.
 - For images in the initial implementation, every successful upload creates exactly three variants: `original`, `thumb`, `display`.
 
@@ -628,6 +626,13 @@ After each phase, we review what we learned during implementation and update the
 ## Follow-Up Work
 
 ### Follow-Up 1: Video Support
+
+Schema additions (migration required):
+
+- Add `duration_seconds` (PositiveIntegerField, nullable) to `MediaAsset`.
+- Add constraints: `duration_seconds > 0` when set; when `kind = 'image'`, `duration_seconds` must be null.
+
+Infrastructure:
 
 - Presigned direct-to-S3 uploads (needed for large video files — no migration, same S3 bucket).
 - Async task queue (evaluate options: Celery, django-q2, or lighter-weight).
