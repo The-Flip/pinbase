@@ -44,6 +44,18 @@ Pinbase does not download, transcode, re-host, or pretend to own third-party fil
 
 UI and APIs prefer Pinbase-owned media first, then fall back to third-party referenced media.
 
+## App Structure
+
+All media models, APIs, and processing live in a new **`media` app** (`backend/apps/media/`). Media is a distinct domain — storage infrastructure, file processing, upload endpoints — and is big enough to warrant its own app rather than being folded into `catalog` or `core`.
+
+Wiring between apps:
+
+- **`media` app owns**: `MediaAsset`, `MediaVariant`, `EntityMedia`, image processing module, upload API endpoint.
+- **`catalog` app owns**: `media_attachment` claim namespace registration (in `catalog/claims.py`, alongside credits/themes/etc.) and media claim resolution logic (in `catalog/resolve/`, since it already orchestrates all relationship resolution).
+- **`EntityMedia`** uses a GenericFK to target catalog entities, so the `media` app has no import dependency on catalog models.
+
+This mirrors how `provenance` works today — provenance owns the Claim model, catalog registers namespaces and runs resolution. Same pattern: media owns the storage/attachment models, catalog registers the claim namespace and resolves them.
+
 ## Data Model
 
 ### Three-Layer Architecture
