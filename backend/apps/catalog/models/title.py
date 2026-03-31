@@ -50,7 +50,7 @@ class Title(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):
     description = MarkdownField(blank=True)
     franchise = models.ForeignKey(
         "Franchise",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="titles",
         null=True,
         blank=True,

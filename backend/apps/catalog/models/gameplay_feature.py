@@ -61,7 +61,7 @@ class MachineModelGameplayFeature(TimeStampedModel):
     """Through model for MachineModel ↔ GameplayFeature, carrying optional count."""
 
     machinemodel = models.ForeignKey("MachineModel", on_delete=models.CASCADE)
-    gameplayfeature = models.ForeignKey(GameplayFeature, on_delete=models.CASCADE)
+    gameplayfeature = models.ForeignKey(GameplayFeature, on_delete=models.PROTECT)
     count = models.PositiveSmallIntegerField(
         null=True,
         blank=True,

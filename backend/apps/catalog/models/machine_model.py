@@ -71,7 +71,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     # Hierarchy
     title = models.ForeignKey(
         "Title",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -79,7 +79,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     variant_of = models.ForeignKey(
         "self",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="variants",
         null=True,
         blank=True,
@@ -87,7 +87,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     converted_from = models.ForeignKey(
         "self",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="conversions",
         null=True,
         blank=True,
@@ -95,7 +95,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     remake_of = models.ForeignKey(
         "self",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="remakes",
         null=True,
         blank=True,
@@ -107,7 +107,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     # Core filterable fields
     corporate_entity = models.ForeignKey(
         "CorporateEntity",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="models",
         null=True,
         blank=True,
@@ -125,7 +125,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     technology_generation = models.ForeignKey(
         "TechnologyGeneration",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -133,7 +133,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     technology_subgeneration = models.ForeignKey(
         "TechnologySubgeneration",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -141,7 +141,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     display_type = models.ForeignKey(
         "DisplayType",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -149,7 +149,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     display_subtype = models.ForeignKey(
         "DisplaySubtype",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -157,7 +157,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     cabinet = models.ForeignKey(
         "Cabinet",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -165,7 +165,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     game_format = models.ForeignKey(
         "GameFormat",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,
@@ -181,6 +181,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     themes = models.ManyToManyField(
         "Theme",
+        through="MachineModelTheme",
         blank=True,
         related_name="machine_models",
         help_text="Resolved theme tags (materialized from relationship claims).",
@@ -194,12 +195,14 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     reward_types = models.ManyToManyField(
         "RewardType",
+        through="MachineModelRewardType",
         blank=True,
         related_name="machine_models",
         help_text="Reward types (materialized from relationship claims).",
     )
     tags = models.ManyToManyField(
         "Tag",
+        through="MachineModelTag",
         blank=True,
         related_name="machine_models",
         help_text="Classification tags (materialized from relationship claims).",
@@ -209,7 +212,7 @@ class MachineModel(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMo
     )
     system = models.ForeignKey(
         "System",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="machine_models",
         null=True,
         blank=True,

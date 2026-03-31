@@ -124,7 +124,7 @@ class CorporateEntity(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampe
 
     manufacturer = models.ForeignKey(
         Manufacturer,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="entities",
     )
     slug = models.SlugField(max_length=300, unique=True)

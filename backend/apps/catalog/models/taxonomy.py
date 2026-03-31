@@ -28,7 +28,9 @@ __all__ = [
     "GameFormat",
     "RewardType",
     "RewardTypeAlias",
+    "MachineModelRewardType",
     "Tag",
+    "MachineModelTag",
     "CreditRole",
 ]
 
@@ -206,6 +208,25 @@ class RewardType(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedMode
         return self.name
 
 
+class MachineModelRewardType(TimeStampedModel):
+    """Through model for MachineModel ↔ RewardType (materialized from relationship claims)."""
+
+    machinemodel = models.ForeignKey("MachineModel", on_delete=models.CASCADE)
+    rewardtype = models.ForeignKey(RewardType, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "catalog_machinemodel_reward_types"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["machinemodel", "rewardtype"],
+                name="catalog_machinemodelrewardtype_unique_pair",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.machinemodel} → {self.rewardtype}"
+
+
 class RewardTypeAlias(AliasBase):
     """An alternate name for a RewardType, used for matching/search."""
 
@@ -245,6 +266,25 @@ class Tag(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):
 
     def __str__(self) -> str:
         return self.name
+
+
+class MachineModelTag(TimeStampedModel):
+    """Through model for MachineModel ↔ Tag (materialized from relationship claims)."""
+
+    machinemodel = models.ForeignKey("MachineModel", on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "catalog_machinemodel_tags"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["machinemodel", "tag"],
+                name="catalog_machinemodeltag_unique_pair",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.machinemodel} → {self.tag}"
 
 
 class CreditRole(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):

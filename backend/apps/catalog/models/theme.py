@@ -19,7 +19,7 @@ from apps.core.models import (
 )
 from apps.core.validators import validate_no_mojibake
 
-__all__ = ["Theme", "ThemeAlias"]
+__all__ = ["Theme", "ThemeAlias", "MachineModelTheme"]
 
 
 class Theme(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):
@@ -52,6 +52,25 @@ class Theme(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):
 
     def __str__(self) -> str:
         return self.name
+
+
+class MachineModelTheme(TimeStampedModel):
+    """Through model for MachineModel ↔ Theme (materialized from relationship claims)."""
+
+    machinemodel = models.ForeignKey("MachineModel", on_delete=models.CASCADE)
+    theme = models.ForeignKey(Theme, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "catalog_machinemodel_themes"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["machinemodel", "theme"],
+                name="catalog_machinemodeltheme_unique_pair",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.machinemodel} → {self.theme}"
 
 
 class ThemeAlias(AliasBase):

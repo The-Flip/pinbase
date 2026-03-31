@@ -35,14 +35,14 @@ class System(EntityStatusMixin, SluggedModel, LinkableModel, TimeStampedModel):
     description = MarkdownField(blank=True)
     manufacturer = models.ForeignKey(
         "Manufacturer",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="systems",
         null=True,
         blank=True,
     )
     technology_subgeneration = models.ForeignKey(
         "TechnologySubgeneration",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="systems",
         null=True,
         blank=True,

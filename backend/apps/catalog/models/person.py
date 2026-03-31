@@ -221,7 +221,7 @@ class Credit(TimeStampedModel):
     )
     person = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="credits",
     )
     role = models.ForeignKey(

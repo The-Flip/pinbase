@@ -59,7 +59,7 @@ class Location(EntityStatusMixin, models.Model):
         "self",
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="children",
     )
     claims = GenericRelation("provenance.Claim")
