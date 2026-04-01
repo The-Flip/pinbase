@@ -27,7 +27,7 @@ This document outlines photo and video upload and storage support for Pinbase. D
 The media system is for only for media that Pinbase has a clear license to display, whether end users have uploaded it (and granted Pinbase license to use it), or the images are actually owned by The Flip museum, which owns Pinbase.
 
 - Uploaded media goes into `MediaAsset` + `MediaRendition`.
-- Pinbase-generated derivatives go into Pinbase storage.
+- Pinbase-generated renditions go into Pinbase storage.
 - Pinbase serves URLs for those files.
 
 Third-party media stays outside:
@@ -184,7 +184,7 @@ Steps 1-7 are one synchronous HTTP request. No task queue, no polling, no "pendi
 
 The upload flow must not leave orphaned state on failure:
 
-- **Processing failure** (Pillow can't generate derivatives): return error, nothing written to S3 or DB.
+- **Processing failure** (Pillow can't generate renditions): return error, nothing written to S3 or DB.
 - **S3 write failure** (one of the three uploads fails): clean up any S3 objects already written, return error, nothing written to DB.
 - **DB write failure** (transaction fails after S3 uploads succeed): clean up all S3 objects. DB transaction rollback handles the rows.
 
@@ -231,7 +231,7 @@ ALLOWED_IMAGE_EXTENSIONS = {
 | GIF                      | Converted              | JPEG              | Static frame only; animated GIF not supported |
 | BMP                      | Converted              | JPEG              | Legacy format                                 |
 
-Derivatives (thumb, display) are always WebP regardless of original format.
+Renditions (thumb, display) are always WebP regardless of original format.
 
 HEIC support requires `pillow-heif`, a Pillow plugin that registers HEIC/HEIF format handlers. This is the same approach flipfix uses in production.
 
@@ -244,15 +244,15 @@ Adapted from flipfix's `core/image_processing.py` — a production-proven Pillow
 1. Validate image type and decodability (Pillow `Image.open()`).
 2. EXIF orientation correction (`ImageOps.exif_transpose()`).
 3. Extract dimensions, mime type, byte size.
-4. Generate two derivatives:
+4. Generate two renditions:
    - **`thumb`**: max 400px longest side, WebP output. For grid/list views.
    - **`display`**: max 1600px longest side, WebP output. For detail pages.
-5. Save original in uploaded format, derivatives in WebP.
+5. Save original in uploaded format, renditions in WebP.
 
 ### Format Handling (from flipfix)
 
 - **Original**: web-native formats preserved as-is; non-web formats (HEIC/HEIF, BMP, GIF) converted to JPEG. PNG with transparency stays PNG regardless. See the Accepted Image Formats table for the full mapping.
-- **Derivatives** (thumb, display): always WebP output.
+- **Renditions** (thumb, display): always WebP output.
 - LANCZOS resampling for resize.
 - Pillow `optimize` flag for JPEG/PNG.
 
@@ -287,15 +287,17 @@ Format: `catalog-media/{asset_uuid}/{rendition_segment}`
 
 Where `rendition_segment` depends on the rendition type:
 
-| Rendition type | `rendition_segment`            | Example                                        |
-| -------------- | ------------------------------ | ---------------------------------------------- |
-| `original`     | `original/{original_filename}` | `catalog-media/abc-123/original/backglass.jpg` |
-| `thumb`        | `thumb.webp`                   | `catalog-media/abc-123/thumb.webp`             |
-| `display`      | `display.webp`                 | `catalog-media/abc-123/display.webp`           |
+| Rendition type | `rendition_segment`          | Example                                        |
+| -------------- | ---------------------------- | ---------------------------------------------- |
+| `original`     | `original/{stored_filename}` | `catalog-media/abc-123/original/backglass.jpg` |
+| `thumb`        | `thumb.webp`                 | `catalog-media/abc-123/thumb.webp`             |
+| `display`      | `display.webp`               | `catalog-media/abc-123/display.webp`           |
+
+`stored_filename` is the uploaded filename with the extension replaced by the actual output format when `process_original()` converts it (e.g., `backglass.bmp` → `backglass.jpg`). When the format is preserved, the filename is unchanged. `MediaAsset.original_filename` always stores the user's uploaded filename (for display/audit); the storage key reflects the actual stored format.
 
 The `catalog-media/` prefix is defined in the media app's storage module, not a DB constraint. This keeps the storage location configurable without schema changes.
 
-The asset UUID guarantees uniqueness across uploads. Derivative rendition types have fixed filenames since the format is always WebP. The original preserves the uploaded filename for human readability in storage browsers.
+The asset UUID guarantees uniqueness across uploads. Rendition types other than `original` have fixed filenames since the format is always WebP.
 
 Future video rendition types (follow-up):
 
@@ -521,19 +523,25 @@ All three models live in `backend/apps/media/models.py` with a bunch of DB-level
 - `uploaded_by` uses `on_delete=PROTECT`. Asset deletion must be handled explicitly.
 - Since `MediaRendition` has no `storage_key` field, storage key validation (including whitespace) lives in the `build_storage_key()` utility (Phase 3), not in model constraints.
 
-### Phase 2: Image Processing Module + Tests
+### Phase 2: Image Processing Module + Tests — DONE
 
-- Image processing module adapted from flipfix (`resize_image_file`, format conversion, EXIF handling).
-- Media constants (`ALLOWED_IMAGE_EXTENSIONS`, `THUMB_MAX_DIMENSION`, `DISPLAY_MAX_DIMENSION`, `MAX_UPLOADS_PER_HOUR`).
-- Unit tests: resize, EXIF transpose, format conversion, transparency handling, HEIC support.
-- Pure library code — no API, no models, no storage.
+Pure library code in `backend/apps/media/processing.py` and `constants.py`. Things later phases should know:
+
+- `process_original(data: bytes)` takes only bytes — no filename parameter. The output extension comes from `ProcessedImage.format_ext`; the filename stem is the caller's concern when building storage keys.
+- `generate_rendition` handles mode conversion (CMYK, palette → RGB) before WebP encoding. Phase 3 doesn't need to worry about incompatible color modes.
+- `validate_image` checks dimensions from the header before `.load()` to avoid allocating memory for oversized images. Follow this open-then-check-then-decode pattern.
+- `ImageOps.contain()` upscales small images by default. `generate_rendition` guards against this — only calls `contain()` when a dimension exceeds the max.
+- `check_codec_support()` returns a dict of codec availability (`heic`, `heif`, `avif`). Phase 3's upload endpoint should call this for pre-flight checks on codec-dependent extensions.
+- pillow-heif is registered in `MediaConfig.ready()` along with an AVIF availability check. Both log warnings at startup if unavailable.
 
 ### Phase 3: R2 Storage Config + Upload API + Tests
 
 - django-storages + Cloudflare R2 configuration.
 - `POST /api/media/upload/` endpoint: validates file, processes image, writes to R2, creates MediaAsset + MediaRendition rows + media attachment claim in one request.
+- **Codec pre-flight check**: Before calling `validate_image()`, the upload endpoint checks `check_codec_support()` (from Phase 2's `processing.py`) against the file extension. If the extension requires an unavailable codec (`.heic`/`.heif` without pillow-heif, `.avif` without AVIF codec), return a specific 400 error ("HEIC format is not supported") instead of a generic decode failure.
+- **Storage key extension for converted originals**: When `process_original()` converts the format (e.g., BMP → JPEG), `build_storage_key()` must use `ProcessedImage.format_ext` for the original rendition's stored filename, not the user's `original_filename` extension. The `original_filename` on `MediaAsset` stays as the user's upload name (for display/audit), but the storage path reflects the actual stored format.
 - Rate limiting.
-- Upload API tests: valid/invalid files, storage key verification, rate limit enforcement, atomicity.
+- Upload API tests: valid/invalid files, storage key verification, rate limit enforcement, atomicity, codec-unavailable error messages.
 
 ### Phase 4: Claims Namespace + Resolver + Tests
 
@@ -625,7 +633,7 @@ Infrastructure:
 | Status field          | Present but minimal                       | `ready`/`failed` for images. Full state machine activated for video follow-up.                                                                     |
 | sha256 dedupe         | Deferred (far future)                     | Adds complexity without clear near-term value.                                                                                                     |
 | Task queue            | Deferred (video follow-up)                | No async work needed. Evaluate options when video lands.                                                                                           |
-| Derivative format     | WebP                                      | Good compression, universal browser support. AVIF deferred.                                                                                        |
+| Rendition format      | WebP                                      | Good compression, universal browser support. AVIF deferred.                                                                                        |
 | Storage provider      | Cloudflare R2                             | Already in use for ingest sources. Zero egress, hosting-independent, integrated CDN path (free).                                                   |
 | Third-party media     | Stays in `extra_data`                     | Not temporary — permanent fallback layer. API reads both uploaded and external.                                                                    |
 | Category vocabulary   | Per-entity-type registry                  | Not a global enum. `MachineModel` gets `backglass`/`playfield`/`cabinet`/`other`.                                                                  |
