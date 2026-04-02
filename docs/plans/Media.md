@@ -279,6 +279,45 @@ Using django-storages with R2's S3-compatible API also gives us:
 - Same file locations whether uploaded through Django or later via presigned URLs. No migration needed when switching upload path.
 - Swappable to any other S3-compatible service if needed (AWS S3, Backblaze B2, etc.).
 
+### Cost Expectations
+
+Rough order-of-magnitude estimate, using Cloudflare R2 Standard pricing as of 2026-04-02. Check the current [Cloudflare R2 pricing page](https://developers.cloudflare.com/r2/pricing/) before relying on these numbers — pricing and free-tier limits can change.
+
+Assumptions for a near-term Pinbase scenario:
+
+- `5,000` uploaded images.
+- Each upload creates `3` stored objects: `original`, `thumb`, `display`.
+- `60` image reads per hour on average, with little or no useful CDN cache hit rate.
+- Storage dominates cost; request volume at this scale does not.
+
+R2 price points that matter here:
+
+- Storage: first `10 GB` free, then `$0.015 / GB-month`.
+- Class A operations (writes, deletes, list): first `1,000,000 / month` free, then `$4.50 / million`.
+- Class B operations (reads): first `10,000,000 / month` free, then `$0.36 / million`.
+- Egress: `$0`.
+
+Traffic math:
+
+- `60` reads/hour is about `43,200` reads/month.
+- That is far below the free `10,000,000` monthly Class B limit, so read cost is effectively `$0` even if Cloudflare CDN caching is poor.
+- `5,000` uploads means about `15,000` object writes for the initial import or early growth phase, also far below the free Class A limit.
+
+Estimated monthly storage cost at `5,000` uploaded images:
+
+| Average stored size per uploaded image set (`original` + `thumb` + `display`) | Total stored | Estimated monthly R2 cost |
+| ----------------------------------------------------------------------------- | ------------ | ------------------------- |
+| `1.4 MB`                                                                      | `~7.0 GB`    | `$0.00`                   |
+| `3.4 MB`                                                                      | `~16.8 GB`   | `~$0.10`                  |
+| `5.4 MB`                                                                      | `~26.5 GB`   | `~$0.26`                  |
+| `10.4 MB`                                                                     | `~50.9 GB`   | `~$0.61`                  |
+
+Practical takeaway:
+
+- For the first few thousand images, R2 cost is likely to be negligible.
+- Even without strong cache hit rates, read traffic has to grow by orders of magnitude before request charges matter.
+- The real long-term cost driver is total stored bytes, especially large originals or future video assets, not image serving.
+
 ### Key Generation
 
 Storage keys are derived by a `build_storage_key()` utility function (built in Phase 3, not on the model) from the asset UUID and rendition type. The storage backend stores the file at whatever key Pinbase provides — it has no say in naming. The storage prefix and rendition-to-filename mapping live in the media app's storage module, not on the ORM model.
