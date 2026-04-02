@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +12,7 @@ DEBUG = os.environ.get("DEBUG", "true").lower() in ("true", "1", "yes")
 if DEBUG:
     SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-dev-key-change-me")
 else:
-    SECRET_KEY = os.environ["SECRET_KEY"]  # crash if missing in production
+    SECRET_KEY = os.environ["SECRET_KEY"].strip()  # crash if missing in production
 
 ALLOWED_HOSTS = [
     h.strip()
@@ -111,18 +112,22 @@ STORAGES = {
 }
 
 # ── Media storage (S3-compatible file storage provider) ───────────
-MEDIA_PUBLIC_BASE_URL = os.environ.get("MEDIA_PUBLIC_BASE_URL", "/media/")
+MEDIA_PUBLIC_BASE_URL = os.environ.get("MEDIA_PUBLIC_BASE_URL", "/media/").strip()
+if not MEDIA_PUBLIC_BASE_URL.endswith("/"):
+    raise ImproperlyConfigured(
+        f"MEDIA_PUBLIC_BASE_URL must end with a slash (got {MEDIA_PUBLIC_BASE_URL!r})."
+    )
 MEDIA_URL = MEDIA_PUBLIC_BASE_URL
 
 if os.environ.get("MEDIA_STORAGE_BUCKET"):
     STORAGES["default"] = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
     }
-    AWS_STORAGE_BUCKET_NAME = os.environ["MEDIA_STORAGE_BUCKET"]
-    AWS_S3_REGION_NAME = os.environ.get("MEDIA_STORAGE_REGION", "auto")
-    AWS_S3_ENDPOINT_URL = os.environ["MEDIA_STORAGE_ENDPOINT"]
-    AWS_ACCESS_KEY_ID = os.environ["MEDIA_STORAGE_ACCESS_KEY"]
-    AWS_SECRET_ACCESS_KEY = os.environ["MEDIA_STORAGE_SECRET_KEY"]
+    AWS_STORAGE_BUCKET_NAME = os.environ["MEDIA_STORAGE_BUCKET"].strip()
+    AWS_S3_REGION_NAME = os.environ.get("MEDIA_STORAGE_REGION", "auto").strip()
+    AWS_S3_ENDPOINT_URL = os.environ["MEDIA_STORAGE_ENDPOINT"].strip()
+    AWS_ACCESS_KEY_ID = os.environ["MEDIA_STORAGE_ACCESS_KEY"].strip()
+    AWS_SECRET_ACCESS_KEY = os.environ["MEDIA_STORAGE_SECRET_KEY"].strip()
 else:
     STORAGES["default"] = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -188,11 +193,11 @@ LOGGING = {
 }
 
 # ── WorkOS AuthKit ────────────────────────────────────────────────
-WORKOS_API_KEY = os.environ.get("WORKOS_API_KEY", "")
-WORKOS_CLIENT_ID = os.environ.get("WORKOS_CLIENT_ID", "")
+WORKOS_API_KEY = os.environ.get("WORKOS_API_KEY", "").strip()
+WORKOS_CLIENT_ID = os.environ.get("WORKOS_CLIENT_ID", "").strip()
 WORKOS_REDIRECT_URI = os.environ.get(
     "WORKOS_REDIRECT_URI", "http://localhost:5173/api/auth/callback/"
-)
+).strip()
 
 AUTHENTICATION_BACKENDS = [
     "apps.accounts.backends.WorkOSBackend",
