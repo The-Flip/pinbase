@@ -225,6 +225,14 @@ Do NOT skip step 1. Do NOT write the fix first "to understand the problem" and b
 
 For new behavior, include tests. Consider writing the test first, though sometimes that's more trouble than it's worth.
 
+## Data Modeling
+
+See [docs/DataModeling.md](DataModeling.md) for modeling principles, Django pitfalls, and constraint testing patterns. Key rules:
+
+- **Validate strictly** — start with the tightest constraint you can defend. Relaxing is a one-line migration; tightening requires auditing every row.
+- **Validate in the database** — `full_clean()` is optional; CHECK constraints are not. Use `field_not_blank()`, CHECK constraints for enums/ranges, and UNIQUE constraints for identity rules.
+- **Default to `PROTECT`** on foreign keys. Use `CASCADE` only for wholly owned children.
+
 ## Rules
 
 - Don't silence linter warnings — fix the underlying issue

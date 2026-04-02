@@ -24,7 +24,9 @@ from .helpers import (
     _extract_image_urls,
     _extract_variant_features,
     _get_feature_descendant_slugs,
+    _media_prefetch,
     _serialize_title_machine,
+    _serialize_uploaded_media,
 )
 from .schemas import (
     AttributionSchema,
@@ -40,6 +42,7 @@ from .schemas import (
     SeriesRefSchema,
     ThemeSchema,
     TitleMachineSchema,
+    UploadedMediaSchema,
 )
 
 # ---------------------------------------------------------------------------
@@ -130,6 +133,7 @@ class MachineModelDetailSchema(Schema):
     thumbnail_url: Optional[str] = None
     hero_image_url: Optional[str] = None
     image_attribution: Optional[AttributionSchema] = None
+    uploaded_media: list[UploadedMediaSchema] = []
     variant_features: list[str] = []
     variants: list[VariantSchema] = []
     title: Optional[Ref] = None
@@ -173,6 +177,8 @@ def _build_model_list_qs(
 ):
     from ..models import MachineModel
 
+    from apps.media.models import EntityMedia
+
     qs = (
         MachineModel.objects.active()
         .select_related(
@@ -181,7 +187,17 @@ def _build_model_list_qs(
             "display_type",
             "title",
         )
-        .prefetch_related("themes")
+        .prefetch_related(
+            "themes",
+            Prefetch(
+                "entity_media",
+                queryset=EntityMedia.objects.filter(
+                    is_primary=True,
+                    asset__status="ready",
+                ).select_related("asset"),
+                to_attr="primary_media",
+            ),
+        )
         .filter(Q(variant_of__isnull=True) | Q(converted_from__isnull=False))
     )
 
@@ -234,7 +250,8 @@ def _build_model_list_qs(
 
 
 def _serialize_model_list(pm) -> dict:
-    thumbnail_url, _ = _extract_image_urls(pm.extra_data or {})
+    primary_media = getattr(pm, "primary_media", None)
+    thumbnail_url, _ = _extract_image_urls(pm.extra_data or {}, primary_media)
     mfr = (
         pm.corporate_entity.manufacturer
         if pm.corporate_entity and pm.corporate_entity.manufacturer
@@ -305,8 +322,15 @@ def _serialize_model_detail(pm) -> dict:
         )
     activity = _build_activity(activity_claims)
 
-    thumbnail_url, hero_image_url = _extract_image_urls(pm.extra_data or {})
-    image_attribution = _extract_image_attribution(pm.extra_data or {})
+    all_media = getattr(pm, "all_media", None) or []
+    primary_media = [em for em in all_media if em.is_primary]
+    thumbnail_url, hero_image_url = _extract_image_urls(
+        pm.extra_data or {}, primary_media or None
+    )
+    image_attribution = _extract_image_attribution(
+        pm.extra_data or {}, primary_media or None
+    )
+    uploaded_media = _serialize_uploaded_media(all_media)
     description = _build_rich_text(pm, "description", activity_claims)
     variant_features = _extract_variant_features(pm.extra_data or {})
 
@@ -399,6 +423,7 @@ def _serialize_model_detail(pm) -> dict:
         "thumbnail_url": thumbnail_url,
         "hero_image_url": hero_image_url,
         "image_attribution": image_attribution,
+        "uploaded_media": uploaded_media,
         "variant_features": variant_features,
         "variants": variants,
         "variant_of": (
@@ -534,6 +559,7 @@ def _model_detail_qs():
                 ),
             ),
             _claims_prefetch(),
+            _media_prefetch(),
         )
     )
 

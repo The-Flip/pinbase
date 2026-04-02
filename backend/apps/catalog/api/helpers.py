@@ -115,6 +115,39 @@ def _build_edit_history(entity) -> list[dict]:
     return result
 
 
+def _media_prefetch():
+    """Return a Prefetch for ready EntityMedia with assets."""
+    from apps.media.models import EntityMedia
+
+    return Prefetch(
+        "entity_media",
+        queryset=EntityMedia.objects.filter(
+            asset__status="ready",
+        ).select_related("asset"),
+        to_attr="all_media",
+    )
+
+
+def _serialize_uploaded_media(all_media) -> list[dict]:
+    """Serialize EntityMedia rows into the uploaded_media response list."""
+    from apps.media.storage import build_public_url, build_storage_key
+
+    return [
+        {
+            "asset_uuid": str(em.asset.uuid),
+            "category": em.category,
+            "is_primary": em.is_primary,
+            "renditions": {
+                "thumb": build_public_url(build_storage_key(em.asset.uuid, "thumb")),
+                "display": build_public_url(
+                    build_storage_key(em.asset.uuid, "display")
+                ),
+            },
+        }
+        for em in all_media
+    ]
+
+
 def _claims_prefetch(to_attr: str = "active_claims"):
     """Return a Prefetch for active claims with priority annotation."""
     from apps.provenance.models import Claim
@@ -137,15 +170,48 @@ def _claims_prefetch(to_attr: str = "active_claims"):
     )
 
 
-def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
-    """Return (thumbnail_url, hero_image_url) from extra_data.
+def _uploaded_image_urls(primary_media) -> tuple[str | None, str | None]:
+    """Return (thumbnail_url, hero_image_url) from prefetched EntityMedia.
 
-    Tries OPDB structured images first (with size variants), then falls back
-    to IPDB flat URL list (same URL used for both thumbnail and hero).
-
-    Respects the global Constance display threshold: skips image sources
-    whose ``__permissiveness_rank`` is below the minimum.
+    Prefers ``backglass`` category, then falls back to any primary.
+    Returns ``(None, None)`` when no uploaded media is available.
     """
+    from apps.media.storage import build_public_url, build_storage_key
+
+    if not primary_media:
+        return None, None
+
+    # Prefer backglass, fall back to first available primary.
+    chosen = None
+    for em in primary_media:
+        if em.category == "backglass":
+            chosen = em
+            break
+    if chosen is None:
+        chosen = primary_media[0]
+
+    asset_uuid = chosen.asset.uuid
+    thumb = build_public_url(build_storage_key(asset_uuid, "thumb"))
+    hero = build_public_url(build_storage_key(asset_uuid, "display"))
+    return thumb, hero
+
+
+def _extract_image_urls(
+    extra_data: dict,
+    primary_media=None,
+) -> tuple[str | None, str | None]:
+    """Return (thumbnail_url, hero_image_url).
+
+    When *primary_media* (prefetched ``EntityMedia`` rows) contains uploaded
+    images, those are used unconditionally (no license gating — Pinbase owns
+    them).  Otherwise falls back to third-party images in *extra_data*,
+    respecting the global Constance display threshold.
+    """
+    # Uploaded media always wins — no license gating.
+    thumb, hero = _uploaded_image_urls(primary_media)
+    if thumb or hero:
+        return thumb, hero
+
     from apps.core.licensing import UNKNOWN_LICENSE_RANK, get_minimum_display_rank
 
     min_rank = get_minimum_display_rank()
@@ -183,12 +249,18 @@ def _extract_image_urls(extra_data: dict) -> tuple[str | None, str | None]:
     return None, None
 
 
-def _extract_image_attribution(extra_data: dict) -> dict | None:
+def _extract_image_attribution(extra_data: dict, primary_media=None) -> dict | None:
     """Return AttributionSchema-shaped dict for the displayed image, or None.
 
-    Checks each image source in priority order (same as _extract_image_urls)
-    and returns info for the first source that passes the display threshold.
+    When uploaded media is being used (determined by *primary_media*), returns
+    ``None`` — no third-party license to cite.  Otherwise checks each external
+    image source in priority order and returns info for the first source that
+    passes the display threshold.
     """
+    # Uploaded media has no third-party attribution.
+    if primary_media:
+        return None
+
     from apps.core.licensing import UNKNOWN_LICENSE_RANK, get_minimum_display_rank
 
     min_rank = get_minimum_display_rank()
