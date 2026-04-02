@@ -42,9 +42,9 @@ const UPLOAD_RESULT = {
 	width: 800,
 	height: 600,
 	renditions: {
-		original: '/media/abc/original/test.jpg',
-		thumb: '/media/abc/thumb.webp',
-		display: '/media/abc/display.webp'
+		original: '/media/abc/original',
+		thumb: '/media/abc/thumb',
+		display: '/media/abc/display'
 	},
 	attachment: {
 		entity_type: 'machine-model',

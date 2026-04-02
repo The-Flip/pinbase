@@ -1,4 +1,4 @@
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 
 from django.conf import settings
 from django.contrib import admin
@@ -85,10 +85,35 @@ urlpatterns: list[URLPattern | URLResolver] = [
 ]
 
 # Serve uploaded media files during local development.
-if settings.DEBUG:
-    from django.conf.urls.static import static
+# Storage keys are extensionless (e.g. media/{uuid}/thumb), so Django's
+# default static view can't guess Content-Type from the filename.  We sniff
+# the file's magic bytes to set the correct header.
 
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+def _serve_media(request, path="", document_root=None):
+    from django.views.static import serve
+
+    from apps.media.storage import sniff_image_content_type
+
+    response = serve(request, path, document_root=document_root)
+    if response.get("Content-Type", "").startswith("application/octet-stream"):
+        filepath = Path(document_root) / path
+        with open(filepath, "rb") as f:
+            head = f.read(16)
+        detected = sniff_image_content_type(head)
+        if detected:
+            response["Content-Type"] = detected
+    return response
+
+
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(
+            r"^%s(?P<path>.*)$" % settings.MEDIA_URL.lstrip("/"),
+            _serve_media,
+            {"document_root": settings.MEDIA_ROOT},
+        ),
+    ]
 
 # Catch-all: serve SvelteKit SPA for non-API/admin routes.
 # Only active when the frontend build directory exists (i.e., production

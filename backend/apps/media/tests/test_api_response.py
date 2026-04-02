@@ -75,11 +75,11 @@ def _attach(ct, entity, asset, category=None, is_primary=True):
 
 
 def _expected_thumb(asset):
-    return build_public_url(build_storage_key(asset.uuid, "thumb", ""))
+    return build_public_url(build_storage_key(asset.uuid, "thumb"))
 
 
 def _expected_hero(asset):
-    return build_public_url(build_storage_key(asset.uuid, "display", ""))
+    return build_public_url(build_storage_key(asset.uuid, "display"))
 
 
 OPDB_EXTRA_DATA = {

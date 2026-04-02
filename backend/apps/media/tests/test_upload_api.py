@@ -106,50 +106,6 @@ def _post_upload(client, machine_model, file=None, **extra):
 
 
 # ---------------------------------------------------------------------------
-# Filename sanitization
-# ---------------------------------------------------------------------------
-
-
-class TestStoredFilename:
-    """_stored_filename sanitizes stems for safe storage keys."""
-
-    def test_ascii_filename_unchanged(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("backglass.bmp", "jpg") == "backglass.jpg"
-
-    def test_unicode_replaced(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("café.jpg", "jpg") == "caf.jpg"
-
-    def test_spaces_replaced(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("my photo.jpg", "jpg") == "my_photo.jpg"
-
-    def test_parentheses_replaced(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("photo (1).jpg", "jpg") == "photo_1.jpg"
-
-    def test_consecutive_special_chars_collapsed(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("a  &  b.jpg", "jpg") == "a_b.jpg"
-
-    def test_all_special_chars_fallback(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("🎯.jpg", "jpg") == "upload.jpg"
-
-    def test_hyphens_and_underscores_preserved(self):
-        from apps.media.api import _stored_filename
-
-        assert _stored_filename("my-file_v2.jpg", "jpg") == "my-file_v2.jpg"
-
-
-# ---------------------------------------------------------------------------
 # Happy path
 # ---------------------------------------------------------------------------
 
@@ -196,8 +152,8 @@ class TestUploadHappyPath:
         assert renditions["original"].startswith(_TEST_MEDIA_URL)
         assert renditions["thumb"].startswith(_TEST_MEDIA_URL)
         assert renditions["display"].startswith(_TEST_MEDIA_URL)
-        assert "/thumb.webp" in renditions["thumb"]
-        assert "/display.webp" in renditions["display"]
+        assert renditions["thumb"].endswith("/thumb")
+        assert renditions["display"].endswith("/display")
 
     def test_upload_bmp_converted(self, client, machine_model):
         file = _create_bmp_image()
@@ -214,11 +170,11 @@ class TestUploadHappyPath:
         assert asset.mime_type == "image/jpeg"
         assert asset.byte_size == original_rendition.byte_size
 
-        # Storage key should use .jpg, not .bmp
+        # Storage key is extensionless — Content-Type is in object metadata
         body = resp.json()
-        assert body["renditions"]["original"].endswith("/original/legacy.jpg")
+        assert body["renditions"]["original"].endswith("/original")
 
-    def test_upload_unicode_filename_sanitized(self, client, machine_model):
+    def test_upload_unicode_filename_preserved(self, client, machine_model):
         file = _create_test_image(name="café (1).jpg")
         resp = _post_upload(client, machine_model, file=file)
         assert resp.status_code == 200
@@ -226,8 +182,8 @@ class TestUploadHappyPath:
         body = resp.json()
         # Original filename preserved for display
         assert body["original_filename"] == "café (1).jpg"
-        # Storage key sanitized
-        assert "/original/caf_1.jpg" in body["renditions"]["original"]
+        # Storage key is extensionless — no filename sanitization in the key
+        assert body["renditions"]["original"].endswith("/original")
 
     def test_attachment_metadata_echoed(self, client, machine_model):
         resp = _post_upload(client, machine_model)

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import re
 import uuid as uuid_lib
 from pathlib import PurePosixPath
 
@@ -132,30 +131,6 @@ def _resolve_entity(entity_type: str, slug: str):
     return ct, entity
 
 
-def _sanitize_stem(stem: str) -> str:
-    """Sanitize a filename stem to safe ASCII characters.
-
-    Keeps alphanumeric, hyphens, underscores, and dots. Replaces
-    everything else (spaces, unicode, parentheses, etc.) with
-    underscores. Collapses consecutive underscores.
-    """
-    sanitized = re.sub(r"[^a-zA-Z0-9._-]", "_", stem)
-    sanitized = re.sub(r"_+", "_", sanitized)
-    sanitized = sanitized.strip("_")
-    return sanitized or "upload"
-
-
-def _stored_filename(original_filename: str, format_ext: str) -> str:
-    """Build the stored filename for the original rendition.
-
-    Sanitizes the stem to safe ASCII, then appends the actual output
-    extension (which may differ after format conversion, e.g. .bmp -> .jpg).
-    The user's original filename is preserved on MediaAsset.original_filename.
-    """
-    stem = PurePosixPath(original_filename).stem
-    return f"{_sanitize_stem(stem)}.{format_ext}"
-
-
 @media_router.post("/upload/", response=UploadOut, auth=django_auth)
 def upload_media(
     request,
@@ -221,11 +196,10 @@ def upload_media(
 
     # --- Build storage keys ---
     asset_uuid = uuid_lib.uuid4()
-    fname = _stored_filename(original_filename, original.format_ext)
 
-    key_original = build_storage_key(asset_uuid, "original", fname)
-    key_thumb = build_storage_key(asset_uuid, "thumb", fname)
-    key_display = build_storage_key(asset_uuid, "display", fname)
+    key_original = build_storage_key(asset_uuid, "original")
+    key_thumb = build_storage_key(asset_uuid, "thumb")
+    key_display = build_storage_key(asset_uuid, "display")
 
     # --- Upload to storage ---
     uploaded_keys: list[str] = []

@@ -138,11 +138,9 @@ def _serialize_uploaded_media(all_media) -> list[dict]:
             "category": em.category,
             "is_primary": em.is_primary,
             "renditions": {
-                "thumb": build_public_url(
-                    build_storage_key(em.asset.uuid, "thumb", "")
-                ),
+                "thumb": build_public_url(build_storage_key(em.asset.uuid, "thumb")),
                 "display": build_public_url(
-                    build_storage_key(em.asset.uuid, "display", "")
+                    build_storage_key(em.asset.uuid, "display")
                 ),
             },
         }
@@ -193,8 +191,8 @@ def _uploaded_image_urls(primary_media) -> tuple[str | None, str | None]:
         chosen = primary_media[0]
 
     asset_uuid = chosen.asset.uuid
-    thumb = build_public_url(build_storage_key(asset_uuid, "thumb", ""))
-    hero = build_public_url(build_storage_key(asset_uuid, "display", ""))
+    thumb = build_public_url(build_storage_key(asset_uuid, "thumb"))
+    hero = build_public_url(build_storage_key(asset_uuid, "display"))
     return thumb, hero
 
 

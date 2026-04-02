@@ -20,45 +20,19 @@ logger = logging.getLogger(__name__)
 
 _VALID_RENDITION_TYPES = {v.value for v in MediaRendition.RenditionType}
 
-# Fixed filenames for generated renditions (always WebP).
-_RENDITION_FILENAMES: dict[str, str] = {
-    "thumb": "thumb.webp",
-    "display": "display.webp",
-}
 
-
-def build_storage_key(
-    asset_uuid: UUID,
-    rendition_type: str,
-    stored_filename: str,
-) -> str:
+def build_storage_key(asset_uuid: UUID, rendition_type: str) -> str:
     """Derive the storage key for a rendition.
 
-    ``stored_filename`` is only used for the ``original`` rendition type
-    (the filename stem + actual output extension after any format
-    conversion).  For ``thumb``/``display`` it is ignored.
+    Keys are deterministic from asset UUID + rendition type alone.
+    Content-Type is stored as object metadata by S3/R2, not encoded
+    in the key.
     """
     if rendition_type not in _VALID_RENDITION_TYPES:
         msg = f"Invalid rendition_type: {rendition_type!r}"
         raise ValueError(msg)
 
-    if rendition_type == "original":
-        if not stored_filename:
-            msg = "stored_filename is required for original rendition"
-            raise ValueError(msg)
-        if " " in stored_filename or "\t" in stored_filename:
-            msg = f"stored_filename must not contain whitespace: {stored_filename!r}"
-            raise ValueError(msg)
-        if "/" in stored_filename or "\\" in stored_filename:
-            msg = (
-                f"stored_filename must not contain path separator: {stored_filename!r}"
-            )
-            raise ValueError(msg)
-        segment = f"original/{stored_filename}"
-    else:
-        segment = _RENDITION_FILENAMES[rendition_type]
-
-    return f"{STORAGE_PREFIX}/{asset_uuid}/{segment}"
+    return f"{STORAGE_PREFIX}/{asset_uuid}/{rendition_type}"
 
 
 def build_public_url(storage_key: str) -> str:
@@ -89,6 +63,27 @@ def upload_to_storage(storage_key: str, data: bytes, content_type: str) -> None:
         storage.delete(actual_key)
         msg = f"Storage key mismatch: expected {storage_key}, got {actual_key}"
         raise RuntimeError(msg)
+
+
+_MAGIC_SIGNATURES: list[tuple[bytes, int, str]] = [
+    (b"\xff\xd8\xff", 0, "image/jpeg"),
+    (b"\x89PNG", 0, "image/png"),
+    (b"WEBP", 8, "image/webp"),  # RIFF....WEBP
+    (b"ftypavif", 4, "image/avif"),  # ISOBMFF ftyp box
+]
+
+
+def sniff_image_content_type(data: bytes) -> str | None:
+    """Detect image MIME type from magic bytes.
+
+    Returns None if no known signature matches.  Used by the dev-only
+    media serving view where extensionless storage keys prevent
+    Django's default Content-Type guessing.
+    """
+    for signature, offset, mime_type in _MAGIC_SIGNATURES:
+        if data[offset : offset + len(signature)] == signature:
+            return mime_type
+    return None
 
 
 def delete_from_storage(storage_keys: list[str]) -> None:
