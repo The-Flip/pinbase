@@ -25,7 +25,7 @@ def _register_heif():
 
 
 def _check_avif():
-    from PIL import Image
+    from PIL import features
 
-    if "AVIF" not in Image.SAVE:
+    if not features.check("avif"):
         logger.warning("AVIF codec unavailable; AVIF uploads will fail.")

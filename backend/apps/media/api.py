@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from ninja import File, Form, Router, Schema, UploadedFile
+from ninja import File, Form, Router, Schema, Status, UploadedFile
 from ninja.errors import HttpError
 from ninja.security import django_auth
 
@@ -347,7 +347,7 @@ def detach_media(request, body: MediaAssetRefIn):
                 lambda keys=storage_keys: _delete_media_storage_after_commit(keys)
             )
 
-    return 200, None
+    return Status(200, None)
 
 
 @media_router.post("/set-primary/", response={200: None}, auth=django_auth)
@@ -387,4 +387,4 @@ def set_primary(request, body: MediaAssetRefIn):
             entity_ids={entity.pk},
         )
 
-    return 200, None
+    return Status(200, None)
