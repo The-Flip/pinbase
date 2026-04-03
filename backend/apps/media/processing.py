@@ -197,5 +197,7 @@ def check_codec_support() -> dict[str, bool]:
         heif_ok = True
     except ImportError:
         pass
-    avif_ok = "AVIF" in Image.SAVE
+    from PIL import features
+
+    avif_ok = features.check("avif")
     return {"heic": heif_ok, "heif": heif_ok, "avif": avif_ok}

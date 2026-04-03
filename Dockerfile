@@ -19,21 +19,14 @@ RUN pnpm build
 # ── Stage 2: Django application ────────────────────────────────────
 FROM python:3.14-slim AS base
 
-# Build deps + AVIF library so Pillow compiles with AVIF support
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libavif-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
 # Install dependencies (cached layer)
-# --no-binary-package pillow forces source build against system libavif
 COPY backend/pyproject.toml backend/uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project --no-binary-package pillow
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy application code
 COPY backend/ .
