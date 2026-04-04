@@ -4,6 +4,7 @@
 	import { ENTITY_TYPES } from '$lib/api/catalog-meta';
 	import { SITE_NAME } from '$lib/constants';
 	import { resolveHref } from '$lib/utils';
+	import SmartDate from '$lib/components/SmartDate.svelte';
 	import InlineDiff from '$lib/components/InlineDiff.svelte';
 	import UserBadge from '$lib/components/UserBadge.svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
@@ -130,16 +131,6 @@
 		}
 	}
 
-	function formatDateTime(iso: string): string {
-		return new Date(iso).toLocaleDateString('en', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: '2-digit'
-		});
-	}
-
 	// Reload on filter change
 	let filterKey = $derived(`${entityType}|${timeRange}|${includeIngest}`);
 
@@ -226,7 +217,7 @@
 								<span class="entity-type">{cs.entity_type_label}</span>
 							</a>
 						</div>
-						<time datetime={cs.created_at}>{formatDateTime(cs.created_at)}</time>
+						<span class="timestamp"><SmartDate iso={cs.created_at} /></span>
 					</div>
 
 					<div class="feed-body">
@@ -404,7 +395,7 @@
 		flex: 1;
 	}
 
-	.feed-header time {
+	.timestamp {
 		font-size: var(--font-size-0);
 		color: var(--color-text-muted);
 		margin-left: auto;
@@ -605,7 +596,7 @@
 			gap: var(--size-1);
 		}
 
-		.feed-header time {
+		.timestamp {
 			margin-left: 0;
 		}
 

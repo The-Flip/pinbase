@@ -7,6 +7,7 @@
 	import UserBadge from './UserBadge.svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { isDiffable, formatValue } from './change-display';
+	import SmartDate from './SmartDate.svelte';
 
 	type ChangeSet = components['schemas']['ChangeSetSchema'];
 	type FieldChange = components['schemas']['FieldChangeSchema'];
@@ -75,17 +76,6 @@
 			(r) => !matchedRetractionIds.has(r.claim_id)
 		);
 		return !hasChanges && !hasUnmatchedRetractions;
-	}
-
-	function formatDate(iso: string): string {
-		const d = new Date(iso);
-		return d.toLocaleDateString('en', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: '2-digit'
-		});
 	}
 
 	function canRevert(change: FieldChange): boolean {
@@ -184,7 +174,7 @@
 					<li class="changeset">
 						<div class="changeset-header">
 							<UserBadge username={cs.user_display} />
-							<time datetime={cs.created_at}>{formatDate(cs.created_at)}</time>
+							<span class="timestamp"><SmartDate iso={cs.created_at} /></span>
 						</div>
 						{#if cs.note}
 							<p class="changeset-note">{cs.note}</p>
@@ -205,7 +195,9 @@
 												by {#if info.user_display}<a href="/users/{info.user_display}"
 														>{info.user_display}</a
 													>{:else}system{/if}
-												on {formatDate(info.created_at)}{#if info.note}:
+												on
+												<span class="timestamp"><SmartDate iso={info.created_at} /></span
+												>{#if info.note}:
 													{info.note}{/if}
 											{/if}
 										</dd>
@@ -297,7 +289,7 @@
 		margin-bottom: var(--size-2);
 	}
 
-	time {
+	.timestamp {
 		font-size: var(--font-size-0);
 		color: var(--color-text-muted);
 	}
