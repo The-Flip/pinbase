@@ -294,6 +294,7 @@ class TestModelDetailApiResponse:
             assert "display" in item["renditions"]
             assert "category" in item
             assert "is_primary" in item
+            assert item["uploaded_by_username"] == user.username
 
     def test_detail_uploaded_media_empty(self, client, machine_model):
         resp = client.get(f"/api/models/{machine_model.slug}")

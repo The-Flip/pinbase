@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolveHref } from '$lib/utils';
 	import type { components } from '$lib/api/schema';
 
 	type UploadedMedia = components['schemas']['UploadedMediaSchema'];
@@ -61,6 +62,14 @@
 			<div class="lightbox-footer">
 				{#if item.category}
 					<span class="category">{item.category}</span>
+				{/if}
+				{#if item.uploaded_by_username}
+					<span class="uploader">
+						Uploaded by <a
+							href={resolveHref(`/users/${item.uploaded_by_username}`)}
+							class="uploader-link">{item.uploaded_by_username}</a
+						>
+					</span>
 				{/if}
 				<span class="counter">{index + 1} / {media.length}</span>
 			</div>
@@ -150,11 +159,17 @@
 
 	.lightbox-footer {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
+		justify-content: center;
 		gap: var(--size-3);
 		margin-top: var(--size-2);
 		color: rgba(255, 255, 255, 0.7);
 		font-size: var(--font-size-1);
+	}
+
+	.uploader-link {
+		color: var(--color-link);
 	}
 
 	@media (max-width: 640px) {

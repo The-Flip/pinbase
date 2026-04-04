@@ -174,4 +174,5 @@ class UploadedMediaSchema(Schema):
     asset_uuid: str
     category: Optional[str] = None
     is_primary: bool
+    uploaded_by_username: Optional[str] = None
     renditions: MediaRenditionsSchema
