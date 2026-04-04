@@ -1,27 +1,10 @@
 <script lang="ts">
 	import { SITE_NAME } from '$lib/constants';
 	import { resolveHref } from '$lib/utils';
+	import SmartDate from '$lib/components/SmartDate.svelte';
 
 	let { data } = $props();
 	let { profile } = data;
-
-	function formatDate(iso: string): string {
-		return new Date(iso).toLocaleDateString('en', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
-	}
-
-	function formatDateTime(iso: string): string {
-		return new Date(iso).toLocaleDateString('en', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: '2-digit'
-		});
-	}
 </script>
 
 <svelte:head>
@@ -32,7 +15,10 @@
 	<header class="profile-header">
 		<h1>@{profile.username}</h1>
 		<p class="meta">
-			Member since {formatDate(profile.member_since)} · {profile.edit_count}
+			Member since {new Date(profile.member_since).toLocaleDateString(undefined, {
+				month: 'short',
+				year: 'numeric'
+			})} · {profile.edit_count}
 			{profile.edit_count === 1 ? 'edit' : 'edits'}
 		</p>
 	</header>
@@ -49,9 +35,8 @@
 						</a>
 						<span class="entity-meta">
 							{entity.edit_count}
-							{entity.edit_count === 1 ? 'edit' : 'edits'} · last {formatDate(
-								entity.last_edited_at
-							)}
+							{entity.edit_count === 1 ? 'edit' : 'edits'} · last
+							<SmartDate iso={entity.last_edited_at} />
 						</span>
 					</li>
 				{/each}
@@ -70,7 +55,7 @@
 								<span class="entity-name">{edit.entity_name}</span>
 								<span class="entity-type">{edit.entity_type_label}</span>
 							</a>
-							<time datetime={edit.created_at}>{formatDateTime(edit.created_at)}</time>
+							<span class="timestamp"><SmartDate iso={edit.created_at} /></span>
 						</div>
 						{#if edit.note}
 							<p class="edit-note">{edit.note}</p>
@@ -185,7 +170,7 @@
 		width: 100%;
 	}
 
-	.edit-header time {
+	.timestamp {
 		font-size: var(--font-size-0);
 		color: var(--color-text-muted);
 		margin-left: auto;
