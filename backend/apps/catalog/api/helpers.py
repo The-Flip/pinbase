@@ -13,7 +13,7 @@ def _media_prefetch():
         "entity_media",
         queryset=EntityMedia.objects.filter(
             asset__status="ready",
-        ).select_related("asset"),
+        ).select_related("asset", "asset__uploaded_by"),
         to_attr="all_media",
     )
 
@@ -27,6 +27,9 @@ def _serialize_uploaded_media(all_media) -> list[dict]:
             "asset_uuid": str(em.asset.uuid),
             "category": em.category,
             "is_primary": em.is_primary,
+            "uploaded_by_username": (
+                em.asset.uploaded_by.username if em.asset.uploaded_by else None
+            ),
             "renditions": {
                 "thumb": build_public_url(build_storage_key(em.asset.uuid, "thumb")),
                 "display": build_public_url(

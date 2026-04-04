@@ -86,3 +86,20 @@ Always record who the photographer is (required, defaults to the uploader's name
 
 - **Why it could work:** Cleanest data — always knows the photographer, separately from the display preference. No ambiguity between "didn't fill it in" and "wants to be anonymous." Closest to the Wikimedia model.
 - **Why it might not:** Two controls on an upload form is more friction than one. The distinction between "who took this" and "should we show it" is meaningful at Wikimedia's scale but probably over-engineered for Pinbase's current stage. A required credit field adds friction even when the uploader is the photographer (the common case).
+
+## Decision
+
+**Option A now, with a path to C later.**
+
+Start by always showing the uploader's display name on the photo detail/lightbox view. No new fields, no configuration — just surface what we already track (`uploaded_by`). Gallery thumbnails stay clean with no attribution.
+
+This is the right first step because:
+
+- It's the simplest thing that works. No new data model, no upload UX changes.
+- It establishes attribution as a norm from day one, before habits form around anonymity.
+- Every photo uploaded under Option A remains correctly attributed if we later add opt-out or photographer override — no backfill needed.
+
+**Future additions (not committed, just preserved as options):**
+
+- **Opt-out:** Add an optional mechanism for uploaders to hide their name. Could be per-photo or account-wide. Only worth adding if users actually request it.
+- **Photographer credit:** Add an optional field for crediting someone other than the uploader. Only worth adding if the "uploader ≠ photographer" case turns out to be common in practice.
