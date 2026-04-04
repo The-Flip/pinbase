@@ -18,6 +18,8 @@ from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
 
+from apps.catalog.api.schemas import FieldChangeSchema
+
 
 class SourceSchema(Schema):
     name: str
@@ -163,13 +165,6 @@ class RetractionSchema(Schema):
     old_value: object
 
 
-class FieldChangeDetailSchema(Schema):
-    field_name: str
-    claim_key: str
-    old_value: Optional[object] = None
-    new_value: object
-
-
 class RecentChangeSetDetailSchema(Schema):
     id: int
     user_display: Optional[str] = None
@@ -180,7 +175,7 @@ class RecentChangeSetDetailSchema(Schema):
     entity_href: str
     entity_name: str
     entity_type_label: str
-    changes: list[FieldChangeDetailSchema]
+    changes: list[FieldChangeSchema]
     retractions: list[RetractionSchema]
 
 

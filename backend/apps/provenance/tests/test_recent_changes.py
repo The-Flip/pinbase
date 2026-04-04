@@ -311,3 +311,46 @@ class TestRecentChangesDetail:
         # The bootstrap source claim has no changeset, so no prior user claim exists.
         # old_value should be None for the first user edit.
         assert year_change["old_value"] is None
+
+    def test_retraction_only_changeset(self, client, user, pm):
+        """A changeset with only retracted claims shows retractions, no changes."""
+        # Create a claim, then retract it via a separate changeset.
+        original_cs = ChangeSet.objects.create(user=user)
+        claim = Claim.objects.assert_claim(
+            pm, "year", 2000, user=user, changeset=original_cs
+        )
+
+        retract_cs = ChangeSet.objects.create(user=user)
+        claim.retracted_by_changeset = retract_cs
+        claim.is_active = False
+        claim.save()
+
+        resp = client.get(f"/api/recent-changes/{retract_cs.pk}/")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["changes"] == []
+        assert len(data["retractions"]) == 1
+        assert data["retractions"][0]["field_name"] == "year"
+        assert data["retractions"][0]["old_value"] == 2000
+
+
+@pytest.mark.django_db
+class TestRecentChangesListBeforeFilter:
+    def test_before_filter(self, client, user, pm):
+        client.force_login(user)
+        client.patch(
+            f"/api/models/{pm.slug}/claims/",
+            data='{"fields": {"year": 1998}}',
+            content_type="application/json",
+        )
+        # Use a past timestamp so the edit falls after it.
+        past = "2000-01-01T00:00:00"
+        resp = client.get(f"/api/recent-changes/?before={past}")
+        assert resp.status_code == 200
+        assert len(resp.json()["items"]) == 0
+
+        # Use a future timestamp so the edit falls before it.
+        future = "2099-01-01T00:00:00"
+        resp = client.get(f"/api/recent-changes/?before={future}")
+        assert resp.status_code == 200
+        assert len(resp.json()["items"]) == 1
