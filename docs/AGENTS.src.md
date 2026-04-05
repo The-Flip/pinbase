@@ -234,6 +234,10 @@ See [docs/DataModeling.md](DataModeling.md) for modeling principles, Django pitf
 - **Validate in the database** — `full_clean()` is optional; CHECK constraints are not. Use `field_not_blank()`, CHECK constraints for enums/ranges, and UNIQUE constraints for identity rules.
 - **Default to `PROTECT`** on foreign keys. Use `CASCADE` only for wholly owned children.
 
+## Code Review
+
+When reviewing code or a PR, read [docs/Reviewing.md](Reviewing.md) first and follow its checklist.
+
 ## Rules
 
 - Don't silence linter warnings — fix the underlying issue
