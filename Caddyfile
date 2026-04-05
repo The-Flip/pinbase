@@ -2,7 +2,9 @@
 
 @django path /api /api/* /admin /admin/* /media/* /static /static/*
 handle @django {
-	reverse_proxy 127.0.0.1:{$DJANGO_PORT:8000}
+	reverse_proxy 127.0.0.1:{$DJANGO_PORT:8000} {
+		header_up X-Forwarded-Proto https
+	}
 }
 
 handle {
