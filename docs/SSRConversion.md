@@ -1,8 +1,8 @@
 # SSR Conversion
 
-This document is a practical guide for converting an existing SvelteKit route subtree from CSR to SSR in Pinbase.
+This document is the implementation checklist for converting an existing SvelteKit route subtree from CSR to SSR in Pinbase.
 
-It is not the canonical source for SSR philosophy or API design rules. Read [Svelte.md](Svelte.md) and [WebApiDesign.md](WebApiDesign.md) for those. This doc is the implementation checklist.
+For SSR philosophy and API design rules, read [Svelte.md](Svelte.md) and [WebApiDesign.md](WebApiDesign.md).
 
 ## When To Use This
 
@@ -13,6 +13,10 @@ Use this workflow when:
 - the page is important for SEO, sharing, or first-load usability
 
 Do not use this workflow blindly for authenticated or highly interactive app surfaces.
+
+## First Check to See if Page _SHOULD_ be SSR
+
+Only pages that need to be indexed by search engines need to be SSR'ed. See [Svelte.md](Svelte.md#choosing-a-rendering-strategy).
 
 ## Standard Pattern
 

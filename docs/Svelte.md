@@ -1,60 +1,43 @@
 # Svelte
 
-This document defines how to think about SvelteKit pages in Pinbase.
+This document defines how to think about and develop SvelteKit pages in Pinbase.
 
-It is not about Svelte syntax or component style. It is about route behavior: which pages should render on the server, which should stay client-only, and how routes should obtain data from Django.
+## Authoring Conventions
 
-## Default Model
+You MUST use Svelte 5 runes mode. Use modern Svelte 5 patterns, not legacy Svelte 4 syntax:
 
-Use SvelteKit as the page runtime and Django as the data authority.
+- `export let` -> `$props()`
+- `$:` -> `$derived` / `$effect`
+- `on:click` -> `onclick`
+- `<slot>` -> `{@render children()}`
 
-- Django owns the data model, business logic, auth, and API contract.
-- SvelteKit owns page rendering and user-facing UI composition.
-- Public pages should usually render meaningful HTML on the server.
-- Internal or heavily interactive application pages may stay client-rendered.
+Keep component styles scoped by default. Avoid `:global` unless there is a clear reason. You MUST obtain explicit user approval to get an exception to use `:global`.
 
-## Public SSR Pages
+## Choosing A Rendering Strategy
 
-Default to SSR for pages where the initial HTML matters.
+How to choose which rendering mode:
 
-This usually means:
+- **Server-Side Rendering (SSR)** for any page that needs to be indexed by search engines.
+- **Prerendered static shell plus client fetch** as the default for pages that do not need to be indexed by search engines. Why? Because this is usually perceived by the user as more performant than pure CSR.
+- **Pure Client-Side Rendering (CSR)** only for pages that cannot practically use a prerendered shell.
 
-- public detail pages
-- public browse/index pages that should be crawlable
-- pages where content should appear in the first response without waiting for client fetches
+In this repo, that usually means:
 
-For these routes, prefer:
+- **SSR**:
+  - public detail pages such as title, model, manufacturer, and similar entity detail routes. These need to be in search engines.
+  - public read-only child pages when they add meaningful content that needs to be in search engines, such as `sources` or `edit-history`
+  - public media/gallery pages when they have content that needs to be in search engines, not editing surfaces
+- **Prerendered static shell plus client fetch**:
+  - home page, search, recent activity, and large browse/index pages
+  - pages where the content changes often and does not need to be indexed from the initial HTML
+  - aggregate pages where fast shell delivery is more valuable than server-rendering the full dataset
+  - most non-SEO pages when the route can be prerendered and the shell is generic
+- **CSR-only**:
+  - routes that cannot be enumerated at build time and do not need SSR
+  - routes where prerendering is not practical because the shell itself depends on request-time state
+  - dynamic edit, upload, review, and similar app surfaces that must support arbitrary new slugs without a rebuild
 
-- `+page.server.ts` for route data loading
-- one page-oriented backend endpoint, usually under `/api/pages/...`
-- `+page.svelte` that renders the returned data directly
-
-The page should receive a page model and render it. It should not orchestrate multiple backend calls unless there is a strong reason.
-
-## CSR-Only Pages
-
-Use `ssr = false` deliberately, not by default.
-
-This is appropriate for:
-
-- authenticated app surfaces
-- pages dominated by in-browser state and interaction
-- internal tools where SEO and first-response HTML are not important
-- routes where the browser-only environment is central to the experience
-
-Examples in this repo include authenticated application layouts that intentionally opt out of SSR.
-
-## Choosing Between SSR And CSR
-
-Ask:
-
-1. Does the first HTML response need to contain the actual content?
-2. Is this page public and important for discovery or sharing?
-3. Is the page mostly presentation of backend data, or mostly client interaction?
-
-If the page is public and content-heavy, prefer SSR.
-
-If the page is internal, highly interactive, or intentionally app-like, CSR is often the better fit.
+**Prerender caveat:** A prerendered shell must not read request-time state (like `window.location.search`) at module scope or during initial render — that code runs at build time when no request exists. Defer URL-dependent state initialization to `onMount` or a `browser` guard so the shell can prerender as a generic page and hydrate with the real URL on the client.
 
 ## Route Files
 
@@ -67,7 +50,17 @@ Use route files by responsibility:
 
 For public SSR pages, `+page.server.ts` or `+layout.server.ts` should be the default choice.
 
-## Calling Django From Server-Side Routes
+## Implementing SSR Routes
+
+For SSR routes, prefer:
+
+- `+page.server.ts` or `+layout.server.ts` for route data loading
+- one page-oriented backend endpoint, usually under `/api/pages/...`
+- `+page.svelte` that renders the returned data directly
+
+The page should receive a page model and render it. It should not orchestrate multiple backend calls unless there is a strong reason.
+
+### Calling Django From Server-Side Routes
 
 Server-side Svelte routes should call Django APIs through the typed client, not through ad hoc fetch helpers.
 
@@ -96,7 +89,7 @@ This keeps:
 
 The goal is not for SvelteKit SSR to reach into Django internals. The boundary stays at the HTTP API.
 
-## SSR Inheritance In Child Routes
+### SSR Inheritance In Child Routes
 
 When a parent `+layout.server.ts` enables SSR, all child routes inherit it. This is fine for public content children (detail, sources, edit-history), but breaks interactive children that import the browser API client or read auth state at render time.
 
@@ -107,20 +100,3 @@ When converting a route subtree to SSR, audit every child route and add `export 
 - is an authenticated editing or upload surface
 
 This is easy to miss because the children worked fine when the parent had `ssr = false` — the breakage only surfaces after the parent switches to SSR.
-
-## What To Avoid
-
-Avoid these patterns on SSR pages:
-
-- calling several generic endpoints from one route and merging them in Svelte
-- moving backend composition logic into `load()`
-- using browser-only fetch patterns for data that belongs in the initial HTML
-- marking routes `ssr = false` just because client fetching is familiar
-
-## Heuristic
-
-When building a page, ask:
-
-"Should this page arrive as content, or as an app shell that later discovers its content?"
-
-If it should arrive as content, prefer SSR.
