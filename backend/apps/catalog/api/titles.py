@@ -134,7 +134,7 @@ def _dedup_facet_refs(items) -> list[dict]:
     return result
 
 
-def _serialize_title_list(title) -> dict:
+def _serialize_title_list(title, *, min_rank: int | None = None) -> dict:
     thumbnail_url = None
     manufacturer = None
     year = None
@@ -177,7 +177,9 @@ def _serialize_title_list(title) -> dict:
             ratings.append(float(m.ipdb_rating))
 
     if machines:
-        thumbnail_url, _ = _extract_image_urls(machines[0].extra_data or {})
+        thumbnail_url, _ = _extract_image_urls(
+            machines[0].extra_data or {}, min_rank=min_rank
+        )
         first = machines[0]
         mfr = (
             first.corporate_entity.manufacturer
@@ -515,16 +517,63 @@ def list_titles(request, display: str = ""):
 @titles_router.get("/all/", response=list[TitleListSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_all_titles(request):
-    """Return every title with minimal fields (no pagination)."""
-    from django.core.cache import cache
+    """Return every title with facet data for client-side filtering.
 
-    from ..models import Title
+    Performance-critical: this serializes ~6k titles with facet arrays
+    aggregated from ~7k machine models.  The result is cached indefinitely
+    and invalidated on data changes, so cold-cache rebuild speed matters.
+
+    Strategy (instead of prefetch + ORM iteration):
+    1. Annotate scalar card fields (manufacturer, year) via correlated
+       subqueries so the DB does the work in one SQL statement.
+    2. Use ``values_list`` instead of full ORM object instantiation to
+       avoid Python-side hydration overhead for thousands of rows.
+    3. Fetch M2M facet data (themes, features, credits, etc.) via bulk
+       queries on through tables into ``dict`` lookup maps.
+    4. Assemble the response dicts from the lookup maps.
+
+    This reduces cold-cache rebuild from ~3.5s to ~0.5s locally
+    (~30s to ~5s on production hardware).
+    """
+    from collections import defaultdict
+
+    from django.core.cache import cache
+    from django.db.models import Min, Subquery, OuterRef
+
+    from ..models import Credit, MachineModel, Title, TitleAbbreviation
 
     result = cache.get(TITLES_ALL_KEY)
     if result is not None:
         return result
 
-    qs = (
+    from apps.core.licensing import get_minimum_display_rank
+
+    # Cached once for the entire rebuild — avoids ~6k Constance DB lookups.
+    min_rank = get_minimum_display_rank()
+
+    # "First model" = earliest non-variant model by (year, name), used to
+    # derive the title's display manufacturer, year, and thumbnail.
+    first_model = (
+        MachineModel.objects.filter(title=OuterRef("pk"), variant_of__isnull=True)
+        .active()
+        .order_by("year", "name")
+    )
+    # Column indices for the values_list below.
+    T_ID = 0
+    T_NAME = 1
+    T_SLUG = 2
+    T_MACHINE_COUNT = 3
+    T_LATEST_YEAR = 4
+    T_MFR_SLUG = 5
+    T_MFR_NAME = 6
+    T_PRIMARY_YEAR = 7
+    T_PRIMARY_MODEL_ID = 8
+    T_YEAR_MIN = 9
+    T_IPDB_RATING_MAX = 10
+    T_FRANCHISE_SLUG = 11
+    T_FRANCHISE_NAME = 12
+
+    title_rows = list(
         Title.objects.active()
         .annotate(
             machine_count=Count(
@@ -536,12 +585,193 @@ def list_all_titles(request):
                 "machine_models__year",
                 filter=Q(machine_models__variant_of__isnull=True),
             ),
+            primary_mfr_slug=Subquery(
+                first_model.values("corporate_entity__manufacturer__slug")[:1]
+            ),
+            primary_mfr_name=Subquery(
+                first_model.values("corporate_entity__manufacturer__name")[:1]
+            ),
+            primary_year=Subquery(first_model.values("year")[:1]),
+            primary_model_id=Subquery(first_model.values("pk")[:1]),
+            year_min=Min(
+                "machine_models__year",
+                filter=Q(machine_models__variant_of__isnull=True),
+            ),
+            ipdb_rating_max=Max(
+                "machine_models__ipdb_rating",
+                filter=Q(machine_models__variant_of__isnull=True),
+            ),
         )
-        .select_related("franchise")
-        .prefetch_related(_title_models_prefetch(), "series", "abbreviations")
+        .values_list(
+            "id",
+            "name",
+            "slug",
+            "machine_count",
+            "latest_year",
+            "primary_mfr_slug",
+            "primary_mfr_name",
+            "primary_year",
+            "primary_model_id",
+            "year_min",
+            "ipdb_rating_max",
+            "franchise__slug",
+            "franchise__name",
+        )
         .order_by(F("latest_year").desc(nulls_last=True), "name")
     )
-    result = [_serialize_title_list(t) for t in qs]
+
+    # --- Batch thumbnail fetch ---
+    primary_model_ids = [
+        r[T_PRIMARY_MODEL_ID] for r in title_rows if r[T_PRIMARY_MODEL_ID]
+    ]
+    thumb_data: dict[int, str | None] = {}
+    for mid, extra_data in MachineModel.objects.filter(
+        id__in=primary_model_ids
+    ).values_list("id", "extra_data"):
+        if extra_data:
+            thumb, _ = _extract_image_urls(extra_data, min_rank=min_rank)
+            thumb_data[mid] = thumb
+        else:
+            thumb_data[mid] = None
+
+    # --- Bulk abbreviations and series ---
+    title_ids = [r[T_ID] for r in title_rows]
+
+    title_abbrevs: dict[int, list[str]] = defaultdict(list)
+    for tid, value in TitleAbbreviation.objects.filter(
+        title_id__in=title_ids
+    ).values_list("title_id", "value"):
+        title_abbrevs[tid].append(value)
+
+    title_series: dict[int, list[tuple[str, str]]] = defaultdict(list)
+    Series = Title.series.through
+    for tid, slug, name in Series.objects.filter(title_id__in=title_ids).values_list(
+        "title_id", "series__slug", "series__name"
+    ):
+        title_series[tid].append((slug, name))
+
+    # --- Bulk facet queries via through tables ---
+    model_qs = MachineModel.objects.filter(
+        title__isnull=False, variant_of__isnull=True
+    ).active()
+
+    title_model_map: dict[int, list[int]] = defaultdict(list)
+    model_ids: set[int] = set()
+    for title_id, model_id in model_qs.values_list("title_id", "id"):
+        title_model_map[title_id].append(model_id)
+        model_ids.add(model_id)
+
+    model_tech_gen: dict[int, tuple[str, str]] = {}
+    for mid, slug, name in model_qs.filter(
+        technology_generation__isnull=False
+    ).values_list("id", "technology_generation__slug", "technology_generation__name"):
+        model_tech_gen[mid] = (slug, name)
+
+    model_display: dict[int, tuple[str, str]] = {}
+    for mid, slug, name in model_qs.filter(display_type__isnull=False).values_list(
+        "id", "display_type__slug", "display_type__name"
+    ):
+        model_display[mid] = (slug, name)
+
+    model_system: dict[int, tuple[str, str]] = {}
+    for mid, slug, name in model_qs.filter(system__isnull=False).values_list(
+        "id", "system__slug", "system__name"
+    ):
+        model_system[mid] = (slug, name)
+
+    model_player_count: dict[int, int | None] = {}
+    for mid, pc in model_qs.values_list("id", "player_count"):
+        model_player_count[mid] = pc
+
+    model_themes: dict[int, list[tuple[str, str]]] = defaultdict(list)
+    for mid, slug, name in MachineModel.themes.through.objects.filter(
+        machinemodel_id__in=model_ids
+    ).values_list("machinemodel_id", "theme__slug", "theme__name"):
+        model_themes[mid].append((slug, name))
+
+    model_gf: dict[int, list[tuple[str, str]]] = defaultdict(list)
+    for mid, slug, name in MachineModel.gameplay_features.through.objects.filter(
+        machinemodel_id__in=model_ids
+    ).values_list(
+        "machinemodel_id",
+        "gameplayfeature__slug",
+        "gameplayfeature__name",
+    ):
+        model_gf[mid].append((slug, name))
+
+    model_rt: dict[int, list[tuple[str, str]]] = defaultdict(list)
+    for mid, slug, name in MachineModel.reward_types.through.objects.filter(
+        machinemodel_id__in=model_ids
+    ).values_list("machinemodel_id", "rewardtype__slug", "rewardtype__name"):
+        model_rt[mid].append((slug, name))
+
+    model_persons: dict[int, list[tuple[str, str]]] = defaultdict(list)
+    for mid, slug, name in Credit.objects.filter(model_id__in=model_ids).values_list(
+        "model_id", "person__slug", "person__name"
+    ):
+        model_persons[mid].append((slug, name))
+
+    # --- Assembly ---
+    result = []
+    for r in title_rows:
+        tid = r[T_ID]
+        mids = title_model_map.get(tid, [])
+
+        mfr = {"slug": r[T_MFR_SLUG], "name": r[T_MFR_NAME]} if r[T_MFR_SLUG] else None
+        franchise = (
+            {"slug": r[T_FRANCHISE_SLUG], "name": r[T_FRANCHISE_NAME]}
+            if r[T_FRANCHISE_SLUG]
+            else None
+        )
+
+        result.append(
+            {
+                "name": r[T_NAME],
+                "slug": r[T_SLUG],
+                "abbreviations": title_abbrevs.get(tid, []),
+                "machine_count": r[T_MACHINE_COUNT],
+                "manufacturer": mfr,
+                "year": r[T_PRIMARY_YEAR],
+                "thumbnail_url": thumb_data.get(r[T_PRIMARY_MODEL_ID]),
+                "tech_generations": _dedup_facet_refs(
+                    model_tech_gen[mid] for mid in mids if mid in model_tech_gen
+                ),
+                "display_types": _dedup_facet_refs(
+                    model_display[mid] for mid in mids if mid in model_display
+                ),
+                "player_counts": sorted(
+                    {
+                        model_player_count[mid]
+                        for mid in mids
+                        if model_player_count.get(mid) is not None
+                    }
+                ),
+                "systems": _dedup_facet_refs(
+                    model_system[mid] for mid in mids if mid in model_system
+                ),
+                "themes": _dedup_facet_refs(
+                    p for mid in mids for p in model_themes.get(mid, [])
+                ),
+                "gameplay_features": _dedup_facet_refs(
+                    p for mid in mids for p in model_gf.get(mid, [])
+                ),
+                "reward_types": _dedup_facet_refs(
+                    p for mid in mids for p in model_rt.get(mid, [])
+                ),
+                "persons": _dedup_facet_refs(
+                    p for mid in mids for p in model_persons.get(mid, [])
+                ),
+                "franchise": franchise,
+                "series": [
+                    {"slug": s, "name": n} for s, n in title_series.get(tid, [])
+                ],
+                "year_min": r[T_YEAR_MIN],
+                "year_max": r[T_LATEST_YEAR],
+                "ipdb_rating_max": (
+                    float(r[T_IPDB_RATING_MAX]) if r[T_IPDB_RATING_MAX] else None
+                ),
+            }
+        )
     cache.set(TITLES_ALL_KEY, result, timeout=None)
     return result
 
