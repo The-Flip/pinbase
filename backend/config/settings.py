@@ -19,6 +19,11 @@ ALLOWED_HOSTS = [
     for h in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
     if h.strip()
 ]
+# SSR and health-check traffic reaches Django on 127.0.0.1 inside the
+# container, so localhost must always be allowed regardless of the env var.
+for _host in ("localhost", "127.0.0.1"):
+    if _host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_host)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -199,8 +204,11 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = "Lax"
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    SECURE_SSL_REDIRECT = True
+    # TLS is terminated by Railway's edge proxy and (in the container) by
+    # Caddy.  Django never receives external traffic directly, so SSL
+    # redirect and proxy-header sniffing are unnecessary.  Keeping them
+    # would break internal callers (SSR, health checks) that reach Django
+    # over plain HTTP on 127.0.0.1.
 
 # ---------------------------------------------------------------------------
 # Constance (runtime-configurable settings)
