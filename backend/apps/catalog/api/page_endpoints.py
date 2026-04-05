@@ -12,6 +12,11 @@ from __future__ import annotations
 from django.shortcuts import get_object_or_404
 from ninja import Router
 
+from .manufacturers import (
+    ManufacturerDetailSchema,
+    _manufacturer_qs,
+    _serialize_manufacturer_detail,
+)
 from .titles import TitleDetailSchema, _detail_qs, _serialize_title_detail
 
 pages_router = Router(tags=["private"])
@@ -21,3 +26,9 @@ pages_router = Router(tags=["private"])
 def title_detail_page(request, slug: str):
     title = get_object_or_404(_detail_qs(), slug=slug)
     return _serialize_title_detail(title)
+
+
+@pages_router.get("/manufacturer/{slug}", response=ManufacturerDetailSchema)
+def manufacturer_detail_page(request, slug: str):
+    mfr = get_object_or_404(_manufacturer_qs(), slug=slug)
+    return _serialize_manufacturer_detail(mfr)

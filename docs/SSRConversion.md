@@ -24,8 +24,9 @@ For a typical detail page conversion:
 4. replace `+layout.ts` or `+page.ts` with `+layout.server.ts` or `+page.server.ts`
 5. use `createServerClient(fetch, url)` from `$lib/api/server`
 6. audit every child route before removing inherited `ssr = false`
-7. add backend and frontend SSR tests
-8. regenerate API types
+7. remove the old resource detail endpoint and migrate its tests (see [Removing the Old Detail Endpoint](#removing-the-old-detail-endpoint))
+8. add frontend SSR tests (backend coverage comes from step 7)
+9. regenerate API types
 
 ## Backend Checklist
 
@@ -108,7 +109,7 @@ Do not assume a child “stays CSR” just because it has no loader today.
 
 An SSR conversion should usually add or update these tests:
 
-- backend endpoint test for the new `/api/pages/...` route
+- backend coverage for the `/api/pages/...` endpoint — usually comes from migrating the old detail endpoint's tests (see [Removing the Old Detail Endpoint](#removing-the-old-detail-endpoint)); write new tests only if there are none to migrate
 - frontend server-load test for the new `+page.server.ts` or `+layout.server.ts`
 - frontend server-load test for any converted child route like `edit-history/+page.server.ts`
 - at least one render proof that meaningful content reaches initial HTML
@@ -126,8 +127,31 @@ For a converted page, manually verify:
 5. open any explicitly CSR children and confirm they still work
 6. verify 404 behavior for a nonexistent slug
 
+## Removing the Old Detail Endpoint
+
+When the page endpoint replaces a resource detail endpoint (`GET /api/titles/{slug}`, `GET /api/manufacturers/{slug}`, etc.), remove the old endpoint as part of the same conversion. Leaving both in place creates silent duplication — same queryset, same serializer, two URLs — and the dead endpoint stays in the public OpenAPI schema until someone notices.
+
+### How to remove it
+
+1. Delete the `@router.get("/{slug}", ...)` view function from the entity's router module.
+2. Check that the removal did not leave unused imports (e.g. `cache_control`, `decorate_view`). The list, all, and claims endpoints on the same router usually still need them, but verify.
+3. Grep for every test that GETs the old URL pattern. The search pattern is `client.get(.*"/api/{entity_plural}/` excluding `/claims/`, list (`/`), and `/all/` endpoints.
+4. Rewrite each test GET to use `/api/pages/{entity_singular}/{slug}`.
+5. Regenerate API types (`make api-gen`) so the old path is removed from `schema.d.ts`.
+6. If step 3 found tests to migrate, delete any page endpoint tests that now duplicate them. The migrated tests already cover the page endpoint with richer assertions (ordering, variant exclusion, nulls-last, etc.), so basic "returns 200" and "returns 404" tests written separately for the page endpoint are redundant.
+7. If step 3 found no tests to migrate (the old endpoint had no GET test coverage), write page endpoint tests from scratch — at minimum a 200 with meaningful assertions and a 404.
+
+When old tests exist, migrating them _is_ writing the backend page endpoint tests — they exercise serialization, ordering, and edge cases, and just happened to hit a different URL. Do not write a separate `test_page_endpoints.py` and then also migrate the old tests; you end up with redundant coverage. But when there are no old tests, the page endpoint needs its own coverage.
+
+### What to watch out for
+
+- **Other routers on the same prefix are unaffected.** The list endpoint (`/`), the all endpoint (`/all/`), and the claims PATCH (`/{slug}/claims/`) stay on the entity router. Only the detail GET is removed.
+- **Tests are scattered.** Detail endpoint GETs appear not just in the entity's own test file but also in description, claims, and slug-rename tests. Grep broadly — restricting to one file will miss references.
+- **The claims PATCH returns the detail schema too.** It calls the same serializer directly, not via the detail endpoint, so removing the endpoint does not affect it.
+
 ## Common Gotchas
 
+- leaving the old resource detail endpoint alive after adding the page endpoint — two URLs serving the same data, one in the public schema
 - putting page endpoints in the wrong Django app and violating app boundaries
 - using generic resource endpoints when the page really needs a page-oriented endpoint
 - forgetting `tags=["private"]` on page endpoints
@@ -143,6 +167,7 @@ For a converted page, manually verify:
 A route subtree is cleanly converted when:
 
 - the backend exposes one page-oriented endpoint under `/api/pages/...`
+- the old resource detail endpoint is removed and its tests migrated
 - the SSR route uses `createServerClient`
 - child routes are explicitly classified as SSR or CSR
 - tests cover the endpoint and SSR load path
