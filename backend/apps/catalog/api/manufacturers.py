@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Optional
 
-from django.core.cache import cache
 from django.db.models import Count, F, Max, Min, Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
@@ -16,7 +15,7 @@ from ninja.security import django_auth
 from apps.core.models import active_status_q
 
 
-from ..cache import MANUFACTURERS_ALL_KEY
+from ..cache import MANUFACTURERS_ALL_KEY, get_cached_response, set_cached_response
 from .constants import DEFAULT_PAGE_SIZE
 from apps.provenance.helpers import build_sources, claims_prefetch
 
@@ -272,9 +271,9 @@ def list_all_manufacturers(request):
 
     from apps.core.licensing import get_minimum_display_rank
 
-    result = cache.get(MANUFACTURERS_ALL_KEY)
-    if result is not None:
-        return result
+    response = get_cached_response(MANUFACTURERS_ALL_KEY)
+    if response is not None:
+        return response
 
     min_rank = get_minimum_display_rank()
 
@@ -462,8 +461,7 @@ def list_all_manufacturers(request):
                 "tech_generations": _dedup_facet_refs(mfr_tech_gens.get(mfr.id, [])),
             }
         )
-    cache.set(MANUFACTURERS_ALL_KEY, result, timeout=None)
-    return result
+    return set_cached_response(MANUFACTURERS_ALL_KEY, result)
 
 
 @manufacturers_router.patch(

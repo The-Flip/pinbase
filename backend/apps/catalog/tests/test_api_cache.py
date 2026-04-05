@@ -62,3 +62,47 @@ class TestAllEndpointCache:
         Title.objects.create(name="Godzilla", slug="godzilla", opdb_id="GZ1")
         resp2 = client.get("/api/titles/all/")
         assert len(resp2.json()) == count_before + 1
+
+
+class TestConditionalGet:
+    """Pre-computed ETags let ConditionalGetMiddleware return 304 without
+    serialising or hashing the response body."""
+
+    @pytest.fixture(autouse=True)
+    def _clear_cache(self):
+        cache.clear()
+        yield
+        cache.clear()
+
+    @pytest.mark.parametrize("path", ["/api/models/all/", "/api/titles/all/"])
+    def test_304_on_matching_etag(self, client, machine_model, path):
+        resp = client.get(path)
+        assert resp.status_code == 200
+        etag = resp["ETag"]
+        assert etag
+
+        resp2 = client.get(path, headers={"If-None-Match": etag})
+        assert resp2.status_code == 304
+
+    @pytest.mark.parametrize("path", ["/api/models/all/", "/api/titles/all/"])
+    def test_200_on_stale_etag(self, client, machine_model, path):
+        client.get(path)  # populate cache
+
+        resp = client.get(path, headers={"If-None-Match": '"stale"'})
+        assert resp.status_code == 200
+        assert resp["ETag"]
+
+    @pytest.mark.parametrize(
+        "path,cache_key",
+        [
+            ("/api/models/all/", MODELS_ALL_KEY),
+            ("/api/titles/all/", TITLES_ALL_KEY),
+        ],
+    )
+    def test_cache_stores_bytes_and_etag(self, client, machine_model, path, cache_key):
+        client.get(path)
+        cached = cache.get(cache_key)
+        assert cached is not None
+        json_bytes, etag = cached
+        assert isinstance(json_bytes, bytes)
+        assert etag.startswith('"') and etag.endswith('"')
