@@ -41,6 +41,7 @@ html {
 	/* Semantic */
 	--color-success: #16a34a;
 	--color-error: #dc2626;
+	--color-danger: var(--color-error);
 	--color-warning: #b45309;
 	--color-link: #2563eb;
 
@@ -79,6 +80,7 @@ html {
 		/* Semantic */
 		--color-success: #2ea043;
 		--color-error: #f85149;
+		--color-danger: var(--color-error);
 		--color-warning: #fbbf24;
 		--color-link: #4daafc;
 
