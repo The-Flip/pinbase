@@ -36,7 +36,7 @@ from .schemas import (
     ThemeSchema,
     TitleMachineSchema,
 )
-from ..cache import TITLES_ALL_KEY
+from ..cache import TITLES_ALL_KEY, get_cached_response, set_cached_response
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -537,14 +537,13 @@ def list_all_titles(request):
     """
     from collections import defaultdict
 
-    from django.core.cache import cache
     from django.db.models import Min, Subquery, OuterRef
 
     from ..models import Credit, MachineModel, Title, TitleAbbreviation
 
-    result = cache.get(TITLES_ALL_KEY)
-    if result is not None:
-        return result
+    response = get_cached_response(TITLES_ALL_KEY)
+    if response is not None:
+        return response
 
     from apps.core.licensing import get_minimum_display_rank
 
@@ -772,8 +771,7 @@ def list_all_titles(request):
                 ),
             }
         )
-    cache.set(TITLES_ALL_KEY, result, timeout=None)
-    return result
+    return set_cached_response(TITLES_ALL_KEY, result)
 
 
 @titles_router.patch(

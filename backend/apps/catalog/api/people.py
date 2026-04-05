@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Optional
 
-from django.core.cache import cache
 from django.db.models import Count, F, Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
@@ -13,7 +12,7 @@ from ninja.decorators import decorate_view
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from ..cache import PEOPLE_ALL_KEY
+from ..cache import PEOPLE_ALL_KEY, get_cached_response, set_cached_response
 from .constants import DEFAULT_PAGE_SIZE
 from apps.provenance.helpers import build_sources, claims_prefetch
 
@@ -182,9 +181,9 @@ def list_all_people(request):
     """
     from apps.core.licensing import get_minimum_display_rank
 
-    result = cache.get(PEOPLE_ALL_KEY)
-    if result is not None:
-        return result
+    response = get_cached_response(PEOPLE_ALL_KEY)
+    if response is not None:
+        return response
 
     min_rank = get_minimum_display_rank()
 
@@ -232,8 +231,7 @@ def list_all_people(request):
                 "thumbnail_url": thumb,
             }
         )
-    cache.set(PEOPLE_ALL_KEY, result, timeout=None)
-    return result
+    return set_cached_response(PEOPLE_ALL_KEY, result)
 
 
 @people_router.patch(

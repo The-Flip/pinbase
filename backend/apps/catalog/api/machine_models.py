@@ -13,7 +13,7 @@ from ninja.errors import HttpError
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.security import django_auth
 
-from ..cache import MODELS_ALL_KEY
+from ..cache import MODELS_ALL_KEY, get_cached_response, set_cached_response
 from .constants import DEFAULT_PAGE_SIZE
 from apps.provenance.helpers import build_sources, claims_prefetch
 
@@ -708,8 +708,6 @@ def list_all_models(request):
     """
     from collections import defaultdict
 
-    from django.core.cache import cache
-
     from ..models import (
         Credit,
         CorporateEntity,
@@ -720,9 +718,9 @@ def list_all_models(request):
 
     from apps.core.licensing import get_minimum_display_rank
 
-    result = cache.get(MODELS_ALL_KEY)
-    if result is not None:
-        return result
+    response = get_cached_response(MODELS_ALL_KEY)
+    if response is not None:
+        return response
 
     min_rank = get_minimum_display_rank()
 
@@ -875,8 +873,7 @@ def list_all_models(request):
                 "title_slug": r[M_TITLE_SLUG],
             }
         )
-    cache.set(MODELS_ALL_KEY, result, timeout=None)
-    return result
+    return set_cached_response(MODELS_ALL_KEY, result)
 
 
 @models_router.get("/edit-options/", response=ModelEditOptionsSchema)
