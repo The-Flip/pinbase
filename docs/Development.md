@@ -11,6 +11,7 @@ It does not try to restate every project rule. Instead, it points to the more sp
 - [WebArchitecture.md](WebArchitecture.md) for the Django + SvelteKit web stack
 - [Svelte.md](Svelte.md) for route-level rendering choices and SvelteKit page conventions
 - [WebApiDesign.md](WebApiDesign.md) for frontend/backend API design rules for pages and SSR
+- [SSRConversion.md](SSRConversion.md) for the step-by-step workflow for converting an existing route subtree from CSR to SSR
 - [Reviewing.md](Reviewing.md) for repo-specific review checks, especially for AI reviewers
 - [AppBoundaries.md](AppBoundaries.md) for backend app dependency rules
 - [DomainModel.md](DomainModel.md) for the business/domain model of pinball

@@ -131,10 +131,13 @@ docs/             Documentation source files
 ## Key Conventions
 
 - Backend dependencies managed with `uv`, frontend with `pnpm`
-- API types are generated from the Django Ninja OpenAPI schema — run `make api-gen` after changing API endpoints
 - CSRF: Django sets `csrftoken` cookie; the frontend `client.ts` reads it and sends `X-CSRFToken` on mutating requests
 - Vite dev server proxies `/api/`, `/admin/`, `/media/`, and `/static/` to Django at `127.0.0.1:8000`
 - For SSR route conventions, see [Svelte.md](Svelte.md). For page-oriented API design, see [WebApiDesign.md](WebApiDesign.md)
+
+### Generated Types — `schema.d.ts` is gitignored
+
+`frontend/src/lib/api/schema.d.ts` is generated and **not committed**. Do not stage or commit it. After adding or changing any API endpoint, run `make api-gen` to regenerate it — the typed client will not see new endpoints until you do.
 
 ### Frontend URLs and `resolve()`
 
