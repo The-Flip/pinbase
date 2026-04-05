@@ -26,6 +26,7 @@ from .taxonomy import (
     technology_subgenerations_router,
 )
 from .themes import themes_router
+from .page_endpoints import pages_router
 from .titles import titles_router
 
 __all__ = [
@@ -48,5 +49,6 @@ __all__ = [
     "technology_generations_router",
     "technology_subgenerations_router",
     "themes_router",
+    "pages_router",
     "titles_router",
 ]

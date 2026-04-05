@@ -21,6 +21,7 @@ from apps.catalog.api import (
     tags_router,
     technology_generations_router,
     technology_subgenerations_router,
+    pages_router,
     themes_router,
     titles_router,
 )
@@ -94,6 +95,7 @@ api.add_router("/locations/", locations_router)
 api.add_router("/reward-types/", reward_types_router)
 api.add_router("/tags/", tags_router)
 api.add_router("/technology-subgenerations/", technology_subgenerations_router)
+api.add_router("/pages/", pages_router)
 api.add_router("/link-types/", link_types_router)
 api.add_router("/sources/", sources_router)
 api.add_router("/edit-history/", edit_history_router)
