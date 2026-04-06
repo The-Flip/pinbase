@@ -677,7 +677,7 @@ def list_recent_models(request):
             F("year").desc(nulls_last=True),
             F("month").desc(nulls_last=True),
             "-updated_at",
-        )
+        )[:20]  # generous LIMIT — we only need 3 unique titles
     )
     from apps.core.licensing import get_minimum_display_rank
 

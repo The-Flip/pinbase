@@ -1,6 +1,33 @@
 import pytest
+from django.test.utils import CaptureQueriesContext
 
 from apps.catalog.models import MachineModel, System, Title
+
+
+class TestStatsAPI:
+    def test_stats_returns_correct_counts(self, client, machine_model):
+        """Counts must reflect actual rows in the database."""
+        resp = client.get("/api/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["titles"] == 0
+        assert data["models"] == 1
+        assert data["manufacturers"] == 1
+        assert data["people"] == 0
+
+    def test_stats_uses_single_query(self, client, db):
+        """The /stats endpoint must fetch all counts in one DB query."""
+        from django.db import connection
+
+        with CaptureQueriesContext(connection) as ctx:
+            resp = client.get("/api/stats")
+        assert resp.status_code == 200
+        count_queries = [
+            q["sql"] for q in ctx.captured_queries if "COUNT" in q["sql"].upper()
+        ]
+        assert len(count_queries) == 1, (
+            f"Expected 1 count query, got {len(count_queries)}"
+        )
 
 
 class TestSourcesAPI:
