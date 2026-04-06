@@ -1,3 +1,5 @@
+from django.test.utils import CaptureQueriesContext
+
 from apps.catalog.models import (
     Credit,
     CreditRole,
@@ -253,3 +255,28 @@ class TestModelsAPI:
     def test_get_model_404(self, client, db):
         resp = client.get("/api/pages/model/nonexistent")
         assert resp.status_code == 404
+
+    def test_recent_models_returns_expected_data(self, client, machine_model):
+        resp = client.get("/api/models/recent/")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert len(data) == 1
+        assert data[0]["name"] == "Medieval Madness"
+        assert data[0]["slug"] == "medieval-madness"
+        assert data[0]["manufacturer_name"] == "Williams"
+        assert data[0]["year"] == 1997
+
+    def test_recent_models_query_is_bounded(self, client, db):
+        """The /recent/ query must use LIMIT to avoid fetching all rows."""
+        from django.db import connection
+
+        with CaptureQueriesContext(connection) as ctx:
+            resp = client.get("/api/models/recent/")
+        assert resp.status_code == 200
+        model_queries = [
+            q["sql"] for q in ctx.captured_queries if "catalog_machinemodel" in q["sql"]
+        ]
+        assert model_queries, "Expected at least one query on catalog_machinemodel"
+        assert any("LIMIT" in q.upper() for q in model_queries), (
+            f"Expected LIMIT in query, got: {model_queries[0][:200]}"
+        )

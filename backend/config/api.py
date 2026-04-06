@@ -24,13 +24,24 @@ class StatsSchema(Schema):
 
 @api.get("/stats", response=StatsSchema, tags=["private"])
 def stats(request):
-    from apps.catalog.models import Manufacturer, MachineModel, Person, Title
+    from django.db import connection
 
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT
+                (SELECT COUNT(*) FROM catalog_title),
+                (SELECT COUNT(*) FROM catalog_machinemodel),
+                (SELECT COUNT(*) FROM catalog_manufacturer),
+                (SELECT COUNT(*) FROM catalog_person)
+            """
+        )
+        titles, models, manufacturers, people = cursor.fetchone()
     return {
-        "titles": Title.objects.count(),
-        "models": MachineModel.objects.count(),
-        "manufacturers": Manufacturer.objects.count(),
-        "people": Person.objects.count(),
+        "titles": titles,
+        "models": models,
+        "manufacturers": manufacturers,
+        "people": people,
     }
 
 
