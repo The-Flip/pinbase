@@ -6,21 +6,19 @@
 	import { resolveHref } from '$lib/utils';
 	import SmartDate from '$lib/components/SmartDate.svelte';
 	import InlineDiff from '$lib/components/InlineDiff.svelte';
-	import UserBadge from '$lib/components/UserBadge.svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { isDiffable, formatValue } from '$lib/components/change-display';
-	import { changesLabel } from './recent-changes';
+	import { changesLabel } from './changes';
 
-	type RecentChangeSet = components['schemas']['RecentChangeSetSchema'];
-	type RecentChangeSetDetail = components['schemas']['RecentChangeSetDetailSchema'];
+	type ChangeSetSummary = components['schemas']['ChangeSetSummarySchema'];
+	type ChangeSetDetail = components['schemas']['ChangeSetDetailSchema'];
 
 	// Filter state
 	let entityType = $state('');
 	let timeRange = $state('');
-	let includeIngest = $state(false);
 
 	// Feed state
-	let items = $state<RecentChangeSet[]>([]);
+	let items = $state<ChangeSetSummary[]>([]);
 	let nextCursor = $state<string | null>(null);
 	let loading = $state(false);
 	let loadingMore = $state(false);
@@ -28,7 +26,7 @@
 	let fetchGeneration = 0;
 
 	// Detail cache (changeset diffs are immutable)
-	let detailCache = new SvelteMap<number, RecentChangeSetDetail>();
+	let detailCache = new SvelteMap<number, ChangeSetDetail>();
 	let expandedIds = new SvelteSet<number>();
 	let loadingDetailIds = new SvelteSet<number>();
 
@@ -51,13 +49,12 @@
 
 	async function fetchPage(cursor?: string) {
 		const { after, before } = computeTimeFilter();
-		const { data } = await client.GET('/api/recent-changes/', {
+		const { data } = await client.GET('/api/pages/changes/', {
 			params: {
 				query: {
 					entity_type: entityType || undefined,
 					after,
 					before,
-					include_ingest: includeIngest || undefined,
 					cursor: cursor || undefined,
 					limit: 50
 				}
@@ -80,11 +77,11 @@
 				items = data.items;
 				nextCursor = data.next_cursor ?? null;
 			} else {
-				error = 'Failed to load recent changes.';
+				error = 'Failed to load changes.';
 			}
 		} catch {
 			if (gen !== fetchGeneration) return;
-			error = 'Failed to load recent changes.';
+			error = 'Failed to load changes.';
 		} finally {
 			if (gen === fetchGeneration) loading = false;
 		}
@@ -115,7 +112,7 @@
 		if (!detailCache.has(id)) {
 			loadingDetailIds.add(id);
 			try {
-				const { data } = await client.GET('/api/recent-changes/{changeset_id}/', {
+				const { data } = await client.GET('/api/pages/changes/{changeset_id}/', {
 					params: { path: { changeset_id: id } }
 				});
 				if (data) {
@@ -132,7 +129,7 @@
 	}
 
 	// Reload on filter change
-	let filterKey = $derived(`${entityType}|${timeRange}|${includeIngest}`);
+	let filterKey = $derived(`${entityType}|${timeRange}`);
 
 	$effect(() => {
 		// Read filterKey to trigger on any filter change
@@ -157,12 +154,12 @@
 </script>
 
 <svelte:head>
-	<title>Recent Changes &mdash; {SITE_NAME}</title>
+	<title>Changelog &mdash; {SITE_NAME}</title>
 </svelte:head>
 
-<div class="recent-changes-page">
+<div class="changes-page">
 	<header class="page-header">
-		<h1>Recent Changes</h1>
+		<h1>Changelog</h1>
 	</header>
 
 	<div class="filter-bar">
@@ -185,11 +182,6 @@
 				<option value="30d">Last 30 days</option>
 			</select>
 		</label>
-
-		<label class="filter-field filter-checkbox">
-			<input type="checkbox" bind:checked={includeIngest} />
-			<span>Include data imports</span>
-		</label>
 	</div>
 
 	{#if loading}
@@ -197,27 +189,31 @@
 	{:else if error}
 		<p class="status-message error">{error}</p>
 	{:else if items.length === 0}
-		<p class="status-message">No recent changes found.</p>
+		<p class="status-message">No changes found.</p>
 	{:else}
 		<ol class="feed">
 			{#each items as cs (cs.id)}
 				<li class="feed-item">
 					<div class="feed-header">
-						<div class="feed-meta">
+						<a href={resolveHref(cs.entity_href)} class="entity-link">
+							<span class="entity-name">{cs.entity_name}</span>
+							<span class="entity-type">{cs.entity_type_label}</span>
+						</a>
+						<span class="byline">
+							By
 							{#if cs.is_ingest}
-								<span class="system-badge">system</span>
 								{#if cs.source_name}
-									<span class="source-name">{cs.source_name}</span>
+									{cs.source_name}
+								{:else}
+									system
 								{/if}
+							{:else if cs.user_display}
+								<a href={resolveHref(`/users/${cs.user_display}`)}>{cs.user_display}</a>
 							{:else}
-								<UserBadge username={cs.user_display} />
+								system
 							{/if}
-							<a href={resolveHref(cs.entity_href)} class="entity-link">
-								<span class="entity-name">{cs.entity_name}</span>
-								<span class="entity-type">{cs.entity_type_label}</span>
-							</a>
-						</div>
-						<span class="timestamp"><SmartDate iso={cs.created_at} /></span>
+							&middot; <SmartDate iso={cs.created_at} />
+						</span>
 					</div>
 
 					<div class="feed-body">
@@ -304,7 +300,7 @@
 </div>
 
 <style>
-	.recent-changes-page {
+	.changes-page {
 		padding: var(--size-5) 0;
 	}
 
@@ -353,14 +349,6 @@
 		font-size: var(--font-size-1);
 	}
 
-	.filter-checkbox {
-		flex-direction: row;
-		align-items: center;
-		gap: var(--size-2);
-		font-size: var(--font-size-1);
-		color: var(--color-text-primary);
-	}
-
 	/* Feed list */
 	.feed {
 		list-style: none;
@@ -387,37 +375,20 @@
 		gap: var(--size-2);
 	}
 
-	.feed-meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: var(--size-2);
-		flex: 1;
-	}
-
-	.timestamp {
+	.byline {
 		font-size: var(--font-size-0);
 		color: var(--color-text-muted);
 		margin-left: auto;
 		white-space: nowrap;
 	}
 
-	.system-badge {
-		display: inline-block;
-		padding: 1px var(--size-2);
-		font-size: var(--font-size-00, 0.7rem);
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		border-radius: var(--radius-1);
-		background-color: var(--color-surface);
-		border: 1px solid var(--color-border-soft);
-		color: var(--color-text-muted);
+	.byline a {
+		color: var(--color-accent);
+		text-decoration: none;
 	}
 
-	.source-name {
-		font-size: var(--font-size-0);
-		color: var(--color-text-muted);
+	.byline a:hover {
+		text-decoration: underline;
 	}
 
 	.entity-link {
@@ -591,12 +562,7 @@
 			align-items: stretch;
 		}
 
-		.feed-header {
-			flex-direction: column;
-			gap: var(--size-1);
-		}
-
-		.timestamp {
+		.byline {
 			margin-left: 0;
 		}
 

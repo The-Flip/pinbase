@@ -1,10 +1,10 @@
 import type { components } from '$lib/api/schema';
 
-type RecentChangeSet = components['schemas']['RecentChangeSetSchema'];
+type ChangeSetSummary = components['schemas']['ChangeSetSummarySchema'];
 
 /** Build a human-readable summary like "3 changes including 1 retraction". */
 export function changesLabel(
-	cs: Pick<RecentChangeSet, 'changes_count' | 'retractions_count'>
+	cs: Pick<ChangeSetSummary, 'changes_count' | 'retractions_count'>
 ): string {
 	const n = cs.changes_count;
 	let label = `${n} ${n === 1 ? 'change' : 'changes'}`;
