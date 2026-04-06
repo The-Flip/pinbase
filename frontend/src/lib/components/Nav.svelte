@@ -14,7 +14,7 @@
 		{ href: '/titles' as const, label: 'Titles' },
 		{ href: '/manufacturers' as const, label: 'Manufacturers' },
 		{ href: '/people' as const, label: 'People' },
-		{ href: '/recent-changes' as const, label: 'Recent Changes' }
+		{ href: '/changes' as const, label: 'Changelog' }
 	];
 
 	function isActive(href: string) {

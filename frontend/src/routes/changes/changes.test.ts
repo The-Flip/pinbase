@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { changesLabel } from './recent-changes';
+import { changesLabel } from './changes';
 
 describe('changesLabel', () => {
 	it('singularizes "change" for count of 1', () => {

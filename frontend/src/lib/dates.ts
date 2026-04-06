@@ -37,24 +37,22 @@ export function smartDate(iso: string): string {
 	}
 
 	if (calendarDays > 0 && calendarDays < 7) {
-		const weekday = new Intl.DateTimeFormat(undefined, { weekday: 'short' }).format(date);
+		const weekday = new Intl.DateTimeFormat(undefined, { weekday: 'long' }).format(date);
 		return `${weekday} ${formatTime(date)}`;
 	}
 
 	if (date.getFullYear() === now.getFullYear()) {
-		const monthDay = new Intl.DateTimeFormat(undefined, {
+		return new Intl.DateTimeFormat(undefined, {
 			month: 'short',
 			day: 'numeric'
 		}).format(date);
-		return `${monthDay} ${formatTime(date)}`;
 	}
 
-	const full = new Intl.DateTimeFormat(undefined, {
+	return new Intl.DateTimeFormat(undefined, {
 		month: 'short',
 		day: 'numeric',
 		year: 'numeric'
 	}).format(date);
-	return `${full} ${formatTime(date)}`;
 }
 
 export function fullDateTime(iso: string): string {

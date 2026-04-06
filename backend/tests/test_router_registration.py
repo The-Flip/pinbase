@@ -29,7 +29,6 @@ EXPECTED_PREFIXES = {
     "/link-types/",
     "/sources/",
     "/edit-history/",
-    "/recent-changes/",
     "/review/",
     "/media/",
 }

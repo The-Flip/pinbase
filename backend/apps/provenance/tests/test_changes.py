@@ -1,4 +1,4 @@
-"""Tests for the Recent Changes API endpoints."""
+"""Tests for the Changes page API endpoints."""
 
 from __future__ import annotations
 
@@ -112,7 +112,7 @@ class TestCursorPaginate:
 
 
 @pytest.mark.django_db
-class TestRecentChangesList:
+class TestChangesList:
     def test_returns_user_edits(self, client, user, pm):
         client.force_login(user)
         client.patch(
@@ -120,7 +120,7 @@ class TestRecentChangesList:
             data='{"fields": {"year": 1998}}',
             content_type="application/json",
         )
-        resp = client.get("/api/recent-changes/")
+        resp = client.get("/api/pages/changes/")
         assert resp.status_code == 200
         data = resp.json()
         assert len(data["items"]) == 1
@@ -141,7 +141,7 @@ class TestRecentChangesList:
         cs = ChangeSet.objects.create(ingest_run=run)
         Claim.objects.assert_claim(pm, "year", 1999, source=source, changeset=cs)
 
-        resp = client.get("/api/recent-changes/")
+        resp = client.get("/api/pages/changes/")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 0
 
@@ -155,7 +155,7 @@ class TestRecentChangesList:
         cs = ChangeSet.objects.create(ingest_run=run)
         Claim.objects.assert_claim(pm, "year", 1999, source=source, changeset=cs)
 
-        resp = client.get("/api/recent-changes/?include_ingest=true")
+        resp = client.get("/api/pages/changes/?include_ingest=true")
         assert resp.status_code == 200
         items = resp.json()["items"]
         assert len(items) == 1
@@ -175,14 +175,14 @@ class TestRecentChangesList:
             content_type="application/json",
         )
 
-        resp = client.get("/api/recent-changes/?entity_type=manufacturer")
+        resp = client.get("/api/pages/changes/?entity_type=manufacturer")
         assert resp.status_code == 200
         items = resp.json()["items"]
         assert len(items) == 1
         assert items[0]["entity_type_label"] == "Manufacturer"
 
     def test_invalid_entity_type_returns_empty(self, client):
-        resp = client.get("/api/recent-changes/?entity_type=nonexistent")
+        resp = client.get("/api/pages/changes/?entity_type=nonexistent")
         assert resp.status_code == 200
         assert resp.json()["items"] == []
 
@@ -195,14 +195,12 @@ class TestRecentChangesList:
                 content_type="application/json",
             )
 
-        resp1 = client.get("/api/recent-changes/?limit=3")
+        resp1 = client.get("/api/pages/changes/?limit=3")
         data1 = resp1.json()
         assert len(data1["items"]) == 3
         assert data1["next_cursor"] is not None
 
-        resp2 = client.get(
-            f"/api/recent-changes/?limit=3&cursor={data1['next_cursor']}"
-        )
+        resp2 = client.get(f"/api/pages/changes/?limit=3&cursor={data1['next_cursor']}")
         data2 = resp2.json()
         assert len(data2["items"]) == 2
         assert data2["next_cursor"] is None
@@ -220,13 +218,13 @@ class TestRecentChangesList:
         )
         # Use a future timestamp so the edit falls before it.
         future = "2099-01-01T00:00:00"
-        resp = client.get(f"/api/recent-changes/?after={future}")
+        resp = client.get(f"/api/pages/changes/?after={future}")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 0
 
         # Use a past timestamp so the edit falls after it.
         past = "2000-01-01T00:00:00"
-        resp = client.get(f"/api/recent-changes/?after={past}")
+        resp = client.get(f"/api/pages/changes/?after={past}")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 1
 
@@ -239,7 +237,7 @@ class TestRecentChangesList:
         )
         pm.delete()
 
-        resp = client.get("/api/recent-changes/")
+        resp = client.get("/api/pages/changes/")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 0
 
@@ -248,7 +246,7 @@ class TestRecentChangesList:
 
 
 @pytest.mark.django_db
-class TestRecentChangesDetail:
+class TestChangesDetail:
     def test_returns_field_diffs(self, client, user, pm):
         client.force_login(user)
         client.patch(
@@ -258,7 +256,7 @@ class TestRecentChangesDetail:
         )
         cs_id = ChangeSet.objects.filter(user=user).latest("created_at").pk
 
-        resp = client.get(f"/api/recent-changes/{cs_id}/")
+        resp = client.get(f"/api/pages/changes/{cs_id}/")
         assert resp.status_code == 200
         data = resp.json()
         assert data["entity_name"] == "Medieval Madness"
@@ -282,7 +280,7 @@ class TestRecentChangesDetail:
         )
 
         cs_id = ChangeSet.objects.filter(user=user_b).latest("created_at").pk
-        resp = client.get(f"/api/recent-changes/{cs_id}/")
+        resp = client.get(f"/api/pages/changes/{cs_id}/")
         assert resp.status_code == 200
         year_change = next(
             c for c in resp.json()["changes"] if c["field_name"] == "year"
@@ -291,7 +289,7 @@ class TestRecentChangesDetail:
         assert year_change["new_value"] == 2001
 
     def test_nonexistent_changeset_returns_404(self, client):
-        resp = client.get("/api/recent-changes/99999/")
+        resp = client.get("/api/pages/changes/99999/")
         assert resp.status_code == 404
 
     def test_first_edit_has_null_old_value(self, client, user, pm):
@@ -304,7 +302,7 @@ class TestRecentChangesDetail:
         )
         cs_id = ChangeSet.objects.filter(user=user).latest("created_at").pk
 
-        resp = client.get(f"/api/recent-changes/{cs_id}/")
+        resp = client.get(f"/api/pages/changes/{cs_id}/")
         year_change = next(
             c for c in resp.json()["changes"] if c["field_name"] == "year"
         )
@@ -325,7 +323,7 @@ class TestRecentChangesDetail:
         claim.is_active = False
         claim.save()
 
-        resp = client.get(f"/api/recent-changes/{retract_cs.pk}/")
+        resp = client.get(f"/api/pages/changes/{retract_cs.pk}/")
         assert resp.status_code == 200
         data = resp.json()
         assert data["changes"] == []
@@ -335,7 +333,7 @@ class TestRecentChangesDetail:
 
 
 @pytest.mark.django_db
-class TestRecentChangesListBeforeFilter:
+class TestChangesListBeforeFilter:
     def test_before_filter(self, client, user, pm):
         client.force_login(user)
         client.patch(
@@ -345,12 +343,12 @@ class TestRecentChangesListBeforeFilter:
         )
         # Use a past timestamp so the edit falls after it.
         past = "2000-01-01T00:00:00"
-        resp = client.get(f"/api/recent-changes/?before={past}")
+        resp = client.get(f"/api/pages/changes/?before={past}")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 0
 
         # Use a future timestamp so the edit falls before it.
         future = "2099-01-01T00:00:00"
-        resp = client.get(f"/api/recent-changes/?before={future}")
+        resp = client.get(f"/api/pages/changes/?before={future}")
         assert resp.status_code == 200
         assert len(resp.json()["items"]) == 1
