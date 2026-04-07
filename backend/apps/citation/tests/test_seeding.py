@@ -262,6 +262,11 @@ class TestSeedRealData:
         assert wizardry.year == 1979
         assert wizardry.parent is None
 
+        # Spot-check: a magazine source
+        play_meter = CitationSource.objects.get(name="Play Meter")
+        assert play_meter.source_type == "magazine"
+        assert play_meter.year == 1974
+
 
 class TestManagementCommand:
     def test_command_output(self, db):

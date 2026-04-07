@@ -44,7 +44,7 @@ class TestCitationSourceType:
         with pytest.raises(IntegrityError):
             CitationSource.objects.create(name="Test", source_type="invalid")
 
-    @pytest.mark.parametrize("source_type", ["book", "web"])
+    @pytest.mark.parametrize("source_type", ["book", "magazine", "web"])
     def test_valid_source_type_accepted(self, db, source_type):
         cs = CitationSource.objects.create(name="Test", source_type=source_type)
         assert cs.pk is not None

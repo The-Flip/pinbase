@@ -26,6 +26,7 @@ class CitationSource(TimeStampedModel):
 
     class SourceType(models.TextChoices):
         BOOK = "book", "Book"
+        MAGAZINE = "magazine", "Magazine"
         WEB = "web", "Web"
 
     name = models.CharField(max_length=500, validators=[validate_no_mojibake])
@@ -93,7 +94,7 @@ class CitationSource(TimeStampedModel):
             field_not_blank("source_type"),
             # Belt-and-suspenders: source_type must be a valid enum value
             models.CheckConstraint(
-                condition=models.Q(source_type__in=["book", "web"]),
+                condition=models.Q(source_type__in=["book", "magazine", "web"]),
                 name="citation_citationsource_source_type_valid",
             ),
             # Prevent self-referencing
