@@ -1,6 +1,20 @@
 import pytest
+from django.contrib.auth import get_user_model
+from django.test import Client
 
 from apps.citation.models import CitationSource, CitationSourceLink
+
+User = get_user_model()
+
+
+@pytest.fixture
+def user(db):
+    return User.objects.create_user(username="editor")
+
+
+@pytest.fixture
+def client():
+    return Client()
 
 
 @pytest.fixture

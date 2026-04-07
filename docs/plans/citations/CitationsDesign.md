@@ -298,3 +298,35 @@ A Citation Source is reference metadata: "this book exists, it was written by th
 The database is being deleted and reset with fresh 0001 migrations. So, for example:
 
 - We don't migrate any existing data on the `citation` TextField on Claim.
+
+## Follow-ups
+
+### CitationInstance → CitationSourceLink FK
+
+For web sources, the CitationInstance locator is a URL fragment (e.g. `#section-3`) that must be appended to a CitationSourceLink URL to produce a full deep link. Currently CitationInstance has a FK to CitationSource but no relationship to CitationSourceLink, so the rendering path has to guess which link to pair with the fragment.
+
+**Option A — Optional FK from CitationInstance to CitationSourceLink.** Explicit: the instance says "this fragment belongs to this link." Null for non-web sources where the locator is "p. 30". Needs a cross-FK constraint (the link must belong to the same source). PROTECT on delete enforces link integrity at the DB level.
+
+**Option B — Keep it implicit.** The locator is just text. Rendering logic picks the "best" link from the source (first? primary? only one for most web sources). Simpler model, fuzzier semantics.
+
+This also affects whether CitationSourceLinks can be deleted — if instances reference them via FK, deletion is blocked by PROTECT. Until this is resolved, link deletion is not exposed in the API.
+
+### Edit-count permission gate
+
+The governance section says "anyone with at least one edit" can create/edit Citation Sources. The v1 API uses plain session auth (`django_auth`), matching every other write endpoint in the project. No endpoint currently enforces an edit-count threshold. This should be designed as a cross-cutting permission class when it's needed, not bolted onto one API in isolation.
+
+### Changes feed integration
+
+The governance section says Citation Source creates and edits appear in the `/changes/` feed. The changes feed doesn't exist yet as an API-driven feature for any entity type — it's admin-side only. This needs holistic design across all entity types before citation editing goes to real contributors.
+
+### Extract `_clean_and_save` to `apps/core`
+
+The citation API introduced `_clean_and_save()` — a helper that calls `full_clean()` then `save()`, converting both `ValidationError` and `IntegrityError` into `HttpError(422)`. This is the first standard CRUD API in the project (all others go through the claims system). When a second CRUD API appears, this helper should move to `apps/core/` rather than being copied or imported across app boundaries.
+
+### Investigate `validate_no_mojibake` gap in claims path
+
+The `validate_no_mojibake` validators on model fields only fire via `full_clean()`. The claims system writes through `Claim.objects.assert_claim()` → `validate_claim_value()`, which does not call `full_clean()` on the target model. This means mojibake could theoretically slip through claim-controlled text fields. Worth investigating whether the claims validation path should run mojibake checks on string values.
+
+### Recently used sources in autocomplete
+
+The Contributor UX section describes "Recently used Citation Sources surfaced first" as part of the autocomplete experience. This is deferred — the v1 search endpoint returns results ordered by name only. Adding recently-used ranking requires tracking per-user citation activity and merging it into the search results.

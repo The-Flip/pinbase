@@ -15,9 +15,11 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
+from ninja.errors import HttpError
 from ninja.responses import Status
 from ninja.security import django_auth
 
+from .models import CitationInstance
 from .page_endpoints import pages_router
 from .schemas import FieldChangeSchema, RetractionSchema
 
@@ -213,9 +215,54 @@ def revert_claim(request, entity_type: str, slug: str, data: RevertClaimSchema):
     return {"ok": True}
 
 
+citation_instances_router = Router(tags=["citation-instances", "private"])
+
+
+class CitationInstanceSchema(Schema):
+    id: int
+    citation_source_id: int
+    citation_source_name: str
+    claim_id: Optional[int] = None
+    locator: str
+    created_at: str
+
+
+@citation_instances_router.get(
+    "/",
+    response=list[CitationInstanceSchema],
+    auth=django_auth,
+)
+def list_citation_instances(
+    request, source: Optional[int] = None, claim: Optional[int] = None
+):
+    """List Citation Instances, filtered by source and/or claim."""
+    if source is None and claim is None:
+        raise HttpError(422, "Provide ?source= or ?claim= filter.")
+
+    qs = CitationInstance.objects.select_related("citation_source")
+    if source is not None:
+        qs = qs.filter(citation_source_id=source)
+    if claim is not None:
+        qs = qs.filter(claim_id=claim)
+    qs = qs.order_by("-created_at")
+
+    return [
+        {
+            "id": ci.pk,
+            "citation_source_id": ci.citation_source_id,
+            "citation_source_name": ci.citation_source.name,
+            "claim_id": ci.claim_id,
+            "locator": ci.locator,
+            "created_at": ci.created_at.isoformat(),
+        }
+        for ci in qs
+    ]
+
+
 routers = [
     ("/sources/", sources_router),
     ("/edit-history/", edit_history_router),
     ("/pages/", pages_router),
     ("/review/", review_router),
+    ("/citation-instances/", citation_instances_router),
 ]
