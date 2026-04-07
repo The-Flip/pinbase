@@ -61,6 +61,11 @@ class LinkType:
     get_url: Callable[[Any], str] | None = None  # override for irregular URL
     get_label: Callable[[Any], str] | None = None  # override for irregular label
     select_related: tuple[str, ...] = ()
+    # Optional custom renderer: (obj_or_None, 1-based_index, base_url, plain_text) -> str
+    # When set, _render_by_id() uses this instead of _format_link(). Indices are
+    # assigned by unique ID in order of first appearance (duplicate markers share
+    # the same index).
+    format_link: Callable[[Any, int, str, bool], str] | None = None
 
     # --- Authoring format (slug-based types only) ---
     # Custom lookup for authoring format: (model_class, raw_values) -> {key: obj}
@@ -231,11 +236,23 @@ def _render_by_id(
         qs = qs.select_related(*lt.select_related)
     by_id = {obj.pk: obj for obj in qs}
 
+    # Build unique-ID → index mapping in order of first appearance
+    # (for format_link renderers that need sequential numbering).
+    index_by_id: dict[int, int] = {}
+    if lt.format_link:
+        for match in matches:
+            obj_id = int(match.group(1))
+            if obj_id not in index_by_id:
+                index_by_id[obj_id] = len(index_by_id) + 1
+
     result = text
     for match in reversed(matches):
         obj_id = int(match.group(1))
         obj = by_id.get(obj_id)
-        replacement = _format_link(lt, obj, base_url, plain_text)
+        if lt.format_link:
+            replacement = lt.format_link(obj, index_by_id[obj_id], base_url, plain_text)
+        else:
+            replacement = _format_link(lt, obj, base_url, plain_text)
         result = result[: match.start()] + replacement + result[match.end() :]
     return result
 

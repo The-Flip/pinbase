@@ -10,6 +10,8 @@ import re
 from typing import Optional
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
@@ -18,6 +20,8 @@ from ninja.decorators import decorate_view
 from ninja.errors import HttpError
 from ninja.responses import Status
 from ninja.security import django_auth
+
+from apps.citation.models import CitationSource
 
 from .models import CitationInstance
 from .page_endpoints import pages_router
@@ -257,6 +261,45 @@ def list_citation_instances(
         }
         for ci in qs
     ]
+
+
+class CitationInstanceCreateIn(Schema):
+    citation_source_id: int
+    locator: str = ""
+
+
+@citation_instances_router.post(
+    "/",
+    response={201: CitationInstanceSchema},
+    auth=django_auth,
+)
+def create_citation_instance(request, data: CitationInstanceCreateIn):
+    """Create a new CitationInstance for use in ``[[cite:N]]`` markers."""
+    source = get_object_or_404(CitationSource, pk=data.citation_source_id)
+
+    instance = CitationInstance(
+        citation_source_id=data.citation_source_id,
+        locator=data.locator,
+    )
+    try:
+        instance.full_clean()
+        instance.save()
+    except ValidationError as exc:
+        raise HttpError(422, str(exc)) from exc
+    except IntegrityError as exc:
+        raise HttpError(422, str(exc)) from exc
+
+    return Status(
+        201,
+        {
+            "id": instance.pk,
+            "citation_source_id": instance.citation_source_id,
+            "citation_source_name": source.name,
+            "claim_id": None,
+            "locator": instance.locator,
+            "created_at": instance.created_at.isoformat(),
+        },
+    )
 
 
 routers = [

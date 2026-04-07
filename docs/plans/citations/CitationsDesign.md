@@ -7,12 +7,12 @@ Design decisions for how Pinbase handles citations. This is the design — big U
 Contributors write normal Markdown prose and inserts citations using the `[[` wikilink syntax, which triggers the existing autocomplete UI, which will be extended to include citation functionality:
 
 ```markdown
-The production run was 4,000 units.[[cite:id:12345]]
+The production run was 4,000 units.[[cite:12345]]
 ```
 
 - `12345` is the ID of a **Citation Instance** — see data model below.
 - The marker means "this source is relevant here" — by convention, it supports the preceding sentence or clause.
-- Multiple citations on the same sentence are fine: `...4,000 units.[[cite:id:123]][[cite:id:456]]`
+- Multiple citations on the same sentence are fine: `...4,000 units.[[cite:123]][[cite:456]]`
 
 ### Autocomplete UI
 
@@ -34,7 +34,7 @@ Citations are **point markers** — footnotes inserted at a position in the text
 
 ```text
 Markdown text
-  └── [[cite:id:12345]]
+  └── [[cite:12345]]
            │
            ▼
       Citation Instance (id: 12345)
@@ -148,7 +148,7 @@ A way for the reader to inspect a Citation Source: a canonical URL, archive URL,
 A Citation Instance is a specific use of a Citation Source at a specific location in the text. It's the thing that the wikilink citation in the markdown points at:
 
 ```markdown
-The production run was 4,000 units.[[cite:id:12345]]
+The production run was 4,000 units.[[cite:12345]]
 ```
 
 The Citation Instance carries:
@@ -163,7 +163,7 @@ Two different markdown files both citing the same page of the same book get thei
 
 #### Citation Instances are immutable
 
-To change a citation (e.g. correct a page number from "p. 30" to "p. 31"), the contributor creates a new Citation Instance and the Markdown text is updated from `[[cite:id:12345]]` to `[[cite:id:12346]]`. That text change flows through the claims system as a normal claim revision, so citation history is captured for free — no separate versioning needed for Citation Instance records.
+To change a citation (e.g. correct a page number from "p. 30" to "p. 31"), the contributor creates a new Citation Instance and the Markdown text is updated from `[[cite:12345]]` to `[[cite:12346]]`. That text change flows through the claims system as a normal claim revision, so citation history is captured for free — no separate versioning needed for Citation Instance records.
 
 Orphaned Citation Instances (no longer referenced by any text) can be cleaned up lazily or left in place.
 
@@ -177,7 +177,7 @@ Both markdown and scalar fields reference the same Citation Instance records, ju
 
 | Content type                                       | How citations attach                                       |
 | -------------------------------------------------- | ---------------------------------------------------------- |
-| Long-form markdown fields (descriptions, articles) | Inline `[[cite:id:...]]` markers in the Markdown text      |
+| Long-form markdown fields (descriptions, articles) | Inline `[[cite:...]]` markers in the Markdown text         |
 | Scalar fields (year, manufacturer, player count)   | Citation Instances linked to the claim record (reverse FK) |
 
 Scalar claims can have multiple Citation Instances — a production count confirmed by both a flyer and a trade magazine gets two Citation Instance records, each pointing at its Citation Source.
@@ -214,7 +214,7 @@ The `[[` autocomplete should make finding an existing Citation Source feel as fa
 
 ### Rich text overlay
 
-A rich text layer over the Markdown can render citation markers as superscript footnote numbers rather than raw `[[cite:id:...]]` tokens. Contributors working in rich mode see familiar footnote markers; contributors who prefer raw Markdown see the tokens directly. Both are editing the same underlying text.
+A rich text layer over the Markdown can render citation markers as superscript footnote numbers rather than raw `[[cite:...]]` tokens. Contributors working in rich mode see familiar footnote markers; contributors who prefer raw Markdown see the tokens directly. Both are editing the same underlying text.
 
 ### Edit note vs. citation
 
@@ -231,7 +231,7 @@ Contributors can save edits without attaching citations. The system may nudge (e
 
 ### Other contributors can add citations to existing text
 
-A common and valuable action: "I didn't write this, but I can confirm it from this flyer." Contributors can add citation markers to existing prose without rewriting it. This is a normal text edit through the claims system — the prose doesn't change, but the Markdown gains `[[cite:id:...]]` markers.
+A common and valuable action: "I didn't write this, but I can confirm it from this flyer." Contributors can add citation markers to existing prose without rewriting it. This is a normal text edit through the claims system — the prose doesn't change, but the Markdown gains `[[cite:...]]` markers.
 
 Other contributors can also revert a citation addition, just like any other edit.
 
@@ -285,7 +285,7 @@ The citation source system -- Citation Source and Citation Source Link -- lives 
 Citation Instance lives in `provenance` because it's fairly coupled to it:
 
 - For scalar fields, `CitationInstance` has a FK to `Claim` (so a Claim can have multiple Citation Instances).
-- For text fields, `[[cite:id:123]]` markers in the Markdown are materialized as `RecordReference` rows on save, like other wikilink types. The Citation Instance's Claim FK is null.
+- For text fields, `[[cite:123]]` markers in the Markdown are materialized as `RecordReference` rows on save, like other wikilink types. The Citation Instance's Claim FK is null.
 
 ### Citation Sources are not claims-controlled
 
@@ -342,6 +342,10 @@ A potential fix: override `save()` on `TimeStampedModel` to call `self.full_clea
 - `bulk_create()` / `bulk_update()` don't call `save()`, so they'd still skip validation — but that's an explicit opt-in to raw performance, which is acceptable.
 - The CLAUDE.md currently says "full_clean() is optional; CHECK constraints are not" — that guidance would need updating.
 - Run the full test suite after the change to see what breaks.
+
+### References section rendering
+
+The inline citation markers render as superscript footnote numbers (`<sup>[1]</sup>`), but there's no References section at the bottom of the article yet. This section should collect all CitationInstances in the document, join to CitationSource for metadata, and render a formatted bibliography. Clicking a superscript number scrolls to the reference; clicking the back-arrow scrolls back to the text.
 
 ### Recently used sources in autocomplete
 

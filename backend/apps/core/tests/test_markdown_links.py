@@ -18,6 +18,7 @@ def _ensure_link_types_registered():
     """Link types are registered on app startup; just verify they exist."""
     assert get_link_type("manufacturer") is not None
     assert get_link_type("system") is not None
+    assert get_link_type("cite") is not None
 
 
 @pytest.fixture
@@ -32,6 +33,24 @@ def system(db):
     from apps.catalog.models import System
 
     return System.objects.create(name="WPC-95", slug="wpc-95")
+
+
+@pytest.fixture
+def citation_source(db):
+    from apps.citation.models import CitationSource
+
+    return CitationSource.objects.create(
+        name="The Encyclopedia of Pinball", source_type="book"
+    )
+
+
+@pytest.fixture
+def citation_instance(citation_source):
+    from apps.provenance.models import CitationInstance
+
+    return CitationInstance.objects.create(
+        citation_source=citation_source, locator="p. 30"
+    )
 
 
 class TestLinkRegistry:
@@ -148,3 +167,79 @@ class TestSyncReferences:
         sync_references(system, text)
         sync_references(system, text)
         assert RecordReference.objects.count() == 1
+
+
+class TestCitationLinkType:
+    def test_cite_registered(self):
+        lt = get_link_type("cite")
+        assert lt is not None
+        assert lt.slug_field is None
+        assert lt.format_link is not None
+        assert lt.sort_order == 900
+
+    def test_render_single_citation(self, citation_instance):
+        text = f"Production was 4,000 units.[[cite:{citation_instance.pk}]]"
+        result = render_all_links(text)
+        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
+        assert "[[cite:" not in result
+
+    def test_render_multiple_citations(self, citation_source):
+        from apps.provenance.models import CitationInstance
+
+        ci1 = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 30"
+        )
+        ci2 = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 83"
+        )
+        text = f"First fact.[[cite:{ci1.pk}]] Second fact.[[cite:{ci2.pk}]]"
+        result = render_all_links(text)
+        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
+        assert '<sup><a href="#ref-2">[2]</a></sup>' in result
+
+    def test_duplicate_citation_same_number(self, citation_instance):
+        pk = citation_instance.pk
+        text = f"First mention.[[cite:{pk}]] Second mention.[[cite:{pk}]]"
+        result = render_all_links(text)
+        # Both should be [1], not [1] and [2]
+        assert result.count("[1]") == 2
+        assert "[2]" not in result
+
+    def test_render_broken_citation(self, db):
+        text = "Cited.[[cite:99999]]"
+        result = render_all_links(text)
+        assert "<sup>[?]</sup>" in result
+
+    def test_render_plain_text(self, citation_instance):
+        text = f"Cited.[[cite:{citation_instance.pk}]]"
+        result = render_all_links(text, plain_text=True)
+        assert result == "Cited.[1]"
+
+    def test_render_broken_plain_text(self, db):
+        text = "Cited.[[cite:99999]]"
+        result = render_all_links(text, plain_text=True)
+        assert "[?]" in result
+        assert "<sup>" not in result
+
+    def test_mixed_citations_and_entity_links(self, manufacturer, citation_instance):
+        text = (
+            f"Made by [[manufacturer:id:{manufacturer.pk}]]."
+            f"[[cite:{citation_instance.pk}]]"
+        )
+        result = render_all_links(text)
+        assert "[Williams](/manufacturers/williams)" in result
+        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
+
+    def test_sync_references_for_citations(self, citation_instance, system):
+        text = f"Cited.[[cite:{citation_instance.pk}]]"
+        sync_references(system, text)
+        refs = RecordReference.objects.all()
+        assert refs.count() == 1
+
+    def test_cite_survives_html_pipeline(self, citation_instance):
+        from apps.core.markdown import render_markdown_html
+
+        text = f"Production was 4,000 units.[[cite:{citation_instance.pk}]]"
+        html = render_markdown_html(text)
+        assert "<sup>" in html
+        assert "[1]" in html

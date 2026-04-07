@@ -99,3 +99,47 @@ class TestListCitationInstances:
             "locator",
             "created_at",
         }
+
+
+class TestCreateCitationInstance:
+    def test_create(self, client, user, citation_source):
+        client.force_login(user)
+        resp = client.post(
+            "/api/citation-instances/",
+            {"citation_source_id": citation_source.pk, "locator": "p. 30"},
+            content_type="application/json",
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data["citation_source_id"] == citation_source.pk
+        assert data["citation_source_name"] == citation_source.name
+        assert data["locator"] == "p. 30"
+        assert data["claim_id"] is None
+        assert CitationInstance.objects.filter(pk=data["id"]).exists()
+
+    def test_create_without_locator(self, client, user, citation_source):
+        client.force_login(user)
+        resp = client.post(
+            "/api/citation-instances/",
+            {"citation_source_id": citation_source.pk},
+            content_type="application/json",
+        )
+        assert resp.status_code == 201
+        assert resp.json()["locator"] == ""
+
+    def test_invalid_source_returns_404(self, client, user):
+        client.force_login(user)
+        resp = client.post(
+            "/api/citation-instances/",
+            {"citation_source_id": 99999},
+            content_type="application/json",
+        )
+        assert resp.status_code == 404
+
+    def test_anonymous_gets_401(self, client, citation_source):
+        resp = client.post(
+            "/api/citation-instances/",
+            {"citation_source_id": citation_source.pk},
+            content_type="application/json",
+        )
+        assert resp.status_code in (401, 403)

@@ -51,6 +51,7 @@ ALLOWED_TAGS = {
     "td",
     "figure",
     "figcaption",
+    "sup",
 }
 
 # Allowed attributes per tag
