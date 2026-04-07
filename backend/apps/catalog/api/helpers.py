@@ -18,6 +18,88 @@ from apps.media.storage import build_public_url, build_storage_key
 from ..models import GameplayFeature
 
 
+# ---------------------------------------------------------------------------
+# Generic serialization helpers
+# ---------------------------------------------------------------------------
+
+
+def _serialize_credit(credit) -> dict:
+    """Serialize a Credit row into the standard CreditSchema-shaped dict."""
+    return {
+        "person": {"name": credit.person.name, "slug": credit.person.slug},
+        "role": credit.role.slug,
+        "role_display": credit.role.name,
+        "role_sort_order": credit.role.display_order,
+    }
+
+
+def _first_thumbnail(entities_with_models, *, min_rank: int) -> str | None:
+    """Return the first non-None thumbnail URL from nested entity→model prefetches."""
+    for entity in entities_with_models:
+        for model in entity.models.all():
+            if model.extra_data:
+                thumb, _ = _extract_image_urls(model.extra_data, min_rank=min_rank)
+                if thumb:
+                    return thumb
+    return None
+
+
+def _intersect_facet_sets(models, relation_name: str) -> list[dict]:
+    """Return the intersection of a slug/name M2M across all *models*.
+
+    Each model's related set is collected as ``frozenset((slug, name))``.
+    Only slugs present on **every** model are included.
+    Returns ``[]`` when any model has an empty set or models disagree.
+    """
+    sets = [
+        frozenset((obj.slug, obj.name) for obj in getattr(m, relation_name).all())
+        for m in models
+    ]
+    if not sets or not all(sets):
+        return []
+    common = sets[0]
+    for s in sets[1:]:
+        common &= s
+    return [{"slug": s, "name": n} for s, n in sorted(common)] if common else []
+
+
+def _serialize_title_ref(title, *, min_rank: int | None = None) -> dict:
+    """Serialize a Title for use in franchise/series listing context.
+
+    Expects *title* to have prefetched ``machine_models`` (with
+    corporate_entity__manufacturer) and ``abbreviations``, plus an
+    annotated ``machine_count``.
+    """
+    thumbnail_url = None
+    manufacturer_name = None
+    year = None
+    first = next(iter(title.machine_models.all()), None)
+    if first is not None:
+        thumbnail_url, _ = _extract_image_urls(
+            first.extra_data or {}, min_rank=min_rank
+        )
+        manufacturer_name = (
+            first.corporate_entity.manufacturer.name
+            if first.corporate_entity and first.corporate_entity.manufacturer
+            else None
+        )
+        year = first.year
+    return {
+        "name": title.name,
+        "slug": title.slug,
+        "abbreviations": [a.value for a in title.abbreviations.all()],
+        "machine_count": title.machine_count,
+        "manufacturer_name": manufacturer_name,
+        "year": year,
+        "thumbnail_url": thumbnail_url,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Media helpers
+# ---------------------------------------------------------------------------
+
+
 def _media_prefetch():
     """Return a Prefetch for ready EntityMedia with assets."""
     return Prefetch(
@@ -229,11 +311,12 @@ def _collect_titles(models, *, include_manufacturer: bool = False) -> list[dict]
                 "thumbnail_url": thumbnail_url,
             }
             if include_manufacturer:
-                entry["manufacturer_name"] = (
-                    m.corporate_entity.manufacturer.name
+                mfr = (
+                    m.corporate_entity.manufacturer
                     if m.corporate_entity and m.corporate_entity.manufacturer
                     else None
                 )
+                entry["manufacturer_name"] = mfr.name if mfr else None
             titles[key] = entry
         elif titles[key]["thumbnail_url"] is None:
             thumbnail_url = _extract_image_urls(m.extra_data or {}, min_rank=min_rank)[

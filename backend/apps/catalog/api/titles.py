@@ -26,6 +26,8 @@ from apps.provenance.helpers import build_sources, claims_prefetch
 from .helpers import (
     _build_rich_text,
     _extract_image_urls,
+    _intersect_facet_sets,
+    _serialize_credit,
     _serialize_title_machine,
 )
 from .machine_models import CreditSchema, MachineModelDetailSchema
@@ -285,13 +287,17 @@ def _compute_agreed_specs(models) -> dict:
 
     specs: dict = {}
 
-    tg = _agreed_value(models, lambda m: _fk_pair(m, "technology_generation"))
-    if tg:
-        specs["technology_generation"] = {"name": tg[0], "slug": tg[1]}
-
-    dt = _agreed_value(models, lambda m: _fk_pair(m, "display_type"))
-    if dt:
-        specs["display_type"] = {"name": dt[0], "slug": dt[1]}
+    for key, attr in (
+        ("technology_generation", "technology_generation"),
+        ("display_type", "display_type"),
+        ("system", "system"),
+        ("cabinet", "cabinet"),
+        ("game_format", "game_format"),
+        ("display_subtype", "display_subtype"),
+    ):
+        val = _agreed_value(models, lambda m, a=attr: _fk_pair(m, a))
+        if val:
+            specs[key] = {"name": val[0], "slug": val[1]}
 
     pc = _agreed_value(models, lambda m: m.player_count)
     if pc is not None:
@@ -300,22 +306,6 @@ def _compute_agreed_specs(models) -> dict:
     fc = _agreed_value(models, lambda m: m.flipper_count)
     if fc is not None:
         specs["flipper_count"] = fc
-
-    sys = _agreed_value(models, lambda m: _fk_pair(m, "system"))
-    if sys:
-        specs["system"] = {"name": sys[0], "slug": sys[1]}
-
-    cab = _agreed_value(models, lambda m: _fk_pair(m, "cabinet"))
-    if cab:
-        specs["cabinet"] = {"name": cab[0], "slug": cab[1]}
-
-    gf = _agreed_value(models, lambda m: _fk_pair(m, "game_format"))
-    if gf:
-        specs["game_format"] = {"name": gf[0], "slug": gf[1]}
-
-    dst = _agreed_value(models, lambda m: _fk_pair(m, "display_subtype"))
-    if dst:
-        specs["display_subtype"] = {"name": dst[0], "slug": dst[1]}
 
     pq = _agreed_value(models, lambda m: m.production_quantity or None)
     if pq:
@@ -330,8 +320,7 @@ def _compute_agreed_specs(models) -> dict:
     ):
         specs["themes"] = [{"name": n, "slug": s} for s, n in sorted(theme_sets[0])]
 
-    # Gameplay features: intersection across all models.
-    # Build {slug: (name, count)} per model from prefetched through-model rows.
+    # Gameplay features: intersection across all models (with count agreement).
     gf_maps: list[dict[str, tuple[str, int | None]]] = []
     for m in models:
         gf_map: dict[str, tuple[str, int | None]] = {}
@@ -340,7 +329,6 @@ def _compute_agreed_specs(models) -> dict:
         gf_maps.append(gf_map)
 
     if gf_maps and all(gf_maps):
-        # Intersect on slug; include count only when all models agree.
         common_slugs = set(gf_maps[0])
         for gf_map in gf_maps[1:]:
             common_slugs &= set(gf_map)
@@ -354,15 +342,9 @@ def _compute_agreed_specs(models) -> dict:
             specs["gameplay_features"] = result
 
     # Reward types: intersection across all models.
-    rt_sets = [
-        frozenset((rt.slug, rt.name) for rt in m.reward_types.all()) for m in models
-    ]
-    if rt_sets and all(rt_sets):
-        common = rt_sets[0]
-        for s in rt_sets[1:]:
-            common &= s
-        if common:
-            specs["reward_types"] = [{"slug": s, "name": n} for s, n in sorted(common)]
+    rt = _intersect_facet_sets(models, "reward_types")
+    if rt:
+        specs["reward_types"] = rt
 
     return specs
 
@@ -392,22 +374,13 @@ def _serialize_title_detail(title) -> dict:
         for c in pm.credits.all():
             key = (c.person.slug, c.role.slug)
             model_keys.add(key)
-            credit_data.setdefault(
-                key,
-                {
-                    "person": {"name": c.person.name, "slug": c.person.slug},
-                    "role": c.role.slug,
-                    "role_display": c.role.name,
-                    "role_sort_order": c.role.display_order,
-                },
-            )
+            credit_data.setdefault(key, _serialize_credit(c))
         credit_sets.append(model_keys)
 
     if credit_sets:
         common_keys = credit_sets[0]
         for s in credit_sets[1:]:
             common_keys &= s
-        # Preserve insertion order from credit_data (first model's ordering).
         credits = [v for k, v in credit_data.items() if k in common_keys]
     else:
         credits = []

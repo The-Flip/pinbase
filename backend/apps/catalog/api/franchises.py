@@ -18,7 +18,7 @@ from apps.provenance.helpers import build_sources, claims_prefetch
 
 from .helpers import (
     _build_rich_text,
-    _extract_image_urls,
+    _serialize_title_ref,
 )
 from .schemas import ClaimPatchSchema, ClaimSchema, RichTextSchema
 
@@ -54,38 +54,6 @@ class FranchiseDetailSchema(Schema):
     description: RichTextSchema = RichTextSchema()
     titles: list[TitleRefSchema]
     sources: list[ClaimSchema] = []
-
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-
-def _serialize_title_list(title, *, min_rank: int | None = None) -> dict:
-    thumbnail_url = None
-    manufacturer_name = None
-    year = None
-    machines = list(title.machine_models.all())
-    if machines:
-        thumbnail_url, _ = _extract_image_urls(
-            machines[0].extra_data or {}, min_rank=min_rank
-        )
-        first = machines[0]
-        manufacturer_name = (
-            first.corporate_entity.manufacturer.name
-            if first.corporate_entity and first.corporate_entity.manufacturer
-            else None
-        )
-        year = first.year
-    return {
-        "name": title.name,
-        "slug": title.slug,
-        "abbreviations": [a.value for a in title.abbreviations.all()],
-        "machine_count": title.machine_count,
-        "manufacturer_name": manufacturer_name,
-        "year": year,
-        "thumbnail_url": thumbnail_url,
-    }
 
 
 # ---------------------------------------------------------------------------
@@ -152,7 +120,7 @@ def _serialize_franchise_detail(franchise) -> dict:
             franchise, "description", getattr(franchise, "active_claims", [])
         ),
         "titles": [
-            _serialize_title_list(t, min_rank=min_rank) for t in franchise.titles.all()
+            _serialize_title_ref(t, min_rank=min_rank) for t in franchise.titles.all()
         ],
         "sources": build_sources(getattr(franchise, "active_claims", [])),
     }

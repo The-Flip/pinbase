@@ -92,15 +92,16 @@ def _serialize_system_detail(system) -> dict:
             thumbnail_url = _extract_image_urls(m.extra_data or {}, min_rank=min_rank)[
                 0
             ]
+            mfr = (
+                m.corporate_entity.manufacturer
+                if m.corporate_entity and m.corporate_entity.manufacturer
+                else None
+            )
             titles[key] = {
                 "name": m.title.name,
                 "slug": m.title.slug,
                 "year": m.year,
-                "manufacturer_name": (
-                    m.corporate_entity.manufacturer.name
-                    if m.corporate_entity and m.corporate_entity.manufacturer
-                    else None
-                ),
+                "manufacturer_name": mfr.name if mfr else None,
                 "thumbnail_url": thumbnail_url,
             }
         elif titles[key]["thumbnail_url"] is None:

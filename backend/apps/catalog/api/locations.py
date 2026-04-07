@@ -24,7 +24,7 @@ from ..models import (
     MachineModel,
     Manufacturer,
 )
-from .helpers import _extract_image_urls
+from .helpers import _first_thumbnail
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -193,26 +193,15 @@ def _get_manufacturers_for_pks(pks):
     )
 
     min_rank = get_minimum_display_rank()
-    result = []
-    for mfr in qs:
-        thumb = None
-        for entity in mfr.entities.all():
-            if thumb:
-                break
-            for model in entity.models.all():
-                if model.extra_data:
-                    thumb, _ = _extract_image_urls(model.extra_data, min_rank=min_rank)
-                    if thumb:
-                        break
-        result.append(
-            {
-                "name": mfr.name,
-                "slug": mfr.slug,
-                "model_count": mfr.model_count,
-                "thumbnail_url": thumb,
-            }
-        )
-    return result
+    return [
+        {
+            "name": mfr.name,
+            "slug": mfr.slug,
+            "model_count": mfr.model_count,
+            "thumbnail_url": _first_thumbnail(mfr.entities.all(), min_rank=min_rank),
+        }
+        for mfr in qs
+    ]
 
 
 # ---------------------------------------------------------------------------

@@ -32,6 +32,7 @@ from .helpers import (
     _extract_variant_features,
     _get_feature_descendant_slugs,
     _media_prefetch,
+    _serialize_credit,
     _serialize_title_machine,
     _serialize_uploaded_media,
 )
@@ -328,15 +329,7 @@ def _serialize_model_detail(pm) -> dict:
     """
     min_rank = get_minimum_display_rank()
 
-    credits = [
-        {
-            "person": {"name": c.person.name, "slug": c.person.slug},
-            "role": c.role.slug,
-            "role_display": c.role.name,
-            "role_sort_order": c.role.display_order,
-        }
-        for c in pm.credits.all()
-    ]
+    credits = [_serialize_credit(c) for c in pm.credits.all()]
 
     active_claims = getattr(pm, "active_claims", None)
     if active_claims is None:
@@ -392,16 +385,16 @@ def _serialize_model_detail(pm) -> dict:
             if sib.pk != pm.pk
         ]
 
-    mfr = (
-        pm.corporate_entity.manufacturer
-        if pm.corporate_entity and pm.corporate_entity.manufacturer
-        else None
-    )
-
     # Resolve technology subgeneration: direct on model, or inherited from system.
     subgen = pm.technology_subgeneration or (
         pm.system.technology_subgeneration
         if pm.system and pm.system.technology_subgeneration
+        else None
+    )
+
+    mfr = (
+        pm.corporate_entity.manufacturer
+        if pm.corporate_entity and pm.corporate_entity.manufacturer
         else None
     )
 

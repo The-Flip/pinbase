@@ -19,6 +19,8 @@ from apps.provenance.helpers import build_sources, claims_prefetch
 from .helpers import (
     _build_rich_text,
     _extract_image_urls,
+    _serialize_credit,
+    _serialize_title_ref,
 )
 from .machine_models import CreditSchema
 from .schemas import ClaimPatchSchema, ClaimSchema, RichTextSchema
@@ -62,34 +64,6 @@ class SeriesDetailSchema(Schema):
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-
-def _serialize_title_list(title, *, min_rank: int | None = None) -> dict:
-    """Serialize a Title for use in series listing context."""
-    thumbnail_url = None
-    manufacturer_name = None
-    year = None
-    machines = list(title.machine_models.all())
-    if machines:
-        thumbnail_url, _ = _extract_image_urls(
-            machines[0].extra_data or {}, min_rank=min_rank
-        )
-        first = machines[0]
-        manufacturer_name = (
-            first.corporate_entity.manufacturer.name
-            if first.corporate_entity and first.corporate_entity.manufacturer
-            else None
-        )
-        year = first.year
-    return {
-        "name": title.name,
-        "slug": title.slug,
-        "abbreviations": [a.value for a in title.abbreviations.all()],
-        "machine_count": title.machine_count,
-        "manufacturer_name": manufacturer_name,
-        "year": year,
-        "thumbnail_url": thumbnail_url,
-    }
 
 
 def _series_titles_qs():
@@ -136,17 +110,9 @@ def _serialize_series_detail(series) -> dict:
             series, "description", getattr(series, "active_claims", [])
         ),
         "titles": [
-            _serialize_title_list(t, min_rank=min_rank) for t in series.titles.all()
+            _serialize_title_ref(t, min_rank=min_rank) for t in series.titles.all()
         ],
-        "credits": [
-            {
-                "person": {"name": c.person.name, "slug": c.person.slug},
-                "role": c.role.slug,
-                "role_display": c.role.name,
-                "role_sort_order": c.role.display_order,
-            }
-            for c in series.credits.all()
-        ],
+        "credits": [_serialize_credit(c) for c in series.credits.all()],
         "sources": build_sources(getattr(series, "active_claims", [])),
     }
 
