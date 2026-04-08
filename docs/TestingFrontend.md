@@ -71,6 +71,10 @@ Use `mockReset().mockResolvedValue(...)` in `afterEach`, not `mockClear()`. `moc
 
 Extract multi-step setup into composable helpers that build on each other: `waitForTypes()` → `openSearch()` → select result. Individual tests stay short and focused on one assertion.
 
+### Fixture wrappers for real context
+
+When a component needs a real parent context — for example `bind:` state, snippet props, or a concrete DOM container element — prefer a tiny fixture component over mocking the component's internals. Keep the fixture minimal and let the DOM test drive the real surface area.
+
 ### Synchronous vs. async assertions
 
 Only wait when the production code actually defers work. If the code path under test is synchronous (e.g. `handleInput` → `detectTrigger` for a single `[`), assert immediately — don't add `waitFor`, fake timers, or sleeps. Unnecessary waits teach the wrong pattern and hide whether the code is actually async.
@@ -79,9 +83,17 @@ Only wait when the production code actually defers work. If the code path under 
 
 Timing mechanics (exact debounce delay, coalescing behavior, generation counters) belong in unit tests for the helper module. DOM tests should verify UI-visible outcomes: "typing updates results" and "stale response doesn't win." Over-coupling DOM tests to helper internals makes them fragile and duplicates coverage.
 
+For consumer wiring tests, prove that the parent surface updates, resets, or routes events correctly. Do not re-test the full interaction matrix of a shared child component if that child already has its own exemplar DOM suite.
+
 ### Querying elements
 
 Use accessible roles and names (`getByRole('combobox', { name: /search title/i })`) rather than CSS classes or test IDs. Tests survive refactors that change DOM structure as long as semantics are preserved.
+
+If a control has visible label text but no accessible name, prefer fixing the component so the test can keep using semantic queries instead of normalizing placeholder- or class-based lookups.
+
+### Mocking browser constructors
+
+When a component creates browser APIs with `new` (for example `IntersectionObserver`), mock them with a constructor-shaped class or function that behaves like the real API surface. A plain object-returning stub is not enough when production code instantiates the global.
 
 ### userEvent `[` workaround
 
