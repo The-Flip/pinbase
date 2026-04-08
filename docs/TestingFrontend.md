@@ -29,7 +29,7 @@ pnpm test:dom:watch   # DOM tests in watch mode
 
 ## Creating a DOM Test
 
-Name the file `*.dom.test.ts` next to the component. The `.dom.` suffix routes it to the jsdom project automatically. Use `@testing-library/svelte` for rendering and queries, `userEvent` for interactions. See `wikilink-autocomplete.dom.test.ts` for the canonical example.
+Name the file `*.dom.test.ts` next to the component. The `.dom.` suffix routes it to the jsdom project automatically. Use `@testing-library/svelte` for rendering and queries, `userEvent` for interactions. See `wikilink-autocomplete.dom.test.ts` for the canonical example of mocking standalone API functions, and `citation-autocomplete.dom.test.ts` for mocking the openapi-fetch typed client.
 
 **Gotcha:** when calling exported component methods directly (e.g. `handleExternalKeydown`), wrap in `flushSync` from `svelte` — DOM updates from direct method calls are not automatically flushed.
 
@@ -94,6 +94,49 @@ If a control has visible label text but no accessible name, prefer fixing the co
 ### Mocking browser constructors
 
 When a component creates browser APIs with `new` (for example `IntersectionObserver`), mock them with a constructor-shaped class or function that behaves like the real API surface. A plain object-returning stub is not enough when production code instantiates the global.
+
+### Mocking the openapi-fetch client
+
+Components that use `client.GET`/`client.POST` from `$lib/api/client` need the default export mocked as an object with method stubs. Use `vi.hoisted` to create the mock functions before `vi.mock` hoisting — this avoids type-casting issues with openapi-fetch's deep generic signatures:
+
+```typescript
+const { mockGET, mockPOST } = vi.hoisted(() => ({
+  mockGET: vi.fn(),
+  mockPOST: vi.fn(),
+}));
+
+vi.mock("$lib/api/client", () => ({
+  default: { GET: mockGET, POST: mockPOST },
+}));
+```
+
+Set default responses in `afterEach` with `mockReset()`:
+
+```typescript
+afterEach(() => {
+  mockGET.mockReset().mockResolvedValue({ data: DEFAULT_DATA });
+  mockPOST.mockReset();
+});
+```
+
+When `POST` serves multiple endpoints (e.g. `/api/citation-sources/` and `/api/citation-instances/`), `mockResolvedValueOnce` is consumed in call order, not by path. Set the mock immediately before the action that triggers the call so the pairing is obvious:
+
+```typescript
+mockPOST.mockResolvedValueOnce({ data: { id: 42 } });
+await user.keyboard("{Enter}"); // triggers the POST
+```
+
+See `citation-autocomplete.dom.test.ts` for the canonical example.
+
+### `onpointerdown` handlers and `fireEvent.pointerDown`
+
+Several dropdown components use `onpointerdown` with `e.preventDefault()` to handle clicks without stealing focus from the active input. `user.click()` fires `pointerdown` → `mousedown` → `focus` → `click`, which fights the `preventDefault()`. Use `fireEvent.pointerDown()` instead — it fires only the pointer event, matching the component's handler:
+
+```typescript
+fireEvent.pointerDown(screen.getByRole("button", { name: /skip/i }));
+```
+
+This applies to DropdownItem, DropdownHeader's back button, type chips, and any similar handler that calls `e.preventDefault()` on `pointerdown`.
 
 ### userEvent `[` workaround
 

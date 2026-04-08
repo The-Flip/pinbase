@@ -51,6 +51,7 @@
 	let createUrl = $state('');
 	let createError = $state('');
 	let createSubmitting = $state(false);
+	let createNameInputEl: HTMLInputElement | undefined = $state();
 
 	// Locator
 	let selectedSourceId = $state<number | null>(null);
@@ -109,10 +110,12 @@
 		stage = 'create';
 	}
 
-	// Auto-focus search input on mount and when returning to search
+	// Auto-focus the primary input when entering search or create stage
 	$effect(() => {
 		if (stage === 'search') {
 			requestAnimationFrame(() => searchInputEl?.focus());
+		} else if (stage === 'create') {
+			requestAnimationFrame(() => createNameInputEl?.focus());
 		}
 	});
 
@@ -333,7 +336,13 @@
 					</button>
 				{/each}
 			</div>
-			<input type="text" class="form-input" placeholder="Name" bind:value={createName} />
+			<input
+				bind:this={createNameInputEl}
+				type="text"
+				class="form-input"
+				placeholder="Name"
+				bind:value={createName}
+			/>
 			{#if showAuthorField}
 				<input
 					type="text"
