@@ -263,6 +263,61 @@ def list_citation_instances(
     ]
 
 
+class BatchCitationLinkOut(Schema):
+    url: str
+    label: str
+
+
+class BatchCitationInstanceOut(Schema):
+    id: int
+    source_name: str
+    source_type: str
+    author: str
+    year: Optional[int] = None
+    locator: str
+    links: list[BatchCitationLinkOut] = []
+
+
+@citation_instances_router.get(
+    "/batch/",
+    response={200: list[BatchCitationInstanceOut], 422: dict},
+)
+def batch_citation_instances(request, ids: str = ""):
+    """Return citation instances by ID for tooltip rendering."""
+    if not ids.strip():
+        return []
+
+    try:
+        id_list = [int(x) for x in ids.split(",") if x.strip()]
+    except ValueError:
+        raise HttpError(422, "ids must be comma-separated integers.")
+
+    if len(id_list) > 50:
+        raise HttpError(422, "Maximum 50 IDs per request.")
+
+    qs = (
+        CitationInstance.objects.filter(pk__in=id_list)
+        .select_related("citation_source")
+        .prefetch_related("citation_source__links")
+    )
+
+    return [
+        {
+            "id": ci.pk,
+            "source_name": ci.citation_source.name,
+            "source_type": ci.citation_source.source_type,
+            "author": ci.citation_source.author,
+            "year": ci.citation_source.year,
+            "locator": ci.locator,
+            "links": [
+                {"url": link.url, "label": link.label}
+                for link in ci.citation_source.links.all()
+            ],
+        }
+        for ci in qs
+    ]
+
+
 class CitationInstanceCreateIn(Schema):
     citation_source_id: int
     locator: str = ""

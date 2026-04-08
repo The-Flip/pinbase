@@ -101,6 +101,92 @@ class TestListCitationInstances:
         }
 
 
+class TestBatchCitationInstances:
+    def test_returns_instances_with_source_details(self, client, citation_source):
+        from apps.citation.models import CitationSourceLink
+
+        ci = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 30"
+        )
+        CitationSourceLink.objects.create(
+            citation_source=citation_source,
+            link_type="archive",
+            url="https://archive.org/details/example",
+            label="archive.org scan",
+        )
+        resp = client.get(f"/api/citation-instances/batch/?ids={ci.pk}")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert len(data) == 1
+        item = data[0]
+        assert item["id"] == ci.pk
+        assert item["source_name"] == "The Encyclopedia of Pinball"
+        assert item["source_type"] == "book"
+        assert item["locator"] == "p. 30"
+        assert len(item["links"]) == 1
+        assert item["links"][0]["url"] == "https://archive.org/details/example"
+        assert item["links"][0]["label"] == "archive.org scan"
+
+    def test_multiple_ids(self, client, citation_source):
+        ci1 = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 30"
+        )
+        ci2 = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 83"
+        )
+        resp = client.get(f"/api/citation-instances/batch/?ids={ci1.pk},{ci2.pk}")
+        assert resp.status_code == 200
+        ids = {item["id"] for item in resp.json()}
+        assert ids == {ci1.pk, ci2.pk}
+
+    def test_empty_ids_returns_empty_list(self, client, db):
+        resp = client.get("/api/citation-instances/batch/?ids=")
+        assert resp.status_code == 200
+        assert resp.json() == []
+
+    def test_nonexistent_ids_skipped(self, client, citation_source):
+        ci = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 1"
+        )
+        resp = client.get(f"/api/citation-instances/batch/?ids={ci.pk},99999")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert len(data) == 1
+        assert data[0]["id"] == ci.pk
+
+    def test_no_auth_required(self, client, citation_source):
+        ci = CitationInstance.objects.create(
+            citation_source=citation_source, locator="p. 1"
+        )
+        # No force_login — anonymous request
+        resp = client.get(f"/api/citation-instances/batch/?ids={ci.pk}")
+        assert resp.status_code == 200
+        assert len(resp.json()) == 1
+
+    def test_response_shape(self, client, citation_source):
+        CitationInstance.objects.create(
+            citation_source=citation_source, locator="front"
+        )
+        resp = client.get(
+            f"/api/citation-instances/batch/?ids={CitationInstance.objects.first().pk}"
+        )
+        data = resp.json()[0]
+        assert set(data.keys()) == {
+            "id",
+            "source_name",
+            "source_type",
+            "author",
+            "year",
+            "locator",
+            "links",
+        }
+
+    def test_caps_at_50_ids(self, client, db):
+        ids = ",".join(str(i) for i in range(1, 52))
+        resp = client.get(f"/api/citation-instances/batch/?ids={ids}")
+        assert resp.status_code == 422
+
+
 class TestCreateCitationInstance:
     def test_create(self, client, user, citation_source):
         client.force_login(user)

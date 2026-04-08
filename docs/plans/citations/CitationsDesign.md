@@ -377,6 +377,20 @@ The API is slow (seconds per request) so this must be async. It's also rate-limi
 - The Wayback Machine API sometimes fails silently or returns old snapshots — how do we handle that?
 - Archive.org's terms of service and rate limits need investigation before building this.
 
+### Hierarchical source navigation in autocomplete
+
+The citation source search returns a flat list of all matching sources, including parents and children. For a source like "The Encyclopedia of Pinball" with multiple editions, the search results show 5-6 near-identical entries that are easy to confuse. The hierarchy (parent → editions → translations) exists in the data model but isn't surfaced in the autocomplete UI.
+
+The autocomplete should present hierarchical sources in a way that lets contributors drill into the right edition without being overwhelmed by near-duplicates. Some possible approaches:
+
+- **Group by parent**: Search results show only root sources (or the highest matching ancestor). Selecting one expands inline to show its children, then the contributor picks the specific edition. Adds one click but keeps the list clean.
+- **Indent children**: Show all results but visually nest children under their parent. The contributor sees the hierarchy at a glance without an extra click, but the list gets long.
+- **Parent with count badge**: Show "The Encyclopedia of Pinball (4 editions)" — selecting it opens a sub-list. Compact, but adds a navigation step.
+
+Key design question: when citing, do contributors usually know which specific edition they want (common for books — "I have the 1996 edition"), or do they start from the parent and narrow down? The answer may differ by source type: books have meaningful editions, web sources rarely have hierarchy at all.
+
+This affects both the search API (which currently returns a flat list ordered by name) and the CitationAutocomplete UI (which renders results as a flat list of DropdownItems).
+
 ### Recently used sources in autocomplete
 
 The Contributor UX section describes "Recently used Citation Sources surfaced first" as part of the autocomplete experience. This is deferred — the v1 search endpoint returns results ordered by name only. Adding recently-used ranking requires tracking per-user citation activity and merging it into the search results.
@@ -404,6 +418,14 @@ cachedTypes = data ?? [];
 ```
 
 The module-level cache and `searchLinkTargets` function stay, they just use `client.GET` internally. Tests in `link-types.test.ts` would need to mock `client` instead of `globalThis.fetch`.
+
+### Inline citation data in page API responses
+
+The tooltip's batch endpoint (`GET /api/citation-instances/batch/?ids=...`) exists because of a limitation in how data flows through the rendering pipeline. When `render_all_links` processes `[[cite:N]]` markers, it loads the full CitationInstance + CitationSource objects to resolve them — then discards everything except the PK into a `data-cite-id` attribute. The frontend then makes a separate API call to get back the same data that was already in hand during rendering.
+
+If the page serializers included citation metadata alongside the rendered HTML — e.g., `description_citations: [{id, source_name, author, year, locator, links}]` — the tooltip component could read from props instead of fetching. This would eliminate the batch endpoint, the loading delay, and one network round-trip per page.
+
+This would require the markdown rendering pipeline to return structured citation data alongside the HTML string, and the page serializers to pass it through. The `render_all_links` function already has the resolved objects; it would need to collect and return them as a side channel.
 
 ### Svelte component tests
 

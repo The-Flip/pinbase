@@ -1,9 +1,13 @@
 <script lang="ts">
+	import CitationTooltip from './CitationTooltip.svelte';
+
 	let { html }: { html: string } = $props();
+	let container: HTMLDivElement | undefined = $state();
 </script>
 
 <!-- eslint-disable-next-line svelte/no-at-html-tags -- sanitized server-side by nh3 -->
-<div>{@html html}</div>
+<div bind:this={container}>{@html html}</div>
+<CitationTooltip {container} htmlSignal={html} />
 
 <style>
 	div {
@@ -114,5 +118,16 @@
 
 	div :global(.task-list-item input[type='checkbox']) {
 		margin-right: var(--size-1);
+	}
+
+	div :global(sup[data-cite-id]) {
+		cursor: pointer;
+		color: var(--color-link);
+	}
+
+	div :global(sup[data-cite-id]:hover),
+	div :global(sup[data-cite-id]:focus-visible) {
+		text-decoration: underline;
+		outline: none;
 	}
 </style>

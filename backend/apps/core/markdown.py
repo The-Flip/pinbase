@@ -62,6 +62,7 @@ ALLOWED_ATTRIBUTES = {
     "pre": {"class"},
     "th": {"align"},
     "td": {"align"},
+    "sup": {"data-cite-id", "tabindex", "role"},
 }
 
 # Regex for task list items: matches <li> followed by optional <p>, then [ ], [  ], [], [x], or [X]

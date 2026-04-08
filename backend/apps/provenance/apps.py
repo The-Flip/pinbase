@@ -11,7 +11,7 @@ def _format_citation_link(obj: Any, index: int, base_url: str, plain_text: bool)
         return "[?]" if plain_text else "<sup>[?]</sup>"
     if plain_text:
         return f"[{index}]"
-    return f'<sup><a href="#ref-{index}">[{index}]</a></sup>'
+    return f'<sup data-cite-id="{obj.pk}" tabindex="0" role="button">[{index}]</sup>'
 
 
 class ProvenanceConfig(AppConfig):

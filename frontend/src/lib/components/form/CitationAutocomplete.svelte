@@ -145,7 +145,8 @@
 				date_note: '',
 				description: '',
 				url: showUrlField && createUrl.trim() ? createUrl : null,
-				link_label: ''
+				link_label: '',
+				link_type: 'homepage'
 			}
 		});
 		createSubmitting = false;

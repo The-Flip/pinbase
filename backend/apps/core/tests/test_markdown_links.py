@@ -199,7 +199,10 @@ class TestCitationLinkType:
     def test_render_single_citation(self, citation_instance):
         text = f"Production was 4,000 units.[[cite:{citation_instance.pk}]]"
         result = render_all_links(text)
-        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
+        pk = citation_instance.pk
+        assert (
+            f'<sup data-cite-id="{pk}" tabindex="0" role="button">[1]</sup>' in result
+        )
         assert "[[cite:" not in result
 
     def test_render_multiple_citations(self, citation_source):
@@ -213,8 +216,14 @@ class TestCitationLinkType:
         )
         text = f"First fact.[[cite:{ci1.pk}]] Second fact.[[cite:{ci2.pk}]]"
         result = render_all_links(text)
-        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
-        assert '<sup><a href="#ref-2">[2]</a></sup>' in result
+        assert (
+            f'<sup data-cite-id="{ci1.pk}" tabindex="0" role="button">[1]</sup>'
+            in result
+        )
+        assert (
+            f'<sup data-cite-id="{ci2.pk}" tabindex="0" role="button">[2]</sup>'
+            in result
+        )
 
     def test_duplicate_citation_same_number(self, citation_instance):
         pk = citation_instance.pk
@@ -247,7 +256,10 @@ class TestCitationLinkType:
         )
         result = render_all_links(text)
         assert "[Williams](/manufacturers/williams)" in result
-        assert '<sup><a href="#ref-1">[1]</a></sup>' in result
+        assert (
+            f'<sup data-cite-id="{citation_instance.pk}" tabindex="0" role="button">[1]</sup>'
+            in result
+        )
 
     def test_sync_references_for_citations(self, citation_instance, system):
         text = f"Cited.[[cite:{citation_instance.pk}]]"
@@ -260,5 +272,8 @@ class TestCitationLinkType:
 
         text = f"Production was 4,000 units.[[cite:{citation_instance.pk}]]"
         html = render_markdown_html(text)
-        assert "<sup>" in html
+        pk = citation_instance.pk
+        assert f'data-cite-id="{pk}"' in html
+        assert 'tabindex="0"' in html
+        assert 'role="button"' in html
         assert "[1]" in html
