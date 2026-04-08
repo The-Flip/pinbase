@@ -26,6 +26,18 @@ BOOK_SOURCES: list[dict] = [
                     "covers the birth of pinball from bagatelle-derived "
                     "games through the first flipperless models."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9781889933009",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9781889933009",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "The Encyclopedia of Pinball, Vol. 2: Contact to Bumper 1934–1936",
@@ -39,6 +51,18 @@ BOOK_SOURCES: list[dict] = [
                     "covers the expansion of pinball with contact holes, "
                     "bumpers, and battery-powered features."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9781889933023",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9781889933023",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
         ],
     },
@@ -64,6 +88,18 @@ BOOK_SOURCES: list[dict] = [
                     "Sharpe is known for the 1976 demonstration that saved "
                     "pinball in New York City."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780525179757",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780525179757",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "Pinball!, paperback",
@@ -77,6 +113,18 @@ BOOK_SOURCES: list[dict] = [
                     "Sharpe is known for the 1976 demonstration that saved "
                     "pinball in New York City."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780525474814",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780525474814",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
         ],
     },
@@ -101,6 +149,18 @@ BOOK_SOURCES: list[dict] = [
                     "Visual guide to pinball machines, translated from the "
                     "German Flipper Scheiben."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780887404313",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780887404313",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "Pinball Machines, revised edition",
@@ -113,6 +173,18 @@ BOOK_SOURCES: list[dict] = [
                     "Visual guide to pinball machines, translated from the "
                     "German Flipper Scheiben."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764303166",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764303166",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "Pinball Machines, 3rd revised edition",
@@ -125,6 +197,18 @@ BOOK_SOURCES: list[dict] = [
                     "Visual guide to pinball machines, translated from the "
                     "German Flipper Scheiben."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764308956",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764308956",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
         ],
     },
@@ -149,6 +233,18 @@ BOOK_SOURCES: list[dict] = [
                     "Comprehensive history of pinball covering game design, "
                     "artwork, and collecting."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764310034",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764310034",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "The Complete Pinball Book, 2nd revised edition",
@@ -161,6 +257,18 @@ BOOK_SOURCES: list[dict] = [
                     "Comprehensive history of pinball covering game design, "
                     "artwork, and collecting."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764315862",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764315862",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "The Complete Pinball Book, 3rd revised edition",
@@ -173,6 +281,23 @@ BOOK_SOURCES: list[dict] = [
                     "Comprehensive history of pinball covering game design, "
                     "artwork, and collecting."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764337857",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764337857",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://schifferbooks.com/products/complete-pinball-book-3",
+                        "label": "Publisher",
+                        "link_type": "publisher",
+                    },
+                ],
             },
         ],
     },
@@ -199,6 +324,18 @@ BOOK_SOURCES: list[dict] = [
                     "machines from 1982 onward. Part of Shalhoub's four-volume "
                     "Pinball Compendium series."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764323003",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764323003",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                ],
             },
             {
                 "name": "The Pinball Compendium: 1982 to the Present, 2nd revised and expanded edition",
@@ -212,6 +349,23 @@ BOOK_SOURCES: list[dict] = [
                     "machines from 1982 onward. Part of Shalhoub's four-volume "
                     "Pinball Compendium series."
                 ),
+                "links": [
+                    {
+                        "url": "https://openlibrary.org/isbn/9780764341076",
+                        "label": "Open Library",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://search.worldcat.org/isbn/9780764341076",
+                        "label": "WorldCat",
+                        "link_type": "catalog",
+                    },
+                    {
+                        "url": "https://schifferbooks.com/products/pinball-comp-1982-pres-2",
+                        "label": "Publisher",
+                        "link_type": "publisher",
+                    },
+                ],
             },
         ],
     },
@@ -229,6 +383,18 @@ BOOK_SOURCES: list[dict] = [
             "Bueschel's earlier history of pre-flipper pinball, predecessor "
             "to The Encyclopedia of Pinball."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780866670470",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780866670470",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+        ],
     },
     {
         "name": "Pinball Wizardry",
@@ -240,6 +406,18 @@ BOOK_SOURCES: list[dict] = [
         "description": (
             "Playing strategy and tips guide from the late 1970s golden age."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780136762218",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780136762218",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+        ],
     },
     {
         "name": "Pinball Memories: Forty Years of Fun 1958–1998",
@@ -252,6 +430,23 @@ BOOK_SOURCES: list[dict] = [
             "800+ color photos covering 50 machines from the flipper era "
             "through the 1990s."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764316876",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764316876",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-memories",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Pinball Snapshots: Air Aces to Xenon",
@@ -261,6 +456,23 @@ BOOK_SOURCES: list[dict] = [
         "year": 2004,
         "isbn": "9780764321092",
         "description": ("Detailed profiles of 50 machines with 500+ color photos."),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764321092",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764321092",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-snapshots",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Pinball Perspectives: Ace High to World's Series",
@@ -273,6 +485,23 @@ BOOK_SOURCES: list[dict] = [
             "Profiles of 50 machines with 400+ color photos. Third in "
             "Rossignoli's photo reference series."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764326097",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764326097",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-perspectives",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "The Pinball Compendium: 1930s–1960s",
@@ -286,6 +515,23 @@ BOOK_SOURCES: list[dict] = [
             "pinball. First in Shalhoub's four-volume series; overlaps "
             "with the later Electro-Mechanical Era volume."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764315275",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764315275",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-comp-1930-60s",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "The Pinball Compendium: Electro-Mechanical Era",
@@ -299,6 +545,23 @@ BOOK_SOURCES: list[dict] = [
             "the 1930s–1970s. Broader and more comprehensive than the "
             "earlier 1930s–1960s volume."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764330285",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764330285",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-comp-electro-mech-era",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "The Pinball Compendium: 1970–1981",
@@ -311,6 +574,23 @@ BOOK_SOURCES: list[dict] = [
             "Color photo reference covering the transition from "
             "electromechanical to early solid-state pinball."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764320743",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764320743",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball-comp-1970-81",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Your Pinball Machine",
@@ -323,6 +603,23 @@ BOOK_SOURCES: list[dict] = [
             "Practical guide to purchasing, adjusting, maintaining, and "
             "repairing home pinball machines."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764361807",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764361807",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/your-pinball-machine",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Pinball: A Graphic History of the Silver Ball",
@@ -335,6 +632,23 @@ BOOK_SOURCES: list[dict] = [
             "Nonfiction graphic novel covering pinball history from the "
             "1700s to the present."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9781250249210",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9781250249210",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://us.macmillan.com/books/9781250249210/pinball/",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Pinball: A Quest for Mastery",
@@ -344,6 +658,23 @@ BOOK_SOURCES: list[dict] = [
         "year": 2026,
         "isbn": "9780764365027",
         "description": "Guide to competitive pinball technique and mastery.",
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780764365027",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780764365027",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://schifferbooks.com/products/pinball",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
     {
         "name": "Tilt: The Pinball Book",
@@ -355,6 +686,18 @@ BOOK_SOURCES: list[dict] = [
         "description": (
             "Home maintenance, history, and playing tips for pinball machines."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780916870140",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780916870140",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+        ],
     },
     {
         "name": "Pinball Reference Guide",
@@ -367,6 +710,18 @@ BOOK_SOURCES: list[dict] = [
             "Pocket-sized listing of 2,500+ pinball games. Precursor to "
             "the Pinball Collector's Resource (1992)."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9780934422192",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9780934422192",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+        ],
     },
     {
         "name": "From Pinballs to Pixels",
@@ -379,5 +734,22 @@ BOOK_SOURCES: list[dict] = [
             "History of Williams-Bally-Midway with 40+ interviews covering "
             "pinball and arcade games."
         ),
+        "links": [
+            {
+                "url": "https://openlibrary.org/isbn/9781476689371",
+                "label": "Open Library",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://search.worldcat.org/isbn/9781476689371",
+                "label": "WorldCat",
+                "link_type": "catalog",
+            },
+            {
+                "url": "https://mcfarlandbooks.com/product/from-pinballs-to-pixels/",
+                "label": "Publisher",
+                "link_type": "publisher",
+            },
+        ],
     },
 ]
