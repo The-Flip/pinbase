@@ -270,6 +270,85 @@ class TestCreateCitationSource:
         assert resp.status_code == 422
 
 
+class TestCreateCitationSourceWithLink:
+    """Atomic source + link creation via the optional url field."""
+
+    def test_create_with_url_creates_source_and_link(self, client, user):
+        client.force_login(user)
+        resp = _post(
+            client,
+            "/api/citation-sources/",
+            {
+                "name": "Pinball Wiki Page",
+                "source_type": "web",
+                "url": "https://example.com/pinball",
+            },
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data["name"] == "Pinball Wiki Page"
+        assert len(data["links"]) == 1
+        assert data["links"][0]["url"] == "https://example.com/pinball"
+
+    def test_create_with_url_and_link_label(self, client, user):
+        client.force_login(user)
+        resp = _post(
+            client,
+            "/api/citation-sources/",
+            {
+                "name": "Archive Page",
+                "source_type": "web",
+                "url": "https://archive.org/details/pinball",
+                "link_label": "archive.org",
+            },
+        )
+        assert resp.status_code == 201
+        data = resp.json()
+        assert data["links"][0]["label"] == "archive.org"
+
+    def test_create_without_url_creates_no_link(self, client, user):
+        client.force_login(user)
+        resp = _post(
+            client,
+            "/api/citation-sources/",
+            {
+                "name": "A Book",
+                "source_type": "book",
+            },
+        )
+        assert resp.status_code == 201
+        assert resp.json()["links"] == []
+
+    def test_invalid_url_returns_422_and_creates_no_source(self, client, user):
+        client.force_login(user)
+        resp = _post(
+            client,
+            "/api/citation-sources/",
+            {
+                "name": "Bad Link Source",
+                "source_type": "web",
+                "url": "not-a-url",
+            },
+        )
+        assert resp.status_code == 422
+        assert not CitationSource.objects.filter(name="Bad Link Source").exists()
+
+    def test_link_sets_created_by(self, client, user):
+        client.force_login(user)
+        resp = _post(
+            client,
+            "/api/citation-sources/",
+            {
+                "name": "Test Web",
+                "source_type": "web",
+                "url": "https://example.com",
+            },
+        )
+        assert resp.status_code == 201
+        link = CitationSourceLink.objects.get(citation_source_id=resp.json()["id"])
+        assert link.created_by == user
+
+
 # ---------------------------------------------------------------------------
 # Detail
 # ---------------------------------------------------------------------------

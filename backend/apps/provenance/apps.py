@@ -27,9 +27,11 @@ class ProvenanceConfig(AppConfig):
                 name="cite",
                 model_path="provenance.CitationInstance",
                 label="Citation",
+                description="Cite a source (book, web, magazine)",
                 slug_field=None,
                 format_link=_format_citation_link,
                 select_related=("citation_source",),
-                sort_order=900,
+                sort_order=1,
+                autocomplete_flow="custom",
             )
         )

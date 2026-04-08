@@ -347,6 +347,64 @@ A potential fix: override `save()` on `TimeStampedModel` to call `self.full_clea
 
 The inline citation markers render as superscript footnote numbers (`<sup>[1]</sup>`), but there's no References section at the bottom of the article yet. This section should collect all CitationInstances in the document, join to CitationSource for metadata, and render a formatted bibliography. Clicking a superscript number scrolls to the reference; clicking the back-arrow scrolls back to the text.
 
+### CitationSourceLink `link_type` field
+
+CitationSourceLink currently has `url` + `label` with no structured way to distinguish a canonical URL from an archive.org snapshot from a Google Books preview. The original design anticipated this: "These can be enriched later if the system needs to distinguish between link kinds or detect broken links."
+
+A `link_type` TextChoices field (e.g. `canonical`, `archive`, `preview`, `scan`) would let the system:
+
+- Render links differently (archive links get a clock icon, previews get a book icon)
+- Know which link to pair with a CitationInstance locator (see the CitationInstance → CitationSourceLink FK follow-up above)
+- Support pre-emptive archiving (see below) by distinguishing machine-created archive snapshots from human-curated links
+- Detect and flag broken links by type (a dead canonical URL is more urgent than a dead archive link)
+
+This is a prerequisite for pre-emptive archiving and would also improve the CitationInstance → CitationSourceLink FK decision.
+
+### Pre-emptive archiving via Wayback Machine
+
+Wikipedia encourages [pre-emptive archiving](https://en.wikipedia.org/wiki/Wikipedia:Citing_sources/Further_considerations#Pre-emptive_archiving) of cited URLs because web sources aren't forever. The Wayback Machine has an API (`https://web.archive.org/save/{url}`) that snapshots a page on demand. A background job could:
+
+1. When a web CitationSource is created or a CitationSourceLink is added, fire an async task
+2. Hit the Wayback Machine save API to ensure a recent snapshot exists
+3. Store the resulting `https://web.archive.org/web/{timestamp}/{url}` as a new CitationSourceLink with `link_type="archive"`
+
+The API is slow (seconds per request) so this must be async. It's also rate-limited, so the job should be debounced and respect backoff. This depends on the `link_type` field existing (see above) so the system can distinguish human-curated links from machine-created archive snapshots.
+
+**Open questions:**
+
+- Should we also periodically re-snapshot existing links (e.g. monthly) to catch content drift?
+- Should we snapshot at citation-creation time (when a CitationInstance is created) or at source-creation time (when a CitationSourceLink is added)?
+- The Wayback Machine API sometimes fails silently or returns old snapshots — how do we handle that?
+- Archive.org's terms of service and rate limits need investigation before building this.
+
 ### Recently used sources in autocomplete
 
 The Contributor UX section describes "Recently used Citation Sources surfaced first" as part of the autocomplete experience. This is deferred — the v1 search endpoint returns results ordered by name only. Adding recently-used ranking requires tracking per-user citation activity and merging it into the search results.
+
+### Standardize frontend API calls on the typed client
+
+`frontend/src/lib/api/link-types.ts` uses raw `fetch()` with hand-written types (`LinkType`, `LinkTarget`) for the wikilink autocomplete endpoints. Every other API call in the frontend uses the openapi-fetch `client` from `client.ts` with generated types from `schema.d.ts`. When the `flow` field was added to the link types API, the hand-written `LinkType` type had to be manually updated to match the backend — exactly the kind of drift that generated types prevent.
+
+The fix: delete the hand-written types and raw fetch calls in `link-types.ts`, replace with `client.GET()` calls. For example:
+
+```typescript
+// Before (hand-written types, raw fetch)
+export type LinkType = {
+  name: string;
+  label: string;
+  description: string;
+  flow: "standard" | "custom";
+};
+const resp = await fetch("/api/link-types/");
+cachedTypes = (await resp.json()) as LinkType[];
+
+// After (generated types, typed client)
+const { data } = await client.GET("/api/link-types/");
+cachedTypes = data ?? [];
+```
+
+The module-level cache and `searchLinkTargets` function stay, they just use `client.GET` internally. Tests in `link-types.test.ts` would need to mock `client` instead of `globalThis.fetch`.
+
+### Svelte component tests
+
+The frontend has unit tests for pure helper functions (wikilink-helpers, markdown-shortcuts) but no component-level tests for interactive UI like the wikilink autocomplete dropdown, citation autocomplete, or edit forms. These components have complex keyboard navigation, multi-stage flows, focus management, and API interactions that are only verified manually today. Setting up `@testing-library/svelte` (or equivalent) and writing component tests for MarkdownTextArea, WikilinkAutocomplete, and CitationAutocomplete would catch regressions that helper-only tests miss — especially around blur/focus behavior and stage transitions.

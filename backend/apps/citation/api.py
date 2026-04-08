@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Optional
 
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
@@ -66,6 +66,9 @@ class CitationSourceCreateSchema(Schema):
     isbn: Optional[str] = None
     description: str = ""
     parent_id: Optional[int] = None
+    # Optional: atomically create a CitationSourceLink alongside the source.
+    url: Optional[str] = None
+    link_label: str = ""
 
     @field_validator("isbn", mode="before")
     @classmethod
@@ -264,27 +267,38 @@ def search_citation_sources(request, q: str = ""):
     auth=django_auth,
 )
 def create_citation_source(request, data: CitationSourceCreateSchema):
-    """Create a new Citation Source."""
+    """Create a new Citation Source, optionally with an initial link."""
     parent = None
     if data.parent_id is not None:
         parent = get_object_or_404(CitationSource, pk=data.parent_id)
 
-    source = CitationSource(
-        name=data.name,
-        source_type=data.source_type,
-        author=data.author,
-        publisher=data.publisher,
-        year=data.year,
-        month=data.month,
-        day=data.day,
-        date_note=data.date_note,
-        isbn=data.isbn,
-        description=data.description,
-        parent=parent,
-        created_by=request.user,
-        updated_by=request.user,
-    )
-    _clean_and_save(source, integrity_msg="A source with this ISBN already exists.")
+    with transaction.atomic():
+        source = CitationSource(
+            name=data.name,
+            source_type=data.source_type,
+            author=data.author,
+            publisher=data.publisher,
+            year=data.year,
+            month=data.month,
+            day=data.day,
+            date_note=data.date_note,
+            isbn=data.isbn,
+            description=data.description,
+            parent=parent,
+            created_by=request.user,
+            updated_by=request.user,
+        )
+        _clean_and_save(source, integrity_msg="A source with this ISBN already exists.")
+
+        if data.url:
+            link = CitationSourceLink(
+                citation_source=source,
+                url=data.url,
+                label=data.link_label,
+                created_by=request.user,
+                updated_by=request.user,
+            )
+            _clean_and_save(link)
 
     source = get_object_or_404(_detail_qs(), pk=source.pk)
     return Status(201, _serialize_detail(source))

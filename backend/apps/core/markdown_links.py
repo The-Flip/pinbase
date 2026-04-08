@@ -89,6 +89,12 @@ class LinkType:
     # --- Display order in type picker (lower = higher in list) ---
     sort_order: int = 100
 
+    # --- Autocomplete flow ---
+    # "standard" = generic search via /api/link-types/targets/
+    # "custom" = frontend handles the flow (e.g., citation multi-step)
+    AUTOCOMPLETE_FLOWS = ("standard", "custom")
+    autocomplete_flow: str = "standard"
+
     def get_model(self) -> type[Any]:
         """Resolve the model class lazily via Django's app registry."""
         from django.apps import apps
@@ -121,6 +127,11 @@ def register(link_type: LinkType) -> None:
     """Register a link type. Called from each app's AppConfig.ready()."""
     if link_type.name in _registry:
         raise ValueError(f"Link type '{link_type.name}' is already registered")
+    if link_type.autocomplete_flow not in LinkType.AUTOCOMPLETE_FLOWS:
+        raise ValueError(
+            f"Link type '{link_type.name}': autocomplete_flow must be one of "
+            f"{LinkType.AUTOCOMPLETE_FLOWS}, got {link_type.autocomplete_flow!r}"
+        )
     _registry[link_type.name] = link_type
     # Compile regex patterns eagerly
     name = re.escape(link_type.name)
@@ -154,11 +165,19 @@ def get_enabled_link_types() -> list[LinkType]:
 def get_autocomplete_types() -> list[dict[str, str]]:
     """Return enabled link types that support autocomplete, for the type picker API."""
     types = [
-        lt for lt in _registry.values() if lt.is_enabled() and lt.autocomplete_serialize
+        lt
+        for lt in _registry.values()
+        if lt.is_enabled()
+        and (lt.autocomplete_serialize or lt.autocomplete_flow == "custom")
     ]
     types.sort(key=lambda lt: lt.sort_order)
     return [
-        {"name": lt.name, "label": lt.label, "description": lt.description}
+        {
+            "name": lt.name,
+            "label": lt.label,
+            "description": lt.description,
+            "flow": lt.autocomplete_flow,
+        }
         for lt in types
     ]
 
