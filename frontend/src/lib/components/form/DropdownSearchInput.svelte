@@ -4,13 +4,17 @@
 		value = $bindable(''),
 		oninput,
 		onkeydown,
-		inputRef = $bindable<HTMLInputElement | undefined>(undefined)
+		inputRef = $bindable<HTMLInputElement | undefined>(undefined),
+		activeDescendant,
+		listboxId
 	}: {
 		placeholder?: string;
 		value?: string;
 		oninput?: (e: Event) => void;
 		onkeydown?: (e: KeyboardEvent) => void;
 		inputRef?: HTMLInputElement | undefined;
+		activeDescendant?: string;
+		listboxId?: string;
 	} = $props();
 </script>
 
@@ -19,7 +23,12 @@
 		bind:this={inputRef}
 		type="text"
 		class="search-input"
+		role="combobox"
 		aria-label={placeholder}
+		aria-expanded={true}
+		aria-controls={listboxId}
+		aria-activedescendant={activeDescendant}
+		aria-autocomplete="list"
 		{placeholder}
 		{value}
 		{oninput}

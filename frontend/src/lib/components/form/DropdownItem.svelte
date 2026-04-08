@@ -2,11 +2,13 @@
 	import type { Snippet } from 'svelte';
 
 	let {
+		id,
 		active = false,
 		onselect,
 		onhover,
 		children
 	}: {
+		id?: string;
 		active?: boolean;
 		onselect: () => void;
 		onhover?: () => void;
@@ -15,6 +17,7 @@
 </script>
 
 <div
+	{id}
 	role="option"
 	tabindex="-1"
 	aria-selected={active}

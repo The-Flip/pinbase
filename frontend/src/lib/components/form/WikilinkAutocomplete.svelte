@@ -11,10 +11,12 @@
 
 	let {
 		oncomplete,
-		oncancel
+		oncancel,
+		onfocusreturn
 	}: {
 		oncomplete: (linkText: string) => void;
 		oncancel: () => void;
+		onfocusreturn?: () => void;
 	} = $props();
 
 	// -----------------------------------------------------------------------
@@ -34,6 +36,18 @@
 	let searchIndex = $state(-1);
 	let searchInputEl: HTMLInputElement | undefined = $state();
 	let debouncedSearch: ReturnType<typeof createDebouncedSearch<LinkTarget>> | null = null;
+
+	// ARIA — per-instance IDs for combobox pattern
+	const uid = Math.random().toString(36).slice(2, 8);
+	const listboxId = `wl-results-${uid}`;
+	function resultItemId(ref: string) {
+		return `wl-result-${uid}-${ref}`;
+	}
+	let activeDescendant = $derived(
+		searchIndex >= 0 && searchIndex < searchResults.length
+			? resultItemId(searchResults[searchIndex].ref)
+			: undefined
+	);
 
 	onDestroy(() => debouncedSearch?.cancel());
 
@@ -102,7 +116,8 @@
 		searchQuery = '';
 		searchResults = [];
 		searchIndex = -1;
-		typeIndex = 0;
+		// Preserve typeIndex so the user returns to the type they selected
+		onfocusreturn?.();
 	}
 
 	// -----------------------------------------------------------------------
@@ -215,10 +230,13 @@
 			oninput={handleSearchInput}
 			onkeydown={handleSearchKeydown}
 			bind:inputRef={searchInputEl}
+			{activeDescendant}
+			{listboxId}
 		/>
-		<div class="results-list" role="listbox">
+		<div class="results-list" role="listbox" id={listboxId}>
 			{#each searchResults as target, i (target.ref)}
 				<DropdownItem
+					id={resultItemId(target.ref)}
 					active={i === searchIndex}
 					onselect={() => selectResult(target)}
 					onhover={() => (searchIndex = i)}

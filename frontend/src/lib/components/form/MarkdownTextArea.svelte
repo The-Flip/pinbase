@@ -123,8 +123,8 @@
 	function insertWikilink(linkText: string) {
 		if (!textareaEl) return;
 
-		const replaceEnd = textareaEl.selectionStart;
 		textareaEl.focus();
+		const replaceEnd = textareaEl.selectionStart;
 		textareaEl.setSelectionRange(triggerStart, replaceEnd);
 
 		if (!document.execCommand('insertText', false, linkText)) {
@@ -298,6 +298,7 @@
 					closeDropdown();
 					textareaEl?.focus();
 				}}
+				onfocusreturn={() => textareaEl?.focus()}
 			/>
 		</div>
 	{/if}

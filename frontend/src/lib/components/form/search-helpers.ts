@@ -29,7 +29,11 @@ export function createDebouncedSearch<T>(
 				const results = await fetchFn(query);
 				if (gen === generation) onResults(results);
 			};
-			timer = setTimeout(run, query ? delay : 0);
+			if (query) {
+				timer = setTimeout(run, delay);
+			} else {
+				run();
+			}
 		},
 		cancel() {
 			clearTimeout(timer);
