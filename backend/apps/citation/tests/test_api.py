@@ -505,6 +505,39 @@ class TestGetCitationSourceDetail:
         assert len(data["children"]) == 1
         assert data["children"][0]["skip_locator"] is True
 
+    def test_detail_children_include_urls(self, client, user, db):
+        """Children in detail response include their link URLs."""
+        parent = CitationSource.objects.create(
+            name="Internet Pinball Database", source_type="web"
+        )
+        child = CitationSource.objects.create(
+            name="IPDB Machine 3000", source_type="web", parent=parent
+        )
+        CitationSourceLink.objects.create(
+            citation_source=child,
+            link_type="homepage",
+            url="https://www.ipdb.org/machine.cgi?id=3000",
+        )
+        client.force_login(user)
+        resp = client.get(f"/api/citation-sources/{parent.pk}/")
+        data = resp.json()
+        assert len(data["children"]) == 1
+        assert data["children"][0]["urls"] == [
+            "https://www.ipdb.org/machine.cgi?id=3000"
+        ]
+
+    def test_detail_children_urls_empty_when_no_links(self, client, user, db):
+        """Children with no links have an empty urls list."""
+        parent = CitationSource.objects.create(name="Big Book", source_type="book")
+        CitationSource.objects.create(
+            name="Edition 1", source_type="book", parent=parent
+        )
+        client.force_login(user)
+        resp = client.get(f"/api/citation-sources/{parent.pk}/")
+        data = resp.json()
+        assert len(data["children"]) == 1
+        assert data["children"][0]["urls"] == []
+
 
 # ---------------------------------------------------------------------------
 # Update

@@ -121,6 +121,7 @@ class CitationSourceChildSchema(Schema):
     year: Optional[int] = None
     isbn: Optional[str] = None
     skip_locator: bool = False
+    urls: list[str] = []
 
 
 class CitationSourceLinkSchema(Schema):
@@ -222,7 +223,7 @@ def _clean_and_save(instance, update_fields=None, *, integrity_msg=""):
 
 def _detail_qs():
     return CitationSource.objects.select_related("parent").prefetch_related(
-        "links", "children"
+        "links", "children", "children__links"
     )
 
 
@@ -256,6 +257,7 @@ def _serialize_detail(source) -> dict:
                 "year": child.year,
                 "isbn": child.isbn,
                 "skip_locator": _skip_locator(child.source_type, child.parent_id),
+                "urls": [link.url for link in child.links.all()],
             }
             for child in source.children.all()
         ],

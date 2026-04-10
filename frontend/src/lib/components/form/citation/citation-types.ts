@@ -77,21 +77,82 @@ export function detectSourceFromUrl(url: string): { sourceName: string; machineI
 const BARE_DIGITS = /^\d+$/;
 const BARE_OPDB_ID = /^[A-Za-z0-9_-]+$/;
 
-/** Post-selection: dispatches on a backend-provided key, not display names. */
-export function parseIdentifierInput(identifierKey: string | null, input: string): string | null {
-	if (!input || !identifierKey) return null;
+/**
+ * Post-selection: extracts a normalized identifier from user input.
+ *
+ * Instance-level rules (identifierKey: 'ipdb', 'opdb') take precedence.
+ * Type-level rules (sourceType: 'book' → ISBN) are the fallback.
+ */
+export function parseIdentifierInput(
+	sourceType: string,
+	identifierKey: string | null,
+	input: string
+): string | null {
+	if (!input) return null;
 
+	// Instance-level: dispatch on backend-provided key
+	if (identifierKey) {
+		switch (identifierKey) {
+			case 'ipdb': {
+				const urlMatch = IPDB_RE.exec(input);
+				if (urlMatch) return urlMatch[1];
+				return BARE_DIGITS.test(input) ? input : null;
+			}
+			case 'opdb': {
+				const urlMatch = OPDB_RE.exec(input);
+				if (urlMatch) return urlMatch[1];
+				return BARE_OPDB_ID.test(input) ? input : null;
+			}
+			default:
+				return null;
+		}
+	}
+
+	// Type-level: derive from source type
+	switch (sourceType) {
+		case 'book':
+			return parseIsbn(input);
+		default:
+			return null;
+	}
+}
+
+/** Strip hyphens/spaces from input, validate check digit, return normalized ISBN or null. */
+function parseIsbn(input: string): string | null {
+	const stripped = input.replace(/[-\s]/g, '').toUpperCase();
+	if (stripped.length === 13 && /^\d{13}$/.test(stripped)) {
+		return isValidIsbn13(stripped) ? stripped : null;
+	}
+	if (stripped.length === 10 && /^\d{9}[\dX]$/.test(stripped)) {
+		return isValidIsbn10(stripped) ? stripped : null;
+	}
+	return null;
+}
+
+function isValidIsbn13(isbn: string): boolean {
+	let sum = 0;
+	for (let i = 0; i < 13; i++) {
+		sum += Number(isbn[i]) * (i % 2 === 0 ? 1 : 3);
+	}
+	return sum % 10 === 0;
+}
+
+function isValidIsbn10(isbn: string): boolean {
+	let sum = 0;
+	for (let i = 0; i < 10; i++) {
+		const val = isbn[i] === 'X' ? 10 : Number(isbn[i]);
+		sum += val * (10 - i);
+	}
+	return sum % 11 === 0;
+}
+
+/** Construct a canonical URL for a child source from its identifier key and parsed ID. */
+export function buildChildUrl(identifierKey: string | null, parsedId: string): string | null {
 	switch (identifierKey) {
-		case 'ipdb': {
-			const urlMatch = IPDB_RE.exec(input);
-			if (urlMatch) return urlMatch[1];
-			return BARE_DIGITS.test(input) ? input : null;
-		}
-		case 'opdb': {
-			const urlMatch = OPDB_RE.exec(input);
-			if (urlMatch) return urlMatch[1];
-			return BARE_OPDB_ID.test(input) ? input : null;
-		}
+		case 'ipdb':
+			return `https://www.ipdb.org/machine.cgi?id=${parsedId}`;
+		case 'opdb':
+			return `https://opdb.org/machines/${parsedId}`;
 		default:
 			return null;
 	}

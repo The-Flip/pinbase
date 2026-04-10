@@ -3,6 +3,7 @@ import {
 	suppressChildResults,
 	detectSourceFromUrl,
 	parseIdentifierInput,
+	buildChildUrl,
 	isDraftSubmittable,
 	emptyDraft,
 	transition,
@@ -146,50 +147,135 @@ describe('detectSourceFromUrl', () => {
 // ---------------------------------------------------------------------------
 
 describe('parseIdentifierInput', () => {
-	describe('ipdb key', () => {
+	describe('instance-level: ipdb key', () => {
 		it('parses IPDB URL', () => {
-			expect(parseIdentifierInput('ipdb', 'https://www.ipdb.org/machine.cgi?id=4836')).toBe('4836');
+			expect(parseIdentifierInput('web', 'ipdb', 'https://www.ipdb.org/machine.cgi?id=4836')).toBe(
+				'4836'
+			);
 		});
 
 		it('parses bare digits', () => {
-			expect(parseIdentifierInput('ipdb', '4836')).toBe('4836');
+			expect(parseIdentifierInput('web', 'ipdb', '4836')).toBe('4836');
 		});
 
 		it('returns null for non-numeric non-URL input', () => {
-			expect(parseIdentifierInput('ipdb', 'abc')).toBeNull();
+			expect(parseIdentifierInput('web', 'ipdb', 'abc')).toBeNull();
 		});
 
 		it('returns null for empty input', () => {
-			expect(parseIdentifierInput('ipdb', '')).toBeNull();
+			expect(parseIdentifierInput('web', 'ipdb', '')).toBeNull();
 		});
 	});
 
-	describe('opdb key', () => {
+	describe('instance-level: opdb key', () => {
 		it('parses OPDB URL', () => {
-			expect(parseIdentifierInput('opdb', 'https://opdb.org/machines/abc-123')).toBe('abc-123');
+			expect(parseIdentifierInput('web', 'opdb', 'https://opdb.org/machines/abc-123')).toBe(
+				'abc-123'
+			);
 		});
 
 		it('parses bare alphanumeric ID', () => {
-			expect(parseIdentifierInput('opdb', 'abc-123')).toBe('abc-123');
+			expect(parseIdentifierInput('web', 'opdb', 'abc-123')).toBe('abc-123');
 		});
 
 		it('returns null for invalid characters', () => {
-			expect(parseIdentifierInput('opdb', 'has spaces')).toBeNull();
+			expect(parseIdentifierInput('web', 'opdb', 'has spaces')).toBeNull();
 		});
 
 		it('returns null for empty input', () => {
-			expect(parseIdentifierInput('opdb', '')).toBeNull();
+			expect(parseIdentifierInput('web', 'opdb', '')).toBeNull();
 		});
 	});
 
-	describe('unknown or null key', () => {
-		it('returns null for unknown key', () => {
-			expect(parseIdentifierInput('something', '12345')).toBeNull();
+	describe('type-level: book → ISBN', () => {
+		it('parses ISBN-13 with hyphens', () => {
+			expect(parseIdentifierInput('book', null, '978-0-13-468599-1')).toBe('9780134685991');
 		});
 
-		it('returns null for null key', () => {
-			expect(parseIdentifierInput(null, '12345')).toBeNull();
+		it('parses ISBN-13 bare digits', () => {
+			expect(parseIdentifierInput('book', null, '9780134685991')).toBe('9780134685991');
 		});
+
+		it('parses ISBN-10 with hyphens', () => {
+			expect(parseIdentifierInput('book', null, '0-13-468599-7')).toBe('0134685997');
+		});
+
+		it('parses ISBN-10 bare digits', () => {
+			expect(parseIdentifierInput('book', null, '0134685997')).toBe('0134685997');
+		});
+
+		it('parses ISBN-10 with X check digit', () => {
+			expect(parseIdentifierInput('book', null, '0-9752298-0-X')).toBe('097522980X');
+		});
+
+		it('rejects ISBN-13 with invalid check digit', () => {
+			expect(parseIdentifierInput('book', null, '9780134685992')).toBeNull();
+		});
+
+		it('rejects ISBN-10 with invalid check digit', () => {
+			expect(parseIdentifierInput('book', null, '0134685998')).toBeNull();
+		});
+
+		it('returns null for wrong digit count', () => {
+			expect(parseIdentifierInput('book', null, '12345')).toBeNull();
+		});
+
+		it('returns null for non-ISBN text', () => {
+			expect(parseIdentifierInput('book', null, 'some book title')).toBeNull();
+		});
+
+		it('returns null for empty input', () => {
+			expect(parseIdentifierInput('book', null, '')).toBeNull();
+		});
+	});
+
+	describe('instance-level takes precedence over type-level', () => {
+		it('uses identifier_key when both source_type and key are present', () => {
+			// A hypothetical book source that also has an instance-level key
+			expect(parseIdentifierInput('book', 'ipdb', '4836')).toBe('4836');
+		});
+	});
+
+	describe('unknown or null key with non-book type', () => {
+		it('returns null for unknown key on web source', () => {
+			expect(parseIdentifierInput('web', 'something', '12345')).toBeNull();
+		});
+
+		it('returns null for null key on web source', () => {
+			expect(parseIdentifierInput('web', null, '12345')).toBeNull();
+		});
+	});
+});
+
+// ---------------------------------------------------------------------------
+// buildChildUrl
+// ---------------------------------------------------------------------------
+
+describe('buildChildUrl', () => {
+	it('builds IPDB URL from parsed ID', () => {
+		expect(buildChildUrl('ipdb', '4836')).toBe('https://www.ipdb.org/machine.cgi?id=4836');
+	});
+
+	it('builds OPDB URL from parsed ID', () => {
+		expect(buildChildUrl('opdb', 'abc-123')).toBe('https://opdb.org/machines/abc-123');
+	});
+
+	it('returns null for unknown key', () => {
+		expect(buildChildUrl('something', '123')).toBeNull();
+	});
+
+	it('returns null for null key', () => {
+		expect(buildChildUrl(null, '123')).toBeNull();
+	});
+
+	it('round-trips with parseIdentifierInput for IPDB', () => {
+		const url = buildChildUrl('ipdb', '4836')!;
+		expect(parseIdentifierInput('web', 'ipdb', url)).toBe('4836');
+	});
+
+	it('round-trips with parseIdentifierInput for OPDB', () => {
+		const url = buildChildUrl('opdb', 'abc-123')!;
+		expect(parseIdentifierInput('web', 'opdb', url)).toBe('abc-123');
 	});
 });
 
