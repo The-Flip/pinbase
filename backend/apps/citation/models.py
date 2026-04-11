@@ -102,7 +102,7 @@ class CitationSource(TimeStampedModel):
             "children (e.g. 'ipdb' → numeric machine IDs, 'opdb' → slug IDs). "
             "Stopgap: will be subsumed by the extractor registry when the "
             "extraction layer is built. See docs/plans/citations/"
-            "CitationAutogenerationDesign.md."
+            "CitationsDesign.md."
         ),
     )
 

@@ -1,252 +1,120 @@
-# Citation Source Extraction Design
+# Citation Autogeneration Design
 
-High-level architecture for automatic citation source extraction. Implements the product direction described in [CitationEditUXImprovements.md](CitationEditUXImprovements.md).
+This document describes the planned automatic source-draft flow for citations. It is intentionally future-facing: parts of it have not been implemented yet.
 
-## Summary
+## Status
 
-When a user pastes evidence (URL, ISBN, DOI) into the citation input and no existing source matches, the system extracts metadata from external services and shapes it into a proposed CitationSource draft. The user confirms or edits the draft before it becomes a real source.
+Pinbase has some stopgap pieces today:
 
-## Where It Lives
+- client-side recognition of certain URL and identifier patterns
+- seeded source families such as books and major websites
+- guided child-source flows for known source families
 
-Extraction lives inside the `citation` app as an `extraction/` module, following the same pattern as catalog ingestion living inside `catalog`.
+What is not implemented yet is the fuller backend extraction layer that can take pasted evidence, call external services or site-specific extractors, and return a proposed `CitationSource` draft for confirmation.
 
-```text
-backend/apps/citation/
-  extraction/
-    __init__.py
-    classify.py          # input classification (ISBN, DOI, URL, text)
-    chain.py             # extractor chain runner
-    extractors/
-      __init__.py
-      isbn.py            # Open Library / Google Books
-      doi.py             # CrossRef
-      ipdb.py            # IPDB site-specific
-      generic_url.py     # OG tags, JSON-LD fallback
-    draft.py             # CitationSourceDraft shape
-  api/
-    extract.py           # the /extract/ endpoint
-```
+## Goal
 
-## Source Hierarchy
+Citation entry should accept evidence-like input such as:
 
-CitationSources are hierarchical. The hierarchy represents **identity** — which specific edition, which specific page on a site — not position within a source (that's what locators are for).
+- ISBN
+- DOI
+- known-site URL
+- generic URL
 
-Examples:
+If search does not find an existing source, Pinbase should try to turn that evidence into a proposed new source draft instead of forcing the contributor into manual data entry.
 
-- **Books**: The abstract work is the parent. Each ISBN-identified edition is a child. A French Kindle edition is a child of the French edition (or of the abstract work if editions aren't subdivided). Page number is a locator on the CitationInstance, not a level in the hierarchy.
-- **IPDB**: IPDB-the-database is the parent source. Each machine page (identified by IPDB machine ID) is a child source. A specific table or section on that page would be a locator, if ever needed.
+The important constraint is that this should help source creation, not silently bypass editorial review.
 
-This means extraction sometimes creates a **child source under an existing parent**, not a top-level source. The draft shape includes an optional `parent` reference. The extractor is responsible for:
+## Product Shape
 
-1. Determining whether the input belongs under an existing parent (e.g., ISBN → book work, IPDB URL → IPDB parent).
-2. Checking whether the child source already exists (dedup).
-3. If not, producing a draft positioned in the hierarchy.
+The intended flow is:
 
-### Internal Cross-Reference vs. External Fetch
+1. User searches or pastes evidence into the citation input.
+2. Pinbase searches for an existing source first.
+3. If there is no strong existing match and the input looks like evidence, Pinbase runs extraction.
+4. Extraction returns either:
+   - a proposed source draft
+   - an existing-source match
+   - a structured failure
+5. The user confirms or edits the draft before creation.
 
-Not all extraction requires live external requests. Two modes:
+## Design Principles
 
-- **External fetch**: ISBN → Open Library, DOI → CrossRef, generic URL → HTML scrape. Goes out to the internet.
-- **Internal cross-reference**: IPDB ID → our already-ingested IPDB data. No live fetch needed (and IPDB blocks bots anyway). The extractor matches against data we already have in the database.
+### Backend, not frontend
 
-The extractor interface is the same in both cases. The difference is where the data comes from.
-
-### Parent-Only Sources
-
-Some sources are containers — you never cite them directly, you always cite a specific child. IPDB-the-database is not a citation; IPDB machine page 4836 is. Similarly, the abstract work "The Encyclopedia of Pinball" is not what you cite — you cite a specific ISBN-identified volume.
-
-The system needs to know which sources are parent-only so the UI can enforce "don't stop here, go one level deeper." This is a property of the CitationSource itself, not the extraction system — likely a flag or convention on the model.
-
-## Steel Thread
-
-Two paths exercise the full system end to end:
-
-### Path 1: Paste IPDB URL → automatic child source
-
-1. User pastes `https://www.ipdb.org/machine.cgi?id=4836` into the citation input.
-2. Search runs first — no existing child source for IPDB machine 4836.
-3. Input classification recognizes a URL. Extract endpoint is called.
-4. IPDB extractor matches the URL pattern, extracts machine ID 4836.
-5. Cross-references against ingested IPDB data (no live fetch).
-6. Finds the IPDB parent source, checks for an existing child — none.
-7. Returns a draft for a new child source under IPDB, pre-filled with the machine name from ingested data.
-8. User confirms. Child source is created. Citation instance is attached to the claim.
-
-### Path 2: Search "IPDB" → guided child source
-
-1. User types "IPDB" into the citation input.
-2. Search finds the IPDB parent source.
-3. UI recognizes IPDB is a parent-only source — the user can't cite it directly.
-4. UI prompts for a specific IPDB machine: "Enter an IPDB URL or machine ID."
-5. User types `4836` or pastes a URL.
-6. Because the user already selected the IPDB parent, a bare number is unambiguous — it's an IPDB machine ID.
-7. Same extraction flow as Path 1 from step 5 onward.
-8. User confirms. Child source is created. Citation instance is attached to the claim.
-
-Path 1 is fully automatic — one paste, one confirmation. Path 2 is guided — the user tells the system which source family, then identifies the specific child. Both end at the same place: a child source under the IPDB parent.
-
-## Why Extraction Lives on the Backend
-
-Extraction happens **on the Django backend**, not in the frontend.
+The extraction layer should live on the Django side, not in the Svelte UI.
 
 Reasons:
 
-- Extractors call external APIs (Open Library, CrossRef, remote HTML) that require server-side HTTP, API keys, and rate limiting.
-- The CitationSource model and its validation logic already live in Django.
-- The frontend stays thin: send raw input, receive either search results or a draft.
+- external HTTP belongs on the server
+- rate limiting and caching belong on the server
+- API keys, if any, belong on the server
+- source creation and validation already live on the server
 
-Note: the citation autocomplete rewrite already includes **client-side** URL/identifier detection (`detectSourceFromUrl`, `parseIdentifierInput` in `citation-types.ts`). This handles the fast path — recognizing known URL patterns (IPDB, OPDB) and ISBNs before any server round-trip, enabling the guided "select parent → identify child" flow. Server-side extraction complements this as the full-featured path for external metadata resolution (Open Library, CrossRef, HTML scraping) when no existing source matches.
+### Drafts, not auto-create
 
-## API Shape
+Extraction should produce a `CitationSource` draft, not silently create records. The user should still confirm or edit what will be saved.
 
-One new endpoint:
+### Known extractors first
+
+Generic extraction is a weak fallback. Known identifiers and known sites should get dedicated extractors first.
+
+Examples:
+
+- ISBN -> book metadata
+- DOI -> publication metadata
+- `ipdb.org` URL -> site-specific source draft
+- generic URL -> sparse fallback based on page metadata
+
+### Reuse before creation
+
+Extraction is not the first step. Search for an existing source should always run first. Extraction only helps when reuse fails.
+
+## Proposed System Shape
+
+The future backend layer should have three responsibilities:
+
+- classify the input
+- run the right extractor
+- normalize the result into a draft shape used by citation-source creation
+
+Conceptually:
 
 ```text
-POST /api/citation-sources/extract/
-{ "input": "0964359219" }
+raw input
+  -> input classification
+  -> extractor selection
+  -> extracted metadata
+  -> normalized CitationSource draft
 ```
 
-Response (success):
+The extractor set should stay pragmatic and incremental. It does not need a grand plugin framework on day one, but it should not require rewriting the whole flow every time a new source family is added.
 
-```json
-{
-  "status": "extracted",
-  "draft": {
-    "name": "The Encyclopedia of Pinball, Volume 1",
-    "source_type": "BOOK",
-    "author": "Jeff Bueschel",
-    "publisher": "Silverball Amusements",
-    "isbn": "0964359219",
-    "year": 1996,
-    "parent": null,
-    "links": []
-  },
-  "extractor": "isbn",
-  "existing_candidates": []
-}
-```
+## First Useful Cases
 
-Response (failure):
+The first high-value extraction targets are:
 
-```json
-{
-  "status": "not_found",
-  "reason": "isbn_not_found",
-  "input_type": "isbn",
-  "message": "No metadata found for this ISBN."
-}
-```
+- ISBN lookup for books
+- DOI lookup for publications
+- IPDB URL recognition
+- generic URL fallback
 
-The `draft` object matches the shape of `CitationSourceCreateIn` so the frontend can feed it directly into the existing create flow. Nothing is persisted until the user confirms.
+These cover the most obvious evidence-like inputs contributors are likely to paste.
 
-### Integration with the Existing Search Flow
+## Failure Behavior
 
-The frontend already searches existing sources on every keystroke via `GET /api/citation-sources/search/`. Extraction is a separate, explicit step that fires only when:
+Extraction failures should be normal and explicit.
 
-1. The search returns no strong match, **and**
-2. The input looks like evidence (see Input Classification below), **and**
-3. The user triggers it (paste + Enter, or an explicit "Extract" action)
+If extraction fails, the user should get a clear next step:
 
-Extraction is never implicit-on-keystroke. Search is fast and local; extraction is slow and external.
+- use an existing result if one was found
+- continue with manual source creation
+- revise the pasted input
 
-## Input Classification
+The system should not make extraction feel magical or guaranteed.
 
-Before calling the extractor chain, the backend classifies the raw input:
+## Relationship To Current Design
 
-| Pattern                                 | Classification                        |
-| --------------------------------------- | ------------------------------------- |
-| 10 or 13 digits (with optional hyphens) | `isbn`                                |
-| Starts with `10.` followed by a slash   | `doi`                                 |
-| Valid URL (`http://` or `https://`)     | `url`                                 |
-| Anything else                           | `text` (search only, not extractable) |
+This design is a planned extension of the citation flow described in [CitationsDesign.md](CitationsDesign.md).
 
-Classification is deterministic regex, not heuristic. Ambiguous inputs default to `text` and are handled by search alone. The endpoint returns `not_found` with `input_type: "text"` for non-evidence inputs.
-
-## Extractor Chain
-
-Extractors are plain Python classes with a two-method interface:
-
-```python
-class Extractor(ABC):
-    @abstractmethod
-    def can_handle(self, input_type: str, raw_input: str) -> bool: ...
-
-    @abstractmethod
-    def extract(self, raw_input: str) -> CitationSourceDraft | None: ...
-```
-
-The chain runs in order. The first extractor that returns a draft wins.
-
-### Initial Extractors
-
-| Extractor             | Input type | External source  | Notes                                                                                                |
-| --------------------- | ---------- | ---------------- | ---------------------------------------------------------------------------------------------------- |
-| `ISBNExtractor`       | `isbn`     | Open Library API | Falls back to Google Books if Open Library misses                                                    |
-| `DOIExtractor`        | `doi`      | CrossRef API     | Academic publications                                                                                |
-| `IPDBExtractor`       | `url`      | Internal data    | Recognizes IPDB URLs, cross-references against ingested IPDB data (no live fetch — IPDB blocks bots) |
-| `GenericURLExtractor` | `url`      | Remote HTML      | Extracts `<title>`, Open Graph, JSON-LD as a sparse fallback                                         |
-
-Site-specific URL extractors (like IPDB) are ordered before the generic URL extractor so they get first crack at URLs they recognize.
-
-### Adding a New Extractor
-
-Add a class, register it in the chain. No plugin system, no dynamic loading, no configuration files. When the extractor count outgrows a flat list, introduce a registry. Not before.
-
-## Failure Modes
-
-Every failure should leave the user with a clear next step:
-
-| Failure                                        | User sees                                                                        |
-| ---------------------------------------------- | -------------------------------------------------------------------------------- |
-| ISBN not found in any source                   | "No metadata found for this ISBN. Create source manually?"                       |
-| DOI extraction timeout                         | "Couldn't reach CrossRef. Try again or create manually?"                         |
-| URL fetch fails (404, paywall, timeout)        | "Couldn't fetch this URL. Create source manually?"                               |
-| Site-specific extractor hits unexpected layout | Falls through to generic URL extractor; if that also fails, same manual fallback |
-
-The endpoint always returns a structured response, never a 500. The `not_found` status with a `reason` code lets the frontend render appropriate messaging.
-
-## Rate Limiting and Caching
-
-- External API calls are rate-limited per-source (e.g., Open Library asks for max 1 req/sec).
-- Successful extractions are cached by input value (e.g., cache ISBN lookups for 24 hours). Cache lives in Django's cache framework, not in the database.
-- Failed lookups are cached briefly (5 minutes) to avoid hammering external APIs on retry.
-
-## Draft Lifecycle
-
-A draft is a transient JSON object. It is never persisted. The flow:
-
-1. Backend returns draft in the extract response.
-2. Frontend shows it in a confirmation/edit UI.
-3. User confirms (possibly after editing fields).
-4. Frontend POSTs to the existing `POST /api/citation-sources/` endpoint.
-5. Normal CitationSource creation, with full validation.
-
-If the user abandons the confirmation step, nothing was created. No cleanup needed.
-
-## Deduplication
-
-Before returning an extracted draft, the extractor checks whether the extracted metadata matches an existing source:
-
-- ISBN exact match against `CitationSource.isbn`
-- URL match against `CitationSourceLink.url`
-
-If a match is found, the response includes `existing_candidates` so the frontend can offer "Use existing source?" instead of creating a duplicate.
-
-## Scope and Non-Goals
-
-**In scope:**
-
-- The `citation/extraction/` module
-- The extract endpoint and extractor chain
-- ISBN, DOI, IPDB URL, and generic URL extractors
-- Input classification
-- Draft response shape
-- Deduplication check
-
-**Not in scope:**
-
-- Changes to the existing search endpoint
-- Changes to the CitationSource model
-- Frontend implementation (separate plan)
-- Bulk/batch extraction
-- Background extraction or queuing
+Today’s identifier parsing and guided child-source behavior are a stopgap in that direction, not the completed architecture.

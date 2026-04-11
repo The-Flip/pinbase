@@ -18,7 +18,7 @@ export type ParentContext = {
 	/**
 	 * Which URL/ID parsing convention applies to this source's children.
 	 * Stopgap — will be subsumed by the extractor registry.
-	 * See docs/plans/citations/CitationAutogenerationDesign.md.
+	 * See docs/plans/citations/CitationsDesign.md.
 	 */
 	identifier_key: string | null;
 };
@@ -78,7 +78,7 @@ export function suppressChildResults(results: CitationSourceResult[]): CitationS
 // Identifier schemes — one entry per identifier_key value.
 //
 // Stopgap registry: will be subsumed by the server-side extractor layer.
-// See docs/plans/citations/CitationAutogenerationDesign.md.
+// See docs/plans/citations/CitationsDesign.md.
 // To add a new scheme, add one entry here — no other switch statements.
 // ---------------------------------------------------------------------------
 
