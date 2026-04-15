@@ -24,6 +24,7 @@
 	import ModelRelationshipsList from '$lib/components/ModelRelationshipsList.svelte';
 	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
 	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
+	import RelationshipsEditor from '$lib/components/editors/RelationshipsEditor.svelte';
 	import SpecificationsEditor from '$lib/components/editors/SpecificationsEditor.svelte';
 	import {
 		deduplicateCitations,
@@ -87,8 +88,8 @@
 
 	// --- Section editing state ---
 
-	// TODO: add 'relationships' | 'media' as editors are built
-	type EditingSection = 'overview' | 'specifications' | 'people';
+	// TODO: add 'media' as its editor is built
+	type EditingSection = 'overview' | 'specifications' | 'people' | 'relationships';
 	let editing = $state<EditingSection | null>(null);
 	let editError = $state('');
 
@@ -97,6 +98,10 @@
 	function closeEditor() {
 		editing = null;
 		editError = '';
+	}
+
+	function openEditor(section: EditingSection) {
+		editing = section;
 	}
 
 	async function saveCurrentSection(meta: {
@@ -174,7 +179,14 @@
 	{#if !isEdit}
 		<PageActionBar
 			detailHref={isDetail ? undefined : resolve(`/models/${slug}`)}
-			editHref={auth.isAuthenticated ? resolve(`/models/${slug}/edit`) : undefined}
+			editSections={auth.isAuthenticated
+				? [
+						{ label: 'Overview', onclick: () => openEditor('overview') },
+						{ label: 'Specifications', onclick: () => openEditor('specifications') },
+						{ label: 'People', onclick: () => openEditor('people') },
+						{ label: 'Relationships', onclick: () => openEditor('relationships') }
+					]
+				: undefined}
 			historyHref={resolve(`/models/${slug}/edit-history`)}
 			sourcesHref={resolve(`/models/${slug}/sources`)}
 		/>
@@ -242,7 +254,10 @@
 				<!-- Relationships — mobile only -->
 				{#if hasRelationships}
 					<div class="mobile-only">
-						<AccordionSection heading="Relationships">
+						<AccordionSection
+							heading="Relationships"
+							onEdit={auth.isAuthenticated ? () => (editing = 'relationships') : undefined}
+						>
 							<ModelRelationshipsList {model} />
 						</AccordionSection>
 					</div>
@@ -482,8 +497,25 @@
 	/>
 </SectionEditorModal>
 
-<!-- TODO: Add SectionEditorModals for Relationships, Media
-     as their editor components are built -->
+<SectionEditorModal
+	heading="Relationships"
+	open={editing === 'relationships'}
+	error={editError}
+	showMixedEditWarning
+	onclose={closeEditor}
+	onsave={saveCurrentSection}
+>
+	<RelationshipsEditor
+		bind:this={activeEditorRef}
+		initialModel={model}
+		slug={model.slug}
+		onsaved={closeEditor}
+		onerror={(msg) => (editError = msg)}
+	/>
+</SectionEditorModal>
+
+<!-- TODO: Add SectionEditorModal for Media
+     as its editor component is built -->
 
 <style>
 	.muted {
