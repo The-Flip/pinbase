@@ -5,7 +5,12 @@
  * that the Svelte page calls with current values.
  */
 
-import { diffScalarFields, slugSetChanged, stringSetChanged } from '$lib/edit-helpers';
+import {
+	creditsChanged,
+	diffScalarFields,
+	slugSetChanged,
+	stringSetChanged
+} from '$lib/edit-helpers';
 
 // ---------------------------------------------------------------------------
 // FK field config — drives both modelToFormFields and template loops
@@ -176,18 +181,6 @@ function gameplayFeaturesChanged(
 	const curr = current
 		.filter((gf) => gf.slug !== '')
 		.map((gf) => `${gf.slug}:${gf.count}`)
-		.sort();
-	return JSON.stringify(orig) !== JSON.stringify(curr);
-}
-
-function creditsChanged(
-	current: CreditRow[],
-	original: { person: { slug: string }; role: string }[]
-): boolean {
-	const orig = original.map((c) => `${c.person.slug}:${c.role}`).sort();
-	const curr = current
-		.filter((c) => c.person_slug !== '' && c.role !== '')
-		.map((c) => `${c.person_slug}:${c.role}`)
 		.sort();
 	return JSON.stringify(orig) !== JSON.stringify(curr);
 }

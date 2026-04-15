@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import client from '$lib/api/client';
 	import SearchableSelect from '$lib/components/SearchableSelect.svelte';
 	import NumberField from '$lib/components/form/NumberField.svelte';
 	import { fetchFieldConstraints, fc, type FieldConstraints } from '$lib/field-constraints';
 	import { diffScalarFields } from '$lib/edit-helpers';
-	import { saveModelFields, type SaveResult } from './save-model-fields';
+	import {
+		EMPTY_EDIT_OPTIONS,
+		fetchModelEditOptions,
+		type ModelEditOptions
+	} from './model-edit-options';
+	import { saveModelClaims, type SaveResult, type SaveMeta } from './save-model-claims';
 
 	const TECHNOLOGY_FIELDS = [
 		{
@@ -85,8 +89,7 @@
 	const original = untrack(() => extractFields(initialModel));
 	let fields = $state<SpecFormFields>({ ...original });
 
-	type EditOptions = Record<string, { slug: string; label: string }[]>;
-	let editOptions = $state<EditOptions>({});
+	let editOptions = $state<ModelEditOptions>(EMPTY_EDIT_OPTIONS);
 	let constraints = $state<FieldConstraints>({});
 
 	$effect(() => {
@@ -96,12 +99,12 @@
 	});
 
 	$effect(() => {
-		client.GET('/api/models/edit-options/').then(({ data: opts }) => {
-			if (opts) editOptions = opts as EditOptions;
+		fetchModelEditOptions().then((opts) => {
+			editOptions = opts;
 		});
 	});
 
-	export async function save(): Promise<void> {
+	export async function save(meta?: SaveMeta): Promise<void> {
 		const changed = diffScalarFields(fields, original);
 
 		if (Object.keys(changed).length === 0) {
@@ -109,7 +112,10 @@
 			return;
 		}
 
-		const result: SaveResult = await saveModelFields(slug, changed);
+		const result: SaveResult = await saveModelClaims(slug, {
+			fields: changed,
+			...meta
+		});
 
 		if (result.ok) {
 			onsaved();

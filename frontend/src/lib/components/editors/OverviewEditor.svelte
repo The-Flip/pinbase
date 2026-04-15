@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import MarkdownTextArea from '$lib/components/form/MarkdownTextArea.svelte';
-	import { saveModelFields, type SaveResult } from './save-model-fields';
+	import { saveModelClaims, type SaveResult, type SaveMeta } from './save-model-claims';
 
 	let {
 		initialDescription = '',
@@ -19,13 +19,16 @@
 	const original = untrack(() => initialDescription);
 	let description = $state(original);
 
-	export async function save(): Promise<void> {
+	export async function save(meta?: SaveMeta): Promise<void> {
 		if (description === original) {
 			onsaved();
 			return;
 		}
 
-		const result: SaveResult = await saveModelFields(slug, { description });
+		const result: SaveResult = await saveModelClaims(slug, {
+			fields: { description },
+			...meta
+		});
 
 		if (result.ok) {
 			onsaved();

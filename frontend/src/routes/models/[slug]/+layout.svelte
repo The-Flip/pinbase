@@ -23,6 +23,7 @@
 	import ReferencesSection from '$lib/components/ReferencesSection.svelte';
 	import ModelRelationshipsList from '$lib/components/ModelRelationshipsList.svelte';
 	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
+	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
 	import SpecificationsEditor from '$lib/components/editors/SpecificationsEditor.svelte';
 	import {
 		deduplicateCitations,
@@ -30,6 +31,8 @@
 		findRefEntry,
 		scrollToAndHighlight
 	} from '$lib/components/citation-refs';
+	import { type EditCitationSelection, buildEditCitationRequest } from '$lib/edit-citation';
+	import type { SaveMeta } from '$lib/components/editors/save-model-claims';
 
 	let { data, children } = $props();
 	let model = $derived(data.model);
@@ -84,21 +87,28 @@
 
 	// --- Section editing state ---
 
-	// TODO: add 'people' | 'relationships' | 'media' as editors are built
-	type EditingSection = 'overview' | 'specifications';
+	// TODO: add 'relationships' | 'media' as editors are built
+	type EditingSection = 'overview' | 'specifications' | 'people';
 	let editing = $state<EditingSection | null>(null);
 	let editError = $state('');
 
-	let activeEditorRef: { save(): Promise<void> } | undefined = $state();
+	let activeEditorRef: { save(meta?: SaveMeta): Promise<void> } | undefined = $state();
 
 	function closeEditor() {
 		editing = null;
 		editError = '';
 	}
 
-	async function saveCurrentSection() {
+	async function saveCurrentSection(meta: {
+		note: string;
+		citation: EditCitationSelection | null;
+	}) {
 		editError = '';
-		await activeEditorRef?.save();
+		const saveMeta: SaveMeta = {
+			note: meta.note || undefined,
+			citation: buildEditCitationRequest(meta.citation)
+		};
+		await activeEditorRef?.save(saveMeta);
 	}
 
 	// Only model-owned citations feed the References accordion.
@@ -222,7 +232,10 @@
 				</div>
 
 				<!-- People -->
-				<AccordionSection heading="People">
+				<AccordionSection
+					heading="People"
+					onEdit={auth.isAuthenticated ? () => (editing = 'people') : undefined}
+				>
 					<CreditsList credits={model.credits} showHeading={false} />
 				</AccordionSection>
 
@@ -422,6 +435,7 @@
 	heading="Overview"
 	open={editing === 'overview'}
 	error={editError}
+	showCitation={false}
 	onclose={closeEditor}
 	onsave={saveCurrentSection}
 >
@@ -438,6 +452,7 @@
 	heading="Specifications"
 	open={editing === 'specifications'}
 	error={editError}
+	showMixedEditWarning
 	onclose={closeEditor}
 	onsave={saveCurrentSection}
 >
@@ -450,7 +465,24 @@
 	/>
 </SectionEditorModal>
 
-<!-- TODO: Add SectionEditorModals for People, Relationships, Media
+<SectionEditorModal
+	heading="People"
+	open={editing === 'people'}
+	error={editError}
+	showMixedEditWarning
+	onclose={closeEditor}
+	onsave={saveCurrentSection}
+>
+	<PeopleEditor
+		bind:this={activeEditorRef}
+		initialCredits={model.credits}
+		slug={model.slug}
+		onsaved={closeEditor}
+		onerror={(msg) => (editError = msg)}
+	/>
+</SectionEditorModal>
+
+<!-- TODO: Add SectionEditorModals for Relationships, Media
      as their editor components are built -->
 
 <style>

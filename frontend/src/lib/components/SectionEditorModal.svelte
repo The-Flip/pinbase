@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import type { Snippet } from 'svelte';
+	import { type EditCitationSelection } from '$lib/edit-citation';
+	import EditCitationField from '$lib/components/form/EditCitationField.svelte';
+	import TextField from '$lib/components/form/TextField.svelte';
+
+	type ModalSaveMeta = { note: string; citation: EditCitationSelection | null };
 
 	let {
 		heading,
 		open,
 		error = '',
+		showCitation = true,
+		showMixedEditWarning = false,
 		onclose,
 		onsave,
 		children
@@ -13,10 +20,23 @@
 		heading: string;
 		open: boolean;
 		error?: string;
+		showCitation?: boolean;
+		showMixedEditWarning?: boolean;
 		onclose: () => void;
-		onsave: () => void;
+		onsave: (meta: ModalSaveMeta) => void;
 		children: Snippet;
 	} = $props();
+
+	let note = $state('');
+	let citation = $state<EditCitationSelection | null>(null);
+
+	// Reset note/citation state when the modal opens
+	$effect(() => {
+		if (open) {
+			note = '';
+			citation = null;
+		}
+	});
 
 	const FOCUSABLE_SELECTOR = [
 		'a[href]',
@@ -134,11 +154,27 @@
 					<p class="save-error">{error}</p>
 				{/if}
 				{@render children()}
+
+				<details class="meta-section">
+					<summary>{showCitation ? 'Notes & Citations' : 'Notes'}</summary>
+					<div class="meta-fields">
+						<TextField
+							label="Edit note"
+							bind:value={note}
+							placeholder="Why are you making this change?"
+						/>
+						{#if showCitation}
+							<EditCitationField bind:citation {showMixedEditWarning} />
+						{/if}
+					</div>
+				</details>
 			</div>
 
 			<footer class="modal-footer">
 				<button type="button" class="btn-cancel" onclick={close}>Cancel</button>
-				<button type="button" class="btn-save" onclick={onsave}>Save</button>
+				<button type="button" class="btn-save" onclick={() => onsave({ note, citation })}
+					>Save</button
+				>
 			</footer>
 		</div>
 	</div>
@@ -259,6 +295,28 @@
 		color: var(--color-error, #d32f2f);
 		font-size: var(--font-size-1);
 		margin: 0 0 var(--size-3);
+	}
+
+	.meta-section {
+		margin-top: var(--size-4);
+		border-top: 1px solid var(--color-border-soft);
+		padding-top: var(--size-3);
+		background: inherit;
+	}
+
+	.meta-section > summary {
+		cursor: pointer;
+		font-size: var(--font-size-0);
+		color: var(--color-text-muted);
+		user-select: none;
+		background: inherit;
+	}
+
+	.meta-fields {
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-3);
+		margin-top: var(--size-3);
 	}
 
 	/* Mobile: full-screen modal */
