@@ -23,6 +23,7 @@
 	import ReferencesSection from '$lib/components/ReferencesSection.svelte';
 	import ModelRelationshipsList from '$lib/components/ModelRelationshipsList.svelte';
 	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
+	import SpecificationsEditor from '$lib/components/editors/SpecificationsEditor.svelte';
 	import {
 		deduplicateCitations,
 		findFirstInlineMarker,
@@ -83,12 +84,12 @@
 
 	// --- Section editing state ---
 
-	// TODO: add 'specifications' | 'people' | 'relationships' | 'media' as editors are built
-	type EditingSection = 'overview';
+	// TODO: add 'people' | 'relationships' | 'media' as editors are built
+	type EditingSection = 'overview' | 'specifications';
 	let editing = $state<EditingSection | null>(null);
 	let editError = $state('');
 
-	let overviewEditorRef: OverviewEditor | undefined = $state();
+	let activeEditorRef: { save(): Promise<void> } | undefined = $state();
 
 	function closeEditor() {
 		editing = null;
@@ -97,9 +98,7 @@
 
 	async function saveCurrentSection() {
 		editError = '';
-		if (editing === 'overview') {
-			await overviewEditorRef?.save();
-		}
+		await activeEditorRef?.save();
 	}
 
 	// Only model-owned citations feed the References accordion.
@@ -204,7 +203,10 @@
 
 				<!-- Specifications — mobile only -->
 				<div class="mobile-only">
-					<AccordionSection heading="Specifications">
+					<AccordionSection
+						heading="Specifications"
+						onEdit={auth.isAuthenticated ? () => (editing = 'specifications') : undefined}
+					>
 						<ModelSpecsSidebar {model} />
 						{#if model.ipdb_rating || model.pinside_rating}
 							<div class="mobile-ratings">
@@ -266,7 +268,10 @@
 
 		{#snippet sidebar()}
 			<div class:desktop-only={isDetail}>
-				<SidebarSection heading="Specifications">
+				<SidebarSection
+					heading="Specifications"
+					onEdit={auth.isAuthenticated ? () => (editing = 'specifications') : undefined}
+				>
 					<ModelSpecsSidebar {model} />
 				</SidebarSection>
 
@@ -421,7 +426,7 @@
 	onsave={saveCurrentSection}
 >
 	<OverviewEditor
-		bind:this={overviewEditorRef}
+		bind:this={activeEditorRef}
 		initialDescription={model.description?.text ?? ''}
 		slug={model.slug}
 		onsaved={closeEditor}
@@ -429,7 +434,23 @@
 	/>
 </SectionEditorModal>
 
-<!-- TODO: Add SectionEditorModals for Specifications, People, Relationships, Media
+<SectionEditorModal
+	heading="Specifications"
+	open={editing === 'specifications'}
+	error={editError}
+	onclose={closeEditor}
+	onsave={saveCurrentSection}
+>
+	<SpecificationsEditor
+		bind:this={activeEditorRef}
+		initialModel={model}
+		slug={model.slug}
+		onsaved={closeEditor}
+		onerror={(msg) => (editError = msg)}
+	/>
+</SectionEditorModal>
+
+<!-- TODO: Add SectionEditorModals for People, Relationships, Media
      as their editor components are built -->
 
 <style>

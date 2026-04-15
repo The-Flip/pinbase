@@ -6,18 +6,20 @@
 		selected = $bindable(null),
 		multi = false,
 		allowZeroCount = false,
+		showCounts = true,
 		placeholder = 'Search...',
 		label = ''
 	}: {
-		options: { slug: string; label: string; count: number }[];
+		options: { slug: string; label: string; count?: number }[];
 		selected?: string | string[] | null;
 		multi?: boolean;
 		allowZeroCount?: boolean;
+		showCounts?: boolean;
 		placeholder?: string;
 		label?: string;
 	} = $props();
 
-	function isDisabled(opt: { count: number }): boolean {
+	function isDisabled(opt: { count?: number }): boolean {
 		return !allowZeroCount && opt.count === 0;
 	}
 
@@ -35,9 +37,11 @@
 		}
 		// Sort: non-zero counts first (desc), then zero-count; within each group alphabetical
 		return opts.slice().sort((a, b) => {
-			if (a.count === 0 && b.count !== 0) return 1;
-			if (a.count !== 0 && b.count === 0) return -1;
-			if (a.count !== b.count) return b.count - a.count;
+			const ac = a.count ?? 0;
+			const bc = b.count ?? 0;
+			if (ac === 0 && bc !== 0) return 1;
+			if (ac !== 0 && bc === 0) return -1;
+			if (ac !== bc) return bc - ac;
 			return a.label.localeCompare(b.label);
 		});
 	});
@@ -113,10 +117,13 @@
 				}
 				break;
 			case 'Escape':
-				e.preventDefault();
-				open = false;
-				query = '';
-				inputEl?.blur();
+				if (open) {
+					e.preventDefault();
+					e.stopPropagation();
+					open = false;
+					query = '';
+					inputEl?.blur();
+				}
 				break;
 		}
 	}
@@ -230,7 +237,9 @@
 						<span class="check">{isSelected(opt.slug) ? '✓' : ''}</span>
 					{/if}
 					<span class="option-label">{opt.label}</span>
-					<span class="option-count">({opt.count})</span>
+					{#if showCounts && opt.count != null}
+						<span class="option-count">({opt.count})</span>
+					{/if}
 				</li>
 			{:else}
 				<li class="no-results">No matches</li>
