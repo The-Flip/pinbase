@@ -354,7 +354,7 @@ describe('buildModelPatchBody — credits', () => {
 		];
 		const state = stateFromModel(baseModel, { credits });
 		const body = buildModelPatchBody(state, baseModel)!;
-		expect(body.credits!.every((c) => c.person_slug !== '' && c.role !== '')).toBe(true);
+		expect(body.credits!.every((c) => c.person_slug && c.role)).toBe(true);
 		expect(body.credits).toHaveLength(2);
 	});
 

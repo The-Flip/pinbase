@@ -57,8 +57,24 @@
 	}
 
 	export async function save(meta?: SaveMeta): Promise<void> {
+		const incomplete = editCredits.find(
+			(c) => (c.person_slug && !c.role) || (!c.person_slug && c.role)
+		);
+		if (incomplete) {
+			const personLabel = editOptions.people.find((p) => p.slug === incomplete.person_slug)?.label;
+			const roleLabel = editOptions.credit_roles.find((r) => r.slug === incomplete.role)?.label;
+			if (personLabel) {
+				onerror(`${personLabel} is missing a role.`);
+			} else if (roleLabel) {
+				onerror(`${roleLabel} is missing a person.`);
+			} else {
+				onerror('Each credit needs both a person and a role.');
+			}
+			return;
+		}
+
 		const cleanCredits = editCredits
-			.filter((c) => c.person_slug !== '' && c.role !== '')
+			.filter((c) => c.person_slug && c.role)
 			.map(({ person_slug, role }) => ({ person_slug, role }));
 
 		if (!creditsChanged(cleanCredits, originalCredits)) {
@@ -108,7 +124,7 @@
 	<button
 		type="button"
 		class="add-btn"
-		disabled={editCredits.some((c) => c.person_slug === '' || c.role === '')}
+		disabled={editCredits.some((c) => !c.person_slug || !c.role)}
 		onclick={addCredit}
 	>
 		Add credit

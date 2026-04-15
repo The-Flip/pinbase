@@ -227,7 +227,7 @@ export function buildModelPatchBody(
 			: null,
 		credits: hasCredits
 			? state.credits
-					.filter((c) => c.person_slug !== '' && c.role !== '')
+					.filter((c) => c.person_slug && c.role)
 					.map(({ person_slug, role }) => ({ person_slug, role }))
 			: null,
 		abbreviations: hasAbbrevs ? state.abbreviations : null

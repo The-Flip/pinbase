@@ -356,7 +356,7 @@
 		<button
 			type="button"
 			class="add-btn"
-			disabled={editCredits.some((c) => c.person_slug === '' || c.role === '')}
+			disabled={editCredits.some((c) => !c.person_slug || !c.role)}
 			onclick={addCredit}
 		>
 			Add credit

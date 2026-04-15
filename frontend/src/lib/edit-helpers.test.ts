@@ -130,6 +130,16 @@ describe('creditsChanged', () => {
 		expect(creditsChanged(current, original)).toBe(false);
 	});
 
+	it('filters out rows with null person_slug or role', () => {
+		// SearchableSelect sets value to null on deselect, not ''
+		const current = [
+			{ person_slug: 'pat-lawlor', role: 'game-design' },
+			{ person_slug: 'john-youssi', role: null as unknown as string }
+		];
+		const original = [{ person: { slug: 'pat-lawlor' }, role: 'game-design' }];
+		expect(creditsChanged(current, original)).toBe(false);
+	});
+
 	it('returns false for empty arrays on both sides', () => {
 		expect(creditsChanged([], [])).toBe(false);
 	});

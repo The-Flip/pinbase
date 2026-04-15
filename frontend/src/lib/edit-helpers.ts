@@ -55,7 +55,7 @@ export function creditsChanged(
 ): boolean {
 	const orig = original.map((c) => `${c.person.slug}:${c.role}`).sort();
 	const curr = current
-		.filter((c) => c.person_slug !== '' && c.role !== '')
+		.filter((c) => c.person_slug && c.role)
 		.map((c) => `${c.person_slug}:${c.role}`)
 		.sort();
 	return JSON.stringify(orig) !== JSON.stringify(curr);
