@@ -35,6 +35,10 @@
 
 	let editorRef = $state<SectionEditorHandle>();
 	let editError = $state('');
+	// Bump on each successful save so the editor block remounts with fresh
+	// initialModel — the editor captures `original` once at mount, so without
+	// a remount the dirty comparison stays frozen against pre-save values.
+	let saveCounter = $state(0);
 
 	async function handleSave(meta: SaveMeta) {
 		editError = '';
@@ -42,10 +46,14 @@
 	}
 
 	function handleCancel() {
+		if (editorRef?.isDirty() && !confirm('Discard unsaved changes?')) {
+			return;
+		}
 		goto(resolve(`/models/${slug}`));
 	}
 
 	async function handleSaved() {
+		editLayout.setDirty(false);
 		await invalidateAll();
 		// BasicsEditor can change the slug — redirect if needed
 		const updatedSlug = data.model.slug;
@@ -54,6 +62,7 @@
 				replaceState: true
 			});
 		}
+		saveCounter++;
 	}
 
 	function handleDirtyChange(dirty: boolean) {
@@ -63,78 +72,80 @@
 
 {#if section}
 	{#if section.usesSectionEditorForm}
-		<SectionEditorForm
-			error={editError}
-			showCitation={section.showCitation}
-			showMixedEditWarning={section.showMixedEditWarning}
-			oncancel={handleCancel}
-			onsave={handleSave}
-		>
-			{#if section.key === 'basics'}
-				<BasicsEditor
-					bind:this={editorRef}
-					initialModel={model}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'overview'}
-				<OverviewEditor
-					bind:this={editorRef}
-					initialDescription={model.description?.text ?? ''}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'specifications'}
-				<SpecificationsEditor
-					bind:this={editorRef}
-					initialModel={model}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'features'}
-				<FeaturesEditor
-					bind:this={editorRef}
-					initialModel={model}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'people'}
-				<PeopleEditor
-					bind:this={editorRef}
-					initialCredits={model.credits}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'relationships'}
-				<RelationshipsEditor
-					bind:this={editorRef}
-					initialModel={model}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'external-data'}
-				<ExternalDataEditor
-					bind:this={editorRef}
-					initialModel={model}
-					slug={model.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{/if}
-		</SectionEditorForm>
+		{#key saveCounter}
+			<SectionEditorForm
+				error={editError}
+				showCitation={section.showCitation}
+				showMixedEditWarning={section.showMixedEditWarning}
+				oncancel={handleCancel}
+				onsave={handleSave}
+			>
+				{#if section.key === 'basics'}
+					<BasicsEditor
+						bind:this={editorRef}
+						initialModel={model}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'overview'}
+					<OverviewEditor
+						bind:this={editorRef}
+						initialDescription={model.description?.text ?? ''}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'specifications'}
+					<SpecificationsEditor
+						bind:this={editorRef}
+						initialModel={model}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'features'}
+					<FeaturesEditor
+						bind:this={editorRef}
+						initialModel={model}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'people'}
+					<PeopleEditor
+						bind:this={editorRef}
+						initialCredits={model.credits}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'relationships'}
+					<RelationshipsEditor
+						bind:this={editorRef}
+						initialModel={model}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{:else if section.key === 'external-data'}
+					<ExternalDataEditor
+						bind:this={editorRef}
+						initialModel={model}
+						slug={model.slug}
+						onsaved={handleSaved}
+						onerror={(msg) => (editError = msg)}
+						ondirtychange={handleDirtyChange}
+					/>
+				{/if}
+			</SectionEditorForm>
+		{/key}
 	{:else if section.key === 'media'}
 		<MediaEditor
 			entityType="model"

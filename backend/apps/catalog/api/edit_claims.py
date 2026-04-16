@@ -81,7 +81,9 @@ class ValidationErrors:
     form_errors: list[str] = field(default_factory=list)
 
     def add_field(self, field_name: str, message: str) -> None:
-        self.field_errors[field_name] = message
+        # First writer wins: later checks (e.g. unknown-person) must not
+        # silently clobber an earlier, more specific error on the same field.
+        self.field_errors.setdefault(field_name, message)
 
     def add_form(self, message: str) -> None:
         self.form_errors.append(message)

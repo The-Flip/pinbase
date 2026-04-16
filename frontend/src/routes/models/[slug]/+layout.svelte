@@ -123,10 +123,20 @@
 
 	let activeEditorRef: SectionEditorHandle | undefined = $state();
 
-	function closeEditor() {
+	function clearEditorState() {
 		editing = null;
 		editError = '';
 		editorDirty = false;
+	}
+
+	function closeEditor() {
+		// Guard Escape/backdrop dismissal from silently discarding edits.
+		// The switcher is disabled while dirty; the explicit Cancel button
+		// inside the form goes through SectionEditorForm and skips this path.
+		if ((editorDirty || activeEditorRef?.isDirty()) && !confirm('Discard unsaved changes?')) {
+			return;
+		}
+		clearEditorState();
 	}
 
 	function openEditor(section: ModelEditSectionKey) {
@@ -499,7 +509,7 @@
 				bind:this={activeEditorRef}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -508,7 +518,7 @@
 				bind:this={activeEditorRef}
 				initialDescription={model.description?.text ?? ''}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -517,7 +527,7 @@
 				bind:this={activeEditorRef}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -526,7 +536,7 @@
 				bind:this={activeEditorRef}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -535,7 +545,7 @@
 				bind:this={activeEditorRef}
 				initialCredits={model.credits}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -544,7 +554,7 @@
 				bind:this={activeEditorRef}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>
@@ -553,7 +563,7 @@
 				bind:this={activeEditorRef}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={closeEditor}
+				onsaved={clearEditorState}
 				onerror={(msg) => (editError = msg)}
 				ondirtychange={handleEditorDirtyChange}
 			/>

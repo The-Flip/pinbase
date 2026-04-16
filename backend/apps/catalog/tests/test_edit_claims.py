@@ -241,6 +241,17 @@ class TestNormalizeCreditInputs:
             "credits.pat-lawlor:design": "Unknown role: design.",
         }
 
+    def test_duplicate_error_not_clobbered_by_unknown_person(self):
+        with pytest.raises(StructuredValidationError) as exc_info:
+            normalize_credit_inputs(
+                [("pat-lawlor", "design"), ("pat-lawlor", "design")],
+                available_people={"john-youssi"},
+                available_roles={"design"},
+            )
+        assert exc_info.value.field_errors == {
+            "credits.pat-lawlor:design": "Duplicate credit.",
+        }
+
     def test_allows_same_person_with_different_roles(self):
         desired = normalize_credit_inputs(
             [("pat-lawlor", "design"), ("pat-lawlor", "software")],

@@ -21,7 +21,7 @@
 </script>
 
 <ActionMenu label={label ?? currentLabel} {disabled}>
-	{#each items as item (item.label)}
+	{#each items as item (item.key)}
 		<MenuItem
 			href={item.href}
 			onclick={item.onclick}

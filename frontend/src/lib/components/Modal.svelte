@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import type { Snippet } from 'svelte';
+	import { acquireScrollLock } from './scroll-lock';
 
 	let {
 		title,
@@ -44,9 +45,9 @@
 		);
 	}
 
-	// Current contract: this modal assumes only one active dialog at a time.
-	// If we need stacked/nested modals later, keyboard ownership, scroll locking,
-	// and focus restoration should move to a shared modal manager.
+	// Keyboard ownership and focus restoration still assume one active dialog,
+	// but scroll locking is delegated to a shared reference-counted manager so
+	// concurrent or switching modals can't leak the lock.
 	// Capture the element that had focus when the modal opened, move focus
 	// into the dialog, lock body scroll, and listen for Escape.
 	// Focus is restored in cleanup so it works for every close path,
@@ -56,8 +57,7 @@
 
 		const opener = document.activeElement as HTMLElement | undefined;
 
-		const prev = document.body.style.overflow;
-		document.body.style.overflow = 'hidden';
+		const releaseScrollLock = acquireScrollLock();
 
 		let cancelled = false;
 		void tick().then(() => {
@@ -99,7 +99,7 @@
 
 		return () => {
 			cancelled = true;
-			document.body.style.overflow = prev;
+			releaseScrollLock();
 			document.removeEventListener('keydown', handleKeydown);
 			if (opener?.isConnected) {
 				opener.focus();
