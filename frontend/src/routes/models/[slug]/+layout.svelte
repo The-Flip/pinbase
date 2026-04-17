@@ -1,50 +1,33 @@
 <script lang="ts">
-	import { tick } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { auth } from '$lib/auth.svelte';
 	import MetaTags from '$lib/components/MetaTags.svelte';
-	import AccordionSection from '$lib/components/AccordionSection.svelte';
 	import ExternalLinksSidebarSection from '$lib/components/ExternalLinksSidebarSection.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
 	import HeroHeader from '$lib/components/HeroHeader.svelte';
 	import ModelHierarchy from '$lib/components/ModelHierarchy.svelte';
 	import ModelSpecsSidebar from '$lib/components/ModelSpecsSidebar.svelte';
 	import PageActionBar from '$lib/components/PageActionBar.svelte';
 	import RatingsSidebarSection from '$lib/components/RatingsSidebarSection.svelte';
-	import Modal from '$lib/components/Modal.svelte';
-	import SectionEditorModal from '$lib/components/SectionEditorModal.svelte';
+	import SectionEditorHost from '$lib/components/SectionEditorHost.svelte';
 	import SidebarList from '$lib/components/SidebarList.svelte';
 	import SidebarListItem from '$lib/components/SidebarListItem.svelte';
 	import SidebarSection from '$lib/components/SidebarSection.svelte';
 	import TaxonomyLinkSidebarSection from '$lib/components/TaxonomyLinkSidebarSection.svelte';
 	import TwoColumnLayout from '$lib/components/TwoColumnLayout.svelte';
-	import CreditsList from '$lib/components/CreditsList.svelte';
-	import MediaGrid from '$lib/components/media/MediaGrid.svelte';
 	import { MEDIA_CATEGORIES } from '$lib/api/catalog-meta';
-	import ReferencesSection from '$lib/components/ReferencesSection.svelte';
-	import ModelRelationshipsList from '$lib/components/ModelRelationshipsList.svelte';
 	import { getMenuItemAction, type EditSectionMenuItem } from '$lib/components/edit-section-menu';
 	import { LAYOUT_BREAKPOINT } from '$lib/constants';
+	import { setModelEditActionContext } from '$lib/components/editors/edit-action-context';
 	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
 	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import EditSectionMenu from '$lib/components/EditSectionMenu.svelte';
 	import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
 	import RelatedModelsEditor from '$lib/components/editors/RelatedModelsEditor.svelte';
 	import BasicsEditor from '$lib/components/editors/BasicsEditor.svelte';
 	import ExternalDataEditor from '$lib/components/editors/ExternalDataEditor.svelte';
-	import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
 	import FeaturesEditor from '$lib/components/editors/FeaturesEditor.svelte';
 	import TechnologyEditor from '$lib/components/editors/TechnologyEditor.svelte';
-	import {
-		deduplicateCitations,
-		findFirstInlineMarker,
-		findRefEntry,
-		scrollToAndHighlight
-	} from '$lib/components/citation-refs';
-	import type { SaveMeta } from '$lib/components/editors/save-model-claims';
 
 	let { data, children } = $props();
 	let model = $derived(data.model);
@@ -54,13 +37,15 @@
 		auth.load();
 	});
 
-	let isOnlyModelInTitle = $derived(model.title_models.length <= 1);
 	let isMedia = $derived(
 		page.url.pathname.endsWith('/media') || page.url.pathname.includes('/media/')
 	);
 	let isEdit = $derived(
 		page.url.pathname.endsWith('/edit') || page.url.pathname.includes('/edit/')
 	);
+	// isDetail still drives (a) the "Reader" back-link in PageActionBar,
+	// and (b) whether the sidebar is desktop-only — on sub-routes the sidebar
+	// is shown on mobile too because the main column no longer duplicates it.
 	let isDetail = $derived(
 		!isEdit &&
 			!page.url.pathname.endsWith('/sources') &&
@@ -119,39 +104,6 @@
 	} from '$lib/components/editors/model-edit-sections';
 
 	let editing = $state<ModelEditSectionKey | null>(null);
-	let editError = $state('');
-	let editorDirty = $state(false);
-
-	let activeEditorRef: SectionEditorHandle | undefined = $state();
-
-	function clearEditorState() {
-		editing = null;
-		editError = '';
-		editorDirty = false;
-	}
-
-	function closeEditor() {
-		// Guard Escape/backdrop dismissal from silently discarding edits.
-		// The switcher is disabled while dirty; the explicit Cancel button
-		// inside the form goes through SectionEditorForm and skips this path.
-		if ((editorDirty || activeEditorRef?.isDirty()) && !confirm('Discard unsaved changes?')) {
-			return;
-		}
-		clearEditorState();
-	}
-
-	function openEditor(section: ModelEditSectionKey) {
-		if (editing && section !== editing && (editorDirty || activeEditorRef?.isDirty())) {
-			return;
-		}
-		editing = section;
-		editError = '';
-		editorDirty = false;
-	}
-
-	function handleEditorDirtyChange(dirty: boolean) {
-		editorDirty = dirty;
-	}
 
 	let editSections: EditSectionMenuItem[] = $derived(
 		MODEL_EDIT_SECTIONS.map((section) =>
@@ -164,7 +116,7 @@
 				: {
 						key: section.key,
 						label: section.label,
-						onclick: () => openEditor(section.key)
+						onclick: () => (editing = section.key)
 					}
 		)
 	);
@@ -174,72 +126,10 @@
 		return getMenuItemAction(editSections, sectionKey, (href) => goto(href));
 	}
 
-	async function saveCurrentSection(meta: SaveMeta) {
-		editError = '';
-		await activeEditorRef?.save(meta);
-	}
+	// Expose editAction to the detail page so accordion [edit] links can reach the
+	// layout's modal host (desktop) or nav (mobile) without the page knowing how.
+	setModelEditActionContext(editAction);
 
-	// Only model-owned citations feed the References accordion.
-	// title_description citations stay with their own Markdown block
-	// to avoid index collisions (each block numbers from [1]).
-	let allCitations = $derived(model.description?.citations ?? []);
-	let uniqueCitationCount = $derived(deduplicateCitations(allCitations).length);
-
-	// DOM refs for cross-section citation scroll-to.
-	// descriptionContentEl scopes to the model description block only,
-	// so back-links don't accidentally match title_description markers.
-	let descriptionContentEl: HTMLDivElement | undefined = $state();
-	let refsContentEl: HTMLDivElement | undefined = $state();
-	let refsAccordionOpen = $state(false);
-
-	/** Called from References back-link → scroll to inline marker in model description */
-	function scrollToInlineMarker(index: number) {
-		if (!descriptionContentEl) return;
-		const marker = findFirstInlineMarker(descriptionContentEl, index);
-		if (marker) scrollToAndHighlight(marker);
-	}
-
-	/** Called from CitationTooltip in Overview → scroll to entry in References */
-	async function scrollToRefEntry(index: number) {
-		refsAccordionOpen = true;
-		await tick();
-		if (!refsContentEl) return;
-		const entry = findRefEntry(refsContentEl, index);
-		if (entry) scrollToAndHighlight(entry);
-	}
-
-	// Check if there are any relationships to show
-	let hasRelationships = $derived(
-		model.title ||
-			model.variants.length > 0 ||
-			model.variant_of ||
-			(model.variant_siblings && model.variant_siblings.length > 0) ||
-			model.converted_from ||
-			(model.conversions && model.conversions.length > 0) ||
-			model.remake_of ||
-			(model.remakes && model.remakes.length > 0) ||
-			model.title_models.length > 1
-	);
-	let hasTechnology = $derived(
-		!!model.technology_generation ||
-			!!model.technology_subgeneration ||
-			!!model.display_type ||
-			!!model.display_subtype ||
-			!!model.system
-	);
-	let hasFeatures = $derived(
-		!!model.game_format ||
-			!!model.cabinet ||
-			(model.reward_types?.length ?? 0) > 0 ||
-			model.themes.length > 0 ||
-			!!model.production_quantity ||
-			!!model.player_count ||
-			!!model.flipper_count ||
-			model.gameplay_features.length > 0 ||
-			!!model.franchise ||
-			!!model.series ||
-			model.variant_features.length > 0
-	);
 	// Desktop sidebar shows Franchise/Series as their own sections, so the Features
 	// sidebar should hide when *only* franchise/series would appear.
 	let hasFeaturesExcludingFranchiseSeries = $derived(
@@ -253,9 +143,13 @@
 			model.gameplay_features.length > 0 ||
 			model.variant_features.length > 0
 	);
-	let peopleHeading = $derived(`People (${model.credits.length})`);
-	let mediaHeading = $derived(`Media (${model.uploaded_media.length})`);
-	let hasExternalLinks = $derived(!!(model.ipdb_id || model.opdb_id || model.pinside_id));
+	let hasTechnology = $derived(
+		!!model.technology_generation ||
+			!!model.technology_subgeneration ||
+			!!model.display_type ||
+			!!model.display_subtype ||
+			!!model.system
+	);
 </script>
 
 <MetaTags
@@ -289,134 +183,7 @@
 	{:else}
 		<TwoColumnLayout>
 			{#snippet main()}
-				{#if isDetail}
-					<!-- Overview accordion — description prose -->
-					<AccordionSection heading="Overview" open={true} onEdit={editAction('overview')}>
-						{#if (model.title_description?.html && isOnlyModelInTitle) || model.description?.html}
-							{#if model.title_description?.html && isOnlyModelInTitle}
-								<Markdown
-									html={model.title_description.html}
-									citations={model.title_description.citations}
-								/>
-							{/if}
-							{#if model.description?.html}
-								<div bind:this={descriptionContentEl}>
-									<Markdown
-										html={model.description.html}
-										citations={model.description.citations}
-										showReferences={false}
-										onNavigateToRef={scrollToRefEntry}
-									/>
-								</div>
-							{/if}
-						{:else}
-							<p class="muted">No description yet.</p>
-						{/if}
-					</AccordionSection>
-
-					<!-- Technology — mobile only -->
-					{#if hasTechnology}
-						<div class="mobile-only">
-							<AccordionSection heading="Technology" onEdit={editAction('technology')}>
-								<ModelSpecsSidebar {model} section="technology" />
-							</AccordionSection>
-						</div>
-					{/if}
-
-					<!-- Features — mobile only -->
-					{#if hasFeatures}
-						<div class="mobile-only">
-							<AccordionSection heading="Features" onEdit={editAction('features')}>
-								<ModelSpecsSidebar {model} section="features" />
-								{#if model.ipdb_rating || model.pinside_rating}
-									<div class="mobile-ratings">
-										{#if model.ipdb_rating}
-											<span>IPDB: {model.ipdb_rating.toFixed(1)}</span>
-										{/if}
-										{#if model.pinside_rating}
-											<span>Pinside: {model.pinside_rating.toFixed(1)}</span>
-										{/if}
-									</div>
-								{/if}
-							</AccordionSection>
-						</div>
-					{/if}
-
-					<!-- People -->
-					{#if model.credits.length > 0}
-						<AccordionSection heading={peopleHeading} onEdit={editAction('people')}>
-							<CreditsList credits={model.credits} showHeading={false} />
-						</AccordionSection>
-					{/if}
-
-					<!-- Related Models — mobile only -->
-					{#if hasRelationships}
-						<div class="mobile-only">
-							<AccordionSection heading="Related Models" onEdit={editAction('related-models')}>
-								<ModelRelationshipsList {model} />
-								<ModelHierarchy
-									models={model.title_models}
-									heading="Other Models In Title"
-									excludeSlug={model.variant_of?.slug ?? model.slug}
-									inline
-								/>
-							</AccordionSection>
-						</div>
-					{/if}
-
-					<!-- Media -->
-					{#if model.uploaded_media.length > 0}
-						<AccordionSection heading={mediaHeading} onEdit={editAction('media')}>
-							<MediaGrid
-								media={model.uploaded_media}
-								categories={[...MEDIA_CATEGORIES.model]}
-								canEdit={false}
-							/>
-						</AccordionSection>
-					{/if}
-
-					<!-- External Links — mobile only -->
-					{#if hasExternalLinks}
-						<div class="mobile-only">
-							<AccordionSection heading="External Links" onEdit={editAction('external-data')}>
-								<p class="external-note">See this model on other sites:</p>
-								<div class="external-ids">
-									{#if model.ipdb_id}
-										<a href="https://www.ipdb.org/machine.cgi?id={model.ipdb_id}">
-											Internet Pinball Database
-										</a>
-									{/if}
-									{#if model.opdb_id}
-										<a href="https://opdb.org/machines/{model.opdb_id}">Open Pinball Database</a>
-									{/if}
-									{#if model.pinside_id}
-										<a href="https://pinside.com/pinball/machine/{model.pinside_id}">Pinside</a>
-									{/if}
-								</div>
-							</AccordionSection>
-						</div>
-					{/if}
-
-					<!-- References — only when citations exist -->
-					{#if allCitations.length > 0}
-						<AccordionSection
-							heading="References ({uniqueCitationCount})"
-							bind:open={refsAccordionOpen}
-						>
-							<div bind:this={refsContentEl}>
-								<ReferencesSection
-									citations={allCitations}
-									open={true}
-									showToggle={false}
-									onBackLink={scrollToInlineMarker}
-								/>
-							</div>
-						</AccordionSection>
-					{/if}
-				{:else}
-					<!-- Sub-route content (edit, sources, edit-history, media) -->
-					{@render children()}
-				{/if}
+				{@render children()}
 			{/snippet}
 
 			{#snippet sidebar()}
@@ -583,104 +350,87 @@
 	{/if}
 </article>
 
-<!-- Section editor modals — driven by registry -->
-{#each MODEL_EDIT_SECTIONS.filter((s) => s.usesSectionEditorForm) as sectionDef (sectionDef.key)}
-	<SectionEditorModal
-		heading={sectionDef.label}
-		open={editing === sectionDef.key}
-		error={editError}
-		showCitation={sectionDef.showCitation}
-		showMixedEditWarning={sectionDef.showMixedEditWarning}
-		switcherItems={editSections}
-		currentSectionKey={sectionDef.key}
-		switcherDisabled={editorDirty}
-		onclose={closeEditor}
-		onsave={saveCurrentSection}
-	>
-		{#if sectionDef.key === 'basics'}
+<SectionEditorHost
+	bind:editingKey={editing}
+	sections={MODEL_EDIT_SECTIONS}
+	switcherItems={editSections}
+>
+	{#snippet editor(key, { ref, onsaved, onerror, ondirtychange })}
+		{#if key === 'basics'}
 			<BasicsEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'overview'}
+		{:else if key === 'overview'}
 			<OverviewEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialDescription={model.description?.text ?? ''}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'technology'}
+		{:else if key === 'technology'}
 			<TechnologyEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'features'}
+		{:else if key === 'features'}
 			<FeaturesEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'people'}
+		{:else if key === 'people'}
 			<PeopleEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialCredits={model.credits}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'related-models'}
+		{:else if key === 'related-models'}
 			<RelatedModelsEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
-		{:else if sectionDef.key === 'external-data'}
+		{:else if key === 'external-data'}
 			<ExternalDataEditor
-				bind:this={activeEditorRef}
+				bind:this={ref.current}
 				initialModel={model}
 				slug={model.slug}
-				onsaved={clearEditorState}
-				onerror={(msg) => (editError = msg)}
-				ondirtychange={handleEditorDirtyChange}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
 			/>
 		{/if}
-	</SectionEditorModal>
-{/each}
+	{/snippet}
 
-<!-- Media editor — uses base Modal (no save/cancel, operations are immediate) -->
-<Modal title="Edit Media" open={editing === 'media'} onclose={closeEditor}>
-	{#snippet headerActions()}
-		<div class="modal-editor-switcher">
-			<EditSectionMenu items={editSections} currentKey="media" />
-		</div>
+	{#snippet immediateEditor()}
+		<MediaEditor
+			entityType="model"
+			slug={model.slug}
+			media={model.uploaded_media}
+			categories={[...MEDIA_CATEGORIES.model]}
+		/>
 	{/snippet}
-	{#snippet footer()}
-		<Button onclick={closeEditor}>Done</Button>
-	{/snippet}
-	<MediaEditor
-		entityType="model"
-		slug={model.slug}
-		media={model.uploaded_media}
-		categories={[...MEDIA_CATEGORIES.model]}
-	/>
-</Modal>
+</SectionEditorHost>
 
 <style>
 	.muted {
@@ -688,47 +438,16 @@
 		font-size: var(--font-size-0);
 	}
 
-	/* Mobile-only: visible below 52rem — keep in sync with LAYOUT_BREAKPOINT */
-	.mobile-only {
-		display: block;
-	}
-
-	/* Desktop-only: hide sidebar content on mobile */
+	/* Hide sidebar on mobile for the detail reader — the page's accordions
+	   carry the same data. On sub-routes (sources, edit-history, media) the
+	   sidebar is shown on mobile because the main column doesn't duplicate it. */
 	.desktop-only {
 		display: none;
 	}
 
 	@media (min-width: 52rem) {
-		.mobile-only {
-			display: none;
-		}
-
 		.desktop-only {
 			display: contents;
 		}
-	}
-
-	.external-note {
-		font-size: var(--font-size-0);
-		color: var(--color-text-muted);
-		margin: 0 0 var(--size-2);
-	}
-
-	.external-ids {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--size-3);
-		font-size: var(--font-size-0);
-	}
-
-	/* Mobile ratings supplement */
-	.mobile-ratings {
-		display: flex;
-		gap: var(--size-4);
-		margin-top: var(--size-3);
-		padding-top: var(--size-3);
-		border-top: 1px solid var(--color-border-soft);
-		font-size: var(--font-size-0);
-		color: var(--color-text-muted);
 	}
 </style>

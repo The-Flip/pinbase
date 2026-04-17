@@ -1,0 +1,119 @@
+<script lang="ts" generics="TSectionKey extends string">
+	import type { Snippet } from 'svelte';
+	import Button from '$lib/components/Button.svelte';
+	import EditSectionMenu from '$lib/components/EditSectionMenu.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import SectionEditorModal from '$lib/components/SectionEditorModal.svelte';
+	import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
+	import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
+	import type { SaveMeta } from '$lib/components/editors/save-claims-shared';
+
+	type SectionDef = {
+		key: TSectionKey;
+		label: string;
+		showCitation: boolean;
+		showMixedEditWarning: boolean;
+		usesSectionEditorForm: boolean;
+	};
+
+	type EditorRefBox = { current: SectionEditorHandle | undefined };
+
+	type EditorCallbacks = {
+		ref: EditorRefBox;
+		onsaved: () => void;
+		onerror: (msg: string) => void;
+		ondirtychange: (dirty: boolean) => void;
+	};
+
+	let {
+		editingKey = $bindable(),
+		sections,
+		switcherItems,
+		editor,
+		immediateEditor
+	}: {
+		editingKey: TSectionKey | null;
+		sections: SectionDef[];
+		switcherItems: EditSectionMenuItem[];
+		editor: Snippet<[TSectionKey, EditorCallbacks]>;
+		immediateEditor?: Snippet;
+	} = $props();
+
+	let editError = $state('');
+	let editorDirty = $state(false);
+	let activeEditorRef: SectionEditorHandle | undefined = $state();
+
+	const refBox: EditorRefBox = {
+		get current() {
+			return activeEditorRef;
+		},
+		set current(v) {
+			activeEditorRef = v;
+		}
+	};
+
+	const callbacks: EditorCallbacks = {
+		ref: refBox,
+		onsaved: () => clearEditorState(),
+		onerror: (msg) => (editError = msg),
+		ondirtychange: (dirty) => (editorDirty = dirty)
+	};
+
+	function clearEditorState() {
+		editingKey = null;
+		editError = '';
+		editorDirty = false;
+	}
+
+	// Guard Escape/backdrop dismissal from silently discarding edits.
+	// The switcher is disabled while dirty; the explicit Cancel button
+	// inside the form goes through SectionEditorForm and skips this path.
+	function closeEditor() {
+		if ((editorDirty || activeEditorRef?.isDirty()) && !confirm('Discard unsaved changes?')) {
+			return;
+		}
+		clearEditorState();
+	}
+
+	async function saveCurrentSection(meta: SaveMeta) {
+		editError = '';
+		await activeEditorRef?.save(meta);
+	}
+
+	let currentSection = $derived(sections.find((s) => s.key === editingKey));
+	let currentFormSection = $derived(
+		currentSection?.usesSectionEditorForm ? currentSection : undefined
+	);
+	let immediateActive = $derived(!!currentSection && !currentSection.usesSectionEditorForm);
+</script>
+
+{#if currentFormSection}
+	{#key currentFormSection.key}
+		<SectionEditorModal
+			heading={currentFormSection.label}
+			open={true}
+			error={editError}
+			showCitation={currentFormSection.showCitation}
+			showMixedEditWarning={currentFormSection.showMixedEditWarning}
+			{switcherItems}
+			currentSectionKey={currentFormSection.key}
+			switcherDisabled={editorDirty}
+			onclose={closeEditor}
+			onsave={saveCurrentSection}
+		>
+			{@render editor(currentFormSection.key, callbacks)}
+		</SectionEditorModal>
+	{/key}
+{/if}
+
+{#if immediateEditor && currentSection}
+	<Modal title={`Edit ${currentSection.label}`} open={immediateActive} onclose={closeEditor}>
+		{#snippet headerActions()}
+			<EditSectionMenu items={switcherItems} currentKey={currentSection.key} />
+		{/snippet}
+		{#snippet footer()}
+			<Button onclick={closeEditor}>Done</Button>
+		{/snippet}
+		{@render immediateEditor()}
+	</Modal>
+{/if}
