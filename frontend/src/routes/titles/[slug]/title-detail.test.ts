@@ -79,4 +79,57 @@ describe('title detail SSR route', () => {
 		// backend data reached the server-rendered HTML.
 		expect(body).toContain('Models (1)');
 	});
+
+	it('deduplicates citation count in References heading for single-model titles', () => {
+		const makeCite = (id: number, index: number) => ({
+			id,
+			index,
+			source_name: 'Source',
+			source_type: 'book',
+			author: 'Author',
+			year: 2000,
+			locator: '',
+			links: []
+		});
+		const singleModelTitle = {
+			...MOCK_TITLE,
+			model_detail: {
+				name: 'Medieval Madness',
+				slug: 'medieval-madness',
+				description: {
+					text: 'foo [1] bar [2] baz [1]',
+					html: '<p>foo bar baz</p>',
+					citations: [makeCite(10, 1), makeCite(20, 2), makeCite(30, 1)],
+					attribution: null
+				},
+				title_description: { text: '', html: '', citations: [], attribution: null },
+				abbreviations: [],
+				extra_data: {},
+				credits: [],
+				sources: [],
+				uploaded_media: [],
+				variant_features: [],
+				variants: [],
+				themes: [],
+				gameplay_features: [],
+				tags: [],
+				reward_types: [],
+				variant_siblings: [],
+				conversions: [],
+				remakes: [],
+				title_models: [],
+				production_quantity: ''
+			}
+		};
+
+		const { body } = render(Harness, {
+			props: {
+				data: { title: singleModelTitle }
+			} as never
+		});
+
+		// Three citation entries, two unique indices — heading should reflect
+		// the deduplicated count to match what ReferencesSection renders.
+		expect(body).toContain('References (2)');
+	});
 });

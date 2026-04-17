@@ -11,6 +11,7 @@
 	import ReferencesSection from '$lib/components/ReferencesSection.svelte';
 	import RelatedTitlesSection from '$lib/components/RelatedTitlesSection.svelte';
 	import {
+		deduplicateCitations,
 		findFirstInlineMarker,
 		findRefEntry,
 		scrollToAndHighlight
@@ -103,6 +104,11 @@
 	let hasExternalLinks = $derived(!!(title.opdb_id || title.fandom_page_id));
 
 	let descriptionCitations = $derived(title.description?.citations ?? []);
+	let uniqueDescriptionCitationCount = $derived(deduplicateCitations(descriptionCitations).length);
+	let mdDescriptionCitations = $derived(md?.description?.citations ?? []);
+	let uniqueMdDescriptionCitationCount = $derived(
+		deduplicateCitations(mdDescriptionCitations).length
+	);
 </script>
 
 {#if md}
@@ -175,14 +181,14 @@
 		</AccordionSection>
 	{/if}
 
-	{#if md.description && md.description.citations.length > 0}
+	{#if mdDescriptionCitations.length > 0}
 		<AccordionSection
-			heading="References ({md.description.citations.length})"
+			heading="References ({uniqueMdDescriptionCitationCount})"
 			bind:open={refsAccordionOpen}
 		>
 			<div bind:this={refsContentEl}>
 				<ReferencesSection
-					citations={md.description.citations}
+					citations={mdDescriptionCitations}
 					open={true}
 					showToggle={false}
 					onBackLink={scrollToInlineMarker}
@@ -394,7 +400,7 @@
 	<!-- References — only when citations exist -->
 	{#if descriptionCitations.length > 0}
 		<AccordionSection
-			heading="References ({descriptionCitations.length})"
+			heading="References ({uniqueDescriptionCitationCount})"
 			bind:open={refsAccordionOpen}
 		>
 			<div bind:this={refsContentEl}>
