@@ -37,7 +37,8 @@ Core behavior:
 Sections:
 
 - Overview
-- Specifications
+- Technology
+- Features
 - People
 - Relationships
 - Media
@@ -93,15 +94,6 @@ Sections:
 
 ### Title Reader View
 
-When showing a single-model title, the title reader view should look like the model view, but with the addition of title-specific fields like series & franchise. However, when showing a title with multiple models, it should have these accordion sections:
-
-- Overview
-- Models
-- Specifications
-  - Include Franchise / Series here
-- People (hide if none/0)
-- Media (hide if none/0)
-
 Actions in top bar are same as Model page:
 
 - Edit menu of sections
@@ -109,7 +101,46 @@ Actions in top bar are same as Model page:
 - Tools menu
   - Sources
 
-### Single-Model Title Edit
+#### Multi-Model Title Reader View
+
+When showing a title with multiple models, it should have these accordion sections:
+
+- Overview
+  - Title.Description
+- Models (hide if none)
+  - Thumbnail of each model. The current tab approach tries to show hierarchy, with variants under parents. Don't. Show thumnail for each model, both top level AND variants.
+- Technology (hide if none)
+- Features (hide if none)
+  - Include Franchise / Series here
+- Related Titles
+  - Show any related model info that aggregates
+- People (hide if none/0)
+- Media (hide if none/0)
+- External Links (hide if none/0)
+  - Links to OPDB group, fandom
+- References (hide if none/0)
+
+Aggregation rules:
+
+- scalars: show-if-unanimous (intersection)
+- people credits: intersection
+- themes: intersection
+- gameplay: intersection
+- reward types: intersection
+- tags: intersection
+- related titles: intersection
+- media: union
+- references: only show references from Description
+
+#### Single-Model Title Reader View
+
+When showing a single-model title, the accordion sections should look like the model view, but with the addition of title-specific fields like series / franchise.
+
+Put series / franchise under Features, even though it's not a good fit. There's no other great place for them.
+
+### Title Edit View
+
+#### Single-Model Title Edit
 
 When clicking 'edit' on a single-model title, we need to think through what happens. For example:
 
@@ -120,7 +151,7 @@ I think we need to merge the edit of title and model on single-model titles... I
 
 Sections:
 
-- Overview [The existing Model Overview section]
+- Overview [the existing Model Overview section]
   - Model.Description
 - Title Basics
   - Title.Name, Title.Slug
@@ -133,13 +164,13 @@ Sections:
   - Technology Generation, Technology Subgeneration
   - Display Type, Display Subtype
   - System
-- Features [The existing Model Features section]
+- Features [the existing Model Features section]
   - Game format, Cabinet
   - Reward types, Tags
   - Themes, Production quantity
   - \# Players, \# Flippers
   - Gameplay features
-- Related Models [The existing Model Related Features section]
+- Related Models [the existing Model Related Features section]
   - Variant of
   - Converted from
   - Remake of
@@ -147,7 +178,7 @@ Sections:
   - Person/Role rows
 - Media [The existing Model Media section]
   - Photos & Videos
-- Model External Data [The existing Model External Data section]
+- Model External Data [the existing Model External Data section]
   - Links
     - IPDB ID
     - opdb_machine_id
@@ -161,7 +192,7 @@ Sections:
 - Change Title
   - A dedicated section for changing the model's title?
 
-### Multi-Model Title Edit
+#### Multi-Model Title Edit
 
 Sections:
 

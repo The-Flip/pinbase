@@ -109,6 +109,202 @@ class TestTitlesAPI:
         assert "sources" in resp.json()
 
 
+class TestTitleDetailAggregation:
+    """Aggregation rules for the multi-model title reader view:
+    scalars/M2Ms intersect, media/related_titles union."""
+
+    @pytest.fixture
+    def title(self, db):
+        return Title.objects.create(
+            name="Medieval Madness",
+            slug="medieval-madness",
+            opdb_id="G5pe4",
+            fandom_page_id=12345,
+        )
+
+    def test_opdb_id_and_fandom_page_id_exposed(self, client, title):
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        assert data["opdb_id"] == "G5pe4"
+        assert data["fandom_page_id"] == 12345
+
+    def test_technology_subgeneration_intersection_agrees(
+        self, client, title, williams_entity, solid_state
+    ):
+        from apps.catalog.models import TechnologySubgeneration
+
+        subgen = TechnologySubgeneration.objects.create(
+            name="WPC-95",
+            slug="wpc-95-sub",
+            technology_generation=solid_state,
+        )
+        make_machine_model(
+            name="MM", slug="mm-1", title=title, technology_subgeneration=subgen
+        )
+        make_machine_model(
+            name="MMR", slug="mm-2", title=title, technology_subgeneration=subgen
+        )
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        assert data["agreed_specs"]["technology_subgeneration"]["slug"] == "wpc-95-sub"
+
+    def test_technology_subgeneration_intersection_disagrees(
+        self, client, title, solid_state
+    ):
+        from apps.catalog.models import TechnologySubgeneration
+
+        sg1 = TechnologySubgeneration.objects.create(
+            name="WPC", slug="wpc", technology_generation=solid_state
+        )
+        sg2 = TechnologySubgeneration.objects.create(
+            name="SAM", slug="sam", technology_generation=solid_state
+        )
+        make_machine_model(
+            name="MM", slug="mm-1", title=title, technology_subgeneration=sg1
+        )
+        make_machine_model(
+            name="MMR", slug="mm-2", title=title, technology_subgeneration=sg2
+        )
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        assert data["agreed_specs"].get("technology_subgeneration") is None
+
+    def test_tags_intersection(self, client, title):
+        from apps.catalog.models import Tag
+
+        common = Tag.objects.create(name="Classic", slug="classic")
+        only_one = Tag.objects.create(name="LE", slug="le")
+        m1 = make_machine_model(name="MM", slug="mm-1", title=title)
+        m2 = make_machine_model(name="MMR", slug="mm-2", title=title)
+        m1.tags.add(common, only_one)
+        m2.tags.add(common)
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        tag_slugs = [t["slug"] for t in data["agreed_specs"]["tags"]]
+        assert tag_slugs == ["classic"]  # only the shared one
+
+    def test_related_titles_union_cross_title_only(self, client, db):
+        """converted_from / remake_of pointing to *other* titles appear;
+        same-title relations do not."""
+        other_title = Title.objects.create(name="Star Trek", slug="star-trek")
+        other_model = make_machine_model(
+            name="Star Trek", slug="star-trek-orig", title=other_title
+        )
+
+        this_title = Title.objects.create(name="Dark Rider", slug="dark-rider")
+        m_cross = make_machine_model(
+            name="Dark Rider",
+            slug="dark-rider-1",
+            title=this_title,
+            converted_from=other_model,
+        )
+        # Within-title "conversion" — should NOT appear in related_titles.
+        make_machine_model(
+            name="Dark Rider B",
+            slug="dark-rider-2",
+            title=this_title,
+            converted_from=m_cross,
+        )
+
+        resp = client.get(f"/api/pages/title/{this_title.slug}")
+        data = resp.json()
+        related = data["related_titles"]
+        assert len(related) == 1
+        assert related[0]["relation"] == "converted_from"
+        assert related[0]["other_title"]["slug"] == "star-trek"
+        assert related[0]["source_model"]["slug"] == "dark-rider-1"
+
+    def test_related_titles_union_across_models(self, client, db):
+        """Two different models each contribute a cross-title link."""
+        orig = Title.objects.create(name="Orig A", slug="orig-a")
+        orig_m = make_machine_model(name="Orig A", slug="orig-a-1", title=orig)
+        remake_src = Title.objects.create(name="Remake Src", slug="remake-src")
+        remake_src_m = make_machine_model(
+            name="Remake Src", slug="remake-src-1", title=remake_src
+        )
+
+        this_title = Title.objects.create(name="Compound", slug="compound")
+        make_machine_model(
+            name="C1", slug="c-1", title=this_title, converted_from=orig_m
+        )
+        make_machine_model(
+            name="C2", slug="c-2", title=this_title, remake_of=remake_src_m
+        )
+
+        resp = client.get(f"/api/pages/title/{this_title.slug}")
+        data = resp.json()
+        related = data["related_titles"]
+        relations = sorted((r["relation"], r["other_title"]["slug"]) for r in related)
+        assert relations == [
+            ("converted_from", "orig-a"),
+            ("remake_of", "remake-src"),
+        ]
+
+    def test_media_aggregation_empty_by_default(self, client, title, williams_entity):
+        make_machine_model(name="MM", slug="mm-1", title=title)
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        assert data["media"] == []
+
+    def test_media_aggregation_union_with_source_model(
+        self, client, django_user_model, title
+    ):
+        from apps.media.models import EntityMedia, MediaAsset
+        from django.contrib.contenttypes.models import ContentType
+
+        user = django_user_model.objects.create_user(username="u")
+        m1 = make_machine_model(name="MM", slug="mm-1", title=title)
+        m2 = make_machine_model(name="MMR", slug="mm-2", title=title)
+        ct = ContentType.objects.get_for_model(MachineModel)
+
+        a1 = MediaAsset.objects.create(
+            kind=MediaAsset.Kind.IMAGE,
+            status=MediaAsset.Status.READY,
+            original_filename="a.jpg",
+            mime_type="image/jpeg",
+            byte_size=1,
+            width=800,
+            height=600,
+            uploaded_by=user,
+        )
+        a2 = MediaAsset.objects.create(
+            kind=MediaAsset.Kind.IMAGE,
+            status=MediaAsset.Status.READY,
+            original_filename="b.jpg",
+            mime_type="image/jpeg",
+            byte_size=1,
+            width=800,
+            height=600,
+            uploaded_by=user,
+        )
+        EntityMedia.objects.create(
+            content_type=ct,
+            object_id=m1.pk,
+            asset=a1,
+            category="backglass",
+            is_primary=True,
+        )
+        EntityMedia.objects.create(
+            content_type=ct,
+            object_id=m2.pk,
+            asset=a2,
+            category="playfield",
+            is_primary=False,
+        )
+
+        resp = client.get(f"/api/pages/title/{title.slug}")
+        data = resp.json()
+        media = data["media"]
+        assert len(media) == 2
+        by_source = {item["source_model"]["slug"]: item for item in media}
+        assert by_source["mm-1"]["category"] == "backglass"
+        assert by_source["mm-1"]["is_primary"] is True
+        assert by_source["mm-2"]["category"] == "playfield"
+        assert by_source["mm-1"]["asset_uuid"] == str(a1.uuid)
+        assert "thumb" in by_source["mm-1"]["renditions"]
+        assert "display" in by_source["mm-1"]["renditions"]
+
+
 class TestTitlesAllFacets:
     """Test that /api/titles/all/ returns enriched facet data."""
 

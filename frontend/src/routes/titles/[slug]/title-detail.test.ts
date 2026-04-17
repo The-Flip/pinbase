@@ -26,7 +26,11 @@ const MOCK_TITLE = {
 	],
 	series: null,
 	credits: [],
-	agreed_specs: { themes: [], gameplay_features: [], reward_types: [] },
+	agreed_specs: { themes: [], gameplay_features: [], reward_types: [], tags: [] },
+	related_titles: [],
+	media: [],
+	opdb_id: null,
+	fandom_page_id: null,
 	model_detail: null,
 	sources: []
 };

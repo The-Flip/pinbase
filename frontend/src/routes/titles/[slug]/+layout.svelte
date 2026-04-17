@@ -4,19 +4,17 @@
 	import { auth } from '$lib/auth.svelte';
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import ExternalLinksSidebarSection from '$lib/components/ExternalLinksSidebarSection.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
 	import HeroHeader from '$lib/components/HeroHeader.svelte';
 	import ModelHierarchy from '$lib/components/ModelHierarchy.svelte';
 	import ModelSpecsSidebar from '$lib/components/ModelSpecsSidebar.svelte';
+	import PageActionBar from '$lib/components/PageActionBar.svelte';
 	import RatingsSidebarSection from '$lib/components/RatingsSidebarSection.svelte';
 	import SidebarList from '$lib/components/SidebarList.svelte';
 	import SidebarListItem from '$lib/components/SidebarListItem.svelte';
 	import SidebarSection from '$lib/components/SidebarSection.svelte';
-	import TabNav from '$lib/components/TabNav.svelte';
-	import Tab from '$lib/components/Tab.svelte';
 	import TwoColumnLayout from '$lib/components/TwoColumnLayout.svelte';
-	import AttributionLine from '$lib/components/AttributionLine.svelte';
 	import NeedsReviewBanner from '$lib/components/NeedsReviewBanner.svelte';
+	import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
 
 	let { data, children } = $props();
 	let title = $derived(data.title);
@@ -28,22 +26,10 @@
 		auth.load();
 	});
 
-	let isMedia = $derived(
-		page.url.pathname.endsWith('/media') || page.url.pathname.includes('/media/')
-	);
-	let isDetail = $derived(
-		!page.url.pathname.endsWith('/edit') &&
-			!page.url.pathname.endsWith('/sources') &&
-			!page.url.pathname.endsWith('/edit-history') &&
-			!isMedia
-	);
 	let isEdit = $derived(page.url.pathname.endsWith('/edit'));
-	let isSources = $derived(page.url.pathname.endsWith('/sources'));
-	let isEditHistory = $derived(page.url.pathname.endsWith('/edit-history'));
 
 	let metaDescription = $derived.by(() => {
 		if (title.description?.text) return title.description.text;
-		const md = title.model_detail;
 		const parts = [title.name];
 		if (md?.year) parts.push(`a ${md.year} pinball machine`);
 		else parts.push('pinball title');
@@ -69,6 +55,20 @@
 		}
 		return items;
 	});
+
+	// Single-model titles: two edit launchpads (title tier + model tier).
+	// Multi-model titles: single Edit link to the title edit form.
+	let editSections: EditSectionMenuItem[] | undefined = $derived.by(() => {
+		if (!auth.isAuthenticated || !md) return undefined;
+		return [
+			{ key: 'title', label: 'Edit title', href: resolve(`/titles/${slug}/edit`) },
+			{ key: 'model', label: 'Edit model', href: resolve(`/models/${md.slug}/edit`) }
+		];
+	});
+
+	let editHref = $derived(
+		auth.isAuthenticated && !md ? resolve(`/titles/${slug}/edit`) : undefined
+	);
 </script>
 
 <MetaTags
@@ -91,28 +91,17 @@
 		{metaItems}
 	/>
 
+	{#if !isEdit}
+		<PageActionBar
+			{editHref}
+			{editSections}
+			historyHref={resolve(`/titles/${slug}/edit-history`)}
+			sourcesHref={resolve(`/titles/${slug}/sources`)}
+		/>
+	{/if}
+
 	<TwoColumnLayout>
 		{#snippet main()}
-			{#if title.description?.html}
-				<section class="prose">
-					<Markdown html={title.description.html} citations={title.description.citations} />
-					<AttributionLine attribution={title.description.attribution} />
-				</section>
-			{/if}
-
-			<TabNav>
-				<Tab active={isDetail} href={resolve(`/titles/${slug}`)}>Detail</Tab>
-				{#if md}
-					<Tab active={isMedia} href={resolve(`/titles/${slug}/media`)}>Media</Tab>
-				{/if}
-				{#if auth.isAuthenticated}
-					<Tab active={isEdit} href={resolve(`/titles/${slug}/edit`)}>Edit</Tab>
-				{/if}
-				<Tab active={isSources} href={resolve(`/titles/${slug}/sources`)}>Sources</Tab>
-				<Tab active={isEditHistory} href={resolve(`/titles/${slug}/edit-history`)}>Edit History</Tab
-				>
-			</TabNav>
-
 			{@render children()}
 		{/snippet}
 
@@ -267,10 +256,6 @@
 </article>
 
 <style>
-	.prose {
-		margin-bottom: var(--size-5);
-	}
-
 	dl {
 		display: grid;
 		grid-template-columns: auto 1fr;

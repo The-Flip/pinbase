@@ -27,6 +27,7 @@ from .helpers import (
     _build_rich_text,
     _extract_image_urls,
     _intersect_facet_sets,
+    _media_prefetch,
     _serialize_credit,
     _serialize_title_machine,
 )
@@ -35,6 +36,7 @@ from .schemas import (
     ClaimSchema,
     EditCitationInput,
     GameplayFeatureSchema,
+    MediaRenditionsSchema,
     RichTextSchema,
     SeriesRefSchema,
     ThemeSchema,
@@ -46,6 +48,7 @@ from collections import defaultdict
 from django.db.models import Min, OuterRef, Subquery
 
 from apps.core.licensing import get_minimum_display_rank
+from apps.media.storage import build_public_url, build_storage_key
 
 from ..cache import TITLES_ALL_KEY, get_cached_response, set_cached_response
 from ..models import (
@@ -99,6 +102,7 @@ class AgreedSpecsSchema(Schema):
     """Spec fields where all child models of a title agree on the value."""
 
     technology_generation: Optional[FacetRef] = None
+    technology_subgeneration: Optional[FacetRef] = None
     display_type: Optional[FacetRef] = None
     player_count: Optional[int] = None
     flipper_count: Optional[int] = None
@@ -109,12 +113,35 @@ class AgreedSpecsSchema(Schema):
     themes: list[ThemeSchema] = []
     gameplay_features: list[GameplayFeatureSchema] = []
     reward_types: list[FacetRef] = []
+    tags: list[FacetRef] = []
     production_quantity: Optional[str] = None
+
+
+class CrossTitleLinkSchema(Schema):
+    """A cross-title relationship (converted_from / remake_of) contributed by
+    a specific model under the current title."""
+
+    relation: str
+    other_title: FacetRef
+    source_model: FacetRef
+
+
+class AggregatedMediaSchema(Schema):
+    """A media asset from one of the title's models, with its source model."""
+
+    asset_uuid: str
+    category: Optional[str] = None
+    is_primary: bool
+    uploaded_by_username: Optional[str] = None
+    renditions: MediaRenditionsSchema
+    source_model: FacetRef
 
 
 class TitleDetailSchema(Schema):
     name: str
     slug: str
+    opdb_id: Optional[str] = None
+    fandom_page_id: Optional[int] = None
     abbreviations: list[str] = []
     description: RichTextSchema = RichTextSchema()
     needs_review: bool = False
@@ -126,6 +153,8 @@ class TitleDetailSchema(Schema):
     series: Optional[SeriesRefSchema] = None
     credits: list[CreditSchema] = []
     agreed_specs: AgreedSpecsSchema = AgreedSpecsSchema()
+    related_titles: list[CrossTitleLinkSchema] = []
+    media: list[AggregatedMediaSchema] = []
     model_detail: Optional[MachineModelDetailSchema] = None
     sources: list[ClaimSchema] = []
 
@@ -290,6 +319,7 @@ def _compute_agreed_specs(models) -> dict:
 
     for key, attr in (
         ("technology_generation", "technology_generation"),
+        ("technology_subgeneration", "technology_subgeneration"),
         ("display_type", "display_type"),
         ("system", "system"),
         ("cabinet", "cabinet"),
@@ -347,7 +377,72 @@ def _compute_agreed_specs(models) -> dict:
     if rt:
         specs["reward_types"] = rt
 
+    # Tags: intersection across all models.
+    tags = _intersect_facet_sets(models, "tags")
+    if tags:
+        specs["tags"] = tags
+
     return specs
+
+
+def _collect_related_titles(models, current_title) -> list[dict]:
+    """Collect cross-title ``converted_from`` / ``remake_of`` links.
+
+    For each model under *current_title* that has a ``converted_from`` or
+    ``remake_of`` pointing to a model under a *different* title, emit one
+    entry per link with the relation kind, the other title, and the source
+    model under the current title.  Same-title relations (LE→Pro conversion,
+    within-title remakes) are excluded — they are not cross-title content.
+    """
+    items: list[dict] = []
+    for m in models:
+        for attr in ("converted_from", "remake_of"):
+            other = getattr(m, attr, None)
+            if other is None or other.title_id is None:
+                continue
+            if other.title_id == current_title.pk:
+                continue
+            items.append(
+                {
+                    "relation": attr,
+                    "other_title": {
+                        "slug": other.title.slug,
+                        "name": other.title.name,
+                    },
+                    "source_model": {"slug": m.slug, "name": m.name},
+                }
+            )
+    return items
+
+
+def _collect_aggregated_media(models) -> list[dict]:
+    """Collect uploaded media across all *models* (union), labeled with
+    the source model each item came from."""
+    items: list[dict] = []
+    for m in models:
+        media_list = getattr(m, "all_media", None) or []
+        source_ref = {"slug": m.slug, "name": m.name}
+        for em in media_list:
+            items.append(
+                {
+                    "asset_uuid": str(em.asset.uuid),
+                    "category": em.category,
+                    "is_primary": em.is_primary,
+                    "uploaded_by_username": (
+                        em.asset.uploaded_by.username if em.asset.uploaded_by else None
+                    ),
+                    "renditions": {
+                        "thumb": build_public_url(
+                            build_storage_key(em.asset.uuid, "thumb")
+                        ),
+                        "display": build_public_url(
+                            build_storage_key(em.asset.uuid, "display")
+                        ),
+                    },
+                    "source_model": source_ref,
+                }
+            )
+    return items
 
 
 def _serialize_title_detail(title) -> dict:
@@ -388,6 +483,10 @@ def _serialize_title_detail(title) -> dict:
     # Agreed specs across all models.
     agreed_specs = _compute_agreed_specs(model_objs) if model_objs else {}
 
+    # Cross-title links and aggregated media (union across all models).
+    related_titles = _collect_related_titles(model_objs, title)
+    media = _collect_aggregated_media(model_objs)
+
     # For single-model titles with no variants, include full model detail inline.
     model_detail = None
     if len(machines) == 1 and not machines[0].get("variants"):
@@ -403,6 +502,8 @@ def _serialize_title_detail(title) -> dict:
     return {
         "name": title.name,
         "slug": title.slug,
+        "opdb_id": title.opdb_id,
+        "fandom_page_id": title.fandom_page_id,
         "abbreviations": [a.value for a in title.abbreviations.all()],
         "description": description,
         "needs_review": title.needs_review,
@@ -418,6 +519,8 @@ def _serialize_title_detail(title) -> dict:
         "series": series,
         "credits": credits,
         "agreed_specs": agreed_specs,
+        "related_titles": related_titles,
+        "media": media,
         "model_detail": model_detail,
         "sources": build_sources(getattr(title, "active_claims", [])),
     }
@@ -431,11 +534,14 @@ def _title_models_prefetch():
         .select_related(
             "corporate_entity__manufacturer",
             "technology_generation",
+            "technology_subgeneration",
             "display_type",
             "display_subtype",
             "system",
             "cabinet",
             "game_format",
+            "converted_from__title",
+            "remake_of__title",
         )
         .prefetch_related(
             "themes",
@@ -447,9 +553,11 @@ def _title_models_prefetch():
                 ),
             ),
             "reward_types",
+            "tags",
             "credits__person",
             "credits__role",
             "variants",
+            _media_prefetch(),
         )
         .order_by("year", "name"),
     )
