@@ -127,12 +127,18 @@
 </script>
 
 <div class="basics-grid">
+	<!--
+		TODO: title is required (NOT NULL on MachineModel), but SearchableSelect's
+		built-in ✕ button still lets users clear it locally. Saving triggers a
+		backend 422 that renders inline, so the invariant holds — but the UX is
+		"click clear, try to save, see error" instead of "can't clear at all".
+		Follow-up: add a `required` prop to SearchableSelect that hides the ✕.
+	-->
 	<SearchableSelect
 		label="Title"
 		options={editOptions.titles ?? []}
 		bind:selected={fields.title}
 		error={fieldErrors.title ?? ''}
-		allowZeroCount
 		showCounts={false}
 		placeholder="Search titles..."
 	/>

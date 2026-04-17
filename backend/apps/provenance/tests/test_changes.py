@@ -7,9 +7,10 @@ from django.contrib.auth import get_user_model
 from django.test import Client
 from django.utils import timezone
 
-from apps.catalog.models import MachineModel, Manufacturer
+from apps.catalog.models import Manufacturer
 from apps.provenance.models import ChangeSet, Claim, IngestRun, Source
 from apps.provenance.pagination import cursor_paginate
+from apps.catalog.tests.conftest import make_machine_model
 
 User = get_user_model()
 
@@ -43,9 +44,7 @@ def source(db):
 
 @pytest.fixture
 def pm(db, bootstrap_source):
-    pm = MachineModel.objects.create(
-        name="Medieval Madness", slug="medieval-madness", year=1997
-    )
+    pm = make_machine_model(name="Medieval Madness", slug="medieval-madness", year=1997)
     Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=bootstrap_source)
     return pm
 

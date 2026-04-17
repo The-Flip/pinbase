@@ -1700,6 +1700,10 @@ class Command(BaseCommand):
             mm.slug: mm for mm in MachineModel.objects.all()
         }
 
+        # Titles are required at construction time (NOT NULL FK). Resolve each
+        # entry's title_slug against the Titles ingested in Phase 7.
+        titles_by_slug: dict[str, Title] = {t.slug: t for t in Title.objects.all()}
+
         # Pass 1: match or create MachineModels for every entry.
         new_models: list[MachineModel] = []
         models_needing_update: list[MachineModel] = []
@@ -1736,12 +1740,22 @@ class Command(BaseCommand):
                 entry_models.append(mm)
             else:
                 # Create new model.
+                title_slug = entry.get("title_slug")
+                title_obj = titles_by_slug.get(title_slug) if title_slug else None
+                if title_obj is None:
+                    raise CommandError(
+                        f"model.json entry slug={entry.get('slug')!r} "
+                        f"name={entry.get('name')!r}: "
+                        f"title_slug={title_slug!r} is missing or does not "
+                        f"match any existing Title."
+                    )
                 slug = slug or generate_unique_slug(
                     entry.get("name", ""), existing_slugs
                 )
                 mm = MachineModel(
                     name=entry.get("name", ""),
                     slug=slug,
+                    title=title_obj,
                     opdb_id=opdb_id,
                     ipdb_id=ipdb_id,
                 )

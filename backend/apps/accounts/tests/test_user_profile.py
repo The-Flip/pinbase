@@ -4,8 +4,9 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.test import Client
 
-from apps.catalog.models import MachineModel, Manufacturer
+from apps.catalog.models import Manufacturer
 from apps.provenance.models import Claim, Source
+from apps.catalog.tests.conftest import make_machine_model
 
 User = get_user_model()
 
@@ -36,18 +37,14 @@ def manufacturer(db, bootstrap_source):
 
 @pytest.fixture
 def model_a(db, bootstrap_source):
-    pm = MachineModel.objects.create(
-        name="Medieval Madness", slug="medieval-madness", year=1997
-    )
+    pm = make_machine_model(name="Medieval Madness", slug="medieval-madness", year=1997)
     Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=bootstrap_source)
     return pm
 
 
 @pytest.fixture
 def model_b(db, bootstrap_source):
-    pm = MachineModel.objects.create(
-        name="Attack from Mars", slug="attack-from-mars", year=1995
-    )
+    pm = make_machine_model(name="Attack from Mars", slug="attack-from-mars", year=1995)
     Claim.objects.assert_claim(pm, "name", "Attack from Mars", source=bootstrap_source)
     return pm
 
@@ -205,7 +202,7 @@ class TestEditHistoryUserDisplayNull:
         source = Source.objects.create(
             name="IPDB", slug="ipdb", source_type="database", priority=10
         )
-        pm = MachineModel.objects.create(name="Gorgar", slug="gorgar", year=1979)
+        pm = make_machine_model(name="Gorgar", slug="gorgar", year=1979)
 
         # Create an ingest changeset with a claim — this is the non-user path
         ingest_run = IngestRun.objects.create(source=source, input_fingerprint="abc123")

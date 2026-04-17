@@ -4,8 +4,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 
-from apps.catalog.models import MachineModel
 from apps.provenance.models import ChangeSet, Claim, Source
+from apps.catalog.tests.conftest import make_machine_model
 
 User = get_user_model()
 
@@ -33,9 +33,7 @@ def user(db):
 
 @pytest.fixture
 def pm(db, _bootstrap_source):
-    pm = MachineModel.objects.create(
-        name="Medieval Madness", slug="medieval-madness", year=1997
-    )
+    pm = make_machine_model(name="Medieval Madness", slug="medieval-madness", year=1997)
     Claim.objects.assert_claim(pm, "name", "Medieval Madness", source=_bootstrap_source)
     return pm
 
@@ -306,7 +304,7 @@ class TestRevertValidation:
         self, client, user, pm, _bootstrap_source, db
     ):
         """Claim PK that doesn't belong to the URL entity returns 404."""
-        pm2 = MachineModel.objects.create(name="Other", slug="other")
+        pm2 = make_machine_model(name="Other", slug="other")
         Claim.objects.assert_claim(pm2, "name", "Other", source=_bootstrap_source)
         _make_user_edit(client, user, pm2, {"year": 2000})
         claim = _get_active_claim(pm2, "year", user)

@@ -17,6 +17,7 @@ from apps.catalog.models import (
     PersonAlias,
 )
 from apps.provenance.models import Claim, IngestRun, Source
+from apps.catalog.tests.conftest import make_machine_model
 
 
 # ---------------------------------------------------------------------------
@@ -51,6 +52,11 @@ class TestNonBlankConstraints:
         with pytest.raises(IntegrityError):
             Location.objects.create(location_path="", slug="test")
 
+    def test_machine_model_title_null_rejected(self, db):
+        """MachineModel.title is NOT NULL — creating without one fails at the DB."""
+        with pytest.raises(IntegrityError):
+            MachineModel.objects.create(name="No Title", slug="no-title", title=None)
+
 
 # ---------------------------------------------------------------------------
 # Range constraints
@@ -64,7 +70,7 @@ class TestRangeConstraints:
         ce = CorporateEntity.objects.create(
             name="Williams Electronics", slug="williams-electronics", manufacturer=mfr
         )
-        return MachineModel.objects.create(
+        return make_machine_model(
             name="Test", slug="test-machine", corporate_entity=ce, year=1992
         )
 
@@ -109,9 +115,7 @@ class TestNullableIdConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
-            name="Test", slug="test-mm", corporate_entity=ce
-        )
+        mm = make_machine_model(name="Test", slug="test-mm", corporate_entity=ce)
         with pytest.raises(IntegrityError):
             _raw_update(MachineModel, mm.pk, opdb_id="")
 
@@ -120,7 +124,7 @@ class TestNullableIdConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
+        mm = make_machine_model(
             name="Test", slug="test-mm", corporate_entity=ce, opdb_id="ABC"
         )
         _raw_update(MachineModel, mm.pk, opdb_id=None)
@@ -213,7 +217,7 @@ class TestCrossFieldConstraints:
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
         with pytest.raises(IntegrityError):
-            MachineModel.objects.create(
+            make_machine_model(
                 name="Test", slug="test-mm", corporate_entity=ce, month=6, year=None
             )
 
@@ -229,9 +233,7 @@ class TestSelfRefConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
-            name="Test", slug="test-mm", corporate_entity=ce
-        )
+        mm = make_machine_model(name="Test", slug="test-mm", corporate_entity=ce)
         with pytest.raises(IntegrityError):
             _raw_update(MachineModel, mm.pk, variant_of_id=mm.pk)
 
@@ -240,9 +242,7 @@ class TestSelfRefConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
-            name="Test", slug="test-mm", corporate_entity=ce
-        )
+        mm = make_machine_model(name="Test", slug="test-mm", corporate_entity=ce)
         with pytest.raises(IntegrityError):
             _raw_update(MachineModel, mm.pk, converted_from_id=mm.pk)
 
@@ -251,9 +251,7 @@ class TestSelfRefConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
-            name="Test", slug="test-mm", corporate_entity=ce
-        )
+        mm = make_machine_model(name="Test", slug="test-mm", corporate_entity=ce)
         with pytest.raises(IntegrityError):
             _raw_update(MachineModel, mm.pk, remake_of_id=mm.pk)
 
@@ -335,7 +333,7 @@ class TestValidateCheckConstraints:
         ce = CorporateEntity.objects.create(
             name="Test Corp", slug="test-corp", manufacturer=mfr
         )
-        mm = MachineModel.objects.create(
+        mm = make_machine_model(
             name="Test Machine", slug="test-mm", corporate_entity=ce, year=1992
         )
         Claim.objects.assert_claim(mm, "name", "Test Machine", source=source)

@@ -23,7 +23,6 @@ from apps.catalog.models import (
     GameFormat,
     GameplayFeature,
     Location,
-    MachineModel,
     MachineModelGameplayFeature,
     MachineModelRewardType,
     MachineModelTag,
@@ -39,6 +38,7 @@ from apps.catalog.models import (
     Theme,
     Title,
 )
+from apps.catalog.tests.conftest import make_machine_model
 
 
 # ---------------------------------------------------------------------------
@@ -162,7 +162,7 @@ def machine(
     game_format,
     system,
 ):
-    return MachineModel.objects.create(
+    return make_machine_model(
         name="Medieval Madness",
         slug="medieval-madness",
         corporate_entity=corp,
@@ -239,15 +239,13 @@ class TestProtectBlocksDeletion:
             mfr.delete()
 
     def test_variant_of_protected(self, machine):
-        variant = MachineModel.objects.create(
-            name="MM LE", slug="mm-le", variant_of=machine
-        )
+        variant = make_machine_model(name="MM LE", slug="mm-le", variant_of=machine)
         with pytest.raises(ProtectedError):
             machine.delete()
         variant.delete()  # cleanup reference first
 
     def test_converted_from_protected(self, machine):
-        conversion = MachineModel.objects.create(
+        conversion = make_machine_model(
             name="MM Retheme", slug="mm-retheme", converted_from=machine
         )
         with pytest.raises(ProtectedError):
@@ -255,7 +253,7 @@ class TestProtectBlocksDeletion:
         conversion.delete()
 
     def test_remake_of_protected(self, machine):
-        remake = MachineModel.objects.create(
+        remake = make_machine_model(
             name="MM Remake", slug="mm-remake", remake_of=machine
         )
         with pytest.raises(ProtectedError):

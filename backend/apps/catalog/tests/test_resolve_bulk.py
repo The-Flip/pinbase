@@ -6,7 +6,6 @@ from django.contrib.contenttypes.models import ContentType
 from apps.catalog.models import (
     Franchise,
     Manufacturer,
-    MachineModel,
     Series,
     System,
     Tag,
@@ -21,6 +20,7 @@ from apps.catalog.resolve import (
 )
 from apps.core.models import RecordReference, get_claim_fields
 from apps.provenance.models import Claim, Source
+from apps.catalog.tests.conftest import make_machine_model
 
 
 @pytest.fixture
@@ -567,7 +567,7 @@ class TestApplyResolutionPreserve:
     """_apply_resolution preserves UNIQUE fields when no claim exists."""
 
     def test_preserves_slug_without_claim(self, opdb):
-        mm = MachineModel.objects.create(name="Test", slug="test-slug")
+        mm = make_machine_model(name="Test", slug="test-slug")
         Claim.objects.assert_claim(mm, "name", "Test Model", source=opdb)
         # No slug claim — slug should be preserved after resolution.
 
@@ -578,7 +578,7 @@ class TestApplyResolutionPreserve:
         assert mm.name == "Test Model"  # Resolved from claim.
 
     def test_preserves_opdb_id_without_claim(self, opdb):
-        mm = MachineModel.objects.create(name="Test", slug="test-slug", opdb_id="O123")
+        mm = make_machine_model(name="Test", slug="test-slug", opdb_id="O123")
         Claim.objects.assert_claim(mm, "name", "Test Model", source=opdb)
         # No opdb_id claim.
 
@@ -588,8 +588,8 @@ class TestApplyResolutionPreserve:
         assert mm.opdb_id == "O123"  # Preserved.
 
     def test_bulk_preserves_slug_without_claim(self, opdb):
-        mm1 = MachineModel.objects.create(name="A", slug="a-slug")
-        mm2 = MachineModel.objects.create(name="B", slug="b-slug")
+        mm1 = make_machine_model(name="A", slug="a-slug")
+        mm2 = make_machine_model(name="B", slug="b-slug")
         Claim.objects.assert_claim(mm1, "name", "Model A", source=opdb)
         Claim.objects.assert_claim(mm2, "name", "Model B", source=opdb)
         # No slug claims — both should preserve their slugs.

@@ -15,6 +15,7 @@ from apps.catalog.models import (
 )
 
 from .conftest import SAMPLE_IMAGES
+from apps.catalog.tests.conftest import make_machine_model
 
 
 class TestTitlesAPI:
@@ -26,7 +27,7 @@ class TestTitlesAPI:
 
     @pytest.fixture
     def title_with_machines(self, title, williams_entity):
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness",
             slug="medieval-madness",
             corporate_entity=williams_entity,
@@ -34,7 +35,7 @@ class TestTitlesAPI:
             title=title,
             extra_data={"opdb.images": SAMPLE_IMAGES},
         )
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness (Remake)",
             slug="medieval-madness-remake",
             corporate_entity=williams_entity,
@@ -74,7 +75,7 @@ class TestTitlesAPI:
 
     def test_get_title_detail_excludes_variants(self, client, title_with_machines):
         parent = MachineModel.objects.get(name="Medieval Madness")
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness (LE)",
             slug="medieval-madness-le",
             title=title_with_machines,
@@ -88,7 +89,7 @@ class TestTitlesAPI:
 
     def test_machine_count_excludes_variants(self, client, title_with_machines):
         parent = MachineModel.objects.get(name="Medieval Madness")
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness (LE)",
             slug="medieval-madness-le",
             title=title_with_machines,
@@ -135,7 +136,7 @@ class TestTitlesAllFacets:
         theme = Theme.objects.create(name="Medieval", slug="medieval")
         role = CreditRole.objects.get(slug="design")
 
-        m1 = MachineModel.objects.create(
+        m1 = make_machine_model(
             name="Medieval Madness",
             slug="medieval-madness",
             corporate_entity=williams_entity,
@@ -151,7 +152,7 @@ class TestTitlesAllFacets:
         Credit.objects.create(model=m1, person=person, role=role)
 
         # Second model with different year to test year_min/year_max
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness (Remake)",
             slug="medieval-madness-remake",
             corporate_entity=williams_entity,
@@ -220,7 +221,7 @@ class TestTitlesAllFacets:
         """Variant models should not contribute facet data."""
         parent = MachineModel.objects.get(name="Medieval Madness")
         lcd = DisplayType.objects.create(name="LCD", slug="lcd")
-        MachineModel.objects.create(
+        make_machine_model(
             name="Medieval Madness (LE)",
             slug="medieval-madness-le",
             title=faceted_title,

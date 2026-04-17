@@ -80,9 +80,7 @@ class MachineModel(
         "Title",
         on_delete=models.PROTECT,
         related_name="machine_models",
-        null=True,
-        blank=True,
-        help_text="Title this machine belongs to (resolved from claims).",
+        help_text="Title this machine belongs to.",
     )
     variant_of = models.ForeignKey(
         "self",
