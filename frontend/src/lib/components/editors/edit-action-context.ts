@@ -2,6 +2,7 @@ import { getContext, setContext } from 'svelte';
 import type { CombinedSectionKey } from './combined-edit-sections';
 import type { ManufacturerEditSectionKey } from './manufacturer-edit-sections';
 import type { ModelEditSectionKey } from './model-edit-sections';
+import type { PersonEditSectionKey } from './person-edit-sections';
 
 export type EditActionFn<TKey extends string> = (key: TKey) => (() => void) | undefined;
 
@@ -40,6 +41,11 @@ export const modelEditActionContext = createEditActionContext<ModelEditSectionKe
 export const manufacturerEditActionContext = createEditActionContext<ManufacturerEditSectionKey>(
 	'manufacturerEditAction',
 	'manufacturerEditAction context missing — must be rendered inside the manufacturer layout'
+);
+
+export const personEditActionContext = createEditActionContext<PersonEditSectionKey>(
+	'personEditAction',
+	'personEditAction context missing — must be rendered inside the person layout'
 );
 
 /**

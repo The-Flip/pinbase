@@ -18,6 +18,7 @@
 	let md = $derived(title.model_detail);
 	let specs = $derived(title.agreed_specs);
 	let overviewRichText = $derived(md ? md.description : title.description);
+	let hasOverview = $derived(!!overviewRichText?.html);
 
 	// Desktop: opens the layout's SectionEditorHost modal. Mobile: navigates to
 	// the appropriate edit route. Returns undefined when unauthenticated.
@@ -85,11 +86,13 @@
 
 {#if md}
 	<!-- Single-model title: sections sourced from the one model's detail. -->
-	<RichTextOverviewAccordion
-		richText={overviewRichText}
-		state={richTextState}
-		onEdit={editAction('model:overview')}
-	/>
+	{#if hasOverview}
+		<RichTextOverviewAccordion
+			richText={overviewRichText}
+			state={richTextState}
+			onEdit={editAction('model:overview')}
+		/>
+	{/if}
 
 	{#if md.technology_generation || md.technology_subgeneration || md.display_type || md.display_subtype || md.system}
 		<AccordionSection heading="Technology" onEdit={editAction('model:technology')}>
@@ -155,11 +158,13 @@
 	{/if}
 
 	<!-- Overview -->
-	<RichTextOverviewAccordion
-		richText={overviewRichText}
-		state={richTextState}
-		onEdit={editAction('title:overview')}
-	/>
+	{#if hasOverview}
+		<RichTextOverviewAccordion
+			richText={overviewRichText}
+			state={richTextState}
+			onEdit={editAction('title:overview')}
+		/>
+	{/if}
 
 	<!-- Models — flat grid including variants -->
 	{#if flatModels.length > 0}

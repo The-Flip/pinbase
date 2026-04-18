@@ -12,9 +12,6 @@
 
 <div class="prompt">
 	<p class="lead">{titleName} has no models yet.</p>
-	<p class="sub">
-		Add the first one to give this title something to link from machines, media, and people.
-	</p>
 	<Button tag="a" href={resolve(`/titles/${titleSlug}/models/new`)}>Create first model</Button>
 </div>
 
@@ -35,12 +32,5 @@
 		margin: 0;
 		font-size: var(--font-size-2);
 		font-weight: 600;
-	}
-
-	.sub {
-		margin: 0 0 var(--size-2);
-		color: var(--color-text-muted);
-		font-size: var(--font-size-1);
-		max-width: 32rem;
 	}
 </style>

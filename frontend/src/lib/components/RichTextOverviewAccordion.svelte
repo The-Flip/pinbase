@@ -16,21 +16,19 @@
 		richText = null,
 		state,
 		heading = 'Overview',
-		emptyText = 'No description yet.',
 		open = true,
 		onEdit = undefined
 	}: {
 		richText?: RichTextValue;
 		state: RichTextAccordionState;
 		heading?: string;
-		emptyText?: string;
 		open?: boolean;
 		onEdit?: (() => void) | undefined;
 	} = $props();
 </script>
 
-<AccordionSection {heading} {open} {onEdit}>
-	{#if richText?.html}
+{#if richText?.html}
+	<AccordionSection {heading} {open} {onEdit}>
 		<div bind:this={state.descriptionContentEl}>
 			<Markdown
 				html={richText.html}
@@ -40,14 +38,5 @@
 			/>
 			<AttributionLine attribution={richText.attribution} />
 		</div>
-	{:else}
-		<p class="muted">{emptyText}</p>
-	{/if}
-</AccordionSection>
-
-<style>
-	.muted {
-		color: var(--color-text-muted);
-		font-size: var(--font-size-0);
-	}
-</style>
+	</AccordionSection>
+{/if}

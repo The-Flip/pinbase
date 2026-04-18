@@ -19,78 +19,79 @@
 
 	let yearsActive = $derived(formatYearRange(mfr.year_start, mfr.year_end));
 	let hasEntityLocations = $derived(mfr.entities.some((entity) => entity.locations.length > 0));
+	let hasCompanyDetails = $derived(
+		!!(yearsActive || mfr.entities.length > 0 || mfr.website || mfr.headquarters || mfr.country)
+	);
 	let titlesHeading = $derived(`Titles (${mfr.titles.length})`);
 	let systemsHeading = $derived(`Systems (${mfr.systems.length})`);
 	let peopleHeading = $derived(`People (${mfr.persons.length})`);
 	let mediaHeading = $derived(`Media (${mfr.uploaded_media.length})`);
 </script>
 
-<RichTextOverviewAccordion
-	richText={mfr.description}
-	state={richTextState}
-	onEdit={editAction('description')}
-/>
+{#if mfr.description?.html}
+	<RichTextOverviewAccordion
+		richText={mfr.description}
+		state={richTextState}
+		onEdit={editAction('description')}
+	/>
+{/if}
 
-<AccordionSection heading="Companies">
-	<div class="company-section">
-		{#if yearsActive}
-			<div class="detail-block">
-				<h3>Years Active</h3>
-				<p>{yearsActive}</p>
-			</div>
-		{/if}
+{#if hasCompanyDetails}
+	<AccordionSection heading="Companies">
+		<div class="company-section">
+			{#if yearsActive}
+				<div class="detail-block">
+					<h3>Years Active</h3>
+					<p>{yearsActive}</p>
+				</div>
+			{/if}
 
-		{#if mfr.entities.length > 0}
-			<div class="detail-block">
-				<h3>Companies</h3>
-				<ul class="stack-list">
-					{#each mfr.entities as entity (entity.slug)}
-						<li>
-							<div class="entity">
-								<a href={resolve(`/corporate-entities/${entity.slug}`)} class="entity-name"
-									>{entity.name}</a
-								>
-								{#if formatYearRange(entity.year_start, entity.year_end)}
-									<span class="muted">
-										{formatYearRange(entity.year_start, entity.year_end)}
-									</span>
-								{/if}
-								{#each entity.locations as loc, i (i)}
-									<LocationLink {loc} />
-								{/each}
-							</div>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/if}
+			{#if mfr.entities.length > 0}
+				<div class="detail-block">
+					<h3>Companies</h3>
+					<ul class="stack-list">
+						{#each mfr.entities as entity (entity.slug)}
+							<li>
+								<div class="entity">
+									<a href={resolve(`/corporate-entities/${entity.slug}`)} class="entity-name"
+										>{entity.name}</a
+									>
+									{#if formatYearRange(entity.year_start, entity.year_end)}
+										<span class="muted">
+											{formatYearRange(entity.year_start, entity.year_end)}
+										</span>
+									{/if}
+									{#each entity.locations as loc, i (i)}
+										<LocationLink {loc} />
+									{/each}
+								</div>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
 
-		{#if !hasEntityLocations && (mfr.headquarters || mfr.country)}
-			<div class="detail-block">
-				<h3>Location</h3>
-				<p>{[mfr.headquarters, mfr.country].filter(Boolean).join(', ')}</p>
-			</div>
-		{/if}
+			{#if !hasEntityLocations && (mfr.headquarters || mfr.country)}
+				<div class="detail-block">
+					<h3>Location</h3>
+					<p>{[mfr.headquarters, mfr.country].filter(Boolean).join(', ')}</p>
+				</div>
+			{/if}
 
-		{#if mfr.website}
-			<div class="detail-block">
-				<h3>Website</h3>
-				<p>
-					<a href={mfr.website} target="_blank" rel="noopener">{websiteHostname(mfr.website)}</a>
-				</p>
-			</div>
-		{/if}
+			{#if mfr.website}
+				<div class="detail-block">
+					<h3>Website</h3>
+					<p>
+						<a href={mfr.website} target="_blank" rel="noopener">{websiteHostname(mfr.website)}</a>
+					</p>
+				</div>
+			{/if}
+		</div>
+	</AccordionSection>
+{/if}
 
-		{#if !yearsActive && mfr.entities.length === 0 && !mfr.website && !mfr.headquarters && !mfr.country}
-			<p class="empty">No company details yet.</p>
-		{/if}
-	</div>
-</AccordionSection>
-
-<AccordionSection heading={titlesHeading}>
-	{#if mfr.titles.length === 0}
-		<p class="empty">No titles listed for this manufacturer.</p>
-	{:else}
+{#if mfr.titles.length > 0}
+	<AccordionSection heading={titlesHeading}>
 		<SearchableGrid
 			items={mfr.titles}
 			filterFields={(item) => [item.name]}
@@ -106,8 +107,8 @@
 				/>
 			{/snippet}
 		</SearchableGrid>
-	{/if}
-</AccordionSection>
+	</AccordionSection>
+{/if}
 
 {#if mfr.systems.length > 0}
 	<AccordionSection heading={systemsHeading}>
@@ -194,11 +195,5 @@
 	.muted {
 		color: var(--color-text-muted);
 		font-size: var(--font-size-0);
-	}
-
-	.empty {
-		color: var(--color-text-muted);
-		font-size: var(--font-size-1);
-		margin: 0;
 	}
 </style>

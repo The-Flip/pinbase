@@ -54,11 +54,13 @@
 	let hasExternalLinks = $derived(!!(model.ipdb_id || model.opdb_id || model.pinside_id));
 </script>
 
-<RichTextOverviewAccordion
-	richText={model.description}
-	state={richTextState}
-	onEdit={editAction('overview')}
-/>
+{#if model.description?.html}
+	<RichTextOverviewAccordion
+		richText={model.description}
+		state={richTextState}
+		onEdit={editAction('overview')}
+	/>
+{/if}
 
 <!-- Technology — mobile only -->
 {#if hasTechnology}
