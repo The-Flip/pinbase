@@ -104,7 +104,12 @@
 		{@render children()}
 	{/snippet}
 
-	<RecordDetailShell name={franchise.name} {actionBar} {main} />
+	<RecordDetailShell
+		name={franchise.name}
+		parentLink={{ text: 'Franchises', href: resolve('/franchises') }}
+		{actionBar}
+		{main}
+	/>
 
 	<SectionEditorHost
 		bind:editingKey={editing}
