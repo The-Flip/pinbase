@@ -71,7 +71,9 @@ class TechnologySubgeneration(
 
     link_url_pattern = "/technology-subgenerations/{slug}"
 
-    name = models.CharField(max_length=200, validators=[validate_no_mojibake])
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
     technology_generation = models.ForeignKey(
@@ -122,7 +124,9 @@ class DisplaySubtype(EntityStatusMixin, SluggedModel, LinkableModel, TimeStamped
 
     link_url_pattern = "/display-subtypes/{slug}"
 
-    name = models.CharField(max_length=200, validators=[validate_no_mojibake])
+    name = models.CharField(
+        max_length=200, unique=True, validators=[validate_no_mojibake]
+    )
     display_order = models.PositiveSmallIntegerField(default=0)
     description = MarkdownField(blank=True)
     display_type = models.ForeignKey(

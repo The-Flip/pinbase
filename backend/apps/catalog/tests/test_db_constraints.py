@@ -10,11 +10,17 @@ from django.db import IntegrityError, connection
 
 from apps.catalog.models import (
     CorporateEntity,
+    DisplaySubtype,
+    DisplayType,
+    Franchise,
     Location,
     MachineModel,
     Manufacturer,
     Person,
     PersonAlias,
+    Series,
+    TechnologyGeneration,
+    TechnologySubgeneration,
 )
 from apps.provenance.models import Claim, IngestRun, Source
 from apps.provenance.test_factories import user_changeset
@@ -57,6 +63,45 @@ class TestNonBlankConstraints:
         """MachineModel.title is NOT NULL — creating without one fails at the DB."""
         with pytest.raises(IntegrityError):
             MachineModel.objects.create(name="No Title", slug="no-title", title=None)
+
+
+# ---------------------------------------------------------------------------
+# Uniqueness constraints
+# ---------------------------------------------------------------------------
+
+
+class TestUniqueNameConstraints:
+    def test_duplicate_series_name_rejected(self, db):
+        Series.objects.create(name="Eight Ball", slug="eight-ball")
+        with pytest.raises(IntegrityError):
+            Series.objects.create(name="Eight Ball", slug="eight-ball-2")
+
+    def test_duplicate_franchise_name_rejected(self, db):
+        Franchise.objects.create(name="Indiana Jones", slug="indiana-jones")
+        with pytest.raises(IntegrityError):
+            Franchise.objects.create(name="Indiana Jones", slug="indiana-jones-2")
+
+    def test_duplicate_technology_subgeneration_name_rejected(self, db):
+        gen = TechnologyGeneration.objects.create(name="Solid State", slug="ss")
+        TechnologySubgeneration.objects.create(
+            name="Discrete Logic", slug="discrete-logic", technology_generation=gen
+        )
+        with pytest.raises(IntegrityError):
+            TechnologySubgeneration.objects.create(
+                name="Discrete Logic",
+                slug="discrete-logic-2",
+                technology_generation=gen,
+            )
+
+    def test_duplicate_display_subtype_name_rejected(self, db):
+        dt = DisplayType.objects.create(name="LCD", slug="lcd")
+        DisplaySubtype.objects.create(
+            name="Standard LCD", slug="standard-lcd", display_type=dt
+        )
+        with pytest.raises(IntegrityError):
+            DisplaySubtype.objects.create(
+                name="Standard LCD", slug="standard-lcd-2", display_type=dt
+            )
 
 
 # ---------------------------------------------------------------------------
