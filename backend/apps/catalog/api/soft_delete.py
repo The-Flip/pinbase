@@ -49,6 +49,18 @@ class BlockingReferrer:
     blocked_target_slug: str | None
 
 
+def serialize_blocking_referrer(ref: BlockingReferrer) -> dict:
+    """Wire format for :class:`BlockingReferrer` used by delete API responses."""
+    return {
+        "entity_type": ref.entity_type,
+        "slug": ref.slug,
+        "name": ref.name,
+        "relation": ref.relation,
+        "blocked_target_type": ref.blocked_target_type,
+        "blocked_target_slug": ref.blocked_target_slug,
+    }
+
+
 @dataclass
 class SoftDeletePlan:
     """Outcome of :func:`plan_soft_delete`.

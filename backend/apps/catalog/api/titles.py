@@ -34,6 +34,7 @@ from .soft_delete import (
     SoftDeleteBlocked,
     execute_soft_delete,
     plan_soft_delete,
+    serialize_blocking_referrer,
 )
 from apps.catalog.naming import MAX_CATALOG_NAME_LENGTH, normalize_catalog_name
 from apps.provenance.helpers import build_sources, claims_prefetch
@@ -54,6 +55,7 @@ from .helpers import (
 )
 from .machine_models import CreditSchema, MachineModelDetailSchema
 from .schemas import (
+    BlockingReferrerSchema,
     ClaimSchema,
     EditCitationInput,
     GameplayFeatureSchema,
@@ -203,15 +205,6 @@ class TitleDeleteSchema(Schema):
 class TitleRestoreSchema(Schema):
     note: str = ""
     citation: EditCitationInput | None = None
-
-
-class BlockingReferrerSchema(Schema):
-    entity_type: str
-    slug: Optional[str] = None
-    name: str
-    relation: str
-    blocked_target_type: str
-    blocked_target_slug: Optional[str] = None
 
 
 class TitleDeletePreviewSchema(Schema):
@@ -1111,17 +1104,6 @@ def create_model(request, title_slug: str, data: ModelCreateSchema):
 # ---------------------------------------------------------------------------
 
 
-def _serialize_blocking_referrer(ref) -> dict:
-    return {
-        "entity_type": ref.entity_type,
-        "slug": ref.slug,
-        "name": ref.name,
-        "relation": ref.relation,
-        "blocked_target_type": ref.blocked_target_type,
-        "blocked_target_slug": ref.blocked_target_slug,
-    }
-
-
 def _count_title_changesets(title, model_pks: list[int]) -> int:
     """Count user ChangeSets with at least one claim on *title* or *models*.
 
@@ -1168,7 +1150,7 @@ def title_delete_preview(request, slug: str):
         "title_slug": title.slug,
         "active_model_count": len(model_pks),
         "changeset_count": changeset_count,
-        "blocked_by": [_serialize_blocking_referrer(b) for b in plan.blockers],
+        "blocked_by": [serialize_blocking_referrer(b) for b in plan.blockers],
     }
 
 
@@ -1199,7 +1181,7 @@ def delete_title(request, slug: str, data: TitleDeleteSchema):
             422,
             {
                 "detail": "Cannot delete: active references would be left dangling.",
-                "blocked_by": [_serialize_blocking_referrer(b) for b in exc.blockers],
+                "blocked_by": [serialize_blocking_referrer(b) for b in exc.blockers],
             },
         )
 

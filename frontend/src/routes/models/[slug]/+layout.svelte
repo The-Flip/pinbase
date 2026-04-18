@@ -118,8 +118,8 @@
 		updateEditQuery(editing);
 	});
 
-	let editSections: EditSectionMenuItem[] = $derived(
-		MODEL_EDIT_SECTIONS.map((section) =>
+	let editSections: EditSectionMenuItem[] = $derived([
+		...MODEL_EDIT_SECTIONS.map((section) =>
 			isMobile
 				? {
 						key: section.key,
@@ -131,8 +131,17 @@
 						label: section.label,
 						onclick: () => (editing = section.key)
 					}
-		)
-	);
+		),
+		// "Delete Model" is the last item in the menu (destructive action).
+		// Navigates to a focus-mode confirmation page; the whole menu is
+		// hidden for anonymous users via the `auth.isAuthenticated` check
+		// on PageActionBar's `editSections` prop below.
+		{
+			key: 'delete-model',
+			label: 'Delete Model',
+			href: resolve(`/models/${slug}/delete`)
+		}
+	]);
 
 	function editAction(sectionKey: ModelEditSectionKey): (() => void) | undefined {
 		if (!auth.isAuthenticated) return undefined;

@@ -1,8 +1,8 @@
 /**
- * Client shim for the Title delete + undo flow.
+ * Client shim for the Model delete flow. Mirrors title-delete.ts.
  *
- * Kept separate from the Svelte page so it can be unit-tested without the
- * DOM, mirroring title-create.ts / model-create.ts.
+ * The Undo helper lives in ``$lib/undo-delete`` and is re-exported here for
+ * callers that want the whole surface from one module.
  */
 
 import client from '$lib/api/client';
@@ -11,8 +11,8 @@ import type { components } from '$lib/api/schema';
 import type { EditCitationSelection } from '$lib/edit-citation';
 import { buildEditCitationRequest } from '$lib/edit-citation';
 
-export type DeletePreview = components['schemas']['TitleDeletePreviewSchema'];
-export type DeleteResponse = components['schemas']['TitleDeleteResponseSchema'];
+export type DeletePreview = components['schemas']['ModelDeletePreviewSchema'];
+export type DeleteResponse = components['schemas']['ModelDeleteResponseSchema'];
 export type BlockingReferrer = components['schemas']['BlockingReferrerSchema'];
 
 export type DeleteOutcome =
@@ -25,7 +25,7 @@ export async function submitDelete(
 	slug: string,
 	opts: { note?: string; citation?: EditCitationSelection | null } = {}
 ): Promise<DeleteOutcome> {
-	const { data, error, response } = await client.POST('/api/titles/{slug}/delete/', {
+	const { data, error, response } = await client.POST('/api/models/{slug}/delete/', {
 		params: { path: { slug } },
 		body: {
 			note: opts.note ?? '',
@@ -44,8 +44,6 @@ export async function submitDelete(
 	}
 
 	if (response.status === 422) {
-		// 422 from the delete endpoint is either a structured error (same
-		// shape as other 422s) or a delete-specific block with blocked_by.
 		const body = (await response
 			.clone()
 			.json()
