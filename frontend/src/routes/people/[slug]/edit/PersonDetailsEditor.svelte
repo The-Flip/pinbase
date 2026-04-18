@@ -100,6 +100,12 @@
 		error={fieldErrors.nationality ?? ''}
 	/>
 
+	<TextField
+		label="Birth place"
+		bind:value={fields.birth_place}
+		error={fieldErrors.birth_place ?? ''}
+	/>
+
 	<fieldset class="date-group">
 		<legend>Born</legend>
 		<div class="date-row">
@@ -122,12 +128,6 @@
 			/>
 		</div>
 	</fieldset>
-
-	<TextField
-		label="Birth place"
-		bind:value={fields.birth_place}
-		error={fieldErrors.birth_place ?? ''}
-	/>
 
 	<fieldset class="date-group">
 		<legend>Died</legend>
