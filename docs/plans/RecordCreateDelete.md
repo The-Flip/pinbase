@@ -61,14 +61,30 @@ Cascade behavior mirrors DB FK semantics, but splits by target type:
 | FK target                                                                   | Soft-delete behavior                                                                                                                                                        |
 | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PROTECT, referenced by an _active_ independent entity                       | Block the delete. UI explains what's referencing it.                                                                                                                        |
-| PROTECT, referenced only by already-soft-deleted entities                   | Allow; those references don't count as active.                                                                                                                              |
+| PROTECT, referenced only by already-soft-deleted entities                   | Allow; those references don't count as active. See note below on enforcement.                                                                                               |
 | CASCADE to an independent lifecycle entity (e.g. Title → MachineModel)      | Write `status = deleted` claims for each child in the same ChangeSet.                                                                                                       |
 | CASCADE to an owned child row with no lifecycle status (e.g. Title → Alias) | Do nothing special. The child disappears because the parent is hidden. Do not invent fake lifecycle claims.                                                                 |
 | SET_NULL / SET_DEFAULT                                                      | Not currently present in catalog/media/provenance. (Citation app has a few, but citations are not user-deletable here.) If added later, per-relationship decision required. |
 
-#### Resurrection Symmetry
+**Enforcement note on PROTECT.** DB-level FK PROTECT operates on raw rows; it has no awareness of `status = deleted`. So the "allow if referrers are all soft-deleted" rule cannot be enforced by the DB — it must be computed at the application layer by walking the reference graph and filtering out entities whose resolved status is `deleted`. The DB's PROTECT constraint remains as a safety net against bugs, not as the mechanism that implements this policy.
 
-Resurrecting a parent inverts the same ChangeSet that deleted it, which re-activates cascaded children in one atomic move. A user who deletes a Title and undoes it gets their Models back; they don't have to resurrect each child individually.
+#### Links to Deleted Records
+
+If an admin hard deletes a record, it's gone and the system serves a 404 like any not found record.
+
+For claims-deleted records, the v1 will also serve a 404.
+
+In a future version -- NOT v1 -- we should look at serving a HTTP 410 Gone, with a "This record was deleted" page with links to view history and restore the record.
+
+#### Resurrection
+
+There are two distinct ways a soft-deleted record can come back, and they have different cascade semantics. The spec supports both.
+
+**Undo** — invert a specific past delete ChangeSet. Because the delete ChangeSet contained `status = deleted` claims for every cascaded child, inverting it restores the whole tree atomically. Symmetric by construction. A user who deletes a Title and immediately hits Undo gets their Models back without having to resurrect each child individually. This is the primary expected flow, especially for fat-finger deletes.
+
+**Restore** — a fresh ChangeSet that writes `status = active` on the record. This is just another claim, and normal resolution handles it: the later same-priority claim wins by recency. Restore does **not** automatically bring children back, because the children still carry their own `status = deleted` claims from the original delete ChangeSet. If the user wants the tree restored, they either Undo the original delete or Restore each child individually.
+
+Undo is only available while the delete ChangeSet is still the latest action against the record. Restore is the mechanism for bringing back a record whose delete is older or has been superseded.
 
 ### Delete Confirmation
 
@@ -88,6 +104,10 @@ Create and Delete screens should have both a Notes field and Citation support, j
 
 The system must aggressively prevent duplicate records.
 
+#### Enforced at the API, Not Just the UI
+
+All duplicate-prevention rules below are enforced at the API layer, independent of whatever the UI does. The UI gates (search-then-create, collision messaging) are ergonomic affordances, not the mechanism. The API must reject a colliding create even when it arrives without having gone through the UI gate — whether because two users raced to submit the same name, a client has stale state, or the request bypassed the UI entirely. Slug uniqueness is already enforced by the DB; name-collision rules are not, and must be enforced in the create endpoint.
+
 #### Create Is Offered Only After Search
 
 - Creation should only be offered to the user after a search for that record type returns no results.
@@ -97,11 +117,58 @@ The system must aggressively prevent duplicate records.
 
 #### Name Collisions
 
-Titles and Models names aren't unique. That's necessary because names _are_ re-used in the industry. However, if the user types in a name that is a collision, for this V1 will will block creation. Require the user to give a disambiguating name.
+Title and Model names aren't unique. That's necessary because names _are_ re-used in the industry. However, if the user types in a name that is a collision, for this V1 will will block creation. Require the user to give a disambiguating name.
 
-We may decide to change this approach later, but I think reusing names is an edge case and we can see how this feels for now. The first time we hit this I think we're going to have a discussion as a team about how to handle it, so it's not worth baking in rules now.
+People's names are not unique. However, in the history of pinball as recorded in IPDB and our database, there's been zero duplicates so far. For v1 we will reject duplicate names.
+
+We may decide to change this approach later, but reusing names is an edge case and we can see how the "no duplicate creation via the UI" feels for now. The first time we hit an issue, I think we're going to have a discussion as a team about how to handle it, so it's not worth baking in rules now.
 
 Because of this rule, we don't need slug auto-suggest like godzilla-2.
+
+#### Slug Collisions
+
+Slugs are a separate collision surface from names, and the rules are enforced by the DB, not by editorial preference.
+
+Current model (as of this writing):
+
+- `Title.slug` — globally unique (`unique=True`).
+- `MachineModel.slug` — globally unique. The URL pattern is `/models/{slug}` with no title segment, so global uniqueness is load-bearing for routing, not just a DB nicety.
+- `Manufacturer.slug` — globally unique.
+- `Location.slug` — not globally unique (scoped).
+
+Implication: duplicate prevention must check both axes, because they can disagree:
+
+- Two models with the same name but different slugs (`godzilla-stern-pro` vs `godzilla-williams-pro`) pass the DB check but fail the name-collision rule.
+- Two models with different names that sluggify to the same thing pass the name check but fail the DB check.
+
+UX should surface each with distinct messaging:
+
+- Name collision → "A Title/Model/Manufacturer named X already exists. Pick a disambiguating name."
+- Slug collision → "The slug `x` is already taken. Edit the slug field."
+
+Model slugs being globally unique is worth calling out separately: it means "Pro" as a model slug is only claimable once across the entire catalog, so in practice Model slugs need to be title-qualified (`godzilla-pro`, not `pro`). The auto-populate-from-name behavior should reflect this — likely by prepending or incorporating the parent Title's slug — but the exact rule is a detail to settle during Model Create implementation.
+
+### Rate Limits
+
+Values:
+
+- create: 5 ChangeSets / hour
+- edit: 60 ChangeSets / hour
+- delete: 5 ChangeSets / day
+
+Notes:
+
+- Enforce per user, not per IP
+- Staff/admin accounts are exempt from these limits
+- Inverting your own ChangeSet (delete, create, or edit) is exempt from these limits
+- Both successful AND attempted ChangeSets count against these limits
+- Rolling window, not calendar hour/day
+- Restore uses the same bucket as create
+- A cascading delete counts as one delete ChangeSet, not one per hidden child
+- If a single UI action creates one ChangeSet, that’s what the limit applies to, even if many claims are written inside it.
+- These values must be in well-documented constants where they can be easily found and updated
+- The API returns 429 with a Retry-After header
+- The UI surfaces the time at which the next slot frees up
 
 ## Specific Record Types
 
@@ -125,9 +192,9 @@ After you click Save you're taken to the Title Detail page, where you can furthe
 
 #### Titles with Zero Models
 
-When the user first creates a Title and lands on the Title detail page, we should have a very obvious "Create first model" CTA. This "Create first model" is shown to any user viewing that page until the first model is created. If all models are deleted from the title, that CTA comes back.
+When the user first creates a Title and lands on the Title detail page, we should have a very obvious "Create first model" CTA with a link to the model create screen. This "Create first model" is shown to any user viewing that page until the first model is created. If all models are deleted from the title, that CTA comes back.
 
-#### Deletion Entry Point: Edit Menu Item
+#### Deletion Entry Point: Title Detail Edit Menu Item
 
 On the Title Detail page, there's an Edit menu dropdown. Let's have Delete Title as the last item. It shows some sort of confirmation.
 
@@ -149,15 +216,15 @@ There's a strong argument to also have variants, which is pretty fundamental, bu
 
 After you click Save you're taken to the Model Detail page, where you can further edit the model.
 
-#### Deletion Entry Point: Edit Menu Item
+#### Deletion Entry Point: Model Detail Edit Menu Item
 
-On the MOdel Detail page, there's an Edit menu dropdown. Let's have Delete Model as the last item. It shows some sort of confirmation.
+On the Model Detail page, there's an Edit menu dropdown. Let's have Delete Model as the last item. It shows some sort of confirmation.
 
 ### People
 
 #### Creation Entry Point: Search on the People List Page
 
-If you search on the Peoples list page, you get text like this:
+If you search on the People list page, you get text like this:
 
 The person "NO_SUCH_PERSON" does not exist. Create?
 
