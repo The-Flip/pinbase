@@ -1,25 +1,25 @@
 import { describe, expect, it } from 'vitest';
 
-import { classifyCreateResponse, reconcileSlug, slugifyForTitle } from './title-create';
+import { classifyCreateResponse, reconcileSlug, slugifyForCatalog } from './create-form';
 
-describe('slugifyForTitle', () => {
+describe('slugifyForCatalog', () => {
 	it('produces a lowercase-hyphenated slug', () => {
-		expect(slugifyForTitle('Godzilla')).toBe('godzilla');
-		expect(slugifyForTitle('Attack from Mars')).toBe('attack-from-mars');
+		expect(slugifyForCatalog('Godzilla')).toBe('godzilla');
+		expect(slugifyForCatalog('Attack from Mars')).toBe('attack-from-mars');
 	});
 
 	it('collapses punctuation and runs of hyphens', () => {
-		expect(slugifyForTitle('Spider-Man 2!!!')).toBe('spider-man-2');
-		expect(slugifyForTitle('---Godzilla---')).toBe('godzilla');
+		expect(slugifyForCatalog('Spider-Man 2!!!')).toBe('spider-man-2');
+		expect(slugifyForCatalog('---Godzilla---')).toBe('godzilla');
 	});
 
 	it('returns the empty string for names with no alphanumerics', () => {
-		expect(slugifyForTitle('!!!')).toBe('');
-		expect(slugifyForTitle('   ')).toBe('');
+		expect(slugifyForCatalog('!!!')).toBe('');
+		expect(slugifyForCatalog('   ')).toBe('');
 	});
 
 	it('preserves numbers', () => {
-		expect(slugifyForTitle('T2 Judgment Day')).toBe('t2-judgment-day');
+		expect(slugifyForCatalog('T2 Judgment Day')).toBe('t2-judgment-day');
 	});
 });
 
@@ -39,24 +39,19 @@ describe('reconcileSlug', () => {
 	});
 
 	it('stops syncing once the user diverges the slug', () => {
-		// Sim: user typed "Godzilla", then manually set slug to "god".
 		let state = reconcileSlug({ name: 'Godzilla', slug: '', syncedSlug: '' });
-		// User now manually edits slug:
 		state = { slug: 'god', syncedSlug: state.syncedSlug };
-		// Name continues to change; slug should NOT follow.
 		const next = reconcileSlug({ name: 'Godzilla 2', ...state });
 		expect(next.slug).toBe('god');
-		expect(next.syncedSlug).toBe('godzilla'); // unchanged
+		expect(next.syncedSlug).toBe('godzilla');
 	});
 
 	it('resumes syncing if the user clears their manual slug to match synced', () => {
-		// After diverging, the user pastes the synced value back.
 		const afterReset = reconcileSlug({
 			name: 'Attack',
 			slug: 'attack',
 			syncedSlug: 'attack'
 		});
-		// Typing a new name now re-enables sync.
 		const afterRename = reconcileSlug({
 			name: 'Attack 2',
 			slug: afterReset.slug,
@@ -73,9 +68,19 @@ describe('reconcileSlug', () => {
 		});
 		expect(next).toEqual({ slug: 'godzilla', syncedSlug: 'godzilla' });
 	});
+
+	it('accepts a projectedSlug to override the default slugify rule', () => {
+		// Example: Model Create passes a title-prefixed projection.
+		const next = reconcileSlug({
+			name: 'Pro',
+			slug: '',
+			syncedSlug: '',
+			projectedSlug: 'godzilla-pro'
+		});
+		expect(next).toEqual({ slug: 'godzilla-pro', syncedSlug: 'godzilla-pro' });
+	});
 });
 
-// Helper for classify tests.
 function resp(status: number, retryAfter?: string): { status: number; headers: Headers } {
 	const h = new Headers();
 	if (retryAfter !== undefined) h.set('Retry-After', retryAfter);
@@ -85,12 +90,14 @@ function resp(status: number, retryAfter?: string): { status: number; headers: H
 describe('classifyCreateResponse', () => {
 	it('returns ok with the new slug on success', () => {
 		const outcome = classifyCreateResponse({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			data: { slug: 'godzilla', name: 'Godzilla' } as any,
+			data: { slug: 'godzilla', name: 'Godzilla' },
 			error: undefined,
 			response: resp(200)
 		});
-		expect(outcome).toEqual({ kind: 'ok', slug: 'godzilla' });
+		expect(outcome.kind).toBe('ok');
+		if (outcome.kind !== 'ok') throw new Error('type narrow');
+		expect(outcome.slug).toBe('godzilla');
+		expect(outcome.data.slug).toBe('godzilla');
 	});
 
 	it('returns rate_limited with a friendly message for 429', () => {

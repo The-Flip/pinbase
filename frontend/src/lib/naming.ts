@@ -1,5 +1,9 @@
 /**
- * Title name normalization for collision detection.
+ * Catalog name normalization for collision detection.
+ *
+ * Used across record types (Title, MachineModel, Person, …) whenever a name
+ * needs to be folded to a collision-comparison form. Same rule everywhere:
+ * two inputs that normalize to the same string are considered the same name.
  *
  * This implementation MUST stay in lockstep with the Python copy at
  * `backend/apps/catalog/naming.py`. The shared case table lives in
@@ -21,9 +25,9 @@ const NON_ALNUM_RUN = /[^0-9a-z]+/g;
 const LEADING_ARTICLE = /^(?:the|a|an)\s+/;
 const WHITESPACE_RUN = /\s+/g;
 
-export const MAX_TITLE_NAME_LENGTH = 300;
+export const MAX_CATALOG_NAME_LENGTH = 300;
 
-export function normalizeTitleName(raw: string): string {
+export function normalizeCatalogName(raw: string): string {
 	const folded = raw.normalize('NFKC').toLowerCase();
 	const spaced = folded.replace(NON_ALNUM_RUN, ' ').trim();
 	const dearticled = spaced.replace(LEADING_ARTICLE, '');

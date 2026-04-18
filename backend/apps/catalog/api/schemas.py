@@ -73,6 +73,13 @@ class ModelClaimPatchSchema(Schema):
     citation: EditCitationInput | None = None
 
 
+class ModelCreateSchema(Schema):
+    name: str
+    slug: str
+    note: str = ""
+    citation: EditCitationInput | None = None
+
+
 class EditOptionItem(Schema):
     slug: str
     label: str

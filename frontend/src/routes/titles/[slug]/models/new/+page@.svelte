@@ -8,19 +8,16 @@
 	import { buildEditCitationRequest, type EditCitationSelection } from '$lib/edit-citation';
 	import { pageTitle } from '$lib/constants';
 	import { resolveHref } from '$lib/utils';
-	import { classifyCreateResponse, reconcileSlug, slugifyForCatalog } from '$lib/create-form';
+	import { classifyCreateResponse, reconcileSlug } from '$lib/create-form';
+	import { slugifyForModel } from './model-create';
 
 	let { data } = $props();
+	let titleSlug = $derived(data.title.slug);
+	let titleName = $derived(data.title.name);
 
-	// svelte-ignore state_referenced_locally
-	const initialName = data.initialName;
-	const initialSlug = slugifyForCatalog(initialName);
-	let name = $state(initialName);
-	let slug = $state(initialSlug);
-	// Tracks the last slug value written by name-sync. If the user hasn't
-	// diverged the slug from this, we keep syncing from name; once they
-	// edit the slug to something else, sync stops.
-	let syncedSlug = $state(initialSlug);
+	let name = $state('');
+	let slug = $state('');
+	let syncedSlug = $state('');
 	let note = $state('');
 	let citation = $state<EditCitationSelection | null>(null);
 
@@ -30,7 +27,12 @@
 	let submitting = $state(false);
 
 	$effect(() => {
-		const next = reconcileSlug({ name, slug, syncedSlug });
+		const next = reconcileSlug({
+			name,
+			slug,
+			syncedSlug,
+			projectedSlug: slugifyForModel(name, titleSlug)
+		});
 		if (next.slug !== slug) {
 			slug = next.slug;
 			syncedSlug = next.syncedSlug;
@@ -57,7 +59,8 @@
 				data: created,
 				error,
 				response
-			} = await client.POST('/api/titles/', {
+			} = await client.POST('/api/titles/{title_slug}/models/', {
+				params: { path: { title_slug: titleSlug } },
 				body: {
 					name: name.trim(),
 					slug: slug.trim(),
@@ -69,7 +72,7 @@
 			const outcome = classifyCreateResponse({ data: created, error, response });
 			switch (outcome.kind) {
 				case 'ok':
-					await goto(resolveHref(`/titles/${outcome.slug}`));
+					await goto(resolveHref(`/models/${outcome.slug}`));
 					return;
 				case 'rate_limited':
 					formError = outcome.message;
@@ -91,17 +94,17 @@
 	}
 
 	function handleCancel() {
-		goto(resolve('/titles'));
+		goto(resolve(`/titles/${titleSlug}`));
 	}
 </script>
 
 <svelte:head>
-	<title>{pageTitle('New Title')}</title>
+	<title>{pageTitle(`New model in ${titleName}`)}</title>
 </svelte:head>
 
 <div class="create-page">
 	<header class="hdr">
-		<h1>New Title</h1>
+		<h1>New model in {titleName}</h1>
 	</header>
 
 	{#if formError}
@@ -122,13 +125,13 @@
 		bind:note
 		bind:citation
 		noteLabel="Creation note"
-		notePlaceholder="Why are you adding this title?"
+		notePlaceholder="Why are you adding this model?"
 	/>
 
 	<div class="form-footer">
 		<Button variant="secondary" onclick={handleCancel}>Cancel</Button>
 		<Button onclick={handleSave} disabled={submitting}>
-			{submitting ? 'Creating…' : 'Create Title'}
+			{submitting ? 'Creating…' : 'Create Model'}
 		</Button>
 	</div>
 </div>

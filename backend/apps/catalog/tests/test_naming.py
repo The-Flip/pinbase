@@ -1,6 +1,6 @@
-"""Tests for title name normalization.
+"""Tests for catalog name normalization.
 
-The case table is loaded from ``docs/fixtures/normalize_title_name_cases.json``,
+The case table is loaded from ``docs/fixtures/normalize_catalog_name_cases.json``,
 which is shared with ``frontend/src/lib/naming.test.ts`` so both implementations
 run against the same inputs and the two implementations can't drift.
 """
@@ -12,13 +12,13 @@ from pathlib import Path
 
 import pytest
 
-from apps.catalog.naming import normalize_title_name
+from apps.catalog.naming import normalize_catalog_name
 
 _FIXTURE = (
     Path(__file__).resolve().parents[4]
     / "docs"
     / "fixtures"
-    / "normalize_title_name_cases.json"
+    / "normalize_catalog_name_cases.json"
 )
 
 with _FIXTURE.open() as f:
@@ -26,5 +26,5 @@ with _FIXTURE.open() as f:
 
 
 @pytest.mark.parametrize("raw,expected", _CASES)
-def test_normalize_title_name(raw: str, expected: str) -> None:
-    assert normalize_title_name(raw) == expected
+def test_normalize_catalog_name(raw: str, expected: str) -> None:
+    assert normalize_catalog_name(raw) == expected

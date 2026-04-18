@@ -10,6 +10,7 @@
 	import RichTextReferencesAccordion from '$lib/components/RichTextReferencesAccordion.svelte';
 	import { createRichTextAccordionState } from '$lib/components/rich-text-accordion-state.svelte';
 	import RelatedTitlesSection from '$lib/components/RelatedTitlesSection.svelte';
+	import CreateFirstModelPrompt from '$lib/components/CreateFirstModelPrompt.svelte';
 	import { titleAreaEditActionContext } from '$lib/components/editors/edit-action-context';
 
 	let { data } = $props();
@@ -145,6 +146,14 @@
 
 	<RichTextReferencesAccordion richText={overviewRichText} state={richTextState} />
 {:else}
+	<!-- "Create first model" CTA when the title has no models. Shown to all
+	     viewers (spec: "shown to any user viewing that page until the first
+	     model is created") — anonymous users clicking through get bounced
+	     to login by the create page's load guard. -->
+	{#if flatModels.length === 0}
+		<CreateFirstModelPrompt titleSlug={title.slug} titleName={title.name} />
+	{/if}
+
 	<!-- Overview -->
 	<RichTextOverviewAccordion
 		richText={overviewRichText}

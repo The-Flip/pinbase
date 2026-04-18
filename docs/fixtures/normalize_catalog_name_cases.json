@@ -1,5 +1,5 @@
 {
-  "_comment": "Shared parity fixture for the title-name normalization rule. Both backend/apps/catalog/tests/test_naming.py and frontend/src/lib/naming.test.ts read this file. If you change the rule, update the cases here — both test suites will re-run against the new table. See backend/apps/catalog/naming.py for the rule and its Known Limitation note on NFKC.",
+  "_comment": "Shared parity fixture for the catalog name normalization rule (used for Title names, Model names, Person names — any record type that needs collision-comparison folding). Both backend/apps/catalog/tests/test_naming.py and frontend/src/lib/naming.test.ts read this file. If you change the rule, update the cases here — both test suites will re-run against the new table. See backend/apps/catalog/naming.py for the rule and its Known Limitation note on NFKC.",
   "cases": [
     ["Godzilla", "godzilla"],
     ["godzilla", "godzilla"],

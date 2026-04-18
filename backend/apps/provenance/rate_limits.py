@@ -26,6 +26,8 @@ from dataclasses import dataclass
 
 from django.core.cache import cache
 
+from .constants import CREATE_RATE_LIMIT, CREATE_WINDOW_SECONDS
+
 _CACHE_TTL_FUDGE_SECONDS = 60
 
 
@@ -43,6 +45,16 @@ class RateLimitSpec:
     bucket: str
     limit: int
     window_seconds: int
+
+
+# Shared bucket for user-driven record creation (Title, Model, …). All record
+# types share one bucket so that a burst of creates is capped in aggregate,
+# not per-record-type. Delete and Restore will add sibling specs here.
+CREATE_RATE_LIMIT_SPEC = RateLimitSpec(
+    bucket="create",
+    limit=CREATE_RATE_LIMIT,
+    window_seconds=CREATE_WINDOW_SECONDS,
+)
 
 
 def _cache_key(user_id: int, bucket: str) -> str:

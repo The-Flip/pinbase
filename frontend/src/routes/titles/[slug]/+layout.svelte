@@ -118,8 +118,8 @@
 		updateEditQuery(editing);
 	});
 
-	let switcherItems: EditSectionMenuItem[] = $derived(
-		sections.map((s) => {
+	let switcherItems: EditSectionMenuItem[] = $derived([
+		...sections.map((s): EditSectionMenuItem => {
 			if (!isMobile) {
 				return { key: s.key, label: s.menuLabel, onclick: () => (editing = s.key) };
 			}
@@ -140,8 +140,17 @@
 				label: s.menuLabel,
 				href: resolve(`/models/${md.slug}/edit/${s.segment}`)
 			};
-		})
-	);
+		}),
+		// "Create Model" is appended last per the Record Create & Delete spec.
+		// It's a navigation action (not a section editor), so it carries only
+		// an `href`; auth gating happens via `editSectionsForBar` below, which
+		// drops the whole menu when anonymous.
+		{
+			key: 'create-model',
+			label: 'Create Model',
+			href: resolve(`/titles/${slug}/models/new`)
+		}
+	]);
 
 	let editSectionsForBar = $derived(auth.isAuthenticated ? switcherItems : undefined);
 
