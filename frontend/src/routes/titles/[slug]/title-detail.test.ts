@@ -102,7 +102,6 @@ describe('title detail SSR route', () => {
 					citations: [makeCite(10, 1), makeCite(20, 2), makeCite(30, 1)],
 					attribution: null
 				},
-				title_description: { text: '', html: '', citations: [], attribution: null },
 				abbreviations: [],
 				extra_data: {},
 				credits: [],

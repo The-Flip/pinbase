@@ -164,7 +164,6 @@ class MachineModelDetailSchema(Schema):
     ipdb_rating: Optional[float] = None
     pinside_rating: Optional[float] = None
     description: RichTextSchema = RichTextSchema()
-    title_description: RichTextSchema = RichTextSchema()
     abbreviations: list[str] = []
     extra_data: dict
     credits: list[CreditSchema]
@@ -442,9 +441,6 @@ def _serialize_model_detail(pm) -> dict:
         "pinside_rating": float(pm.pinside_rating)
         if pm.pinside_rating is not None
         else None,
-        "title_description": _build_rich_text(pm.title, "description")
-        if pm.title
-        else {},
         "abbreviations": [a.value for a in pm.abbreviations.all()],
         "extra_data": pm.extra_data or {},
         "credits": credits,

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { formatYearRange, resolveHref } from '$lib/utils';
+	import { formatYearRange, resolveHref, websiteHostname } from '$lib/utils';
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import { auth } from '$lib/auth.svelte';
 	import ExpandableSidebarList from '$lib/components/ExpandableSidebarList.svelte';
@@ -23,9 +23,8 @@
 	} from '$lib/components/editors/manufacturer-edit-sections';
 	import { LAYOUT_BREAKPOINT } from '$lib/constants';
 	import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
-	import ManufacturerBasicsEditor from './edit/ManufacturerBasicsEditor.svelte';
-	import ManufacturerDescriptionEditor from './edit/ManufacturerDescriptionEditor.svelte';
-	import ManufacturerNameEditor from './edit/ManufacturerNameEditor.svelte';
+	import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+	import ManufacturerEditorSwitch from './edit/ManufacturerEditorSwitch.svelte';
 
 	let { data, children } = $props();
 	let mfr = $derived(data.manufacturer);
@@ -36,43 +35,47 @@
 	let mode = $derived(resolveDetailSubrouteMode(page.url.pathname));
 	let isDetail = $derived(mode === 'detail');
 	let isEdit = $derived(mode === 'edit');
-	let isMobile = $state(false);
+	const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+	let isMobile = $derived(isMobileFlag.current);
 	let editing = $state<ManufacturerEditSectionKey | null>(null);
+	let syncEnabled = $derived(!isMobile && !isEdit);
+	// Tracks the last URL-derived edit section so local modal state doesn't immediately write it back.
+	let lastUrlEditing = $state<ManufacturerEditSectionKey | null>(null);
 
 	$effect(() => {
 		auth.load();
 	});
 
-	$effect(() => {
-		const mql = matchMedia(`(max-width: ${LAYOUT_BREAKPOINT}rem)`);
-		isMobile = mql.matches;
-		function onChange(e: MediaQueryListEvent) {
-			isMobile = e.matches;
-		}
-		mql.addEventListener('change', onChange);
-		return () => mql.removeEventListener('change', onChange);
-	});
-
-	$effect(() => {
-		if (isMobile) {
-			editing = null;
-			return;
-		}
-		const section = page.url.searchParams.get('edit');
-		const matched = section ? findManufacturerSectionBySegment(section) : undefined;
-		editing = matched?.key ?? null;
-	});
-
-	$effect(() => {
-		if (isMobile || isEdit) return;
-		const current = page.url.searchParams.get('edit');
-		const desired = editing ? findManufacturerSectionByKey(editing)?.segment : null;
-		if ((current ?? null) === desired) return;
-
+	function updateEditQuery(nextEditing: ManufacturerEditSectionKey | null) {
+		const current = page.url.searchParams.get('edit') ?? null;
+		const desired = nextEditing
+			? (findManufacturerSectionByKey(nextEditing)?.segment ?? null)
+			: null;
+		if (current === desired) return;
 		const url = new URL(page.url);
 		if (desired) url.searchParams.set('edit', desired);
 		else url.searchParams.delete('edit');
 		goto(`${url.pathname}${url.search}`, { replaceState: true, noScroll: true, keepFocus: true });
+	}
+
+	function resolveEditingFromUrl(): ManufacturerEditSectionKey | null {
+		if (!syncEnabled) return null;
+		const section = page.url.searchParams.get('edit');
+		const matched = section ? findManufacturerSectionBySegment(section) : undefined;
+		return matched?.key ?? null;
+	}
+
+	$effect(() => {
+		const nextEditing = resolveEditingFromUrl();
+		lastUrlEditing = nextEditing;
+		editing = nextEditing;
+	});
+
+	$effect(() => {
+		if (!syncEnabled) return;
+		if (editing === lastUrlEditing) return;
+		lastUrlEditing = editing;
+		updateEditQuery(editing);
 	});
 
 	let hasEntityLocations = $derived(mfr.entities.some((entity) => entity.locations.length > 0));
@@ -99,14 +102,6 @@
 	}
 
 	manufacturerEditActionContext.set(editAction);
-
-	function websiteHostname(url: string): string {
-		try {
-			return new URL(url).hostname;
-		} catch {
-			return url;
-		}
-	}
 </script>
 
 <MetaTags
@@ -206,7 +201,7 @@
 		{/if}
 
 		{#if mfr.website}
-			<SidebarSection heading="Links">
+			<SidebarSection heading="Links" onEdit={editAction('basics')}>
 				<SidebarList>
 					<SidebarListItem>
 						<a href={mfr.website} target="_blank" rel="noopener">{websiteHostname(mfr.website)}</a>
@@ -234,34 +229,15 @@
 		switcherItems={editSections}
 	>
 		{#snippet editor(key, { ref, onsaved, onerror, ondirtychange })}
-			{#if key === 'name'}
-				<ManufacturerNameEditor
-					bind:this={ref.current}
-					initialData={mfr}
-					slug={mfr.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'description'}
-				<ManufacturerDescriptionEditor
-					bind:this={ref.current}
-					initialData={mfr}
-					slug={mfr.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'basics'}
-				<ManufacturerBasicsEditor
-					bind:this={ref.current}
-					initialData={mfr}
-					slug={mfr.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{/if}
+			<ManufacturerEditorSwitch
+				sectionKey={key}
+				initialData={mfr}
+				slug={mfr.slug}
+				bind:editorRef={ref.current}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
+			/>
 		{/snippet}
 	</SectionEditorHost>
 {/if}

@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
 	import { page } from '$app/state';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { MEDIA_CATEGORIES } from '$lib/api/catalog-meta';
 	import SectionEditorForm from '$lib/components/SectionEditorForm.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import BasicsEditor from '$lib/components/editors/BasicsEditor.svelte';
-	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
-	import TechnologyEditor from '$lib/components/editors/TechnologyEditor.svelte';
-	import FeaturesEditor from '$lib/components/editors/FeaturesEditor.svelte';
-	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
-	import RelatedModelsEditor from '$lib/components/editors/RelatedModelsEditor.svelte';
-	import ExternalDataEditor from '$lib/components/editors/ExternalDataEditor.svelte';
 	import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
+	import ModelEditorSwitch from '../ModelEditorSwitch.svelte';
+	import { getEditLayoutContext } from '$lib/components/editors/edit-layout-context';
 	import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
 	import type { SaveMeta } from '$lib/components/editors/save-model-claims';
 	import { findSectionBySegment } from '$lib/components/editors/model-edit-sections';
@@ -37,7 +31,7 @@
 		}
 	});
 
-	const editLayout = getContext<{ setDirty: (dirty: boolean) => void }>('edit-layout');
+	const editLayout = getEditLayoutContext();
 
 	let editorRef = $state<SectionEditorHandle>();
 	let editError = $state('');
@@ -86,71 +80,16 @@
 				oncancel={handleCancel}
 				onsave={handleSave}
 			>
-				{#if section.key === 'basics'}
-					<BasicsEditor
-						bind:this={editorRef}
-						initialData={model}
-						slug={model.slug}
-						slim={slimBasics}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'overview'}
-					<OverviewEditor
-						bind:this={editorRef}
-						initialData={model.description?.text ?? ''}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'technology'}
-					<TechnologyEditor
-						bind:this={editorRef}
-						initialData={model}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'features'}
-					<FeaturesEditor
-						bind:this={editorRef}
-						initialData={model}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'people'}
-					<PeopleEditor
-						bind:this={editorRef}
-						initialData={model.credits}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'related-models'}
-					<RelatedModelsEditor
-						bind:this={editorRef}
-						initialData={model}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{:else if section.key === 'external-data'}
-					<ExternalDataEditor
-						bind:this={editorRef}
-						initialData={model}
-						slug={model.slug}
-						onsaved={handleSaved}
-						onerror={(msg) => (editError = msg)}
-						ondirtychange={handleDirtyChange}
-					/>
-				{/if}
+				<ModelEditorSwitch
+					sectionKey={section.key}
+					initialData={model}
+					slug={model.slug}
+					slim={slimBasics}
+					bind:editorRef
+					onsaved={handleSaved}
+					onerror={(msg: string) => (editError = msg)}
+					ondirtychange={handleDirtyChange}
+				/>
 			</SectionEditorForm>
 		{/key}
 	{:else if section.key === 'media'}

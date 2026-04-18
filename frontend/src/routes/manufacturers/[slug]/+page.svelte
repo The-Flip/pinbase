@@ -2,17 +2,20 @@
 	import { resolve } from '$app/paths';
 	import { MEDIA_CATEGORIES } from '$lib/api/catalog-meta';
 	import AccordionSection from '$lib/components/AccordionSection.svelte';
-	import RichTextAccordionReader from '$lib/components/RichTextAccordionReader.svelte';
+	import RichTextOverviewAccordion from '$lib/components/RichTextOverviewAccordion.svelte';
+	import RichTextReferencesAccordion from '$lib/components/RichTextReferencesAccordion.svelte';
+	import { createRichTextAccordionState } from '$lib/components/rich-text-accordion-state.svelte';
 	import TitleCard from '$lib/components/cards/TitleCard.svelte';
 	import { manufacturerEditActionContext } from '$lib/components/editors/edit-action-context';
 	import SearchableGrid from '$lib/components/grid/SearchableGrid.svelte';
 	import LocationLink from '$lib/components/LocationLink.svelte';
 	import MediaGrid from '$lib/components/media/MediaGrid.svelte';
-	import { formatYearRange } from '$lib/utils';
+	import { formatYearRange, websiteHostname } from '$lib/utils';
 
 	let { data } = $props();
 	let mfr = $derived(data.manufacturer);
 	let editAction = manufacturerEditActionContext.get();
+	const richTextState = createRichTextAccordionState();
 
 	let yearsActive = $derived(formatYearRange(mfr.year_start, mfr.year_end));
 	let hasEntityLocations = $derived(mfr.entities.some((entity) => entity.locations.length > 0));
@@ -20,17 +23,13 @@
 	let systemsHeading = $derived(`Systems (${mfr.systems.length})`);
 	let peopleHeading = $derived(`People (${mfr.persons.length})`);
 	let mediaHeading = $derived(`Media (${mfr.uploaded_media.length})`);
-
-	function websiteHostname(url: string): string {
-		try {
-			return new URL(url).hostname;
-		} catch {
-			return url;
-		}
-	}
 </script>
 
-<RichTextAccordionReader richText={mfr.description} onEdit={editAction('description')} />
+<RichTextOverviewAccordion
+	richText={mfr.description}
+	state={richTextState}
+	onEdit={editAction('description')}
+/>
 
 <AccordionSection heading="Companies">
 	<div class="company-section">
@@ -148,6 +147,8 @@
 		/>
 	</AccordionSection>
 {/if}
+
+<RichTextReferencesAccordion richText={mfr.description} state={richTextState} />
 
 <style>
 	.company-section {

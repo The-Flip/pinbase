@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
 	import { page } from '$app/state';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import SectionEditorForm from '$lib/components/SectionEditorForm.svelte';
-	import TitleBasicsEditor from '$lib/components/editors/TitleBasicsEditor.svelte';
-	import TitleExternalDataEditor from '$lib/components/editors/TitleExternalDataEditor.svelte';
-	import TitleOverviewEditor from '$lib/components/editors/TitleOverviewEditor.svelte';
+	import { getEditLayoutContext } from '$lib/components/editors/edit-layout-context';
+	import TitleEditorSwitch from '../TitleEditorSwitch.svelte';
 	import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
 	import type { SaveMeta } from '$lib/components/editors/save-claims-shared';
 	import {
@@ -33,7 +31,7 @@
 		}
 	});
 
-	const editLayout = getContext<{ setDirty: (dirty: boolean) => void }>('edit-layout');
+	const editLayout = getEditLayoutContext();
 
 	let editorRef = $state<SectionEditorHandle>();
 	let editError = $state('');
@@ -77,34 +75,15 @@
 			oncancel={handleCancel}
 			onsave={handleSave}
 		>
-			{#if section.key === 'overview'}
-				<TitleOverviewEditor
-					bind:this={editorRef}
-					initialData={title.description?.text ?? ''}
-					slug={title.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'basics'}
-				<TitleBasicsEditor
-					bind:this={editorRef}
-					initialData={title}
-					slug={title.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{:else if section.key === 'external-data'}
-				<TitleExternalDataEditor
-					bind:this={editorRef}
-					initialData={title}
-					slug={title.slug}
-					onsaved={handleSaved}
-					onerror={(msg) => (editError = msg)}
-					ondirtychange={handleDirtyChange}
-				/>
-			{/if}
+			<TitleEditorSwitch
+				sectionKey={section.key}
+				initialData={title}
+				slug={title.slug}
+				bind:editorRef
+				onsaved={handleSaved}
+				onerror={(msg: string) => (editError = msg)}
+				ondirtychange={handleDirtyChange}
+			/>
 		</SectionEditorForm>
 	{/key}
 {/if}

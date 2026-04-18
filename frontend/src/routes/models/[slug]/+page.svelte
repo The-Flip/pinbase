@@ -1,58 +1,22 @@
 <script lang="ts">
-	import { tick } from 'svelte';
 	import AccordionSection from '$lib/components/AccordionSection.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
 	import ModelHierarchy from '$lib/components/ModelHierarchy.svelte';
 	import ModelSpecsSidebar from '$lib/components/ModelSpecsSidebar.svelte';
 	import CreditsList from '$lib/components/CreditsList.svelte';
 	import MediaGrid from '$lib/components/media/MediaGrid.svelte';
 	import { MEDIA_CATEGORIES } from '$lib/api/catalog-meta';
-	import ReferencesSection from '$lib/components/ReferencesSection.svelte';
+	import RichTextOverviewAccordion from '$lib/components/RichTextOverviewAccordion.svelte';
+	import RichTextReferencesAccordion from '$lib/components/RichTextReferencesAccordion.svelte';
+	import { createRichTextAccordionState } from '$lib/components/rich-text-accordion-state.svelte';
 	import ModelRelationshipsList from '$lib/components/ModelRelationshipsList.svelte';
 	import { modelEditActionContext } from '$lib/components/editors/edit-action-context';
-	import {
-		deduplicateCitations,
-		findFirstInlineMarker,
-		findRefEntry,
-		scrollToAndHighlight
-	} from '$lib/components/citation-refs';
 
 	let { data } = $props();
 	let model = $derived(data.model);
 
 	// On desktop, editAction opens the modal editor; on mobile, it navigates to the edit route.
 	const editAction = modelEditActionContext.get();
-
-	let isOnlyModelInTitle = $derived(model.title_models.length <= 1);
-
-	// Only model-owned citations feed the References accordion.
-	// title_description citations stay with their own Markdown block
-	// to avoid index collisions (each block numbers from [1]).
-	let allCitations = $derived(model.description?.citations ?? []);
-	let uniqueCitationCount = $derived(deduplicateCitations(allCitations).length);
-
-	// DOM refs for cross-section citation scroll-to.
-	// descriptionContentEl scopes to the model description block only,
-	// so back-links don't accidentally match title_description markers.
-	let descriptionContentEl: HTMLDivElement | undefined = $state();
-	let refsContentEl: HTMLDivElement | undefined = $state();
-	let refsAccordionOpen = $state(false);
-
-	/** Called from References back-link → scroll to inline marker in model description */
-	function scrollToInlineMarker(index: number) {
-		if (!descriptionContentEl) return;
-		const marker = findFirstInlineMarker(descriptionContentEl, index);
-		if (marker) scrollToAndHighlight(marker);
-	}
-
-	/** Called from CitationTooltip in Overview → scroll to entry in References */
-	async function scrollToRefEntry(index: number) {
-		refsAccordionOpen = true;
-		await tick();
-		if (!refsContentEl) return;
-		const entry = findRefEntry(refsContentEl, index);
-		if (entry) scrollToAndHighlight(entry);
-	}
+	const richTextState = createRichTextAccordionState();
 
 	let hasRelationships = $derived(
 		model.title ||
@@ -90,26 +54,11 @@
 	let hasExternalLinks = $derived(!!(model.ipdb_id || model.opdb_id || model.pinside_id));
 </script>
 
-<!-- Overview accordion — description prose -->
-<AccordionSection heading="Overview" open={true} onEdit={editAction('overview')}>
-	{#if (model.title_description?.html && isOnlyModelInTitle) || model.description?.html}
-		{#if model.title_description?.html && isOnlyModelInTitle}
-			<Markdown html={model.title_description.html} citations={model.title_description.citations} />
-		{/if}
-		{#if model.description?.html}
-			<div bind:this={descriptionContentEl}>
-				<Markdown
-					html={model.description.html}
-					citations={model.description.citations}
-					showReferences={false}
-					onNavigateToRef={scrollToRefEntry}
-				/>
-			</div>
-		{/if}
-	{:else}
-		<p class="muted">No description yet.</p>
-	{/if}
-</AccordionSection>
+<RichTextOverviewAccordion
+	richText={model.description}
+	state={richTextState}
+	onEdit={editAction('overview')}
+/>
 
 <!-- Technology — mobile only -->
 {#if hasTechnology}
@@ -194,26 +143,9 @@
 	</div>
 {/if}
 
-<!-- References — only when citations exist -->
-{#if allCitations.length > 0}
-	<AccordionSection heading="References ({uniqueCitationCount})" bind:open={refsAccordionOpen}>
-		<div bind:this={refsContentEl}>
-			<ReferencesSection
-				citations={allCitations}
-				open={true}
-				showToggle={false}
-				onBackLink={scrollToInlineMarker}
-			/>
-		</div>
-	</AccordionSection>
-{/if}
+<RichTextReferencesAccordion richText={model.description} state={richTextState} />
 
 <style>
-	.muted {
-		color: var(--color-text-muted);
-		font-size: var(--font-size-0);
-	}
-
 	/* Mobile-only: visible below 52rem — keep in sync with LAYOUT_BREAKPOINT */
 	.mobile-only {
 		display: block;

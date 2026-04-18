@@ -21,14 +21,9 @@
 	import { modelHasTitleOwnedIdentity } from '$lib/catalog-rules';
 	import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
 	import { modelEditActionContext } from '$lib/components/editors/edit-action-context';
-	import OverviewEditor from '$lib/components/editors/OverviewEditor.svelte';
-	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
+	import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
 	import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
-	import RelatedModelsEditor from '$lib/components/editors/RelatedModelsEditor.svelte';
-	import BasicsEditor from '$lib/components/editors/BasicsEditor.svelte';
-	import ExternalDataEditor from '$lib/components/editors/ExternalDataEditor.svelte';
-	import FeaturesEditor from '$lib/components/editors/FeaturesEditor.svelte';
-	import TechnologyEditor from '$lib/components/editors/TechnologyEditor.svelte';
+	import ModelEditorSwitch from './edit/ModelEditorSwitch.svelte';
 
 	let { data, children } = $props();
 	let model = $derived(data.model);
@@ -46,20 +41,11 @@
 	let isDetail = $derived(mode === 'detail');
 
 	// Mobile detection — matches TwoColumnLayout breakpoint (LAYOUT_BREAKPOINT)
-	let isMobile = $state(false);
-	$effect(() => {
-		const mql = matchMedia(`(max-width: ${LAYOUT_BREAKPOINT}rem)`);
-		isMobile = mql.matches;
-		function onChange(e: MediaQueryListEvent) {
-			isMobile = e.matches;
-		}
-		mql.addEventListener('change', onChange);
-		return () => mql.removeEventListener('change', onChange);
-	});
+	const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+	let isMobile = $derived(isMobileFlag.current);
 
 	let metaDescription = $derived.by(() => {
 		if (model.description?.text) return model.description.text;
-		if (model.title_description?.text) return model.title_description.text;
 		const parts = [model.name];
 		if (model.year) parts.push(`a ${model.year} pinball machine`);
 		else parts.push('pinball machine');
@@ -92,10 +78,45 @@
 
 	import {
 		MODEL_EDIT_SECTIONS,
+		findSectionByKey,
+		findSectionBySegment,
 		type ModelEditSectionKey
 	} from '$lib/components/editors/model-edit-sections';
 
 	let editing = $state<ModelEditSectionKey | null>(null);
+	let syncEnabled = $derived(!isMobile && !isEdit);
+	// Tracks the last URL-derived edit section so local modal state doesn't immediately write it back.
+	let lastUrlEditing = $state<ModelEditSectionKey | null>(null);
+
+	function updateEditQuery(nextEditing: ModelEditSectionKey | null) {
+		const current = page.url.searchParams.get('edit') ?? null;
+		const desired = nextEditing ? (findSectionByKey(nextEditing)?.segment ?? null) : null;
+		if (current === desired) return;
+		const url = new URL(page.url);
+		if (desired) url.searchParams.set('edit', desired);
+		else url.searchParams.delete('edit');
+		goto(`${url.pathname}${url.search}`, { replaceState: true, noScroll: true, keepFocus: true });
+	}
+
+	function resolveEditingFromUrl(): ModelEditSectionKey | null {
+		if (!syncEnabled) return null;
+		const section = page.url.searchParams.get('edit');
+		const matched = section ? findSectionBySegment(section) : undefined;
+		return matched?.key ?? null;
+	}
+
+	$effect(() => {
+		const nextEditing = resolveEditingFromUrl();
+		lastUrlEditing = nextEditing;
+		editing = nextEditing;
+	});
+
+	$effect(() => {
+		if (!syncEnabled) return;
+		if (editing === lastUrlEditing) return;
+		lastUrlEditing = editing;
+		updateEditQuery(editing);
+	});
 
 	let editSections: EditSectionMenuItem[] = $derived(
 		MODEL_EDIT_SECTIONS.map((section) =>
@@ -336,71 +357,16 @@
 		switcherItems={editSections}
 	>
 		{#snippet editor(key, { ref, onsaved, onerror, ondirtychange })}
-			{#if key === 'basics'}
-				<BasicsEditor
-					bind:this={ref.current}
-					initialData={model}
-					slug={model.slug}
-					slim={modelHasTitleOwnedIdentity(model)}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'overview'}
-				<OverviewEditor
-					bind:this={ref.current}
-					initialData={model.description?.text ?? ''}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'technology'}
-				<TechnologyEditor
-					bind:this={ref.current}
-					initialData={model}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'features'}
-				<FeaturesEditor
-					bind:this={ref.current}
-					initialData={model}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'people'}
-				<PeopleEditor
-					bind:this={ref.current}
-					initialData={model.credits}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'related-models'}
-				<RelatedModelsEditor
-					bind:this={ref.current}
-					initialData={model}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{:else if key === 'external-data'}
-				<ExternalDataEditor
-					bind:this={ref.current}
-					initialData={model}
-					slug={model.slug}
-					{onsaved}
-					{onerror}
-					{ondirtychange}
-				/>
-			{/if}
+			<ModelEditorSwitch
+				sectionKey={key}
+				initialData={model}
+				slug={model.slug}
+				slim={modelHasTitleOwnedIdentity(model)}
+				bind:editorRef={ref.current}
+				{onsaved}
+				{onerror}
+				{ondirtychange}
+			/>
 		{/snippet}
 
 		{#snippet immediateEditor()}
