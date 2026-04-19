@@ -2,13 +2,10 @@
 	import BasicsEditor from './BasicsEditor.svelte';
 
 	type BasicsModel = {
-		name: string;
-		slug: string;
 		year?: number | null;
 		month?: number | null;
 		title?: { slug: string } | null;
 		corporate_entity?: { slug: string } | null;
-		abbreviations: string[];
 	};
 
 	let {

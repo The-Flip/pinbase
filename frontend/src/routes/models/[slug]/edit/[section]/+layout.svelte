@@ -2,18 +2,20 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { auth } from '$lib/auth.svelte';
+	import { modelHasTitleOwnedIdentity } from '$lib/catalog-rules';
 	import EditSectionShell from '$lib/components/EditSectionShell.svelte';
 	import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
 	import { setEditLayoutContext } from '$lib/components/editors/edit-layout-context';
 	import {
-		MODEL_EDIT_SECTIONS,
-		findSectionBySegment
+		findSectionBySegment,
+		modelSectionsFor
 	} from '$lib/components/editors/model-edit-sections';
 
-	let { children } = $props();
+	let { children, data } = $props();
 	let slug = $derived(page.params.slug);
 	let sectionSegment = $derived(page.params.section);
 	let currentSection = $derived(sectionSegment ? findSectionBySegment(sectionSegment) : undefined);
+	let availableSections = $derived(modelSectionsFor(modelHasTitleOwnedIdentity(data.model)));
 
 	$effect(() => {
 		auth.load();
@@ -28,7 +30,7 @@
 	});
 
 	let switcherItems: EditSectionMenuItem[] = $derived(
-		MODEL_EDIT_SECTIONS.map((s) => ({
+		availableSections.map((s) => ({
 			key: s.key,
 			label: s.label,
 			href: resolve(`/models/${slug}/edit/${s.segment}`)

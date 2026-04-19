@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import TitleBasicsEditorFixture from './TitleBasicsEditor.fixture.svelte';
+import TitleFranchiseEditorFixture from './TitleFranchiseEditor.fixture.svelte';
 
 const { GET, PATCH } = vi.hoisted(() => ({
 	GET: vi.fn(),
@@ -33,11 +33,8 @@ const SERIES = {
 };
 
 const INITIAL_TITLE = {
-	name: 'The Addams Family',
-	slug: 'addams-family',
 	franchise: { slug: 'addams-family' },
-	series: null,
-	abbreviations: ['TAF']
+	series: null
 };
 
 function mockGetResponses() {
@@ -48,7 +45,7 @@ function mockGetResponses() {
 	});
 }
 
-describe('TitleBasicsEditor dirty-state contract', () => {
+describe('TitleFranchiseEditor', () => {
 	beforeEach(() => {
 		GET.mockReset();
 		PATCH.mockReset();
@@ -56,9 +53,9 @@ describe('TitleBasicsEditor dirty-state contract', () => {
 		mockGetResponses();
 	});
 
-	it('reports clean state initially and dirty state after editing', async () => {
+	it('reports clean state initially', async () => {
 		const user = userEvent.setup();
-		render(TitleBasicsEditorFixture, {
+		render(TitleFranchiseEditorFixture, {
 			props: { initialData: INITIAL_TITLE }
 		});
 
@@ -66,33 +63,17 @@ describe('TitleBasicsEditor dirty-state contract', () => {
 
 		await user.click(screen.getByRole('button', { name: 'Check dirty' }));
 		expect(screen.getByTestId('dirty-handle')).toHaveTextContent('false');
-
-		await user.clear(screen.getByLabelText('Name'));
-		await user.type(screen.getByLabelText('Name'), 'The Addams Family Gold');
-
-		expect(screen.getByTestId('dirty-callback')).toHaveTextContent('true');
-
-		await user.click(screen.getByRole('button', { name: 'Check dirty' }));
-		expect(screen.getByTestId('dirty-handle')).toHaveTextContent('true');
 	});
 
-	it('PATCHes /api/titles/{slug}/claims/ with only the changed name', async () => {
+	it('does not PATCH when saving a clean form', async () => {
 		const user = userEvent.setup();
-		PATCH.mockResolvedValue({ data: {}, error: undefined });
-		invalidateAll.mockResolvedValue(undefined);
-		render(TitleBasicsEditorFixture, {
+		render(TitleFranchiseEditorFixture, {
 			props: { initialData: INITIAL_TITLE }
 		});
 
-		await user.clear(screen.getByLabelText('Name'));
-		await user.type(screen.getByLabelText('Name'), 'Addams Family');
-
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
-		expect(PATCH).toHaveBeenCalledOnce();
-		expect(PATCH).toHaveBeenCalledWith('/api/titles/{slug}/claims/', {
-			params: { path: { slug: 'addams-family' } },
-			body: { fields: { name: 'Addams Family' }, note: '' }
-		});
+		expect(PATCH).not.toHaveBeenCalled();
+		expect(screen.getByTestId('saved-count')).toHaveTextContent('1');
 	});
 });

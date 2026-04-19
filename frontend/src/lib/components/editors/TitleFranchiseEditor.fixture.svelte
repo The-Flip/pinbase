@@ -1,19 +1,16 @@
 <script lang="ts">
-	import TitleBasicsEditor from './TitleBasicsEditor.svelte';
+	import TitleFranchiseEditor from './TitleFranchiseEditor.svelte';
 
-	type BasicsTitle = {
-		name: string;
-		slug: string;
+	type FranchiseTitle = {
 		franchise?: { slug: string } | null;
 		series?: { slug: string } | null;
-		abbreviations: string[];
 	};
 
 	let {
 		initialData,
 		slug = 'addams-family'
 	}: {
-		initialData: BasicsTitle;
+		initialData: FranchiseTitle;
 		slug?: string;
 	} = $props();
 
@@ -30,7 +27,7 @@
 		| undefined = $state();
 </script>
 
-<TitleBasicsEditor
+<TitleFranchiseEditor
 	bind:this={editorRef}
 	{initialData}
 	{slug}

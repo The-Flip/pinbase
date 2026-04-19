@@ -50,7 +50,7 @@ export const personEditActionContext = createEditActionContext<PersonEditSection
 
 /**
  * Title-area context — used on the Title reader where the combined menu spans
- * both title- and model-tier sections. Keys are composite (e.g. 'title:basics',
+ * both title- and model-tier sections. Keys are composite (e.g. 'title:name',
  * 'model:overview').
  */
 export const titleAreaEditActionContext = createEditActionContext<CombinedSectionKey>(

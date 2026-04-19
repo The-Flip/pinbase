@@ -1,6 +1,6 @@
 import type { EditSectionDef } from './edit-section-def';
 
-export type TitleEditSectionKey = 'overview' | 'basics' | 'external-data';
+export type TitleEditSectionKey = 'name' | 'overview' | 'franchise' | 'external-data';
 
 export type TitleEditSectionDef = EditSectionDef<TitleEditSectionKey> & {
 	/** URL segment for the edit route */
@@ -10,6 +10,14 @@ export type TitleEditSectionDef = EditSectionDef<TitleEditSectionKey> & {
 
 export const TITLE_EDIT_SECTIONS: TitleEditSectionDef[] = [
 	{
+		key: 'name',
+		segment: 'name',
+		label: 'Name',
+		showCitation: true,
+		showMixedEditWarning: false,
+		includeInSingleModel: true
+	},
+	{
 		key: 'overview',
 		segment: 'overview',
 		label: 'Overview',
@@ -18,9 +26,9 @@ export const TITLE_EDIT_SECTIONS: TitleEditSectionDef[] = [
 		includeInSingleModel: false
 	},
 	{
-		key: 'basics',
-		segment: 'basics',
-		label: 'Basics',
+		key: 'franchise',
+		segment: 'franchise',
+		label: 'Franchise',
 		showCitation: true,
 		showMixedEditWarning: true,
 		includeInSingleModel: true
@@ -46,5 +54,5 @@ export function titleSectionsFor(isSingleModel: boolean): TitleEditSectionDef[] 
 }
 
 export function defaultTitleSectionSegment(isSingleModel: boolean): string {
-	return isSingleModel ? 'basics' : 'overview';
+	return isSingleModel ? 'franchise' : 'overview';
 }

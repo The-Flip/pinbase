@@ -17,23 +17,25 @@ import { describe, expect, it } from 'vitest';
 import { combinedSectionsFor } from './combined-edit-sections';
 
 describe('combinedSectionsFor', () => {
-	it('multi-model returns the three title-tier sections in natural order with plain labels', () => {
+	it('multi-model returns the title-tier sections in natural order with plain labels', () => {
 		const out = combinedSectionsFor(false);
 		expect(out.map((s) => s.key)).toEqual([
+			'title:name',
 			'title:overview',
-			'title:basics',
+			'title:franchise',
 			'title:external-data'
 		]);
-		expect(out.map((s) => s.menuLabel)).toEqual(['Overview', 'Basics', 'External Data']);
+		expect(out.map((s) => s.menuLabel)).toEqual(['Name', 'Overview', 'Franchise', 'External Data']);
 		expect(out.every((s) => s.tier === 'title')).toBe(true);
 	});
 
 	it('single-model interleaves title and model sections in the spec ordering', () => {
 		const out = combinedSectionsFor(true);
 		expect(out.map((s) => s.key)).toEqual([
-			'model:overview',
-			'title:basics',
+			'title:name',
 			'model:basics',
+			'model:overview',
+			'title:franchise',
 			'model:technology',
 			'model:features',
 			'model:people',
@@ -44,13 +46,15 @@ describe('combinedSectionsFor', () => {
 		]);
 	});
 
-	it('single-model labels disambiguate title-tier entries', () => {
+	it('single-model labels only disambiguate where title + model collide', () => {
 		const byKey = new Map(combinedSectionsFor(true).map((s) => [s.key, s.menuLabel]));
-		expect(byKey.get('title:basics')).toBe('Title Details');
+		// Title-tier Name has no model counterpart, so label stays plain.
+		expect(byKey.get('title:name')).toBe('Name');
+		expect(byKey.get('title:franchise')).toBe('Franchise');
+		// external-data exists on both tiers, so title's is disambiguated.
 		expect(byKey.get('title:external-data')).toBe('External Data - Title');
-		// Model-tier menu labels stay plain (no prefix).
-		expect(byKey.get('model:basics')).toBe('Basics');
 		expect(byKey.get('model:external-data')).toBe('External Data');
+		expect(byKey.get('model:basics')).toBe('Basics');
 	});
 
 	it('every composite key is uniquely namespaced by tier', () => {

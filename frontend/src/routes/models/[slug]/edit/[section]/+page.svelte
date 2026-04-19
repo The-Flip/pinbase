@@ -19,14 +19,17 @@
 	let sectionSegment = $derived(page.params.section);
 	let section = $derived(sectionSegment ? findSectionBySegment(sectionSegment) : undefined);
 
-	// On single-model titles, name/slug/title/abbreviations are title-owned per
-	// ModelAndTitleUX.md — the model-side editor never shows them, regardless
-	// of entry point.
+	// On single-model titles the model's title is fixed — the Title picker in
+	// Basics must not be re-assignable. Name/slug/abbreviations are handled
+	// separately: the Name section is filtered out of the switcher and this
+	// page redirects when the URL targets a hidden section.
 	let slimBasics = $derived(modelHasTitleOwnedIdentity(model));
 
-	// Redirect invalid sections to basics
+	// Redirect invalid or hidden sections to basics. A section may be hidden when
+	// the model's identity is title-owned (e.g. Name on single-model titles).
 	$effect(() => {
-		if (!section) {
+		const hidden = section?.hideOnTitleOwnedIdentity && modelHasTitleOwnedIdentity(model);
+		if (!section || hidden) {
 			goto(resolve(`/models/${slug}/edit/basics`), { replaceState: true });
 		}
 	});

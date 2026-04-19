@@ -41,13 +41,10 @@ const FIELD_CONSTRAINTS = {
 };
 
 const INITIAL_MODEL = {
-	name: 'Medieval Madness',
-	slug: 'medieval-madness',
 	year: 1997,
 	month: 6,
 	title: { slug: 'medieval-madness' },
-	corporate_entity: { slug: 'williams-electronics' },
-	abbreviations: ['MM']
+	corporate_entity: { slug: 'williams-electronics' }
 };
 
 function mockGetResponses() {
@@ -66,7 +63,7 @@ describe('BasicsEditor dirty-state contract', () => {
 		mockGetResponses();
 	});
 
-	it('reports clean state initially and dirty state after editing', async () => {
+	it('reports clean state initially and dirty after editing year', async () => {
 		const user = userEvent.setup();
 		render(BasicsEditorFixture, {
 			props: { initialData: INITIAL_MODEL }
@@ -77,8 +74,9 @@ describe('BasicsEditor dirty-state contract', () => {
 		await user.click(screen.getByRole('button', { name: 'Check dirty' }));
 		expect(screen.getByTestId('dirty-handle')).toHaveTextContent('false');
 
-		await user.clear(screen.getByLabelText('Name'));
-		await user.type(screen.getByLabelText('Name'), 'Medieval Madness Remake');
+		const yearInput = screen.getByLabelText('Year');
+		await user.clear(yearInput);
+		await user.type(yearInput, '1998');
 
 		expect(screen.getByTestId('dirty-callback')).toHaveTextContent('true');
 
@@ -107,38 +105,13 @@ describe('BasicsEditor dirty-state contract', () => {
 			body: { fields: { title: 'attack-from-mars' }, note: '' }
 		});
 	});
-});
 
-describe('BasicsEditor slim mode', () => {
-	beforeEach(() => {
-		GET.mockReset();
-		PATCH.mockReset();
-		invalidateAll.mockReset();
-		mockGetResponses();
-	});
-
-	it('hides name, slug, title, and abbreviations when slim', () => {
-		render(BasicsEditorFixture, {
-			props: { initialData: INITIAL_MODEL, slim: true }
-		});
-
-		expect(screen.queryByLabelText('Name')).toBeNull();
-		expect(screen.queryByLabelText('Slug')).toBeNull();
-		expect(screen.queryByRole('combobox', { name: 'Title' })).toBeNull();
-		expect(screen.queryByLabelText('Abbreviations')).toBeNull();
-
-		// The kept fields are still rendered.
-		expect(screen.getByRole('combobox', { name: 'Manufacturer' })).toBeInTheDocument();
-		expect(screen.getByLabelText('Year')).toBeInTheDocument();
-		expect(screen.getByLabelText('Month')).toBeInTheDocument();
-	});
-
-	it('saves only year/month/corporate_entity changes in slim mode', async () => {
+	it('PATCHes only the changed year', async () => {
 		const user = userEvent.setup();
 		PATCH.mockResolvedValue({ data: {}, error: undefined });
 		invalidateAll.mockResolvedValue(undefined);
 		render(BasicsEditorFixture, {
-			props: { initialData: INITIAL_MODEL, slim: true }
+			props: { initialData: INITIAL_MODEL }
 		});
 
 		const yearInput = screen.getByLabelText('Year');
@@ -152,5 +125,27 @@ describe('BasicsEditor slim mode', () => {
 			params: { path: { slug: 'medieval-madness' } },
 			body: { fields: { year: 1998 }, note: '' }
 		});
+	});
+});
+
+describe('BasicsEditor slim mode', () => {
+	beforeEach(() => {
+		GET.mockReset();
+		PATCH.mockReset();
+		invalidateAll.mockReset();
+		mockGetResponses();
+	});
+
+	it('hides the Title picker when slim', () => {
+		render(BasicsEditorFixture, {
+			props: { initialData: INITIAL_MODEL, slim: true }
+		});
+
+		expect(screen.queryByRole('combobox', { name: 'Title' })).toBeNull();
+
+		// The kept fields are still rendered.
+		expect(screen.getByRole('combobox', { name: 'Manufacturer' })).toBeInTheDocument();
+		expect(screen.getByLabelText('Year')).toBeInTheDocument();
+		expect(screen.getByLabelText('Month')).toBeInTheDocument();
 	});
 });

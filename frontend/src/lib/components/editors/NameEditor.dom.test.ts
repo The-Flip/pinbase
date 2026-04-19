@@ -137,6 +137,54 @@ describe('NameEditor', () => {
 		expect(goto).toHaveBeenCalledWith('/people/bob/edit/name', { replaceState: true });
 	});
 
+	it('hides the abbreviations field when initialAbbreviations is not passed', () => {
+		render(NameEditorFixture);
+		expect(screen.queryByLabelText('Abbreviations')).toBeNull();
+	});
+
+	it('shows abbreviations and reports dirty when the tag set changes', async () => {
+		const user = userEvent.setup();
+		render(NameEditorFixture, {
+			props: { initialAbbreviations: ['WMS'] }
+		});
+
+		expect(screen.getByLabelText('Abbreviations')).toBeInTheDocument();
+		expect(screen.getByTestId('dirty-callback')).toHaveTextContent('false');
+
+		await user.type(screen.getByLabelText('Abbreviations'), 'BLY{Enter}');
+		expect(screen.getByTestId('dirty-callback')).toHaveTextContent('true');
+	});
+
+	it('sends only abbreviations in the save body when only abbreviations changed', async () => {
+		const user = userEvent.setup();
+		render(NameEditorFixture, {
+			props: { initialAbbreviations: ['WMS'] }
+		});
+
+		await user.type(screen.getByLabelText('Abbreviations'), 'BLY{Enter}');
+		await user.click(screen.getByRole('button', { name: 'Save' }));
+
+		expect(screen.getByTestId('last-save-body')).toHaveTextContent(
+			JSON.stringify({ abbreviations: ['WMS', 'BLY'] })
+		);
+	});
+
+	it('sends both fields and abbreviations when both changed', async () => {
+		const user = userEvent.setup();
+		render(NameEditorFixture, {
+			props: { initialAbbreviations: ['WMS'] }
+		});
+
+		await user.clear(screen.getByLabelText('Name'));
+		await user.type(screen.getByLabelText('Name'), 'Bally');
+		await user.type(screen.getByLabelText('Abbreviations'), 'BLY{Enter}');
+		await user.click(screen.getByRole('button', { name: 'Save' }));
+
+		expect(screen.getByTestId('last-save-body')).toHaveTextContent(
+			JSON.stringify({ fields: { name: 'Bally', slug: 'bally' }, abbreviations: ['WMS', 'BLY'] })
+		);
+	});
+
 	it('surfaces field errors from the save result', async () => {
 		const user = userEvent.setup();
 		render(NameEditorFixture, {

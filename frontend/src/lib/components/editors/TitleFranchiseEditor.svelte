@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import SearchableSelect from '$lib/components/SearchableSelect.svelte';
-	import TextField from '$lib/components/form/TextField.svelte';
-	import TagInput from '$lib/components/form/TagInput.svelte';
-	import { diffScalarFields, stringSetChanged } from '$lib/edit-helpers';
+	import { diffScalarFields } from '$lib/edit-helpers';
 	import type { SectionEditorProps } from './editor-contract';
 	import { type FieldErrors, type SaveResult, type SaveMeta } from './save-claims-shared';
 	import { saveTitleClaims } from './save-title-claims';
@@ -13,12 +11,9 @@
 		type TitleEditOption
 	} from './title-edit-options';
 
-	type BasicsTitle = {
-		name: string;
-		slug: string;
+	type FranchiseTitle = {
 		franchise?: { slug: string } | null;
 		series?: { slug: string } | null;
-		abbreviations: string[];
 	};
 
 	let {
@@ -27,33 +22,23 @@
 		onsaved,
 		onerror,
 		ondirtychange = () => {}
-	}: SectionEditorProps<BasicsTitle> = $props();
+	}: SectionEditorProps<FranchiseTitle> = $props();
 
-	type BasicsFormFields = {
-		name: string;
-		slug: string;
+	type FranchiseFormFields = {
 		franchise: string;
 		series: string;
 	};
 
-	function extractFields(t: BasicsTitle): BasicsFormFields {
+	function extractFields(t: FranchiseTitle): FranchiseFormFields {
 		return {
-			name: t.name,
-			slug: t.slug,
 			franchise: t.franchise?.slug ?? '',
 			series: t.series?.slug ?? ''
 		};
 	}
 
 	const original = untrack(() => extractFields(initialData));
-	const originalAbbreviations = untrack(() => [...initialData.abbreviations]);
-	let fields = $state<BasicsFormFields>({ ...original });
-	let abbreviations = $state<string[]>(untrack(() => [...initialData.abbreviations]));
-	let dirty = $derived.by(
-		() =>
-			Object.keys(diffScalarFields(fields, original)).length > 0 ||
-			stringSetChanged(abbreviations, originalAbbreviations)
-	);
+	let fields = $state<FranchiseFormFields>({ ...original });
+	let dirty = $derived(Object.keys(diffScalarFields(fields, original)).length > 0);
 
 	let fieldErrors = $state<FieldErrors>({});
 
@@ -79,7 +64,6 @@
 	export async function save(meta?: SaveMeta): Promise<void> {
 		fieldErrors = {};
 		const changed = diffScalarFields(fields, original);
-		const abbrevsChanged = stringSetChanged(abbreviations, originalAbbreviations);
 
 		if (!dirty) {
 			onsaved();
@@ -87,8 +71,7 @@
 		}
 
 		const result: SaveResult = await saveTitleClaims(slug, {
-			fields: Object.keys(changed).length > 0 ? changed : undefined,
-			abbreviations: abbrevsChanged ? abbreviations : undefined,
+			fields: changed,
 			...meta
 		});
 
@@ -103,9 +86,7 @@
 	}
 </script>
 
-<div class="basics-grid">
-	<TextField label="Name" bind:value={fields.name} error={fieldErrors.name ?? ''} />
-	<TextField label="Slug" bind:value={fields.slug} error={fieldErrors.slug ?? ''} />
+<div class="franchise-grid">
 	<SearchableSelect
 		label="Franchise"
 		options={franchiseOptions}
@@ -122,19 +103,12 @@
 		allowZeroCount
 		placeholder="Search series..."
 	/>
-	<div class="full-row">
-		<TagInput label="Abbreviations" bind:tags={abbreviations} placeholder="Type and press Enter" />
-	</div>
 </div>
 
 <style>
-	.basics-grid {
+	.franchise-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--size-3);
-	}
-
-	.full-row {
-		grid-column: 1 / -1;
 	}
 </style>

@@ -6,6 +6,7 @@
 	import DescriptionEditor from '$lib/components/editors/DescriptionEditor.svelte';
 	import ExternalDataEditor from '$lib/components/editors/ExternalDataEditor.svelte';
 	import FeaturesEditor from '$lib/components/editors/FeaturesEditor.svelte';
+	import NameEditor from '$lib/components/editors/NameEditor.svelte';
 	import PeopleEditor from '$lib/components/editors/PeopleEditor.svelte';
 	import RelatedModelsEditor from '$lib/components/editors/RelatedModelsEditor.svelte';
 	import { saveModelClaims } from '$lib/components/editors/save-model-claims';
@@ -34,7 +35,18 @@
 	} = $props();
 </script>
 
-{#if sectionKey === 'basics'}
+{#if sectionKey === 'name'}
+	<NameEditor
+		bind:this={editorRef}
+		initialData={{ name: initialData.name, slug: initialData.slug }}
+		initialAbbreviations={initialData.abbreviations}
+		{slug}
+		save={saveModelClaims}
+		{onsaved}
+		{onerror}
+		{ondirtychange}
+	/>
+{:else if sectionKey === 'basics'}
 	<BasicsEditor
 		bind:this={editorRef}
 		{initialData}

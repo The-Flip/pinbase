@@ -2,7 +2,7 @@
  * Combined section registry for the Title reader's edit menu.
  *
  * Single-model titles need to edit both Title- and Model-tier sections from one
- * menu and one modal host. Section-key collisions (`basics`, `external-data`)
+ * menu and one modal host. Section-key collisions (`name`, `external-data`)
  * are resolved with composite keys of the form `${tier}:${key}`, so a single
  * SectionEditorHost (generic over TSectionKey extends string) handles both
  * tiers without host-side changes.
@@ -21,9 +21,9 @@ export type CombinedSectionDef = {
 	key: CombinedSectionKey;
 	tier: SectionTier;
 	segment: string;
-	/** Plain label, used as modal heading (e.g. "Basics"). */
+	/** Plain label, used as modal heading (e.g. "Name"). */
 	label: string;
-	/** Label shown in the combined dropdown (disambiguated for title tier on single-model). */
+	/** Label shown in the combined dropdown (disambiguated where title + model collide). */
 	menuLabel: string;
 	showCitation: boolean;
 	showMixedEditWarning: boolean;
@@ -58,31 +58,52 @@ function toModelDef(s: ModelEditSectionDef): CombinedSectionDef {
 }
 
 /**
- * Single-model ordering mirrors the reader's accordion order: model Overview
- * first, then Title Details (title:basics), then the rest of the model
- * sections, with External Data - Title (title:external-data) appended last
- * next to model:external-data. Multi-model returns the natural title order.
+ * Single-model ordering (edits both tiers from one menu):
+ *   1. title:name        — identity edits land on the Title row
+ *   2. model:basics      — manufacturer / year / month
+ *   3. model:overview
+ *   4. title:franchise
+ *   5. model:technology, features, people, related-models, media
+ *   6. model:external-data, title:external-data (disambiguated)
+ *
+ * The Title-tier `name` section uses the plain label "Name" because the model
+ * has no Name section to collide with. The `external-data` sections collide,
+ * so the title one is relabeled for the menu.
+ *
+ * Multi-model returns the natural title order.
  */
 export function combinedSectionsFor(isSingleModel: boolean): CombinedSectionDef[] {
 	const titleDefs = titleSectionsFor(isSingleModel);
 
 	if (!isSingleModel) {
-		// Multi-model: plain labels, no disambiguation needed.
 		return titleDefs.map((s) => toTitleDef(s, s.label));
 	}
 
 	const titleByKey = new Map(titleDefs.map((s) => [s.key, s]));
-	const modelOverview = MODEL_EDIT_SECTIONS.find((s) => s.key === 'overview');
-	if (!modelOverview) {
-		throw new Error('MODEL_EDIT_SECTIONS missing required "overview" entry');
-	}
-	const modelRest = MODEL_EDIT_SECTIONS.filter((s) => s.key !== 'overview');
+	const modelByKey = new Map(MODEL_EDIT_SECTIONS.map((s) => [s.key, s]));
 
-	const out: CombinedSectionDef[] = [toModelDef(modelOverview)];
-	const titleBasics = titleByKey.get('basics');
-	if (titleBasics) out.push(toTitleDef(titleBasics, 'Title Details'));
-	for (const s of modelRest) out.push(toModelDef(s));
-	const titleExternal = titleByKey.get('external-data');
-	if (titleExternal) out.push(toTitleDef(titleExternal, 'External Data - Title'));
-	return out;
+	const requireTitle = (key: TitleEditSectionDef['key']): TitleEditSectionDef => {
+		const s = titleByKey.get(key);
+		if (!s) throw new Error(`TITLE_EDIT_SECTIONS missing required "${key}" entry`);
+		return s;
+	};
+	const requireModel = (key: ModelEditSectionDef['key']): ModelEditSectionDef => {
+		const s = modelByKey.get(key);
+		if (!s) throw new Error(`MODEL_EDIT_SECTIONS missing required "${key}" entry`);
+		return s;
+	};
+
+	return [
+		toTitleDef(requireTitle('name'), 'Name'),
+		toModelDef(requireModel('basics')),
+		toModelDef(requireModel('overview')),
+		toTitleDef(requireTitle('franchise'), 'Franchise'),
+		toModelDef(requireModel('technology')),
+		toModelDef(requireModel('features')),
+		toModelDef(requireModel('people')),
+		toModelDef(requireModel('related-models')),
+		toModelDef(requireModel('media')),
+		toModelDef(requireModel('external-data')),
+		toTitleDef(requireTitle('external-data'), 'External Data - Title')
+	];
 }

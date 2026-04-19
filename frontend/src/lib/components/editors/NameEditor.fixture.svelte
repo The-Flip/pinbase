@@ -4,10 +4,12 @@
 
 	let {
 		initialData = { name: 'Williams', slug: 'williams' },
+		initialAbbreviations,
 		slug = 'williams',
 		saveResult = { ok: true } as SaveResult
 	}: {
 		initialData?: { name: string; slug: string };
+		initialAbbreviations?: string[];
 		slug?: string;
 		saveResult?: SaveResult;
 	} = $props();
@@ -27,7 +29,10 @@
 
 	async function save(
 		_slug: string,
-		body: { fields: Partial<{ name: string; slug: string }> } & SaveMeta
+		body: {
+			fields?: Partial<{ name: string; slug: string }>;
+			abbreviations?: string[];
+		} & SaveMeta
 	): Promise<SaveResult> {
 		lastSaveBody = body;
 		return saveResult;
@@ -37,6 +42,7 @@
 <NameEditor
 	bind:this={editorRef}
 	{initialData}
+	{initialAbbreviations}
 	{slug}
 	{save}
 	onsaved={() => savedCount++}

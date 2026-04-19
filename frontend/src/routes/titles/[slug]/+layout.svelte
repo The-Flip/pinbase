@@ -330,13 +330,13 @@
 				heading="Franchise"
 				basePath="/franchises"
 				item={title.franchise}
-				onEdit={editAction('title:basics')}
+				onEdit={editAction('title:franchise')}
 			/>
 			<TaxonomyLinkSidebarSection
 				heading="Series"
 				basePath="/series"
 				item={title.series}
-				onEdit={editAction('title:basics')}
+				onEdit={editAction('title:franchise')}
 			/>
 
 			{#if title.machines.length > 0}

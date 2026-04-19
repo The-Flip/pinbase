@@ -77,11 +77,17 @@
 	// --- Section editing state ---
 
 	import {
-		MODEL_EDIT_SECTIONS,
 		findSectionByKey,
 		findSectionBySegment,
+		modelSectionsFor,
 		type ModelEditSectionKey
 	} from '$lib/components/editors/model-edit-sections';
+
+	// The dedicated edit route and this reader-level editor must agree on which
+	// sections are writable — otherwise a title-owned model would still expose a
+	// model-side Name editor from the reader menu or the ?edit=name URL,
+	// producing claim writes against the Model row instead of the Title row.
+	let availableSections = $derived(modelSectionsFor(modelHasTitleOwnedIdentity(model)));
 
 	let editing = $state<ModelEditSectionKey | null>(null);
 	let syncEnabled = $derived(!isMobile && !isEdit);
@@ -102,7 +108,11 @@
 		if (!syncEnabled) return null;
 		const section = page.url.searchParams.get('edit');
 		const matched = section ? findSectionBySegment(section) : undefined;
-		return matched?.key ?? null;
+		if (!matched) return null;
+		// Reject sections that are filtered out for this model (e.g. `?edit=name`
+		// on a title-owned model) so the reader can't bypass the menu filter.
+		if (!availableSections.some((s) => s.key === matched.key)) return null;
+		return matched.key;
 	}
 
 	$effect(() => {
@@ -119,7 +129,7 @@
 	});
 
 	let editSections: EditSectionMenuItem[] = $derived([
-		...MODEL_EDIT_SECTIONS.map((section) =>
+		...availableSections.map((section) =>
 			isMobile
 				? {
 						key: section.key,
@@ -362,7 +372,7 @@
 
 	<SectionEditorHost
 		bind:editingKey={editing}
-		sections={MODEL_EDIT_SECTIONS}
+		sections={availableSections}
 		switcherItems={editSections}
 	>
 		{#snippet editor(key, { ref, onsaved, onerror, ondirtychange })}
