@@ -196,3 +196,8 @@ a:hover {
 	white-space: nowrap;
 	border-width: 0;
 }
+
+.muted {
+	color: var(--color-text-muted);
+	font-size: var(--font-size-0);
+}
