@@ -16,6 +16,7 @@ from .edit_claims import (
     raise_form_error,
     validate_scalar_fields,
 )
+from .entity_crud import register_entity_create, register_entity_delete_restore
 from apps.provenance.helpers import build_sources, claims_prefetch
 
 from .helpers import (
@@ -42,6 +43,7 @@ from ..models import MachineModel, Theme
 class ThemeListSchema(Schema):
     name: str
     slug: str
+    aliases: list[str] = []
     parent_slugs: list[str] = []
 
 
@@ -110,13 +112,17 @@ themes_router = Router(tags=["themes"])
 def list_themes(request):
     themes = (
         Theme.objects.active()
-        .prefetch_related(Prefetch("parents", queryset=Theme.objects.active()))
+        .prefetch_related(
+            Prefetch("parents", queryset=Theme.objects.active()),
+            "aliases",
+        )
         .order_by("name")
     )
     return [
         {
             "name": t.name,
             "slug": t.slug,
+            "aliases": [a.value for a in t.aliases.all()],
             "parent_slugs": [p.slug for p in t.parents.all()],
         }
         for t in themes
@@ -166,3 +172,23 @@ def patch_theme_claims(request, slug: str, data: HierarchyClaimPatchSchema):
 
     theme = get_object_or_404(_detail_qs(), slug=theme.slug)
     return _serialize_detail(theme)
+
+
+# ---------------------------------------------------------------------------
+# Create / delete / restore wiring
+# ---------------------------------------------------------------------------
+
+register_entity_create(
+    themes_router,
+    Theme,
+    detail_qs=_detail_qs,
+    serialize_detail=_serialize_detail,
+    response_schema=ThemeDetailSchema,
+)
+register_entity_delete_restore(
+    themes_router,
+    Theme,
+    detail_qs=_detail_qs,
+    serialize_detail=_serialize_detail,
+    response_schema=ThemeDetailSchema,
+)

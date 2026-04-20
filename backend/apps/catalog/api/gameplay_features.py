@@ -16,6 +16,7 @@ from .edit_claims import (
     raise_form_error,
     validate_scalar_fields,
 )
+from .entity_crud import register_entity_create, register_entity_delete_restore
 from apps.provenance.helpers import build_sources, claims_prefetch
 
 from .helpers import (
@@ -41,6 +42,7 @@ from ..models import GameplayFeature, MachineModel
 class GameplayFeatureListSchema(Schema):
     name: str
     slug: str
+    aliases: list[str] = []
     model_count: int = 0
     parent_slugs: list[str] = []
 
@@ -105,6 +107,7 @@ def list_gameplay_features(request):
         .prefetch_related(
             Prefetch("children", queryset=GameplayFeature.objects.active()),
             Prefetch("parents", queryset=GameplayFeature.objects.active()),
+            "aliases",
         )
         .order_by("name")
     )
@@ -143,6 +146,7 @@ def list_gameplay_features(request):
             {
                 "name": f.name,
                 "slug": f.slug,
+                "aliases": [a.value for a in f.aliases.all()],
                 "model_count": len(all_model_pks),
                 "parent_slugs": [p.slug for p in f.parents.all()],
             }
@@ -197,3 +201,23 @@ def patch_gameplay_feature_claims(request, slug: str, data: HierarchyClaimPatchS
 
     feature = get_object_or_404(_detail_qs(), slug=feature.slug)
     return _serialize_detail(feature)
+
+
+# ---------------------------------------------------------------------------
+# Create / delete / restore wiring
+# ---------------------------------------------------------------------------
+
+register_entity_create(
+    gameplay_features_router,
+    GameplayFeature,
+    detail_qs=_detail_qs,
+    serialize_detail=_serialize_detail,
+    response_schema=GameplayFeatureDetailSchema,
+)
+register_entity_delete_restore(
+    gameplay_features_router,
+    GameplayFeature,
+    detail_qs=_detail_qs,
+    serialize_detail=_serialize_detail,
+    response_schema=GameplayFeatureDetailSchema,
+)

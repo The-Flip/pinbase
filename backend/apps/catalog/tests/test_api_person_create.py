@@ -14,7 +14,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 
-from apps.catalog.models import Person
+from apps.catalog.models import Person, PersonAlias
 from apps.provenance.models import ChangeSet, ChangeSetAction, Claim
 
 User = get_user_model()
@@ -157,6 +157,18 @@ class TestCreateInputValidation:
         resp = _post(client, {"name": "Someone", "slug": "Not A Slug"})
         assert resp.status_code == 422
         assert "slug" in resp.json()["detail"]["field_errors"]
+
+    def test_alias_collision_rejected(self, client, user):
+        existing = Person.objects.create(
+            name="Robert Smith", slug="robert-smith", status="active"
+        )
+        PersonAlias.objects.create(person=existing, value="Bob Smith")
+
+        client.force_login(user)
+        resp = _post(client, {"name": "Bob Smith", "slug": "bob-smith"})
+        assert resp.status_code == 422
+        assert "name" in resp.json()["detail"]["field_errors"]
+        assert not Person.objects.filter(slug="bob-smith").exists()
 
 
 # ── Rate limiting ───────────────────────────────────────────────────

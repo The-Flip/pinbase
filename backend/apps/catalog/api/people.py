@@ -71,6 +71,7 @@ from .edit_claims import ClaimSpec, execute_claims, plan_scalar_field_claims
 class PersonGridSchema(Schema):
     name: str
     slug: str
+    aliases: list[str] = []
     credit_count: int = 0
     thumbnail_url: Optional[str] = None
 
@@ -222,6 +223,7 @@ def list_all_people(request):
     people = list(
         Person.objects.active()
         .annotate(credit_count=Count("credits"))
+        .prefetch_related("aliases")
         .order_by("-credit_count")
     )
 
@@ -257,6 +259,7 @@ def list_all_people(request):
             {
                 "name": p.name,
                 "slug": p.slug,
+                "aliases": [a.value for a in p.aliases.all()],
                 "credit_count": p.credit_count,
                 "thumbnail_url": thumb,
             }

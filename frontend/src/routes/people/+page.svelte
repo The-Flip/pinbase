@@ -27,7 +27,7 @@
 	items={people.data}
 	loading={people.loading}
 	error={people.error}
-	filterFields={(item) => [item.name]}
+	filterFields={(item) => [item.name, ...(item.aliases ?? [])]}
 	placeholder="Search people..."
 	entityName="person"
 	entityNamePlural="people"
