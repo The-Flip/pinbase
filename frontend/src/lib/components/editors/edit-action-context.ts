@@ -1,12 +1,13 @@
 import { getContext, setContext } from 'svelte';
 import type { CombinedSectionKey } from './combined-edit-sections';
+import type { HierarchicalTaxonomyEditSectionKey } from './hierarchical-taxonomy-edit-sections';
 import type { ManufacturerEditSectionKey } from './manufacturer-edit-sections';
 import type { ModelEditSectionKey } from './model-edit-sections';
 import type { PersonEditSectionKey } from './person-edit-sections';
 
 export type EditActionFn<TKey extends string> = (key: TKey) => (() => void) | undefined;
 
-type EditActionContext<TKey extends string> = {
+export type EditActionContext<TKey extends string> = {
 	set: (fn: EditActionFn<TKey>) => void;
 	get: () => EditActionFn<TKey>;
 	setForTesting: (fn: EditActionFn<TKey>) => void;
@@ -57,3 +58,17 @@ export const titleAreaEditActionContext = createEditActionContext<CombinedSectio
 	'titleAreaEditAction',
 	'titleAreaEditAction context missing — must be rendered inside the title layout'
 );
+
+/**
+ * Hierarchical-taxonomy context — shared between gameplay-features and themes.
+ * Both entities' detail layouts publish an editAction; their +page.svelte
+ * accordions retrieve it for [edit] affordances (e.g. the Media accordion on
+ * gameplay-features). Themes calling editAction('media') returns undefined
+ * because no 'media' section is registered for it; safe because themes never
+ * renders the Media accordion.
+ */
+export const hierarchicalTaxonomyEditActionContext =
+	createEditActionContext<HierarchicalTaxonomyEditSectionKey>(
+		'hierarchicalTaxonomyEditAction',
+		'hierarchicalTaxonomyEditAction context missing — must be rendered inside the gameplay-features or themes layout'
+	);

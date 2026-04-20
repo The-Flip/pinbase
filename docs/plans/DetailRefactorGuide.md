@@ -1,75 +1,49 @@
 # Detail Refactor Guide
 
-Use this when converting another record type to the section-based detail-page pattern.
+This document only covers traps and rationale that reading the current code doesn't reveal.
 
-## Start Here
+## Reference Examples
 
-1. Define the edit sections first in a shared registry (`*-edit-sections.ts`). Menus, sidebar edit links, accordion `[edit]` links, and the desktop/mobile dispatch all read from it.
-2. Convert the route layout to `RecordDetailShell` + `PageActionBar`.
-3. Use `resolveDetailSubrouteMode()` — do not hand-roll `isEdit` / `isMedia` / `isSources` booleans.
-4. Keep edit-action ownership in the layout. Pages ask for `onEdit`; they don't know whether it opens a modal or navigates.
-5. Add the main page sections only after the shell and edit routing are working.
+- **One-off record type (unique shape):** [models/[slug]/](../../frontend/src/routes/models/%5Bslug%5D/) — full-featured, inline scaffolding in the layout.
+- **Family of near-identical entities, simple (no sidebar):** [display-types/[slug]/](../../frontend/src/routes/display-types/%5Bslug%5D/) wrapping [SimpleTaxonomyDetailLayout.svelte](../../frontend/src/lib/components/SimpleTaxonomyDetailLayout.svelte).
+- **Family of near-identical entities, hierarchical (sidebar + mobile meta bar + optional media):** [gameplay-features/[slug]/](../../frontend/src/routes/gameplay-features/%5Bslug%5D/) using [TaxonomyDetailBaseLayout.svelte](../../frontend/src/lib/components/TaxonomyDetailBaseLayout.svelte) directly.
 
-## Required Seams
+## When to extract a shared base
 
-- **Desktop modal editing + mobile section routes.** The contract this preserves: one open editor at a time (desktop modal enforces it trivially) _and_ real back-button semantics on mobile (section routes give each editor a URL). Collapsing to one mode breaks one of the two invariants.
-- **Layout-owned edit action context** (`*EditActionContext.set(editAction)`). Pages consume via `get()`; they never branch on `isMobile`.
-- **Per-entity editor-dispatch component** (`*EditorSwitch.svelte`). Owns the `{#if sectionKey === 'x'}` cascade. The layout's `SectionEditorHost` and the mobile `[section]/+page.svelte` both render the switch; the cascade lives in exactly one place. Skipping this means ~90 lines of duplicated dispatch per record type.
-- **Typed `initialData` via `Pick<components['schemas']['…']>`**. Define a `*EditView` type for editor props. Catches real field-presence bugs and keeps editors from accepting looser types than they handle.
-- **Authenticated-only edit exposure.** The top action bar exposes edit sections _to authenticated users_ — gate on `auth.isAuthenticated` in the layout.
+- **One-off record type:** inline scaffolding in the entity's `+layout.svelte`. No base.
+- **Family of 3+ near-identical entities:** parameterized base + thin per-entity wrappers (e.g. `TaxonomyDetailBaseLayout`). Family-level shared context is fine — one `*EditActionContext` typed on the shared key union, not one per entity.
 
-## Page Composition Rules
+## Rationale (the _why_ behind the seams)
 
-- **Overview first when a description is present and load-bearing.** When a record's primary content is a grid (multi-model title → Models; manufacturer → Titles), let that lead. Don't show an empty Overview at the top just because the pattern says so.
-- **References belongs at the end of the page.** Do not let a reusable overview component bundle its references accordion adjacent to Overview — that silently moves references up past every intermediate section. Use the `createRichTextAccordionState()` + split-component pattern so each page places Overview and References separately.
-- **Grids-wider-than-a-screen go below People/Media**, not above.
-- **Decide explicitly what stays in the sidebar vs moves into main content vs is duplicated.** On sub-routes the sidebar often moves inline on mobile — pick the behavior per record type.
-
-## Edit Affordances
-
-- Top action bar exposes the full edit-section menu.
-- Add sidebar or accordion `[edit]` hooks **only when the block maps 1:1 to a real section**. A sidebar "Companies" block with a `[edit]` link that opens the Basics editor is worse than no link — it teaches the UI to lie.
-- Do not invent sections to match a sidebar block's shape.
-
-## Good Extractions
-
-- Detail subroute mode (`resolveDetailSubrouteMode`).
-- Mobile edit shell (`EditSectionShell`).
-- Layout-breakpoint detection (`createIsMobileFlag(LAYOUT_BREAKPOINT)`). Not "viewport" — it's keyed on the shared layout breakpoint.
-- Layout edit-action context (one `*EditActionContext` per record type, Symbol-keyed).
-- Per-entity editor-dispatch switch (`*EditorSwitch`).
-- Split rich-text overview/references components with a shared state factory (`RichTextOverviewAccordion` + `RichTextReferencesAccordion` + `createRichTextAccordionState`). The factory keeps scroll interconnection intact while letting pages place the two accordions independently.
-- Mobile ↔ desktop edit-URL redirect logic (currently ~identical across three record types; extract when a fourth lands).
+- **Desktop modal editing + mobile section routes.** The contract: one open editor at a time (desktop modal enforces it trivially) **and** real back-button semantics on mobile (section routes give each editor a URL). Collapsing to one mode breaks one invariant.
+- **Layout owns `editAction`, pages consume via context.** Pages never branch on `isMobile`. The layout already knows whether to open a modal or navigate; pushing that decision into pages clones it into every accordion `[edit]` link.
+- **Per-entity editor-dispatch component (`*EditorSwitch.svelte`).** The `{#if sectionKey === 'x'}` cascade lives in exactly one place; the layout's `SectionEditorHost` and the mobile `[section]/+page.svelte` both render the switch.
+- **Typed `initialData`.** Use `Pick<components['schemas']['…']>` for single-schema editors; use a structural superset when the view must satisfy multiple schemas (e.g. `SimpleTaxonomyEditView`, `HierarchicalTaxonomyEditView`).
+- **Sidebar/accordion `[edit]` hooks only when the block maps 1:1 to a real section.** A link that opens the wrong editor teaches the UI to lie.
 
 ## Avoid
 
-- Building a generic "detail page framework." Three isomorphic layouts that share named helpers beats one configurable layout that tries to cover every case.
-- Hand-rolled `isEdit` / `isMedia` / `isSources` per record.
-- Multiple owners for URL sync or modal state.
-- **Reading the local state inside the URL→state effect that writes it.** In the `?edit=<segment>` sync pattern, effect 1 (URL→state) should write `editing` unconditionally. An `if (editing !== nextEditing)` guard turns `editing` into a read-dep of effect 1, which re-runs on local writes and reverts the user's click in the same tick. Same-value `$state` writes are already no-ops; the guard is wrong, not an optimization.
-- **Defensive rendering of fields an invariant says won't exist.** If single-model titles aren't supposed to have `title.description`, don't render `title_description` on model detail "just in case." Enforce the invariant at write time _and_ strip it from the API schema — otherwise the read side grows permanent dead branches that drift from the rule.
-- `:global` in Svelte component styles. Rearchitect; don't escape the scope.
-- Stringly-keyed contexts. Use `createContextKey()`-style Symbol keys.
-
-## Test Checklist
-
-- Detail route vs subroute shell behavior.
-- Desktop modal edit vs mobile route edit behavior.
-- Section order in SSR output.
-- Overview `[n]` → References scroll, and References back-link → Overview marker scroll.
-- URL ↔ modal state round-trip: menu click updates `?edit=`; reload restores the open modal; back-button closes it.
-- Deep-link to a mobile edit route (`/x/slug/edit/name`) from a desktop viewport — no flash of mobile shell before redirect to `?edit=name`.
-- Viewport resize across the layout breakpoint while on an edit route — no data loss, no wrong-chrome flash.
-- Save flows that change the slug and must navigate to the new canonical route.
-- Mixed-edit citation warning per section — verify `showMixedEditWarning` matches what the section actually edits (single-field → `false`; multi-source composite → `true`).
-- Dirty-state cancel/navigate prompt fires and respects the user's choice.
+- **Reading local state inside the URL→state effect that writes it.** In the `?edit=<segment>` sync pattern, effect 1 (URL→state) must write `editing` unconditionally. An `if (editing !== nextEditing)` guard turns `editing` into a read-dep of effect 1, which re-runs on local writes and reverts the user's click in the same tick. Same-value `$state` writes are already no-ops; the guard is wrong, not an optimization.
+- **Defensive rendering of fields an invariant says won't exist.** Enforce the invariant at write time **and** strip the field from the API schema — otherwise the read side grows permanent dead branches that drift from the rule.
+- **Hand-rolled `isEdit` / `isMedia` / `isSources` per record.** Use `resolveDetailSubrouteMode()`.
+- **Forgetting `sidebarDesktopOnly={isDetail}` when the main column duplicates the sidebar on mobile.** `RecordDetailShell` defaults `sidebarDesktopOnly={false}`, which stacks the sidebar _below_ main content on mobile. When the detail page also renders a mobile meta bar / children accordion / relationships accordion, the sidebar must be suppressed on mobile (`={isDetail}` keeps it visible on subroutes that don't duplicate).
+- **Generic "detail page framework" for one-off entities.** Three isomorphic layouts that share named helpers beats one configurable layout that tries to cover every case. Family bases are a different category — they're for 3+ near-identical entities, not for one-offs.
+- **Bundling References with Overview.** Use `createRichTextAccordionState()` + split components (`RichTextOverviewAccordion` + `RichTextReferencesAccordion`) so each page places the two accordions independently. Otherwise References silently rides up past intermediate sections.
+- **Accordion empty states.** When a block has no content, hide the accordion entirely — never render "No X yet" inside.
+- **Multiple owners for URL sync or modal state.** One owner per concern.
+- **`:global` in Svelte component styles.** Rearchitect; don't escape the scope.
+- **Stringly-keyed contexts.** Use Symbol-keyed `createEditActionContext`.
 
 ## Lessons from Prior Refactors
 
-These are the bugs we actually hit — worth re-reading before the next conversion.
+Bugs whose fixes aren't visible in the current code.
 
-- **Reactivity if-guard in URL sync.** Shipped into manufacturer, propagated to model and title; reverted every menu click on desktop. Fix: drop the guard. See `Avoid` above.
-- **References adjacent to Overview.** `RichTextAccordionSections` bundled both accordions. Worked on manufacturer's short page; broke title/model where seven sections separate Overview from where References should sit. Fix: split into two components with a shared state factory.
-- **`title_description` dead field.** Backend serialized `title_description` on single-model titles even though the invariant said only the model owns description. Model detail grew a defensive dual-render branch. Fix was twofold: drop from the API schema, and remove the defensive branch.
-- **Mixed-edit citation warning miscategorization.** The manufacturer Name section (name + slug) was flagged `true`, then flipped to `false`. Rule of thumb: `true` when the section's fields genuinely come from multiple sources (Basics, External Data); `false` when they share a citation source in practice (Name, Description).
+- **Reactivity if-guard in URL sync.** Shipped into manufacturer, propagated to model and title; reverted every menu click on desktop. Fix: drop the guard. See `Avoid`.
+- **References adjacent to Overview.** `RichTextAccordionSections` bundled both accordions. Worked on manufacturer's short page; broke title/model where seven sections separate them. Fix: split into two components with a shared state factory.
+- **`title_description` dead field.** Backend serialized `title_description` on single-model titles even though the invariant said only the model owns description. Model detail grew a defensive dual-render branch. Fix: drop from the API schema **and** remove the defensive branch.
+- **Mixed-edit citation warning miscategorization.** Manufacturer Name section (name + slug) was flagged `true`, then flipped to `false`. Rule of thumb: `true` when the section's fields genuinely come from multiple sources (Basics, External Data); `false` when they share a citation source in practice (Name, Description).
 - **Flash of wrong UI on desktop deep-links.** Visiting `/x/slug/edit/name` on desktop briefly rendered the mobile edit shell before redirecting. Fix: gate the shell on `{#if isMobile === true}` and have `createIsMobileFlag` return the browser's synchronous `matchMedia` value on first paint.
+- **Alias filter ported to the wrong entity.** Hierarchical-taxonomy refactor silently ported gameplay-features' `displayAliasesFor` (filters aliases whose normalized form equals the entity name) to themes, which historically never filtered. Themes aliases disappeared from the sidebar. Lesson: when extracting shared components from multiple entity layouts, verify each entity's pre-refactor behavior per-entity; don't assume the family is uniform.
+- **Mobile sidebar double-rendering.** `TaxonomyDetailBaseLayout` passed `sidebar` through to `RecordDetailShell` without `sidebarDesktopOnly`. Result: on mobile, the sidebar stacked below the main column which was already rendering its content via mobile meta bar + children accordion. Fix: pass `sidebarDesktopOnly={isDetail}` — keeps the sidebar visible on subroutes (`/sources`, `/edit-history`) where the main column doesn't duplicate it.
+- **Prettier collapsing template whitespace.** `{#if i > 0}, {/if}<a>` inside `{#each}` had prettier reformat the comma-space across lines, and Svelte's whitespace handling stripped it — `"Blackjack, Cards"` became `"Blackjack,Cards"`. Fix: wrap literal separators in a span (`<span class="sep">, </span>`) so the whitespace is element content, not inter-tag whitespace. Add a regression test that asserts `textContent` contains the expected separator.
+- **`SearchableSelect` showing single-selected label in the input.** In multi mode with exactly one selection, the input value was populated with that item's label, reading like a pre-filled search query and duplicating the chip below. Fix: in multi mode, only populate the input for 2+ selections (show "N selected"); leave it empty for 0 or 1 and let the chips speak.

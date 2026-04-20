@@ -81,11 +81,11 @@
 
 	function selectedLabel(): string {
 		if (multi) {
+			// In multi mode, selections are already rendered as chips below the
+			// input. Showing a single selected label inside the input reads like
+			// a current search query, so suppress it — let the chip speak for
+			// the selection and keep the input as a search affordance.
 			const arr = Array.isArray(selected) ? selected : [];
-			if (arr.length === 1) {
-				const opt = options.find((o) => o.slug === arr[0]);
-				return opt?.label ?? '';
-			}
 			if (arr.length > 1) return `${arr.length} selected`;
 			return '';
 		}

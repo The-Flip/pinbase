@@ -1,22 +1,18 @@
 <script lang="ts">
 	import client from '$lib/api/client';
-	import TaxonomyDetailBaseLayout from '$lib/components/TaxonomyDetailBaseLayout.svelte';
-	import HierarchicalTaxonomySidebar from '$lib/components/HierarchicalTaxonomySidebar.svelte';
-	import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
+	import TaxonomyEditSectionPageBase from '$lib/components/TaxonomyEditSectionPageBase.svelte';
 	import HierarchicalTaxonomyEditorSwitch from '$lib/components/editors/HierarchicalTaxonomyEditorSwitch.svelte';
-	import { hierarchicalTaxonomyEditActionContext } from '$lib/components/editors/edit-action-context';
+	import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
 	import {
+		defaultHierarchicalTaxonomySectionSegment,
 		HIERARCHICAL_TAXONOMY_EDIT_SECTIONS,
 		MEDIA_SECTION,
 		type HierarchicalTaxonomyEditSectionKey
 	} from '$lib/components/editors/hierarchical-taxonomy-edit-sections';
-	import { displayAliasesFor } from '$lib/hierarchy-edit';
-	import { saveGameplayFeatureClaims } from './save-gameplay-feature-claims';
+	import { saveGameplayFeatureClaims } from '../../save-gameplay-feature-claims';
 
-	let { data, children } = $props();
+	let { data } = $props();
 	let profile = $derived(data.profile);
-
-	const BASE_PATH = '/gameplay-features';
 
 	const sections = [
 		...HIERARCHICAL_TAXONOMY_EDIT_SECTIONS.map((section) =>
@@ -24,8 +20,6 @@
 		),
 		MEDIA_SECTION
 	];
-
-	let displayAliases = $derived(displayAliasesFor(profile.name, profile.aliases ?? []));
 
 	async function loadParentOptions() {
 		const { data: features } = await client.GET('/api/gameplay-features/');
@@ -38,24 +32,11 @@
 	}
 </script>
 
-<TaxonomyDetailBaseLayout
-	{profile}
-	parentLabel="Gameplay Features"
-	basePath={BASE_PATH}
+<TaxonomyEditSectionPageBase
+	basePath="/gameplay-features"
 	{sections}
-	editActionContext={hierarchicalTaxonomyEditActionContext}
+	defaultSegment={defaultHierarchicalTaxonomySectionSegment()}
 >
-	{#snippet sidebar()}
-		<HierarchicalTaxonomySidebar
-			basePath={BASE_PATH}
-			parents={profile.parents ?? []}
-			children={profile.children ?? []}
-			aliases={displayAliases}
-			parentHeading="Type of"
-			childHeading="Subtypes"
-		/>
-	{/snippet}
-
 	{#snippet editor(
 		key: HierarchicalTaxonomyEditSectionKey,
 		{ ref, onsaved, onerror, ondirtychange }
@@ -81,6 +62,4 @@
 			media={profile.uploaded_media ?? []}
 		/>
 	{/snippet}
-
-	{@render children()}
-</TaxonomyDetailBaseLayout>
+</TaxonomyEditSectionPageBase>

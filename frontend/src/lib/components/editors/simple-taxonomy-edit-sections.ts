@@ -28,18 +28,6 @@ export const SIMPLE_TAXONOMY_EDIT_SECTIONS: SimpleTaxonomyEditSectionDef[] = [
 	}
 ];
 
-export function findSimpleTaxonomySectionBySegment(
-	segment: string
-): SimpleTaxonomyEditSectionDef | undefined {
-	return SIMPLE_TAXONOMY_EDIT_SECTIONS.find((section) => section.segment === segment);
-}
-
-export function findSimpleTaxonomySectionByKey(
-	key: SimpleTaxonomyEditSectionKey
-): SimpleTaxonomyEditSectionDef | undefined {
-	return SIMPLE_TAXONOMY_EDIT_SECTIONS.find((section) => section.key === key);
-}
-
 export function defaultSimpleTaxonomySectionSegment(): string {
 	return 'name';
 }
