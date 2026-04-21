@@ -61,11 +61,15 @@ ignore = [
     "S101",  # Use of assert — okay in tests (also per-file-ignored below)
     "S311",  # Use of random — not cryptographic in this app
 
-    # The rules below are temporarily silenced to land the initial sweep as a
-    # mechanical-only change. Each represents a real issue (correctness,
-    # security, or style) and should be re-enabled and fixed in follow-up PRs,
-    # one rule at a time. Do not add to this list without a follow-up.
-    "N806",  # Variable in function should be lowercase
+    # N806 disabled project-wide. The majority of violations in this codebase
+    # are either (a) SCREAMING_SNAKE_CASE column-index constants scoped inside
+    # a function (e.g. M_ID, T_NAME) — legitimate constants, just not at module
+    # scope — or (b) idiomatic Django dynamic class assignments such as
+    # `User = get_user_model()` and `FormSet = modelformset_factory(...)` where
+    # the result is a class and CapWords is the correct PEP 8 form. Fixing
+    # would require lowercasing names that are semantically constants/classes,
+    # which loses information at call sites without improving anything.
+    "N806",
 ]
 
 [tool.ruff.lint.per-file-ignores]
