@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
 	const parentSlug = url.searchParams.get('parent');
 	if (!parentSlug) {
-		throw redirect(302, resolve('/technology-subgenerations'));
+		throw redirect(302, resolve('/technology-generations'));
 	}
 
 	// Parent's display name is fetched via the parent list endpoint — the
@@ -26,7 +26,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 	const parents = (await listRes.json()) as { slug: string; name: string }[];
 	const parent = parents.find((p) => p.slug === parentSlug);
 	if (!parent) {
-		throw redirect(302, resolve('/technology-subgenerations'));
+		throw redirect(302, resolve('/technology-generations'));
 	}
 
 	return {

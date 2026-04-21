@@ -1,4 +1,7 @@
-<script lang="ts" generics="T extends { slug: string; name: string; aliases?: string[] }">
+<script
+	lang="ts"
+	generics="T extends { slug: string; name: string; aliases?: string[]; title_count?: number }"
+>
 	import type { Snippet } from 'svelte';
 	import PageHeader from './PageHeader.svelte';
 	import SearchBox from './SearchBox.svelte';
@@ -21,6 +24,14 @@
 		rowStyle?: string;
 		headerSnippet?: Snippet;
 		rowSnippet?: Snippet<[item: T]>;
+		/**
+		 * Optional override for the list rendering. When provided, replaces
+		 * the default `<ul>` of rows with caller-rendered content — useful
+		 * for grouped/hierarchical layouts. The filtered, search-narrowed
+		 * item list is passed in. Header, search, filters, and empty states
+		 * remain handled by this component.
+		 */
+		listSnippet?: Snippet<[items: T[]]>;
 		/**
 		 * When true, the page renders create affordances (auth-gated) pointing
 		 * at `/{entity_type_plural}/new`:
@@ -49,6 +60,7 @@
 		rowStyle,
 		headerSnippet,
 		rowSnippet,
+		listSnippet,
 		canCreate = false,
 		filters,
 		filterFn
@@ -92,7 +104,11 @@
 	);
 
 	let showActionMenu = $derived(
-		actionItems.length > 0 && auth.isAuthenticated && !loading && !error
+		actionItems.length > 0 &&
+			auth.isAuthenticated &&
+			!loading &&
+			!error &&
+			items.length < SEARCH_THRESHOLD
 	);
 </script>
 
@@ -144,6 +160,8 @@
 			{:else}
 				<p class="status">No matching {entityLabel}.</p>
 			{/if}
+		{:else if listSnippet}
+			{@render listSnippet(filteredItems)}
 		{:else}
 			<ul class="item-list">
 				{#each filteredItems as item (item.slug)}
@@ -153,6 +171,11 @@
 								{@render rowSnippet(item)}
 							{:else}
 								<span class="item-name">{item.name}</span>
+								{#if typeof item.title_count === 'number'}
+									<span class="count"
+										>{item.title_count} title{item.title_count === 1 ? '' : 's'}</span
+									>
+								{/if}
 							{/if}
 						</a>
 					</li>
@@ -211,6 +234,13 @@
 		font-size: var(--font-size-2);
 		color: inherit;
 		font-weight: 500;
+		flex: 1;
+	}
+
+	.count {
+		font-size: var(--font-size-1);
+		color: var(--color-text-muted);
+		flex-shrink: 0;
 	}
 
 	.status {

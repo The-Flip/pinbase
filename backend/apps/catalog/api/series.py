@@ -23,8 +23,13 @@ from .helpers import (
     _serialize_credit,
     _serialize_title_ref,
 )
-from .machine_models import CreditSchema
-from .schemas import ClaimPatchSchema, ClaimSchema, RichTextSchema
+from .schemas import (
+    ClaimPatchSchema,
+    ClaimSchema,
+    CreditSchema,
+    RichTextSchema,
+    TitleRefSchema,
+)
 
 from apps.core.licensing import get_minimum_display_rank
 
@@ -33,16 +38,6 @@ from ..models import Credit, MachineModel, Series, Title
 # ---------------------------------------------------------------------------
 # Schemas
 # ---------------------------------------------------------------------------
-
-
-class TitleRefSchema(Schema):
-    name: str
-    slug: str
-    abbreviations: list[str] = []
-    machine_count: int = 0
-    manufacturer_name: Optional[str] = None  # display-only, no paired slug
-    year: Optional[int] = None
-    thumbnail_url: Optional[str] = None
 
 
 class SeriesListSchema(Schema):
@@ -71,7 +66,7 @@ def _series_titles_qs():
     return (
         Title.objects.active()
         .annotate(
-            machine_count=Count(
+            model_count=Count(
                 "machine_models",
                 filter=Q(machine_models__variant_of__isnull=True)
                 & active_status_q("machine_models"),
@@ -132,6 +127,7 @@ def list_series(request):
     qs = (
         Series.objects.active()
         .annotate(title_count=Count("titles", filter=active_status_q("titles")))
+        .order_by("-title_count", "name")
         .prefetch_related(
             Prefetch(
                 "titles__machine_models",

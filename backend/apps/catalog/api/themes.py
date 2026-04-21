@@ -9,6 +9,7 @@ from ninja import Router, Schema
 from ninja.decorators import decorate_view
 from ninja.security import django_auth
 
+from ._counts import bulk_title_counts_via_models
 from .edit_claims import (
     execute_claims,
     plan_alias_claims,
@@ -44,6 +45,7 @@ class ThemeListSchema(Schema):
     name: str
     slug: str
     aliases: list[str] = []
+    title_count: int = 0
     parent_slugs: list[str] = []
 
 
@@ -110,19 +112,28 @@ themes_router = Router(tags=["themes"])
 @themes_router.get("/", response=list[ThemeListSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_themes(request):
-    themes = (
-        Theme.objects.active()
-        .prefetch_related(
+    themes = list(
+        Theme.objects.active().prefetch_related(
             Prefetch("parents", queryset=Theme.objects.active()),
+            Prefetch("children", queryset=Theme.objects.active()),
             "aliases",
         )
-        .order_by("name")
     )
+    children_map: dict[int, list[int]] = {
+        t.pk: [c.pk for c in t.children.all()] for t in themes
+    }
+    counts = bulk_title_counts_via_models(
+        [t.pk for t in themes],
+        "themes",
+        children_map=children_map,
+    )
+    themes.sort(key=lambda t: (-counts.get(t.pk, 0), t.name.lower()))
     return [
         {
             "name": t.name,
             "slug": t.slug,
             "aliases": [a.value for a in t.aliases.all()],
+            "title_count": counts.get(t.pk, 0),
             "parent_slugs": [p.slug for p in t.parents.all()],
         }
         for t in themes

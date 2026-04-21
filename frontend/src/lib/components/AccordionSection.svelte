@@ -3,11 +3,13 @@
 
 	let {
 		heading,
+		headingSize = 'var(--font-size-2)',
 		open = $bindable(false),
 		onEdit = undefined,
 		children
 	}: {
 		heading: string;
+		headingSize?: string;
 		open?: boolean;
 		onEdit?: () => void;
 		children: Snippet;
@@ -36,7 +38,7 @@
 		></button>
 		<div class="accordion-header">
 			<h2 class="accordion-heading">
-				<span id={titleId} class="accordion-title">{heading}</span>
+				<span id={titleId} class="accordion-title" style:font-size={headingSize}>{heading}</span>
 				{#if onEdit && open}
 					<button class="edit-link" type="button" onclick={onEdit}>edit</button>
 				{/if}

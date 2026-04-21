@@ -11,7 +11,6 @@
 
 <TaxonomyListPage
 	catalogKey="theme"
-	subtitle="Thematic categories for pinball machines."
 	items={loader.data}
 	loading={loader.loading}
 	error={loader.error}

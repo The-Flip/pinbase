@@ -9,6 +9,7 @@ from ninja import Router, Schema
 from ninja.decorators import decorate_view
 from ninja.security import django_auth
 
+from ._counts import bulk_title_counts_via_models
 from .edit_claims import (
     execute_claims,
     plan_alias_claims,
@@ -32,7 +33,7 @@ from .schemas import (
     UploadedMediaSchema,
 )
 
-from ..models import GameplayFeature, MachineModel
+from ..models import GameplayFeature
 
 # ---------------------------------------------------------------------------
 # Schemas
@@ -43,7 +44,7 @@ class GameplayFeatureListSchema(Schema):
     name: str
     slug: str
     aliases: list[str] = []
-    model_count: int = 0
+    title_count: int = 0
     parent_slugs: list[str] = []
 
 
@@ -103,55 +104,33 @@ gameplay_features_router = Router(tags=["gameplay-features"])
 @decorate_view(cache_control(no_cache=True))
 def list_gameplay_features(request):
     features = list(
-        GameplayFeature.objects.active()
-        .prefetch_related(
+        GameplayFeature.objects.active().prefetch_related(
             Prefetch("children", queryset=GameplayFeature.objects.active()),
             Prefetch("parents", queryset=GameplayFeature.objects.active()),
             "aliases",
         )
-        .order_by("name")
     )
 
-    # Build children map for transitive closure.
     children_map: dict[int, list[int]] = {
         f.pk: [c.pk for c in f.children.all()] for f in features
     }
+    counts = bulk_title_counts_via_models(
+        [f.pk for f in features],
+        "gameplay_features",
+        children_map=children_map,
+    )
+    features.sort(key=lambda f: (-counts.get(f.pk, 0), f.name.lower()))
 
-    # Fetch (gameplay_feature_pk, machinemodel_pk) for non-variant machines only.
-    Through = MachineModel.gameplay_features.through
-    feature_to_model_pks: dict[int, set[int]] = {}
-    for gf_pk, mm_pk in Through.objects.filter(
-        machinemodel__variant_of__isnull=True
-    ).values_list("gameplayfeature_id", "machinemodel_id"):
-        feature_to_model_pks.setdefault(gf_pk, set()).add(mm_pk)
-
-    def _get_descendants(pk: int) -> set[int]:
-        result: set[int] = {pk}
-        stack = [pk]
-        while stack:
-            current = stack.pop()
-            for child_pk in children_map.get(current, []):
-                if child_pk not in result:
-                    result.add(child_pk)
-                    stack.append(child_pk)
-        return result
-
-    result = []
-    for f in features:
-        descendants = _get_descendants(f.pk)
-        all_model_pks: set[int] = set()
-        for d_pk in descendants:
-            all_model_pks |= feature_to_model_pks.get(d_pk, set())
-        result.append(
-            {
-                "name": f.name,
-                "slug": f.slug,
-                "aliases": [a.value for a in f.aliases.all()],
-                "model_count": len(all_model_pks),
-                "parent_slugs": [p.slug for p in f.parents.all()],
-            }
-        )
-    return result
+    return [
+        {
+            "name": f.name,
+            "slug": f.slug,
+            "aliases": [a.value for a in f.aliases.all()],
+            "title_count": counts.get(f.pk, 0),
+            "parent_slugs": [p.slug for p in f.parents.all()],
+        }
+        for f in features
+    ]
 
 
 @gameplay_features_router.patch(

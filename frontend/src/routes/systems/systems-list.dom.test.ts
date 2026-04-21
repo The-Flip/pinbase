@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -21,27 +21,31 @@ const SYSTEMS = [
 		name: 'SPIKE',
 		slug: 'spike',
 		manufacturer: { slug: 'stern', name: 'Stern' },
-		machine_count: 42
+		model_count: 42
 	},
 	{
 		name: 'WPC-95',
 		slug: 'wpc-95',
 		manufacturer: { slug: 'williams', name: 'Williams' },
-		machine_count: 30
+		model_count: 30
 	},
 	{
 		name: 'Whitestar',
 		slug: 'whitestar',
 		manufacturer: { slug: 'stern', name: 'Stern' },
-		machine_count: 12
+		model_count: 12
 	}
 ];
 
 async function renderAndWait() {
 	mockGet.mockResolvedValue({ data: SYSTEMS });
 	render(Page);
-	// createAsyncLoader resolves on the next tick; wait for a known row.
-	await screen.findByText('SPIKE');
+	// createAsyncLoader resolves on the next tick; wait for the list to
+	// appear, then scope subsequent queries to it so the overview paragraph
+	// in the page header (which also mentions systems like WPC-95) doesn't
+	// collide with row-level text matches.
+	const list = await screen.findByRole('list');
+	return within(list);
 }
 
 describe('systems list route', () => {
@@ -50,16 +54,14 @@ describe('systems list route', () => {
 		authMock.isAuthenticated = true;
 	});
 
-	it('renders all systems with manufacturer and machine count', async () => {
-		await renderAndWait();
-		expect(screen.getByText('SPIKE')).toBeInTheDocument();
-		expect(screen.getByText('WPC-95')).toBeInTheDocument();
-		expect(screen.getByText('Whitestar')).toBeInTheDocument();
-		// Two systems show "Stern" as their row-level manufacturer label
-		// (a third "Stern" lives inside the filter <select> options).
-		expect(screen.getAllByText('Stern').length).toBeGreaterThanOrEqual(2);
-		expect(screen.getByText('42 machines')).toBeInTheDocument();
-		expect(screen.getByText('30 machines')).toBeInTheDocument();
+	it('renders all systems with manufacturer and model count', async () => {
+		const list = await renderAndWait();
+		expect(list.getByText('SPIKE')).toBeInTheDocument();
+		expect(list.getByText('WPC-95')).toBeInTheDocument();
+		expect(list.getByText('Whitestar')).toBeInTheDocument();
+		expect(list.getAllByText('Stern').length).toBe(2);
+		expect(list.getByText('42 models')).toBeInTheDocument();
+		expect(list.getByText('30 models')).toBeInTheDocument();
 	});
 
 	it('derives manufacturer options from visible systems', async () => {
@@ -73,14 +75,14 @@ describe('systems list route', () => {
 
 	it('manufacturer filter narrows the rendered list', async () => {
 		const user = userEvent.setup();
-		await renderAndWait();
+		const list = await renderAndWait();
 
 		const select = screen.getByLabelText('Manufacturer') as HTMLSelectElement;
 		await user.selectOptions(select, 'williams');
 
-		expect(screen.getByText('WPC-95')).toBeInTheDocument();
-		expect(screen.queryByText('SPIKE')).not.toBeInTheDocument();
-		expect(screen.queryByText('Whitestar')).not.toBeInTheDocument();
+		expect(list.getByText('WPC-95')).toBeInTheDocument();
+		expect(list.queryByText('SPIKE')).not.toBeInTheDocument();
+		expect(list.queryByText('Whitestar')).not.toBeInTheDocument();
 	});
 
 	it('shows "+ New System" in the action menu when authenticated', async () => {
@@ -95,7 +97,8 @@ describe('systems list route', () => {
 		authMock.isAuthenticated = false;
 		mockGet.mockResolvedValue({ data: SYSTEMS });
 		render(Page);
-		await screen.findByText('SPIKE');
+		const list = await screen.findByRole('list');
+		expect(within(list).getByText('SPIKE')).toBeInTheDocument();
 		// The trigger itself is gated on auth, so there is no Edit button to
 		// click — and therefore no way to reveal the create item.
 		expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull();

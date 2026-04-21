@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from itertools import chain
+
 from django.db.models import F, Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
@@ -11,6 +13,7 @@ from ninja.security import django_auth
 
 from apps.provenance.helpers import build_sources, claims_prefetch
 
+from ._counts import bulk_title_counts_via_models
 from .edit_claims import execute_claims, plan_scalar_field_claims
 from .entity_crud import (
     register_entity_create,
@@ -30,6 +33,7 @@ from ..models import (
     TechnologySubgeneration,
 )
 from apps.core.licensing import get_minimum_display_rank
+from apps.core.models import active_status_q
 
 from .helpers import _build_rich_text, _serialize_title_machine
 from .schemas import (
@@ -52,6 +56,18 @@ class TaxonomySchema(Schema):
     description: RichTextSchema = RichTextSchema()
     aliases: list[str] = []
     sources: list[ClaimSchema] = []
+
+
+class TaxonomyWithTitleCountSchema(TaxonomySchema):
+    title_count: int = 0
+
+
+class DisplayTypeListSchema(TaxonomyWithTitleCountSchema):
+    subtypes: list[TaxonomyWithTitleCountSchema] = []
+
+
+class TechnologyGenerationListSchema(TaxonomyWithTitleCountSchema):
+    subgenerations: list[TaxonomyWithTitleCountSchema] = []
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +93,31 @@ def _serialize_taxonomy(obj) -> dict:
         "aliases": aliases,
         "sources": build_sources(getattr(obj, "active_claims", [])),
     }
+
+
+def _list_taxonomy_with_counts(
+    model_class, mm_relation: str, *, sort_by_display_order: bool = False
+) -> list[dict]:
+    """Standard list response for flat (non-DAG) model-attached taxonomies.
+
+    Default sort is title_count desc (popular first). Pass
+    ``sort_by_display_order=True`` for small, chronologically-meaningful
+    taxonomies (tech generations, game formats) where editorial order is
+    more useful to users than popularity.
+    """
+    items = list(
+        model_class.objects.active().prefetch_related(
+            *(["aliases"] if hasattr(model_class, "aliases") else [])
+        )
+    )
+    counts = bulk_title_counts_via_models([t.pk for t in items], mm_relation)
+    if sort_by_display_order:
+        items.sort(key=lambda t: (t.display_order, t.name.lower()))
+    else:
+        items.sort(key=lambda t: (-counts.get(t.pk, 0), t.name.lower()))
+    return [
+        {**_serialize_taxonomy(t), "title_count": counts.get(t.pk, 0)} for t in items
+    ]
 
 
 def _taxonomy_detail_qs(model_class):
@@ -129,13 +170,73 @@ def _register_create(router: Router, model_cls, **kwargs) -> None:
 technology_generations_router = Router(tags=["technology-generations"])
 
 
-@technology_generations_router.get("/", response=list[TaxonomySchema])
+@technology_generations_router.get("/", response=list[TechnologyGenerationListSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_technology_generations(request):
+    gens = list(TechnologyGeneration.objects.active())
+    subgens = list(TechnologySubgeneration.objects.active())
+
+    gen_counts = bulk_title_counts_via_models(
+        [g.pk for g in gens], "technology_generation"
+    )
+    subgen_counts = _bulk_title_counts_for_subgenerations([s.pk for s in subgens])
+
+    subgens_by_gen: dict[int, list[TechnologySubgeneration]] = {}
+    for s in subgens:
+        subgens_by_gen.setdefault(s.technology_generation_id, []).append(s)
+    for group in subgens_by_gen.values():
+        group.sort(key=lambda s: (s.display_order, s.name.lower()))
+
+    gens.sort(key=lambda g: (g.display_order, g.name.lower()))
+
     return [
-        _serialize_taxonomy(t)
-        for t in TechnologyGeneration.objects.active().order_by("display_order")
+        {
+            **_serialize_taxonomy(g),
+            "title_count": gen_counts.get(g.pk, 0),
+            "subgenerations": [
+                {
+                    **_serialize_taxonomy(s),
+                    "title_count": subgen_counts.get(s.pk, 0),
+                }
+                for s in subgens_by_gen.get(g.pk, [])
+            ],
+        }
+        for g in gens
     ]
+
+
+def _bulk_title_counts_for_subgenerations(
+    subgen_pks: list[int],
+) -> dict[int, int]:
+    """Count titles under each subgeneration, mirroring the OR semantics
+    of the ``/api/models/?subgeneration=...`` filter: a machine counts
+    toward a subgen if its own FK references it OR its ``system``'s FK
+    references it. Without the inherited branch, subgens whose machines
+    carry the attribution only through ``system`` show ``0 titles`` while
+    the detail page lists many — see ``machine_models._build_model_list_qs``.
+    """
+    if not subgen_pks:
+        return {}
+
+    base = (
+        MachineModel.objects.active()
+        .filter(variant_of__isnull=True)
+        .filter(active_status_q("title"))
+    )
+    direct = base.filter(technology_subgeneration__in=subgen_pks).values_list(
+        "technology_subgeneration_id", "title_id"
+    )
+    inherited = base.filter(
+        system__technology_subgeneration__in=subgen_pks
+    ).values_list("system__technology_subgeneration_id", "title_id")
+
+    titles_by_subgen: dict[int, set[int]] = {}
+    for sg_id, title_id in chain(direct, inherited):
+        if sg_id is None or title_id is None:
+            continue
+        titles_by_subgen.setdefault(sg_id, set()).add(title_id)
+
+    return {pk: len(titles_by_subgen.get(pk, ())) for pk in subgen_pks}
 
 
 @technology_generations_router.patch(
@@ -152,12 +253,38 @@ def patch_technology_generation(request, slug: str, data: ClaimPatchSchema):
 display_types_router = Router(tags=["display-types"])
 
 
-@display_types_router.get("/", response=list[TaxonomySchema])
+@display_types_router.get("/", response=list[DisplayTypeListSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_display_types(request):
+    types = list(DisplayType.objects.active())
+    subtypes = list(DisplaySubtype.objects.active())
+
+    type_counts = bulk_title_counts_via_models([t.pk for t in types], "display_type")
+    subtype_counts = bulk_title_counts_via_models(
+        [s.pk for s in subtypes], "display_subtype"
+    )
+
+    subtypes_by_type: dict[int, list[DisplaySubtype]] = {}
+    for s in subtypes:
+        subtypes_by_type.setdefault(s.display_type_id, []).append(s)
+    for group in subtypes_by_type.values():
+        group.sort(key=lambda s: (s.display_order, s.name.lower()))
+
+    types.sort(key=lambda t: (t.display_order, t.name.lower()))
+
     return [
-        _serialize_taxonomy(d)
-        for d in DisplayType.objects.active().order_by("display_order")
+        {
+            **_serialize_taxonomy(t),
+            "title_count": type_counts.get(t.pk, 0),
+            "subtypes": [
+                {
+                    **_serialize_taxonomy(s),
+                    "title_count": subtype_counts.get(s.pk, 0),
+                }
+                for s in subtypes_by_type.get(t.pk, [])
+            ],
+        }
+        for t in types
     ]
 
 
@@ -175,15 +302,6 @@ def patch_display_type(request, slug: str, data: ClaimPatchSchema):
 technology_subgenerations_router = Router(tags=["technology-subgenerations"])
 
 
-@technology_subgenerations_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(no_cache=True))
-def list_technology_subgenerations(request):
-    return [
-        _serialize_taxonomy(t)
-        for t in TechnologySubgeneration.objects.active().order_by("display_order")
-    ]
-
-
 @technology_subgenerations_router.patch(
     "/{slug}/claims/", auth=django_auth, response=TaxonomySchema, tags=["private"]
 )
@@ -196,15 +314,6 @@ def patch_technology_subgeneration(request, slug: str, data: ClaimPatchSchema):
 # ---------------------------------------------------------------------------
 
 display_subtypes_router = Router(tags=["display-subtypes"])
-
-
-@display_subtypes_router.get("/", response=list[TaxonomySchema])
-@decorate_view(cache_control(no_cache=True))
-def list_display_subtypes(request):
-    return [
-        _serialize_taxonomy(d)
-        for d in DisplaySubtype.objects.active().order_by("display_order")
-    ]
 
 
 @display_subtypes_router.patch(
@@ -221,13 +330,10 @@ def patch_display_subtype(request, slug: str, data: ClaimPatchSchema):
 cabinets_router = Router(tags=["cabinets"])
 
 
-@cabinets_router.get("/", response=list[TaxonomySchema])
+@cabinets_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_cabinets(request):
-    return [
-        _serialize_taxonomy(c)
-        for c in Cabinet.objects.active().order_by("display_order")
-    ]
+    return _list_taxonomy_with_counts(Cabinet, "cabinet")
 
 
 @cabinets_router.patch(
@@ -244,13 +350,12 @@ def patch_cabinet(request, slug: str, data: ClaimPatchSchema):
 game_formats_router = Router(tags=["game-formats"])
 
 
-@game_formats_router.get("/", response=list[TaxonomySchema])
+@game_formats_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_game_formats(request):
-    return [
-        _serialize_taxonomy(g)
-        for g in GameFormat.objects.active().order_by("display_order")
-    ]
+    return _list_taxonomy_with_counts(
+        GameFormat, "game_format", sort_by_display_order=True
+    )
 
 
 @game_formats_router.patch(
@@ -296,15 +401,10 @@ def _serialize_reward_type_detail(rt) -> dict:
     }
 
 
-@reward_types_router.get("/", response=list[TaxonomySchema])
+@reward_types_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_reward_types(request):
-    return [
-        _serialize_taxonomy(rt)
-        for rt in RewardType.objects.active()
-        .prefetch_related("aliases")
-        .order_by("display_order", "name")
-    ]
+    return _list_taxonomy_with_counts(RewardType, "reward_types")
 
 
 @reward_types_router.patch(
@@ -332,12 +432,10 @@ def patch_reward_type(request, slug: str, data: ClaimPatchSchema):
 tags_router = Router(tags=["tags"])
 
 
-@tags_router.get("/", response=list[TaxonomySchema])
+@tags_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_tags(request):
-    return [
-        _serialize_taxonomy(t) for t in Tag.objects.active().order_by("display_order")
-    ]
+    return _list_taxonomy_with_counts(Tag, "tags")
 
 
 @tags_router.patch(
@@ -358,8 +456,7 @@ credit_roles_router = Router(tags=["credit-roles"])
 @decorate_view(cache_control(no_cache=True))
 def list_credit_roles(request):
     return [
-        _serialize_taxonomy(c)
-        for c in CreditRole.objects.active().order_by("display_order")
+        _serialize_taxonomy(c) for c in CreditRole.objects.active().order_by("name")
     ]
 
 

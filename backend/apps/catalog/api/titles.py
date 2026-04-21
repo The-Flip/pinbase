@@ -54,11 +54,13 @@ from .helpers import (
     _serialize_credit,
     _serialize_title_machine,
 )
-from .machine_models import CreditSchema, MachineModelDetailSchema
+from .machine_models import MachineModelDetailSchema
 from .schemas import (
     BlockingReferrerSchema,
     ClaimSchema,
+    CreditSchema,
     EditCitationInput,
+    FacetRef,
     GameplayFeatureSchema,
     MediaRenditionsSchema,
     ModelCreateSchema,
@@ -89,16 +91,11 @@ from ..models import (
 # ---------------------------------------------------------------------------
 
 
-class FacetRef(Schema):
-    slug: str
-    name: str
-
-
 class TitleListSchema(Schema):
     name: str
     slug: str
     abbreviations: list[str] = []
-    machine_count: int = 0
+    model_count: int = 0
     manufacturer: Optional[FacetRef] = None
     year: Optional[int] = None
     thumbnail_url: Optional[str] = None
@@ -322,7 +319,7 @@ def _serialize_title_list(title, *, min_rank: int | None = None) -> dict:
         "name": title.name,
         "slug": title.slug,
         "abbreviations": [a.value for a in title.abbreviations.all()],
-        "machine_count": title.machine_count,
+        "model_count": title.model_count,
         "manufacturer": manufacturer,
         "year": year,
         "thumbnail_url": thumbnail_url,
@@ -677,7 +674,7 @@ titles_router = Router(tags=["titles"])
 @paginate(PageNumberPagination, page_size=DEFAULT_PAGE_SIZE)
 def list_titles(request, display: str = ""):
     qs = Title.objects.active().annotate(
-        machine_count=Count(
+        model_count=Count(
             "machine_models",
             filter=Q(machine_models__variant_of__isnull=True)
             & active_status_q("machine_models"),
@@ -733,7 +730,7 @@ def list_all_titles(request):
     T_ID = 0
     T_NAME = 1
     T_SLUG = 2
-    T_MACHINE_COUNT = 3
+    T_MODEL_COUNT = 3
     T_LATEST_YEAR = 4
     T_MFR_SLUG = 5
     T_MFR_NAME = 6
@@ -749,7 +746,7 @@ def list_all_titles(request):
     title_rows = list(
         Title.objects.active()
         .annotate(
-            machine_count=Count(
+            model_count=Count(
                 "machine_models",
                 filter=Q(machine_models__variant_of__isnull=True)
                 & active_status_q("machine_models"),
@@ -779,7 +776,7 @@ def list_all_titles(request):
             "id",
             "name",
             "slug",
-            "machine_count",
+            "model_count",
             "latest_year",
             "primary_mfr_slug",
             "primary_mfr_name",
@@ -902,7 +899,7 @@ def list_all_titles(request):
                 "name": r[T_NAME],
                 "slug": r[T_SLUG],
                 "abbreviations": title_abbrevs.get(tid, []),
-                "machine_count": r[T_MACHINE_COUNT],
+                "model_count": r[T_MODEL_COUNT],
                 "manufacturer": mfr,
                 "year": r[T_PRIMARY_YEAR],
                 "thumbnail_url": thumb_data.get(r[T_PRIMARY_MODEL_ID]),

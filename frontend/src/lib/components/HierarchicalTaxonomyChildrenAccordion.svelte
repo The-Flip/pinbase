@@ -7,17 +7,19 @@
 	let {
 		basePath,
 		children,
-		heading
+		heading,
+		headingSize
 	}: {
 		basePath: string;
 		children: Ref[];
 		heading: string;
+		headingSize?: string;
 	} = $props();
 </script>
 
 {#if children.length > 0}
 	<div class="mobile-only" data-testid="hierarchical-taxonomy-children-accordion">
-		<AccordionSection {heading}>
+		<AccordionSection {heading} {headingSize}>
 			<ul class="children-list">
 				{#each children as child (child.slug)}
 					<li>

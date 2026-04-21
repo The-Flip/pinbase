@@ -22,7 +22,7 @@
 	// Unlike gameplay-features, themes has historically shown aliases verbatim
 	// (no near-duplicate filter against the canonical name). Preserve that.
 	let aliases = $derived(theme.aliases ?? []);
-	let childHeading = $derived(`Sub-themes (${theme.children?.length ?? 0})`);
+	let childHeading = 'Sub-themes';
 
 	async function loadParentOptions() {
 		const { data: themes } = await client.GET('/api/themes/');
@@ -39,6 +39,7 @@
 	parentLabel="Themes"
 	basePath={BASE_PATH}
 	{sections}
+	{aliases}
 	editActionContext={hierarchicalTaxonomyEditActionContext}
 	deleteHref={`${BASE_PATH}/${theme.slug}/delete`}
 >
@@ -47,7 +48,7 @@
 			basePath={BASE_PATH}
 			parents={theme.parents ?? []}
 			children={theme.children ?? []}
-			{aliases}
+			aliases={[]}
 			parentHeading="Parent themes"
 			{childHeading}
 		/>
