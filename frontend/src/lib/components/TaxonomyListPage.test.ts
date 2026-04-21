@@ -120,6 +120,66 @@ describe('TaxonomyListPage', () => {
 		expect(body).not.toContain('>0<');
 	});
 
+	it('renders title_count in default row when present', () => {
+		const { body } = render(TaxonomyListPage, {
+			props: {
+				catalogKey: 'tag',
+				items: [{ slug: 'alpha', name: 'Alpha', title_count: 5 }],
+				loading: false,
+				error: null
+			}
+		});
+
+		expect(body).toContain('Alpha');
+		expect(body).toContain('5 titles');
+	});
+
+	it('renders title_count of 0 (does not hide zero counts)', () => {
+		// Regression guard: franchises/series today render "0 titles" via custom
+		// rowSnippets. Centralizing must preserve that — hiding zeros would be a
+		// silent UX regression on those pages.
+		const { body } = render(TaxonomyListPage, {
+			props: {
+				catalogKey: 'franchise',
+				items: [{ slug: 'empty', name: 'Empty', title_count: 0 }],
+				loading: false,
+				error: null
+			}
+		});
+
+		expect(body).toContain('Empty');
+		expect(body).toContain('0 titles');
+	});
+
+	it('singularizes the count label when title_count is 1', () => {
+		const { body } = render(TaxonomyListPage, {
+			props: {
+				catalogKey: 'tag',
+				items: [{ slug: 'lone', name: 'Lone', title_count: 1 }],
+				loading: false,
+				error: null
+			}
+		});
+
+		expect(body).toContain('1 title');
+		expect(body).not.toContain('1 titles');
+	});
+
+	it('omits count span when title_count is absent (e.g. credit-role shape)', () => {
+		const { body } = render(TaxonomyListPage, {
+			props: {
+				catalogKey: 'credit-role',
+				items: [{ slug: 'design', name: 'Design' }],
+				loading: false,
+				error: null
+			}
+		});
+
+		expect(body).toContain('Design');
+		expect(body).not.toContain('titles');
+		expect(body).not.toContain('class="count"');
+	});
+
 	it('renders custom header content via headerSnippet', () => {
 		const { body } = render(HeaderSnippetFixture);
 

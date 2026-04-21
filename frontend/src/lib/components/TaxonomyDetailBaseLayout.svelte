@@ -37,6 +37,7 @@
 		editor: editorSnippet,
 		immediateEditor,
 		sidebar,
+		aliases = [],
 		editActionContext,
 		deleteHref,
 		createChild,
@@ -49,6 +50,7 @@
 		editor: Snippet<[TKey, EditorCallbacks]>;
 		immediateEditor?: Snippet;
 		sidebar?: Snippet;
+		aliases?: string[];
 		/**
 		 * Optional context to publish an `editAction(sectionKey)` function the
 		 * detail `+page.svelte` can use for accordion `[edit]` affordances.
@@ -187,6 +189,7 @@
 	<RecordDetailShell
 		name={profile.name}
 		parentLink={{ text: parentLabel, href: resolveHref(basePath) }}
+		{aliases}
 		{actionBar}
 		{main}
 		{sidebar}

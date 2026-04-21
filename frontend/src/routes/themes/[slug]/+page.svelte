@@ -9,10 +9,7 @@
 	let { data } = $props();
 	let theme = $derived(data.theme);
 
-	// Themes has historically shown aliases verbatim (no near-duplicate filter
-	// against the canonical name). Preserve that.
-	let aliases = $derived(theme.aliases ?? []);
-	let childHeading = $derived(`Sub-themes (${theme.children?.length ?? 0})`);
+	let childHeading = 'Sub-themes';
 </script>
 
 {#if theme.description?.html}
@@ -25,7 +22,7 @@
 <HierarchicalTaxonomyMobileMetaBar
 	basePath="/themes"
 	parents={theme.parents ?? []}
-	{aliases}
+	aliases={[]}
 	parentLabel="Parent themes"
 />
 
@@ -33,7 +30,10 @@
 	basePath="/themes"
 	children={theme.children ?? []}
 	heading={childHeading}
+	headingSize="var(--font-size-3)"
 />
+
+<h2 class="section-heading">Titles</h2>
 
 {#if theme.machines.length === 0}
 	<p class="empty">No machines with this theme.</p>
@@ -54,6 +54,12 @@
 <style>
 	.description {
 		margin-bottom: var(--size-6);
+	}
+
+	.section-heading {
+		font-size: var(--font-size-3);
+		font-weight: 600;
+		margin: 0 0 var(--size-3);
 	}
 
 	.empty {

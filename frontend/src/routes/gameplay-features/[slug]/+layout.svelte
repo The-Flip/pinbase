@@ -33,7 +33,7 @@
 		return features.map((f) => ({
 			slug: f.slug,
 			label: f.name,
-			count: f.model_count
+			count: f.title_count
 		}));
 	}
 </script>

@@ -1,4 +1,7 @@
-<script lang="ts" generics="T extends { slug: string; name: string; aliases?: string[] }">
+<script
+	lang="ts"
+	generics="T extends { slug: string; name: string; aliases?: string[]; title_count?: number }"
+>
 	import type { Snippet } from 'svelte';
 	import PageHeader from './PageHeader.svelte';
 	import SearchBox from './SearchBox.svelte';
@@ -157,6 +160,11 @@
 								{@render rowSnippet(item)}
 							{:else}
 								<span class="item-name">{item.name}</span>
+								{#if typeof item.title_count === 'number'}
+									<span class="count"
+										>{item.title_count} title{item.title_count === 1 ? '' : 's'}</span
+									>
+								{/if}
 							{/if}
 						</a>
 					</li>
@@ -215,6 +223,13 @@
 		font-size: var(--font-size-2);
 		color: inherit;
 		font-weight: 500;
+		flex: 1;
+	}
+
+	.count {
+		font-size: var(--font-size-1);
+		color: var(--color-text-muted);
+		flex-shrink: 0;
 	}
 
 	.status {

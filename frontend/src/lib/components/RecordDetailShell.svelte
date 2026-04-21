@@ -12,6 +12,7 @@
 		heroImageAlt = '',
 		parentLink = null,
 		metaItems = [],
+		aliases = [],
 		sidebarDesktopOnly = false,
 		actionBar,
 		main: mainContent,
@@ -22,6 +23,7 @@
 		heroImageAlt?: string;
 		parentLink?: ParentLink | null;
 		metaItems?: MetaItem[];
+		aliases?: string[];
 		/**
 		 * When true, hides the sidebar on mobile. Default `false` stacks
 		 * the sidebar below the main column on mobile — correct only when
@@ -38,7 +40,7 @@
 </script>
 
 <article>
-	<HeroHeader {name} {heroImageUrl} {heroImageAlt} {parentLink} {metaItems} />
+	<HeroHeader {name} {heroImageUrl} {heroImageAlt} {parentLink} {metaItems} {aliases} />
 
 	{#if actionBar}
 		{@render actionBar()}

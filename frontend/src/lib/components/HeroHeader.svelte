@@ -4,13 +4,17 @@
 		heroImageUrl = null,
 		heroImageAlt = '',
 		parentLink = null,
-		metaItems = []
+		metaItems = [],
+		aliases = [],
+		aliasLabel = 'Also known as'
 	}: {
 		name: string;
 		heroImageUrl?: string | null;
 		heroImageAlt?: string;
 		parentLink?: { text: string; href: string } | null;
 		metaItems?: Array<{ text: string; href?: string }>;
+		aliases?: string[];
+		aliasLabel?: string;
 	} = $props();
 </script>
 
@@ -19,6 +23,12 @@
 		<a class="kicker" href={parentLink.href}>{parentLink.text}</a>
 	{/if}
 	<h1>{name}</h1>
+	{#if aliases.length > 0}
+		<p class="aliases">
+			<span class="alias-label">{aliasLabel}:</span>
+			{aliases.join(', ')}
+		</p>
+	{/if}
 	{#if metaItems.length > 0}
 		<div class="meta">
 			{#each metaItems as item, i (i)}
@@ -69,6 +79,19 @@
 		font-weight: 700;
 		color: var(--color-text-primary);
 		margin-bottom: var(--size-2);
+	}
+
+	/* Aliases */
+	.aliases {
+		font-size: var(--font-size-0);
+		color: var(--color-text-muted);
+		margin: 0 0 var(--size-2);
+	}
+
+	.alias-label {
+		font-weight: 600;
+		color: var(--color-text-primary);
+		margin-right: var(--size-1);
 	}
 
 	/* Meta */
