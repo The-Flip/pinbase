@@ -67,7 +67,6 @@ ignore = [
     # one rule at a time. Do not add to this list without a follow-up.
     "N806",  # Variable in function should be lowercase
     "S104",  # Possible binding to all interfaces
-    "S108",  # Probable hardcoded tmp dir
     "S310",  # urlopen without allowed-scheme audit
     "S608",  # Possible SQL injection via string concat
 ]
