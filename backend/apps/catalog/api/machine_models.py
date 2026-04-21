@@ -89,7 +89,7 @@ from .schemas import (
     TitleMachineSchema,
 )
 from .soft_delete import (
-    SoftDeleteBlocked,
+    SoftDeleteBlockedError,
     count_entity_changesets,
     execute_soft_delete,
     plan_soft_delete,
@@ -1072,7 +1072,7 @@ def delete_model(request, slug: str, data: ModelDeleteSchema):
         changeset, deleted = execute_soft_delete(
             pm, user=request.user, note=data.note, citation=data.citation
         )
-    except SoftDeleteBlocked as exc:
+    except SoftDeleteBlockedError as exc:
         return Status(
             422,
             {

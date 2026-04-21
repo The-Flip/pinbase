@@ -69,7 +69,6 @@ ignore = [
     "DJ012", # Django model attribute ordering
     "N802",  # Function name should be lowercase
     "N806",  # Variable in function should be lowercase
-    "N818",  # Exception name should end in Error
     "S104",  # Possible binding to all interfaces
     "S108",  # Probable hardcoded tmp dir
     "S310",  # urlopen without allowed-scheme audit

@@ -82,7 +82,7 @@ _discover_routers()
 # ---------------------------------------------------------------------------
 
 from apps.catalog.api.edit_claims import StructuredValidationError  # noqa: E402
-from apps.provenance.rate_limits import RateLimitExceeded  # noqa: E402
+from apps.provenance.rate_limits import RateLimitExceededError  # noqa: E402
 
 
 @api.exception_handler(StructuredValidationError)
@@ -90,7 +90,7 @@ def _handle_structured_validation_error(request, exc):
     return JsonResponse({"detail": exc.to_response_body()}, status=422)
 
 
-@api.exception_handler(RateLimitExceeded)
+@api.exception_handler(RateLimitExceededError)
 def _handle_rate_limit_exceeded(request, exc):
     response = JsonResponse(
         {
