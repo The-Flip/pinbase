@@ -59,7 +59,7 @@ def list_franchises(request):
     qs = (
         Franchise.objects.active()
         .annotate(title_count=Count("titles", filter=active_status_q("titles")))
-        .order_by("name")
+        .order_by("-title_count", "name")
     )
     return [
         {

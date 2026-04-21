@@ -84,14 +84,26 @@ def _serialize_taxonomy(obj) -> dict:
     }
 
 
-def _list_taxonomy_with_counts(model_class, mm_relation: str) -> list[dict]:
-    """Standard list response for flat (non-DAG) model-attached taxonomies."""
+def _list_taxonomy_with_counts(
+    model_class, mm_relation: str, *, sort_by_display_order: bool = False
+) -> list[dict]:
+    """Standard list response for flat (non-DAG) model-attached taxonomies.
+
+    Default sort is title_count desc (popular first). Pass
+    ``sort_by_display_order=True`` for small, chronologically-meaningful
+    taxonomies (tech generations, game formats) where editorial order is
+    more useful to users than popularity.
+    """
     items = list(
-        model_class.objects.active()
-        .prefetch_related(*(["aliases"] if hasattr(model_class, "aliases") else []))
-        .order_by("display_order", "name")
+        model_class.objects.active().prefetch_related(
+            *(["aliases"] if hasattr(model_class, "aliases") else [])
+        )
     )
     counts = bulk_title_counts_via_models([t.pk for t in items], mm_relation)
+    if sort_by_display_order:
+        items.sort(key=lambda t: (t.display_order, t.name.lower()))
+    else:
+        items.sort(key=lambda t: (-counts.get(t.pk, 0), t.name.lower()))
     return [
         {**_serialize_taxonomy(t), "title_count": counts.get(t.pk, 0)} for t in items
     ]
@@ -150,7 +162,9 @@ technology_generations_router = Router(tags=["technology-generations"])
 @technology_generations_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_technology_generations(request):
-    return _list_taxonomy_with_counts(TechnologyGeneration, "technology_generation")
+    return _list_taxonomy_with_counts(
+        TechnologyGeneration, "technology_generation", sort_by_display_order=True
+    )
 
 
 @technology_generations_router.patch(
@@ -191,7 +205,9 @@ technology_subgenerations_router = Router(tags=["technology-subgenerations"])
 @decorate_view(cache_control(no_cache=True))
 def list_technology_subgenerations(request):
     return _list_taxonomy_with_counts(
-        TechnologySubgeneration, "technology_subgeneration"
+        TechnologySubgeneration,
+        "technology_subgeneration",
+        sort_by_display_order=True,
     )
 
 
@@ -252,7 +268,9 @@ game_formats_router = Router(tags=["game-formats"])
 @game_formats_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_game_formats(request):
-    return _list_taxonomy_with_counts(GameFormat, "game_format")
+    return _list_taxonomy_with_counts(
+        GameFormat, "game_format", sort_by_display_order=True
+    )
 
 
 @game_formats_router.patch(
@@ -353,8 +371,7 @@ credit_roles_router = Router(tags=["credit-roles"])
 @decorate_view(cache_control(no_cache=True))
 def list_credit_roles(request):
     return [
-        _serialize_taxonomy(c)
-        for c in CreditRole.objects.active().order_by("display_order")
+        _serialize_taxonomy(c) for c in CreditRole.objects.active().order_by("name")
     ]
 
 

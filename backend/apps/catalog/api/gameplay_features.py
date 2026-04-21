@@ -104,13 +104,11 @@ gameplay_features_router = Router(tags=["gameplay-features"])
 @decorate_view(cache_control(no_cache=True))
 def list_gameplay_features(request):
     features = list(
-        GameplayFeature.objects.active()
-        .prefetch_related(
+        GameplayFeature.objects.active().prefetch_related(
             Prefetch("children", queryset=GameplayFeature.objects.active()),
             Prefetch("parents", queryset=GameplayFeature.objects.active()),
             "aliases",
         )
-        .order_by("name")
     )
 
     children_map: dict[int, list[int]] = {
@@ -121,6 +119,7 @@ def list_gameplay_features(request):
         "gameplay_features",
         children_map=children_map,
     )
+    features.sort(key=lambda f: (-counts.get(f.pk, 0), f.name.lower()))
 
     return [
         {

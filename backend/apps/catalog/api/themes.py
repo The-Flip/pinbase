@@ -113,13 +113,11 @@ themes_router = Router(tags=["themes"])
 @decorate_view(cache_control(no_cache=True))
 def list_themes(request):
     themes = list(
-        Theme.objects.active()
-        .prefetch_related(
+        Theme.objects.active().prefetch_related(
             Prefetch("parents", queryset=Theme.objects.active()),
             Prefetch("children", queryset=Theme.objects.active()),
             "aliases",
         )
-        .order_by("name")
     )
     children_map: dict[int, list[int]] = {
         t.pk: [c.pk for c in t.children.all()] for t in themes
@@ -129,6 +127,7 @@ def list_themes(request):
         "themes",
         children_map=children_map,
     )
+    themes.sort(key=lambda t: (-counts.get(t.pk, 0), t.name.lower()))
     return [
         {
             "name": t.name,

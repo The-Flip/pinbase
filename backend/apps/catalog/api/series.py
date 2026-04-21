@@ -127,6 +127,7 @@ def list_series(request):
     qs = (
         Series.objects.active()
         .annotate(title_count=Count("titles", filter=active_status_q("titles")))
+        .order_by("-title_count", "name")
         .prefetch_related(
             Prefetch(
                 "titles__machine_models",
