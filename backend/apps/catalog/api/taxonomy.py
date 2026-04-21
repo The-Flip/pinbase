@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from itertools import chain
+
 from django.db.models import F, Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
@@ -31,6 +33,7 @@ from ..models import (
     TechnologySubgeneration,
 )
 from apps.core.licensing import get_minimum_display_rank
+from apps.core.models import active_status_q
 
 from .helpers import _build_rich_text, _serialize_title_machine
 from .schemas import (
@@ -61,6 +64,10 @@ class TaxonomyWithTitleCountSchema(TaxonomySchema):
 
 class DisplayTypeListSchema(TaxonomyWithTitleCountSchema):
     subtypes: list[TaxonomyWithTitleCountSchema] = []
+
+
+class TechnologyGenerationListSchema(TaxonomyWithTitleCountSchema):
+    subgenerations: list[TaxonomyWithTitleCountSchema] = []
 
 
 # ---------------------------------------------------------------------------
@@ -163,12 +170,73 @@ def _register_create(router: Router, model_cls, **kwargs) -> None:
 technology_generations_router = Router(tags=["technology-generations"])
 
 
-@technology_generations_router.get("/", response=list[TaxonomyWithTitleCountSchema])
+@technology_generations_router.get("/", response=list[TechnologyGenerationListSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_technology_generations(request):
-    return _list_taxonomy_with_counts(
-        TechnologyGeneration, "technology_generation", sort_by_display_order=True
+    gens = list(TechnologyGeneration.objects.active())
+    subgens = list(TechnologySubgeneration.objects.active())
+
+    gen_counts = bulk_title_counts_via_models(
+        [g.pk for g in gens], "technology_generation"
     )
+    subgen_counts = _bulk_title_counts_for_subgenerations([s.pk for s in subgens])
+
+    subgens_by_gen: dict[int, list[TechnologySubgeneration]] = {}
+    for s in subgens:
+        subgens_by_gen.setdefault(s.technology_generation_id, []).append(s)
+    for group in subgens_by_gen.values():
+        group.sort(key=lambda s: (s.display_order, s.name.lower()))
+
+    gens.sort(key=lambda g: (g.display_order, g.name.lower()))
+
+    return [
+        {
+            **_serialize_taxonomy(g),
+            "title_count": gen_counts.get(g.pk, 0),
+            "subgenerations": [
+                {
+                    **_serialize_taxonomy(s),
+                    "title_count": subgen_counts.get(s.pk, 0),
+                }
+                for s in subgens_by_gen.get(g.pk, [])
+            ],
+        }
+        for g in gens
+    ]
+
+
+def _bulk_title_counts_for_subgenerations(
+    subgen_pks: list[int],
+) -> dict[int, int]:
+    """Count titles under each subgeneration, mirroring the OR semantics
+    of the ``/api/models/?subgeneration=...`` filter: a machine counts
+    toward a subgen if its own FK references it OR its ``system``'s FK
+    references it. Without the inherited branch, subgens whose machines
+    carry the attribution only through ``system`` show ``0 titles`` while
+    the detail page lists many — see ``machine_models._build_model_list_qs``.
+    """
+    if not subgen_pks:
+        return {}
+
+    base = (
+        MachineModel.objects.active()
+        .filter(variant_of__isnull=True)
+        .filter(active_status_q("title"))
+    )
+    direct = base.filter(technology_subgeneration__in=subgen_pks).values_list(
+        "technology_subgeneration_id", "title_id"
+    )
+    inherited = base.filter(
+        system__technology_subgeneration__in=subgen_pks
+    ).values_list("system__technology_subgeneration_id", "title_id")
+
+    titles_by_subgen: dict[int, set[int]] = {}
+    for sg_id, title_id in chain(direct, inherited):
+        if sg_id is None or title_id is None:
+            continue
+        titles_by_subgen.setdefault(sg_id, set()).add(title_id)
+
+    return {pk: len(titles_by_subgen.get(pk, ())) for pk in subgen_pks}
 
 
 @technology_generations_router.patch(
@@ -232,16 +300,6 @@ def patch_display_type(request, slug: str, data: ClaimPatchSchema):
 # ---------------------------------------------------------------------------
 
 technology_subgenerations_router = Router(tags=["technology-subgenerations"])
-
-
-@technology_subgenerations_router.get("/", response=list[TaxonomyWithTitleCountSchema])
-@decorate_view(cache_control(no_cache=True))
-def list_technology_subgenerations(request):
-    return _list_taxonomy_with_counts(
-        TechnologySubgeneration,
-        "technology_subgeneration",
-        sort_by_display_order=True,
-    )
 
 
 @technology_subgenerations_router.patch(

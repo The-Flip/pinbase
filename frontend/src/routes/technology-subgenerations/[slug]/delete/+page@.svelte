@@ -35,7 +35,7 @@
 
 	let impact = $derived({
 		items: ['this subgeneration', pluralize(preview.changeset_count, 'change set')],
-		note: 'You can undo this from the toast that appears on the technology subgenerations page, or restore the record later from its edit history.'
+		note: 'You can undo this from the toast that appears on the technology generations page, or restore the record later from its edit history.'
 	});
 </script>
 
@@ -45,7 +45,7 @@
 	{slug}
 	submit={submitDelete}
 	cancelHref={`/technology-subgenerations/${slug}`}
-	redirectAfterDelete="/technology-subgenerations"
+	redirectAfterDelete="/technology-generations"
 	editHistoryHref={`/technology-subgenerations/${slug}/edit-history`}
 	{parentBreadcrumb}
 	{blocked}

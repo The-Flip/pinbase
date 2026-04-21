@@ -20,6 +20,10 @@ from apps.catalog.models import (
     DisplayType,
     GameplayFeature,
     MachineModel,
+    Manufacturer,
+    System,
+    TechnologyGeneration,
+    TechnologySubgeneration,
     Theme,
     Title,
 )
@@ -337,3 +341,155 @@ class TestDisplayTypesNestedSubtypes:
         row = next(r for r in body if r["slug"] == "lcd")
         assert row["title_count"] == 1
         assert row["subtypes"][0]["title_count"] == 1
+
+
+# ---------------------------------------------------------------------------
+# technology-generations: nested subgenerations with their own title_count
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+class TestTechnologyGenerationsNestedSubgenerations:
+    """Mirrors ``TestDisplayTypesNestedSubtypes`` for the
+    technology-generations endpoint. ``/technology-subgenerations/`` has
+    no list endpoint — subgenerations are exposed only through their
+    parent generation.
+    """
+
+    def test_subgenerations_nested_under_parent_generation(self, client):
+        ss = TechnologyGeneration.objects.create(
+            name="Solid State", slug="solid-state", display_order=3
+        )
+        em = TechnologyGeneration.objects.create(
+            name="Electromechanical", slug="electromechanical", display_order=2
+        )
+        TechnologySubgeneration.objects.create(
+            name="Integrated MPU",
+            slug="integrated-mpu",
+            technology_generation=ss,
+            display_order=2,
+        )
+        TechnologySubgeneration.objects.create(
+            name="Discrete Logic",
+            slug="discrete-logic",
+            technology_generation=ss,
+            display_order=1,
+        )
+        TechnologySubgeneration.objects.create(
+            name="Pre-Flipper EM",
+            slug="pre-flipper-em",
+            technology_generation=em,
+            display_order=1,
+        )
+
+        body = client.get("/api/technology-generations/").json()
+        rows = {r["slug"]: r for r in body}
+        assert [s["slug"] for s in rows["solid-state"]["subgenerations"]] == [
+            "discrete-logic",
+            "integrated-mpu",
+        ]
+        assert [s["slug"] for s in rows["electromechanical"]["subgenerations"]] == [
+            "pre-flipper-em"
+        ]
+
+    def test_generations_sorted_by_display_order(self, client):
+        TechnologyGeneration.objects.create(
+            name="Solid State", slug="solid-state", display_order=3
+        )
+        TechnologyGeneration.objects.create(
+            name="Pure Mechanical", slug="pure-mechanical", display_order=1
+        )
+        TechnologyGeneration.objects.create(
+            name="Electromechanical", slug="electromechanical", display_order=2
+        )
+
+        body = client.get("/api/technology-generations/").json()
+        assert [r["slug"] for r in body] == [
+            "pure-mechanical",
+            "electromechanical",
+            "solid-state",
+        ]
+
+    def test_generation_with_no_subgenerations_returns_empty_list(self, client):
+        TechnologyGeneration.objects.create(
+            name="Pure Mechanical", slug="pure-mechanical", display_order=1
+        )
+
+        body = client.get("/api/technology-generations/").json()
+        assert body[0]["subgenerations"] == []
+
+    def test_soft_deleted_subgeneration_excluded(self, client):
+        ss = TechnologyGeneration.objects.create(
+            name="Solid State", slug="solid-state", display_order=1
+        )
+        TechnologySubgeneration.objects.create(
+            name="Integrated MPU",
+            slug="integrated-mpu",
+            technology_generation=ss,
+            display_order=1,
+        )
+        TechnologySubgeneration.objects.create(
+            name="Retired Subgen",
+            slug="retired-subgen",
+            technology_generation=ss,
+            display_order=2,
+            status=EntityStatus.DELETED,
+        )
+
+        body = client.get("/api/technology-generations/").json()
+        slugs = [s["slug"] for s in body[0]["subgenerations"]]
+        assert slugs == ["integrated-mpu"]
+
+    def test_title_count_populated_on_both_tiers(self, client):
+        ss = TechnologyGeneration.objects.create(
+            name="Solid State", slug="solid-state", display_order=1
+        )
+        mpu = TechnologySubgeneration.objects.create(
+            name="Integrated MPU",
+            slug="integrated-mpu",
+            technology_generation=ss,
+            display_order=1,
+        )
+        title = _title("Funhouse")
+        mm = _model(title, "Funhouse")
+        mm.technology_generation = ss
+        mm.technology_subgeneration = mpu
+        mm.save(update_fields=["technology_generation", "technology_subgeneration"])
+
+        body = client.get("/api/technology-generations/").json()
+        row = next(r for r in body if r["slug"] == "solid-state")
+        assert row["title_count"] == 1
+        assert row["subgenerations"][0]["title_count"] == 1
+
+    def test_subgeneration_count_includes_titles_inherited_via_system(self, client):
+        """A model whose System carries a subgeneration should be counted
+        under that subgen, mirroring the click-through filter on
+        ``/api/models/?subgeneration=...`` which OR's direct-on-model and
+        inherited-via-system. Otherwise, counts on this page disagree with
+        what the detail page shows.
+        """
+        ss = TechnologyGeneration.objects.create(
+            name="Solid State", slug="solid-state", display_order=1
+        )
+        mpu = TechnologySubgeneration.objects.create(
+            name="Integrated MPU",
+            slug="integrated-mpu",
+            technology_generation=ss,
+            display_order=1,
+        )
+        mfr = Manufacturer.objects.create(name="Williams", slug="williams")
+        system = System.objects.create(
+            name="WPC-95",
+            slug="wpc-95",
+            manufacturer=mfr,
+            technology_subgeneration=mpu,
+        )
+        title = _title("Funhouse")
+        mm = _model(title, "Funhouse")
+        # Direct FK deliberately left unset — subgen is inherited via system.
+        mm.system = system
+        mm.save(update_fields=["system"])
+
+        body = client.get("/api/technology-generations/").json()
+        row = next(r for r in body if r["slug"] == "solid-state")
+        assert row["subgenerations"][0]["title_count"] == 1

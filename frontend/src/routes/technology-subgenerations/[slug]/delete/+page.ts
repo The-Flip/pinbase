@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
 	const res = await fetch(`/api/technology-subgenerations/${params.slug}/delete-preview/`);
 	if (res.status === 404) {
-		throw redirect(302, resolve('/technology-subgenerations'));
+		throw redirect(302, resolve('/technology-generations'));
 	}
 	if (!res.ok) {
 		throw new Error(`Failed to load delete preview (${res.status})`);

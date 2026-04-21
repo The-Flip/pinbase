@@ -1,6 +1,7 @@
 <script lang="ts">
 	import client from '$lib/api/client';
 	import { createAsyncLoader } from '$lib/async-loader.svelte';
+	import GroupedTaxonomyList from '$lib/components/GroupedTaxonomyList.svelte';
 	import TaxonomyListPage from '$lib/components/TaxonomyListPage.svelte';
 
 	const loader = createAsyncLoader(async () => {
@@ -41,6 +42,15 @@
 			<a href="/titles/medieval-madness"><em>Medieval Madness</em></a>. Every machine built today
 			still belongs to that solid-state lineage.
 		</p>
+	{/snippet}
+
+	{#snippet listSnippet(items)}
+		<GroupedTaxonomyList
+			{items}
+			parentPath="/technology-generations"
+			childPath="/technology-subgenerations"
+			getChildren={(g) => g.subgenerations}
+		/>
 	{/snippet}
 </TaxonomyListPage>
 

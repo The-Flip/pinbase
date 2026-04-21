@@ -8,8 +8,9 @@
 
 <SimpleTaxonomyDetailLayout
 	{profile}
-	parentLabel="Technology Subgenerations"
+	parentLabel="Technology Generations"
 	basePath="/technology-subgenerations"
+	parentHref="/technology-generations"
 	saveClaims={saveTechnologySubgenerationClaims}
 	deleteHref={`/technology-subgenerations/${profile.slug}/delete`}
 >

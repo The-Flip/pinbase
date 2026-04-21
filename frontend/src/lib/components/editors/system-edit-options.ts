@@ -33,8 +33,12 @@ export function fetchManufacturerOptions(): Promise<SystemEditOption[]> {
 export function fetchTechnologySubgenerationOptions(): Promise<SystemEditOption[]> {
 	if (!cachedTechSubgens) {
 		cachedTechSubgens = client
-			.GET('/api/technology-subgenerations/')
-			.then(({ data }) => (data ?? []).map((t) => ({ slug: t.slug, label: t.name, count: 0 })))
+			.GET('/api/technology-generations/')
+			.then(({ data }) =>
+				(data ?? []).flatMap((g) =>
+					g.subgenerations.map((s) => ({ slug: s.slug, label: s.name, count: 0 }))
+				)
+			)
 			.catch(() => {
 				cachedTechSubgens = null;
 				return [];
