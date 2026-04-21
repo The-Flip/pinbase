@@ -184,7 +184,9 @@ display_types_router = Router(tags=["display-types"])
 @display_types_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_display_types(request):
-    return _list_taxonomy_with_counts(DisplayType, "display_type")
+    return _list_taxonomy_with_counts(
+        DisplayType, "display_type", sort_by_display_order=True
+    )
 
 
 @display_types_router.patch(
@@ -228,7 +230,9 @@ display_subtypes_router = Router(tags=["display-subtypes"])
 @display_subtypes_router.get("/", response=list[TaxonomyWithTitleCountSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_display_subtypes(request):
-    return _list_taxonomy_with_counts(DisplaySubtype, "display_subtype")
+    return _list_taxonomy_with_counts(
+        DisplaySubtype, "display_subtype", sort_by_display_order=True
+    )
 
 
 @display_subtypes_router.patch(
