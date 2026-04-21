@@ -44,6 +44,24 @@
 	filterFn={filterByManufacturer}
 	rowStyle="display: flex; justify-content: space-between; gap: var(--size-4);"
 >
+	{#snippet headerSnippet()}
+		<p class="overview">
+			A <strong>system</strong> is the electronic hardware platform — the CPU board, driver board,
+			and firmware — that a pinball machine runs on. Most manufacturers produce a succession of
+			systems as technology evolves: <a href="/manufacturers/williams">Williams</a> moved from
+			<a href="/systems/williams-system-3">System 3</a> through
+			<a href="/systems/williams-system-11">System 11</a> and eventually to
+			<a href="/systems/wpc-95">WPC-95</a>, while
+			<a href="/manufacturers/stern-pinball">Stern Pinball</a> currently ships on
+			<a href="/systems/stern-spike-2">SPIKE 2</a>. A single title can appear on multiple systems
+			when it is remade years later — <a href="/manufacturers/williams">Williams</a>' original
+			<a href="/titles/medieval-madness"><em>Medieval Madness</em></a> runs on
+			<a href="/systems/wpc-95">WPC-95</a>, while
+			<a href="/manufacturers/chicago-gaming">Chicago Gaming</a>'s remake runs on
+			<a href="/systems/cgc-pinball-controller-os">CGC Pinball Controller/OS</a>.
+		</p>
+	{/snippet}
+
 	{#snippet filters()}
 		{#if manufacturerOptions.length > 1}
 			<div class="mfr-filter">
@@ -72,6 +90,18 @@
 </TaxonomyListPage>
 
 <style>
+	.overview {
+		font-size: var(--font-size-2);
+		color: var(--color-text-muted);
+		margin-top: var(--size-2);
+		max-width: 42rem;
+		line-height: 1.5;
+	}
+
+	.overview a {
+		color: var(--color-accent);
+	}
+
 	.mfr-filter {
 		display: flex;
 		align-items: baseline;
