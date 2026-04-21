@@ -117,11 +117,11 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     # Post-resolution guards for cross-reference fields only (slug, opdb_id).
     # Other unique fields (e.g. name) rely on save() → IntegrityError which
     # execute_claims() catches and returns as 422.
-    _CONFLICT_FIELDS = [
+    conflict_fields = [
         ("slug", original_slug, original_slug),  # (attr, check_original, revert_to)
         ("opdb_id", original_opdb_id, None),  # nullable — clear to None
     ]
-    for attr, original, revert in _CONFLICT_FIELDS:
+    for attr, original, revert in conflict_fields:
         value = getattr(machine_model, attr)
         if not value or value == original:
             continue

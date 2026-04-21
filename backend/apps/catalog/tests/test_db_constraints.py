@@ -6,6 +6,7 @@ Python validators.
 """
 
 import pytest
+from django.contrib.auth import get_user_model
 from django.db import IntegrityError, connection
 
 from apps.catalog.models import (
@@ -25,6 +26,8 @@ from apps.catalog.models import (
 from apps.catalog.tests.conftest import make_machine_model
 from apps.provenance.models import Claim, IngestRun, Source
 from apps.provenance.test_factories import user_changeset
+
+User = get_user_model()
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -315,9 +318,6 @@ class TestSelfRefConstraints:
 
 class TestProvenanceConstraints:
     def test_claim_retracted_while_active_rejected(self, db):
-        from django.contrib.auth import get_user_model
-
-        User = get_user_model()
         user = User.objects.create_user(username="tester")
         source = Source.objects.create(name="Test", source_type="database")
         mfr = Manufacturer.objects.create(name="Test", slug="test-mfr")
@@ -393,10 +393,8 @@ class TestValidateCheckConstraints:
 
     def test_execute_claims_returns_422_on_cross_field_violation(self, db):
         """PATCH path converts ValidationError to HttpError 422."""
-        from django.contrib.auth import get_user_model
         from django.test import Client
 
-        User = get_user_model()
         user = User.objects.create_user(username="editor")
         from apps.accounts.models import UserProfile
 

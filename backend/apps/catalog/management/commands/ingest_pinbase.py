@@ -400,10 +400,10 @@ class Command(BaseCommand):
 
         # Sort: countries first (type order 0), then intermediates (1), then cities (2).
         # Within each tier, sort by location_path so parents always precede children.
-        TYPE_ORDER = {"country": 0, "city": 2}
+        type_order = {"country": 0, "city": 2}
         entries_sorted = sorted(
             entries,
-            key=lambda e: (TYPE_ORDER.get(e["type"], 1), e["location_path"]),
+            key=lambda e: (type_order.get(e["type"], 1), e["location_path"]),
         )
 
         # Pass 1: upsert Location rows (slug + display fields).
