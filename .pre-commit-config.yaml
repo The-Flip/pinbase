@@ -49,6 +49,16 @@ repos:
         language: system
         files: ^backend/
         pass_filenames: false
+      # Static type checking via basedpyright. A baseline at
+      # backend/.basedpyright/baseline.json captures known-accepted findings
+      # from the initial adoption; the hook only fails on *new* errors.
+      # Regenerate with `cd backend && uv run basedpyright --writebaseline`.
+      - id: basedpyright
+        name: basedpyright
+        entry: bash -c 'cd backend && uv run basedpyright'
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
 
   # Secret detection
   - repo: https://github.com/Yelp/detect-secrets
