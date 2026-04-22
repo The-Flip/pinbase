@@ -3,19 +3,15 @@ import client from '$lib/api/client';
 import type { components } from '$lib/api/schema';
 import {
   parseApiError,
-  type FieldErrors,
   type SaveMeta,
   type SaveResult,
 } from '$lib/components/editors/save-claims-shared';
 
-export { parseApiError };
-export type { FieldErrors, SaveMeta, SaveResult };
+export type { SaveMeta };
 
 type SeriesClaimsBody = components['schemas']['ClaimPatchSchema'];
 
-export type SeriesSectionPatchBody = Partial<
-  Pick<SeriesClaimsBody, 'fields' | 'note' | 'citation'>
->;
+type SeriesSectionPatchBody = Partial<Pick<SeriesClaimsBody, 'fields' | 'note' | 'citation'>>;
 
 export async function saveSeriesClaims(
   slug: string,

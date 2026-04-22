@@ -8,12 +8,11 @@ import {
   type SaveResult,
 } from '$lib/components/editors/save-claims-shared';
 
-export { parseApiError };
 export type { FieldErrors, SaveMeta, SaveResult };
 
 type ManufacturerClaimsBody = components['schemas']['ClaimPatchSchema'];
 
-export type ManufacturerSectionPatchBody = Partial<
+type ManufacturerSectionPatchBody = Partial<
   Pick<ManufacturerClaimsBody, 'fields' | 'note' | 'citation'>
 >;
 

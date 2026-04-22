@@ -8,14 +8,11 @@ import {
   type SaveResult,
 } from '$lib/components/editors/save-claims-shared';
 
-export { parseApiError };
 export type { FieldErrors, SaveMeta, SaveResult };
 
 type PersonClaimsBody = components['schemas']['ClaimPatchSchema'];
 
-export type PersonSectionPatchBody = Partial<
-  Pick<PersonClaimsBody, 'fields' | 'note' | 'citation'>
->;
+type PersonSectionPatchBody = Partial<Pick<PersonClaimsBody, 'fields' | 'note' | 'citation'>>;
 
 export async function savePersonClaims(
   slug: string,

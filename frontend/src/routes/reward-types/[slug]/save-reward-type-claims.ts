@@ -1,19 +1,11 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
 import type { components } from '$lib/api/schema';
-import {
-  parseApiError,
-  type FieldErrors,
-  type SaveMeta,
-  type SaveResult,
-} from '$lib/components/editors/save-claims-shared';
-
-export { parseApiError };
-export type { FieldErrors, SaveMeta, SaveResult };
+import { parseApiError, type SaveResult } from '$lib/components/editors/save-claims-shared';
 
 type RewardTypeClaimsBody = components['schemas']['ClaimPatchSchema'];
 
-export type RewardTypeSectionPatchBody = Partial<
+type RewardTypeSectionPatchBody = Partial<
   Pick<RewardTypeClaimsBody, 'fields' | 'note' | 'citation'>
 >;
 

@@ -1,15 +1,7 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import {
-  parseApiError,
-  type FieldErrors,
-  type SaveMeta,
-  type SaveResult,
-} from '$lib/components/editors/save-claims-shared';
+import { parseApiError, type SaveResult } from '$lib/components/editors/save-claims-shared';
 import type { HierarchicalTaxonomySectionPatchBody } from '$lib/components/editors/hierarchical-taxonomy-edit-types';
-
-export { parseApiError };
-export type { FieldErrors, SaveMeta, SaveResult };
 
 export async function saveGameplayFeatureClaims(
   slug: string,

@@ -17,7 +17,8 @@
     "test:unit": "vitest run --project unit",
     "test:dom": "vitest run --project dom",
     "test:dom:watch": "vitest --project dom",
-    "api:gen": "openapi-typescript ../backend/openapi.json -o src/lib/api/schema.d.ts"
+    "api:gen": "openapi-typescript ../backend/openapi.json -o src/lib/api/schema.d.ts",
+    "knip": "knip"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^5.5.4",
@@ -26,12 +27,12 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "@types/eslint": "^9.6.1",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.17.0",
     "globals": "^17.4.0",
     "jsdom": "^29.0.2",
+    "knip": "^6.6.1",
     "markdownlint-cli2": "^0.21.0",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.8.1",
@@ -45,7 +46,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
-    "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "diff": "^8.0.4",
     "open-props": "^1.7.23",
