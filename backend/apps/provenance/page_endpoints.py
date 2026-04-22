@@ -362,11 +362,12 @@ def change_detail(request, changeset_id: int):
         for c in retracted
     ]
 
+    ingest_run = cs.ingest_run
     return {
         "id": cs.pk,
         "user_display": cs.user.username if cs.user else None,
-        "is_ingest": cs.ingest_run_id is not None,
-        "source_name": cs.ingest_run.source.name if cs.ingest_run_id else None,
+        "is_ingest": ingest_run is not None,
+        "source_name": ingest_run.source.name if ingest_run is not None else None,
         "note": cs.note,
         "created_at": cs.created_at.isoformat(),
         "entity_href": meta["href"],

@@ -115,6 +115,7 @@ class CorporateEntityLocation(models.Model):
     """
 
     corporate_entity_id: int
+    location_id: int
     corporate_entity = models.ForeignKey(
         "catalog.CorporateEntity",
         on_delete=models.CASCADE,
