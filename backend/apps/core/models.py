@@ -47,7 +47,7 @@ class AliasBase(TimeStampedModel):
         return self.value
 
 
-def field_not_blank(field_name):
+def field_not_blank(field_name: str) -> models.CheckConstraint:
     """CHECK constraint: field != ''. Use in concrete model Meta.constraints."""
     return models.CheckConstraint(
         condition=~models.Q(**{field_name: ""}),
@@ -55,7 +55,7 @@ def field_not_blank(field_name):
     )
 
 
-def nullable_id_not_empty(field_name):
+def nullable_id_not_empty(field_name: str) -> models.CheckConstraint:
     """CHECK constraint: nullable string ID is NULL or non-empty.
 
     Prevents '' on optional unique CharField IDs (opdb_id, wikidata_id),
@@ -151,7 +151,7 @@ class SluggedModel(models.Model):
         abstract = True
 
 
-def slug_not_blank():
+def slug_not_blank() -> models.CheckConstraint:
     """CHECK constraint: slug != ''. Use in each SluggedModel subclass Meta."""
     return models.CheckConstraint(
         condition=~models.Q(slug=""),
@@ -231,7 +231,7 @@ class EntityStatusMixin(models.Model):
         abstract = True
 
 
-def status_valid():
+def status_valid() -> models.CheckConstraint:
     """CHECK constraint: status must be 'active', 'deleted', or null."""
     return models.CheckConstraint(
         condition=(
