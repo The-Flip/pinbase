@@ -105,7 +105,7 @@ def build_edit_history(entity: Any) -> list[dict[str, Any]]:
     # 4. Build response.
     result: list[dict[str, Any]] = []
     for cs in changesets:
-        changes: list[dict] = []
+        changes: list[dict[str, Any]] = []
         for claim in cs.claims.all():
             chain = (
                 history.get((claim.claim_key, claim.user_id), [])
