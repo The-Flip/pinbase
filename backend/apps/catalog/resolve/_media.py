@@ -5,21 +5,18 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from datetime import datetime
-from typing import Protocol, cast
+from typing import cast
 
 from django.contrib.contenttypes.models import ContentType
 
 from apps.core.models import MediaSupported
 from apps.media.models import EntityMedia, MediaAsset
 from apps.provenance.models import Claim
+from apps.provenance.typing import HasEffectivePriority
 
 from ._helpers import _annotate_priority
 
 logger = logging.getLogger(__name__)
-
-
-class _ClaimWithEffectivePriority(Protocol):
-    effective_priority: int
 
 
 def resolve_media_attachments(
@@ -142,7 +139,7 @@ def resolve_media_attachments(
                 (asset_pk, claim.created_at)
             )
             if is_primary:
-                effective_priority = cast(_ClaimWithEffectivePriority, claim)
+                effective_priority = cast(HasEffectivePriority, claim)
                 primary_candidates[(ct_id, obj_id, category)].append(
                     (asset_pk, effective_priority.effective_priority, claim.created_at)
                 )

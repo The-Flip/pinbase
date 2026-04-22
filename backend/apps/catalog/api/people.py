@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Protocol, cast
+from typing import cast
 
 from django.db.models import Count, F, Prefetch, Q
 from django.shortcuts import get_object_or_404
@@ -28,6 +28,7 @@ from apps.provenance.schemas import RichTextSchema
 
 from ..cache import PEOPLE_ALL_KEY, get_cached_response, set_cached_response
 from ..models import Credit, MachineModel, Person
+from ._typing import HasCreditCount
 from .constants import DEFAULT_PAGE_SIZE
 from .edit_claims import ClaimSpec, execute_claims, plan_scalar_field_claims
 from .entity_create import (
@@ -59,14 +60,6 @@ from .soft_delete import (
     plan_soft_delete,
     serialize_blocking_referrer,
 )
-
-# ---------------------------------------------------------------------------
-# Schemas
-# ---------------------------------------------------------------------------
-
-
-class _AnnotatedPerson(Protocol):
-    credit_count: int
 
 
 class PersonGridSchema(Schema):
@@ -247,7 +240,6 @@ def list_all_people(request):
 
     result = []
     for p in people:
-        annotated_person = cast(_AnnotatedPerson, p)
         thumb = None
         person_id = p.pk
         tm_id = person_thumb_model.get(person_id)
@@ -261,7 +253,7 @@ def list_all_people(request):
                 "name": p.name,
                 "slug": p.slug,
                 "aliases": [a.value for a in p.aliases.all()],
-                "credit_count": annotated_person.credit_count,
+                "credit_count": cast(HasCreditCount, p).credit_count,
                 "thumbnail_url": thumb,
             }
         )

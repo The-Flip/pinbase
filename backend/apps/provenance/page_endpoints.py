@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import datetime
+from typing import cast
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
@@ -27,6 +28,7 @@ from .evidence import build_cited_changesets
 from .helpers import build_sources, claims_prefetch
 from .history import build_edit_history
 from .schemas import ClaimSchema, FieldChangeSchema, RetractionSchema
+from .typing import HasActiveClaims
 
 
 class ChangeSetSummarySchema(Schema):
@@ -161,7 +163,7 @@ def sources_page(request, entity_type: str, slug: str):
     entity = get_object_or_404(
         model_class.objects.prefetch_related(claims_prefetch()), slug=slug
     )
-    active_claims = getattr(entity, "active_claims", [])
+    active_claims = cast(HasActiveClaims, entity).active_claims
     return {
         "sources": build_sources(active_claims),
         "evidence": build_cited_changesets(active_claims),

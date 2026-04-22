@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Protocol, cast
+from typing import cast
 
 from django.db.models import Count, F, Max, Min, Prefetch, Q
 from django.shortcuts import get_object_or_404
@@ -30,6 +30,7 @@ from ..models import (
     ManufacturerAlias,
     System,
 )
+from ._typing import HasModelCount, HasYearRange
 from .constants import DEFAULT_PAGE_SIZE
 from .edit_claims import execute_claims, plan_scalar_field_claims
 from .entity_crud import register_entity_create, register_entity_delete_restore
@@ -48,16 +49,6 @@ from .schemas import (
     RelatedTitleSchema,
 )
 from .titles import _dedup_facet_refs
-
-# ---------------------------------------------------------------------------
-# Schemas
-# ---------------------------------------------------------------------------
-
-
-class _AnnotatedManufacturer(Protocol):
-    model_count: int
-    year_min: int | None
-    year_max: int | None
 
 
 class ManufacturerGridSchema(Schema):
@@ -426,11 +417,10 @@ def list_all_manufacturers(request):
     # --- Assembly ---
     result = []
     for mfr in manufacturers:
-        annotated_mfr = cast(_AnnotatedManufacturer, mfr)
         mfr_id = cast(int, mfr.pk)
-        model_count = annotated_mfr.model_count
-        year_min = annotated_mfr.year_min
-        year_max = annotated_mfr.year_max
+        model_count = cast(HasModelCount, mfr).model_count
+        year_min = cast(HasYearRange, mfr).year_min
+        year_max = cast(HasYearRange, mfr).year_max
         search_parts: list[str] = []
         search_parts.extend(mfr_brand_alias_names.get(mfr_id, []))
         search_parts.extend(mfr_entity_names.get(mfr_id, []))

@@ -1,61 +1,11 @@
 {
     "files": {
-        "./backend/apps/catalog/api/corporate_entities.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 30,
-                    "endColumn": 41,
-                    "lineCount": 1
-                }
-            }
-        ],
-        "./backend/apps/catalog/api/franchises.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 29,
-                    "endColumn": 40,
-                    "lineCount": 1
-                }
-            }
-        ],
         "./backend/apps/catalog/api/gameplay_features.py": [
             {
                 "code": "reportAttributeAccessIssue",
                 "range": {
                     "startColumn": 43,
                     "endColumn": 50,
-                    "lineCount": 1
-                }
-            }
-        ],
-        "./backend/apps/catalog/api/locations.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 31,
-                    "endColumn": 42,
-                    "lineCount": 1
-                }
-            }
-        ],
-        "./backend/apps/catalog/api/series.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 33,
-                    "endColumn": 44,
-                    "lineCount": 1
-                }
-            }
-        ],
-        "./backend/apps/catalog/api/systems.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 29,
-                    "endColumn": 40,
                     "lineCount": 1
                 }
             }
@@ -166,16 +116,6 @@
                 "range": {
                     "startColumn": 73,
                     "endColumn": 83,
-                    "lineCount": 1
-                }
-            }
-        ],
-        "./backend/apps/catalog/tests/test_source_enabled.py": [
-            {
-                "code": "reportAttributeAccessIssue",
-                "range": {
-                    "startColumn": 28,
-                    "endColumn": 41,
                     "lineCount": 1
                 }
             }
