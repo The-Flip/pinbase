@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
 from django.core.management.base import CommandError
 from django.db import transaction
 
 from apps.citation.seed_data import SEED_SOURCES as _SEED_SOURCES
 from apps.citation.seed_data.types import SeedSource
+
+if TYPE_CHECKING:
+    from apps.citation.models import CitationSource
 
 
 def ensure_citation_sources(
@@ -50,7 +53,7 @@ _SOURCE_FIELDS = frozenset(
 
 def _seed_nodes(
     nodes: list[SeedSource],
-    parent: Any,
+    parent: CitationSource | None,
     counts: dict[str, int],
 ) -> None:
     from apps.citation.models import CitationSource, CitationSourceLink
