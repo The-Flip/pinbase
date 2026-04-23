@@ -1,6 +1,5 @@
-from typing import Any, cast
-
 from django.contrib import admin
+from django.forms import BaseInlineFormSet, ModelForm
 from django.http import HttpRequest
 
 from .models import CitationSource, CitationSourceLink
@@ -41,11 +40,11 @@ class CitationSourceAdmin(admin.ModelAdmin[CitationSource]):
         self,
         request: HttpRequest,
         obj: CitationSource,
-        form: Any,
+        form: ModelForm[CitationSource],
         change: bool,
     ) -> None:
         assert request.user.is_authenticated
-        user = cast(Any, request.user)
+        user = request.user
         if not change:
             obj.created_by = user
         obj.updated_by = user
@@ -54,12 +53,14 @@ class CitationSourceAdmin(admin.ModelAdmin[CitationSource]):
     def save_formset(
         self,
         request: HttpRequest,
-        form: Any,
-        formset: Any,
+        form: ModelForm[CitationSource],
+        formset: BaseInlineFormSet[
+            CitationSourceLink, CitationSource, ModelForm[CitationSourceLink]
+        ],
         change: bool,
     ) -> None:
         assert request.user.is_authenticated
-        user = cast(Any, request.user)
+        user = request.user
         instances = formset.save(commit=False)
         for instance in instances:
             if isinstance(instance, CitationSourceLink):
