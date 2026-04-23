@@ -6,7 +6,7 @@ We recently introduced mypy and grandfathered in a lot of exceptions in backend/
 
 ## Status
 
-Steps 1–4 complete. Step 4.7 and 5+ undone.
+Steps 1–5 complete. Step 6+ undone.
 
 ## Running mypy
 
@@ -155,7 +155,7 @@ Delete endpoints now type 422 as a union of `SoftDeleteBlockedSchema | AlreadyDe
 - **Introduced `AlreadyDeletedSchema` as the second union arm.** The "already soft-deleted" 422 has only `detail` (no `blocked_by`), which the frontend's [delete-flow.ts classifier](frontend/src/lib/delete-flow.ts) relies on to fall through to `form_error` instead of `blocked`. A distinct class alone is **not sufficient** — Pydantic smart-union dispatch is structural, so `{"detail": "…"}` matches whichever arm has defaults covering the missing fields, and `{"detail": "…", "blocked_by": […]}` matches whichever arm treats extras permissively. Correct dispatch required making `blocked_by` required (no default) on `SoftDeleteBlockedSchema` / `PersonSoftDeleteBlockedSchema`, **and** `model_config = ConfigDict(extra="forbid")` on `AlreadyDeletedSchema`. See the "Pydantic response unions need structural discrimination" idiom above. Named `AlreadyDeletedSchema` rather than reusing `ErrorDetailSchema` so the union is self-documenting at the call site.
 - **No inheritance between error schemas.** Pydantic subclassing doesn't affect union dispatch (structural) or openapi-typescript output (duplicates fields, no TS subtyping). No backend code processes these polymorphically; no frontend code either. Inheritance would be a type-gesture only.
 
-## Step 4: Clean up tech debt from the Step 2 signature sweep
+## Step 4: Clean up tech debt from the Step 2 signature sweep - DONE
 
 Quality regressions introduced to clear the baseline quickly. Independent of Steps 3 / 5 — can land any time, but should not normalize.
 
@@ -173,47 +173,25 @@ Quality regressions introduced to clear the baseline quickly. Independent of Ste
 
 All Step 4 items resolved. Baseline: 377 → 375.
 
-## Step 4.7: Idiom-#2 cast sweep
+## Step 4.7: Idiom-#2 cast sweep — WONT_DO
 
-Separate from Step 4's Step-2 regressions: a distinct pattern of idiom-#2 violations (the "queryset-annotated attribute" class) that exist across the `catalog/api` package. Per idiom #2, `cast(HasModelCount, obj).model_count` should be `getattr(obj, "model_count", 0)` — scoped to the one annotated field instead of widening the whole object.
+Originally planned as a sweep to replace `cast(HasModelCount, obj).model_count` with `getattr(obj, "model_count", 0)` across `catalog/api`. On trying the first site ([corporate_entities.py:154](backend/apps/catalog/api/corporate_entities.py#L154)) it became clear the trade is lateral at best:
 
-**Per-protocol default values.** Read [\_typing.py](backend/apps/catalog/api/_typing.py) and pick the right default per site — not every field defaults to `0`. Count-style fields (`model_count`, `title_count`, `credit_count`) default to `0`; optional-range fields on `HasYearRange` (`year_start`, `year_end`) are nullable ints and default to `None`. A blanket `0` at every site would silently invert semantics for the year-range case (missing year → 0 CE, not "unknown").
+- **Cast + protocol:** `.model_count` is a real typed attribute access. Typos → mypy error. `HasModelCount` is effectively a structural type for "an object with the queryset-annotated count field" — which is what protocols are _for_.
+- **getattr:** `"model_count"` is a magic string. Typos → silently returns `0` forever, no mypy signal.
 
-Call sites (~8):
+The idiom-#2 argument ("widens the whole object") is overstated here: the `cast(Has*, obj).field` pattern reads one field and discards the widened reference immediately. There is no cleaner django-stubs-native way to express "this queryset carries these `.annotate()`d attributes" — `.values()` + `TypedDict` would lose model instances and break the prefetch-heavy serializers these endpoints rely on.
 
-- [corporate_entities.py:154](backend/apps/catalog/api/corporate_entities.py#L154) — `HasModelCount`
-- [franchises.py:67](backend/apps/catalog/api/franchises.py#L67) — `HasTitleCount`
-- [locations.py:208](backend/apps/catalog/api/locations.py#L208) — `HasModelCount`
-- [manufacturers.py:427-429](backend/apps/catalog/api/manufacturers.py#L427) — `HasModelCount`, `HasYearRange` ×2
-- [people.py:263](backend/apps/catalog/api/people.py#L263) — `HasCreditCount`
-- [series.py:153](backend/apps/catalog/api/series.py#L153) — `HasTitleCount`
-- [systems.py:202](backend/apps/catalog/api/systems.py#L202) — `HasModelCount`
+**Decision:** keep the `Has*` protocols in [\_typing.py](backend/apps/catalog/api/_typing.py) and the existing `cast(Has*, obj).field` sites. Update idiom #2 when touched to note that queryset-annotated attributes are an exception: prefer a narrow structural protocol over `getattr` for this case.
 
-The `HasModelCount` / `HasTitleCount` / `HasCreditCount` / `HasYearRange` protocols in [\_typing.py](backend/apps/catalog/api/_typing.py) become unused after the sweep — delete them if no other callers remain.
+## Step 5: narrow `apps.*.api.*` decorator relaxation - DONE
 
-**Scope note:** this sweep is _only_ the `cast(Has*, obj).field` pattern. Other remaining `cast(...)` uses in `catalog/api` are deliberate or fall under different idioms and should not be folded in:
+Removed the override entirely. Measured fallout in two passes:
 
-- `cast(User, user)` ([edit_claims.py](backend/apps/catalog/api/edit_claims.py)) — tracked by [UserModel.md](UserModel.md).
-- `cast(Any, model_cls)` casts in [entity_crud.py](backend/apps/catalog/api/entity_crud.py) / [entity_create.py](backend/apps/catalog/api/entity_create.py) — removed in Step 4.
-- `cast(CatalogModel, root)` / `cast(Any, remote_model)` in [soft_delete.py](backend/apps/catalog/api/soft_delete.py) — cross-model walker over dynamically-resolved relations; likely legitimate idiom #3 but worth re-reading when touched.
-- `cast(list[object], getattr(field, "_validators", []))` / `cast(list[Any], all_entities)` in [edit_claims.py](backend/apps/catalog/api/edit_claims.py) — django-stubs gaps, idiom #3.
-- `cast(_LocationTree, result)` in [locations.py](backend/apps/catalog/api/locations.py) / `cast(tuple[str, Any], child)` in [entity_create.py](backend/apps/catalog/api/entity_create.py) — shape narrowings at JSON / heterogeneous-iter boundaries; probably justified.
+1. Scoped the override away from `apps.catalog.api.*` (Step 3.1/3.2 typed every endpoint return, so the Ninja decorators now have enough call-site typing to satisfy `disallow_untyped_decorators`). Zero new baseline entries, zero raw `untyped-decorator` errors in `apps/catalog/api/*`.
+2. Dropped the override entirely. Still zero new baseline entries and zero raw `untyped-decorator` errors anywhere — the single-file `apps.{accounts,citation,core,media,provenance}.api` modules are clean too.
 
-**Done when:** every `cast(Has*, obj).field` call site is replaced with `getattr(obj, "field", default)`; the `Has*` protocols are deleted if no other callers remain; `./scripts/mypy` stays clean.
-
-**Baseline sync at the end.** Removed casts often clear related baseline entries (e.g. `Returning Any from function declared to return …`). Once `./scripts/mypy` reports `new: 0` and `unresolved` has dropped, run:
-
-```sh
-uv run --directory backend mypy --config-file pyproject.toml . 2>&1 | uv run --directory backend mypy-baseline sync
-```
-
-to remove the now-resolved entries from [backend/mypy-baseline.txt](backend/mypy-baseline.txt). Do **not** sync while `new > 0` — that would bake new errors into the baseline.
-
-## Step 5: narrow `apps.*.api.*` decorator relaxation
-
-Gated on Step 3. With `catalog/api` signatures typed and error schemas swapped, `disallow_untyped_decorators = false` at [pyproject.toml:136](backend/pyproject.toml#L136) can likely be scoped to just the files that still pay the cost, or removed for `catalog/api` entirely. Measure the fallout before flipping.
-
-**Done when:** the `apps.*.api.*` override at [pyproject.toml:136](backend/pyproject.toml#L136) is either removed, scoped to a narrower path, or kept with an inline comment naming the specific files that still need it and why.
+The override block at the old `pyproject.toml:136` is gone. If a future Ninja endpoint regresses, the failure will surface as an `untyped-decorator` error against the baseline rather than being silently relaxed.
 
 ## Step 6: `citation/api` and `provenance/api`
 
