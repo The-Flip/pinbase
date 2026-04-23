@@ -3,9 +3,13 @@
 
   let {
     backHref = '/titles/medieval-madness',
+    recordName = undefined,
+    recordHref = undefined,
     maxWidth = undefined,
   }: {
     backHref?: string;
+    recordName?: string;
+    recordHref?: string;
     maxWidth?: string;
   } = $props();
 </script>
@@ -14,6 +18,6 @@
   <h1>Edit History</h1>
 {/snippet}
 
-<FocusContentShell {backHref} {maxWidth} heading={headingSnippet}>
+<FocusContentShell {backHref} {recordName} {recordHref} {maxWidth} heading={headingSnippet}>
   <div>Audit content</div>
 </FocusContentShell>

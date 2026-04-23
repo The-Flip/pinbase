@@ -11,7 +11,7 @@ describe('title sources page', () => {
 
     expect(body).toContain('href="/titles/medieval-madness"');
     expect(body).toContain('Back');
-    expect(body).toContain('<h1>Sources</h1>');
+    expect(body).toContain('>Sources</h1>');
     // EntitySources empty-state passes through.
     expect(body.toLowerCase()).toContain('no source data recorded yet');
   });
