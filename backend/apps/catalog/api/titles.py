@@ -544,7 +544,7 @@ def _serialize_title_detail(title) -> dict:
 
     # Credits that appear on every model (intersection, not union).
     credit_sets = []
-    credit_data: dict[CreditKey, dict] = {}
+    credit_data: dict[CreditKey, CreditSchema] = {}
     for pm in model_objs:
         model_keys: set[CreditKey] = set()
         for c in pm.credits.all():
@@ -570,8 +570,8 @@ def _serialize_title_detail(title) -> dict:
 
     # For single-model titles with no variants, include full model detail inline.
     model_detail = None
-    if len(machines) == 1 and not machines[0].get("variants"):
-        pm = _model_detail_qs().get(slug=machines[0]["slug"])
+    if len(machines) == 1 and not machines[0].variants:
+        pm = _model_detail_qs().get(slug=machines[0].slug)
         model_detail = _serialize_model_detail(pm)
 
     description = _build_rich_text(title, "description", active_claims(title))
