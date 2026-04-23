@@ -7,7 +7,7 @@ Nothing about storage paths is stored in the database.
 from __future__ import annotations
 
 import logging
-from typing import Any, NamedTuple, cast
+from typing import NamedTuple
 from uuid import UUID
 
 from django.conf import settings
@@ -47,6 +47,17 @@ def get_media_storage() -> Storage:
     return default_storage
 
 
+class _TypedContentFile(ContentFile[bytes]):
+    """ContentFile that advertises a content_type attribute.
+
+    django-storages' S3Boto3Storage forwards ``file.content_type`` to S3
+    as the object's Content-Type when the attribute is present. Declaring
+    it on a subclass lets us set it without a cast.
+    """
+
+    content_type: str
+
+
 def upload_to_storage(storage_key: str, data: bytes, content_type: str) -> None:
     """Write bytes to storage at the given key.
 
@@ -57,10 +68,9 @@ def upload_to_storage(storage_key: str, data: bytes, content_type: str) -> None:
     between the DB and storage.
     """
     storage = get_media_storage()
-    file = ContentFile(data, name=storage_key)
-    content_file = cast(Any, file)
-    content_file.content_type = content_type
-    actual_key = storage.save(storage_key, content_file)
+    file = _TypedContentFile(data, name=storage_key)
+    file.content_type = content_type
+    actual_key = storage.save(storage_key, file)
     if actual_key != storage_key:
         storage.delete(actual_key)
         msg = f"Storage key mismatch: expected {storage_key}, got {actual_key}"
