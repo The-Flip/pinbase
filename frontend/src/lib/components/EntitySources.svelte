@@ -45,9 +45,14 @@
   {/if}
 {/snippet}
 
-<FocusContentShell backHref={entity.detailHref} maxWidth="64rem">
+<FocusContentShell
+  backHref={entity.detailHref}
+  recordName={entity.name}
+  recordHref={entity.detailHref}
+  maxWidth="64rem"
+>
   {#snippet heading()}
-    <h1>Sources</h1>
+    <h1 class="page-label">Sources</h1>
   {/snippet}
 
   {#if sources.length > 0}
@@ -181,6 +186,13 @@
 </FocusContentShell>
 
 <style>
+  .page-label {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
   h2 {
     font-size: var(--font-size-3);
     font-weight: 600;

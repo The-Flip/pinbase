@@ -11,7 +11,7 @@ describe('title edit-history page', () => {
 
     expect(body).toContain('href="/titles/medieval-madness"');
     expect(body).toContain('Back');
-    expect(body).toContain('<h1>Edit History</h1>');
+    expect(body).toContain('>Edit History</h1>');
     // EditHistory empty-state passes through.
     expect(body.toLowerCase()).toContain('no edit history yet');
   });

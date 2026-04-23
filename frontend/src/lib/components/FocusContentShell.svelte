@@ -3,11 +3,15 @@
 
   let {
     backHref,
+    recordName,
+    recordHref,
     maxWidth = '48rem',
     heading,
     children,
   }: {
     backHref: string;
+    recordName?: string;
+    recordHref?: string;
     maxWidth?: string;
     heading: Snippet;
     children: Snippet;
@@ -16,7 +20,13 @@
 
 <div class="focus-shell" style:max-width={maxWidth}>
   <header class="focus-header">
-    <a href={backHref} class="back-link">&larr; Back</a>
+    <a href={backHref} class="back-link">
+      <span class="back-arrow" aria-hidden="true">&larr;</span>
+      <span class="back-text">Back</span>
+    </a>
+    {#if recordName && recordHref}
+      <a href={recordHref} class="record-name" title={recordName}>{recordName}</a>
+    {/if}
     <div class="heading-slot">
       {@render heading()}
     </div>
@@ -32,17 +42,20 @@
   }
 
   .focus-header {
-    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: var(--size-3);
+    padding-bottom: var(--size-3);
     margin-bottom: var(--size-4);
     min-height: 2.5rem;
+    border-bottom: 1px solid var(--color-border-soft);
   }
 
   .back-link {
-    position: absolute;
-    left: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    flex-shrink: 0;
     font-size: var(--font-size-1);
     color: var(--color-text-muted);
     text-decoration: none;
@@ -50,5 +63,33 @@
 
   .back-link:hover {
     color: var(--color-text-primary);
+  }
+
+  .record-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--font-size-3);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .record-name:hover {
+    text-decoration: underline;
+  }
+
+  .heading-slot {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  /* Keep in sync with LAYOUT_BREAKPOINT (52rem). */
+  @media (max-width: 52rem) {
+    .back-text {
+      display: none;
+    }
   }
 </style>

@@ -11,7 +11,7 @@ describe('cabinet edit-history page (taxonomy representative)', () => {
 
     expect(body).toContain('href="/cabinets/standard-body"');
     expect(body).toContain('Back');
-    expect(body).toContain('<h1>Edit History</h1>');
+    expect(body).toContain('>Edit History</h1>');
     expect(body.toLowerCase()).toContain('no edit history yet');
   });
 });
