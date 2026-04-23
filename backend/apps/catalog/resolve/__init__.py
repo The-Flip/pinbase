@@ -389,4 +389,3 @@ def _apply_resolution(
                 )
 
     pm.extra_data = extra_data
-

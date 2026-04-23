@@ -325,4 +325,3 @@ def resolve_unique_conflicts(
             )
             setattr(loser, field_name, pre_values[cast(int, loser.pk)])
             seen[getattr(winner, field_name)] = winner
-
