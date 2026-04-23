@@ -11,7 +11,7 @@ describe('cabinet sources page (taxonomy representative)', () => {
 
     expect(body).toContain('href="/cabinets/standard-body"');
     expect(body).toContain('Back');
-    expect(body).toContain('<h1>Sources</h1>');
+    expect(body).toContain('>Sources</h1>');
     expect(body.toLowerCase()).toContain('no source data recorded yet');
   });
 });

@@ -3,6 +3,7 @@
   import EditSectionMenu from '$lib/components/EditSectionMenu.svelte';
   import FocusContentShell from '$lib/components/FocusContentShell.svelte';
   import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
+  import { getEntityContext } from '$lib/entity-context';
 
   let {
     detailHref,
@@ -19,9 +20,11 @@
     fallbackHeading?: string;
     children: Snippet;
   } = $props();
+
+  const entity = getEntityContext();
 </script>
 
-<FocusContentShell backHref={detailHref}>
+<FocusContentShell backHref={detailHref} recordName={entity.name} recordHref={entity.detailHref}>
   {#snippet heading()}
     {#if currentSectionKey}
       <EditSectionMenu

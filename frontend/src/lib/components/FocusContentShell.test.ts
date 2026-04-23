@@ -15,6 +15,27 @@ describe('FocusContentShell', () => {
     expect(body).toContain('Audit content');
   });
 
+  it('renders the record name as a link when provided', () => {
+    const { body } = render(Harness, {
+      props: {
+        backHref: '/titles/medieval-madness',
+        recordName: 'Medieval Madness',
+        recordHref: '/titles/medieval-madness',
+      },
+    });
+
+    expect(body).toContain('Medieval Madness');
+    expect(body).toContain('title="Medieval Madness"');
+  });
+
+  it('omits the record name when not provided', () => {
+    const { body } = render(Harness, {
+      props: { backHref: '/titles/medieval-madness' },
+    });
+
+    expect(body).not.toContain('class="record-name"');
+  });
+
   it('applies a custom max-width when provided', () => {
     const { body } = render(Harness, {
       props: { maxWidth: '64rem' },
