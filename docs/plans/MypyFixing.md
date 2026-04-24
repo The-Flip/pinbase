@@ -226,11 +226,17 @@ Remaining "return Schema, not dict" debt in `catalog/api`. No baseline impact �
 
 - **Restructure the accumulator-then-mutate pattern in `_serialize_system_detail` and `_serialize_person_detail`.** Both helpers build a `dict[str, SomeSchema]` and then mutate the Schema instances in place (`titles[key].thumbnail_url = ...`, `titles[key].roles.append(...)`) as more data arrives in the loop. Pydantic v2 allows this (no `validate_assignment`), but it's off-idiom — pydantic models are usually treated as immutable after construction. Build mutable state (dataclass or plain dict) during accumulation, then construct the Schema once at the end.
 
-## Step 8: `citation/api`
+## Step 8: `citation/api` - DONE
 
-Same pattern as Step 2 — helpers first, endpoints after, `make api-gen` between batches. Should go quickly after Step 2's muscle memory.
+Same pattern as Step 2 — helpers first, endpoints after, `make api-gen` between batches. Unlike Step 2, the type catalog was designed up-front (every helper signature, endpoint return type, and schema boundary decided before any code change) to avoid the gradual dict-return reverse-engineering that slowed Steps 1–7.
 
-Scope (~45 entries): `citation/api.py` (38) plus foundational `citation/url_extraction.py` (7).
+Scope landed: `citation/api.py` (38 → 0), `citation/url_extraction.py` (7 → 0), plus three adjacent files:
+
+- **`citation/models.py`** — dropped the `has_children: bool` class-level annotation on `CitationSource`. It was a lie: `has_children` only exists on rows from the search queryset's `.annotate(has_children=Exists(...))`. Replaced with a narrow `_HasChildren` Protocol in `api.py` and `cast(_HasChildren, s).has_children` at the one read site (same pattern as the `Has*` protocols in [catalog/api/\_typing.py](backend/apps/catalog/api/_typing.py)).
+- **`citation/extractors.py`** — `Recognition`'s four loose `child_id` / `child_name` / `child_skip_locator` fields were tightened into a nested `RecognitionChild | None`. The dataclass now encodes the runtime invariant (child fields are either all present or all absent) in the type, eliminating an `assert rec.child_name is not None` at the consumer and a defensive `rec.child_name or ""` fallback in `url_extraction.py`. Two test mocks flipped from `MagicMock(child_id=…)` to real `Recognition` / `RecognitionChild` instances.
+- **`_authed_user(request: HttpRequest) -> User`** — new endpoint-local helper that narrows `request.user` with `assert not isinstance(request.user, AnonymousUser)`. No `cast(User, ...)` needed because django-stubs types `HttpRequest.user` as `User | AnonymousUser` when `AUTH_USER_MODEL` resolves to `auth.User`. When a custom User model lands (see [docs/plans/UserModel.md](UserModel.md)), the helper will need a cast re-added — flagged in the docstring.
+
+Baseline: 310 → 261.
 
 ## Step 9: `provenance/api`
 
