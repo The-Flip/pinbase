@@ -1,6 +1,8 @@
 # Step 10.3: `catalog/resolve/*` typing pass
 
-Detailed plan for [Step 10.3 of MypyFixing.md](MypyFixing.md). Steps 10.1 and 10.2 (behavior fixes) land first and are tracked in MypyFixing.md, not here.
+> **Status: ON HOLD.** This doc's core premise — TypedDicts that mirror the `_relationship_schemas` registry proposed in [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) — is invalidated by the model-driven metadata work. The registry goes away entirely; relationship schemas are derived from model-owned [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md) declarations. The TypedDicts themselves still make sense as an internal representation, but the consistency test flips from "TypedDict vs. registry" to "TypedDict vs. derived-from-`_meta`-and-spec schema." Do not act on this doc's current contents. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle.
+
+Detailed plan for [Step 10.3 of MypyFixing.md](MypyFixing.md). Step 10.1 is done (commit `e1d8886e`); Step 10.2 lands before this one. Both are tracked in MypyFixing.md, not here.
 
 ## Context
 
@@ -43,13 +45,15 @@ New module `backend/apps/catalog/resolve/_claim_values.py` with **7 TypedDicts**
 
 **`exists` is Required on all 7 TypedDicts.** Post-10.2, [classify_claim](../../../backend/apps/provenance/validation.py#L86) + the shared relationship validator guarantee every relationship-claim row has `exists: bool`.
 
-**`LocationClaimValue` is a relationship claim, not DIRECT.** `CorporateEntity` at [manufacturer.py:129](../../../backend/apps/catalog/models/manufacturer.py#L129) has no `location` column; the payload materializes `CorporateEntityLocation` rows. 10.1 adds the `exists=False` retraction handling; the TypedDict models the post-10.1 wire shape.
+**`LocationClaimValue` is a relationship claim, not DIRECT.** `CorporateEntity` at [manufacturer.py:129](../../../backend/apps/catalog/models/manufacturer.py#L129) has no `location` column; the payload materializes `CorporateEntityLocation` rows. 10.1 (commit `e1d8886e`) added the `exists=False` retraction handling; the TypedDict models the post-10.1 wire shape.
 
 **No `M2MClaimValue` TypedDict.** The generic resolver [\_resolve_machine_model_m2m](../../../backend/apps/catalog/resolve/_relationships.py#L86) reads the payload with a runtime key (`val[spec.field_name]`), which TypedDict can't express. Use `Mapping[str, object]` + `type(target_pk) is int` narrowing in that one helper. The field-specific TypedDicts above cover the non-generic relationship resolvers.
 
 **Placement** — `resolve/_claim_values.py` for now. These are read-side only. If a future step types the claim _builders_ in `apps.catalog.claims`, moving the types to `apps.catalog.claims.types` is a rename. (10.2's registry additions for literal schemas live separately from these TypedDicts — the registry is write-side metadata; these are read-side shape names.)
 
-**Done when:** `_claim_values.py` exists, mypy + tests pass, no baseline delta.
+**Consistency test.** Add a unit test in `backend/apps/catalog/resolve/tests/test_claim_values.py` (new file) that iterates each TypedDict in `_claim_values.py`, looks up the matching `RelationshipSchema` from `provenance.validation.get_relationship_schema(namespace)`, and asserts the key sets + types + required/optional flags match. Catches TypedDict-vs-schema drift at test time rather than leaving it to bite at runtime during Step 10.4's subscript flip. This is the single mechanism that makes "two hand-maintained shapes" drift-proof.
+
+**Done when:** `_claim_values.py` exists, the consistency test passes, mypy + tests pass, no baseline delta.
 
 ### Phase B — Wire resolvers to their TypedDicts
 

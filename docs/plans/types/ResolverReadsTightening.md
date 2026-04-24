@@ -1,5 +1,7 @@
 # Resolver Reads Tightening
 
+> **Status: ON HOLD.** Transitively blocked by the model-driven metadata work. This step depends on [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) and [CatalogResolveTyping.md](CatalogResolveTyping.md) landing — both are on hold pending [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md). The "subscript instead of `.get()`" idea still holds, but the resolver code this acts on is scheduled for rewrite, so defer until that lands. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle.
+
 Follow-up to [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md): once the write-path validator guarantees relationship-claim payloads have all their required keys at the right scalar types, the read side in `catalog/resolve/*.py` can drop defensive `.get()` calls in favor of subscript access. Behavior-preserving; the runtime contract didn't change, only mypy's knowledge of it did.
 
 This is Step 10.4 of [MypyFixing.md](MypyFixing.md). Its own PR with its own gate (ProvenanceValidationTightening landed).
