@@ -283,7 +283,7 @@ def test_failed_apply_ingest_run_survives(test_source):
     mfr = Manufacturer.objects.create(name="Bally", slug="bally")
     ct_id = _mfr_ct_id()
 
-    def raise_error(*, model_ids=None):
+    def raise_error(*, subject_ids=None):
         raise RuntimeError("Resolve failed!")
 
     plan = IngestPlan(

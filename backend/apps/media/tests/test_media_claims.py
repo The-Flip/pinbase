@@ -83,7 +83,7 @@ def _resolve_media(entity):
     from apps.catalog.resolve import resolve_media_attachments
 
     ct = ContentType.objects.get_for_model(entity)
-    resolve_media_attachments(content_type_id=ct.id, entity_ids={entity.pk})
+    resolve_media_attachments(content_type_id=ct.id, subject_ids={entity.pk})
 
 
 # ---------------------------------------------------------------------------
@@ -661,5 +661,5 @@ class TestResolverValidation:
         ct = ContentType.objects.get_for_model(Theme)
         from apps.catalog.resolve import resolve_media_attachments
 
-        resolve_media_attachments(content_type_id=ct.id, entity_ids={theme.pk})
+        resolve_media_attachments(content_type_id=ct.id, subject_ids={theme.pk})
         assert EntityMedia.objects.count() == 0

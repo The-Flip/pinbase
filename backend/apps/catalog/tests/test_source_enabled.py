@@ -140,14 +140,14 @@ class TestIsEnabledRelationshipResolution:
         )
 
         # With source enabled, theme should resolve.
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert theme in pm.themes.all()
 
         # Disable source; theme should be removed.
         source_a.is_enabled = False
         source_a.save()
 
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert theme not in pm.themes.all()
 
     def test_disabled_source_credit_excluded(self, source_a):
@@ -168,14 +168,14 @@ class TestIsEnabledRelationshipResolution:
         )
 
         # With source enabled, credit should resolve.
-        resolve_all_credits(model_ids={pm.pk})
+        resolve_all_credits(subject_ids={pm.pk})
         assert pm.credits.filter(person=person, role=role).exists()
 
         # Disable source; credit should be removed.
         source_a.is_enabled = False
         source_a.save()
 
-        resolve_all_credits(model_ids={pm.pk})
+        resolve_all_credits(subject_ids={pm.pk})
         assert not pm.credits.filter(person=person, role=role).exists()
 
 

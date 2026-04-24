@@ -45,10 +45,10 @@ class ResolveHook(Protocol):
 
     Matches the standardised resolve function signature::
 
-        def resolve_all_gameplay_features(*, model_ids: set[int] | None = None) -> None
+        def resolve_all_gameplay_features(*, subject_ids: set[int] | None = None) -> None
     """
 
-    def __call__(self, *, model_ids: set[int] | None = None) -> None: ...
+    def __call__(self, *, subject_ids: set[int] | None = None) -> None: ...
 
 
 class RetractEntry(NamedTuple):
@@ -816,4 +816,4 @@ def _resolve(
         model_class = ContentType.objects.get_for_id(ct_id).model_class()
         resolve_all_entities(model_class, object_ids=obj_ids)
         for hook in resolve_hooks.get(ct_id, []):
-            hook(model_ids=obj_ids)
+            hook(subject_ids=obj_ids)
