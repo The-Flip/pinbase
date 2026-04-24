@@ -199,10 +199,14 @@ def _register_delete_restore(  # noqa: UP047
     parent_field: str | None = None,
 ) -> None:
     """Thin wrapper — auto-plumbs the standard taxonomy detail/serialize pair."""
+
+    def detail_qs() -> QuerySet[_TaxM]:
+        return _taxonomy_detail_qs(model_cls)
+
     register_entity_delete_restore(
         router,
         model_cls,
-        detail_qs=lambda cls=model_cls: _taxonomy_detail_qs(cls),
+        detail_qs=detail_qs,
         serialize_detail=_serialize_taxonomy,
         response_schema=TaxonomySchema,
         child_related_name=child_related_name,
@@ -218,10 +222,13 @@ def _register_create(  # noqa: UP047
     parent_model: type[CatalogModel] | None = None,
     route_suffix: str = "",
 ) -> None:
+    def detail_qs() -> QuerySet[_TaxM]:
+        return _taxonomy_detail_qs(model_cls)
+
     register_entity_create(
         router,
         model_cls,
-        detail_qs=lambda cls=model_cls: _taxonomy_detail_qs(cls),
+        detail_qs=detail_qs,
         serialize_detail=_serialize_taxonomy,
         response_schema=TaxonomySchema,
         parent_field=parent_field,

@@ -19,7 +19,7 @@ from collections.abc import Callable
 from typing import Any
 
 from django.db import models as db_models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
@@ -111,17 +111,15 @@ class TaxonomyDeleteResponseSchema(Schema):
 # ---------------------------------------------------------------------------
 
 
-DetailQsFn = Callable[[], Any]
-SerializeFn = Callable[[Any], Schema]
-
-
-def register_entity_delete_restore(
+# ``ModelT`` / ``SchemaT`` link the four contractually-related arguments
+# — model class, detail queryset, serializer, response schema must agree.
+def register_entity_delete_restore[ModelT: CatalogModel, SchemaT: Schema](
     router: Router,
-    model_cls: type[CatalogModel],
+    model_cls: type[ModelT],
     *,
-    detail_qs: DetailQsFn,
-    serialize_detail: SerializeFn,
-    response_schema: type[Schema],
+    detail_qs: Callable[[], QuerySet[ModelT]],
+    serialize_detail: Callable[[ModelT], SchemaT],
+    response_schema: type[SchemaT],
     child_related_name: str | None = None,
     parent_field: str | None = None,
 ) -> None:
@@ -248,7 +246,7 @@ def register_entity_delete_restore(
 
     def _restore(
         request: HttpRequest, slug: str, data: TaxonomyRestoreSchema
-    ) -> Schema | Status[Any]:
+    ) -> SchemaT | Status[Any]:
         check_and_record(request.user, CREATE_RATE_LIMIT_SPEC)
 
         # Bypass .active() — we're looking for soft-deleted rows.
@@ -289,13 +287,13 @@ def register_entity_delete_restore(
     )(_restore)
 
 
-def register_entity_create(
+def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
     router: Router,
-    model_cls: type[CatalogModel],
+    model_cls: type[ModelT],
     *,
-    detail_qs: DetailQsFn,
-    serialize_detail: SerializeFn,
-    response_schema: type[Schema],
+    detail_qs: Callable[[], QuerySet[ModelT]],
+    serialize_detail: Callable[[ModelT], SchemaT],
+    response_schema: type[SchemaT],
     parent_field: str | None = None,
     parent_model: type[CatalogModel] | None = None,
     route_suffix: str = "",
@@ -337,12 +335,9 @@ def register_entity_create(
         )
 
     entity_label = model_cls.__name__
-    # django-stubs's plugin can't see ``name`` as a field on the abstract
-    # ``CatalogModel`` (LinkableModel declares the attribute annotation, not
-    # the Django field; the field lives on each concrete subclass). At
-    # runtime the lookup hits the concrete model's ``_meta``, so the call
-    # is safe — the ``# type: ignore[misc]`` is just for the plugin.
-    name_field = model_cls._meta.get_field("name")  # type: ignore[misc]
+    # django-stubs returns ``Any`` for ``_meta.get_field`` on a TypeVar'd
+    # model; the assert is the runtime narrowing to ``Field``.
+    name_field = model_cls._meta.get_field("name")
     assert isinstance(name_field, db_models.Field)
     name_max = name_field.max_length
     assert name_max is not None
