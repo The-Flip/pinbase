@@ -2,17 +2,40 @@
 
 ## Context
 
-The provenance write path admits malformed relationship claims through three independent holes. Each one is a silent-data-loss path today:
+This is **Step 2** of [ResolveHardening.md](ResolveHardening.md) — the write-path foundation of a multi-step sequence that tightens the claim-value contract across `catalog/resolve/*`:
+
+- **Step 2 (this doc)** — unify the three registries that hand-maintain catalog relationship namespace knowledge today, and tighten the write-path shape validation that the unified registry now makes expressible.
+- **Step 3** — [Claim-value TypedDicts + resolver casts + consistency test](CatalogResolveTyping.md). Introduces TypedDicts over the resolver read path that mirror this doc's registry, plus a consistency test enforcing the mirror holds.
+- **Step 4** — [Mypy baseline burn-down on `catalog/resolve/*`](CatalogResolveBaselineCleanup.md). Helper signatures + tuple-reuse cleanup. Not load-bearing for the hardening story, bundled because it touches the same files.
+- **Step 5** — [Subscript flip](ResolverReadsTightening.md). Flips resolver reads from `cast + .get()` to subscript access for required keys — sound only because Step 2's write-path validation now guarantees required keys are present, _and_ because Step 2's post-merge wipe + re-ingest has rebuilt stored rows under the new validator.
+
+### Primary work: unify three hand-maintained registries
+
+Namespace knowledge for catalog relationships lives in three registries today, covering overlapping ground:
+
+- `_entity_ref_targets` in [catalog/claims.py](../../../backend/apps/catalog/claims.py) — `namespace → [RefKey(name, model)]`. Drives FK claim construction.
+- `_literal_schemas` in [catalog/claims.py](../../../backend/apps/catalog/claims.py) — `namespace → LiteralKey(value_key, identity_key)`. Drives literal claim construction.
+- `_relationship_target_registry` in [apps/provenance/validation.py](../../../backend/apps/provenance/validation.py) — namespace → FK existence targets. Drives batch validation.
+
+Adding or changing an FK namespace means touching two of these in lockstep; there's no cross-check that they agree. Step 3 is about to introduce a fourth source of truth: TypedDicts over the resolver read path, which must agree with the write-path schema for Step 5's subscript flip to be sound. Adding that fourth without unifying first is strictly worse than today — four hand-maintained registries, drift risk every time a namespace is added, no mechanical way to enforce agreement.
+
+**Unify to one registry** (`_relationship_schemas` in `provenance/validation.py`) that drives claim construction (`build_relationship_claim`), namespace enumeration (`get_relationship_namespaces`), write-path validation (shape + existence), and — via Step 3's consistency test — the read-side TypedDicts in `_claim_values.py`. After this work, adding a namespace is one `register_relationship_schema(...)` call + one TypedDict (test-enforced to match). Two places.
+
+The unified registry is what earns Step 3's consistency test its keep: it's the single authority the TypedDicts are tested against. Without unification, the TypedDicts would have three disagreeing registries to reconcile with, and the test would either not exist or silently gloss over the disagreements.
+
+### Along for the ride: three silent-data-loss bugs
+
+The unified registry makes shape validation expressible in one place, and three pre-existing holes in the write path get closed as a natural consequence rather than as standalone tightening:
 
 - **`assert_claim` bypasses relationship validation.** [claim.py:121-127](../../../backend/apps/provenance/models/claim.py#L121) classifies each claim and only validates `DIRECT` payloads; `RELATIONSHIP` passes through untouched. User edits via `execute_claims` → `assert_claim` therefore never reach any relationship shape check.
 - **Malformed payloads misclassify as EXTRA.** [classify_claim](../../../backend/apps/provenance/validation.py#L86) returns `RELATIONSHIP` only if `"exists" in value`. On any model with an `extra_data` field (MachineModel, Title, …), a malformed credit/theme/alias payload lacking `"exists"` falls through to `EXTRA` and gets silently stored as free-form staging data — never hitting the relationship validator at all.
 - **Literal namespaces have no schema.** [validate_relationship_claims_batch](../../../backend/apps/provenance/validation.py#L359) only validates namespaces registered via `register_relationship_targets`, which covers FK value_keys. Aliases (`alias_value`, `alias_display`) and abbreviations (`value`) are intentionally unregistered today and pass through without any schema check.
 
+Closing these is also load-bearing for Step 5: the subscript flip only becomes safe once the write path guarantees required keys are present on stored claims. So the bug-fixes aren't just opportunistic — they're the other half of what unblocks Step 5.
+
 We're pre-launch. Loosening later is a one-line change; tightening later requires auditing every production row. **Err tight.**
 
 **Data posture.** The DB can be dropped and all migrations reset to 0001. The remediation path for any malformed legacy rows surfaced by the new validator is: wipe the DB, reset migrations, `make pull-ingest`, `make ingest`. No audit script, no row-level cleanup, no `is_active=False` sweeps. If re-ingestion produces rejections, that is an extractor bug — fix at the source (where the malformed shape originated), re-ingest, repeat.
-
-This work also unblocks [Step 10.4 of MypyFixing.md](MypyFixing.md#step-104-subscript-flip-in-catalogresolve) — the resolver read path can flip from `cast + .get()` to subscript access for required keys once the write path guarantees them.
 
 ## Non-goals
 
@@ -21,12 +44,6 @@ This work also unblocks [Step 10.4 of MypyFixing.md](MypyFixing.md#step-104-subs
 - **Not touching DIRECT claim validation.** `validate_claim_value` stays as-is.
 - **Not collapsing bespoke resolvers into a generic spec-driven resolver.** The registry added here is intentionally consumed by `classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, and `build_relationship_claim` only. Folding `_parent_dispatch` / `_custom_dispatch` / `M2M_FIELDS` into one generic resolver is a plausible follow-up that can consume the same registry, but keeping it out of scope here bounds the PR and avoids bundling a latent behavior change in `resolve_all_corporate_entity_locations` (which today filters `is_active=True` before winner selection) with an otherwise behavior-preserving refactor.
 - **Not lifting the identity-vs-UC cross-check from [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md).** That guard — verifying `subject_fks ∪ identity_fields` matches one `UniqueConstraint` per through-model at `ready()` — is genuinely useful, but it belongs with the model-driven metadata work it was drafted for. Pulling it in here would motivate `through_model` and `subject_fks` on the schema, which would force `(namespace, subject_content_type)` keying and the "abbreviation registers twice" complication — all scaffolding for a check the rest of this PR does not use. Deferred as a whole.
-
-### Registry unification — in scope (added after initial draft)
-
-Originally flagged as a follow-up, now folded in. `catalog/claims.py` today carries `_entity_ref_targets` (`namespace → [RefKey(name, model)]`) and `_literal_schemas` (`namespace → LiteralKey(value_key, identity_key)`) driving claim construction and namespace enumeration. `provenance/validation.py` carries `_relationship_target_registry` (FK existence checks only). Adding a fourth `_relationship_schemas` registry without unifying would mean three hand-maintained registries covering overlapping namespace knowledge — strictly worse than today, drift risk every time a namespace is added.
-
-Unification kills `_entity_ref_targets`, `_literal_schemas`, and `_relationship_target_registry`. **One registry** (`_relationship_schemas`) drives construction (`build_relationship_claim`), namespace enumeration (`get_relationship_namespaces`), validation (shape + existence), and — via a consistency test in Step 10.3 — the read-side TypedDicts in `_claim_values.py`. After this work, adding a new namespace is: one `register_relationship_schema(...)` call + one TypedDict (test-enforced to match). Two places.
 
 ## Design
 
@@ -163,7 +180,7 @@ Commit A is larger than a pure "scaffolding" commit would be, but the blast radi
 
 ### Registered schemas
 
-Every catalog relationship gets a `register_relationship_schema(...)` call in `register_catalog_relationship_schemas()`, once per namespace. Identity keys (`identity is not None`) drive `build_relationship_claim`'s claim_key composition; non-identity keys are shape-validated only. Missing any of these means resolver reads for that namespace stay unvalidated and Step 10.4 of MypyFixing.md can't subscript those keys safely.
+Every catalog relationship gets a `register_relationship_schema(...)` call in `register_catalog_relationship_schemas()`, once per namespace. Identity keys (`identity is not None`) drive `build_relationship_claim`'s claim_key composition; non-identity keys are shape-validated only. Missing any of these means resolver reads for that namespace stay unvalidated and [Step 5 of ResolveHardening.md](ResolveHardening.md) can't subscript those keys safely.
 
 - **Alias (7 schemas, one per alias namespace):** `theme_alias` (valid_subjects=(Theme,)), `manufacturer_alias` ((Manufacturer,)), `person_alias` ((Person,)), `gameplay_feature_alias` ((GameplayFeature,)), `reward_type_alias` ((RewardType,)), `corporate_entity_alias` ((CorporateEntity,)), `location_alias` ((Location,)). Each → `alias_value: str (identity="alias")`, `alias_display: str (optional)`. Dynamic discovery via `discover_alias_types()` still happens — it just calls `register_relationship_schema` instead of populating `_literal_schemas`.
 - **Abbreviation (1 schema):** `abbreviation`, `valid_subjects=(Title, MachineModel)`. → `value: str (identity="value")`.
@@ -211,10 +228,12 @@ Assumes the "Commit sequence" above: Commit A (registry) → Commit B (classifie
 - `./scripts/mypy` — baseline unchanged (this step has no mypy impact).
 - **Pre-merge dry-run:** wipe localhost DB, reset migrations to 0001, `make pull-ingest`, `make ingest`. No rejections on clean data. If rejections appear, they're real malformed payloads upstream ingest is producing and must be fixed at the source before merging.
 - **Post-merge:** same wipe + re-ingest against the shared environment.
-- After landing, Step 10.4 of MypyFixing.md (resolver subscript flip) is unblocked.
+- After landing (and after the post-merge wipe + re-ingest), [Step 5 of ResolveHardening.md](ResolveHardening.md) (resolver subscript flip) is unblocked.
 
 ## Relation to model-driven metadata
 
-This registry is intentionally hand-maintained. The model-driven metadata umbrella ([ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md)) proposes moving these declarations onto the through-model classes as a typed `catalog_relationship_spec` ClassVar ([ModelDrivenCatalogRelationshipMetadata.md](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md)), derived at `ready()` and pushed into a registry that looks very much like this one. That move is deferred until a genuinely second independent consumer materializes — e.g. frontend edit metadata being actually built, not hypothetical. Today's consumers (`classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, `build_relationship_claim`) all live on the same backend write/read path and don't yet meet the umbrella's ≥2-consumers test.
+This registry is intentionally hand-maintained. The model-driven metadata umbrella ([ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md)) proposes moving these declarations onto the through-model classes as a typed `catalog_relationship_spec` ClassVar ([ModelDrivenCatalogRelationshipMetadata.md](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md)), derived at `ready()` and pushed into a registry that looks very much like this one. That move is deferred until a genuinely _independent_ consumer materializes — e.g. frontend edit metadata being actually built, not hypothetical.
+
+Note the distinction: this PR's consumers (`classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, `build_relationship_claim`, and — via Step 3's consistency test — the read-side TypedDicts) are what make the _unified registry_ pay off today. They don't meet the spec-move's ≥2-consumers bar because they're all facets of the same backend write/read path, tested against each other. The spec move is waiting for a second consumer that would motivate the richer `through_model` / `subject_fks` fields and `(namespace, subject_content_type)` keying, which this PR's consumers don't need.
 
 The spec doc's identity-vs-UC cross-check (verifying `subject_fks ∪ identity_fields` matches one `UniqueConstraint` per through-model at `ready()`) is the piece worth lifting eventually, but it's deferred with the rest of the spec work — lifting it alone would require `through_model` and `subject_fks` on the schema and `(namespace, subject_content_type)` keying, which this PR otherwise doesn't need. When the second consumer arrives and the spec move lands, `register_catalog_relationship_schemas()` is replaced with a walk over a `ClaimThroughModel` marker base that emits the same `RelationshipSchema` objects plus the richer fields the cross-check needs. The registry interface (`get_relationship_schema`, `is_valid_subject`) stays the same; consumers don't change.

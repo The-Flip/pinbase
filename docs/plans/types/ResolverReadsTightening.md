@@ -2,11 +2,12 @@
 
 Follow-up to [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md): once the write-path validator guarantees relationship-claim payloads have all their required keys at the right scalar types, the read side in `catalog/resolve/*.py` can drop defensive `.get()` calls in favor of subscript access. Behavior-preserving; the runtime contract didn't change, only mypy's knowledge of it did.
 
-This is Step 10.4 of [MypyFixing.md](MypyFixing.md). Its own PR with its own gate (ProvenanceValidationTightening landed).
+This is Step 5 of [ResolveHardening.md](ResolveHardening.md) (originally Step 10.4 of [MypyFixing.md](MypyFixing.md)). Its own PR with its own gates — see Prerequisites.
 
 ## Prerequisites
 
-- **[ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) landed.** Both Commit A (registry scaffolding) and Commit B (classifier + validator + cleanup). The write path must now reject payloads missing any required registered key, so a `val["person"]` read can't KeyError on a legacy malformed row.
+- **[ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) landed.** Both Commit A (registry scaffolding) and Commit B (classifier + validator + cleanup). The write path must now reject payloads missing any required registered key, so a `val["person"]` read can't KeyError on a freshly written malformed row.
+- **Post-Step-2 wipe + re-ingest done.** The validator only constrains rows _written after_ it lands. Any pre-validator row missing a required key would KeyError on subscript access here. Step 2's commit sequence includes a post-merge wipe + re-ingest ([ProvenanceValidationTightening.md § Data posture](ProvenanceValidationTightening.md)); this step must not land until that has happened.
 - **[CatalogResolveTyping.md](CatalogResolveTyping.md) Phase B landed.** Every resolver loop already has `cast(<Schema>, claim.value)` at the top. This step only flips the reads, not the types.
 
 If a key is subscript-accessed here but the corresponding namespace isn't registered in the write-path validator, the flip is unsafe. Double-check coverage against the registration list in [ProvenanceValidationTightening.md § "New register_relationship_schema call sites"](ProvenanceValidationTightening.md) before flipping.
