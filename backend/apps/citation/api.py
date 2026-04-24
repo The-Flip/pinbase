@@ -341,7 +341,10 @@ def _serialize_detail(source: CitationSource) -> CitationSourceDetailSchema:
         identifier_key=source.identifier_key,
         skip_locator=source.skip_locator,
         parent=parent,
-        links=[CitationSourceLinkSchema.from_orm(link) for link in source.links.all()],
+        links=[
+            CitationSourceLinkSchema.model_validate(link, from_attributes=True)
+            for link in source.links.all()
+        ],
         children=[_serialize_child(child) for child in source.children.all()],
         created_at=source.created_at.isoformat(),
         updated_at=source.updated_at.isoformat(),
@@ -635,7 +638,9 @@ def create_citation_source_link(
     )
     _clean_and_save(link, integrity_msg="This URL is already linked to this source.")
 
-    return Status(201, CitationSourceLinkSchema.from_orm(link))
+    return Status(
+        201, CitationSourceLinkSchema.model_validate(link, from_attributes=True)
+    )
 
 
 @citation_sources_router.patch(
@@ -668,4 +673,4 @@ def update_citation_source_link(
         integrity_msg="This URL is already linked to this source.",
     )
 
-    return CitationSourceLinkSchema.from_orm(link)
+    return CitationSourceLinkSchema.model_validate(link, from_attributes=True)
