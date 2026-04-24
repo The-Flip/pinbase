@@ -76,7 +76,7 @@ def _attach_via_claims(entity, asset, user, category="backglass", is_primary=Tru
         claim_key=claim_key,
     )
     ct = ContentType.objects.get_for_model(type(entity))
-    resolve_media_attachments(content_type_id=ct.id, entity_ids={entity.pk})
+    resolve_media_attachments(content_type_id=ct.id, subject_ids={entity.pk})
 
 
 @pytest.fixture

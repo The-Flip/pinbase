@@ -52,7 +52,7 @@ def _assert_credit_claim(machine, person_pk, role_slug, source):
 class TestResolveCredits:
     def test_basic_materialization(self, machine, person, source, credit_roles):
         _assert_credit_claim(machine, person.pk, "design", source)
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(
             model=machine, person=person, role__slug="design"
@@ -61,7 +61,7 @@ class TestResolveCredits:
     def test_multiple_credits(self, machine, person, person2, source, credit_roles):
         _assert_credit_claim(machine, person.pk, "design", source)
         _assert_credit_claim(machine, person2.pk, "art", source)
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 2
         assert Credit.objects.filter(
@@ -73,8 +73,8 @@ class TestResolveCredits:
 
     def test_idempotent(self, machine, person, source, credit_roles):
         _assert_credit_claim(machine, person.pk, "design", source)
-        resolve_all_credits(model_ids={machine.pk})
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 1
 
@@ -84,14 +84,14 @@ class TestResolveCredits:
         """If a credit claim is deactivated, resolution removes the Credit."""
         _assert_credit_claim(machine, person.pk, "design", source)
         _assert_credit_claim(machine, person2.pk, "art", source)
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
         assert Credit.objects.filter(model=machine).count() == 2
 
         # Deactivate the art credit claim.
         Claim.objects.filter(
             field_name="credit", claim_key__contains=str(person2.pk)
         ).update(is_active=False)
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 1
         assert not Credit.objects.filter(model=machine, person=person2).exists()
@@ -101,7 +101,7 @@ class TestResolveCredits:
     ):
         """A higher-priority exists=False claim prevents materialization."""
         _assert_credit_claim(machine, person.pk, "design", source)
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
         assert Credit.objects.filter(model=machine).count() == 1
 
         # Higher-priority source disputes the credit.
@@ -112,7 +112,7 @@ class TestResolveCredits:
         Claim.objects.assert_claim(
             machine, "credit", value, source=high_source, claim_key=claim_key
         )
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 0
 
@@ -128,7 +128,7 @@ class TestResolveCredits:
         Claim.objects.assert_claim(
             machine, "credit", value, source=high_source, claim_key=claim_key
         )
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 2
 
@@ -141,7 +141,7 @@ class TestResolveCredits:
         Claim.objects.assert_claim(
             machine, "credit", value, source=source, claim_key=claim_key
         )
-        resolve_all_credits(model_ids={machine.pk})
+        resolve_all_credits(subject_ids={machine.pk})
 
         assert Credit.objects.filter(model=machine).count() == 0
         assert "Unresolved person" in caplog.text

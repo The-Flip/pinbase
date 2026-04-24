@@ -271,7 +271,7 @@ def upload_media(
             )
             resolve_media_attachments(
                 content_type_id=ct.id,
-                entity_ids={entity.pk},
+                subject_ids={entity.pk},
             )
     except Exception:
         logger.exception("DB transaction failed, cleaning up storage keys")
@@ -338,7 +338,7 @@ def detach_media(request, body: MediaAssetRefIn):
         )
         resolve_media_attachments(
             content_type_id=ct.id,
-            entity_ids={entity.pk},
+            subject_ids={entity.pk},
         )
         asset.delete()
         if storage_keys:
@@ -383,7 +383,7 @@ def set_primary(request, body: MediaAssetRefIn):
         )
         resolve_media_attachments(
             content_type_id=ct.id,
-            entity_ids={entity.pk},
+            subject_ids={entity.pk},
         )
 
     return Status(200, None)

@@ -140,18 +140,18 @@ def resolve_model(machine_model: MachineModel) -> MachineModel:
     machine_model.save()
 
     # Resolve relationship claims after scalar save.
-    model_ids = {machine_model.pk}
-    resolve_all_credits(model_ids=model_ids)
-    resolve_all_themes(model_ids=model_ids)
-    resolve_all_gameplay_features(model_ids=model_ids)
-    resolve_all_reward_types(model_ids=model_ids)
-    resolve_all_tags(model_ids=model_ids)
-    resolve_all_model_abbreviations(model_ids=model_ids)
+    subject_ids = {machine_model.pk}
+    resolve_all_credits(subject_ids=subject_ids)
+    resolve_all_themes(subject_ids=subject_ids)
+    resolve_all_gameplay_features(subject_ids=subject_ids)
+    resolve_all_reward_types(subject_ids=subject_ids)
+    resolve_all_tags(subject_ids=subject_ids)
+    resolve_all_model_abbreviations(subject_ids=subject_ids)
 
     from django.contrib.contenttypes.models import ContentType
 
     ct_mm = ContentType.objects.get_for_model(MachineModel)
-    resolve_media_attachments(content_type_id=ct_mm.id, entity_ids=model_ids)
+    resolve_media_attachments(content_type_id=ct_mm.id, subject_ids=subject_ids)
 
     return machine_model
 
@@ -280,22 +280,22 @@ def resolve_machine_models(stdout=None) -> int:
 
     # 9. Bulk-resolve relationship claims.
     all_model_ids = {pm.pk for pm in all_models}
-    resolve_all_credits(model_ids=all_model_ids)
+    resolve_all_credits(subject_ids=all_model_ids)
     _status("Credits resolved")
 
-    resolve_all_themes(model_ids=all_model_ids)
-    resolve_all_gameplay_features(model_ids=all_model_ids)
-    resolve_all_reward_types(model_ids=all_model_ids)
-    resolve_all_tags(model_ids=all_model_ids)
+    resolve_all_themes(subject_ids=all_model_ids)
+    resolve_all_gameplay_features(subject_ids=all_model_ids)
+    resolve_all_reward_types(subject_ids=all_model_ids)
+    resolve_all_tags(subject_ids=all_model_ids)
     _status("Themes, features, reward types, tags resolved")
 
-    resolve_all_model_abbreviations(model_ids=all_model_ids)
+    resolve_all_model_abbreviations(subject_ids=all_model_ids)
     _status("Abbreviations resolved")
 
     from django.contrib.contenttypes.models import ContentType
 
     ct_mm = ContentType.objects.get_for_model(MachineModel)
-    resolve_media_attachments(content_type_id=ct_mm.id, entity_ids=all_model_ids)
+    resolve_media_attachments(content_type_id=ct_mm.id, subject_ids=all_model_ids)
     _status("Media attachments resolved")
 
     return len(all_models)

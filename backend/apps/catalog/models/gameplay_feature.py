@@ -41,9 +41,8 @@ class GameplayFeature(
 
     entity_type = "gameplay-feature"
     entity_type_plural = "gameplay-features"
-    soft_delete_usage_blockers: ClassVar[tuple[str, ...]] = (
-        "machine_models",
-        "children",
+    soft_delete_usage_blockers: ClassVar[frozenset[str]] = frozenset(
+        {"machine_models", "children"}
     )
     MEDIA_CATEGORIES = ["other"]
     aliases: models.Manager[GameplayFeatureAlias]
@@ -108,6 +107,8 @@ class MachineModelGameplayFeature(TimeStampedModel):
 
 class GameplayFeatureAlias(AliasBase):
     """An alternate name for a GameplayFeature, used for matching/search."""
+
+    alias_claim_field = "gameplay_feature_alias"
 
     feature = models.ForeignKey(
         GameplayFeature, on_delete=models.CASCADE, related_name="aliases"

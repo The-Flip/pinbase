@@ -1,7 +1,5 @@
 # Step 10.3: `catalog/resolve/*` typing pass
 
-> **Status: ON HOLD.** This doc's core premise — TypedDicts that mirror the `_relationship_schemas` registry proposed in [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) — is invalidated by the model-driven metadata work. The registry goes away entirely; relationship schemas are derived from model-owned [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md) declarations. The TypedDicts themselves still make sense as an internal representation, but the consistency test flips from "TypedDict vs. registry" to "TypedDict vs. derived-from-`_meta`-and-spec schema." Do not act on this doc's current contents. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle.
-
 Detailed plan for [Step 10.3 of MypyFixing.md](MypyFixing.md). Step 10.1 is done (commit `e1d8886e`); Step 10.2 lands before this one. Both are tracked in MypyFixing.md, not here.
 
 ## Context

@@ -62,7 +62,7 @@ class MediaRowState(NamedTuple):
 def resolve_media_attachments(
     *,
     content_type_id: int | None = None,
-    entity_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve ``media_attachment`` claims into :class:`EntityMedia` rows.
 
@@ -74,8 +74,8 @@ def resolve_media_attachments(
     claims_qs = _annotate_priority(Claim.objects.filter(field_name="media_attachment"))
     if content_type_id is not None:
         claims_qs = claims_qs.filter(content_type_id=content_type_id)
-    if entity_ids is not None:
-        claims_qs = claims_qs.filter(object_id__in=entity_ids)
+    if subject_ids is not None:
+        claims_qs = claims_qs.filter(object_id__in=subject_ids)
     claims = claims_qs.order_by(
         "content_type_id",
         "object_id",
@@ -237,8 +237,8 @@ def resolve_media_attachments(
     existing_qs = EntityMedia.objects.all()
     if content_type_id is not None:
         existing_qs = existing_qs.filter(content_type_id=content_type_id)
-    if entity_ids is not None:
-        existing_qs = existing_qs.filter(object_id__in=entity_ids)
+    if subject_ids is not None:
+        existing_qs = existing_qs.filter(object_id__in=subject_ids)
 
     existing_by_entity: dict[EntityKey, dict[int, MediaRowState]] = {}
     for row in existing_qs.values_list(

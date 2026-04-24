@@ -1,7 +1,5 @@
 # Provenance Validation Tightening
 
-> **Status: ON HOLD.** This doc predates the model-driven metadata work. The registry-based design it proposes is the wrong shape once [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md) lands — relationship schemas will be derived from model-owned specs, not a hand-maintained `_relationship_schemas` registry. This doc needs a full rewrite against the finalized spec; do not act on its current contents. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle and [ModelDrivenMetadataPlanning.md](../model_driven_metadata/ModelDrivenMetadataPlanning.md) for the "Rewrite `ProvenanceValidationTightening.md`" next step.
-
 ## Context
 
 The provenance write path admits malformed relationship claims through three independent holes. Each one is a silent-data-loss path today:
@@ -12,6 +10,8 @@ The provenance write path admits malformed relationship claims through three ind
 
 We're pre-launch. Loosening later is a one-line change; tightening later requires auditing every production row. **Err tight.**
 
+**Data posture.** The DB can be dropped and all migrations reset to 0001. The remediation path for any malformed legacy rows surfaced by the new validator is: wipe the DB, reset migrations, `make pull-ingest`, `make ingest`. No audit script, no row-level cleanup, no `is_active=False` sweeps. If re-ingestion produces rejections, that is an extractor bug — fix at the source (where the malformed shape originated), re-ingest, repeat.
+
 This work also unblocks [Step 10.4 of MypyFixing.md](MypyFixing.md#step-104-subscript-flip-in-catalogresolve) — the resolver read path can flip from `cast + .get()` to subscript access for required keys once the write path guarantees them.
 
 ## Non-goals
@@ -19,6 +19,8 @@ This work also unblocks [Step 10.4 of MypyFixing.md](MypyFixing.md#step-104-subs
 - **Not adding target-existence validation to the single-write path.** Existence stays batch-only. `validate_relationship_claims_batch` already groups claims by namespace and issues one SQL query per group — cheap amortized. Doing the same check in `assert_claim` would be one query per claim, and `execute_claims` writes many claims per user edit (e.g. editing a Title's gameplay features). The brief window of tolerated stale FK targets is an explicit trade-off: stale targets get caught at the next bulk resolve. If we later see drift in practice, benchmark before changing.
 - **Not reworking `extra_data` semantics.** Claims that genuinely belong in `EXTRA` (unrecognized field names on models with `extra_data`) still flow through untouched.
 - **Not touching DIRECT claim validation.** `validate_claim_value` stays as-is.
+- **Not collapsing bespoke resolvers into a generic spec-driven resolver.** The registry added here is intentionally consumed by `classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, and `build_relationship_claim` only. Folding `_parent_dispatch` / `_custom_dispatch` / `M2M_FIELDS` into one generic resolver is a plausible follow-up that can consume the same registry, but keeping it out of scope here bounds the PR and avoids bundling a latent behavior change in `resolve_all_corporate_entity_locations` (which today filters `is_active=True` before winner selection) with an otherwise behavior-preserving refactor.
+- **Not lifting the identity-vs-UC cross-check from [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md).** That guard — verifying `subject_fks ∪ identity_fields` matches one `UniqueConstraint` per through-model at `ready()` — is genuinely useful, but it belongs with the model-driven metadata work it was drafted for. Pulling it in here would motivate `through_model` and `subject_fks` on the schema, which would force `(namespace, subject_content_type)` keying and the "abbreviation registers twice" complication — all scaffolding for a check the rest of this PR does not use. Deferred as a whole.
 
 ### Registry unification — in scope (added after initial draft)
 
@@ -42,62 +44,75 @@ class ValueKeySpec:
     scalar_type: type  # int, str, or bool — matched with `type(v) is scalar_type`
     required: bool
     nullable: bool = False  # True allows `None` in addition to scalar_type
-    identity: bool = False
-    # True if this key participates in the claim_key identity. Used by
-    # build_relationship_claim to derive the identity dict. For literal
-    # namespaces (aliases/abbreviations) the identity key may differ from
-    # the value_key name — see `identity_name` below.
-    identity_name: str | None = None
-    # Overrides `name` when the claim_key identity uses a different label
-    # (e.g. value_key "alias_value" → identity "alias"). Only meaningful
-    # when identity=True.
+    identity: str | None = None
+    # If set, this key participates in the claim_key identity and the string
+    # is the label used in the identity dict. Use `name` when the label
+    # matches the value_key name (e.g. identity="person" for value_key "person").
+    # Use a different string when they differ (e.g. identity="alias" for
+    # value_key "alias_value" — matches today's LiteralKey("alias_value", "alias")).
+    # None means this key is non-identity (e.g. count, category, alias_display).
     fk_target: tuple[type[models.Model], str] | None = None
     # If set, (target_model, lookup_field) — this value_key is an FK reference
     # and batch-path existence checks apply via validate_relationship_claims_batch.
 
 @dataclass(frozen=True, slots=True)
 class RelationshipSchema:
-    namespace: str  # claim field_name, e.g. "credit", "theme_alias", "abbreviation"
+    namespace: str                                     # claim field_name, e.g. "credit", "theme_alias", "abbreviation"
     value_keys: tuple[ValueKeySpec, ...]
+    valid_subjects: tuple[type[models.Model], ...]     # subject models this namespace applies to
 
+# Registry keyed by namespace. Shared-namespace cases (abbreviation, credit,
+# media_attachment) register once with multiple valid_subjects.
 _relationship_schemas: dict[str, RelationshipSchema] = {}
 
 def register_relationship_schema(schema: RelationshipSchema) -> None:
+    if schema.namespace in _relationship_schemas:
+        raise ImproperlyConfigured(f"namespace {schema.namespace!r} registered twice")
     _relationship_schemas[schema.namespace] = schema
 
 def get_relationship_schema(namespace: str) -> RelationshipSchema | None:
     return _relationship_schemas.get(namespace)
+
+def is_valid_subject(schema: RelationshipSchema, subject_content_type: ContentType) -> bool:
+    target_id = subject_content_type.id
+    return any(
+        ContentType.objects.get_for_model(m).id == target_id for m in schema.valid_subjects
+    )
 ```
 
-`identity` and `identity_name` subsume what `RefKey` and `LiteralKey` carry today. An FK reference like `{"person": int}` has `identity=True`, `identity_name=None` (defaults to `name`). An alias key like `alias_value: str` has `identity=True, identity_name="alias"` — matching the current `LiteralKey("alias_value", "alias")` shape. Non-identity optional keys (`count`, `category`, `is_primary`, `alias_display`) have `identity=False`.
+`ValueKeySpec.identity` subsumes what `RefKey` and `LiteralKey` carry today. An FK reference like `{"person": int}` uses `identity="person"` (label equals name). An alias key like `alias_value: str` uses `identity="alias"` — matching the current `LiteralKey("alias_value", "alias")` shape. Non-identity optional keys (`count`, `category`, `is_primary`, `alias_display`) leave `identity=None`.
+
+### Registry is keyed by namespace
+
+One schema per namespace, not per `(namespace, subject)`. Shared-namespace cases (`abbreviation` on Title vs MachineModel, `credit` on MachineModel vs Series, `media_attachment` on N subjects) register once with multiple `valid_subjects`; this works because the value-key shapes are identical across those subjects today. The subject content type is carried on the claim itself and enters via `is_valid_subject(schema, subject_content_type)` — a check owned by the validator, not a registry-key discriminator. This keying is what a pre-launch hand-maintained registry needs; the `(namespace, subject_ct)` keying required for the UC cross-check belongs with the deferred spec work (see Non-goals).
 
 ### Catalog-side consolidation
 
 [apps/catalog/claims.py](../../../backend/apps/catalog/claims.py) loses `_entity_ref_targets`, `_literal_schemas`, `RefKey`, `LiteralKey`, `_get_entity_ref_targets`, `_get_literal_schemas`, and `register_relationship_targets`. In their place:
 
 - `register_catalog_relationship_schemas()` — one function called from `CatalogConfig.ready()`. Replaces `register_relationship_targets()`. Body is a series of `register_relationship_schema(RelationshipSchema(...))` calls, one per namespace. The schemas are _the_ source: no intermediate dict.
-- `build_relationship_claim(field_name, identity, exists)` — reworked to read from `get_relationship_schema(field_name)` and iterate `schema.value_keys` where `identity=True`, using `identity_name or name` as the claim_key label and `name` as the value_dict key. Behavior preserved for every existing call site.
-- `get_relationship_namespaces()` — returns `frozenset(_relationship_schemas.keys())` (or a wrapper that filters to catalog-owned namespaces if future apps register their own).
+- `build_relationship_claim(field_name, subject_content_type, identity, exists)` — reworked to read from `get_relationship_schema(field_name)` and iterate `schema.value_keys` where `identity is not None`, using `spec.identity` as the claim_key label and `spec.name` as the value_dict key. Subject `content_type` still flows through call sites (needed for the wrong-subject rejection below), but the lookup itself is subject-independent.
+- `get_relationship_namespaces()` — returns `frozenset(_relationship_schemas)`.
 - `get_all_namespace_keys()` — derived from the registry via a similar iteration. Used only in tests today; safe to rewrite.
 
-Identity-key discovery from the schema means alias types added dynamically via `discover_alias_types()` must now call `register_relationship_schema` at discovery time instead of populating `_literal_schemas`. That hook lives in `register_catalog_relationship_schemas()` — same spot, same `ready()`-time timing, different target registry.
+Alias types added dynamically via `discover_alias_types()` must now call `register_relationship_schema` at discovery time instead of populating `_literal_schemas`. That hook lives in `register_catalog_relationship_schemas()` — same spot, same `ready()`-time timing, different target registry.
 
 No behavior change for any consumer of the public surface (`build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys`). Existing call-site tests stay green.
 
-Namespaces registered (full coverage — must match the read-side TypedDicts in `catalog/resolve/_claim_values.py`):
+Registered schemas (full coverage — must match the read-side TypedDicts in `catalog/resolve/_claim_values.py`):
 
-- `"credit"` → `{person: int (required, fk=Person.pk), role: int (required, fk=CreditRole.pk)}`
-- `"gameplay_feature"` → `{gameplay_feature: int (required, fk=GameplayFeature.pk), count: int | None (optional)}`
-- `"theme"` / `"tag"` / `"reward_type"` → `{<namespace>: int (required, fk=<target>.pk)}`
-- `"theme_alias"` / `"manufacturer_alias"` / `"person_alias"` / `"gameplay_feature_alias"` / `"reward_type_alias"` / `"corporate_entity_alias"` / `"location_alias"` → `{alias_value: str (required), alias_display: str (optional)}`
-- `"abbreviation"` → `{value: str (required)}` — shared by Title and MachineModel resolvers (same `field_name`, distinguished by `content_type`); registry keyed by `field_name` alone is fine today because both share the shape.
-- `"media_attachment"` → `{media_asset: int (required, fk=MediaAsset.pk), category: str | None (optional), is_primary: bool (optional)}`
-- `"location"` (CorporateEntity → Location) → `{location: int (required, fk=Location.pk)}`
-- `"theme_parent"` / `"gameplay_feature_parent"` → `{parent: int (required, fk=<self>.pk)}`
+- `"credit"` — `valid_subjects=(MachineModel, Series)`. Value keys: `{person: int (identity="person", fk=Person.pk), role: int (identity="role", fk=CreditRole.pk)}`.
+- `"gameplay_feature"` — `valid_subjects=(MachineModel,)`. Value keys: `{gameplay_feature: int (identity="gameplay_feature", fk=GameplayFeature.pk), count: int | None (optional)}`.
+- `"theme"` / `"tag"` / `"reward_type"` — `valid_subjects=(MachineModel,)`. Value keys: `{<namespace>: int (identity=<namespace>, fk=<target>.pk)}`.
+- Alias namespaces (7) — one schema each. `valid_subjects=(<owner>,)`. Value keys: `{alias_value: str (identity="alias"), alias_display: str (optional)}`.
+- `"abbreviation"` — `valid_subjects=(Title, MachineModel)`. Value keys: `{value: str (identity="value")}`.
+- `"media_attachment"` — `valid_subjects=(<all supported subjects>)`. Value keys: `{media_asset: int (identity="media_asset", fk=MediaAsset.pk), category: str | None (optional), is_primary: bool (optional)}`.
+- `"location"` — `valid_subjects=(CorporateEntity,)`. Value keys: `{location: int (identity="location", fk=Location.pk)}`.
+- `"theme_parent"` / `"gameplay_feature_parent"` — `valid_subjects=(Theme,)` / `(GameplayFeature,)`. Value keys: `{parent: int (identity="parent", fk=<self>.pk)}`.
 
 ### Classification change
 
-Preserve DIRECT precedence. Keep the existing `field_name in claim_fields → DIRECT` check first. **After** DIRECT detection, classify any remaining `field_name` appearing in `_relationship_schemas` as `RELATIONSHIP` regardless of whether `"exists"` is present. The new registry check **replaces** the old structural relationship check (`claim_key != field_name and isinstance(value, dict) and "exists" in value`) for non-direct fields; it does **not** override legitimate direct fields whose name collides with a relationship namespace.
+Preserve DIRECT precedence. Keep the existing `field_name in claim_fields → DIRECT` check first. **After** DIRECT detection, classify any remaining claim as `RELATIONSHIP` iff `get_relationship_schema(field_name)` returns a schema — regardless of whether `"exists"` is present and regardless of whether this subject is in the schema's `valid_subjects`. The wrong-subject case (e.g. `field_name="credit"` on `Title`) routes to the relationship validator and is rejected there, not silently routed to `EXTRA`. The new registry check **replaces** the old structural relationship check (`claim_key != field_name and isinstance(value, dict) and "exists" in value`) for non-direct fields; it does **not** override legitimate direct fields whose name collides with a relationship namespace.
 
 ### Single-claim validator
 
@@ -110,167 +125,96 @@ Factor a new `validate_single_relationship_claim(claim: Claim) -> None` out of `
 
 Applied by `validate_single_relationship_claim` in both paths:
 
+- **Wrong subject**: claim's subject `content_type` is not in `schema.valid_subjects` (e.g. `field_name="credit"` on a `Title`). Closes the silent-EXTRA-fallthrough class for misrouted namespaces. Checked first — before the shape rules below — because a namespace that doesn't belong on this subject can't be validated against the schema's value-key expectations.
 - `value` is not a `dict`.
 - `value` is missing `"exists"`, or `value["exists"]` is not a `bool`.
 - Missing any **required** registered `ValueKeySpec` for the namespace. Optional keys are type-checked only when present.
 - Wrong scalar type for any present registered key (required or optional). Applies to identity keys (`person: int`, `alias_value: str`) and non-identity keys (`count: int | None`, `category: str | None`, `is_primary: bool`, `alias_display: str`).
+- **Unknown keys**: any key in `value` other than `"exists"` or a name in `schema.value_keys`. Prevents typos (`{person, role, rol}`) and stale fields from accumulating indefinitely in stored claim payloads. Same class of silent-drift as the silent-EXTRA-fallthrough — if extractors or adapters produce typos or leftover keys, nothing else rejects them today.
 
 **Why `type(value) is scalar_type`, not `isinstance(value, scalar_type)`.** `bool` is a subclass of `int` in Python, so `isinstance(True, int)` is `True`. A payload carrying `{"person": True}` or `{"count": False}` should be rejected, not silently accepted as PK `1` / count `0`. The primary threat is Python-side code (tests, ingest adapters) passing bools where ints belong; `json.loads` of `{"x": true}` also produces `bool`, so the rule catches wire payloads too. Future readers should not loosen this to `isinstance`. For `nullable=True` specs, accept `None` in addition to `type(v) is scalar_type`.
 
 ### Rejection conditions (existence — batch only)
 
-Unchanged from today. `validate_relationship_claims_batch` continues to do per-namespace group queries for FK `ValueKeySpec`s where `exists=True`. `assert_claim` does not do existence checks — see Non-goals.
+Unchanged from today, including the explicit carve-out that **retractions (`exists=False`) are exempt from FK-target existence**. A retraction references a previous assertion, not a current row — the target may already have been deleted and the retraction must still succeed, otherwise claims about deleted entities could never be retracted. Identity keys remain required on retractions so batch resolve knows which row to remove; shape validation (above) applies uniformly to positive claims and retractions.
+
+`validate_relationship_claims_batch` continues to do per-namespace group queries for FK `ValueKeySpec`s where `exists=True`; `exists=False` entries skip that check. `assert_claim` does not do existence checks regardless of `exists` — see Non-goals.
+
+Test coverage for the retraction carve-out lives in [`test_validation.py`](../../../backend/apps/provenance/tests/test_validation.py) (explicit case for retractions against deleted targets). Do not remove or loosen without replacing.
 
 ## Commit sequence
 
-The audit can't run before the registry exists. Split into two commits:
+Two commits in one PR. Commit A is a mechanical registry rewrite, Commit B is the tightening proper. Keeping them separate matters even in one PR — reviewers can check A against today's behavior ("same inputs, same outputs") without tangling that against the shape-rejection rules B introduces.
 
-1. **Commit A — unified registry + scaffolding (no behavior change).**
-   - Add `ValueKeySpec` / `RelationshipSchema` / `register_relationship_schema` / `get_relationship_schema` to [validation.py](../../../backend/apps/provenance/validation.py).
-   - Rewrite [catalog/claims.py](../../../backend/apps/catalog/claims.py): delete `_entity_ref_targets`, `_literal_schemas`, `RefKey`, `LiteralKey`, `_get_entity_ref_targets`, `_get_literal_schemas`, `register_relationship_targets`. Add `register_catalog_relationship_schemas()` with one `register_relationship_schema(...)` call per namespace (17 total — list below). Rework `build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys` to read from the unified registry.
+1. **Commit A — unified registry (no behavior change).**
+   - Add `ValueKeySpec` / `RelationshipSchema` (namespace + `value_keys` + `valid_subjects`) / `register_relationship_schema` / `get_relationship_schema` / `is_valid_subject` to [validation.py](../../../backend/apps/provenance/validation.py). Registry keyed by `namespace: str`.
+   - Rewrite [catalog/claims.py](../../../backend/apps/catalog/claims.py): delete `_entity_ref_targets`, `_literal_schemas`, `RefKey`, `LiteralKey`, `_get_entity_ref_targets`, `_get_literal_schemas`, `register_relationship_targets`. Add `register_catalog_relationship_schemas()` with one `register_relationship_schema(...)` call per namespace (list below). Rework `build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys` to read from the unified registry.
    - Rewrite `validate_relationship_claims_batch` internals to read `fk_target` tuples off `ValueKeySpec` entries (same existence-check semantics, new source).
    - Delete `_relationship_target_registry` and the old `register_relationship_targets` function in validation.py.
-   - At this point `classify_claim` still uses the old structural check and no new shape rejections fire — runtime behavior is identical. Mypy passes, full test suite passes, baseline unchanged.
+   - `classify_claim` still uses the old structural check, no new rejections fire — claim-shape runtime behavior is identical. Mypy passes, full test suite passes, baseline unchanged.
 
-2. **Audit against prod snapshot.** Run `scripts/audit_relationship_claims.py` (below) using Commit A's registry against a prod DB. Record counts + breakdown. Expected outcome on a clean pre-launch DB: all zeros. Non-zero counts inform Commit B.
+2. **Commit B — classifier + validator.** Flip `classify_claim` to registry-driven classification (preserving DIRECT precedence, using `get_relationship_schema(field_name)` lookup). Add `validate_single_relationship_claim` including the wrong-subject check. Wire it into `assert_claim` and `validate_claims_batch`. No data-cleanup step bundled in — see "Data posture".
 
-3. **Commit B — classifier, validator, cleanup.** Flip `classify_claim` to registry-driven classification (preserving DIRECT precedence). Add `validate_single_relationship_claim`. Wire it into `assert_claim` and `validate_claims_batch`. If the audit found offending rows, include the `Claim.objects.filter(...).update(is_active=False)` cleanup in the same commit, with counts and namespace breakdown in the commit message.
+3. **Pre-merge dry-run (local).** With Commit B applied locally: `make reset-db` (or equivalent — wipe the localhost DB and reset migrations to 0001), then `make pull-ingest` + `make ingest`. Observe any validator rejections. Clean ⇒ merge. Dirty ⇒ rejections name the offending namespace + reason; fix at the extractor source, re-ingest, repeat until clean. This replaces the removed audit script as the "how bad is it" preview.
+
+4. **Post-merge: wipe + re-ingest.** Same sequence against the shared environment so the DB is rebuilt fresh under the new validator. Behavior should match the pre-merge dry-run exactly.
 
 Commit A is larger than a pure "scaffolding" commit would be, but the blast radius is bounded to `catalog/claims.py` and `provenance/validation.py` plus their tests. The size is bounded because every consumer of `build_relationship_claim` / `get_relationship_namespaces` sees unchanged behavior — those functions keep their signatures and semantics; only their implementation moves.
 
-### Registered namespaces
+### Registered schemas
 
-Every catalog relationship namespace gets a `register_relationship_schema(...)` call in `register_catalog_relationship_schemas()`. Identity keys (`identity=True`) drive `build_relationship_claim`'s claim_key composition; non-identity keys are shape-validated only. Missing any of these means resolver reads for that namespace stay unvalidated and Step 10.4 of MypyFixing.md can't subscript those keys safely.
+Every catalog relationship gets a `register_relationship_schema(...)` call in `register_catalog_relationship_schemas()`, once per namespace. Identity keys (`identity is not None`) drive `build_relationship_claim`'s claim_key composition; non-identity keys are shape-validated only. Missing any of these means resolver reads for that namespace stay unvalidated and Step 10.4 of MypyFixing.md can't subscript those keys safely.
 
-- **Alias namespaces (7):** `theme_alias`, `manufacturer_alias`, `person_alias`, `gameplay_feature_alias`, `reward_type_alias`, `corporate_entity_alias`, `location_alias`. Each → `alias_value: str (required, identity, identity_name="alias")`, `alias_display: str (optional)`. Dynamic discovery via `discover_alias_types()` still happens — it just calls `register_relationship_schema` instead of populating `_literal_schemas`.
-- **Abbreviation namespace (1):** `abbreviation` → `value: str (required, identity)`. Shared by Title and MachineModel resolvers.
-- **Parent namespaces (2):** `theme_parent`, `gameplay_feature_parent`. Each → `parent: int (required, identity, fk=<self>.pk)`.
-- **Location namespace (1):** `location` (CorporateEntity → Location) → `location: int (required, identity, fk=Location.pk)`.
-- **Credit namespace (1):** `credit` → `person: int (required, identity, fk=Person.pk)`, `role: int (required, identity, fk=CreditRole.pk)`.
-- **Gameplay feature namespace (1):** `gameplay_feature` → `gameplay_feature: int (required, identity, fk=GameplayFeature.pk)`, `count: int | None (optional)`.
-- **Simple M2M namespaces (3):** `theme`, `tag`, `reward_type`. Each → `<namespace>: int (required, identity, fk=<target>.pk)`.
-- **Media attachment namespace (1):** `media_attachment` → `media_asset: int (required, identity, fk=MediaAsset.pk)`, `category: str | None (optional)`, `is_primary: bool (optional)`.
+- **Alias (7 schemas, one per alias namespace):** `theme_alias` (valid_subjects=(Theme,)), `manufacturer_alias` ((Manufacturer,)), `person_alias` ((Person,)), `gameplay_feature_alias` ((GameplayFeature,)), `reward_type_alias` ((RewardType,)), `corporate_entity_alias` ((CorporateEntity,)), `location_alias` ((Location,)). Each → `alias_value: str (identity="alias")`, `alias_display: str (optional)`. Dynamic discovery via `discover_alias_types()` still happens — it just calls `register_relationship_schema` instead of populating `_literal_schemas`.
+- **Abbreviation (1 schema):** `abbreviation`, `valid_subjects=(Title, MachineModel)`. → `value: str (identity="value")`.
+- **Parent (2 schemas):** `theme_parent` ((Theme,)), `gameplay_feature_parent` ((GameplayFeature,)). Each → `parent: int (identity="parent", fk=<self>.pk)`.
+- **Location (1 schema):** `location` ((CorporateEntity,)) → `location: int (identity="location", fk=Location.pk)`.
+- **Credit (1 schema):** `credit`, `valid_subjects=(MachineModel, Series)`. → `person: int (identity="person", fk=Person.pk)`, `role: int (identity="role", fk=CreditRole.pk)`.
+- **Gameplay feature (1 schema):** `gameplay_feature` ((MachineModel,)) → `gameplay_feature: int (identity="gameplay_feature", fk=GameplayFeature.pk)`, `count: int | None (optional)`.
+- **Simple M2M (3 schemas):** `theme`, `tag`, `reward_type` each with `valid_subjects=(MachineModel,)`. → `<namespace>: int (identity=<namespace>, fk=<target>.pk)`.
+- **Media attachment (1 schema):** `media_attachment`, `valid_subjects=(<all supported subjects>)`. → `media_asset: int (identity="media_asset", fk=MediaAsset.pk)`, `category: str | None (optional)`, `is_primary: bool (optional)`.
 
-17 namespaces. All registered fresh in the unified API — no migration shim needed because the old registries are deleted wholesale in the same commit.
-
-## Audit queries
-
-Draft the script below into `scripts/audit_relationship_claims.py` (or a Django management command) and run against a production DB snapshot after Commit A lands but before Commit B. Counts and breakdowns go in the Commit B PR description.
-
-```python
-# scripts/audit_relationship_claims.py
-"""One-shot audit ahead of ProvenanceValidationTightening.
-
-Reports three counts:
-  a. Active claims where field_name is a relationship-registry name but
-     classify_claim currently returns EXTRA (the silent-fallthrough case).
-  b. Active claims under a registered relationship namespace whose value
-     fails the new shape rejection conditions (non-dict, missing/non-bool
-     exists, missing required key, wrong scalar type).
-  c. A breakdown of (b) by namespace so we know what to deactivate.
-"""
-from collections import Counter
-
-from apps.provenance.models import Claim
-from apps.provenance.validation import (
-    EXTRA,
-    _relationship_schemas,   # Commit A adds this registry; script runs after Commit A.
-    classify_claim,
-)
-from apps.core.models import get_claim_fields
-
-
-def reason_for_rejection(value: object, schema: "RelationshipSchema") -> str | None:
-    if not isinstance(value, dict):
-        return "not-dict"
-    exists = value.get("exists")
-    if not isinstance(exists, bool):
-        return "missing-or-non-bool-exists"
-    for spec in schema.value_keys:
-        v = value.get(spec.name)
-        if v is None:
-            if spec.required and not spec.nullable:
-                return f"missing-required-{spec.name}"
-            continue
-        if spec.nullable and v is None:
-            continue
-        if type(v) is not spec.scalar_type:
-            return f"wrong-type-{spec.name}"
-    return None
-
-
-def run() -> None:
-    namespaces = set(_relationship_schemas.keys())
-
-    # (a) silent EXTRA fallthrough
-    a_count = 0
-    for claim in Claim.objects.filter(is_active=True, field_name__in=namespaces).iterator():
-        model_class = claim.content_type.model_class()
-        if model_class is None:
-            continue
-        ct = classify_claim(
-            model_class, claim.field_name, claim.claim_key, claim.value,
-            claim_fields=get_claim_fields(model_class),
-        )
-        if ct == EXTRA:
-            a_count += 1
-
-    # (b) + (c) shape violations by namespace
-    breakdown: Counter[tuple[str, str]] = Counter()
-    b_count = 0
-    for schema in _relationship_schemas.values():
-        for claim in Claim.objects.filter(
-            is_active=True, field_name=schema.namespace
-        ).iterator():
-            reason = reason_for_rejection(claim.value, schema)
-            if reason:
-                breakdown[(schema.namespace, reason)] += 1
-                b_count += 1
-
-    print(f"(a) silent-EXTRA-fallthrough active claims: {a_count}")
-    print(f"(b) shape-violation active claims: {b_count}")
-    print("(c) breakdown by (namespace, reason):")
-    for (ns, reason), n in sorted(breakdown.items(), key=lambda kv: -kv[1]):
-        print(f"    {n:>6}  {ns}  {reason}")
-```
-
-Run on a prod DB snapshot (`railway ssh` + DJANGO_SETTINGS connection, or a fresh `make pull-ingest` against current data). Expected outcome on a clean pre-launch DB: all zeros. Any non-zero count is either a legacy ingest artifact (deactivate in the cleanup step) or a bug in the script — investigate before writing the validator.
+All registered fresh in the unified API — no migration shim needed because the old registries are deleted wholesale in the same commit.
 
 ## TDD plan
 
-Assumes the "Commit sequence" above: Commit A (registry scaffolding) → audit → Commit B (classifier + validator + cleanup). Tests land with Commit B.
+Assumes the "Commit sequence" above: Commit A (registry) → Commit B (classifier + validator) → pre-merge dry-run → post-merge wipe + re-ingest. Tests land with Commit B.
 
 1. **Commit A is not TDD-gated for new behavior** (there isn't any), but **existing `catalog/claims.py` tests are the regression gate**. The full test suite must pass green — `build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys`, and all their downstream callers are rewritten to read from the unified registry, and their existing tests are what prove the rewrite preserves behavior. If a test fails, the rewrite has drifted from today's semantics — fix the rewrite, not the test.
-2. **Run the audit script** (above) against a prod snapshot. Counts + breakdown inform Commit B's PR description.
-3. **If audit is all zero:** Commit B is a straight code change — the three tightenings in one PR.
-4. **If non-zero:** cleanup step in the same PR — `Claim.objects.filter(...).update(is_active=False)` on offending rows using the breakdown from step 2, with counts and namespace breakdown in the commit message. Don't hand-edit payloads; the audit trail is the truth.
-5. **Failing tests, one per rejection mode, per path:**
-   - `assert_claim` path: assert `ValidationError` raised for each of — non-dict value, missing `exists`, non-bool `exists`, missing required key, wrong-scalar-type required key, wrong-scalar-type optional key, `bool` passed where `int` expected.
+2. **Failing tests, one per rejection mode, per path:**
+   - `assert_claim` path: assert `ValidationError` raised for each of — wrong subject (`field_name` registered but `subject.content_type not in schema.valid_subjects`), non-dict value, missing `exists`, non-bool `exists`, missing required key, wrong-scalar-type required key, wrong-scalar-type optional key, `bool` passed where `int` expected, unknown key.
    - Batch path: `validate_claims_batch(...)` returns `(valid, rejected_count)` — assert `rejected_count == 1` and the malformed claim is **not** in `valid`. For rejection-reason assertions, call `validate_relationship_claims_batch(...)` directly (that function returns the rejected `list[Claim]`).
    - Classify-by-registry fix: a malformed relationship payload on a model with `extra_data` must reach the relationship validator (and be rejected), not land as `EXTRA`.
    - DIRECT precedence preserved: a `field_name` that is both a DIRECT claim field on the model **and** a name in the relationship registry must classify as `DIRECT`. (Likely synthetic — no real collision today, but pin the ordering.)
-6. Implement the three tightenings. Tests go green.
+3. Implement the tightenings. Tests go green.
+4. **Pre-merge dry-run:** wipe localhost DB + reset migrations, `make pull-ingest`, `make ingest`. Any rejections name an extractor bug — fix at source, re-ingest, repeat until clean.
+5. **Post-merge:** same wipe + re-ingest against the shared environment.
 
 ## Files touched
 
 **Commit A — unified registry:**
 
-- [apps/provenance/validation.py](../../../backend/apps/provenance/validation.py) — new `ValueKeySpec` / `RelationshipSchema` / `register_relationship_schema` / `get_relationship_schema`. Delete `_relationship_target_registry` and the old `register_relationship_targets`. Rewrite `validate_relationship_claims_batch` internals to read `fk_target` tuples off `ValueKeySpec` entries.
-- [apps/catalog/claims.py](../../../backend/apps/catalog/claims.py) — delete `RefKey`, `LiteralKey`, `_entity_ref_targets`, `_literal_schemas`, `_get_entity_ref_targets`, `_get_literal_schemas`, `register_relationship_targets`. Add `register_catalog_relationship_schemas()` with 17 `register_relationship_schema(...)` calls. Rewrite `build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys` to read from the unified registry. Alias-type dynamic discovery hooks into the new registration function.
-- [apps/catalog/apps.py](../../../backend/apps/catalog/apps.py) — `CatalogConfig.ready()` calls `register_catalog_relationship_schemas()` instead of `register_relationship_targets()`.
+- [apps/provenance/validation.py](../../../backend/apps/provenance/validation.py) — new `ValueKeySpec` / `RelationshipSchema` (namespace + `value_keys` + `valid_subjects`) / `register_relationship_schema` / `get_relationship_schema` / `is_valid_subject`, keyed by `namespace: str`. Delete `_relationship_target_registry` and the old `register_relationship_targets`. Rewrite `validate_relationship_claims_batch` internals to read `fk_target` tuples off `ValueKeySpec` entries.
+- [apps/catalog/claims.py](../../../backend/apps/catalog/claims.py) — delete `RefKey`, `LiteralKey`, `_entity_ref_targets`, `_literal_schemas`, `_get_entity_ref_targets`, `_get_literal_schemas`, `register_relationship_targets`. Add `register_catalog_relationship_schemas()` with one `register_relationship_schema(...)` call per namespace. Rewrite `build_relationship_claim`, `get_relationship_namespaces`, `get_all_namespace_keys` to read from the unified registry. Alias-type dynamic discovery hooks into the new registration function.
+- [apps/catalog/apps.py](../../../backend/apps/catalog/apps.py) — `CatalogConfig.ready()` calls `register_catalog_relationship_schemas()`.
 - [apps/catalog/tests/test_claims.py](../../../backend/apps/catalog/tests/test_claims.py) (or wherever the existing claim-building tests live) — behavior-preserving; trivial touches if any.
 
-**Commit B — classifier, validator, cleanup:**
+**Commit B — classifier + validator:**
 
-- [apps/provenance/validation.py](../../../backend/apps/provenance/validation.py) — `classify_claim` registry-driven; new `validate_single_relationship_claim`.
+- [apps/provenance/validation.py](../../../backend/apps/provenance/validation.py) — `classify_claim` registry-driven; new `validate_single_relationship_claim` (including wrong-subject check).
 - [apps/provenance/models/claim.py](../../../backend/apps/provenance/models/claim.py) — `assert_claim` new `RELATIONSHIP` branch calling `validate_single_relationship_claim`.
-- [apps/provenance/tests/test_validation.py](../../../backend/apps/provenance/tests/test_validation.py) — new rejection-mode tests.
-- `scripts/audit_relationship_claims.py` — new, one-shot script.
-- If audit non-zero: a data-cleanup call in the same commit, noted in the commit message.
+- [apps/provenance/tests/test_validation.py](../../../backend/apps/provenance/tests/test_validation.py) — new rejection-mode tests (including wrong-subject).
 
 ## Verification
 
 - `uv run --directory backend pytest apps/provenance/tests/test_validation.py apps/catalog/tests/test_bulk_resolve*.py` — all tests pass.
 - `./scripts/mypy` — baseline unchanged (this step has no mypy impact).
-- `make ingest` end-to-end against R2 data — no new rejections on clean data. If rejections appear, they're real malformed payloads upstream ingest is producing and must be fixed at the source.
+- **Pre-merge dry-run:** wipe localhost DB, reset migrations to 0001, `make pull-ingest`, `make ingest`. No rejections on clean data. If rejections appear, they're real malformed payloads upstream ingest is producing and must be fixed at the source before merging.
+- **Post-merge:** same wipe + re-ingest against the shared environment.
 - After landing, Step 10.4 of MypyFixing.md (resolver subscript flip) is unblocked.
+
+## Relation to model-driven metadata
+
+This registry is intentionally hand-maintained. The model-driven metadata umbrella ([ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md)) proposes moving these declarations onto the through-model classes as a typed `catalog_relationship_spec` ClassVar ([ModelDrivenCatalogRelationshipMetadata.md](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md)), derived at `ready()` and pushed into a registry that looks very much like this one. That move is deferred until a genuinely second independent consumer materializes — e.g. frontend edit metadata being actually built, not hypothetical. Today's consumers (`classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, `build_relationship_claim`) all live on the same backend write/read path and don't yet meet the umbrella's ≥2-consumers test.
+
+The spec doc's identity-vs-UC cross-check (verifying `subject_fks ∪ identity_fields` matches one `UniqueConstraint` per through-model at `ready()`) is the piece worth lifting eventually, but it's deferred with the rest of the spec work — lifting it alone would require `through_model` and `subject_fks` on the schema and `(namespace, subject_content_type)` keying, which this PR otherwise doesn't need. When the second consumer arrives and the spec move lands, `register_catalog_relationship_schemas()` is replaced with a walk over a `ClaimThroughModel` marker base that emits the same `RelationshipSchema` objects plus the richer fields the cross-check needs. The registry interface (`get_relationship_schema`, `is_valid_subject`) stays the same; consumers don't change.

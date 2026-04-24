@@ -86,7 +86,7 @@ M2M_FIELDS: dict[str, M2MFieldSpec] = {
 def _resolve_machine_model_m2m(
     spec: M2MFieldSpec,
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve M2M claims into through-table rows for the given spec."""
     from django.contrib.contenttypes.models import ContentType
@@ -97,8 +97,8 @@ def _resolve_machine_model_m2m(
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name=spec.field_name)
     )
-    if model_ids is not None:
-        claims_qs = claims_qs.filter(object_id__in=model_ids)
+    if subject_ids is not None:
+        claims_qs = claims_qs.filter(object_id__in=subject_ids)
     claims = claims_qs.order_by(
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
@@ -136,8 +136,8 @@ def _resolve_machine_model_m2m(
         desired_by_model[model_id] = desired
 
     # Pre-fetch existing M2M through-table rows.
-    if model_ids is not None:
-        all_model_ids = model_ids
+    if subject_ids is not None:
+        all_model_ids = subject_ids
     else:
         all_model_ids = set(MachineModel.objects.values_list("pk", flat=True))
     through: type[Model] = getattr(MachineModel, spec.m2m_attr).through
@@ -191,14 +191,14 @@ def _resolve_machine_model_m2m(
 
 def resolve_all_themes(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
-    _resolve_machine_model_m2m(M2M_FIELDS["theme"], model_ids=model_ids)
+    _resolve_machine_model_m2m(M2M_FIELDS["theme"], subject_ids=subject_ids)
 
 
 def resolve_all_gameplay_features(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve gameplay feature claims into through-model rows with counts."""
     from django.contrib.contenttypes.models import ContentType
@@ -208,8 +208,8 @@ def resolve_all_gameplay_features(
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="gameplay_feature")
     )
-    if model_ids is not None:
-        claims_qs = claims_qs.filter(object_id__in=model_ids)
+    if subject_ids is not None:
+        claims_qs = claims_qs.filter(object_id__in=subject_ids)
     claims = claims_qs.order_by(
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
@@ -246,8 +246,8 @@ def resolve_all_gameplay_features(
         desired_by_model[mid] = desired
 
     # Pre-fetch existing through-table rows.
-    if model_ids is not None:
-        all_model_ids = model_ids
+    if subject_ids is not None:
+        all_model_ids = subject_ids
     else:
         all_model_ids = set(MachineModel.objects.values_list("pk", flat=True))
     existing_by_model: dict[int, dict[int, tuple[int, int | None]]] = {}
@@ -300,16 +300,16 @@ def resolve_all_gameplay_features(
 
 def resolve_all_reward_types(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
-    _resolve_machine_model_m2m(M2M_FIELDS["reward_type"], model_ids=model_ids)
+    _resolve_machine_model_m2m(M2M_FIELDS["reward_type"], subject_ids=subject_ids)
 
 
 def resolve_all_tags(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
-    _resolve_machine_model_m2m(M2M_FIELDS["tag"], model_ids=model_ids)
+    _resolve_machine_model_m2m(M2M_FIELDS["tag"], subject_ids=subject_ids)
 
 
 # ------------------------------------------------------------------
@@ -319,7 +319,7 @@ def resolve_all_tags(
 
 def resolve_all_credits(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve credit claims into Credit rows."""
     from django.contrib.contenttypes.models import ContentType
@@ -338,8 +338,8 @@ def resolve_all_credits(
     credit_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="credit")
     )
-    if model_ids is not None:
-        credit_qs = credit_qs.filter(object_id__in=model_ids)
+    if subject_ids is not None:
+        credit_qs = credit_qs.filter(object_id__in=subject_ids)
     credit_claims = credit_qs.order_by(
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
@@ -378,8 +378,8 @@ def resolve_all_credits(
             desired.add(CreditAssignment(person_pk, role_pk))
         desired_by_model[model_id] = desired
 
-    if model_ids is not None:
-        all_model_ids = model_ids
+    if subject_ids is not None:
+        all_model_ids = subject_ids
     else:
         all_model_ids = set(MachineModel.objects.values_list("pk", flat=True))
     existing_by_model: dict[int, set[CreditAssignment]] = {}
@@ -424,7 +424,7 @@ def resolve_all_credits(
 
 def resolve_all_title_abbreviations(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve abbreviation claims into TitleAbbreviation rows."""
     from django.contrib.contenttypes.models import ContentType
@@ -434,8 +434,8 @@ def resolve_all_title_abbreviations(
     abbr_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="abbreviation")
     )
-    if model_ids is not None:
-        abbr_qs = abbr_qs.filter(object_id__in=model_ids)
+    if subject_ids is not None:
+        abbr_qs = abbr_qs.filter(object_id__in=subject_ids)
     abbr_claims = abbr_qs.order_by(
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
@@ -459,8 +459,8 @@ def resolve_all_title_abbreviations(
         desired_by_title[title_id] = desired
 
     all_title_ids = (
-        model_ids
-        if model_ids is not None
+        subject_ids
+        if subject_ids is not None
         else set(Title.objects.values_list("pk", flat=True))
     )
     existing_by_title: dict[int, set[str]] = {}
@@ -522,7 +522,7 @@ def _get_title_abbrs_for_models(
 
 def resolve_all_model_abbreviations(
     *,
-    model_ids: set[int] | None = None,
+    subject_ids: set[int] | None = None,
 ) -> None:
     """Bulk-resolve abbreviation claims into ModelAbbreviation rows."""
     from django.contrib.contenttypes.models import ContentType
@@ -532,8 +532,8 @@ def resolve_all_model_abbreviations(
     abbr_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name="abbreviation")
     )
-    if model_ids is not None:
-        abbr_qs = abbr_qs.filter(object_id__in=model_ids)
+    if subject_ids is not None:
+        abbr_qs = abbr_qs.filter(object_id__in=subject_ids)
     abbr_claims = abbr_qs.order_by(
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
@@ -556,8 +556,8 @@ def resolve_all_model_abbreviations(
             desired.add(val["value"])
         desired_by_model[model_id] = desired
 
-    if model_ids is not None:
-        all_model_ids = model_ids
+    if subject_ids is not None:
+        all_model_ids = subject_ids
     else:
         all_model_ids = set(MachineModel.objects.values_list("pk", flat=True))
     title_abbrs_by_model = _get_title_abbrs_for_models(all_model_ids)
@@ -851,11 +851,11 @@ def resolve_all_location_aliases() -> None:
 
 def resolve_all_corporate_entity_locations(
     *,
-    entity_ids: set[int] | None = None,
-) -> dict[str, int]:
+    subject_ids: set[int] | None = None,
+) -> None:
     """Sync CorporateEntityLocation rows from active 'location' claims on CorporateEntity.
 
-    When *entity_ids* is ``None`` (the default), processes ALL CorporateEntity
+    When *subject_ids* is ``None`` (the default), processes ALL CorporateEntity
     rows so that CEs whose claims were all deactivated also have their stale
     rows removed.  When scoped to a set of entity PKs, only those CEs are
     considered.
@@ -870,8 +870,8 @@ def resolve_all_corporate_entity_locations(
     claims_qs = Claim.objects.filter(
         content_type=ce_ct, field_name="location", is_active=True
     ).exclude(source__is_enabled=False)
-    if entity_ids is not None:
-        claims_qs = claims_qs.filter(object_id__in=entity_ids)
+    if subject_ids is not None:
+        claims_qs = claims_qs.filter(object_id__in=subject_ids)
 
     active_claims = claims_qs.values("object_id", "value")
 
@@ -884,11 +884,9 @@ def resolve_all_corporate_entity_locations(
         if loc_pk and loc_pk in valid_loc_pks:
             desired[row["object_id"]].add(loc_pk)
 
-    created = deleted = 0
-
     existing_qs = CorporateEntityLocation.objects.all()
-    if entity_ids is not None:
-        existing_qs = existing_qs.filter(corporate_entity_id__in=entity_ids)
+    if subject_ids is not None:
+        existing_qs = existing_qs.filter(corporate_entity_id__in=subject_ids)
 
     current: dict[int, dict[int, CorporateEntityLocation]] = defaultdict(dict)
     for cel in existing_qs:
@@ -903,7 +901,6 @@ def resolve_all_corporate_entity_locations(
                     corporate_entity_id=ce_pk,
                     location_id=loc_pk,
                 )
-                created += 1
 
     # Delete stale rows (location no longer desired, or CE lost all claims).
     stale_pks: list[int] = []
@@ -913,6 +910,4 @@ def resolve_all_corporate_entity_locations(
             if loc_pk not in wanted:
                 stale_pks.append(cel.pk)
     if stale_pks:
-        deleted = CorporateEntityLocation.objects.filter(pk__in=stale_pks).delete()[0]
-
-    return {"created": created, "deleted": deleted}
+        CorporateEntityLocation.objects.filter(pk__in=stale_pks).delete()

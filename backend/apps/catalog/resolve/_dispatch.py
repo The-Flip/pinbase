@@ -37,14 +37,13 @@ class ParentDispatchSpec(NamedTuple):
 class CustomDispatchSpec(NamedTuple):
     """Entry in the custom-resolver dispatch table.
 
-    Each entry specifies which model type it applies to, which
-    ``resolve_all_*`` function to call, and which keyword argument
-    receives the scoped ID set.
+    Each entry specifies which model type it applies to and which
+    ``resolve_all_*`` function to call.  Every bespoke resolver takes
+    the canonical ``subject_ids`` kwarg.
     """
 
     entity_model: type
     resolver_function_name: str
-    id_kwarg_name: str
 
 
 _alias_dispatch: dict[str, type] | None = None
@@ -89,12 +88,11 @@ def _get_custom_dispatch() -> dict[str, CustomDispatchSpec]:
 
         _custom_dispatch = {
             "abbreviation": CustomDispatchSpec(
-                Title, "resolve_all_title_abbreviations", "model_ids"
+                Title, "resolve_all_title_abbreviations"
             ),
             "location": CustomDispatchSpec(
                 CorporateEntity,
                 "resolve_all_corporate_entity_locations",
-                "entity_ids",
             ),
         }
     return _custom_dispatch
@@ -214,7 +212,7 @@ def _resolve_non_machine_model(
         from django.contrib.contenttypes.models import ContentType
 
         ct = ContentType.objects.get_for_model(entity_type)
-        resolve_media_attachments(content_type_id=ct.id, entity_ids={entity.pk})
+        resolve_media_attachments(content_type_id=ct.id, subject_ids={entity.pk})
 
     # --- Scalar fields ---
     resolve_entity(entity)
@@ -225,4 +223,4 @@ def _call_custom_resolver(spec: CustomDispatchSpec, entity_pk: int) -> None:
     from . import _relationships
 
     func = getattr(_relationships, spec.resolver_function_name)
-    func(**{spec.id_kwarg_name: {entity_pk}})
+    func(subject_ids={entity_pk})

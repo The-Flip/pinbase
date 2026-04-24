@@ -305,7 +305,7 @@ class TestResolveThemes:
                 pm, "theme", value, source=ipdb, claim_key=claim_key
             )
 
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert set(pm.themes.values_list("slug", flat=True)) == {
             "horror",
             "licensed",
@@ -331,7 +331,7 @@ class TestResolveThemes:
             pm, "theme", dispute_value, source=editorial, claim_key=claim_key
         )
 
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert pm.themes.count() == 0
 
     def test_stale_themes_cleared(self):
@@ -343,12 +343,12 @@ class TestResolveThemes:
 
         claim_key, value = build_relationship_claim("theme", {"theme": horror.pk})
         Claim.objects.assert_claim(pm, "theme", value, source=ipdb, claim_key=claim_key)
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert pm.themes.count() == 1
 
         # Deactivate claim, re-resolve — themes should be empty.
         pm.claims.filter(is_active=True).update(is_active=False)
-        resolve_all_themes(model_ids={pm.pk})
+        resolve_all_themes(subject_ids={pm.pk})
         assert pm.themes.count() == 0
 
     def test_bulk_theme_resolution(self):
@@ -473,9 +473,8 @@ class TestResolveCorporateEntityLocations:
         assert CorporateEntityLocation.objects.filter(corporate_entity=ce).count() == 1
 
         ce.claims.filter(is_active=True).update(is_active=False)
-        result = resolve_all_corporate_entity_locations()
+        resolve_all_corporate_entity_locations()
 
-        assert result["deleted"] == 1
         assert not CorporateEntityLocation.objects.filter(corporate_entity=ce).exists()
 
     def test_retraction_claim_does_not_create_cel(self, db):
@@ -509,9 +508,8 @@ class TestResolveCorporateEntityLocations:
         Claim.objects.assert_claim(
             ce, "location", value, source=source, claim_key=claim_key
         )
-        result = resolve_all_corporate_entity_locations()
+        resolve_all_corporate_entity_locations()
 
-        assert result["deleted"] == 1
         assert not CorporateEntityLocation.objects.filter(corporate_entity=ce).exists()
 
     def test_handles_multiple_ces(self, db):
@@ -523,7 +521,6 @@ class TestResolveCorporateEntityLocations:
         self._assert_location(source, ce1, loc1)
         self._assert_location(source, ce2, loc2)
 
-        result = resolve_all_corporate_entity_locations()
+        resolve_all_corporate_entity_locations()
 
-        assert result["created"] == 2
         assert CorporateEntityLocation.objects.count() == 2
