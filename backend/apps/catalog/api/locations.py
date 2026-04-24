@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Any, cast
+from dataclasses import dataclass
+from typing import cast
 
 from django.core.cache import cache
 from django.db.models import Count, F, Prefetch, Q
@@ -81,15 +82,26 @@ class LocationDetailSchema(Schema):
 # ---------------------------------------------------------------------------
 
 
-_LocationTree = tuple[dict[str, dict[str, Any]], dict[str | None, list[str]]]
+@dataclass(frozen=True, slots=True)
+class _LocationNode:
+    """Internal tree node; `manufacturer_pks` is plumbing — do not serialize."""
+
+    name: str
+    slug: str
+    location_path: str
+    location_type: str
+    parent_path: str | None
+    manufacturer_pks: frozenset[int]
+
+
+_LocationTree = tuple[dict[str, _LocationNode], dict[str | None, list[str]]]
 
 
 def _get_location_tree() -> _LocationTree:
     """Build location data from Location + CorporateEntityLocation records.
 
     Returns a tuple (nodes, children_index) where:
-    - nodes: dict[location_path, {name, slug, location_type, parent_path,
-                                  location_path, manufacturer_pks: frozenset}]
+    - nodes: dict[location_path, _LocationNode]
     - children_index: dict[parent_path_or_None, list[location_path]]
 
     Results are cached; invalidated by ``invalidate_all()``.
@@ -122,20 +134,18 @@ def _get_location_tree() -> _LocationTree:
             mfr_pks_by_path.setdefault(cur.location_path, set()).add(mfr_pk)
             cur = cur.parent
 
-    nodes: dict[str, dict[str, Any]] = {}
+    nodes: dict[str, _LocationNode] = {}
     children_index: dict[str | None, list[str]] = {}
     for loc in all_locs:
         parent_path = loc.parent.location_path if loc.parent else None
-        nodes[loc.location_path] = {
-            "name": loc.name,
-            "slug": loc.slug,
-            "location_path": loc.location_path,
-            "location_type": loc.location_type,
-            "parent_path": parent_path,
-            "manufacturer_pks": frozenset(
-                mfr_pks_by_path.get(loc.location_path, set())
-            ),
-        }
+        nodes[loc.location_path] = _LocationNode(
+            name=loc.name,
+            slug=loc.slug,
+            location_path=loc.location_path,
+            location_type=loc.location_type,
+            parent_path=parent_path,
+            manufacturer_pks=frozenset(mfr_pks_by_path.get(loc.location_path, set())),
+        )
         children_index.setdefault(parent_path, []).append(loc.location_path)
 
     tree = (nodes, children_index)
@@ -145,33 +155,43 @@ def _get_location_tree() -> _LocationTree:
 
 def _children_of(
     path: str | None,
-    nodes: dict[str, dict[str, Any]],
+    nodes: dict[str, _LocationNode],
     children_index: dict[str | None, list[str]],
-) -> list[dict[str, Any]]:
+) -> list[_LocationNode]:
     """Return child nodes sorted by manufacturer_count desc, then name."""
     return sorted(
         [nodes[p] for p in children_index.get(path, []) if p in nodes],
-        key=lambda n: (-len(n["manufacturer_pks"]), n["name"]),
+        key=lambda n: (-len(n.manufacturer_pks), n.name),
     )
 
 
-def _ancestors_of(path: str, nodes: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+def _ancestors_of(path: str, nodes: dict[str, _LocationNode]) -> list[_LocationNode]:
     """Return ancestor chain from root to immediate parent (root first)."""
-    ancestors: list[dict[str, Any]] = []
+    ancestors: list[_LocationNode] = []
     node = nodes.get(path)
     if node is None:
         return ancestors
-    parent_path = node["parent_path"]
+    parent_path = node.parent_path
     while parent_path is not None:
         parent = nodes.get(parent_path)
         if parent is None:
             break
         ancestors.insert(0, parent)
-        parent_path = parent["parent_path"]
+        parent_path = parent.parent_path
     return ancestors
 
 
-def _get_manufacturers_for_pks(pks: Iterable[int]) -> list[dict[str, Any]]:
+def _to_child_ref(node: _LocationNode) -> LocationChildRef:
+    return LocationChildRef(
+        name=node.name,
+        slug=node.slug,
+        location_path=node.location_path,
+        location_type=node.location_type,
+        manufacturer_count=len(node.manufacturer_pks),
+    )
+
+
+def _get_manufacturers_for_pks(pks: Iterable[int]) -> list[LocationManufacturerSchema]:
     """Return serialized manufacturer list for a set of PKs."""
     qs = (
         Manufacturer.objects.active()
@@ -202,12 +222,12 @@ def _get_manufacturers_for_pks(pks: Iterable[int]) -> list[dict[str, Any]]:
 
     min_rank = get_minimum_display_rank()
     return [
-        {
-            "name": mfr.name,
-            "slug": mfr.slug,
-            "model_count": cast(HasModelCount, mfr).model_count,
-            "thumbnail_url": _first_thumbnail(mfr.entities.all(), min_rank=min_rank),
-        }
+        LocationManufacturerSchema(
+            name=mfr.name,
+            slug=mfr.slug,
+            model_count=cast(HasModelCount, mfr).model_count,
+            thumbnail_url=_first_thumbnail(mfr.entities.all(), min_rank=min_rank),
+        )
         for mfr in qs
     ]
 
@@ -221,39 +241,30 @@ locations_router = Router(tags=["locations"])
 
 @locations_router.get("/", response=LocationIndexSchema)
 @decorate_view(cache_control(no_cache=True))
-def list_locations(request: HttpRequest) -> dict[str, Any]:
+def list_locations(request: HttpRequest) -> LocationIndexSchema:
     """Return all countries with their direct children and manufacturer counts."""
     nodes, children_index = _get_location_tree()
 
-    countries: list[dict[str, Any]] = []
+    countries: list[LocationIndexCountry] = []
     for country_path in sorted(
-        children_index.get(None, []), key=lambda p: nodes[p]["name"]
+        children_index.get(None, []), key=lambda p: nodes[p].name
     ):
         country = nodes[country_path]
         children = _children_of(country_path, nodes, children_index)
         countries.append(
-            {
-                "name": country["name"],
-                "slug": country["slug"],
-                "location_path": country_path,
-                "manufacturer_count": len(country["manufacturer_pks"]),
-                "children": [
-                    {
-                        "name": c["name"],
-                        "slug": c["slug"],
-                        "location_path": c["location_path"],
-                        "location_type": c["location_type"],
-                        "manufacturer_count": len(c["manufacturer_pks"]),
-                    }
-                    for c in children
-                ],
-            }
+            LocationIndexCountry(
+                name=country.name,
+                slug=country.slug,
+                location_path=country_path,
+                manufacturer_count=len(country.manufacturer_pks),
+                children=[_to_child_ref(c) for c in children],
+            )
         )
 
-    return {"countries": countries}
+    return LocationIndexSchema(countries=countries)
 
 
-def _get_location_detail(location_path: str) -> dict[str, Any]:
+def _get_location_detail(location_path: str) -> LocationDetailSchema:
     """Shared implementation for all location detail endpoints."""
     nodes, children_index = _get_location_tree()
 
@@ -264,28 +275,19 @@ def _get_location_detail(location_path: str) -> dict[str, Any]:
     ancestors = _ancestors_of(location_path, nodes)
     children = _children_of(location_path, nodes, children_index)
 
-    return {
-        "name": node["name"],
-        "slug": node["slug"],
-        "location_path": location_path,
-        "location_type": node["location_type"],
-        "manufacturer_count": len(node["manufacturer_pks"]),
-        "ancestors": [
-            {"name": a["name"], "slug": a["slug"], "location_path": a["location_path"]}
+    return LocationDetailSchema(
+        name=node.name,
+        slug=node.slug,
+        location_path=location_path,
+        location_type=node.location_type,
+        manufacturer_count=len(node.manufacturer_pks),
+        ancestors=[
+            LocationAncestorRef(name=a.name, slug=a.slug, location_path=a.location_path)
             for a in ancestors
         ],
-        "children": [
-            {
-                "name": c["name"],
-                "slug": c["slug"],
-                "location_path": c["location_path"],
-                "location_type": c["location_type"],
-                "manufacturer_count": len(c["manufacturer_pks"]),
-            }
-            for c in children
-        ],
-        "manufacturers": _get_manufacturers_for_pks(node["manufacturer_pks"]),
-    }
+        children=[_to_child_ref(c) for c in children],
+        manufacturers=_get_manufacturers_for_pks(node.manufacturer_pks),
+    )
 
 
 # Ninja's path converter syntax doesn't support Django's <path:...> wildcard,
@@ -295,21 +297,23 @@ def _get_location_detail(location_path: str) -> dict[str, Any]:
 
 @locations_router.get("/{s1}", response=LocationDetailSchema)
 @decorate_view(cache_control(no_cache=True))
-def get_location_1(request: HttpRequest, s1: str) -> dict[str, Any]:
+def get_location_1(request: HttpRequest, s1: str) -> LocationDetailSchema:
     """Return detail for a single-segment location (e.g. 'usa')."""
     return _get_location_detail(s1)
 
 
 @locations_router.get("/{s1}/{s2}", response=LocationDetailSchema)
 @decorate_view(cache_control(no_cache=True))
-def get_location_2(request: HttpRequest, s1: str, s2: str) -> dict[str, Any]:
+def get_location_2(request: HttpRequest, s1: str, s2: str) -> LocationDetailSchema:
     """Return detail for a two-segment location (e.g. 'usa/il')."""
     return _get_location_detail(f"{s1}/{s2}")
 
 
 @locations_router.get("/{s1}/{s2}/{s3}", response=LocationDetailSchema)
 @decorate_view(cache_control(no_cache=True))
-def get_location_3(request: HttpRequest, s1: str, s2: str, s3: str) -> dict[str, Any]:
+def get_location_3(
+    request: HttpRequest, s1: str, s2: str, s3: str
+) -> LocationDetailSchema:
     """Return detail for a three-segment location (e.g. 'usa/il/chicago')."""
     return _get_location_detail(f"{s1}/{s2}/{s3}")
 
@@ -318,6 +322,6 @@ def get_location_3(request: HttpRequest, s1: str, s2: str, s3: str) -> dict[str,
 @decorate_view(cache_control(no_cache=True))
 def get_location_4(
     request: HttpRequest, s1: str, s2: str, s3: str, s4: str
-) -> dict[str, Any]:
+) -> LocationDetailSchema:
     """Return detail for a four-segment location (e.g. 'france/idf/essonne/marcoussis')."""
     return _get_location_detail(f"{s1}/{s2}/{s3}/{s4}")
