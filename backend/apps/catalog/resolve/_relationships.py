@@ -13,6 +13,7 @@ from typing import NamedTuple, cast
 
 from django.db.models import Model
 
+from apps.core.models import CatalogModel
 from apps.provenance.models import Claim
 
 from .._alias_registry import AliasType, discover_alias_types
@@ -108,7 +109,7 @@ def _resolve_machine_model_m2m(
     )
     if subject_ids is not None:
         claims_qs = claims_qs.filter(object_id__in=subject_ids)
-    claims = claims_qs.order_by(
+    claims = claims_qs.order_by(  # type: ignore[misc]
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
 
@@ -219,7 +220,7 @@ def resolve_all_gameplay_features(
     )
     if subject_ids is not None:
         claims_qs = claims_qs.filter(object_id__in=subject_ids)
-    claims = claims_qs.order_by(
+    claims = claims_qs.order_by(  # type: ignore[misc]
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
 
@@ -349,7 +350,7 @@ def resolve_all_credits(
     )
     if subject_ids is not None:
         credit_qs = credit_qs.filter(object_id__in=subject_ids)
-    credit_claims = credit_qs.order_by(
+    credit_claims = credit_qs.order_by(  # type: ignore[misc]
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
 
@@ -445,7 +446,7 @@ def resolve_all_title_abbreviations(
     )
     if subject_ids is not None:
         abbr_qs = abbr_qs.filter(object_id__in=subject_ids)
-    abbr_claims = abbr_qs.order_by(
+    abbr_claims = abbr_qs.order_by(  # type: ignore[misc]
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
 
@@ -543,7 +544,7 @@ def resolve_all_model_abbreviations(
     )
     if subject_ids is not None:
         abbr_qs = abbr_qs.filter(object_id__in=subject_ids)
-    abbr_claims = abbr_qs.order_by(
+    abbr_claims = abbr_qs.order_by(  # type: ignore[misc]
         "object_id", "claim_key", "-effective_priority", "-created_at"
     )
 
@@ -610,8 +611,33 @@ def resolve_all_model_abbreviations(
 # ------------------------------------------------------------------
 
 
+def _get_alias_rel_info(parent: type[Model]) -> tuple[type[Model], str]:
+    """Return (alias_model, fk_col) for ``parent``'s GenericRelation ``aliases``.
+
+    ``parent.aliases.rel`` — and ``.rel.related_model`` / ``.rel.field.name`` —
+    are attributes of a runtime-generated descriptor that django-stubs can't
+    see.  Confining the ignore to this helper keeps it from leaking into the
+    caller bodies.
+    """
+    rel = parent.aliases.rel  # type: ignore[attr-defined]
+    alias_model: type[Model] = rel.related_model
+    fk_col: str = rel.field.name + "_id"
+    return alias_model, fk_col
+
+
+def _get_parents_through(parent: type[Model]) -> type[Model]:
+    """Return the through model for ``parent``'s self-referential ``parents`` M2M.
+
+    ``parent.parents.through`` is a runtime-generated descriptor (same category
+    as ``_get_alias_rel_info``'s ``.aliases.rel``).  Helper-with-ignore keeps
+    the category-3 ``Any`` leak out of ``_resolve_parents``.
+    """
+    through: type[Model] = parent.parents.through  # type: ignore[attr-defined]
+    return through
+
+
 def _resolve_aliases(
-    parent_model,
+    parent_model: type[Model],
     claim_field_name: str,
 ) -> None:
     """Bulk-resolve alias claims into alias model rows.
@@ -628,15 +654,13 @@ def _resolve_aliases(
     from django.contrib.contenttypes.models import ContentType
 
     # Derive alias model and FK column from the GenericRelation / ForeignKey.
-    rel = parent_model.aliases.rel
-    alias_model = rel.related_model
-    fk_col = rel.field.name + "_id"
+    alias_model, fk_col = _get_alias_rel_info(parent_model)
 
     ct = ContentType.objects.get_for_model(parent_model)
 
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name=claim_field_name)
-    ).order_by("object_id", "claim_key", "-effective_priority", "-created_at")
+    ).order_by("object_id", "claim_key", "-effective_priority", "-created_at")  # type: ignore[misc]
 
     # Pick winners per (object_id, claim_key).
     winners_by_parent: dict[int, list[Claim]] = {}
@@ -663,9 +687,9 @@ def _resolve_aliases(
         desired_by_parent[parent_id] = desired
 
     # Pre-fetch existing alias rows, keyed by lowercase value: {lower → (pk, stored_value)}.
-    all_parent_ids = set(parent_model.objects.values_list("pk", flat=True))
+    all_parent_ids = set(parent_model._default_manager.values_list("pk", flat=True))
     existing_by_parent: dict[int, dict[str, tuple[int, str]]] = {}
-    for row in alias_model.objects.values_list("pk", fk_col, "value"):
+    for row in alias_model._default_manager.values_list("pk", fk_col, "value"):
         pk_val, parent_id, value = row
         existing_by_parent.setdefault(parent_id, {})[value.lower()] = (pk_val, value)
 
@@ -692,13 +716,13 @@ def _resolve_aliases(
                 to_delete_pks.append(alias_pk)
 
     if to_delete_pks:
-        alias_model.objects.filter(pk__in=to_delete_pks).delete()
+        alias_model._default_manager.filter(pk__in=to_delete_pks).delete()
     if to_create:
-        alias_model.objects.bulk_create(
+        alias_model._default_manager.bulk_create(
             to_create, batch_size=2000, ignore_conflicts=True
         )
     for pk, display_val in to_update:
-        alias_model.objects.filter(pk=pk).update(value=display_val)
+        alias_model._default_manager.filter(pk=pk).update(value=display_val)
 
 
 # ---------------------------------------------------------------------------
@@ -747,7 +771,9 @@ def resolve_all_aliases() -> None:
 # ------------------------------------------------------------------
 
 
-def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> None:
+def _resolve_parents(
+    parent_model: type[CatalogModel], *, claim_field_prefix: str | None = None
+) -> None:
     """Resolve parent hierarchy claims into self-referential M2M rows.
 
     Reads {claim_field_prefix}_parent claims on parent_model instances.
@@ -767,7 +793,7 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
 
     claims_qs = _annotate_priority(
         Claim.objects.filter(content_type=ct, field_name=claim_field_name)
-    ).order_by("object_id", "claim_key", "-effective_priority", "-created_at")
+    ).order_by("object_id", "claim_key", "-effective_priority", "-created_at")  # type: ignore[misc]
 
     # Pick winners per (object_id, claim_key).
     winners_by_child: dict[int, list[Claim]] = {}
@@ -800,15 +826,15 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
         desired_by_child[child_id] = desired
 
     # Self-referential M2M through-table columns are from_{model}_id / to_{model}_id.
-    through = parent_model.parents.through
+    through = _get_parents_through(parent_model)
     from_col = f"from_{model_name}_id"
     to_col = f"to_{model_name}_id"
 
     all_child_ids = set(parent_model.objects.values_list("pk", flat=True))
     existing_by_child: dict[int, set[int]] = {}
-    for row in through.objects.filter(**{f"{from_col}__in": all_child_ids}).values_list(
-        from_col, to_col
-    ):
+    for row in through._default_manager.filter(
+        **{f"{from_col}__in": all_child_ids}
+    ).values_list(from_col, to_col):
         existing_by_child.setdefault(row[0], set()).add(row[1])
 
     to_create = []
@@ -821,18 +847,20 @@ def _resolve_parents(parent_model, *, claim_field_prefix: str | None = None) -> 
         for parent_pk in desired - existing:
             to_create.append(through(**{from_col: child_id, to_col: parent_pk}))
 
-    for row in through.objects.filter(**{f"{from_col}__in": all_child_ids}).values_list(
-        "pk", from_col, to_col
-    ):
+    for row in through._default_manager.filter(
+        **{f"{from_col}__in": all_child_ids}
+    ).values_list("pk", from_col, to_col):
         pk, child_id, parent_pk = row
         desired = desired_by_child.get(child_id, set())
         if parent_pk not in desired:
             to_delete_pks.append(pk)
 
     if to_delete_pks:
-        through.objects.filter(pk__in=to_delete_pks).delete()
+        through._default_manager.filter(pk__in=to_delete_pks).delete()
     if to_create:
-        through.objects.bulk_create(to_create, batch_size=2000, ignore_conflicts=True)
+        through._default_manager.bulk_create(
+            to_create, batch_size=2000, ignore_conflicts=True
+        )
 
 
 def resolve_theme_parents() -> None:

@@ -77,7 +77,7 @@ def resolve_media_attachments(
         claims_qs = claims_qs.filter(content_type_id=content_type_id)
     if subject_ids is not None:
         claims_qs = claims_qs.filter(object_id__in=subject_ids)
-    claims = claims_qs.order_by(
+    claims = claims_qs.order_by(  # type: ignore[misc]
         "content_type_id",
         "object_id",
         "claim_key",
