@@ -238,22 +238,32 @@ Scope landed: `citation/api.py` (38 → 0), `citation/url_extraction.py` (7 → 
 
 Baseline: 310 → 261.
 
-## Step 9: `provenance/api`
+## Step 9: `provenance`
+
+> **Partially on hold.** `provenance/api.py` (15) can proceed. `provenance/models/claim.py` (4) should wait — its classification logic (`DIRECT` / `RELATIONSHIP` / `EXTRA` split, `assert_claim`, `classify_claim`) is exactly what the model-driven metadata work reworks. Typing it now against the current shape would be thrown away once [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md) lands and [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) is rewritten. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle.
+
+Scope (19 entries): `provenance/api.py` (15) plus foundational `provenance/models/claim.py` (4, deferred).
+
+### Step 9.1: `provenance/api`
 
 Same pattern as Step 2 — helpers first, endpoints after, `make api-gen` between batches.
 
-Scope (19 entries): `provenance/api.py` (15) plus foundational `provenance/models/claim.py` (4).
+## Step 9.2: `provenance/models`
 
 ## Step 10: `catalog/resolve/*`
 
+> **ON HOLD (except 10.1, which is done).** The resolver package is the primary rewrite target for the model-driven metadata work — three of the six Cluster 1 violations (`M2M_FIELDS`, `_parent_dispatch`, `_custom_dispatch`) live in `catalog/resolve/*` and will be subsumed by [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md). 10.2's registry goes away entirely; 10.3's TypedDicts flip from "mirror the registry" to "consistency-check against model introspection"; 10.4 depends on 10.3. Typing this code against its current shape is wasted effort.
+>
+> Unblocks when [CatalogRelationshipSpec](../model_driven_metadata/ModelDrivenCatalogRelationshipMetadata.md) is finalized, [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) is rewritten against it, and the resolver code has been updated. See [ModelDrivenMetadata.md](../model_driven_metadata/ModelDrivenMetadata.md) for the umbrella principle and [ModelDrivenMetadataPlanning.md](../model_driven_metadata/ModelDrivenMetadataPlanning.md) for current sequencing.
+
 Type the resolver package and clean up adjacent behavior issues surfaced along the way. Each of the following is its own PR.
 
-**Sequencing.** 10.2 → 10.3 → 10.4 is strictly serial — 10.3's TypedDicts mirror 10.2's registry (contract drift must be caught at implementation time, not design time), and 10.4 depends on 10.3's Phase B wiring. 10.1 is independent of 10.2 and 10.3 and can land any time, **but should land before 10.4** — 10.4 flips `.get("location")` → subscript inside the same function 10.1 adds a guard to, so landing 10.1 first avoids a merge-conflict hazard.
+**Sequencing.** 10.2 → 10.3 → 10.4 is strictly serial — 10.3's TypedDicts mirror 10.2's registry (contract drift must be caught at implementation time, not design time), and 10.4 depends on 10.3's Phase B wiring. 10.1 is already done.
 
-- **10.1** — behavior fix, small. `resolve_all_corporate_entity_locations` `exists=False` handling. See [LocationRetractionFix.md](LocationRetractionFix.md). Independent of 10.2 / 10.3; should precede 10.4.
-- **10.2** — behavior fix, larger. Provenance write-path validation tightening. See [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md). Settles the relationship-claim registry contract.
-- **10.3** — typing pass on `catalog/resolve/*`. See [CatalogResolveTyping.md](CatalogResolveTyping.md). Adds TypedDicts mirroring 10.2's registry; wires resolvers with `cast + .get()` (subscript flip deferred to 10.4). Depends on 10.2.
-- **10.4** — subscript flip. See [ResolverReadsTightening.md](ResolverReadsTightening.md). Focused grep-flip, easy to review in isolation. Depends on 10.1 and 10.3.
+- **10.1** — DONE (commit `e1d8886e`). `resolve_all_corporate_entity_locations` `exists=False` handling. See [LocationRetractionFix.md](LocationRetractionFix.md).
+- **10.2** — ON HOLD. Provenance write-path validation tightening. See [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) (which carries its own hold notice). The registry-based design it proposes will be replaced by model-owned `CatalogRelationshipSpec` derivation.
+- **10.3** — ON HOLD. Typing pass on `catalog/resolve/*`. See [CatalogResolveTyping.md](CatalogResolveTyping.md). TypedDicts-mirror-registry premise is invalidated by the model-driven work; the consistency test becomes "TypedDict vs. derived-from-`_meta`-and-spec schema." Depends on 10.2.
+- **10.4** — ON HOLD. Subscript flip. See [ResolverReadsTightening.md](ResolverReadsTightening.md). Depends on 10.3.
 
 Typing scope (~44 mypy entries, cleared in 10.3): `_relationships.py` (18), `_entities.py` (10), `__init__.py` (7), `_helpers.py` (5), `_media.py` (4).
 

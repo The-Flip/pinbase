@@ -1,6 +1,10 @@
 # Location Retraction Fix
 
-Step 10.1 of [MypyFixing.md](MypyFixing.md). Small TDD-first behavior fix: `resolve_all_corporate_entity_locations` currently ignores `exists=False` on `location` claims, so retractions don't retract. Independent of the rest of Step 10 — can land any time.
+Status: **DONE** (commit `e1d8886e`).
+
+Step 10.1 of [MypyFixing.md](MypyFixing.md). Small TDD-first behavior fix: `resolve_all_corporate_entity_locations` previously ignored `exists=False` on `location` claims, so retractions didn't retract. Independent of the rest of Step 10; landed ahead of 10.2/10.3/10.4.
+
+Document kept for historical context. Sections below describe the pre-landing state.
 
 ## Bug
 
