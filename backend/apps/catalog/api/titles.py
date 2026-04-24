@@ -1129,10 +1129,7 @@ def title_delete_preview(request: HttpRequest, slug: str) -> TitleDeletePreviewS
         title_slug=title.slug,
         active_model_count=len(model_pks),
         changeset_count=changeset_count,
-        blocked_by=[
-            BlockingReferrerSchema.model_validate(serialize_blocking_referrer(b))
-            for b in plan.blockers
-        ],
+        blocked_by=[serialize_blocking_referrer(b) for b in plan.blockers],
     )
 
 

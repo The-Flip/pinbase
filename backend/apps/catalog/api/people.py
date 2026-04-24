@@ -383,20 +383,20 @@ def _active_credit_count(person: Person) -> int:
     response=PersonDeletePreviewSchema,
     tags=["private"],
 )
-def person_delete_preview(request: HttpRequest, slug: str) -> dict[str, Any]:
+def person_delete_preview(request: HttpRequest, slug: str) -> PersonDeletePreviewSchema:
     """Return the impact summary used by the delete confirmation screen."""
     person = get_object_or_404(Person.objects.active(), slug=slug)
     plan = plan_soft_delete(person)
     active_credits = _active_credit_count(person)
     is_blocked = plan.is_blocked or active_credits > 0
     changeset_count = 0 if is_blocked else count_entity_changesets(person)
-    return {
-        "person_name": person.name,
-        "person_slug": person.slug,
-        "changeset_count": changeset_count,
-        "active_credit_count": active_credits,
-        "blocked_by": [serialize_blocking_referrer(b) for b in plan.blockers],
-    }
+    return PersonDeletePreviewSchema(
+        person_name=person.name,
+        person_slug=person.slug,
+        changeset_count=changeset_count,
+        active_credit_count=active_credits,
+        blocked_by=[serialize_blocking_referrer(b) for b in plan.blockers],
+    )
 
 
 @people_router.post(

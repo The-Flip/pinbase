@@ -47,6 +47,7 @@ from apps.provenance.models import ChangeSet, ChangeSetAction
 from apps.provenance.schemas import EditCitationInput
 
 from .edit_claims import ClaimSpec, execute_multi_entity_claims
+from .schemas import BlockingReferrerSchema
 
 _UserLike = AbstractBaseUser | AnonymousUser
 
@@ -64,16 +65,16 @@ class BlockingReferrer:
     blocked_target_slug: str | None
 
 
-def serialize_blocking_referrer(ref: BlockingReferrer) -> dict[str, object]:
+def serialize_blocking_referrer(ref: BlockingReferrer) -> BlockingReferrerSchema:
     """Wire format for :class:`BlockingReferrer` used by delete API responses."""
-    return {
-        "entity_type": ref.entity_type,
-        "slug": ref.slug,
-        "name": ref.name,
-        "relation": ref.relation,
-        "blocked_target_type": ref.blocked_target_type,
-        "blocked_target_slug": ref.blocked_target_slug,
-    }
+    return BlockingReferrerSchema(
+        entity_type=ref.entity_type,
+        slug=ref.slug,
+        name=ref.name,
+        relation=ref.relation,
+        blocked_target_type=ref.blocked_target_type,
+        blocked_target_slug=ref.blocked_target_slug,
+    )
 
 
 @dataclass

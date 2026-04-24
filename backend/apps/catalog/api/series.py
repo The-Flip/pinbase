@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import cast
 
 from django.db.models import Count, F, Prefetch, Q, QuerySet
 from django.http import HttpRequest
@@ -116,7 +116,7 @@ series_router = Router(tags=["series"])
 
 @series_router.get("/", response=list[SeriesListSchema])
 @decorate_view(cache_control(no_cache=True))
-def list_series(request: HttpRequest) -> list[dict[str, Any]]:
+def list_series(request: HttpRequest) -> list[SeriesListSchema]:
     """Return all series with title count and thumbnail."""
     qs = (
         Series.objects.active()
@@ -134,7 +134,7 @@ def list_series(request: HttpRequest) -> list[dict[str, Any]]:
         )
     )
     min_rank = get_minimum_display_rank()
-    result: list[dict[str, Any]] = []
+    result: list[SeriesListSchema] = []
     for s in qs:
         thumb = None
         for title in s.titles.all():
@@ -146,13 +146,13 @@ def list_series(request: HttpRequest) -> list[dict[str, Any]]:
             if thumb:
                 break
         result.append(
-            {
-                "name": s.name,
-                "slug": s.slug,
-                "description": _build_rich_text(s, "description"),
-                "title_count": cast(HasTitleCount, s).title_count,
-                "thumbnail_url": thumb,
-            }
+            SeriesListSchema(
+                name=s.name,
+                slug=s.slug,
+                description=_build_rich_text(s, "description"),
+                title_count=cast(HasTitleCount, s).title_count,
+                thumbnail_url=thumb,
+            )
         )
     return result
 

@@ -80,6 +80,7 @@ from .helpers import (
 from .schemas import (
     AlreadyDeletedSchema,
     CreditSchema,
+    EditOptionItem,
     ErrorDetailSchema,
     FranchiseRefSchema,
     GameplayFeatureSchema,
@@ -674,7 +675,7 @@ class ModelRecentSchema(Schema):
 
 @models_router.get("/recent/", response=list[ModelRecentSchema])
 @decorate_view(cache_control(no_cache=True))
-def list_recent_models(request: HttpRequest) -> list[dict[str, Any]]:
+def list_recent_models(request: HttpRequest) -> list[ModelRecentSchema]:
     """Return the 3 newest non-variant models, one per title."""
     qs = (
         MachineModel.objects.active()
@@ -687,7 +688,7 @@ def list_recent_models(request: HttpRequest) -> list[dict[str, Any]]:
         )[:20]  # generous LIMIT — we only need 3 unique titles
     )
     min_rank = get_minimum_display_rank()
-    results: list[dict[str, Any]] = []
+    results: list[ModelRecentSchema] = []
     seen_titles: set[int | None] = set()
     for m in qs:
         title_id = m.title_id
@@ -696,17 +697,17 @@ def list_recent_models(request: HttpRequest) -> list[dict[str, Any]]:
         seen_titles.add(title_id)
         thumbnail_url, _ = _extract_image_urls(m.extra_data or {}, min_rank=min_rank)
         results.append(
-            {
-                "name": m.name,
-                "slug": m.slug,
-                "manufacturer_name": (
+            ModelRecentSchema(
+                name=m.name,
+                slug=m.slug,
+                manufacturer_name=(
                     m.corporate_entity.manufacturer.name
                     if m.corporate_entity and m.corporate_entity.manufacturer
                     else None
                 ),
-                "year": m.year,
-                "thumbnail_url": thumbnail_url,
-            }
+                year=m.year,
+                thumbnail_url=thumbnail_url,
+            )
         )
         if len(results) == 3:
             break
@@ -877,50 +878,50 @@ def list_all_models(
 
 @models_router.get("/edit-options/", response=ModelEditOptionsSchema)
 @decorate_view(cache_control(no_cache=True))
-def get_model_edit_options(request: HttpRequest) -> dict[str, Any]:
+def get_model_edit_options(request: HttpRequest) -> ModelEditOptionsSchema:
     """Return all dropdown options for the MachineModel edit form."""
 
-    def _opts(qs: QuerySet[Any]) -> list[dict[str, str]]:
-        return [{"slug": obj.slug, "label": obj.name} for obj in qs]
+    def _opts(qs: QuerySet[Any]) -> list[EditOptionItem]:
+        return [EditOptionItem(slug=obj.slug, label=obj.name) for obj in qs]
 
-    return {
-        "themes": _opts(Theme.objects.active().order_by("name")),
-        "tags": _opts(Tag.objects.active().order_by("name")),
-        "reward_types": _opts(
+    return ModelEditOptionsSchema(
+        themes=_opts(Theme.objects.active().order_by("name")),
+        tags=_opts(Tag.objects.active().order_by("name")),
+        reward_types=_opts(
             RewardType.objects.active().order_by("display_order", "name")
         ),
-        "gameplay_features": _opts(GameplayFeature.objects.active().order_by("name")),
-        "technology_generations": _opts(
+        gameplay_features=_opts(GameplayFeature.objects.active().order_by("name")),
+        technology_generations=_opts(
             TechnologyGeneration.objects.active().order_by("display_order", "name")
         ),
-        "technology_subgenerations": _opts(
+        technology_subgenerations=_opts(
             TechnologySubgeneration.objects.active().order_by("display_order", "name")
         ),
-        "display_types": _opts(
+        display_types=_opts(
             DisplayType.objects.active().order_by("display_order", "name")
         ),
-        "display_subtypes": _opts(
+        display_subtypes=_opts(
             DisplaySubtype.objects.active().order_by("display_order", "name")
         ),
-        "cabinets": _opts(Cabinet.objects.active().order_by("display_order", "name")),
-        "game_formats": _opts(
+        cabinets=_opts(Cabinet.objects.active().order_by("display_order", "name")),
+        game_formats=_opts(
             GameFormat.objects.active().order_by("display_order", "name")
         ),
-        "systems": _opts(System.objects.active().order_by("name")),
-        "corporate_entities": _opts(CorporateEntity.objects.active().order_by("name")),
-        "people": _opts(Person.objects.active().order_by("name")),
-        "credit_roles": _opts(
+        systems=_opts(System.objects.active().order_by("name")),
+        corporate_entities=_opts(CorporateEntity.objects.active().order_by("name")),
+        people=_opts(Person.objects.active().order_by("name")),
+        credit_roles=_opts(
             CreditRole.objects.active().order_by("display_order", "name")
         ),
-        "titles": _opts(Title.objects.active().order_by("name")),
-        "models": [
-            {
-                "slug": obj.slug,
-                "label": f"{obj.name} ({obj.year})" if obj.year else obj.name,
-            }
+        titles=_opts(Title.objects.active().order_by("name")),
+        models=[
+            EditOptionItem(
+                slug=obj.slug,
+                label=f"{obj.name} ({obj.year})" if obj.year else obj.name,
+            )
             for obj in MachineModel.objects.active().order_by("name")
         ],
-    }
+    )
 
 
 _SELF_REF_FIELDS = frozenset({"variant_of", "converted_from", "remake_of"})
@@ -1019,21 +1020,21 @@ def patch_model_claims(
     response=ModelDeletePreviewSchema,
     tags=["private"],
 )
-def model_delete_preview(request: HttpRequest, slug: str) -> dict[str, Any]:
+def model_delete_preview(request: HttpRequest, slug: str) -> ModelDeletePreviewSchema:
     """Return the impact summary used by the delete confirmation screen."""
     pm = get_object_or_404(
         MachineModel.objects.active().select_related("title"), slug=slug
     )
     plan = plan_soft_delete(pm)
     changeset_count = 0 if plan.is_blocked else count_entity_changesets(pm)
-    return {
-        "model_name": pm.name,
-        "model_slug": pm.slug,
-        "title_name": pm.title.name,
-        "title_slug": pm.title.slug,
-        "changeset_count": changeset_count,
-        "blocked_by": [serialize_blocking_referrer(b) for b in plan.blockers],
-    }
+    return ModelDeletePreviewSchema(
+        model_name=pm.name,
+        model_slug=pm.slug,
+        title_name=pm.title.name,
+        title_slug=pm.title.slug,
+        changeset_count=changeset_count,
+        blocked_by=[serialize_blocking_referrer(b) for b in plan.blockers],
+    )
 
 
 @models_router.post(

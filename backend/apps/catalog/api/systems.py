@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import cast
 
 from django.db import models
 from django.db.models import Count, F, Max, Prefetch, Q, QuerySet
@@ -177,7 +177,7 @@ systems_router = Router(tags=["systems"])
 
 @systems_router.get("/all/", response=list[SystemListSchema])
 @decorate_view(cache_control(no_cache=True))
-def list_all_systems(request: HttpRequest) -> list[dict[str, Any]]:
+def list_all_systems(request: HttpRequest) -> list[SystemListSchema]:
     """Return every system with machine count (no pagination)."""
     qs = (
         System.objects.active()
@@ -192,16 +192,16 @@ def list_all_systems(request: HttpRequest) -> list[dict[str, Any]]:
         .order_by("name")
     )
     return [
-        {
-            "name": s.name,
-            "slug": s.slug,
-            "manufacturer": (
-                {"name": s.manufacturer.name, "slug": s.manufacturer.slug}
+        SystemListSchema(
+            name=s.name,
+            slug=s.slug,
+            manufacturer=(
+                Ref(name=s.manufacturer.name, slug=s.manufacturer.slug)
                 if s.manufacturer
                 else None
             ),
-            "model_count": cast(HasModelCount, s).model_count,
-        }
+            model_count=cast(HasModelCount, s).model_count,
+        )
         for s in qs
     ]
 
