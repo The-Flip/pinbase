@@ -30,11 +30,14 @@ The rule: each orthogonal concern gets its own **typed, narrowly-scoped** class 
 
 Design: [ModelDrivenCatalogRelationshipMetadata.md](ModelDrivenCatalogRelationshipMetadata.md).
 
+### Evaluated and deferred
+
 #### Citation Sources
 
-`CitationSourceSpec` — describes a citation source family (IPDB, OPDB, Fandom); consumed by URL recognition, ingest adapters, the `Citation` model + CHECK constraint, seed data, source-priority ranking, and display/branding.
+A `CitationSourceSpec` was considered for unifying citation-source-family metadata (IPDB, OPDB, Fandom). Deferred — revisit when a 3rd structured-parser source family is imminent. Two reasons, detailed in [ModelDrivenCitationSourceMetadata.md](ModelDrivenCitationSourceMetadata.md):
 
-Design: [ModelDrivenCitationSourceMetadata.md](ModelDrivenCitationSourceMetadata.md).
+- **Not the same shape as `CatalogRelationshipSpec`.** Citation source families aren't models; they're rows in `CitationSource` with per-family behavior (a URL regex and a callable builder). The right pattern is a class-per-family behavior registry with a sidecar data table, not model-owned metadata. It reuses the Shape 3 machinery but isn't an instance of this doc's umbrella principle.
+- **Scale doesn't warrant it yet.** Only 2 structured-parser source families exist today (IPDB, OPDB), and the backend extractor registry already absorbed part of the drift surface. A field audit against the ≥2-consumers rule shrinks the spec to `identifier_key` + `display_name` + URL-recogniser methods — real but narrow ROI.
 
 ### Possible future axes
 
@@ -91,7 +94,7 @@ Rules:
 
 ### Shape 3 — Typed spec + registry-via-introspection
 
-When a structured piece of metadata is consumed by multiple subsystems, or when its absence should fail at startup rather than at first request. This is the pattern proposed for `CatalogRelationshipSpec` and `CitationSourceSpec`.
+When a structured piece of metadata is consumed by multiple subsystems, or when its absence should fail at startup rather than at first request. This is the pattern proposed for `CatalogRelationshipSpec`.
 
 #### Why one typed spec object and not N separate class attrs
 
@@ -120,12 +123,13 @@ Rank-ordering the existing "correct examples" surfaced inconsistencies; this is 
 - **Silver — [`_alias_registry.py`](../../backend/apps/catalog/_alias_registry.py)** — same shape, cleaner caching (`lru_cache`), `NamedTuple` return. But derives identity from `_meta.verbose_name` (fragile) and lacks the explicit `check_apps_ready()` guard. Copy the `lru_cache` + `NamedTuple` ideas; don't copy the verbose_name convention.
 - **Don't copy:** `MEDIA_CATEGORIES` + `MediaSupported` (no discovery helper, no validator); `claim_fk_lookups` (untyped ad-hoc `getattr`); `export_catalog_meta` (different axis — codegen/distribution).
 
-#### Worked examples
+#### Worked example
 
-Two Shape 3 specs are proposed, each in its own sibling doc holding the concrete dataclass, per-model declarations, and derivation function:
+One Shape 3 spec is proposed, in its own sibling doc holding the concrete dataclass, per-model declarations, and derivation function:
 
 - `CatalogRelationshipSpec` → [ModelDrivenCatalogRelationshipMetadata.md](ModelDrivenCatalogRelationshipMetadata.md) (claim-relationship metadata).
-- `CitationSourceSpec` → [ModelDrivenCitationSourceMetadata.md](ModelDrivenCitationSourceMetadata.md) (citation source identity; ownership still open).
+
+A second candidate (`CitationSourceSpec`) was evaluated and deferred — see "Evaluated and deferred" above.
 
 ## Distribution to non-Python consumers
 

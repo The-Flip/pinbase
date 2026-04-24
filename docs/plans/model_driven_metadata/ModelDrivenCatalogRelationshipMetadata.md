@@ -1,6 +1,6 @@
 # Model-Driven Catalog Relationships
 
-Sibling doc to [ModelDrivenMetadata.md](ModelDrivenMetadata.md). The umbrella doc establishes the principle ("Django model is source of truth; one axis, one typed spec"). This doc is the design for the `catalog_relationship_spec` axis — the typed spec that replaces the six drift surfaces catalogued as Cluster 1 in the umbrella.
+Child doc to [ModelDrivenMetadata.md](ModelDrivenMetadata.md). The umbrella doc establishes the principle ("Django model is source of truth; one axis, one typed spec"). This doc is the design for the `catalog_relationship_spec` axis — the typed spec that replaces the six drift surfaces catalogued as Cluster 1 in the umbrella.
 
 ## Scope
 
@@ -24,7 +24,7 @@ Six Cluster 1 violations from [ModelDrivenMetadataViolations.md](ModelDrivenMeta
 - `_parent_dispatch`
 - `_custom_dispatch`
 
-Every one answers the same question in a different dialect: _given a claim namespace, what through-model does it live on, and how do I build/resolve/validate it?_ `CatalogRelationshipSpec` subsumes all six. Bespoke-resolver dispatch state (current `_custom_dispatch` stores `(entity model, resolver function name, id kwarg name)`) is orthogonal to the spec — see "Resolver signature standardization" below.
+Every one answers the same question in a different dialect: _given a claim namespace, what through-model does it live on, and how do I build/resolve/validate it?_ `CatalogRelationshipSpec` subsumes all six. Bespoke-resolver dispatch state (`_custom_dispatch` now stores `(entity model, resolver function name)` after the signature-standardization sweep) is orthogonal to the spec — see "Resolver strategy" below.
 
 ## The spec
 
@@ -76,7 +76,7 @@ Any mismatch raises `ImproperlyConfigured` at startup.
 
 Not currently a field: there's no `extra_value_fields` for claim-payload-only keys that aren't model fields. The original motivating example (`alias_display`) lives on alias models, which are out of scope. Reinstate if a real need emerges inside the through-model set.
 
-There is also no `id_kwarg`. The current `_custom_dispatch` carries a per-resolver kwarg name (`model_ids` vs `entity_ids`) because today's bespoke resolvers were written without a naming convention. That indirection disappears once bespoke resolvers all take `subject_ids`.
+There is also no `id_kwarg`. Previously `_custom_dispatch` carried a per-resolver kwarg name (`model_ids` vs `entity_ids`) because bespoke resolvers were written without a naming convention. That indirection is gone — all bespoke resolvers now take `subject_ids` after the standardization sweep.
 
 ## Prerequisite: promote self-parent M2Ms
 
@@ -90,7 +90,7 @@ The full inventory of catalog-app through-models and their proposed `CatalogRela
 
 ## Resolver strategy
 
-A separate audit of all bespoke resolvers in `backend/apps/catalog/resolve/` showed that the apparent signature diversity is mostly cosmetic: `model_ids` vs `entity_ids` is pure naming; one unused stats-dict return can be dropped; entity-type hardcoding goes away once the dispatcher picks the spec by `(namespace, subject_content_type)`; self-referential column naming disappears once `Theme.parents` and `GameplayFeature.parents` are promoted to explicit through-models.
+A separate audit of all bespoke resolvers in `backend/apps/catalog/resolve/` showed that the apparent signature diversity was mostly cosmetic: `model_ids` vs `entity_ids` was pure naming; one unused stats-dict return could be dropped; entity-type hardcoding goes away once the dispatcher picks the spec by `(namespace, subject_content_type)`; self-referential column naming disappears once `Theme.parents` and `GameplayFeature.parents` are promoted to explicit through-models.
 
 The stronger finding: **most bespoke resolvers disappear entirely** once the generic resolver reads the spec. Theme, tag, reward_type, corporate-entity-location, gameplay_feature (its `count` fits `optional_value_fields`), and the promoted parent through-models all collapse into one spec-driven generic resolver. The only remaining bespoke cases are those with internal semantic logic that can't be expressed declaratively:
 
@@ -99,7 +99,19 @@ The stronger finding: **most bespoke resolvers disappear entirely** once the gen
 
 Possibly one or two more will surface during implementation. Those cases carry `resolver=…` on the spec; everything else defaults to `None` and goes through the generic path.
 
-Cost: a bounded signature-refactor sweep (rename `entity_ids` → `subject_ids`, drop the one unused return, thread the spec into the generic resolver). `_custom_dispatch`, `_parent_dispatch`, and most of `M2M_FIELDS` go away.
+### Status
+
+**Landed** (commit `2eea1ebaf`, "refactor(resolve): standardize bespoke resolvers on subject_ids kwarg"):
+
+- `entity_ids` / `model_ids` → `subject_ids` across all bespoke resolvers.
+- Dropped the unused `dict[str, int]` return from `resolve_all_corporate_entity_locations`.
+- Collapsed `CustomDispatchSpec.id_kwarg_name`; the tuple is now `(entity model, resolver function name)`.
+
+**Still ahead, as part of `CatalogRelationshipSpec` implementation itself:**
+
+- Thread the spec into a generic resolver.
+- Collapse `_custom_dispatch`, `_parent_dispatch`, and most of `M2M_FIELDS`.
+- Promote `Theme.parents` and `GameplayFeature.parents` to explicit through-models (see "Prerequisite" above).
 
 ## Open design questions
 
