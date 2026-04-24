@@ -22,13 +22,17 @@ The rule: each orthogonal concern gets its own **typed, narrowly-scoped** class 
 - `MEDIA_CATEGORIES` — media-supported models only.
 - `entity_type` — `LinkableModel` public identifier.
 
-### Proposed by this doc
+### Evaluated and deferred
 
 #### Catalog Relationships
 
-`CatalogRelationshipSpec` — describes how a through-model maps to a claim namespace + payload; consumed by the claim resolver, provenance validation, and (eventually) frontend edit metadata.
+`CatalogRelationshipSpec` — move catalog through-model relationship metadata onto the model classes. Deferred pending a second independent consumer.
 
-Design: [ModelDrivenCatalogRelationshipMetadata.md](ModelDrivenCatalogRelationshipMetadata.md).
+The acute wins the spec was built to capture — silent-data-loss fixes on the provenance write path, consolidation of `_entity_ref_targets` + `_literal_schemas` + `_relationship_target_registry` into one unified registry, and the identity-vs-`UniqueConstraint` cross-check at startup — are being landed by [ProvenanceValidationTightening.md](../types/ProvenanceValidationTightening.md) as a hand-maintained unified registry. That registry's shape is deliberately spec-compatible: if/when this axis is revived, the migration is mechanical (replace the 17-line registration function body with a walk over a `ClaimThroughModel` marker base that builds the same schema objects from model-declared specs).
+
+By the four-test bar in "Avoiding axis drift" below, CRS doesn't clear today. Current consumers (`classify_claim`, `validate_single_relationship_claim`, `validate_relationship_claims_batch`, `build_relationship_claim`, plus the materialization resolvers) all live on the same backend pipeline — same subsystem, same release cadence. Revisit when frontend edit metadata is actually being built, not hypothetical: different subsystem, different cadence, clears ≥2 consumers unambiguously.
+
+Design as of the deferral: [ModelDrivenCatalogRelationshipMetadata.md](ModelDrivenCatalogRelationshipMetadata.md) (status note on that doc explains what landed in PVT instead).
 
 ### Evaluated and deferred
 
@@ -47,9 +51,20 @@ A `CitationSourceSpec` was considered for unifying citation-source-family metada
 
 ### Avoiding axis drift
 
-Guard against dumping-ground drift: if you want to add a field to an existing spec, ask whether the consumer is the same subsystem the spec was built for. If not, it's a new axis and deserves its own attr. If a field could plausibly live in two specs, put it in the narrower one and let the broader consumer read through.
+Two failure modes to guard against: within-spec drift (a single spec grows grab-bag fields) and across-spec drift (a model accumulates so many specs that the _set of declarations_ is itself the drift surface).
 
-A related temptation: when frontend editing or page behavior gets complicated, it can look attractive to define a per-entity **profile object** that bundles API names, edit affordances, relationship sections, etc. into one UI-facing structure. That is fine _only_ if the profile is a derived view composed from the underlying specs + `_meta`, and stays a narrow UI/API concern. It must not become a second hand-maintained catalog registry. Defer introducing any such layer until the duplication it would eliminate is real, not speculative.
+**Within-spec drift.** If you want to add a field to an existing spec, ask whether the consumer is the same subsystem the spec was built for. If not, it's a new axis and deserves its own attr. If a field could plausibly live in two specs, put it in the narrower one and let the broader consumer read through.
+
+**Across-spec drift — when a new axis is justified.** "One axis, one spec" prevents grab-bag specs but says nothing about axis count. A model carrying six orthogonal specs still accumulates six things-to-remember-when-adding-a-model; the failure mode just moved. A new Shape 3 axis must pass all four tests:
+
+1. **≥2 genuinely independent consumers.** "Validator + dispatcher in the same resolution pipeline" does not count — same subsystem, same read path, same cadence of change. "Backend claim resolver + frontend edit metadata" does — different subsystems, different release cycles.
+2. **Orthogonal to existing axes.** No field overlap; different question answered. If a proposed field could plausibly live on an existing axis, it belongs there — or the slicing between axes is wrong and needs rethinking before adding another.
+3. **Stable shape.** The field set converges as consumers grow, not diverges. If each new consumer adds a field, it's a grab bag in slow motion.
+4. **Alternative explicitly considered.** Before a Shape 3 spec, confirm Shape 1 (pure `_meta` walk) and Shape 2 (single-purpose class attr) genuinely can't do it. Shape 2 handles more than you'd guess.
+
+Meta-norm: no model carries a spec it doesn't apply to. Absence is default; declaration is opt-in per axis.
+
+**Profile objects.** A related temptation: when frontend editing or page behavior gets complicated, it can look attractive to define a per-entity **profile object** that bundles API names, edit affordances, relationship sections, etc. into one UI-facing structure. That is fine _only_ if the profile is a derived view composed from the underlying specs + `_meta`, and stays a narrow UI/API concern. It must not become a second hand-maintained catalog registry. Defer introducing any such layer until the duplication it would eliminate is real, not speculative.
 
 ## How derivation works
 
@@ -120,7 +135,7 @@ Rank-ordering the existing "correct examples" surfaced inconsistencies; this is 
 #### Existing examples, ranked
 
 - **Gold — [`core/entity_types.py`](../../backend/apps/core/entity_types.py)** — class attr + subclass walk + cache + `check_apps_ready()` + duplicate validation + typed return + tight API. Closest template to copy.
-- **Silver — [`_alias_registry.py`](../../backend/apps/catalog/_alias_registry.py)** — same shape, cleaner caching (`lru_cache`), `NamedTuple` return. But derives identity from `_meta.verbose_name` (fragile) and lacks the explicit `check_apps_ready()` guard. Copy the `lru_cache` + `NamedTuple` ideas; don't copy the verbose_name convention.
+- **Silver — [`_alias_registry.py`](../../backend/apps/catalog/_alias_registry.py)** — same shape, cleaner caching (`lru_cache`), `NamedTuple` return. But derives identity from `_meta.verbose_name` (fragile) and lacks the explicit `check_apps_ready()` guard. Copy the `lru_cache` + `NamedTuple` ideas; don't copy the verbose_name convention. Follow-up for when the registry is next touched: replace the verbose_name lookup with an explicit `alias_target: ClassVar[type[Model]]` class attr on each alias model, and add the missing `check_apps_ready()` guard. No full `AliasSpec` axis is warranted — aliases don't have enough metadata to bundle, and the single-consumer Shape 3 machinery already fits; it's just the identity convention that needs fixing. Treat as independent from the `CatalogRelationshipSpec` work.
 - **Don't copy:** `MEDIA_CATEGORIES` + `MediaSupported` (no discovery helper, no validator); `claim_fk_lookups` (untyped ad-hoc `getattr`); `export_catalog_meta` (different axis — codegen/distribution).
 
 #### Worked example
@@ -160,7 +175,3 @@ Rejected because:
 - Retrofitting a generator into an active Django app is a large architectural commitment. The current pain can be addressed incrementally by moving small declarations onto model classes and deriving runtime schemas from `_meta`.
 
 The model-owned metadata approach gets most of the centralization benefit while preserving Django as the actual persistence and relationship authority.
-
-## Planning
-
-For the current plan-of-record — ordering, dependencies, open questions ready to be worked — see [ModelDrivenMetadataPlanning.md](ModelDrivenMetadataPlanning.md). This doc stays time-invariant reference.
