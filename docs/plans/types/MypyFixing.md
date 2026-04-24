@@ -250,16 +250,7 @@ Same pattern as Step 2 — helpers first, endpoints after, `make api-gen` betwee
 
 ## Step 10: `catalog/resolve/*`
 
-Type the resolver package and clean up adjacent behavior issues surfaced along the way. Each of the following is its own PR.
-
-**Sequencing.** 10.2 → 10.3 → 10.4 is strictly serial — 10.3's TypedDicts mirror 10.2's registry (contract drift must be caught at implementation time, not design time), and 10.4 depends on 10.3's Phase B wiring. 10.1 is already done.
-
-- **10.1** — DONE (commit `e1d8886e`). `resolve_all_corporate_entity_locations` `exists=False` handling. See [LocationRetractionFix.md](LocationRetractionFix.md).
-- **10.2** — Provenance write-path validation tightening. See [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md).
-- **10.3** — Typing pass on `catalog/resolve/*`. See [CatalogResolveTyping.md](CatalogResolveTyping.md). Depends on 10.2.
-- **10.4** — Subscript flip. See [ResolverReadsTightening.md](ResolverReadsTightening.md). Depends on 10.3.
-
-Typing scope (~44 mypy entries, cleared in 10.3): `_relationships.py` (18), `_entities.py` (10), `__init__.py` (7), `_helpers.py` (5), `_media.py` (4).
+See [ResolveHardening.md](ResolveHardening.md). Multi-PR sequence that tightens the claim-value contract across the write path, registry, read-path types, and resolver reads. Typing motivation is one of several — the reasoning wins justify the sequence independently — but baseline reduction still counts here: ~44 mypy entries in `catalog/resolve/*` clear across Steps 3–4, plus downstream subscript-flip entries in Step 5.
 
 ## Step 11: `media/*`
 

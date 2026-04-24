@@ -1,29 +1,24 @@
-# Step 10.3: `catalog/resolve/*` typing pass
+# Catalog Resolve Claim-Value Typing
 
-Detailed plan for [Step 10.3 of MypyFixing.md](MypyFixing.md). Step 10.1 is done (commit `e1d8886e`); Step 10.2 lands before this one. Both are tracked in MypyFixing.md, not here.
+Step 3 of [ResolveHardening.md](ResolveHardening.md). Defines the read-side TypedDict vocabulary for claim values in `backend/apps/catalog/resolve/*.py` and wires each resolver to `cast` to its shape. Pure claim-value shape work — helper-signature and tuple-reuse cleanup are moved to Step 4 ([CatalogResolveBaselineCleanup.md](CatalogResolveBaselineCleanup.md)).
 
 ## Context
 
-45 baseline mypy entries in `backend/apps/catalog/resolve/*.py`. The user's stated goal is **not** just burning down entries — it's defining the types _up front_ before wiring, to avoid the reverse-engineering pattern from the catalog-app refactor.
+The user's stated goal is **not** just burning down mypy entries — it's defining the types _up front_ before wiring, to avoid the reverse-engineering pattern from the catalog-app refactor.
 
-The 45 errors cluster into four root causes:
-
-1. **`_annotate_priority(qs)` is untyped** — ~9 `no-untyped-call` errors across every resolver.
-2. **`claim.value` is `object`** (JSONField payload) and is accessed with string keys across ~10 resolvers. Shape knowledge is implicit at every call site.
-3. **Tuple-shape variable reuse** in [\_relationships.py](../../../backend/apps/catalog/resolve/_relationships.py) and [\_media.py](../../../backend/apps/catalog/resolve/_media.py): loop variables get assigned from `values_list(...)` tuples of different arities (or a tuple and a model instance) in the same scope, tripping `Incompatible types in assignment` + `Need more than N values to unpack`.
-4. **Untyped keystone helpers** — `validate_check_constraints`, `_coerce`, `_resolve_fk_generic`, `_sync_markdown_references`, `_resolve_aliases`, `_resolve_parents`, `resolve_entity`, `resolve_all_entities` all missing annotations.
+Today, `claim.value` is `object` (JSONField payload) and is accessed with string keys across ~10 resolvers. Shape knowledge is implicit at every call site. This step makes that knowledge explicit: 7 TypedDicts, one per distinct relationship-claim payload shape, mirrored to the registry Step 2 ([ProvenanceValidationTightening.md](ProvenanceValidationTightening.md)) establishes, with a consistency test enforcing the mirror.
 
 [\_media.py](../../../backend/apps/catalog/resolve/_media.py) is already the cleanest file — 5 NamedTuples in place — and serves as the shape target for the rest.
 
 ## Scope — behavior-preserving
 
-Pure typing cleanup. No resolver logic changes. The only baseline movement is downward.
+Pure typing work. No resolver logic changes. `.get()` reads stay byte-identical — the subscript flip for Required keys is Step 5's work ([ResolverReadsTightening.md](ResolverReadsTightening.md)), not this step's. Helper-signature and tuple-reuse cleanup also stay out — that's Step 4.
 
 ## Prerequisites
 
-[ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) (Step 10.2) lands first. This plan's TypedDicts mirror the registry schemas 10.2 establishes — required/optional/type per value_key must match. Serializing the two steps means the contract is settled at implementation time, not guessed at design time.
+[ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) (Step 2) lands first. This plan's TypedDicts mirror the registry schemas Step 2 establishes — required/optional/type per value_key must match. Serializing the two steps means the contract is settled at implementation time, not guessed at design time.
 
-The TypedDicts mark `exists` and FK keys as Required — that's the post-10.2 wire contract. 10.3's Phase B still reads with `cast + .get()` (not subscript) to keep the runtime-adjacent subscript flip out of this large typing diff — Step 10.4 ([ResolverReadsTightening.md](ResolverReadsTightening.md)) is a focused follow-up that does the flip in isolation.
+The TypedDicts mark `exists` and FK keys as Required — that's the post-Step-2 wire contract. This step still reads with `cast + .get()` (not subscript) to keep the runtime-adjacent subscript flip out of this typing diff — Step 5 does the flip in isolation.
 
 ## Approach
 
@@ -41,15 +36,17 @@ New module `backend/apps/catalog/resolve/_claim_values.py` with **7 TypedDicts**
 | `MediaAttachmentClaimValue` | `resolve_media_attachments`                                          | `media_asset: int`, `exists: bool`         | `category: str \| None`, `is_primary: bool` |
 | `LocationClaimValue`        | `resolve_all_corporate_entity_locations`                             | `location: int`, `exists: bool`            | —                                           |
 
-**`exists` is Required on all 7 TypedDicts.** Post-10.2, [classify_claim](../../../backend/apps/provenance/validation.py#L86) + the shared relationship validator guarantee every relationship-claim row has `exists: bool`.
+**`exists` is Required on all 7 TypedDicts.** Post-Step-2, [classify_claim](../../../backend/apps/provenance/validation.py#L86) + the shared relationship validator guarantee every relationship-claim row has `exists: bool`.
 
-**`LocationClaimValue` is a relationship claim, not DIRECT.** `CorporateEntity` at [manufacturer.py:129](../../../backend/apps/catalog/models/manufacturer.py#L129) has no `location` column; the payload materializes `CorporateEntityLocation` rows. 10.1 (commit `e1d8886e`) added the `exists=False` retraction handling; the TypedDict models the post-10.1 wire shape.
+**`LocationClaimValue` is a relationship claim, not DIRECT.** `CorporateEntity` at [manufacturer.py:129](../../../backend/apps/catalog/models/manufacturer.py#L129) has no `location` column; the payload materializes `CorporateEntityLocation` rows. Step 1 (commit `e1d8886e`) added the `exists=False` retraction handling; the TypedDict models the post-Step-1 wire shape.
 
 **No `M2MClaimValue` TypedDict.** The generic resolver [\_resolve_machine_model_m2m](../../../backend/apps/catalog/resolve/_relationships.py#L86) reads the payload with a runtime key (`val[spec.field_name]`), which TypedDict can't express. Use `Mapping[str, object]` + `type(target_pk) is int` narrowing in that one helper. The field-specific TypedDicts above cover the non-generic relationship resolvers.
 
-**Placement** — `resolve/_claim_values.py` for now. These are read-side only. If a future step types the claim _builders_ in `apps.catalog.claims`, moving the types to `apps.catalog.claims.types` is a rename. (10.2's registry additions for literal schemas live separately from these TypedDicts — the registry is write-side metadata; these are read-side shape names.)
+**Placement** — `resolve/_claim_values.py` for now. These are read-side only. If a future step types the claim _builders_ in `apps.catalog.claims`, moving the types to `apps.catalog.claims.types` is a rename.
 
-**Consistency test.** Add a unit test in `backend/apps/catalog/resolve/tests/test_claim_values.py` (new file) that iterates each TypedDict in `_claim_values.py`, looks up the matching `RelationshipSchema` from `provenance.validation.get_relationship_schema(namespace)`, and asserts the key sets + types + required/optional flags match. Catches TypedDict-vs-schema drift at test time rather than leaving it to bite at runtime during Step 10.4's subscript flip. This is the single mechanism that makes "two hand-maintained shapes" drift-proof.
+**Consistency test.** Add a unit test in `backend/apps/catalog/resolve/tests/test_claim_values.py` (new file) that iterates each TypedDict in `_claim_values.py`, looks up the matching `RelationshipSchema` from `provenance.validation.get_relationship_schema(namespace)`, and asserts the key sets + types + required/optional flags match. Catches TypedDict-vs-schema drift at test time rather than leaving it to bite at runtime during Step 5's subscript flip.
+
+**Limit of the consistency test — state it explicitly.** The test proves that _each defined TypedDict_ matches its registry namespace. It does NOT prove that every resolver uses the _right_ TypedDict for the namespace it's resolving. A resolver writing `cast(CreditClaimValue, claim.value)` on a `theme` claim would pass mypy and pass this test. That gap is fixable (e.g. a namespace→TypedDict dispatch) but not in scope; for now, the cast site itself is the editorial checkpoint.
 
 **Done when:** `_claim_values.py` exists, the consistency test passes, mypy + tests pass, no baseline delta.
 
@@ -64,7 +61,7 @@ Per-resolver-family commits in this order (smallest blast radius first):
 5. `_relationships.py` aliases + parents — `_resolve_aliases` → `AliasClaimValue`, `_resolve_parents` → `ParentClaimValue`.
 6. `_relationships.py` CE locations — `resolve_all_corporate_entity_locations` → `LocationClaimValue`.
 
-**`cast` names the shape; keep every `.get()`.** Defensive reads for required keys stay in place — the write-path validator won't guarantee them until 10.2 lands, and flipping `.get("person")` to `val["person"]` would turn a legacy malformed row into a KeyError mid-bulk-resolve. `cast` is documentation-only for now; Step 10.4 of MypyFixing.md does the subscript flip once 10.2's runtime guarantees are in place.
+**`cast` names the shape; keep every `.get()`.** Defensive reads for required keys stay in place — flipping `.get("person")` to `val["person"]` would turn any pre-Step-2 row into a KeyError mid-bulk-resolve. `cast` is documentation-only for now; Step 5 does the subscript flip once Step 2's runtime guarantees are in place _and_ the post-Step-2 wipe + re-ingest has rebuilt stored rows.
 
 ```python
 val = cast(CreditClaimValue, claim.value)
@@ -83,98 +80,50 @@ category = val.get("category")
 is_primary = val.get("is_primary", False)
 ```
 
-The TypedDict Required/NotRequired split still encodes the true post-10.2 wire shape — that's what mypy sees when it checks `val.get("person")` (returns `int | None` here because `.get()` without default widens the type). Callers doing `if person_pk is None: continue` or `if person_pk not in valid_person_pks` narrow from there, same as today.
+The TypedDict Required/NotRequired split still encodes the true post-Step-2 wire shape — that's what mypy sees when it checks `val.get("person")` (returns `int | None` here because `.get()` without default widens the type). Callers doing `if person_pk is None: continue` or `if person_pk not in valid_person_pks` narrow from there, same as today.
 
-**Done when:** each resolver has `cast(<Schema>, claim.value)` at the top of its loop body. Every existing `.get()` call, skip-on-None check, and PK-validity narrow stays byte-identical — the subscript flip for Required keys is Step 10.4's work, not Phase B's.
-
-### Phase C — Type keystone helpers
-
-Annotate in callee-before-caller order:
-
-- [\_helpers.py](../../../backend/apps/catalog/resolve/_helpers.py): `validate_check_constraints(obj: models.Model) -> None`; `_coerce(model_class: type[models.Model], attr: str, value: object) -> object`; `_resolve_fk_generic(..., value: object, ...)`; **`_annotate_priority(qs: QuerySet[Claim]) -> QuerySet[Claim]`** (kills ~9 `no-untyped-call` errors). Only [\_media.py:181](../../../backend/apps/catalog/resolve/_media.py#L181) reads `effective_priority`, and it already uses `cast(HasEffectivePriority, claim)` — keep it.
-- [\_entities.py](../../../backend/apps/catalog/resolve/_entities.py): `_sync_markdown_references(obj: models.Model)`; `_resolve_single(obj: models.Model, ...)`; `_resolve_bulk(model_class: type[models.Model], ...)`; `resolve_entity(obj: models.Model) -> models.Model`; `resolve_all_entities(model_class: type[models.Model], *, object_ids: set[int] | None = None)`. Flip `extra_data: dict | None = {} if has_extra_data else None` to `JsonBody | None` — both locals mutate the dict, so the covariant `JsonData = Mapping[str, object]` is wrong; invariant `JsonBody = dict[str, object]` is correct per [core/types.py:19-20](../../../backend/apps/core/types.py#L19).
-- [\_relationships.py](../../../backend/apps/catalog/resolve/_relationships.py): `_resolve_aliases(parent_model: type[models.Model], claim_field_name: str)`; `_resolve_parents(parent_model: type[models.Model], *, claim_field_prefix: str | None = None)`. Reverse-relation accessors (`parent_model.aliases.rel`, `parent_model.parents.through`) are category-#3 `Any` per the idiom — Django's descriptor API genuinely discards the info. Confine the ignores to two small helpers:
-  - `_get_alias_rel_info(parent: type[models.Model]) -> tuple[type[models.Model], str]` — returns `(alias_model, fk_col)` from `parent.aliases.rel` with a single `# type: ignore[attr-defined]` + comment naming the GenericRelation reverse-accessor constraint.
-  - `_get_parents_through(parent: type[models.Model]) -> type[models.Model]` — returns `parent.parents.through`, same pattern.
-
-  A Protocol can't express `parents.through` (or the `.rel.field.name` path), so helper-with-ignore is the minimum-touch option; scattering the ignores across `_resolve_aliases` / `_resolve_parents` loop bodies would be easier to accidentally normalize.
-
-- [\_\_init\_\_.py](../../../backend/apps/catalog/resolve/__init__.py): the `dict | None` / `dict` generics on `sfl_map`, `extra_data`, `_apply_resolution` signatures.
-
-**Done when:** every function in `resolve/` has a full signature; `no-untyped-call` entries on `_annotate_priority` are gone across all five files.
-
-### Phase D — Clean up tuple-reuse in `_relationships.py` and `_media.py`
-
-Two files, same pattern: a loop variable gets assigned from `values_list(...)` with one tuple arity and then reassigned in a later scope (either a different values_list, or a model instance from `in_bulk`). Mypy locks in the first-seen type and flags every divergence.
-
-- `_relationships.py` — baseline lines 81–92 and siblings. ~6 loops across `_resolve_machine_model_m2m`, `resolve_all_gameplay_features`, `resolve_all_credits`, both abbreviation resolvers, `_resolve_aliases`, `_resolve_parents`. `resolve_all_gameplay_features` in particular has the same tuple-vs-instance collision as `_media.py`: [line 253-258](../../../backend/apps/catalog/resolve/_relationships.py#L253) uses `row` for a `values_list` tuple, then [line 294](../../../backend/apps/catalog/resolve/_relationships.py#L294) reassigns `row = rows[pk]` to a `MachineModelGameplayFeature` instance and writes `row.count = count` — this triggers three baseline entries (`[assignment]`, `[method-assign]`, second `[assignment]`) that all collapse when the inner-loop local is renamed (`mgf_row` or similar). Same rename-the-inner-local fix as `_media.py`, not just the inline-unpack fix.
-- `_media.py` — baseline entries at [\_media.py:244-250](../../../backend/apps/catalog/resolve/_media.py#L244) (values_list row) colliding with [\_media.py:293](../../../backend/apps/catalog/resolve/_media.py#L293) (`row = rows[update.row_pk]` — the `EntityMedia` instance). Rename the inner-loop local (`media_row` or similar).
-
-Fix by inline-unpacking the tuple at the loop header and renaming any colliding inner-scope reuse:
-
-```python
-# before
-for row in MachineModelGameplayFeature.objects.filter(...).values_list(
-    "pk", "machinemodel_id", "gameplayfeature_id", "count"
-):
-    pk, mid, fk_id, count = row
-    ...
-
-# after
-for pk, mid, fk_id, count in MachineModelGameplayFeature.objects.filter(...).values_list(
-    "pk", "machinemodel_id", "gameplayfeature_id", "count"
-):
-    ...
-```
-
-Order after Phase C so collateral `no-untyped-call` errors are already gone.
-
-**Done when:** baseline for `resolve/_relationships.py` and `resolve/_media.py` is zero.
+**Done when:** each resolver has `cast(<Schema>, claim.value)` at the top of its loop body. Every existing `.get()` call, skip-on-None check, and PK-validity narrow stays byte-identical.
 
 ## Ordering
 
-A → B → C → D.
-
-- A is independent, small, reviewable.
-- B depends on A (needs the TypedDicts to exist).
-- C is technically independent of A/B but sequenced here so C's collateral errors don't mask B review.
-- D after C (C removes the `no-untyped-call` noise that otherwise clutters D's diff).
+A → B. A is independent, small, reviewable. B depends on A.
 
 ## Critical files
 
 - `backend/apps/catalog/resolve/_claim_values.py` — **new**, the vocabulary module.
-- `backend/apps/catalog/resolve/_helpers.py` — `_annotate_priority` annotation is the keystone.
-- `backend/apps/catalog/resolve/_relationships.py` — 915 lines, bulk of the wiring + tuple cleanup.
-- `backend/apps/catalog/resolve/_entities.py`, `_media.py`, `__init__.py` — smaller wiring passes.
+- `backend/apps/catalog/resolve/_relationships.py` — bulk of the wiring.
+- `backend/apps/catalog/resolve/_media.py`, `_entities.py`, `__init__.py` — smaller wiring passes.
+- `backend/apps/catalog/resolve/tests/test_claim_values.py` — **new**, consistency test.
 
 ## Reuse
 
-- `JsonBody` from [apps/core/types.py](../../../backend/apps/core/types.py) — invariant `dict[str, object]` alias for mutable JSON-shaped dicts. Use for `extra_data` locals and signatures that build up the dict. `JsonData` (covariant `Mapping[str, object]`) is for read-only params; don't use it where the code assigns into the dict.
 - `HasEffectivePriority` from [apps/provenance/typing.py](../../../backend/apps/provenance/typing.py) — existing protocol, one read site in `_media.py` keeps its `cast`.
 - `ClaimIdentity` / `EntityKey` from [apps/core/types.py](../../../backend/apps/core/types.py) — already used in `_media.py`; carry the pattern.
-- NamedTuple shapes in `_media.py` (`CtInfo`, `PrimaryCandidate`, `AttachmentTimestamp`, `MediaRowState`, `EntityCategoryKey`) — the template for any incidental tuple-shape cleanup that falls out of Phase D.
+- NamedTuple shapes in `_media.py` (`CtInfo`, `PrimaryCandidate`, `AttachmentTimestamp`, `MediaRowState`, `EntityCategoryKey`) — the template for any incidental tuple-shape cleanup that falls out.
 
 ## Non-goals
 
-- Not introducing dataclass factories or Pydantic Schemas for claim values. Rejected: once 10.2 lands, the write path validates every shape; a read-side validator would be a second source of truth with no correctness win. Until 10.2 lands, the existing `.get()`-based defensive reads already do minimal shape checking at the read side.
+- Not introducing dataclass factories or Pydantic Schemas for claim values. Rejected: once Step 2 lands, the write path validates every shape; a read-side validator would be a second source of truth with no correctness win.
 - Not refactoring `_resolve_single` / `_resolve_bulk` / `_apply_resolution` architecturally.
-- Not consolidating the three parallel M2M / abbreviation / alias diff-and-apply patterns — larger refactor, out of mypy scope.
+- Not consolidating the three parallel M2M / abbreviation / alias diff-and-apply patterns — larger refactor, out of scope.
+- Not touching helper signatures or tuple-reuse cleanup — those are Step 4 ([CatalogResolveBaselineCleanup.md](CatalogResolveBaselineCleanup.md)).
+- Not flipping required-key reads to subscript — that's Step 5 ([ResolverReadsTightening.md](ResolverReadsTightening.md)).
+- Not closing the cast-site correctness gap (wrong TypedDict for the namespace being resolved). Acknowledged in the Phase A consistency-test note.
 
 ## Verification
 
-- `./scripts/mypy` — expect baseline `new: 0` at every phase, `fixed: >0` at B/C/D.
+- `./scripts/mypy` — expect baseline `new: 0`.
   - After A: unchanged baseline (no wiring).
-  - After C: the ~9 `no-untyped-call` entries on `_annotate_priority` gone; `no-untyped-def` entries on `_helpers.py` / `_entities.py` gone.
-  - After D: `_relationships.py` and `_media.py` baselines at zero.
-- `uv run --directory backend pytest apps/catalog/tests/test_resolve*.py apps/catalog/tests/test_bulk_resolve*.py` — behavior-preserving; all resolver tests pass.
+  - After B: claim-value-shape entries on resolver files cleared; helper-signature + tuple-reuse entries still outstanding (Step 4 clears those).
+- `uv run --directory backend pytest apps/catalog/tests/test_resolve*.py apps/catalog/tests/test_bulk_resolve*.py apps/catalog/resolve/tests/test_claim_values.py` — behavior-preserving plus the new consistency test.
 - `make ingest` end-to-end — exercises real bulk-resolution paths against R2 data. Not gating, but the natural integration test.
 - After each phase, sync baseline with `uv run --directory backend mypy --config-file pyproject.toml . 2>&1 | uv run --directory backend mypy-baseline sync` once `./scripts/mypy` reports `new: 0`.
 
 ## Design decisions locked in after review
 
-- **TypedDicts (not dataclass factories or Pydantic Schemas).** Read-side shape documentation only; zero runtime cost. Factories would duplicate write-path validation (post-10.2).
-- **`cast` is documentation-only in 10.3.** `.get()` stays everywhere, required and optional alike. Subscript flip for required keys happens in Step 10.4 after [ProvenanceValidationTightening.md](ProvenanceValidationTightening.md) lands.
+- **TypedDicts (not dataclass factories or Pydantic Schemas).** Read-side shape documentation only; zero runtime cost. Factories would duplicate write-path validation (post-Step-2).
+- **`cast` is documentation-only in this step.** `.get()` stays everywhere, required and optional alike. Subscript flip for required keys happens in Step 5.
 - **`exists` is Required on all 7 TypedDicts.**
 - **No `M2MClaimValue` TypedDict.** Generic M2M resolver uses `Mapping[str, object]` + `isinstance`.
-- **Introspection confined to helpers.** `_get_alias_rel_info` and `_get_parents_through` isolate the `# type: ignore[attr-defined]` to one line each.
 - **TypedDicts live in `resolve/_claim_values.py` for now.** Move to `apps.catalog.claims.types` later if claim builders get typed.
+- **Consistency test does not cover cast-site correctness.** See Phase A note — that gap is acknowledged and not closed here.
