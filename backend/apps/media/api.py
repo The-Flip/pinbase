@@ -307,7 +307,7 @@ def upload_media(
     )
 
 
-@media_router.post("/detach/", response={200: None}, auth=django_auth)
+@media_router.post("/detach/", response={204: None}, auth=django_auth)
 def detach_media(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
     """Detach a media asset from an entity by asserting an exists=False claim."""
     user = authed_user(request)
@@ -353,10 +353,10 @@ def detach_media(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
                 partial(_delete_media_storage_after_commit, storage_keys)
             )
 
-    return Status(200, None)
+    return Status(204, None)
 
 
-@media_router.post("/set-primary/", response={200: None}, auth=django_auth)
+@media_router.post("/set-primary/", response={204: None}, auth=django_auth)
 def set_primary(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
     """Set a media asset as primary for its category on an entity."""
     user = authed_user(request)
@@ -394,7 +394,7 @@ def set_primary(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
             subject_ids={entity.pk},
         )
 
-    return Status(200, None)
+    return Status(204, None)
 
 
 routers = [
