@@ -524,3 +524,29 @@ class TestResolveCorporateEntityLocations:
         resolve_all_corporate_entity_locations()
 
         assert CorporateEntityLocation.objects.count() == 2
+
+
+@pytest.mark.django_db
+class TestResolveEntitySlugConflictGuard:
+    def test_slug_change_not_reverted_when_slug_field_not_unique(self):
+        """resolve_entity must not silently revert a slug change when the
+        model's slug field is not globally unique (e.g. Location, where
+        slug is unique-per-location_path only).
+        """
+        from apps.catalog.resolve._entities import resolve_entity
+
+        editorial = Source.objects.create(
+            name="The Flip Editorial", source_type="editorial", priority=100
+        )
+        Location.objects.create(location_path="usa/il/springfield", slug="springfield")
+        target = Location.objects.create(location_path="usa/oh/oldslug", slug="oldslug")
+
+        Claim.objects.assert_claim(target, "slug", "springfield", source=editorial)
+
+        # Bypass the dispatcher so the bug is reachable without widening
+        # resolve_entity's signature; the type ignore goes away in step 7
+        # of plans/types/ClaimControlledEntity.md.
+        resolve_entity(target)  # type: ignore[type-var]
+        target.refresh_from_db()
+
+        assert target.slug == "springfield"

@@ -287,11 +287,17 @@ def resolve_entity[T: CatalogModel](obj: T) -> T:
     # Single-object slug conflict guard — only slug gets silent revert.
     # Other unique fields (e.g. name) rely on save() → IntegrityError
     # which execute_claims() catches and returns as 422.
-    # django-stubs checks the ``slug=`` filter keyword against the model's
-    # declared fields; abstract CatalogModel._meta lists none.  The concrete
-    # subclass always has slug.  See plans/types/ClaimControlledEntity.md.
+    # Skip when slug isn't globally unique (e.g. Location, where slug is
+    # unique-per-location_path); mirrors the bulk path's has_unique_slug
+    # check.  django-stubs checks the ``slug=`` filter keyword against the
+    # model's declared fields; abstract CatalogModel._meta lists none.  The
+    # concrete subclass always has slug.  See plans/types/ClaimControlledEntity.md.
+    slug_field = model_class._meta.get_field("slug") if "slug" in fields else None
+    slug_is_unique = slug_field is not None and bool(
+        getattr(slug_field, "unique", False)
+    )
     if (
-        "slug" in fields
+        slug_is_unique
         and obj.slug
         and obj.slug != original_slug
         and model_class.objects.filter(slug=obj.slug)  # type: ignore[misc]
