@@ -2,6 +2,9 @@
   import client from '$lib/api/client';
   import { createAsyncLoader } from '$lib/async-loader.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
+  import EditSectionMenu from '$lib/components/EditSectionMenu.svelte';
+  import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
+  import { auth } from '$lib/auth.svelte';
   import { resolveHref } from '$lib/utils';
   import { pageTitle } from '$lib/constants';
 
@@ -12,6 +15,16 @@
     },
     { countries: [] },
   );
+
+  $effect(() => {
+    void auth.load();
+  });
+
+  const actionItems: EditSectionMenuItem[] = [
+    { key: 'new', label: '+ New Country', href: resolveHref('/locations/new') },
+  ];
+
+  let showActionMenu = $derived(auth.isAuthenticated && !locations.loading && !locations.error);
 </script>
 
 <svelte:head>
@@ -20,9 +33,18 @@
 </svelte:head>
 
 <article>
-  <PageHeader title="Locations" --page-header-title-mb="0">
-    <p class="subtitle">Browse pinball manufacturers by country, state, and city.</p>
-  </PageHeader>
+  <div class="page-head">
+    <div class="page-head-title">
+      <PageHeader title="Locations" --page-header-title-mb="0">
+        <p class="subtitle">Browse pinball manufacturers by country, state, and city.</p>
+      </PageHeader>
+    </div>
+    {#if showActionMenu}
+      <div class="page-actions">
+        <EditSectionMenu items={actionItems} />
+      </div>
+    {/if}
+  </div>
 
   {#if locations.loading}
     <p class="status">Loading...</p>
@@ -62,6 +84,22 @@
 <style>
   article {
     max-width: 48rem;
+  }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--size-4);
+  }
+
+  .page-head-title {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-actions {
+    flex-shrink: 0;
   }
 
   .subtitle {
