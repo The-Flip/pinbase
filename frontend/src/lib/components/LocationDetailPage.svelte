@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
+  import StatusMessage from '$lib/components/StatusMessage.svelte';
   import type { Crumb } from '$lib/components/Breadcrumb.svelte';
   import TwoColumnLayout from '$lib/components/TwoColumnLayout.svelte';
   import CardGrid from '$lib/components/grid/CardGrid.svelte';
@@ -53,7 +54,7 @@
       --page-header-mb="var(--size-5)"
       --page-header-title-mb="var(--size-2)"
     />
-    <p class="status error">Failed to load location.</p>
+    <StatusMessage variant="error">Failed to load location.</StatusMessage>
   {:else}
     <PageHeader
       title={heading}
@@ -74,11 +75,3 @@
     </TwoColumnLayout>
   {/if}
 </article>
-
-<style>
-  .status.error {
-    color: var(--color-error);
-    text-align: center;
-    padding: var(--size-8) 0;
-  }
-</style>

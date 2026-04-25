@@ -2,6 +2,7 @@
   import client from '$lib/api/client';
   import { createAsyncLoader } from '$lib/async-loader.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
+  import StatusMessage from '$lib/components/StatusMessage.svelte';
   import EditSectionMenu from '$lib/components/EditSectionMenu.svelte';
   import type { EditSectionMenuItem } from '$lib/components/edit-section-menu';
   import { auth } from '$lib/auth.svelte';
@@ -44,11 +45,11 @@
   {/snippet}
 
   {#if locations.loading}
-    <p class="status">Loading...</p>
+    <StatusMessage variant="loading">Loading...</StatusMessage>
   {:else if locations.error}
-    <p class="status error">Failed to load locations.</p>
+    <StatusMessage variant="error">Failed to load locations.</StatusMessage>
   {:else if locations.data.countries.length === 0}
-    <p class="status">No locations found.</p>
+    <StatusMessage variant="empty">No locations found.</StatusMessage>
   {:else}
     <div class="countries">
       {#each locations.data.countries as country (country.location_path)}
@@ -138,16 +139,5 @@
     font-size: var(--font-size-0);
     color: var(--color-text-muted);
     font-weight: 400;
-  }
-
-  .status {
-    font-size: var(--font-size-2);
-    color: var(--color-text-muted);
-    padding: var(--size-8) 0;
-    text-align: center;
-  }
-
-  .status.error {
-    color: var(--color-error);
   }
 </style>
