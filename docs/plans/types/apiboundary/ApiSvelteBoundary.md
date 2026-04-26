@@ -15,17 +15,12 @@ isn't worth fighting.
 
 ## Direction
 
-Clear structural deletions first (Pre-work), then stand up the
-re-export barrel and ESLint guardrail so later sweeps stay small.
+Stand up the re-export barrel and ESLint guardrail so later sweeps stay small.
 Close the real correctness gap (typed error responses). Rename
 schemas at the source so backend, OpenAPI, and frontend share one
 vocabulary. Pin the resulting conventions with tests.
 
 ## Tasks
-
-### Pre-work
-
-See [ApiSvelteBoundaryPrework.md](ApiSvelteBoundaryPrework.md).
 
 ### Document rationalized API names
 

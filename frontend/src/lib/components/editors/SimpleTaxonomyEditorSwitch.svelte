@@ -58,7 +58,7 @@
 {:else if sectionKey === 'display-order'}
   <DisplayOrderEditor
     bind:this={editorRef}
-    initialData={initialData.display_order}
+    initialData={initialData.display_order ?? null}
     {slug}
     save={saveClaims}
     {onsaved}

@@ -3,6 +3,7 @@
   import TaxonomyDetailBaseLayout from '$lib/components/TaxonomyDetailBaseLayout.svelte';
   import {
     SIMPLE_TAXONOMY_EDIT_SECTIONS,
+    type SimpleTaxonomyEditSectionDef,
     type SimpleTaxonomyEditSectionKey,
   } from '$lib/components/editors/simple-taxonomy-edit-sections';
   import SimpleTaxonomyEditorSwitch from '$lib/components/editors/SimpleTaxonomyEditorSwitch.svelte';
@@ -17,6 +18,7 @@
     claimsPath,
     deleteHref,
     createChild,
+    sections: sectionsProp = SIMPLE_TAXONOMY_EDIT_SECTIONS,
     children,
   }: {
     profile: SimpleTaxonomyEditView;
@@ -26,13 +28,15 @@
     claimsPath: SimpleTaxonomyClaimsPath;
     deleteHref?: string;
     createChild?: { href: string; label: string };
+    /** Override the default section list. Defaults to all 3 simple-taxonomy
+     * sections; pass a subset to omit sections that don't apply. */
+    sections?: SimpleTaxonomyEditSectionDef[];
     children: Snippet;
   } = $props();
 
-  let sections = SIMPLE_TAXONOMY_EDIT_SECTIONS.map((section) => ({
-    ...section,
-    usesSectionEditorForm: true,
-  }));
+  let sections = $derived(
+    sectionsProp.map((section) => ({ ...section, usesSectionEditorForm: true })),
+  );
 </script>
 
 <TaxonomyDetailBaseLayout

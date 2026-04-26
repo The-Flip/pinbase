@@ -3,6 +3,7 @@
   import {
     defaultSimpleTaxonomySectionSegment,
     SIMPLE_TAXONOMY_EDIT_SECTIONS,
+    type SimpleTaxonomyEditSectionDef,
     type SimpleTaxonomyEditSectionKey,
   } from '$lib/components/editors/simple-taxonomy-edit-sections';
   import SimpleTaxonomyEditorSwitch from '$lib/components/editors/SimpleTaxonomyEditorSwitch.svelte';
@@ -13,16 +14,17 @@
     profile,
     basePath,
     claimsPath,
+    sections: sectionsProp = SIMPLE_TAXONOMY_EDIT_SECTIONS,
   }: {
     profile: SimpleTaxonomyEditView;
     basePath: string;
     claimsPath: SimpleTaxonomyClaimsPath;
+    sections?: SimpleTaxonomyEditSectionDef[];
   } = $props();
 
-  const sections = SIMPLE_TAXONOMY_EDIT_SECTIONS.map((section) => ({
-    ...section,
-    usesSectionEditorForm: true,
-  }));
+  let sections = $derived(
+    sectionsProp.map((section) => ({ ...section, usesSectionEditorForm: true })),
+  );
 </script>
 
 <TaxonomyEditSectionPageBase
