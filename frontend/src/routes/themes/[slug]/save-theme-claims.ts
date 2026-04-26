@@ -1,6 +1,7 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import { parseApiError, type SaveResult } from '$lib/components/editors/save-claims-shared';
+import { parseApiError } from '$lib/api/parse-api-error';
+import type { SaveResult } from '$lib/components/editors/save-claims-shared';
 import type { HierarchicalTaxonomySectionPatchBody } from '$lib/components/editors/hierarchical-taxonomy-edit-types';
 
 export async function saveThemeClaims(

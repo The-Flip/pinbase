@@ -17,11 +17,9 @@ isn't worth fighting.
 
 Clear structural deletions first (Pre-work), then stand up the
 re-export barrel and ESLint guardrail so later sweeps stay small.
-Move `parseApiError` to its right home before the error-contract
-work extends it. Close the real correctness gap (typed error
-responses). Rename schemas at the source so backend, OpenAPI, and
-frontend share one vocabulary. Pin the resulting conventions with
-tests.
+Close the real correctness gap (typed error responses). Rename
+schemas at the source so backend, OpenAPI, and frontend share one
+vocabulary. Pin the resulting conventions with tests.
 
 ## Tasks
 
@@ -51,16 +49,6 @@ consumers to named imports before the rename starts, so each rename
 commit's frontend changes are small identifier swaps rather than
 indexed-access rewrites. Pair with an ESLint guardrail banning
 `components['schemas']` outside `client.ts` and `types.ts`.
-
-### Move `parseApiError` to `$lib/api/`
-
-`parseApiError` lives at `frontend/src/lib/components/editors/save-claims-shared.ts`
-but is general-purpose API error parsing — not claims-specific, not
-editor-specific. Move it next to `client.ts` and update its callers.
-
-Trivial in itself, but worth doing before _Type error responses_
-because the error contract work will extend or simplify it, and we
-don't want to edit it in its wrong location first.
 
 ### Type error responses
 
