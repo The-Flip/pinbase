@@ -29,7 +29,7 @@ from apps.provenance.rate_limits import (
     DELETE_RATE_LIMIT_SPEC,
     check_and_record,
 )
-from apps.provenance.schemas import RichTextSchema
+from apps.provenance.schemas import ChangeSetInputSchema, RichTextSchema
 
 from ..cache import PEOPLE_ALL_KEY, get_cached_response, set_cached_response
 from ..models import Credit, MachineModel, Person
@@ -52,11 +52,9 @@ from .helpers import (
 from .schemas import (
     AlreadyDeletedSchema,
     ClaimPatchSchema,
-    PersonCreateSchema,
+    CreateSchema,
     PersonDeletePreviewSchema,
     PersonDeleteResponseSchema,
-    PersonDeleteSchema,
-    PersonRestoreSchema,
     PersonSoftDeleteBlockedSchema,
     RelatedTitleSchema,
 )
@@ -315,7 +313,7 @@ def patch_person_claims(
     tags=["private"],
 )
 def create_person(
-    request: HttpRequest, data: PersonCreateSchema
+    request: HttpRequest, data: CreateSchema
 ) -> Status[PersonDetailSchema]:
     """Create a new Person from a user-supplied name and slug.
 
@@ -426,7 +424,7 @@ def person_delete_preview(request: HttpRequest, slug: str) -> PersonDeletePrevie
     tags=["private"],
 )
 def delete_person(
-    request: HttpRequest, slug: str, data: PersonDeleteSchema
+    request: HttpRequest, slug: str, data: ChangeSetInputSchema
 ) -> (
     PersonDeleteResponseSchema
     | Status[PersonSoftDeleteBlockedSchema | AlreadyDeletedSchema]
@@ -493,7 +491,7 @@ def delete_person(
     tags=["private"],
 )
 def restore_person(
-    request: HttpRequest, slug: str, data: PersonRestoreSchema
+    request: HttpRequest, slug: str, data: ChangeSetInputSchema
 ) -> PersonDetailSchema | Status[ErrorDetailSchema]:
     """Write a fresh ``status=active`` claim on a soft-deleted Person.
 

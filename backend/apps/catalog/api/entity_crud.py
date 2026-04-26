@@ -8,9 +8,10 @@ response schema) are injected as callables so the same helpers can wire
 routes for taxonomy entities *and* the richer Theme / GameplayFeature /
 Series / Franchise / System schemas without duplicating code.
 
-Public schema class names keep the ``Taxonomy`` prefix for OpenAPI
-stability — consumers already depend on
-``TaxonomyDeletePreviewSchema`` and ``TaxonomyDeleteResponseSchema``.
+Create / delete / restore inputs use the shared ``CreateSchema`` and
+``ChangeSetInputSchema`` from the catalog/provenance schema modules; only
+the preview and response shapes (``TaxonomyDeletePreviewSchema``,
+``TaxonomyDeleteResponseSchema``) are entity-specific to this module.
 """
 
 from __future__ import annotations
@@ -35,7 +36,7 @@ from apps.provenance.rate_limits import (
     DELETE_RATE_LIMIT_SPEC,
     check_and_record,
 )
-from apps.provenance.schemas import EditCitationInput
+from apps.provenance.schemas import ChangeSetInputSchema
 
 from .edit_claims import ClaimSpec, execute_claims
 from .entity_create import (
@@ -48,6 +49,7 @@ from .entity_create import (
 from .schemas import (
     AlreadyDeletedSchema,
     BlockingReferrerSchema,
+    CreateSchema,
     SoftDeleteBlockedSchema,
 )
 from .soft_delete import (
@@ -59,25 +61,8 @@ from .soft_delete import (
 )
 
 # ---------------------------------------------------------------------------
-# Schemas — names kept stable for OpenAPI consumers.
+# Schemas
 # ---------------------------------------------------------------------------
-
-
-class TaxonomyCreateSchema(Schema):
-    name: str
-    slug: str
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class TaxonomyDeleteSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class TaxonomyRestoreSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
 class TaxonomyDeletePreviewSchema(Schema):
@@ -179,7 +164,7 @@ def register_entity_delete_restore[ModelT: CatalogModel, SchemaT: Schema](
     )(_delete_preview)
 
     def _delete(
-        request: HttpRequest, slug: str, data: TaxonomyDeleteSchema
+        request: HttpRequest, slug: str, data: ChangeSetInputSchema
     ) -> (
         TaxonomyDeleteResponseSchema
         | Status[SoftDeleteBlockedSchema | AlreadyDeletedSchema]
@@ -247,7 +232,7 @@ def register_entity_delete_restore[ModelT: CatalogModel, SchemaT: Schema](
     )(_delete)
 
     def _restore(
-        request: HttpRequest, slug: str, data: TaxonomyRestoreSchema
+        request: HttpRequest, slug: str, data: ChangeSetInputSchema
     ) -> SchemaT | Status[ErrorDetailSchema]:
         check_and_record(request.user, CREATE_RATE_LIMIT_SPEC)
 
@@ -348,7 +333,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
 
     def _do_create(
         request: HttpRequest,
-        data: TaxonomyCreateSchema,
+        data: CreateSchema,
         parent: CatalogModel | None = None,
     ) -> Status[Any]:
         check_and_record(request.user, CREATE_RATE_LIMIT_SPEC)
@@ -398,7 +383,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
         assert parent_model is not None
 
         def _create_parented(
-            request: HttpRequest, parent_slug: str, data: TaxonomyCreateSchema
+            request: HttpRequest, parent_slug: str, data: CreateSchema
         ) -> Status[Any]:
             parent = get_object_or_404(parent_model.objects.active(), slug=parent_slug)
             return _do_create(request, data, parent=parent)
@@ -412,9 +397,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
         )(_create_parented)
     else:
 
-        def _create_unparented(
-            request: HttpRequest, data: TaxonomyCreateSchema
-        ) -> Status[Any]:
+        def _create_unparented(request: HttpRequest, data: CreateSchema) -> Status[Any]:
             return _do_create(request, data)
 
         _create_unparented.__name__ = f"{entity_label.lower()}_create"

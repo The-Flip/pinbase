@@ -7,7 +7,7 @@ from typing import Any
 from ninja import Schema
 from pydantic import ConfigDict
 
-from apps.provenance.schemas import EditCitationInput
+from apps.provenance.schemas import ChangeSetInputSchema
 
 
 class Ref(Schema):
@@ -17,30 +17,31 @@ class Ref(Schema):
     slug: str
 
 
-class ClaimPatchSchema(Schema):
+class CreateSchema(ChangeSetInputSchema):
+    """Base shape for catalog entity create operations."""
+
+    name: str
+    slug: str
+
+
+class ClaimPatchSchema(ChangeSetInputSchema):
     # ``fields`` maps claim-field name → new value. Values are polymorphic per
     # field (str, int, bool, slug string for FK-backed claims, None) and are
     # validated downstream by ``validate_claim_value``; no fixed TypedDict.
     fields: dict[str, Any]
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
-class HierarchyClaimPatchSchema(Schema):
+class HierarchyClaimPatchSchema(ChangeSetInputSchema):
     # See ClaimPatchSchema.fields — polymorphic per claim field, validated downstream.
     fields: dict[str, Any] = {}
     parents: list[str] | None = None
     aliases: list[str] | None = None
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
-class CorporateEntityClaimPatchSchema(Schema):
+class CorporateEntityClaimPatchSchema(ChangeSetInputSchema):
     # See ClaimPatchSchema.fields — polymorphic per claim field, validated downstream.
     fields: dict[str, Any] = {}
     aliases: list[str] | None = None
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
 class GameplayFeatureInput(Schema):
@@ -53,7 +54,7 @@ class CreditInput(Schema):
     role: str
 
 
-class ModelClaimPatchSchema(Schema):
+class ModelClaimPatchSchema(ChangeSetInputSchema):
     # See ClaimPatchSchema.fields — polymorphic per claim field, validated downstream.
     fields: dict[str, Any] = {}
     themes: list[str] | None = None
@@ -62,15 +63,6 @@ class ModelClaimPatchSchema(Schema):
     gameplay_features: list[GameplayFeatureInput] | None = None
     credits: list[CreditInput] | None = None
     abbreviations: list[str] | None = None
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class ModelCreateSchema(Schema):
-    name: str
-    slug: str
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
 class BlockingReferrerSchema(Schema):
@@ -135,16 +127,6 @@ class PersonSoftDeleteBlockedSchema(Schema):
     active_credit_count: int = 0
 
 
-class ModelDeleteSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class ModelRestoreSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
 class ModelDeletePreviewSchema(Schema):
     model_name: str
     model_slug: str
@@ -157,23 +139,6 @@ class ModelDeletePreviewSchema(Schema):
 class ModelDeleteResponseSchema(Schema):
     changeset_id: int
     affected_models: list[str]
-
-
-class PersonCreateSchema(Schema):
-    name: str
-    slug: str
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class PersonDeleteSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
-
-
-class PersonRestoreSchema(Schema):
-    note: str = ""
-    citation: EditCitationInput | None = None
 
 
 class PersonDeletePreviewSchema(Schema):
@@ -217,11 +182,6 @@ class ModelEditOptionsSchema(Schema):
     models: list[EditOptionItem]
 
 
-class ThemeSchema(Schema):
-    name: str
-    slug: str
-
-
 class TitleMachineVariantSchema(Schema):
     """A variant of a machine model, shown nested under its parent."""
 
@@ -253,9 +213,7 @@ class RelatedTitleSchema(Schema):
     thumbnail_url: str | None = None
 
 
-class TitleRefSchema(Schema):
-    name: str
-    slug: str
+class TitleRefSchema(Ref):
     abbreviations: list[str] = []
     model_count: int = 0
     manufacturer_name: str | None = None  # display-only, no paired slug
@@ -263,25 +221,8 @@ class TitleRefSchema(Schema):
     thumbnail_url: str | None = None
 
 
-class SeriesRefSchema(Schema):
-    name: str
-    slug: str
-
-
-class GameplayFeatureSchema(Schema):
-    name: str
-    slug: str
+class GameplayFeatureSchema(Ref):
     count: int | None = None
-
-
-class RewardTypeSchema(Schema):
-    name: str
-    slug: str
-
-
-class FranchiseRefSchema(Schema):
-    name: str
-    slug: str
 
 
 class CreditSchema(Schema):
