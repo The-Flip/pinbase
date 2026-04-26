@@ -153,24 +153,12 @@ class DeletePreviewBase(Schema):
     blocked_by: list[BlockingReferrerSchema] = []
 
 
-class ParentedDeletePreviewSchema(DeletePreviewBase):
-    """Delete-preview for entities that nest under another entity.
-
-    ``parent`` is optional at this level because some subclasses (taxonomy)
-    cover both leaf and parented entities through the same shape. Subclasses
-    that always have a parent tighten the field to required.
-    """
-
-    parent: Ref | None = None
-
-
-class ModelDeletePreviewSchema(ParentedDeletePreviewSchema):
-    # Every MachineModel has a Title parent — tighten the base's optional
-    # ``parent`` to required so the wire contract matches the producer.
+class ModelDeletePreviewSchema(DeletePreviewBase):
     parent: Ref
 
 
-class TaxonomyDeletePreviewSchema(ParentedDeletePreviewSchema):
+class TaxonomyDeletePreviewSchema(DeletePreviewBase):
+    parent: Ref | None = None
     # 0 on leaf entities; non-zero only for parents (tech-gen, display-type)
     # whose active children would block the delete.
     active_children_count: int = 0
