@@ -6,10 +6,10 @@
  * response schemas for page-level imports.
  */
 import { createDeleteSubmitter } from '$lib/delete-flow';
-import type { components } from '$lib/api/schema';
+import type { TitleDeletePreviewSchema, TitleDeleteResponseSchema } from '$lib/api/schema';
 
-export type DeletePreview = components['schemas']['TitleDeletePreviewSchema'];
-export type DeleteResponse = components['schemas']['TitleDeleteResponseSchema'];
+export type DeletePreview = TitleDeletePreviewSchema;
+export type DeleteResponse = TitleDeleteResponseSchema;
 
 export type { DeleteOutcome } from '$lib/delete-flow';
 

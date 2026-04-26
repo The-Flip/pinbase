@@ -1,8 +1,8 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import type { components } from '$lib/api/schema';
+  import type { CreditSchema } from '$lib/api/schema';
 
-  type Credit = components['schemas']['CreditSchema'];
+  type Credit = CreditSchema;
 
   let { credits, showHeading = true }: { credits: Credit[]; showHeading?: boolean } = $props();
 

@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { FieldChangeSchema } from '$lib/api/schema';
 
-type FieldChange = components['schemas']['FieldChangeSchema'];
+type FieldChange = FieldChangeSchema;
 
 /**
  * Type guard: true when both old and new values are strings and at least one

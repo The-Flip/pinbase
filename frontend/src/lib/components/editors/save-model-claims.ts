@@ -8,13 +8,13 @@
 
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import type { components } from '$lib/api/schema';
+import type { ModelClaimPatchSchema } from '$lib/api/schema';
 import { parseApiError } from '$lib/api/parse-api-error';
 import type { SaveMeta, SaveResult } from './save-claims-shared';
 
 export type { SaveMeta, SaveResult };
 
-type ModelClaimsBody = components['schemas']['ModelClaimPatchSchema'];
+type ModelClaimsBody = ModelClaimPatchSchema;
 
 /**
  * Body keys that section editors may include in a PATCH.

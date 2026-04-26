@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { SystemDetailSchema } from '$lib/api/schema';
 
 export type SystemEditView = Pick<
-  components['schemas']['SystemDetailSchema'],
+  SystemDetailSchema,
   'name' | 'slug' | 'description' | 'manufacturer' | 'technology_subgeneration'
 >;

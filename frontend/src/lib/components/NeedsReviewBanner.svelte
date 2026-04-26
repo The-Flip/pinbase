@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { ReviewLinkSchema } from '$lib/api/schema';
   import { resolveHref } from '$lib/utils';
 
-  type ReviewLink = components['schemas']['ReviewLinkSchema'];
+  type ReviewLink = ReviewLinkSchema;
 
   let { notes, links }: { notes: string; links: ReviewLink[] } = $props();
 </script>

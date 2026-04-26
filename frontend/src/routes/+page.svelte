@@ -8,9 +8,9 @@
   import MetaTags from '$lib/components/MetaTags.svelte';
   import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import type { components } from '$lib/api/schema';
+  import type { ModelRecentSchema } from '$lib/api/schema';
 
-  type RecentModel = components['schemas']['ModelRecentSchema'];
+  type RecentModel = ModelRecentSchema;
 
   let searchQuery = $state('');
   let recentModels = $state<RecentModel[]>([]);

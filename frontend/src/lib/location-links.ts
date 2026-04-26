@@ -1,6 +1,4 @@
-import type { components } from '$lib/api/schema';
-
-type CorporateEntityLocationSchema = components['schemas']['CorporateEntityLocationSchema'];
+import type { CorporateEntityLocationSchema } from '$lib/api/schema';
 
 export type LocationPart = {
   text: string;

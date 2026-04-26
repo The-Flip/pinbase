@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { ChangeSetSummarySchema } from '$lib/api/schema';
 
-type ChangeSetSummary = components['schemas']['ChangeSetSummarySchema'];
+type ChangeSetSummary = ChangeSetSummarySchema;
 
 /** Build a human-readable summary like "3 changes including 1 retraction". */
 export function changesLabel(

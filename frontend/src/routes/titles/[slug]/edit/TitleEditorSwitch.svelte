@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { TitleDetailSchema } from '$lib/api/schema';
   import DescriptionEditor from '$lib/components/editors/DescriptionEditor.svelte';
   import NameEditor from '$lib/components/editors/NameEditor.svelte';
   import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
@@ -8,7 +8,7 @@
   import TitleFranchiseEditor from '$lib/components/editors/TitleFranchiseEditor.svelte';
   import TitleExternalDataEditor from '$lib/components/editors/TitleExternalDataEditor.svelte';
 
-  type TitleDetail = components['schemas']['TitleDetailSchema'];
+  type TitleDetail = TitleDetailSchema;
 
   let {
     sectionKey,

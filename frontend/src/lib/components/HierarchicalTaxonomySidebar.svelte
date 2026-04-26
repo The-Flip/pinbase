@@ -3,9 +3,7 @@
   import SidebarList from '$lib/components/SidebarList.svelte';
   import SidebarListItem from '$lib/components/SidebarListItem.svelte';
   import SidebarSection from '$lib/components/SidebarSection.svelte';
-  import type { components } from '$lib/api/schema';
-
-  type Ref = components['schemas']['Ref'];
+  import type { Ref } from '$lib/api/schema';
 
   let {
     basePath,

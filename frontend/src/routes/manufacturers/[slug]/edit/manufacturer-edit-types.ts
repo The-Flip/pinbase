@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { ManufacturerDetailSchema } from '$lib/api/schema';
 
 export type ManufacturerEditView = Pick<
-  components['schemas']['ManufacturerDetailSchema'],
+  ManufacturerDetailSchema,
   'name' | 'slug' | 'website' | 'logo_url' | 'description'
 >;

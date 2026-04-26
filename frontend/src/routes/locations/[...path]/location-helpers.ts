@@ -1,7 +1,7 @@
-import type { components } from '$lib/api/schema';
+import type { LocationChildRef, LocationDetailSchema } from '$lib/api/schema';
 
-export type LocationDetail = components['schemas']['LocationDetailSchema'];
-export type LocationChild = components['schemas']['LocationChildRef'];
+export type LocationDetail = LocationDetailSchema;
+export type LocationChild = LocationChildRef;
 
 export const CHILD_TYPE_LABELS: Record<string, string> = {
   country: 'Countries',

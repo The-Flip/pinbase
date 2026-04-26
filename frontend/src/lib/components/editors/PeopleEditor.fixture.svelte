@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { CreditSchema } from '$lib/api/schema';
   import PeopleEditor from './PeopleEditor.svelte';
 
-  type Credit = components['schemas']['CreditSchema'];
+  type Credit = CreditSchema;
 
   let {
     initialData = [],

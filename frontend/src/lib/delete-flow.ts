@@ -11,11 +11,11 @@
  */
 import client from '$lib/api/client';
 import { parseApiError } from '$lib/api/parse-api-error';
-import type { components } from '$lib/api/schema';
+import type { BlockingReferrerSchema } from '$lib/api/schema';
 import type { EditCitationSelection } from '$lib/edit-citation';
 import { buildEditCitationRequest } from '$lib/edit-citation';
 
-export type BlockingReferrer = components['schemas']['BlockingReferrerSchema'];
+export type BlockingReferrer = BlockingReferrerSchema;
 
 export type DeleteOutcome<TResponse> =
   | { kind: 'ok'; data: TResponse }

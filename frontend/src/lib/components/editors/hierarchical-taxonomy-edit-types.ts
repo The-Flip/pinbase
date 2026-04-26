@@ -1,6 +1,4 @@
-import type { components } from '$lib/api/schema';
-
-type RichTextSchema = components['schemas']['RichTextSchema'];
+import type { RichTextSchema } from '$lib/api/schema';
 
 /**
  * Structural superset of GameplayFeatureDetailSchema and ThemeDetailSchema —

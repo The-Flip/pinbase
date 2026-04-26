@@ -1,12 +1,12 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import type { components } from '$lib/api/schema';
+import type { ClaimPatchSchema } from '$lib/api/schema';
 import { parseApiError } from '$lib/api/parse-api-error';
 import type { SaveMeta, SaveResult } from '$lib/components/editors/save-claims-shared';
 
 export type { SaveMeta, SaveResult };
 
-type ManufacturerClaimsBody = components['schemas']['ClaimPatchSchema'];
+type ManufacturerClaimsBody = ClaimPatchSchema;
 
 type ManufacturerSectionPatchBody = Partial<
   Pick<ManufacturerClaimsBody, 'fields' | 'note' | 'citation'>

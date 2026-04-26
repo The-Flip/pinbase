@@ -5,20 +5,25 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
 import { parseApiError, type FieldErrors } from '$lib/api/parse-api-error';
-import type { components, paths } from '$lib/api/schema';
+import type {
+  ClaimPatchSchema,
+  EditCitationInput,
+  HierarchyClaimPatchSchema,
+  paths,
+} from '$lib/api/schema';
 
 /** Metadata that the modal passes through to an editor's save(). */
 export type SaveMeta = {
   note?: string;
-  citation?: components['schemas']['EditCitationInput'];
+  citation?: EditCitationInput;
 };
 
 export type SaveResult =
   | { ok: true; updatedSlug?: string }
   | { ok: false; error: string; fieldErrors: FieldErrors };
 
-type ClaimsBody = components['schemas']['ClaimPatchSchema'];
-type HierarchyClaimsBody = components['schemas']['HierarchyClaimPatchSchema'];
+type ClaimsBody = ClaimPatchSchema;
+type HierarchyClaimsBody = HierarchyClaimPatchSchema;
 
 export type SimpleTaxonomySectionPatchBody = Partial<
   Pick<ClaimsBody, 'fields' | 'note' | 'citation'>

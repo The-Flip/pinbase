@@ -2,11 +2,11 @@
   import { invalidateAll } from '$app/navigation';
   import { detachMedia, setPrimary } from '$lib/api/media-api';
   import { MEDIA_CATEGORIES } from '$lib/api/catalog-meta';
-  import type { components } from '$lib/api/schema';
+  import type { UploadedMediaSchema } from '$lib/api/schema';
   import MediaUploadZone from '$lib/components/media/MediaUploadZone.svelte';
   import MediaGrid from '$lib/components/media/MediaGrid.svelte';
 
-  type UploadedMedia = components['schemas']['UploadedMediaSchema'];
+  type UploadedMedia = UploadedMediaSchema;
   type MediaEntityKey = keyof typeof MEDIA_CATEGORIES;
 
   let {

@@ -1,9 +1,7 @@
 <script lang="ts">
   import { resolveHref } from '$lib/utils';
   import AccordionSection from '$lib/components/AccordionSection.svelte';
-  import type { components } from '$lib/api/schema';
-
-  type Ref = components['schemas']['Ref'];
+  import type { Ref } from '$lib/api/schema';
 
   let {
     basePath,

@@ -4,11 +4,11 @@
 
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import type { components } from '$lib/api/schema';
+import type { TitleClaimPatchSchema } from '$lib/api/schema';
 import { parseApiError } from '$lib/api/parse-api-error';
 import type { SaveResult } from './save-claims-shared';
 
-type TitleClaimsBody = components['schemas']['TitleClaimPatchSchema'];
+type TitleClaimsBody = TitleClaimPatchSchema;
 
 export type TitleSectionPatchBody = Partial<
   Pick<TitleClaimsBody, 'fields' | 'abbreviations' | 'note' | 'citation'>

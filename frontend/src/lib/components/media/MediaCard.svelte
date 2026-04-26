@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { UploadedMediaSchema } from '$lib/api/schema';
 
-  type UploadedMedia = components['schemas']['UploadedMediaSchema'];
+  type UploadedMedia = UploadedMediaSchema;
 
   let {
     asset,

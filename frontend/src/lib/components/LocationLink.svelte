@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { CorporateEntityLocationSchema } from '$lib/api/schema';
   import { buildLocationParts } from '$lib/location-links';
   import { resolveHref } from '$lib/utils';
 
   let {
     loc,
   }: {
-    loc: components['schemas']['CorporateEntityLocationSchema'];
+    loc: CorporateEntityLocationSchema;
   } = $props();
 
   type Part = { text: string; href?: string };

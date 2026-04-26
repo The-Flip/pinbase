@@ -1,12 +1,12 @@
 import { invalidateAll } from '$app/navigation';
 import client from '$lib/api/client';
-import type { components } from '$lib/api/schema';
+import type { CorporateEntityClaimPatchSchema } from '$lib/api/schema';
 import { parseApiError } from '$lib/api/parse-api-error';
 import type { SaveMeta, SaveResult } from '$lib/components/editors/save-claims-shared';
 
 export type { SaveMeta, SaveResult };
 
-type CorporateEntityClaimsBody = components['schemas']['CorporateEntityClaimPatchSchema'];
+type CorporateEntityClaimsBody = CorporateEntityClaimPatchSchema;
 
 type CorporateEntitySectionPatchBody = Partial<
   Pick<CorporateEntityClaimsBody, 'fields' | 'aliases' | 'note' | 'citation'>

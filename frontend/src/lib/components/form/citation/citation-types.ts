@@ -1,17 +1,23 @@
-import type { components } from '$lib/api/schema';
+import type {
+  CitationSourceChildSchema,
+  CitationSourceSearchSchema,
+  ExtractDraftSchema,
+  RecognitionSchema,
+  SearchResponse,
+} from '$lib/api/schema';
 import type { createApiClient } from '$lib/api/client';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type CitationSourceResult = components['schemas']['CitationSourceSearchSchema'];
-export type ChildSource = components['schemas']['CitationSourceChildSchema'];
-export type RecognitionResult = components['schemas']['RecognitionSchema'];
-export type SearchResponse = components['schemas']['SearchResponse'];
+export type CitationSourceResult = CitationSourceSearchSchema;
+export type ChildSource = CitationSourceChildSchema;
+export type RecognitionResult = RecognitionSchema;
+export type { SearchResponse };
 
 /** Draft metadata returned by the extract endpoint (Open Library, etc.). */
-export type ExtractionDraft = components['schemas']['ExtractDraftSchema'];
+export type ExtractionDraft = ExtractDraftSchema;
 
 /** Subset of a search result carried through the state machine after selecting an abstract source. */
 export type ParentContext = {

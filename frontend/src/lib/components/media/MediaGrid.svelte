@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { UploadedMediaSchema } from '$lib/api/schema';
   import MediaCard from './MediaCard.svelte';
   import MediaLightbox from './MediaLightbox.svelte';
 
-  type UploadedMedia = components['schemas']['UploadedMediaSchema'];
+  type UploadedMedia = UploadedMediaSchema;
 
   const BATCH_SIZE = 100;
 

@@ -72,23 +72,36 @@ Commit scripts and the JSON map so reviewers can re-run the transform after reba
 
 **Script behavior** (`sweep-indexed-access.mjs`):
 
-1. Find every `components[<q>schemas<q>][<q>Name<q>]` reference (where `<q>` is `'` or `"`) in `frontend/src/**/*.{ts,svelte,svelte.ts}`. Skip `frontend/src/lib/api/client.ts` (the only legitimate consumer of indexed access). Empirically every real-source occurrence today uses single quotes — the double-quote form only appears in generated `schema.d.ts` — but accepting both costs nothing and prevents a silent miss.
-2. For each unique `Name` referenced in a file, add it to a `import type { … } from '$lib/api/schema'` block. No existing named-import blocks today (confirmed below), so this just creates a new block; the script still needs to dedupe across multiple references to the same `Name` within one file.
+1. Find every `components[<q>schemas<q>][<q>Name<q>]` reference (where `<q>` is `'` or `"`) in `frontend/src/**/*.{ts,svelte,svelte.ts}`. Skip `frontend/src/lib/api/client.ts` (the only legitimate consumer of indexed access). Empirically every real-source occurrence today uses single quotes — the double-quote form only appears in generated `schema.d.ts` — but accepting both costs nothing and prevents a silent miss. The match must be **prefix-only**: rewrite the `components['schemas']['Name']` chunk to bare `Name` and leave any trailing index/property chains (`['field']`, `[number]`, `[keyof …]`) untouched. A bare identifier is valid TypeScript in every position the original indexed access was, so further chains continue to type-check unchanged. Verified greenfield today (zero such chains in real source — every consumer stops at `['Name']`), but the prefix-only rule keeps the script correct if one ever appears.
+2. For each unique `Name` referenced in a file, add it to a `import type { … } from '$lib/api/schema'` block. No existing named-import blocks today (confirmed below), so this just creates a new block; the script still needs to dedupe across multiple references to the same `Name` within one file. The script must also accept `from './schema'` — one file ([frontend/src/lib/api/media-api.ts](../../../../frontend/src/lib/api/media-api.ts)) imports relatively because it lives next to `schema.d.ts` — and preserve whichever spelling the file already uses (don't canonicalize paths; out of scope).
 3. Rewrite the indexed-access reference to bare `Name`.
-4. If, after the rewrites, the file no longer contains a word-boundary match for `components` outside the import line itself, remove `components` from the import specifier list. **Specifier-level, not line-level**: one file ([frontend/src/lib/components/editors/save-claims-shared.ts](../../../../frontend/src/lib/components/editors/save-claims-shared.ts)) has `import type { components, paths } from '$lib/api/schema'` — it must become `import type { paths } from '$lib/api/schema'`, not be deleted. Drop the whole line only when `components` was the sole specifier.
+4. If, after the rewrites, the file no longer contains an identifier-position reference to `components` outside the import line itself, remove `components` from the import specifier list. **Specifier-level, not line-level**: one file ([frontend/src/lib/components/editors/save-claims-shared.ts](../../../../frontend/src/lib/components/editors/save-claims-shared.ts)) has `import type { components, paths } from '$lib/api/schema'` — it must become `import type { paths } from '$lib/api/schema'`, not be deleted. Drop the whole line only when `components` was the sole specifier. **Heuristic gotcha**: a naive `\bcomponents\b` test produces false positives on unrelated import paths like `'$lib/components/Foo.svelte'`, where `components` is a directory name in a string literal, not an identifier. Narrow the check to identifier-position uses — e.g. `\bcomponents\s*[\[\.,>]` — or strip import lines before testing.
 5. **Insertion point** for the new `import type { … } from '$lib/api/schema'`: after the last existing import in the script block / file. Prettier reorders imports anyway, so exact placement matters less than producing a syntactically valid file for the type-checker to consume.
 6. **Idempotence**: re-running the script on a fully-converted tree is a no-op (no indexed-access matches → no rewrites). This makes "rebase, re-run, commit" safe.
+7. **Format after rewriting**: run `cd frontend && pnpm format` once the codemod finishes. The string-based rewrites leave noisy whitespace and the new `import type { … }` line is unsorted relative to existing imports. Without this step the diff is polluted and the pre-commit hook would rewrite the files anyway. Same rationale as the per-app PR loop ([below](#run-order)).
 
 For `.svelte` files, transform only the contents of `<script lang="ts">…</script>` blocks (markup never references generated types). Every `.svelte` file in the repo uses `lang="ts"`. `.svelte.ts` files are plain TypeScript and are transformed as-is.
 
-**Scope today**: ~853 indexed-access call sites across ~86 files (verified via grep). Zero files currently use named imports from `$lib/api/schema` — confirmed greenfield. There are 5+ `.svelte.ts` files in `frontend/src/lib/`; the file glob includes them.
+**Self-named alias collapse** — required pre-pass. Several files declare `type X = components['schemas']['X'];` (or `export type X = components['schemas']['X'];`) where the alias name on the LHS matches the schema name on the RHS. After the bare-name rewrite this becomes `type X = X;` — a self-reference that TypeScript flags as a circular type. The script must detect this pattern up front and:
+
+- **Non-exported** (`type X = components['schemas']['X'];`) — delete the line. The bare `X` is now imported by name; the local alias was redundant.
+- **Exported** (`export type X = components['schemas']['X'];`) — replace with `export type { X };`. The import block brings `X` into scope and the bare re-export preserves the module's public surface for downstream consumers.
+
+Detect with a regex requiring the LHS identifier and the RHS schema name to be **the same captured group** (back-reference), so renaming aliases like `type Model = components['schemas']['MachineModelDetailSchema'];` are left to the regular rewrite (they become `type Model = MachineModelDetailSchema`, which is fine). Eight files in the current tree hit this pattern: `field-constraints.ts`, `location-links.ts`, one alias in `citation-types.ts`, three hierarchical-taxonomy svelte files (`Ref`), and two taxonomy-edit-types files (`RichTextSchema`).
+
+This pre-pass also matters for **PR 1+** (see [TS transform scope below](#ts-transform-scope)): a rename like `BlockingReferrerSchema → BlockingReferrer` will turn today's non-self-aliased `export type BlockingReferrer = components['schemas']['BlockingReferrerSchema'];` (which PR 0 rewrites to `export type BlockingReferrer = BlockingReferrerSchema;`) into a fresh self-alias. The rename codemod needs the same collapse logic.
+
+**Scope at implementation time**: 98 indexed-access call sites across 85 source files (excluding the generated `schema.d.ts`, which itself contains ~774 indexed-access references — those are the type alias bodies in the generated file, not consumer call sites). Zero files used named imports from `$lib/api/schema` before PR 0 — confirmed greenfield.
+
+**Lock in the import style in the same PR.** Add a `no-restricted-syntax` rule to [frontend/eslint.config.js](../../../../frontend/eslint.config.js) banning `components['schemas']` indexed access, with a file-scoped override re-allowing it in `src/lib/api/client.ts`. The flat config already uses per-block `files` overrides ([frontend/eslint.config.js:19-26](../../../../frontend/eslint.config.js#L19-L26)), so this is the same shape. After the codemod runs, the rule has zero violations and permanently prevents regression — including from any branch in flight while PR 0 is in review. Folding it into PR 0 (rather than a follow-up) closes the regression window and makes the PR self-enforcing: `pnpm lint` is now a stronger oracle than the grep.
 
 **Verification**:
 
 - `pnpm check` passes (no type drift).
-- `pnpm lint` passes.
+- `pnpm lint` passes (the new ESLint rule has zero violations on the converted tree).
 - `pnpm test` passes.
-- `grep -rE "components\[[\"']schemas" frontend/src --include="*.ts" --include="*.svelte" | grep -v "lib/api/client.ts"` returns zero matches. (Both quote styles, all three file extensions covered by the include patterns since `*.ts` matches `*.svelte.ts`.)
+- `pnpm format` has been run; `git diff` shows no whitespace-only churn pending.
+- `grep -rE "components\[[\"']schemas" frontend/src --include="*.ts" --include="*.svelte" | grep -v "lib/api/client.ts"` returns zero matches. (Both quote styles, all three file extensions covered by the include patterns since `*.ts` matches `*.svelte.ts`.) Redundant with the ESLint rule, but cheap insurance during the PR.
 
 **Why this is one PR, not split per area**: the codemod is mechanical and easier to review as a single sweep. Splitting by route/area would force humans to track which files were converted and which still use indexed access — extra cognitive load for no review benefit.
 
@@ -119,6 +132,8 @@ Walks `frontend/src/**/*.{ts,svelte,svelte.ts}` (excluding `client.ts`). For eac
 2. Replace every in-code word-boundary reference to `OldName` with `NewName`.
 
 After PR 0, no indexed-access dedupe logic is needed — every relevant reference is already a named import. The transform is `s/\bOldName\b/NewName/g` plus rewriting specifiers in the `import type { … } from '$lib/api/schema'` block, so it's plain string-based like PR 0's script. Format step (`pnpm format`) handles import-specifier sort order; the codemod doesn't need to.
+
+**Self-alias collapse — same logic as PR 0.** A rename can manufacture new self-aliases out of files that didn't have them before. Concrete example: `BlockingReferrerSchema → BlockingReferrer`. Today, [frontend/src/lib/delete-flow.ts](../../../../frontend/src/lib/delete-flow.ts) declares `export type BlockingReferrer = components['schemas']['BlockingReferrerSchema'];` — LHS and RHS differ, so PR 0 rewrites it to `export type BlockingReferrer = BlockingReferrerSchema;`, which type-checks fine. After the rename, the naive transform would produce `export type BlockingReferrer = BlockingReferrer;` — a circular self-reference. The rename codemod must therefore reuse PR 0's self-alias detection and collapse rule (delete if non-exported; convert to `export type { X };` if exported), applied **after** the bare-name substitution. Implement once; share between the two scripts via a small helper.
 
 #### Iterate until tests pass
 
@@ -220,10 +235,10 @@ Likely candidates, to be confirmed against what actually shipped:
   4).
 - Every mutating endpoint declares typed 4xx responses (already established
   by _Type error responses_).
-- ESLint `no-restricted-syntax` rule banning `components['schemas']` indexed
-  access outside `client.ts`. Land this immediately after PR 0 (the
-  indexed-access sweep) — at that point the rule has zero violations and
-  permanently locks in the import style.
+- (The ESLint `no-restricted-syntax` rule banning `components['schemas']`
+  indexed access outside `client.ts` ships **inside PR 0**, not here — see
+  [PR 0](#pr-0-ts-side-sweep-indexed-access--named-imports). This section
+  no longer needs to add it.)
 
 Existing precedent at
 [backend/apps/catalog/tests/test_api_schema_boundaries.py](../../../../backend/apps/catalog/tests/test_api_schema_boundaries.py)
@@ -242,7 +257,8 @@ Per task: `make lint`, `make test`, `pnpm check` (svelte-check, distinct from `m
 PR 0 (indexed-access sweep):
 
 - `grep -r "components\['schemas'\]" frontend/src --include="*.ts" --include="*.svelte" | grep -v "lib/api/client.ts"` returns zero matches.
-- `pnpm check`, `pnpm lint`, `pnpm test` pass.
+- `pnpm check`, `pnpm lint`, `pnpm test` pass. `pnpm lint` includes the new `no-restricted-syntax` rule banning `components['schemas']` outside `client.ts` — its zero violations are part of the acceptance signal.
+- `pnpm format` has been run; no pending whitespace churn in `git diff`.
 - No backend changes; `make api-gen` is a no-op.
 
 Per per-app rename PR (partial — only the schemas in that PR's scope have been renamed):
@@ -267,7 +283,7 @@ After the final rename PR lands:
 - Every schema in `components.schemas` is exposed as a top-level type alias
   in `schema.d.ts` (the `--root-types` flag is on).
 - No `components['schemas']` indexed access remains outside `client.ts`
-  (enforced by the ESLint rule landed after PR 0).
+  (enforced by the ESLint rule landed in PR 0).
 
 ## Follow-ups
 
