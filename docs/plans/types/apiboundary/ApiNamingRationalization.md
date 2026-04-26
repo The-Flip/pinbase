@@ -18,30 +18,22 @@ contract carries:
   schema-module convention (out of scope for this plan; see
   follow-ups).
 
-[ApiSvelteBoundary.md](ApiSvelteBoundary.md) originally
-proposed solving the consumer-side noise by introducing a frontend
-re-export barrel at `$lib/api/types.ts` that strips the `Schema`
-suffix on the way through. That approach is cheaper but creates a
-two-name regime: backend says `TitleDetailSchema`, frontend says
-`TitleDetail`, and every contributor has to learn the mapping.
+The OpenAPI contract is the shared vocabulary between Django, the generated TypeScript types, ~88 frontend consumers, and any AI agent reading the codebase. When the same role (input, output, list-row, detail) carries three different suffixes depending on which app a schema lives in, every contributor has to learn the per-app convention before they can type anything correctly. The Schema suffix is implementation noise — it names the Pydantic parent class, not the domain concept — and it adds friction to every read of every type signature. Generic names like Input, Source, Stats are worse: at the OpenAPI component level they're ambiguous, and a frontend reader can't tell what they refer to without grepping the backend.
 
-This plan supersedes that approach. We rationalize the names at the
+The cost compounds over time. Every new schema either follows whichever local convention the surrounding file uses (perpetuating the divergence) or invents its own. Renaming gets monotonically harder: the longer we wait, the more consumers reference each schema. And the inconsistency blocks lint enforcement — there's no single convention for a boundary test to assert, so drift goes uncaught.
+
+We will rationalize the names at the
 source — in the backend Python classes — so the OpenAPI contract,
 the generated `schema.d.ts`, and the frontend imports all use the
-same names. In the boundary-plan task sequence, this is the
+same names.
+
+This is part of the [ApiSvelteBoundary.md](ApiSvelteBoundary.md) work. In [ApiSvelteBoundary.md](ApiSvelteBoundary.md)'s task sequence, this is the
 _Rename API schemas on the backend_ task: _Re-export barrel_ lands
 first so per-rename diffs stay small, _Type error responses_ lands
 ahead of the rename so its correctness fix ships sooner and any
 new error schemas get caught up in the rename pass, and
 _Boundary tests_ inverts its `Schema`-suffix rule to enforce the
 new convention.
-
-The trade-off is real: this is materially more work than the
-ergonomic-only barrel. It touches every Ninja schema class and every
-frontend consumer in lockstep. The justification is that it fixes
-the contract once instead of papering over it forever. The decision
-to spend that cost is captured in conversation — see the discussion
-that produced this plan.
 
 ## Naming convention
 
@@ -69,8 +61,8 @@ and `backend/config/api.py`.
    media app's current `…In`/`…Out` names are migrated.
 3. **Bare entity names are reserved for full canonical outputs.**
    Where an entity's "bare" schema today is actually a list-item
-   shape (e.g., today's `PersonSchema`, `SystemSchema`,
-   `ManufacturerSchema`), it gets renamed to `…ListItem`. The bare
+   shape (e.g., today's `PersonSchema`, `ManufacturerSchema`), it
+   gets renamed to `…ListItem`. The bare
    name then becomes available for the canonical full shape — but
    the codebase doesn't currently use it that way, so the rename
    table below leaves the bare slot vacant in those cases. A future
@@ -79,12 +71,8 @@ and `backend/config/api.py`.
 4. **Generic names get scoped.** `Variant`, `Source`, `Stats`,
    `Recognition`, and `Create` are too generic at the OpenAPI
    component level. Each is renamed to an entity-scoped name.
-5. **`…Detail` is preserved as-is** for full-entity output shapes,
-   even when also used by `/api/pages/...` page endpoints. The
-   codebase currently does not distinguish resource-canonical vs
-   page-model shapes (the same `*DetailSchema` is reused for both).
-   Splitting them is an architectural question, not a naming one,
-   and is out of scope for this plan.
+5. **`…Detail` is preserved as-is** for full-entity output shapes
+   (see the page-vs-resource note below for the page-API context).
 
 ### Page-vs-resource note
 
@@ -104,50 +92,29 @@ ones.
 These are settled in this plan; the per-app rename tables below
 apply them mechanically.
 
-| Current name                | New name                       | Why                                                                                                                                                                                           |
-| --------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VariantSchema`             | `MachineModelVariant`          | Bare `Variant` collides with broader vocabulary; user rule reserves "variant" for machine model variants specifically.                                                                        |
-| `SourceSchema`              | `CitationSource`               | Bare `Source` is too generic at the OpenAPI level. Aligns with the citation-app naming.                                                                                                       |
-| `StatsSchema`               | `SiteStats`                    | Bare `Stats` is too generic. The schema lives in `config/api.py` and reports site-wide totals.                                                                                                |
-| `RecognitionSchema`         | `CitationRecognition`          | Bare `Recognition` is too generic; clearly a citation-domain schema.                                                                                                                          |
-| `Input` (auto)              | `PaginationParams`             | Ninja auto-named the inline pagination query model; give it a real name.                                                                                                                      |
-| `JsonBody`                  | (removed from OpenAPI)         | A `apps/core/types.py` Python type alias leaking into OpenAPI as `{ [key: string]: unknown }`. The endpoint exposing it should declare a real schema or `dict[str, Any]` typed appropriately. |
-| `UploadOut`                 | `Upload`                       | Drop `Out` suffix. No collision with `UploadedMedia`.                                                                                                                                         |
-| `UploadedMediaSchema`       | `UploadedMedia`                | Drop `Schema`.                                                                                                                                                                                |
-| `MediaAssetRefIn`           | `MediaAssetRefInput`           | Standardize on `…Input`.                                                                                                                                                                      |
-| `AttachmentMetaOut`         | `AttachmentMeta`               | Drop `Out` suffix.                                                                                                                                                                            |
-| `RenditionUrlsOut`          | `RenditionUrls`                | Drop `Out` suffix.                                                                                                                                                                            |
-| `BatchCitationInstanceOut`  | `BatchCitationInstance`        | Drop `Out` suffix.                                                                                                                                                                            |
-| `CitationInstanceCreateIn`  | `CitationInstanceCreate`       | Use `…Create` for entity-scoped create input.                                                                                                                                                 |
-| `EditCitationInput`         | `EditCitationInput`            | Already conforms.                                                                                                                                                                             |
-| `CreditInput`               | `CreditInput`                  | Already conforms.                                                                                                                                                                             |
-| `GameplayFeatureInput`      | `GameplayFeatureInput`         | Already conforms.                                                                                                                                                                             |
-| `EditOptionItem`            | `EditOption`                   | `Item` is redundant.                                                                                                                                                                          |
-| `FieldConstraint`           | `FieldConstraint`              | Already conforms.                                                                                                                                                                             |
-| `Ref`                       | `Ref`                          | Already conforms.                                                                                                                                                                             |
-| `*AncestorRef`, `*ChildRef` | (unchanged)                    | Already conform.                                                                                                                                                                              |
-| `CreateSchema`              | `EntityCreateInput`            | Currently a base class for entity creates in `catalog/api/schemas.py`. Scoped name avoids collision with per-entity `…Create` names.                                                          |
-| `SearchResponse`            | `CitationSourceSearchResponse` | `Response` suffix is rare; scope it to its entity since `SearchResponse` is too generic.                                                                                                      |
+| Current name               | New name                       | Why                                                                                                                                                                                           |
+| -------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VariantSchema`            | `MachineModelVariant`          | Bare `Variant` collides with broader vocabulary; user rule reserves "variant" for machine model variants specifically.                                                                        |
+| `SourceSchema`             | `CitationSource`               | Bare `Source` is too generic at the OpenAPI level. Aligns with the citation-app naming.                                                                                                       |
+| `StatsSchema`              | `SiteStats`                    | Bare `Stats` is too generic. The schema lives in `config/api.py` and reports site-wide totals.                                                                                                |
+| `RecognitionSchema`        | `CitationRecognition`          | Bare `Recognition` is too generic; clearly a citation-domain schema.                                                                                                                          |
+| `Input` (auto)             | `PaginationParams`             | Ninja auto-named the inline pagination query model; give it a real name.                                                                                                                      |
+| `JsonBody`                 | (removed from OpenAPI)         | A `apps/core/types.py` Python type alias leaking into OpenAPI as `{ [key: string]: unknown }`. The endpoint exposing it should declare a real schema or `dict[str, Any]` typed appropriately. |
+| `UploadOut`                | `Upload`                       | Drop `Out` suffix. No collision with `UploadedMedia`.                                                                                                                                         |
+| `UploadedMediaSchema`      | `UploadedMedia`                | Drop `Schema`.                                                                                                                                                                                |
+| `MediaAssetRefIn`          | `MediaAssetRefInput`           | Standardize on `…Input`.                                                                                                                                                                      |
+| `AttachmentMetaOut`        | `AttachmentMeta`               | Drop `Out` suffix.                                                                                                                                                                            |
+| `RenditionUrlsOut`         | `RenditionUrls`                | Drop `Out` suffix.                                                                                                                                                                            |
+| `BatchCitationInstanceOut` | `BatchCitationInstance`        | Drop `Out` suffix.                                                                                                                                                                            |
+| `CitationInstanceCreateIn` | `CitationInstanceCreate`       | Use `…Create` for entity-scoped create input.                                                                                                                                                 |
+| `EditOptionItem`           | `EditOption`                   | `Item` is redundant.                                                                                                                                                                          |
+| `CreateSchema`             | `EntityCreateInput`            | Currently a base class for entity creates in `catalog/api/schemas.py`. Scoped name avoids collision with per-entity `…Create` names.                                                          |
+| `SearchResponse`           | `CitationSourceSearchResponse` | `Response` suffix is rare; scope it to its entity since `SearchResponse` is too generic.                                                                                                      |
 
-### Open decisions in the rename table
-
-These need a one-line user decision before the relevant per-app
-commit lands. They're called out in their per-app sections below.
-
-- **`PersonSchema`, `SystemSchema`, `ManufacturerSchema`,
-  `CorporateEntitySchema`** — all currently list-item or thin
-  shapes. Rename to `…ListItem` (consistent) or keep bare and live
-  with the inconsistency? Default in the table: `…ListItem`.
-- **`PersonGridSchema`** — `PersonGrid`, `PersonGridItem`, or
-  collapse with `…ListItem`? Default: `PersonGridItem` (item shape,
-  not a wrapper).
-- **`UndoChangeSetSchema` vs `UndoResultSchema`** — these are
-  already distinct; rename strips `Schema` from each. No semantic
-  change.
-- **`ChangeSetBaseSchema`** — this is a real shared base class.
-  Keep `Base` suffix? Or rename the parent to `ChangeSetBase` (still
-  in the public OpenAPI component list since Pydantic exports it).
-  Default: `ChangeSetBase`.
+Names that already conform and pass through unchanged
+(`EditCitationInput`, `CreditInput`, `GameplayFeatureInput`,
+`FieldConstraint`, `Ref`, `*AncestorRef`, `*ChildRef`) are not
+listed in the table above.
 
 ## Per-app rename tables
 
@@ -307,30 +274,41 @@ the row shape, not a wrapper around a list.)
 
 #### Manufacturers / corporate entities (`apps/catalog/api/manufacturers.py`, `corporate_entities.py`, `locations.py`)
 
-| Current                              | New                                               |
-| ------------------------------------ | ------------------------------------------------- |
-| `CorporateEntityClaimPatchSchema`    | `CorporateEntityClaimPatch`                       |
-| `CorporateEntityDetailSchema`        | `CorporateEntityDetail`                           |
-| `CorporateEntityListSchema`          | `CorporateEntityListItem`                         |
-| `CorporateEntityLocationAncestorRef` | `CorporateEntityLocationAncestorRef`              |
-| `CorporateEntityLocationSchema`      | `CorporateEntityLocation`                         |
-| `CorporateEntitySchema`              | `CorporateEntityListItem` (collision — see below) |
-| `LocationAncestorRef`                | `LocationAncestorRef`                             |
-| `LocationChildRef`                   | `LocationChildRef`                                |
-| `LocationDetailSchema`               | `LocationDetail`                                  |
-| `LocationManufacturerSchema`         | `LocationManufacturer`                            |
-| `ManufacturerDetailSchema`           | `ManufacturerDetail`                              |
-| `ManufacturerGridSchema`             | `ManufacturerGridItem`                            |
-| `ManufacturerPersonSchema`           | `ManufacturerPerson`                              |
-| `ManufacturerSchema`                 | `ManufacturerListItem`                            |
-| `SystemSchema`                       | `SystemListItem` (collision — see below)          |
+| Current                              | New                                  |
+| ------------------------------------ | ------------------------------------ |
+| `CorporateEntityClaimPatchSchema`    | `CorporateEntityClaimPatch`          |
+| `CorporateEntityDetailSchema`        | `CorporateEntityDetail`              |
+| `CorporateEntityListSchema`          | `CorporateEntityListItem`            |
+| `CorporateEntityLocationAncestorRef` | `CorporateEntityLocationAncestorRef` |
+| `CorporateEntityLocationSchema`      | `CorporateEntityLocation`            |
+| `CorporateEntitySchema`              | `ManufacturerCorporateEntity`        |
+| `LocationAncestorRef`                | `LocationAncestorRef`                |
+| `LocationChildRef`                   | `LocationChildRef`                   |
+| `LocationDetailSchema`               | `LocationDetail`                     |
+| `LocationManufacturerSchema`         | `LocationManufacturer`               |
+| `ManufacturerDetailSchema`           | `ManufacturerDetail`                 |
+| `ManufacturerGridSchema`             | `ManufacturerGridItem`               |
+| `ManufacturerPersonSchema`           | `ManufacturerPerson`                 |
+| `ManufacturerSchema`                 | `ManufacturerListItem`               |
+| `SystemSchema`                       | `ManufacturerSystem`                 |
 
-**Collision resolution needed:** `CorporateEntitySchema` and
-`CorporateEntityListSchema` both want `CorporateEntityListItem`.
-Same for `SystemSchema` and `SystemListSchema`. Inspect the schema
-shapes in the corresponding commit and either consolidate (if
-shape-identical) or pick distinct names (`CorporateEntityRef` for
-the thinner one, `CorporateEntityListItem` for the richer one).
+`SystemSchema` and `CorporateEntitySchema` are both renamed to
+`Manufacturer*` names following the `<Parent><Child>` pattern
+already used for `ManufacturerPerson` and `LocationManufacturer`.
+Both are embedded sub-shapes inside `ManufacturerDetail` —
+semantically list-items in "the manufacturer's systems/entities
+list" — even though `ManufacturerSystem` happens to be exactly
+`name + slug` today. Per
+[ApiDesign.md](../../../ApiDesign.md), naming a list-item shape
+preserves a future expansion point (e.g., adding `model_count`)
+that collapsing to `Ref` would foreclose.
+
+`ManufacturerCorporateEntity` is genuinely distinct in shape from
+`CorporateEntityListItem` — the embedded form lacks `manufacturer`
+and `model_count` since both are context-redundant when nested
+under a manufacturer detail. A future consolidation of those two
+shapes (if the field divergence isn't load-bearing) is tracked in
+[ApiSvelteBoundaryFollowups.md](ApiSvelteBoundaryFollowups.md).
 
 #### Systems (`apps/catalog/api/systems.py`)
 
@@ -387,10 +365,10 @@ relevant-app commit:
 
 ## Per-app commit sequence
 
-Assumes Task 2 (`$lib/api/types.ts` barrel + named-import sweep)
-from [ApiSvelteBoundary.md](ApiSvelteBoundary.md) has already
-landed, so consumers are on named imports and the ESLint guardrail
-is active.
+Assumes the _Re-export barrel_ task from
+[ApiSvelteBoundary.md](ApiSvelteBoundary.md) has already landed, so
+consumers are on named imports from `$lib/api/types` and the ESLint
+guardrail blocking `components['schemas']` is active.
 
 Each commit:
 
@@ -404,8 +382,8 @@ Each commit:
    keys.
 4. Codemods consumer named imports: `OldName` → `NewName`
    wherever the renamed types are imported. Identifier-swap diffs
-   only; no indexed-access rewrites since Task 2 already moved
-   consumers off that pattern.
+   only; no indexed-access rewrites since the barrel task already
+   moved consumers off that pattern.
 5. Runs `make lint` and `make test`.
 
 Order, smallest first:
@@ -430,29 +408,34 @@ Order, smallest first:
 These came up during the audit but belong to other plans or
 follow-up work:
 
-- **The `$lib/api/types.ts` re-export barrel.** Becomes a pure
-  passthrough re-export after this plan lands. Tracked as Task 1
-  of [ApiSvelteBoundary.md](ApiSvelteBoundary.md), revised to drop
-  the suffix-stripping behavior.
-- **ESLint guardrail banning `components['schemas']` outside
-  `client.ts` / `types.ts`.** Tracked alongside the barrel work in
+- **The `$lib/api/types.ts` re-export barrel.** A pure passthrough
+  re-export — never renames. Tracked in [ApiBarrel.md](ApiBarrel.md)
+  and summarized as _Re-export barrel_ in
   [ApiSvelteBoundary.md](ApiSvelteBoundary.md).
+- **ESLint guardrail banning `components['schemas']` outside
+  `client.ts` / `types.ts`.** Tracked alongside the barrel work
+  ([ApiBarrel.md](ApiBarrel.md)).
 - **Inline schemas defined in endpoint files** (`apps/citation/api.py`
   has 15; `apps/accounts/api.py` has 4; several catalog routers
   define schemas inline rather than in `schemas.py`). This is a
   "where does code live" question, not a naming question. Tracked
-  as Task 4 of [ApiSvelteBoundary.md](ApiSvelteBoundary.md).
+  as _Boundary tests_ in
+  [ApiSvelteBoundary.md](ApiSvelteBoundary.md).
 - **Page-model vs resource-canonical schema split.** The codebase
   currently shares `*Detail` schemas between `/api/<entity>/...`
   and `/api/pages/<entity>/...`. [ApiDesign.md](../../../ApiDesign.md)
   describes them as conceptually distinct; today they aren't.
   Splitting them is an API-design question, not a naming one.
 - **Typed error responses across mutating endpoints.** Tracked as
-  Task 3 of [ApiSvelteBoundary.md](ApiSvelteBoundary.md).
-- **`SystemSchema` / `SystemListSchema` and similar collisions** —
-  resolved per-commit in this plan, but the underlying duplication
-  (two near-identical list shapes) is worth a separate look once
-  names are settled.
+  _Type error responses_ in
+  [ApiSvelteBoundary.md](ApiSvelteBoundary.md).
+- **Consolidating `ManufacturerCorporateEntity` with
+  `CorporateEntityListItem`.** The two shapes diverge only in
+  `manufacturer` and `model_count`; whether the divergence is
+  load-bearing or the schemas should collapse is tracked in
+  [ApiSvelteBoundaryFollowups.md](ApiSvelteBoundaryFollowups.md).
+  (`ManufacturerSystem` and `SystemListItem` are kept distinct
+  for the same expansion-point reason; no consolidation follow-up.)
 
 ## Verification
 
@@ -471,5 +454,3 @@ After all commits land:
   generic-name components (`Variant`, `Source`, `Stats`,
   `Recognition`, `Create`, `Input`, `JsonBody`).
 - 88 frontend consumers all use the new names.
-- The follow-on barrel work in
-  [ApiSvelteBoundary.md](ApiSvelteBoundary.md) Task 1 is unblocked.

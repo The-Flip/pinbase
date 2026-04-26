@@ -13,21 +13,26 @@ real shape duplication, naming inconsistencies the rationalization
 table couldn't fully resolve, page-vs-resource shape divergences the
 rename couldn't predict, and so on.
 
-## Resolve underlying shape duplication surfaced by rename collisions
+## Consolidate `ManufacturerCorporateEntity` with `CorporateEntityListItem`
 
-[ApiNamingRationalization.md](ApiNamingRationalization.md) flags two
-collision pairs that resolve per-commit during the rename:
+The rename pre-flight resolved both `…Schema`/`…ListSchema`
+collision pairs by renaming the embedded shape under a
+`Manufacturer*` name (parallel to `ManufacturerPerson`):
 
-- `CorporateEntitySchema` vs `CorporateEntityListSchema` — both want
-  `CorporateEntityListItem`.
-- `SystemSchema` vs `SystemListSchema` — both want `SystemListItem`.
+`CorporateEntitySchema` → `ManufacturerCorporateEntity`,
+`CorporateEntityListSchema` → `CorporateEntityListItem`. These
+have meaningfully different fields today:
+`ManufacturerCorporateEntity` lacks `manufacturer` and
+`model_count` because both are context-redundant when nested
+under a manufacturer detail.
 
-If the pre-flight investigation reveals these are near-identical
-shapes, the per-commit resolution may pick distinct names rather
-than consolidate, leaving the underlying duplication in place. After
-the rename lands, decide whether to consolidate the shapes — by then
-the names are stable and the call sites are visible against the
-renamed contract.
+After the rename lands, revisit whether
+`ManufacturerCorporateEntity` and `CorporateEntityListItem` should
+consolidate. The question: is the field divergence
+(`manufacturer` ref + `model_count` on the list shape) load-bearing,
+or could a single schema cover both uses with optional/computed
+fields? Deferred because consolidation is an API-shape decision that
+benefits from seeing the renamed contract in place first.
 
 ## Split schema per-tag
 

@@ -24,17 +24,10 @@ vocabulary. Pin the resulting conventions with tests.
 
 ### Document rationalized API names
 
-**Status: in progress.** Convention rules and full per-app rename
-tables drafted in
-[ApiNamingRationalization.md](ApiNamingRationalization.md). Still
-under review — collision pairs (`SystemSchema`/`SystemListSchema`,
-`CorporateEntitySchema`/`CorporateEntityListSchema`) and a handful
-of edge-case decisions (`PersonGridItem` vs collapse,
-`ChangeSetBase` vs drop the `Base`) need to be settled before
-_Rename API schemas on the backend_ can begin.
-
-Pure paper work — no code changes. Output is the finalized rename
-table that _Rename API schemas on the backend_ executes against.
+Convention rules and full per-app rename tables in
+[ApiNamingRationalization.md](ApiNamingRationalization.md). Pure
+paper work — no code changes. Output is the finalized rename table
+that _Rename API schemas on the backend_ executes against.
 
 ### Re-export barrel
 
