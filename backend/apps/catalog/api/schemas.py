@@ -65,6 +65,12 @@ class ModelClaimPatchSchema(ChangeSetInputSchema):
     abbreviations: list[str] | None = None
 
 
+class TitleClaimPatchSchema(ChangeSetInputSchema):
+    # See ClaimPatchSchema.fields — polymorphic per claim field, validated downstream.
+    fields: dict[str, Any] = {}
+    abbreviations: list[str] | None = None
+
+
 class BlockingReferrerSchema(Schema):
     """An active reference blocking a soft-delete.
 

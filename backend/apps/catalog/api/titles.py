@@ -92,6 +92,7 @@ from .schemas import (
     GameplayFeatureSchema,
     Ref,
     SoftDeleteBlockedSchema,
+    TitleClaimPatchSchema,
     TitleMachineSchema,
 )
 from .soft_delete import (
@@ -189,13 +190,6 @@ class TitleDetailSchema(Schema):
     related_titles: list[CrossTitleLinkSchema] = []
     media: list[AggregatedMediaSchema] = []
     model_detail: MachineModelDetailSchema | None = None
-
-
-class TitleClaimPatchSchema(ChangeSetInputSchema):
-    # See schemas.ClaimPatchSchema.fields — polymorphic per claim field,
-    # validated downstream by ``validate_claim_value``.
-    fields: dict[str, Any] = {}
-    abbreviations: list[str] | None = None
 
 
 class TitleDeletePreviewSchema(Schema):
