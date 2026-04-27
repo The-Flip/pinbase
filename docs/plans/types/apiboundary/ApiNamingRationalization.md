@@ -3,29 +3,41 @@
 ## Context
 
 The Django Ninja schema names that flow through OpenAPI into the
-generated TypeScript types are inconsistent and noisy. Today the
-contract carries:
+generated TypeScript types are inconsistent. Today the contract
+carries:
 
-- 117 names ending in `Schema` (a Ninja base-class artifact, not
-  domain vocabulary).
+- 117 names ending in `Schema` (the Ninja base class).
 - 18 names that don't — split between intentional choices (`Ref`,
   `JsonBody`), divergent media-app conventions (`UploadOut`,
   `MediaAssetRefIn`, `RenditionUrlsOut`, `AttachmentMetaOut`), and
-  generic Python-side leakage (`Input`).
+  generic Python-side leakage (`Input`, `SearchResponse`).
 - Schemas with too-generic bare names that survive suffix removal
   poorly (`Variant`, `Source`, `Stats`, `Recognition`, `Create`).
 - Schemas defined inline in endpoint files that don't follow the
   schema-module convention (out of scope for this plan; see
   follow-ups).
 
-The OpenAPI contract is the shared vocabulary between Django, the generated TypeScript types, ~88 frontend consumers, and any AI agent reading the codebase. When the same role (input, output, list-row, detail) carries three different suffixes depending on which app a schema lives in, every contributor has to learn the per-app convention before they can type anything correctly. The Schema suffix is implementation noise — it names the Pydantic parent class, not the domain concept — and it adds friction to every read of every type signature. Generic names like Input, Source, Stats are worse: at the OpenAPI component level they're ambiguous, and a frontend reader can't tell what they refer to without grepping the backend.
+The OpenAPI contract is the shared vocabulary between Django, the
+generated TypeScript types, ~88 frontend consumers, and any AI agent
+reading the codebase. When the same role takes different suffixes
+depending on which app a schema lives in, every contributor has to
+learn the per-app convention before they can type anything correctly.
+Generic names like `Input`, `Source`, `Stats` are worse: at the
+OpenAPI component level they're ambiguous, and a frontend reader
+can't tell what they refer to without grepping the backend.
 
-The cost compounds over time. Every new schema either follows whichever local convention the surrounding file uses (perpetuating the divergence) or invents its own. Renaming gets monotonically harder: the longer we wait, the more consumers reference each schema. And the inconsistency blocks lint enforcement — there's no single convention for a boundary test to assert, so drift goes uncaught.
-
-We will rationalize the names at the
-source — in the backend Python classes — so the OpenAPI contract,
-the generated `schema.d.ts`, and the frontend imports all use the
-same names.
+We will rationalize the names at the source — in the backend Python
+classes — so the OpenAPI contract, the generated `schema.d.ts`, and
+the frontend imports all use the same vocabulary. The rule is
+**every Ninja `Schema` subclass ends in `Schema`** (with two
+deliberate exceptions, below). This matches Django Ninja's own
+documentation, which adopts the `Schema` suffix specifically to
+disambiguate wire shapes from Django models when the bare name would
+collide. We have the same collision throughout `provenance` and
+`citation` (`ChangeSet`, `Claim`, `CitationInstance`, `Source`, …
+all exist as both ORM models and wire shapes), and the `Schema`
+suffix is the cleanest way to keep them unambiguous in Python _and_
+in cross-stack grep.
 
 This doc is the rules-and-tables source for the rename. The
 process — when, in what commit, with what codemod — lives in
@@ -38,37 +50,47 @@ and `backend/config/api.py`.
 
 ### Suffixes by role
 
-| Role                                  | Suffix                                        | Example                         |
-| ------------------------------------- | --------------------------------------------- | ------------------------------- |
-| Output, full entity (detail)          | `…Detail`                                     | `TitleDetail`, `PersonDetail`   |
-| Output, list/index page row           | `…ListItem` _or_ bare entity name (see below) | `TitleListItem`                 |
-| Output, grid view row                 | `…GridItem`                                   | `PersonGridItem`                |
-| Output, paginated/wrapped list        | `…List`                                       | `MachineModelList`              |
-| Output, minimal reference (name+slug) | `Ref` or `…Ref`                               | `Ref`, `TitleRef`, `ModelRef`   |
-| Input, full payload                   | `…Input`                                      | `ChangeSetInput`, `CreditInput` |
-| Input, partial update                 | `…Patch`                                      | `ClaimPatch`, `TitleClaimPatch` |
-| Input, create payload                 | `…Create`                                     | `SystemCreate`                  |
+| Role                                  | Suffix                | Example                                                   |
+| ------------------------------------- | --------------------- | --------------------------------------------------------- |
+| Output, full entity (detail)          | `…DetailSchema`       | `TitleDetailSchema`, `PersonDetailSchema`                 |
+| Output, list/index page row           | `…ListItemSchema`     | `TitleListItemSchema`, `PersonListItemSchema`             |
+| Output, grid view row                 | `…GridItemSchema`     | `PersonGridItemSchema`                                    |
+| Output, paginated/wrapped list        | `…ListSchema`         | `ModelListSchema` _(if such a wrapper appears in future)_ |
+| Output, minimal reference (name+slug) | `EntityRef` or `…Ref` | `EntityRef`, `TitleRef`, `ModelRef`                       |
+| Input, full payload                   | `…InputSchema`        | `ChangeSetInputSchema`, `CreditInputSchema`               |
+| Input, partial update                 | `…PatchSchema`        | `ClaimPatchSchema`, `TitleClaimPatchSchema`               |
+| Input, create payload                 | `…CreateSchema`       | `SystemCreateSchema`                                      |
 
 ### Hard rules
 
-1. **No `Schema` suffix anywhere.** It's a Ninja base-class artifact,
-   not domain vocabulary.
-2. **No `In`/`Out` suffixes.** Use `…Input` / bare-output. The
-   media app's current `…In`/`…Out` names are migrated.
-3. **Bare entity names are reserved for full canonical outputs.**
-   Where an entity's "bare" schema today is actually a list-item
-   shape (e.g., today's `PersonSchema`, `ManufacturerSchema`), it
-   gets renamed to `…ListItem`. The bare
-   name then becomes available for the canonical full shape — but
-   the codebase doesn't currently use it that way, so the rename
-   table below leaves the bare slot vacant in those cases. A future
-   pass can decide whether to alias `Person` → `PersonDetail` or
-   leave them distinct.
+1. **Every Ninja `Schema` subclass ends in `Schema`.** It marks
+   "this is a wire shape," disambiguates from Django model classes
+   that share the bare name, and gives the boundary test one rule
+   to assert. Two exceptions:
+   - **`*Ref` shapes are bare** (no `Schema` suffix). The `Ref`
+     suffix already self-identifies the class as a wire-shape
+     reference (`{name, slug}` and minor variants). Examples:
+     `EntityRef`, `TitleRef`, `ModelRef`, `LocationAncestorRef`,
+     `LocationChildRef`, `CorporateEntityLocationAncestorRef`,
+     `GameplayFeatureRef`. This includes `…AncestorRef` /
+     `…ChildRef` family members.
+   - **`JsonBody` is exempt** — it is not a `Schema` subclass at
+     all (PEP 695 type alias for arbitrary JSON objects). See
+     §_Ghost-type fixes_.
+2. **No `In`/`Out` abbreviations.** Inputs use `…InputSchema` (or
+   `…PatchSchema` / `…CreateSchema`). Outputs drop the direction
+   marker entirely — the role suffix already implies output. The
+   media app's current `In`/`Out` names are migrated.
+3. **No bare entity names.** Where an entity's "bare" schema today
+   is actually a list-item shape (e.g., today's `PersonSchema`,
+   `ManufacturerSchema`), it gets renamed to `…ListItemSchema`.
+   The bare name slot stays vacant; a future pass can decide
+   whether to alias `Person` → `PersonDetail` or leave them
+   distinct.
 4. **Generic names get scoped.** `Variant`, `Source`, `Stats`,
-   `Recognition`, and `Create` are too generic at the OpenAPI
-   component level. Each is renamed to an entity-scoped name.
-5. **`…Detail` is preserved as-is** for full-entity output shapes
-   (see the page-vs-resource note below for the page-API context).
+   `Recognition`, `Create`, and `SearchResponse` are too generic at
+   the OpenAPI component level. Each is renamed to an
+   entity-scoped name.
 
 ### Page-vs-resource note
 
@@ -80,283 +102,265 @@ today is shared between the two — the page endpoint returns the
 same shape as the resource detail endpoint. This plan does not
 attempt to separate them. The rename preserves whatever sharing
 exists; if a future pass splits page models from resource shapes,
-it will introduce new `…Page` schemas alongside the `…Detail`
-ones.
+it will introduce new `…PageSchema` schemas alongside the
+`…DetailSchema` ones.
 
 ## Decisions baked into the rename table
 
 These are settled in this plan; the per-app rename tables below
 apply them mechanically.
 
-| Current name               | New name                       | Why                                                                                                                                                                   |
-| -------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VariantSchema`            | `MachineModelVariant`          | Bare `Variant` collides with broader vocabulary; user rule reserves "variant" for machine model variants specifically.                                                |
-| `SourceSchema`             | `CitationSource`               | Bare `Source` is too generic at the OpenAPI level. Aligns with the citation-app naming.                                                                               |
-| `StatsSchema`              | `SiteStats`                    | Bare `Stats` is too generic. The schema lives in `config/api.py` and reports site-wide totals.                                                                        |
-| `RecognitionSchema`        | `CitationRecognition`          | Bare `Recognition` is too generic; clearly a citation-domain schema.                                                                                                  |
-| `Input` (auto)             | TBD — library-level fix        | Orphaned component from Ninja's `PageNumberPagination.Input`. See [ApiSvelteBoundary.md](ApiSvelteBoundary.md) §_Ghost-type fixes_.                                   |
-| `JsonBody`                 | (kept as-is)                   | Intentional shared name for arbitrary JSON-object fields. Not a ghost; do not rename or inline. See [ApiSvelteBoundary.md](ApiSvelteBoundary.md) §_Ghost-type fixes_. |
-| `UploadOut`                | `Upload`                       | Drop `Out` suffix. No collision with `UploadedMedia`.                                                                                                                 |
-| `UploadedMediaSchema`      | `UploadedMedia`                | Drop `Schema`.                                                                                                                                                        |
-| `MediaAssetRefIn`          | `MediaAssetRefInput`           | Standardize on `…Input`.                                                                                                                                              |
-| `AttachmentMetaOut`        | `AttachmentMeta`               | Drop `Out` suffix.                                                                                                                                                    |
-| `RenditionUrlsOut`         | `RenditionUrls`                | Drop `Out` suffix.                                                                                                                                                    |
-| `BatchCitationInstanceOut` | `BatchCitationInstance`        | Drop `Out` suffix.                                                                                                                                                    |
-| `CitationInstanceCreateIn` | `CitationInstanceCreate`       | Use `…Create` for entity-scoped create input.                                                                                                                         |
-| `EditOptionItem`           | `EditOption`                   | `Item` is redundant.                                                                                                                                                  |
-| `CreateSchema`             | `EntityCreateInput`            | Currently a base class for entity creates in `catalog/api/schemas.py`. Scoped name avoids collision with per-entity `…Create` names.                                  |
-| `SearchResponse`           | `CitationSourceSearchResponse` | `Response` suffix is rare; scope it to its entity since `SearchResponse` is too generic.                                                                              |
+| Current name               | New name                              | Why                                                                                                                                                                                                                         |
+| -------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VariantSchema`            | `ModelVariantSchema`                  | Bare `Variant` is too generic; the user reserves "variant" for machine-model variants specifically. `MachineModel` is reserved for the Django model class and never appears in wire vocabulary; the wire side uses `Model`. |
+| `SourceSchema`             | `CitationSourceSchema`                | Bare `Source` is too generic and collides with the `apps.citation.models.CitationSource` model name.                                                                                                                        |
+| `StatsSchema`              | `SiteStatsSchema`                     | Bare `Stats` is too generic. The schema lives in `config/api.py` and reports site-wide totals.                                                                                                                              |
+| `RecognitionSchema`        | `CitationRecognitionSchema`           | Bare `Recognition` is too generic; clearly a citation-domain schema.                                                                                                                                                        |
+| `Ref`                      | `EntityRef`                           | Bare `Ref` is too generic at the OpenAPI level. `EntityRef` makes the role explicit; stays bare under the `*Ref` exception.                                                                                                 |
+| `Input` (auto)             | (already fixed as `PaginationParams`) | Renamed to `PaginationParamsSchema` here for the universal-`Schema` rule (see §Ghost-type fixes).                                                                                                                           |
+| `JsonBody`                 | (kept as-is)                          | Intentional shared name for arbitrary JSON-object fields; not a `Schema` subclass. See §_Ghost-type fixes_.                                                                                                                 |
+| `UploadOut`                | `UploadSchema`                        | Drop redundant `Out`; outputs don't carry a direction marker.                                                                                                                                                               |
+| `MediaAssetRefIn`          | `MediaAssetInputSchema`               | Expand `In` → `Input`; add `Schema`. (`MediaAssetRef` is not the trailing token, so the `*Ref` exception doesn't apply.)                                                                                                    |
+| `AttachmentMetaOut`        | `AttachmentMetaSchema`                | Drop redundant `Out`.                                                                                                                                                                                                       |
+| `RenditionUrlsOut`         | `RenditionUrlsSchema`                 | Drop redundant `Out`.                                                                                                                                                                                                       |
+| `BatchCitationInstanceOut` | `CitationInstanceBatchSchema`         | Drop redundant `Out`.                                                                                                                                                                                                       |
+| `CitationInstanceCreateIn` | `CitationInstanceCreateSchema`        | Drop redundant `In` — `Create` already implies input.                                                                                                                                                                       |
+| `CreditInput`              | `CreditInputSchema`                   | Add `Schema` for consistency.                                                                                                                                                                                               |
+| `GameplayFeatureInput`     | `GameplayFeatureInputSchema`          | Add `Schema` for consistency.                                                                                                                                                                                               |
+| `EditCitationInput`        | `CitationReferenceInputSchema`        | Add `Schema` for consistency.                                                                                                                                                                                               |
+| `EditOptionItem`           | `EditOptionSchema`                    | Drop redundant `Item`; add `Schema`.                                                                                                                                                                                        |
+| `CreateSchema`             | `EntityCreateInputSchema`             | Currently a base class for entity creates in `catalog/api/schemas.py`. Scoped name avoids collision with per-entity `…CreateSchema` names.                                                                                  |
+| `SearchResponse`           | `CitationSourceSearchResponseSchema`  | `Response` suffix is rare; scope it to its entity since `SearchResponse` is too generic.                                                                                                                                    |
+| `DeletePreviewBase`        | `DeletePreviewBaseSchema`             | Add `Schema` for consistency (it's a Schema subclass used as a mixin).                                                                                                                                                      |
+| `FieldConstraint`          | `FieldConstraintSchema`               | Add `Schema` for consistency.                                                                                                                                                                                               |
+| `PaginationParams`         | `PaginationParamsSchema`              | Already-shipped ghost-type fix; rename to satisfy the universal `Schema` rule.                                                                                                                                              |
+| `TitleRefSchema`           | `TitleRef`                            | Strip `Schema` to align with the `*Ref` exception.                                                                                                                                                                          |
+| `ModelRefSchema`           | `ModelRef`                            | Strip `Schema` to align with the `*Ref` exception.                                                                                                                                                                          |
+| `GameplayFeatureSchema`    | `GameplayFeatureRef`                  | This schema is `Ref + count`; renaming clarifies role and lands it under the `*Ref` exception (no `Schema`).                                                                                                                |
 
-Names that already conform and pass through unchanged
-(`EditCitationInput`, `CreditInput`, `GameplayFeatureInput`,
-`FieldConstraint`, `Ref`, `*AncestorRef`, `*ChildRef`) are not
-listed in the table above.
+Names that already conform pass through unchanged: every existing
+`…Schema` not listed above (e.g., `TitleDetailSchema`,
+`AuthStatusSchema`, `ChangeSetSchema`, `ClaimSchema`,
+`CitationInstanceSchema`, …), plus the existing bare-`*Ref` family
+(`LocationAncestorRef`, `LocationChildRef`,
+`CorporateEntityLocationAncestorRef`, etc.).
 
 ## Per-app rename tables
 
-Apps are listed smallest first, matching the commit sequence below.
+Apps are listed smallest first, matching the commit sequence in
+[ApiSvelteBoundary.md](ApiSvelteBoundary.md). Apps with **zero**
+renames under the new rules (`accounts`, `core`) are omitted —
+their existing names already conform.
 
-### `accounts` (4 schemas)
+### `core` (1 rename)
 
-| Current                    | New                  |
-| -------------------------- | -------------------- |
-| `AuthStatusSchema`         | `AuthStatus`         |
-| `EntityContributionSchema` | `EntityContribution` |
-| `UserChangeSetSchema`      | `UserChangeSet`      |
-| `UserProfileSchema`        | `UserProfile`        |
+| Current                     | New                    |
+| --------------------------- | ---------------------- |
+| `LinkTargetsResponseSchema` | `LinkTargetListSchema` |
 
-### `core` (8 schemas)
+(Wraps `list[LinkTargetSchema]`; `Response` is rare across the
+codebase and the `…ListSchema` wrapper convention says it more
+clearly.)
 
-| Current                     | New                   |
-| --------------------------- | --------------------- |
-| `ErrorDetailSchema`         | `ErrorDetail`         |
-| `LinkTargetSchema`          | `LinkTarget`          |
-| `LinkTargetsResponseSchema` | `LinkTargets`         |
-| `LinkTypeSchema`            | `LinkType`            |
-| `RateLimitErrorBodySchema`  | `RateLimitErrorBody`  |
-| `RateLimitErrorSchema`      | `RateLimitError`      |
-| `ValidationErrorBodySchema` | `ValidationErrorBody` |
-| `ValidationErrorSchema`     | `ValidationError`     |
+### `media` (4 renames)
 
-### `media` (6 schemas)
+| Current             | New                     |
+| ------------------- | ----------------------- |
+| `AttachmentMetaOut` | `AttachmentMetaSchema`  |
+| `MediaAssetRefIn`   | `MediaAssetInputSchema` |
+| `RenditionUrlsOut`  | `RenditionUrlsSchema`   |
+| `UploadOut`         | `UploadSchema`          |
 
-| Current                 | New                  |
-| ----------------------- | -------------------- |
-| `AttachmentMetaOut`     | `AttachmentMeta`     |
-| `MediaAssetRefIn`       | `MediaAssetRefInput` |
-| `MediaRenditionsSchema` | `MediaRenditions`    |
-| `RenditionUrlsOut`      | `RenditionUrls`      |
-| `UploadOut`             | `Upload`             |
-| `UploadedMediaSchema`   | `UploadedMedia`      |
+(`MediaRenditionsSchema` and `UploadedMediaSchema` already conform.)
 
-### `citation` (15 schemas)
+### `citation` (5 renames)
 
-| Current                          | New                            |
-| -------------------------------- | ------------------------------ |
-| `CitationSourceChildSchema`      | `CitationSourceChild`          |
-| `CitationSourceCreateSchema`     | `CitationSourceCreate`         |
-| `CitationSourceDetailSchema`     | `CitationSourceDetail`         |
-| `CitationSourceLinkCreateSchema` | `CitationSourceLinkCreate`     |
-| `CitationSourceLinkSchema`       | `CitationSourceLink`           |
-| `CitationSourceLinkUpdateSchema` | `CitationSourceLinkUpdate`     |
-| `CitationSourceMatchSchema`      | `CitationSourceMatch`          |
-| `CitationSourceParentSchema`     | `CitationSourceParent`         |
-| `CitationSourceSearchSchema`     | `CitationSourceSearch`         |
-| `CitationSourceUpdateSchema`     | `CitationSourceUpdate`         |
-| `ExtractDraftSchema`             | `ExtractDraft`                 |
-| `ExtractRequestSchema`           | `ExtractRequest`               |
-| `ExtractResponseSchema`          | `ExtractResponse`              |
-| `RecognitionSchema`              | `CitationRecognition`          |
-| `SearchResponse`                 | `CitationSourceSearchResponse` |
+| Current                 | New                                  |
+| ----------------------- | ------------------------------------ |
+| `ExtractDraftSchema`    | `CitationExtractDraftSchema`         |
+| `ExtractRequestSchema`  | `CitationExtractInputSchema`         |
+| `ExtractResponseSchema` | `CitationExtractResultSchema`        |
+| `RecognitionSchema`     | `CitationRecognitionSchema`          |
+| `SearchResponse`        | `CitationSourceSearchResponseSchema` |
 
-### `provenance` (27 schemas)
+(`Extract` is too generic at the OpenAPI level — could be extracting
+anything. Scope all three to `CitationExtract*`. `Request` →
+`Input` per our convention; `Response` → `Result` reads more
+naturally for the operation's output. All other
+`CitationSource*Schema` names already conform.)
 
-| Current                        | New                      |
-| ------------------------------ | ------------------------ |
-| `AttributionSchema`            | `Attribution`            |
-| `BatchCitationInstanceOut`     | `BatchCitationInstance`  |
-| `ChangeSetBaseSchema`          | `ChangeSetBase`          |
-| `ChangeSetDetailSchema`        | `ChangeSetDetail`        |
-| `ChangeSetInputSchema`         | `ChangeSetInput`         |
-| `ChangeSetListSchema`          | `ChangeSetList`          |
-| `ChangeSetSchema`              | `ChangeSet`              |
-| `ChangeSetSummarySchema`       | `ChangeSetSummary`       |
-| `ChangeSetWithEntitySchema`    | `ChangeSetWithEntity`    |
-| `CitationInstanceCreateIn`     | `CitationInstanceCreate` |
-| `CitationInstanceSchema`       | `CitationInstance`       |
-| `CitationLinkSchema`           | `CitationLink`           |
-| `CitedChangeSetCitationSchema` | `CitedChangeSetCitation` |
-| `CitedChangeSetSchema`         | `CitedChangeSet`         |
-| `ClaimSchema`                  | `Claim`                  |
-| `EditCitationInput`            | `EditCitationInput`      |
-| `FieldChangeSchema`            | `FieldChange`            |
-| `InlineCitationSchema`         | `InlineCitation`         |
-| `RetractionSchema`             | `Retraction`             |
-| `RevertNoteSchema`             | `RevertNote`             |
-| `ReviewClaimSchema`            | `ReviewClaim`            |
-| `ReviewLinkSchema`             | `ReviewLink`             |
-| `RichTextSchema`               | `RichText`               |
-| `SourceSchema`                 | `CitationSource`         |
-| `SourcesPageSchema`            | `SourcesPage`            |
-| `UndoChangeSetSchema`          | `UndoChangeSet`          |
-| `UndoResultSchema`             | `UndoResult`             |
+### `provenance` (5 renames)
 
-### `catalog` (74 schemas)
+| Current                    | New                            |
+| -------------------------- | ------------------------------ |
+| `BatchCitationInstanceOut` | `CitationInstanceBatchSchema`  |
+| `CitationInstanceCreateIn` | `CitationInstanceCreateSchema` |
+| `EditCitationInput`        | `CitationReferenceInputSchema` |
+| `SourceSchema`             | `CitationSourceSchema`         |
+| `FieldConstraint`          | `FieldConstraintSchema`        |
 
-The bulk of the work. Tables grouped by sub-area for readability.
+(All other `…Schema` names already conform.)
+
+### `catalog` (~25 renames)
+
+Grouped by sub-area for readability. Entries that already conform
+are not listed.
 
 #### Top-level (`apps/catalog/api/schemas.py`)
 
-| Current                     | New                   |
-| --------------------------- | --------------------- |
-| `AlreadyDeletedSchema`      | `AlreadyDeleted`      |
-| `BlockingReferrerSchema`    | `BlockingReferrer`    |
-| `ClaimPatchSchema`          | `ClaimPatch`          |
-| `CreateSchema`              | `EntityCreateInput`   |
-| `CreditSchema`              | `Credit`              |
-| `CreditInput`               | `CreditInput`         |
-| `DeletePreviewBase`         | `DeletePreviewBase`   |
-| `DeleteResponseSchema`      | `DeleteResponse`      |
-| `EditOptionItem`            | `EditOption`          |
-| `GameplayFeatureSchema`     | `GameplayFeatureRef`  |
-| `HierarchyClaimPatchSchema` | `HierarchyClaimPatch` |
-| `Ref`                       | `Ref`                 |
-| `RelatedTitleSchema`        | `RelatedTitle`        |
-| `SoftDeleteBlockedSchema`   | `SoftDeleteBlocked`   |
-| `TitleRefSchema`            | `TitleRef`            |
-
-(`GameplayFeatureSchema` is `Ref + count`. Renaming to
-`GameplayFeatureRef` clarifies that — see the docstring guidance in
-[ApiDesign.md](../../../ApiDesign.md) about preserving expansion points.)
+| Current                 | New                       |
+| ----------------------- | ------------------------- |
+| `CreateSchema`          | `EntityCreateInputSchema` |
+| `CreditInput`           | `CreditInputSchema`       |
+| `DeletePreviewBase`     | `DeletePreviewBaseSchema` |
+| `EditOptionItem`        | `EditOptionSchema`        |
+| `GameplayFeatureSchema` | `GameplayFeatureRef`      |
+| `Ref`                   | `EntityRef`               |
+| `TitleRefSchema`        | `TitleRef`                |
 
 #### Titles (`apps/catalog/api/titles.py`)
 
-| Current                     | New                   |
-| --------------------------- | --------------------- |
-| `AggregatedMediaSchema`     | `AggregatedMedia`     |
-| `AgreedSpecsSchema`         | `AgreedSpecs`         |
-| `CrossTitleLinkSchema`      | `CrossTitleLink`      |
-| `TitleClaimPatchSchema`     | `TitleClaimPatch`     |
-| `TitleDeletePreviewSchema`  | `TitleDeletePreview`  |
-| `TitleDeleteResponseSchema` | `TitleDeleteResponse` |
-| `TitleDetailSchema`         | `TitleDetail`         |
-| `TitleListSchema`           | `TitleListItem`       |
-| `TitleMachineSchema`        | `TitleMachine`        |
-| `TitleMachineVariantSchema` | `TitleMachineVariant` |
+| Current                     | New                       |
+| --------------------------- | ------------------------- |
+| `TitleListSchema`           | `TitleListItemSchema`     |
+| `TitleMachineSchema`        | `TitleModelSchema`        |
+| `TitleMachineVariantSchema` | `TitleModelVariantSchema` |
 
-(`TitleListSchema` → `TitleListItem` rather than `TitleList`: it's
-the row shape, not a wrapper around a list.)
+(`TitleListSchema` → `TitleListItemSchema` rather than left bare:
+it's the row shape, not a wrapper around a list. `TitleMachine*` →
+`TitleModel*` purges another `Machine` leak; the `<Parent><Child>`
+shape stays intact, distinct from the standalone `ModelSchema`
+family.)
 
 #### Machine models (`apps/catalog/api/machine_models.py`)
 
-| Current                    | New                    |
-| -------------------------- | ---------------------- |
-| `MachineModelDetailSchema` | `MachineModelDetail`   |
-| `MachineModelGridSchema`   | `MachineModelGridItem` |
-| `MachineModelListSchema`   | `MachineModelListItem` |
-| `ModelClaimPatchSchema`    | `ModelClaimPatch`      |
-| `ModelDeletePreviewSchema` | `ModelDeletePreview`   |
-| `ModelEditOptionsSchema`   | `ModelEditOptions`     |
-| `ModelRecentSchema`        | `ModelRecent`          |
-| `ModelRefSchema`           | `ModelRef`             |
-| `VariantSchema`            | `MachineModelVariant`  |
+| Current                    | New                   |
+| -------------------------- | --------------------- |
+| `MachineModelDetailSchema` | `ModelDetailSchema`   |
+| `MachineModelGridSchema`   | `ModelGridItemSchema` |
+| `MachineModelListSchema`   | `ModelListItemSchema` |
+| `ModelRefSchema`           | `ModelRef`            |
+| `VariantSchema`            | `ModelVariantSchema`  |
 
 #### People (`apps/catalog/api/people.py`)
 
-| Current                         | New                       |
-| ------------------------------- | ------------------------- |
-| `PersonSchema`                  | `PersonListItem`          |
-| `PersonGridSchema`              | `PersonGridItem`          |
-| `PersonDetailSchema`            | `PersonDetail`            |
-| `PersonDeletePreviewSchema`     | `PersonDeletePreview`     |
-| `PersonSoftDeleteBlockedSchema` | `PersonSoftDeleteBlocked` |
-| `PersonTitleSchema`             | `PersonTitle`             |
+| Current            | New                    |
+| ------------------ | ---------------------- |
+| `PersonSchema`     | `PersonListItemSchema` |
+| `PersonGridSchema` | `PersonGridItemSchema` |
 
-#### Manufacturers / corporate entities (`apps/catalog/api/manufacturers.py`, `corporate_entities.py`, `locations.py`)
+#### Manufacturers / corporate entities / locations
 
-| Current                              | New                                  |
-| ------------------------------------ | ------------------------------------ |
-| `CorporateEntityClaimPatchSchema`    | `CorporateEntityClaimPatch`          |
-| `CorporateEntityDetailSchema`        | `CorporateEntityDetail`              |
-| `CorporateEntityListSchema`          | `CorporateEntityListItem`            |
-| `CorporateEntityLocationAncestorRef` | `CorporateEntityLocationAncestorRef` |
-| `CorporateEntityLocationSchema`      | `CorporateEntityLocation`            |
-| `CorporateEntitySchema`              | `ManufacturerCorporateEntity`        |
-| `LocationAncestorRef`                | `LocationAncestorRef`                |
-| `LocationChildRef`                   | `LocationChildRef`                   |
-| `LocationDetailSchema`               | `LocationDetail`                     |
-| `LocationManufacturerSchema`         | `LocationManufacturer`               |
-| `ManufacturerDetailSchema`           | `ManufacturerDetail`                 |
-| `ManufacturerGridSchema`             | `ManufacturerGridItem`               |
-| `ManufacturerPersonSchema`           | `ManufacturerPerson`                 |
-| `ManufacturerSchema`                 | `ManufacturerListItem`               |
-| `SystemSchema`                       | `ManufacturerSystem`                 |
+| Current                     | New                                 |
+| --------------------------- | ----------------------------------- |
+| `CorporateEntityListSchema` | `CorporateEntityListItemSchema`     |
+| `CorporateEntitySchema`     | `ManufacturerCorporateEntitySchema` |
+| `ManufacturerGridSchema`    | `ManufacturerGridItemSchema`        |
+| `ManufacturerSchema`        | `ManufacturerListItemSchema`        |
+| `SystemSchema`              | `ManufacturerSystemSchema`          |
 
 `SystemSchema` and `CorporateEntitySchema` are both renamed to
 `Manufacturer*` names following the `<Parent><Child>` pattern
-already used for `ManufacturerPerson` and `LocationManufacturer`.
-Both are embedded sub-shapes inside `ManufacturerDetail` —
-semantically list-items in "the manufacturer's systems/entities
-list" — even though `ManufacturerSystem` happens to be exactly
-`name + slug` today. Per
+already used for `ManufacturerPersonSchema` and
+`LocationManufacturerSchema`. Both are embedded sub-shapes inside
+`ManufacturerDetailSchema`. Per
 [ApiDesign.md](../../../ApiDesign.md), naming a list-item shape
-preserves a future expansion point (e.g., adding `model_count`)
-that collapsing to `Ref` would foreclose.
+preserves a future expansion point that collapsing to `Ref` would
+foreclose.
 
-`ManufacturerCorporateEntity` is genuinely distinct in shape from
-`CorporateEntityListItem` — the embedded form lacks `manufacturer`
-and `model_count` since both are context-redundant when nested
-under a manufacturer detail. A future consolidation of those two
-shapes (if the field divergence isn't load-bearing) is tracked in
+`ManufacturerCorporateEntitySchema` is genuinely distinct in shape
+from `CorporateEntityListItemSchema` — the embedded form lacks
+`manufacturer` and `model_count`. A future consolidation of those
+two shapes (if the field divergence isn't load-bearing) is tracked
+in
 [ApiSvelteBoundaryFollowups.md](ApiSvelteBoundaryFollowups.md).
 
 #### Systems (`apps/catalog/api/systems.py`)
 
-| Current              | New              |
-| -------------------- | ---------------- |
-| `SystemCreateSchema` | `SystemCreate`   |
-| `SystemDetailSchema` | `SystemDetail`   |
-| `SystemListSchema`   | `SystemListItem` |
+| Current            | New                    |
+| ------------------ | ---------------------- |
+| `SystemListSchema` | `SystemListItemSchema` |
 
-(See collision note above.)
+#### Series, themes, franchises, gameplay features, taxonomy
 
-#### Series, themes, franchises, gameplay features, taxonomy, reward types, credit roles
+| Current                          | New                                  |
+| -------------------------------- | ------------------------------------ |
+| `DisplayTypeListSchema`          | `DisplayTypeListItemSchema`          |
+| `FranchiseListSchema`            | `FranchiseListItemSchema`            |
+| `GameplayFeatureInput`           | `GameplayFeatureInputSchema`         |
+| `GameplayFeatureListSchema`      | `GameplayFeatureListItemSchema`      |
+| `SeriesListSchema`               | `SeriesListItemSchema`               |
+| `TechnologyGenerationListSchema` | `TechnologyGenerationListItemSchema` |
+| `ThemeListSchema`                | `ThemeListItemSchema`                |
 
-| Current                          | New                            |
-| -------------------------------- | ------------------------------ |
-| `SeriesDetailSchema`             | `SeriesDetail`                 |
-| `SeriesListSchema`               | `SeriesListItem`               |
-| `ThemeDetailSchema`              | `ThemeDetail`                  |
-| `ThemeListSchema`                | `ThemeListItem`                |
-| `FranchiseDetailSchema`          | `FranchiseDetail`              |
-| `FranchiseListSchema`            | `FranchiseListItem`            |
-| `GameplayFeatureDetailSchema`    | `GameplayFeatureDetail`        |
-| `GameplayFeatureInput`           | `GameplayFeatureInput`         |
-| `GameplayFeatureListSchema`      | `GameplayFeatureListItem`      |
-| `TaxonomySchema`                 | `Taxonomy`                     |
-| `TaxonomyDeletePreviewSchema`    | `TaxonomyDeletePreview`        |
-| `TaxonomyWithTitleCountSchema`   | `TaxonomyWithTitleCount`       |
-| `TechnologyGenerationListSchema` | `TechnologyGenerationListItem` |
-| `DisplayTypeListSchema`          | `DisplayTypeListItem`          |
-| `RewardTypeDetailSchema`         | `RewardTypeDetail`             |
-| `CreditRoleDetailSchema`         | `CreditRoleDetail`             |
+### `config/api.py` (1 rename)
 
-#### `config/api.py` (top-level)
+| Current       | New               |
+| ------------- | ----------------- |
+| `StatsSchema` | `SiteStatsSchema` |
 
-| Current       | New         |
-| ------------- | ----------- |
-| `StatsSchema` | `SiteStats` |
+### Already-shipped touch-up
+
+| Current            | New                      |
+| ------------------ | ------------------------ |
+| `PaginationParams` | `PaginationParamsSchema` |
+
+The orphan-pagination fix landed in commit `fd9e02b5a` named the
+new schema `PaginationParams` (no suffix). The universal-`Schema`
+rule means it should be `PaginationParamsSchema`. Bundle this
+one-class rename into whichever app PR touches it most naturally
+(`core`, since it lives in `apps/core/pagination.py`).
 
 ## Ghost-type fixes
 
-One name in the OpenAPI doc doesn't come from an explicit Ninja
-schema and needs a source-side fix alongside the rename:
+Some OpenAPI components don't come from explicit Ninja schema
+classes — Ninja auto-generates them from internal class names
+inside its `@paginate` machinery. They need source-side fixes
+analogous to (and following the pattern of) the already-shipped
+`PaginationParams` fix.
+
+### Pagination query params — DONE
 
 - **`Input` (Ninja-auto-named pagination query model)** — replaced
-  with a real Pydantic schema named `PaginationParams` in
-  `apps/core/schemas.py` (or wherever pagination is currently
-  defined). Endpoints using inline pagination params switch to the
-  named model.
+  by `PaginationParams` in `apps/core/pagination.py` (commit
+  `fd9e02b5a`). Will be renamed to `PaginationParamsSchema` along
+  with the per-app sweep above.
+
+### `Paged*Schema` wrappers — TODO
+
+Four components in the OpenAPI doc are auto-named by Ninja's
+`@paginate` decorator from the inner row-schema class name:
+
+- `PagedMachineModelListSchema` (wraps `MachineModelListSchema`)
+- `PagedManufacturerSchema` (wraps `ManufacturerSchema`)
+- `PagedPersonSchema` (wraps `PersonSchema`)
+- `PagedTitleListSchema` (wraps `TitleListSchema`)
+
+After the renames in this plan, the auto-generated names degrade
+to confusing forms like `PagedManufacturerListItemSchema` — mixing
+the "wrapper" prefix `Paged` with the "row" suffix `ListItem`.
+
+**Fix** (mirrors `NamedPageNumberPagination`): introduce a
+`NamedPaginatedResponseSchema` base — a Ninja-`Schema` subclass
+parameterized by the row type — and apply it at the four
+`@paginate(...)` sites so each wrapper gets a stable, intentional
+name. Goal:
+
+| Auto-generated today          | After ghost fix          |
+| ----------------------------- | ------------------------ |
+| `PagedMachineModelListSchema` | `ModelListSchema`        |
+| `PagedManufacturerSchema`     | `ManufacturerListSchema` |
+| `PagedPersonSchema`           | `PersonListSchema`       |
+| `PagedTitleListSchema`        | `TitleListSchema`        |
+
+(After the row-rename, the `…ListSchema` wrapper slot is free —
+e.g., `TitleListSchema` → `TitleListItemSchema` opens up
+`TitleListSchema` for the wrapper.)
+
+This is its own small PR, sequenced **after** the per-app renames
+that free up the wrapper slot names.
+
+### `JsonBody` — not a ghost
 
 `JsonBody` also surfaces as an OpenAPI component without a Ninja
 `Schema` subclass, but it is **not** a ghost-type fix: the PEP 695

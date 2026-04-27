@@ -105,24 +105,26 @@ This pre-pass also matters for **PR 1+** (see [TS transform scope below](#ts-tra
 
 **Why this is one PR, not split per area**: the codemod is mechanical and easier to review as a single sweep. Splitting by route/area would force humans to track which files were converted and which still use indexed access — extra cognitive load for no review benefit.
 
-#### PR 1+: per-app schema renames
+#### PR 1+: batched schema renames
 
-After PR 0, every consumer uses named imports. Each per-app PR follows this loop.
+After PR 0, every consumer uses named imports. Each batched rename PR follows this loop.
 
 ##### Run order
 
-1. **Python rename** (`backend/scripts/codemod/rename_schemas.py`, scoped to one app's entries from `rename-table.json`).
+1. **Python rename** (`backend/scripts/codemod/rename_schemas.py`, scoped to the batch's entries from `rename-table.json` via `--names OldA,OldB,…`).
 2. **`make api-gen`** — regenerates `frontend/src/lib/api/schema.d.ts`.
-3. **TS rename** (`frontend/scripts/codemod/rename-import-specifiers.mjs`, same JSON scope) — rewrites import specifiers and any in-code references.
-4. **Format**: `cd backend && uv run ruff format .` + `cd frontend && pnpm format`. Both libcst (Python) and the string-based TS rewrites can leave noisy whitespace; without this the diffs are polluted and the pre-commit hook would rewrite the files anyway.
+3. **TS rename** (`frontend/scripts/codemod/rename-import-specifiers.mjs`, same `--names` scope) — rewrites import specifiers and any in-code references.
+4. **Format**: `cd backend && uv run ruff format .` + `cd frontend && pnpm format`. Both libcst (Python) and the string-based TS rewrites can leave noisy whitespace; without this the diffs are polluted and the pre-commit hook would rewrite the files anyway. Whole-tree scope is intentional — both formatters are idempotent on already-formatted files, so they won't sweep unrelated content into the rename diff. (If a future contributor has uncommitted formatting drift in unrelated files, that's a pre-existing issue this step exposes, not creates.)
 5. **Verify** (see _Iterate until tests pass_ below).
 6. Only then commit.
 
 ##### Python transform scope
 
-Find class definitions wherever they live — `apps/*/schemas.py` is canonical, but `apps/citation/api.py` has 15 inline schemas, `apps/accounts/api.py` has 4, and the boundary tests intentionally don't yet enforce the schemas-must-live-in-`schemas.py` rule. The transform walks every `class FooSchema(Schema):` declaration regardless of file. Then updates every reference across `backend/**/*.py` — other apps' imports, serializers, tests, fixtures, endpoint `response=` decorators, type annotations.
+Find class definitions wherever they live — `apps/*/schemas.py` is canonical, but `apps/citation/api.py` has 15 inline schemas, `apps/accounts/api.py` has 4, `apps/core/pagination.py` holds `PaginationParams`, and the boundary tests intentionally don't yet enforce the schemas-must-live-in-`schemas.py` rule. The transform looks up class definitions **by name from the rename table** (not by `Schema`-suffix pattern — `PaginationParams`, `Ref`, `CreditInput`, etc. are entries without the suffix). It walks every matching `class <OldName>(...)` declaration regardless of file or base class, then updates every reference across `backend/**/*.py` — other apps' imports, serializers, tests, fixtures, endpoint `response=` decorators, type annotations.
 
-The rename table is what's per-app; the file scope isn't.
+The rename table contents are what's per-batch; the file scope isn't.
+
+`rename-table.json` is a flat `{"OldName": "NewName"}` map containing the full set of renames from [ApiNamingRationalization.md](ApiNamingRationalization.md). Both scripts accept `--names OldA,OldB,…` to restrict a run to a subset; the JSON map itself never gets rewritten between batches. (Alternative: per-app grouped JSON. Rejected — PR 1's three entries don't all live in one app, so we'd need a cross-cutting filter mechanism anyway.)
 
 ##### TS transform scope
 
@@ -133,58 +135,65 @@ Walks `frontend/src/**/*.{ts,svelte,svelte.ts}` (excluding `client.ts`). For eac
 
 After PR 0, no indexed-access dedupe logic is needed — every relevant reference is already a named import. The transform is `s/\bOldName\b/NewName/g` plus rewriting specifiers in the `import type { … } from '$lib/api/schema'` block, so it's plain string-based like PR 0's script. Format step (`pnpm format`) handles import-specifier sort order; the codemod doesn't need to.
 
-**Self-alias collapse — same logic as PR 0.** A rename can manufacture new self-aliases out of files that didn't have them before. Concrete example: `BlockingReferrerSchema → BlockingReferrer`. Today, [frontend/src/lib/delete-flow.ts](../../../../frontend/src/lib/delete-flow.ts) declares `export type BlockingReferrer = components['schemas']['BlockingReferrerSchema'];` — LHS and RHS differ, so PR 0 rewrites it to `export type BlockingReferrer = BlockingReferrerSchema;`, which type-checks fine. After the rename, the naive transform would produce `export type BlockingReferrer = BlockingReferrer;` — a circular self-reference. The rename codemod must therefore reuse PR 0's self-alias detection and collapse rule (delete if non-exported; convert to `export type { X };` if exported), applied **after** the bare-name substitution. Implement once; share between the two scripts via a small helper.
+**Self-alias collapse not needed.** Verified empirically against the post-PR-0 tree: zero `export type X = XSchema;` patterns exist that the rename table would collapse into a self-reference. The only `Schema`-stripping renames are `TitleRefSchema → TitleRef`, `ModelRefSchema → ModelRef`, and `GameplayFeatureSchema → GameplayFeatureRef` — none have matching local aliases. `Ref → EntityRef` can't manufacture a self-alias because there's no `export type Ref = Ref;` (the bare `Ref` import becomes `EntityRef` along with any LHS reference). The rename codemod is therefore plain substitution, no collapse pass. PR 0's inline self-alias logic stays inline; nothing to extract or share. Re-verify with a quick `grep -rEn 'export type [A-Za-z_]+ = [A-Za-z_]+Schema;' frontend/src` if the rename table grows.
 
 #### Iterate until tests pass
 
-- `git reset --hard` between runs is free. No human-in-the-loop deciding per-batch whether things look right — just run, check, revert, fix script.
+- `git reset --hard` between runs is free **once the working tree is clean**. Stash or commit unrelated in-flight work first — the iteration loop assumes nothing in the tree is worth preserving outside the codemod's output. No human-in-the-loop deciding per-batch whether things look right — just run, check, revert, fix script.
 - Three-part oracle, all binary signals:
   - `make api-gen` succeeds — the OpenAPI doc is internally consistent after the Python rename.
   - `pnpm check` passes — every frontend consumer compiles against the new `schema.d.ts`.
   - `make test` passes — runtime catches anything the type checks miss (string references in fixtures, admin field configs, `extra_data` JSON, etc.).
 
-#### Per-app rollout order
+#### Batch rollout order
 
-After PR 0, sequence the rename PRs smallest-first so the script grows on simple cases before encountering edge cases:
+The "keep `Schema` everywhere" decision (see [ApiNamingRationalization.md](ApiNamingRationalization.md)) collapses the original 134-rename plan to ~40 renames concentrated in `core`, `media`, `citation`, `provenance`, and `catalog`. `accounts` has zero renames under the new rules and is skipped entirely.
 
-1. `config/api.py` — one schema (`StatsSchema → SiteStats`), non-`apps/` location, debugs file-discovery on a one-schema surface.
-2. `accounts` — 4 schemas, all simple `…Schema → …` suffix-strips.
-3. `core` — 8 schemas, mostly suffix-strips.
-4. `media` — 6 schemas, introduces the `In/Out → Input`/bare pattern.
-5. `citation` — 15 schemas, mix including the `RecognitionSchema → CitationRecognition` and `SourceSchema → CitationSource` bare-name renames.
-6. `provenance` — 27 schemas. Wide consumer reach (`ChangeSet`, `Claim`, `CitationInstance` are heavily used), so expect a large frontend diff. Mechanical; reviewers can rerun.
-7. `catalog` — 74 schemas, includes role-suffix decisions (`PersonSchema → PersonListItem` drops `Schema` AND adds a new suffix), embedded sub-shape renames (`SystemSchema → ManufacturerSystem`).
+After PR 0, sequence the remaining rename PRs smallest-first. The original plan split this six ways (one per app) on the theory that the codemod would grow on simple cases before encountering edge cases. In practice the codemod is a JSON map driving plain string substitution — it doesn't grow per app, and the per-PR overhead (api-gen, format, three-oracle verify) dominates the actual rename work. Compress to **three batched PRs** instead, sized so the small batch still exercises both codemods end-to-end on a tiny surface before the bulk of the work:
 
-Expect the script to grow with each app, not just its input table. `config/` and `accounts` validate only trivial cases.
+1. **PR 1 (small batch, 3 renames)** — `config/api.py` + `apps/core/` + the already-shipped pagination touch-up. Renames: `StatsSchema → SiteStatsSchema`, `LinkTargetsResponseSchema → LinkTargetListSchema`, `PaginationParams → PaginationParamsSchema`. Debugs the codemods end-to-end on three modules and three renames.
+2. **PR 2 (medium batch, ~14 renames)** — `media` (4) + `citation` (5) + `provenance` (5). Introduces the `In → Input`, `Out → ∅`, and entity-scoping patterns (`Extract*Schema → CitationExtract*Schema`, `SourceSchema → CitationSourceSchema`, etc.). The provenance `SourceSchema → CitationSourceSchema` collides with `apps.citation.models.CitationSource` already imported in `provenance/api.py`; the `Schema` suffix is what keeps them disambiguated, which is the whole point.
+3. **PR 3 (large batch, ~25 renames)** — `catalog`. The bulk of the work. Includes role-suffix decisions (`PersonSchema → PersonListItemSchema`), embedded sub-shape renames (`SystemSchema → ManufacturerSystemSchema`), the `Machine → Model` purge (`MachineModelDetailSchema → ModelDetailSchema`, `TitleMachineSchema → TitleModelSchema`, etc.), and the `*Ref`-exception strip-throughs (`TitleRefSchema → TitleRef`, `ModelRefSchema → ModelRef`, `Ref → EntityRef`, `GameplayFeatureSchema → GameplayFeatureRef`). **Run `Ref → EntityRef` in dry-run first** — it's the only 3-character target and the most identifier-collision-prone rename in the table; eyeball the diff before letting it land.
+4. **PR 4 (`Paged*Schema` ghost fix)** — non-codemod PR. Introduces `NamedPaginatedResponseSchema` (mirrors `NamedPageNumberPagination`) so the four Ninja-auto-named wrappers get stable names: `PagedTitleListSchema → TitleListSchema`, `PagedMachineModelListSchema → ModelListSchema`, `PagedPersonSchema → PersonListSchema`, `PagedManufacturerSchema → ManufacturerListSchema`. Must come **after** PR 3 since the wrapper-slot names (`TitleListSchema`, `ModelListSchema`) are only freed once the row schemas have moved to `…ListItemSchema`.
+
+If a batch reveals a script defect, revert just that PR — three PRs still gives reasonable bisect granularity, and PR 1's tiny surface catches script-development bugs before PR 2/3 expose them at scale.
 
 #### Caveats
 
 - The codemod must cover `backend/**/*.py` (including `backend/config/api.py`,
-  which holds `StatsSchema → SiteStats`), not just `apps/*/schemas.py` —
+  which holds `StatsSchema → SiteStatsSchema`), not just `apps/*/schemas.py` —
   tests and fixtures reference schema names too.
 - `RelationshipSchema` in `apps/provenance/validation.py` is a `@dataclass`,
   not a Ninja schema, so it never reaches OpenAPI and the rename rules don't
   apply. Excluding it keeps a Python-level grep from producing a false hit.
+- The Python rename codemod no longer has to think about Django-model name
+  collisions, because no rename produces a bare `Claim` / `ChangeSet` /
+  `CitationInstance` / `Source` / `Credit`. The `Schema` suffix is exactly
+  what keeps Python files importing both `from .models import ChangeSet`
+  and `from .schemas import ChangeSetSchema` unambiguous.
 
 #### Rollback
 
-Per-app PRs are independently revertible. If a later PR reveals a script defect that retroactively breaks an earlier rename, revert the affected PRs in reverse order. The inverse transform is mechanical — swap keys/values in the rename table, re-run the codemod — but in practice `git revert` on the merged PR is faster.
+Batched PRs are independently revertible. If a later PR reveals a script defect that retroactively breaks an earlier rename, revert the affected PRs in reverse order. The inverse transform is mechanical — swap keys/values in the rename table, re-run the codemod — but in practice `git revert` on the merged PR is faster.
 
 PR 0 is also revertible — it's a pure import-style change with no semantic effect.
 
 ### Ghost-type fixes
 
-One component name in the OpenAPI doc doesn't come from an explicit Ninja schema. It needs a source-side fix alongside (or before) the renames. It's a separate small PR — not a Python class rename and doesn't fit the codemod machinery.
+Some OpenAPI components don't come from explicit Ninja schema classes — Ninja auto-generates them from internal class names inside its `@paginate` machinery. They need source-side fixes that don't fit the rename codemod. Two are tracked here: the already-shipped `Input` fix, and the `Paged*Schema` family fix that closes out the rename effort.
 
 `JsonBody` is **not** a ghost type to fix — it's the deliberate, project-wide name for "an arbitrary JSON object" and is used pervasively in the backend (see [apps/core/types.py:19](../../../../backend/apps/core/types.py#L19)). It surfaces as a named OpenAPI component because the PEP 695 `type` alias is what Pydantic registers, and that's the desired outcome: every `extra_data`-style field `$ref`s the same `JsonBody` component, frontend consumers can `import type { JsonBody }`, and the meaning is unambiguous. Do not rename, inline, or otherwise touch `JsonBody`.
 
 #### Status
 
-| Step                                                | Status                                                                |
-| --------------------------------------------------- | --------------------------------------------------------------------- |
-| `Input` ghost fix (`NamedPageNumberPagination`)     | DONE                                                                  |
-| PR 0 (TS-side indexed-access → named-imports sweep) | TODO                                                                  |
-| PR 1+ (per-app schema renames via codemod)          | TODO — STOP and check with the user before running the rename codemod |
+| Step                                                               | Status                                                                |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `Input` ghost fix (`NamedPageNumberPagination`)                    | DONE                                                                  |
+| PR 0 (TS-side indexed-access → named-imports sweep)                | DONE                                                                  |
+| PR 1 (small batch: config + core + pagination touch-up)            | TODO — STOP and check with the user before running the rename codemod |
+| PR 2 (medium batch: media + citation + provenance)                 | TODO                                                                  |
+| PR 3 (large batch: catalog)                                        | TODO                                                                  |
+| PR 4 (`Paged*Schema` ghost fix via `NamedPaginatedResponseSchema`) | TODO — runs after PR 3 frees up the wrapper-slot names                |
 
 When picking this up in a fresh session: read this plan top-to-bottom, then `git log refactor/api-renaming` to see what's already landed, then start at the next TODO.
 
@@ -261,7 +270,7 @@ PR 0 (indexed-access sweep):
 - `pnpm format` has been run; no pending whitespace churn in `git diff`.
 - No backend changes; `make api-gen` is a no-op.
 
-Per per-app rename PR (partial — only the schemas in that PR's scope have been renamed):
+Per batched rename PR (PR 1–3; partial — only the schemas in that PR's scope have been renamed):
 
 - After `make api-gen`, the old names are gone from the OpenAPI doc:
   `jq -r '.components.schemas | keys[]' backend/openapi.json | grep -E '^(OldName1|OldName2|...)$'`
@@ -275,11 +284,13 @@ Ghost-type fix PRs:
 
 After the final rename PR lands:
 
-- `frontend/src/lib/api/schema.d.ts` contains zero `…Schema` component
-  names, zero `…In` / `…Out` component names, and no generic-name components
-  (`Variant`, `Source`, `Stats`, `Recognition`, `Create`, and `Input` modulo
-  the spike outcome above). `JsonBody` is intentionally retained as the
-  shared name for arbitrary JSON-object fields.
+- Every name in `components.schemas` either ends in `Schema`, ends in `Ref`,
+  or is `JsonBody`. Asserted by a boundary test against the live OpenAPI
+  doc.
+- No component name ends in `In` or `Out`.
+- None of the previously-generic names (`Variant`, `Source`, `Stats`,
+  `Recognition`, `Create`, `Input`, `SearchResponse`, bare `Ref`) appear in
+  `components.schemas`.
 - Every schema in `components.schemas` is exposed as a top-level type alias
   in `schema.d.ts` (the `--root-types` flag is on).
 - No `components['schemas']` indexed access remains outside `client.ts`
