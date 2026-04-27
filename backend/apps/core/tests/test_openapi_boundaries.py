@@ -49,9 +49,9 @@ NO_4XX_ALLOWLIST = frozenset(
 # baseline (i.e. migrating inline schemas into schemas.py) is welcome.
 INLINE_SCHEMA_BASELINES = {
     "apps.accounts.api": 4,
-    "apps.citation.api": 15,
-    "apps.media.api": 4,
-    "apps.provenance.api": 8,
+    "apps.citation.api": 0,
+    "apps.media.api": 0,
+    "apps.provenance.api": 0,
 }
 
 

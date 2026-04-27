@@ -20,3 +20,33 @@ class UploadedMediaSchema(Schema):
     is_primary: bool
     uploaded_by_username: str | None = None
     renditions: MediaRenditionsSchema
+
+
+class RenditionUrlsSchema(Schema):
+    original: str
+    thumb: str
+    display: str
+
+
+class AttachmentMetaSchema(Schema):
+    entity_type: str
+    slug: str
+    category: str | None
+    is_primary: bool
+
+
+class UploadSchema(Schema):
+    asset_uuid: str
+    kind: str
+    status: str
+    original_filename: str
+    width: int
+    height: int
+    renditions: RenditionUrlsSchema
+    attachment: AttachmentMetaSchema
+
+
+class MediaAssetInputSchema(Schema):
+    entity_type: str
+    slug: str
+    asset_uuid: str

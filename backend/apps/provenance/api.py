@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
-from ninja import Router, Schema
+from ninja import Router
 from ninja.decorators import decorate_view
 from ninja.errors import HttpError
 from ninja.responses import Status
@@ -26,37 +26,17 @@ from apps.core.schemas import ErrorDetailSchema
 
 from .models import CitationInstance, ClaimControlledModel, Source
 from .page_endpoints import pages_router
-from .schemas import CitationLinkSchema, ReviewLinkSchema
-
-
-class CitationSourceSchema(Schema):
-    name: str
-    slug: str
-    source_type: str
-    priority: int
-    url: str
-    description: str
-
-
-class ReviewClaimSchema(Schema):
-    id: int
-    source_name: str
-    field_name: str
-    # ``value`` is the raw JSONField payload of a claim — scalar, dict, list,
-    # or null depending on the field — and stays ``object`` for the same
-    # reason the shared schemas in ``schemas.py`` do.
-    value: object
-    needs_review_notes: str
-    created_at: str
-    # Context about the subject (the entity this claim targets).
-    # Canonical hyphenated CatalogModel.entity_type, e.g. "manufacturer".
-    subject_type: str
-    subject_name: str
-    subject_slug: str | None = None
-    # Title that this claim created (for group claims).
-    title_slug: str | None = None
-    review_links: list[ReviewLinkSchema] = []
-
+from .schemas import (
+    CitationInstanceBatchSchema,
+    CitationInstanceCreateSchema,
+    CitationInstanceSchema,
+    CitationLinkSchema,
+    CitationSourceSchema,
+    RevertNoteSchema,
+    ReviewClaimSchema,
+    UndoChangeSetSchema,
+    UndoResultSchema,
+)
 
 sources_router = Router(tags=["sources", "private"])
 review_router = Router(tags=["review", "private"])
@@ -148,18 +128,6 @@ def list_review_claims(request):
 # ── Claim and ChangeSet mutations (revert, undo) ───────────────────
 
 
-class RevertNoteSchema(Schema):
-    note: str
-
-
-class UndoChangeSetSchema(Schema):
-    note: str = ""
-
-
-class UndoResultSchema(Schema):
-    changeset_id: int
-
-
 claims_router = Router(tags=["claims", "private"])
 changesets_router = Router(tags=["changesets", "private"])
 
@@ -247,15 +215,6 @@ def undo_changeset(
 citation_instances_router = Router(tags=["citation-instances", "private"])
 
 
-class CitationInstanceSchema(Schema):
-    id: int
-    citation_source_id: int
-    citation_source_name: str
-    claim_id: int | None = None
-    locator: str
-    created_at: str
-
-
 @citation_instances_router.get(
     "/",
     response=list[CitationInstanceSchema],
@@ -286,16 +245,6 @@ def list_citation_instances(
         )
         for ci in qs
     ]
-
-
-class CitationInstanceBatchSchema(Schema):
-    id: int
-    source_name: str
-    source_type: str
-    author: str
-    year: int | None = None
-    locator: str
-    links: list[CitationLinkSchema] = []
 
 
 @citation_instances_router.get(
@@ -338,11 +287,6 @@ def batch_citation_instances(
         )
         for ci in qs
     ]
-
-
-class CitationInstanceCreateSchema(Schema):
-    citation_source_id: int
-    locator: str = ""
 
 
 @citation_instances_router.post(

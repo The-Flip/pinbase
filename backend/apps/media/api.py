@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import HttpRequest
-from ninja import File, Form, Router, Schema, Status, UploadedFile
+from ninja import File, Form, Router, Status, UploadedFile
 from ninja.errors import HttpError
 from ninja.security import django_auth
 
@@ -36,6 +36,12 @@ from apps.media.processing import (
     generate_rendition,
     process_original,
     validate_image,
+)
+from apps.media.schemas import (
+    AttachmentMetaSchema,
+    MediaAssetInputSchema,
+    RenditionUrlsSchema,
+    UploadSchema,
 )
 from apps.media.storage import (
     build_public_url,
@@ -84,36 +90,6 @@ def _incr_rate_limit(user_id: int) -> None:
         cache.incr(key)
     except ValueError:
         cache.set(key, 1, 3600)
-
-
-class RenditionUrlsSchema(Schema):
-    original: str
-    thumb: str
-    display: str
-
-
-class AttachmentMetaSchema(Schema):
-    entity_type: str
-    slug: str
-    category: str | None
-    is_primary: bool
-
-
-class UploadSchema(Schema):
-    asset_uuid: str
-    kind: str
-    status: str
-    original_filename: str
-    width: int
-    height: int
-    renditions: RenditionUrlsSchema
-    attachment: AttachmentMetaSchema
-
-
-class MediaAssetInputSchema(Schema):
-    entity_type: str
-    slug: str
-    asset_uuid: str
 
 
 def _resolve_entity(entity_type: str, slug: str) -> tuple[ContentType, MediaSupported]:
