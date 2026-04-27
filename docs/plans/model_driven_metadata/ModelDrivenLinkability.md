@@ -234,6 +234,10 @@ type DeleteEndpoint = {
 
 Drops both `as never` casts, makes new delete endpoints visible to typed callers automatically.
 
+### Type `LinkTypeSchema.flow` as a `Literal` union on the backend
+
+`LinkTypeSchema.flow` is typed `str` in the Pydantic schema, so the generated `schema.d.ts` shape is `flow: string`. The wikilink picker only ever reads `'standard'` or `'custom'` (see [`WikilinkAutocomplete.svelte:91`](../../../frontend/src/lib/components/form/WikilinkAutocomplete.svelte#L91) — `lt.flow === 'custom'`), and the hand-written `LinkType` shape we just deleted narrowed it to `'standard' | 'custom'`. Switch the backend field to `Literal['standard', 'custom']` (or whatever the canonical set is) so the generated type carries the narrowing and frontend exhaustiveness checks become possible.
+
 ### Tighten `parseApiError` to accept the schema error union
 
 [`parse-api-error.ts:21`](../../../frontend/src/lib/api/parse-api-error.ts#L21) takes `error: unknown` and re-discriminates the body by runtime shape checks (`'detail' in error`, `typeof detail === 'string'`, …). Every typed-client caller already has `error` narrowed to the declared error-response union (`ErrorDetailSchema | ValidationErrorSchema` for most endpoints), so the `unknown` parameter widens the type away and forces the function to redo work the type system already did.
