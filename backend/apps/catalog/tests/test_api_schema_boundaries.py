@@ -2,7 +2,7 @@
 
 Shared wire shapes should be *defined* in the app that owns the domain
 concept, not in `catalog.api.schemas`. Catalog may still import and compose
-them (e.g. `ClaimPatchSchema.citation: EditCitationInput | None`), so we
+them (e.g. `ClaimPatchSchema.citation: CitationReferenceInputSchema | None`), so we
 check definition site via `__module__` rather than re-export presence.
 """
 
@@ -15,7 +15,7 @@ from config.api import api
 class TestSharedSchemaOwnership:
     def test_provenance_owned_shapes_are_defined_in_provenance(self):
         for name in (
-            "EditCitationInput",
+            "CitationReferenceInputSchema",
             "AttributionSchema",
             "CitationLinkSchema",
             "InlineCitationSchema",
@@ -34,7 +34,7 @@ class TestSharedSchemaOwnership:
         # to ``ChangeSetInputSchema``, so it lives in catalog. Pin against a
         # future move into provenance, which would force provenance to import
         # catalog vocabulary.
-        cls = catalog_schemas.CreateSchema
+        cls = catalog_schemas.EntityCreateInputSchema
         assert cls.__module__ == "apps.catalog.api.schemas"
 
     def test_media_owned_shapes_are_defined_in_media(self):
@@ -72,8 +72,8 @@ class TestSharedSchemaOwnership:
             for name, comp in components.items()
             if frozenset(comp.get("properties", {})) == create_input_shape
         }
-        assert create_matches == {"CreateSchema"}, (
-            "Expected only CreateSchema to have shape "
+        assert create_matches == {"EntityCreateInputSchema"}, (
+            "Expected only EntityCreateInputSchema to have shape "
             "{name, slug, note, citation}; "
             f"found {sorted(create_matches)}"
         )
@@ -81,7 +81,7 @@ class TestSharedSchemaOwnership:
     def test_catalog_schemas_does_not_redefine_shared_shapes(self):
         # Catalog may import and compose these, but must not define them.
         shared_names = (
-            "EditCitationInput",
+            "CitationReferenceInputSchema",
             "AttributionSchema",
             "CitationLinkSchema",
             "InlineCitationSchema",

@@ -37,6 +37,29 @@ export default ts.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      // Use named imports from `$lib/api/schema` instead of indexed access.
+      // `openapi-typescript --root-types` emits top-level aliases for every
+      // component schema, so `components['schemas']['Foo']` is always
+      // expressible as `Foo`. Indexed access is allowed only in
+      // `src/lib/api/client.ts` (the override below).
+      // Type-position `components['schemas'][...]` parses as a
+      // TSIndexedAccessType, not a MemberExpression — that's why this rule
+      // targets the TS-specific node.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "TSIndexedAccessType[objectType.typeName.name='components'][indexType.literal.value='schemas']",
+          message:
+            "Use a named import from '$lib/api/schema' instead of components['schemas'][...].",
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/lib/api/client.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
     },
   },
   {

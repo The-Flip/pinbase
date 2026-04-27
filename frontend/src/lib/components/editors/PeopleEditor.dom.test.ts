@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import type { components } from '$lib/api/schema';
+import type { CreditSchema } from '$lib/api/schema';
 
 import PeopleEditorFixture from './PeopleEditor.fixture.svelte';
 
-type Credit = components['schemas']['CreditSchema'];
+type Credit = CreditSchema;
 
 const { GET, PATCH } = vi.hoisted(() => ({
   GET: vi.fn(),

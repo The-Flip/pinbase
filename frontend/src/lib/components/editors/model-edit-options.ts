@@ -6,9 +6,9 @@
  */
 
 import client from '$lib/api/client';
-import type { components } from '$lib/api/schema';
+import type { ModelEditOptionsSchema } from '$lib/api/schema';
 
-export type ModelEditOptions = components['schemas']['ModelEditOptionsSchema'];
+export type ModelEditOptions = ModelEditOptionsSchema;
 
 export const EMPTY_EDIT_OPTIONS: ModelEditOptions = {
   themes: [],

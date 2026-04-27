@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { CorporateEntityDetailSchema } from '$lib/api/schema';
 
 export type CorporateEntityEditView = Pick<
-  components['schemas']['CorporateEntityDetailSchema'],
+  CorporateEntityDetailSchema,
   'name' | 'slug' | 'description' | 'year_start' | 'year_end' | 'aliases'
 >;

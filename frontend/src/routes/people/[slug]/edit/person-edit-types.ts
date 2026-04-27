@@ -1,7 +1,7 @@
-import type { components } from '$lib/api/schema';
+import type { PersonDetailSchema } from '$lib/api/schema';
 
 export type PersonEditView = Pick<
-  components['schemas']['PersonDetailSchema'],
+  PersonDetailSchema,
   | 'name'
   | 'slug'
   | 'description'

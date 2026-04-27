@@ -12,13 +12,14 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_control
 from ninja import Router, Schema
 from ninja.decorators import decorate_view
-from ninja.pagination import PageNumberPagination, paginate
+from ninja.pagination import paginate
 from ninja.responses import Status
 from ninja.security import django_auth
 
 from apps.catalog.naming import normalize_catalog_name
 from apps.core.licensing import get_minimum_display_rank
 from apps.core.models import active_status_q
+from apps.core.pagination import NamedPageNumberPagination
 from apps.core.schemas import (
     ErrorDetailSchema,
     RateLimitErrorSchema,
@@ -56,8 +57,8 @@ from .helpers import (
 from .schemas import (
     AlreadyDeletedSchema,
     ClaimPatchSchema,
-    CreateSchema,
     DeleteResponseSchema,
+    EntityCreateInputSchema,
     PersonDeletePreviewSchema,
     PersonSoftDeleteBlockedSchema,
     RelatedTitleSchema,
@@ -71,7 +72,7 @@ from .soft_delete import (
 )
 
 
-class PersonGridSchema(Schema):
+class PersonGridItemSchema(Schema):
     name: str
     slug: str
     aliases: list[str] = []
@@ -79,7 +80,7 @@ class PersonGridSchema(Schema):
     thumbnail_url: str | None = None
 
 
-class PersonSchema(Schema):
+class PersonListItemSchema(Schema):
     name: str
     slug: str
     credit_count: int = 0
@@ -207,11 +208,15 @@ def _person_qs() -> QuerySet[Person]:
 people_router = Router(tags=["people"])
 
 
-@people_router.get("/", response=list[PersonSchema])
-@paginate(PageNumberPagination, page_size=DEFAULT_PAGE_SIZE)
-def list_people(request: HttpRequest) -> list[PersonSchema]:
+class PersonListPagination(NamedPageNumberPagination):
+    response_name = "PersonListSchema"
+
+
+@people_router.get("/", response=list[PersonListItemSchema])
+@paginate(PersonListPagination, page_size=DEFAULT_PAGE_SIZE)
+def list_people(request: HttpRequest) -> list[PersonListItemSchema]:
     return [
-        PersonSchema(
+        PersonListItemSchema(
             name=row["name"], slug=row["slug"], credit_count=row["credit_count"]
         )
         for row in Person.objects.active()
@@ -221,7 +226,7 @@ def list_people(request: HttpRequest) -> list[PersonSchema]:
     ]
 
 
-@people_router.get("/all/", response=list[PersonGridSchema])
+@people_router.get("/all/", response=list[PersonGridItemSchema])
 @decorate_view(cache_control(no_cache=True))
 def list_all_people(
     request: HttpRequest,
@@ -324,7 +329,7 @@ def patch_person_claims(
     tags=["private"],
 )
 def create_person(
-    request: HttpRequest, data: CreateSchema
+    request: HttpRequest, data: EntityCreateInputSchema
 ) -> Status[PersonDetailSchema]:
     """Create a new Person from a user-supplied name and slug.
 

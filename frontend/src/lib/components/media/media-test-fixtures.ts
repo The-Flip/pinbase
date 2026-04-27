@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { UploadedMediaSchema } from '$lib/api/schema';
 
-type UploadedMedia = components['schemas']['UploadedMediaSchema'];
+type UploadedMedia = UploadedMediaSchema;
 
 export function makeMedia(index: number, overrides: Partial<UploadedMedia> = {}): UploadedMedia {
   return {

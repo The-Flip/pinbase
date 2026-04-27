@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { CitedChangeSetSchema, ClaimSchema } from '$lib/api/schema';
   import FocusContentShell from './FocusContentShell.svelte';
   import UserBadge from './UserBadge.svelte';
   import SmartDate from './SmartDate.svelte';
   import { getEntityContext } from '$lib/entity-context';
   import { groupSourcesByField } from './entity-sources';
 
-  type Claim = components['schemas']['ClaimSchema'];
-  type CitedChangeSet = components['schemas']['CitedChangeSetSchema'];
+  type Claim = ClaimSchema;
+  type CitedChangeSet = CitedChangeSetSchema;
 
   let {
     sources,

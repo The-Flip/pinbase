@@ -1,8 +1,6 @@
 <script lang="ts">
   import { resolveHref } from '$lib/utils';
-  import type { components } from '$lib/api/schema';
-
-  type Ref = components['schemas']['Ref'];
+  import type { EntityRef } from '$lib/api/schema';
 
   let {
     basePath,
@@ -12,7 +10,7 @@
     aliasLabel = 'Also known as',
   }: {
     basePath: string;
-    parents: Ref[];
+    parents: EntityRef[];
     aliases: string[];
     parentLabel: string;
     aliasLabel?: string;

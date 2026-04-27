@@ -1,6 +1,6 @@
-import type { components } from '$lib/api/schema';
+import type { ClaimSchema } from '$lib/api/schema';
 
-type Claim = components['schemas']['ClaimSchema'];
+type Claim = ClaimSchema;
 
 export type FieldGroup = { field: string; claims: Claim[] };
 

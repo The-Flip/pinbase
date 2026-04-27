@@ -2,7 +2,7 @@
   import { invalidateAll } from '$app/navigation';
   import client from '$lib/api/client';
   import { parseApiError } from '$lib/api/parse-api-error';
-  import type { components } from '$lib/api/schema';
+  import type { ChangeSetSchema, FieldChangeSchema } from '$lib/api/schema';
   import { auth } from '$lib/auth.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
   import InlineDiff from './InlineDiff.svelte';
@@ -12,8 +12,8 @@
   import { isDiffable, formatValue } from './change-display';
   import SmartDate from './SmartDate.svelte';
 
-  type ChangeSet = components['schemas']['ChangeSetSchema'];
-  type FieldChange = components['schemas']['FieldChangeSchema'];
+  type ChangeSet = ChangeSetSchema;
+  type FieldChange = FieldChangeSchema;
 
   let { changesets }: { changesets: ChangeSet[] } = $props();
   const entity = getEntityContext();

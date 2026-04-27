@@ -1,6 +1,6 @@
 <script lang="ts">
   import { untrack } from 'svelte';
-  import type { components } from '$lib/api/schema';
+  import type { CreditSchema } from '$lib/api/schema';
   import SearchableSelect from '$lib/components/SearchableSelect.svelte';
   import { creditsChanged } from '$lib/edit-helpers';
   import type { SectionEditorProps } from './editor-contract';
@@ -12,7 +12,7 @@
   import type { FieldErrors } from '$lib/api/parse-api-error';
   import { saveModelClaims, type SaveResult, type SaveMeta } from './save-model-claims';
 
-  type Credit = components['schemas']['CreditSchema'];
+  type Credit = CreditSchema;
 
   let {
     initialData,

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import type { components } from '$lib/api/schema';
+  import type { ModelDetailSchema } from '$lib/api/schema';
 
-  type Model = components['schemas']['MachineModelDetailSchema'];
+  type Model = ModelDetailSchema;
 
   let { model }: { model: Model } = $props();
 </script>

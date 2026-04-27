@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { components } from '$lib/api/schema';
+  import type { ChangeSetDetailSchema, ChangeSetSummarySchema } from '$lib/api/schema';
   import client from '$lib/api/client';
   import { CATALOG_META } from '$lib/api/catalog-meta';
   import { SITE_NAME } from '$lib/constants';
@@ -10,8 +10,8 @@
   import { isDiffable, formatValue } from '$lib/components/change-display';
   import { changesLabel } from './changes';
 
-  type ChangeSetSummary = components['schemas']['ChangeSetSummarySchema'];
-  type ChangeSetDetail = components['schemas']['ChangeSetDetailSchema'];
+  type ChangeSetSummary = ChangeSetSummarySchema;
+  type ChangeSetDetail = ChangeSetDetailSchema;
 
   // Filter state
   let entityType = $state('');

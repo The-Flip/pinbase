@@ -3,9 +3,7 @@
   import SidebarList from '$lib/components/SidebarList.svelte';
   import SidebarListItem from '$lib/components/SidebarListItem.svelte';
   import SidebarSection from '$lib/components/SidebarSection.svelte';
-  import type { components } from '$lib/api/schema';
-
-  type Ref = components['schemas']['Ref'];
+  import type { EntityRef } from '$lib/api/schema';
 
   let {
     basePath,
@@ -17,8 +15,8 @@
     aliasHeading = 'Also known as',
   }: {
     basePath: string;
-    parents: Ref[];
-    children: Ref[];
+    parents: EntityRef[];
+    children: EntityRef[];
     aliases: string[];
     parentHeading: string;
     childHeading: string;

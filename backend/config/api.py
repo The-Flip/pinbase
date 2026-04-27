@@ -6,7 +6,10 @@ from django.http import HttpRequest, JsonResponse
 from ninja import NinjaAPI, Schema
 from ninja.errors import HttpError, ValidationError
 
-from apps.catalog.api.edit_claims import FieldConstraint, StructuredValidationError
+from apps.catalog.api.edit_claims import (
+    FieldConstraintSchema,
+    StructuredValidationError,
+)
 from apps.provenance.rate_limits import RateLimitExceededError
 
 api = NinjaAPI(
@@ -20,14 +23,14 @@ api = NinjaAPI(
 # (health checks, stats for the homepage, etc.) use tags=["private"].
 
 
-class StatsSchema(Schema):
+class SiteStatsSchema(Schema):
     titles: int
     models: int
     manufacturers: int
     people: int
 
 
-@api.get("/stats", response=StatsSchema, tags=["private"])
+@api.get("/stats", response=SiteStatsSchema, tags=["private"])
 def stats(request: HttpRequest) -> dict[str, int]:
     with connection.cursor() as cursor:
         cursor.execute(
@@ -170,13 +173,13 @@ def _handle_rate_limit_exceeded(
 
 @api.get(
     "/field-constraints/{entity_type}",
-    response=dict[str, FieldConstraint],
+    response=dict[str, FieldConstraintSchema],
     exclude_none=True,
     tags=["private"],
 )
 def get_field_constraints(
     request: HttpRequest, entity_type: str
-) -> dict[str, FieldConstraint]:
+) -> dict[str, FieldConstraintSchema]:
     """Return numeric field constraints derived from model validators."""
     from apps.catalog.api.edit_claims import get_field_constraints as _get
     from apps.core.entity_types import get_linkable_model

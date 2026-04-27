@@ -1,6 +1,6 @@
 <script lang="ts">
   import client from '$lib/api/client';
-  import type { components } from '$lib/api/schema';
+  import type { SystemCreateSchema } from '$lib/api/schema';
   import CreatePage from '$lib/components/CreatePage.svelte';
   import SearchableSelect from '$lib/components/SearchableSelect.svelte';
   import {
@@ -8,7 +8,7 @@
     type SystemEditOption,
   } from '$lib/components/editors/system-edit-options';
 
-  type CreateBody = components['schemas']['SystemCreateSchema'];
+  type CreateBody = SystemCreateSchema;
 
   let { data } = $props();
 

@@ -21,7 +21,7 @@ from apps.catalog.claims import build_media_attachment_claim
 from apps.catalog.resolve import resolve_media_attachments
 from apps.core.api_helpers import authed_user
 from apps.core.entity_types import get_linkable_model
-from apps.core.schemas import ErrorDetailSchema
+from apps.core.schemas import ErrorDetailSchema, ValidationErrorSchema
 from apps.media.constants import (
     ALLOWED_IMAGE_EXTENSIONS,
     DISPLAY_MAX_DIMENSION,
@@ -86,31 +86,31 @@ def _incr_rate_limit(user_id: int) -> None:
         cache.set(key, 1, 3600)
 
 
-class RenditionUrlsOut(Schema):
+class RenditionUrlsSchema(Schema):
     original: str
     thumb: str
     display: str
 
 
-class AttachmentMetaOut(Schema):
+class AttachmentMetaSchema(Schema):
     entity_type: str
     slug: str
     category: str | None
     is_primary: bool
 
 
-class UploadOut(Schema):
+class UploadSchema(Schema):
     asset_uuid: str
     kind: str
     status: str
     original_filename: str
     width: int
     height: int
-    renditions: RenditionUrlsOut
-    attachment: AttachmentMetaOut
+    renditions: RenditionUrlsSchema
+    attachment: AttachmentMetaSchema
 
 
-class MediaAssetRefIn(Schema):
+class MediaAssetInputSchema(Schema):
     entity_type: str
     slug: str
     asset_uuid: str
@@ -146,7 +146,7 @@ def _resolve_entity(entity_type: str, slug: str) -> tuple[ContentType, MediaSupp
 
 @media_router.post(
     "/upload/",
-    response={200: UploadOut, 429: ErrorDetailSchema},
+    response={200: UploadSchema, 429: ErrorDetailSchema},
     auth=django_auth,
 )
 def upload_media(
@@ -156,7 +156,7 @@ def upload_media(
     slug: Form[str],
     category: Form[str | None] = None,
     is_primary: Form[bool] = False,
-) -> UploadOut:
+) -> UploadSchema:
     """Upload an image and create MediaAsset + MediaRendition rows."""
     user = authed_user(request)
     # --- Rate limit ---
@@ -291,19 +291,19 @@ def upload_media(
 
     _incr_rate_limit(user.id)
 
-    return UploadOut(
+    return UploadSchema(
         asset_uuid=str(asset_uuid),
         kind="image",
         status="ready",
         original_filename=original_filename,
         width=original.width,
         height=original.height,
-        renditions=RenditionUrlsOut(
+        renditions=RenditionUrlsSchema(
             original=build_public_url(key_original),
             thumb=build_public_url(key_thumb),
             display=build_public_url(key_display),
         ),
-        attachment=AttachmentMetaOut(
+        attachment=AttachmentMetaSchema(
             entity_type=entity_type,
             slug=slug,
             category=category,
@@ -312,8 +312,12 @@ def upload_media(
     )
 
 
-@media_router.post("/detach/", response={204: None}, auth=django_auth)
-def detach_media(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
+@media_router.post(
+    "/detach/",
+    response={204: None, 404: ErrorDetailSchema, 422: ValidationErrorSchema},
+    auth=django_auth,
+)
+def detach_media(request: HttpRequest, body: MediaAssetInputSchema) -> Status[None]:
     """Detach a media asset from an entity by asserting an exists=False claim."""
     user = authed_user(request)
     ct, entity = _resolve_entity(body.entity_type, body.slug)
@@ -361,8 +365,12 @@ def detach_media(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
     return Status(204, None)
 
 
-@media_router.post("/set-primary/", response={204: None}, auth=django_auth)
-def set_primary(request: HttpRequest, body: MediaAssetRefIn) -> Status[None]:
+@media_router.post(
+    "/set-primary/",
+    response={204: None, 404: ErrorDetailSchema, 422: ValidationErrorSchema},
+    auth=django_auth,
+)
+def set_primary(request: HttpRequest, body: MediaAssetInputSchema) -> Status[None]:
     """Set a media asset as primary for its category on an entity."""
     user = authed_user(request)
     ct, entity = _resolve_entity(body.entity_type, body.slug)
