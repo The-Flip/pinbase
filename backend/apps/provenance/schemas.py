@@ -1,7 +1,6 @@
-"""Shared API schemas for the provenance app.
+"""API schemas for the provenance app.
 
-These schemas are used by both the edit-history endpoints (api.py) and the
-page-oriented changes endpoints (page_endpoints.py).
+Used by api.py and the page-oriented changes endpoints (page_endpoints.py).
 
 Claim payloads are stored as JSON (``Claim.value`` is a ``JSONField``), so
 ``old_value`` / ``new_value`` / ``value`` fields are typed as ``object`` —
@@ -125,3 +124,68 @@ class RichTextSchema(Schema):
     html: str = ""
     citations: list[InlineCitationSchema] = []
     attribution: AttributionSchema | None = None
+
+
+class CitationSourceSchema(Schema):
+    name: str
+    slug: str
+    source_type: str
+    priority: int
+    url: str
+    description: str
+
+
+class ReviewClaimSchema(Schema):
+    id: int
+    source_name: str
+    field_name: str
+    # ``value`` is the raw JSONField payload of a claim — scalar, dict, list,
+    # or null depending on the field — and stays ``object`` for the same
+    # reason the shared schemas above do.
+    value: object
+    needs_review_notes: str
+    created_at: str
+    # Context about the subject (the entity this claim targets).
+    # Canonical hyphenated CatalogModel.entity_type, e.g. "manufacturer".
+    subject_type: str
+    subject_name: str
+    subject_slug: str | None = None
+    # Title that this claim created (for group claims).
+    title_slug: str | None = None
+    review_links: list[ReviewLinkSchema] = []
+
+
+class RevertNoteSchema(Schema):
+    note: str
+
+
+class UndoChangeSetSchema(Schema):
+    note: str = ""
+
+
+class UndoResultSchema(Schema):
+    changeset_id: int
+
+
+class CitationInstanceSchema(Schema):
+    id: int
+    citation_source_id: int
+    citation_source_name: str
+    claim_id: int | None = None
+    locator: str
+    created_at: str
+
+
+class CitationInstanceBatchSchema(Schema):
+    id: int
+    source_name: str
+    source_type: str
+    author: str
+    year: int | None = None
+    locator: str
+    links: list[CitationLinkSchema] = []
+
+
+class CitationInstanceCreateSchema(Schema):
+    citation_source_id: int
+    locator: str = ""
