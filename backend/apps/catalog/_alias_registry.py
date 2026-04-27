@@ -1,7 +1,7 @@
 """Alias-type discovery from AliasBase subclasses.
 
-Shared module that both ``claims.py`` and ``resolve/`` can import without
-creating circular dependencies — it only touches ``core.models.AliasBase``.
+Catalog-private. Lives in its own module so ``claims.py`` and ``resolve/``
+can both import it without creating a cycle between them.
 """
 
 from __future__ import annotations
@@ -10,13 +10,16 @@ import functools
 from typing import NamedTuple
 
 from django.apps import apps
-from django.db import models
+
+from apps.provenance.models import ClaimControlledModel
+
+from .models import AliasBase
 
 
 class AliasType(NamedTuple):
     """A discovered ``AliasBase`` subclass and the claim field that holds its aliases."""
 
-    parent_model: type[models.Model]
+    parent_model: type[ClaimControlledModel]
     claim_field: str
 
 
@@ -34,8 +37,6 @@ def discover_alias_types() -> tuple[AliasType, ...]:
     """
     apps.check_models_ready()
 
-    from apps.core.models import AliasBase
-
     result: list[AliasType] = []
     for alias_cls in AliasBase.__subclasses__():
         # Each AliasBase subclass has exactly one FK to its parent model.
@@ -51,6 +52,11 @@ def discover_alias_types() -> tuple[AliasType, ...]:
         parent_model = fks[0].related_model
         if parent_model is None or isinstance(parent_model, str):
             raise RuntimeError(f"{alias_cls.__name__} FK has no related model")
+        if not issubclass(parent_model, ClaimControlledModel):
+            raise RuntimeError(
+                f"{alias_cls.__name__} parent {parent_model.__name__} "
+                "is not a ClaimControlledModel subclass"
+            )
         result.append(AliasType(parent_model, alias_cls.alias_claim_field))
 
     return tuple(sorted(result, key=lambda at: at.claim_field))

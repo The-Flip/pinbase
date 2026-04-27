@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
@@ -9,7 +11,7 @@ __all__ = ["ClaimControlledModel"]
 
 
 class ClaimControlledModel(models.Model):
-    """Abstract base for entities whose display fields are claim-controlled.
+    """Abstract base for entities with claim-controlled fields.
 
     Declares the reverse-accessor to provenance claims and the typed ``slug``
     / ``name`` shape that claim-resolver helpers read generically.  Does NOT
@@ -37,6 +39,15 @@ class ClaimControlledModel(models.Model):
     # actual CharField / SlugField with their own max_length and validators.
     slug: str
     name: str
+
+    # Field names excluded from claim control on this model.
+    # Default empty so most models are unaffected.
+    # Subclasses override with their own ``frozenset``.
+    claims_exempt: ClassVar[frozenset[str]] = frozenset()
+
+    # Per-FK override of the lookup field for claim writes/resolution.
+    # Default empty; subclasses override (do not mutate) — see Location.
+    claim_fk_lookups: ClassVar[dict[str, str]] = {}
 
     claims = GenericRelation("provenance.Claim")
 

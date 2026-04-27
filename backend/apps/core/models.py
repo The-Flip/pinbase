@@ -25,47 +25,6 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class AliasBase(TimeStampedModel):
-    """Abstract base for alias lookup models.
-
-    Alias values are stored and compared in lowercase (matching the
-    UniqueConstraint(Lower("value")) that every subclass must define).
-    Claims live on the *parent* object, not on the alias row itself.
-
-    Subclasses must add:
-    - A ForeignKey to the parent model (named after the parent, related_name="aliases")
-    - A UniqueConstraint on Lower("value") with a table-specific name
-    - ``alias_claim_field``: the claim namespace on the parent that carries
-      alias values (e.g. ``"theme_alias"``). Enforced at class creation
-      via ``__init_subclass__``; read by ``discover_alias_types``.
-    """
-
-    alias_claim_field: ClassVar[str]
-
-    value = models.CharField(max_length=200)
-
-    class Meta(TimeStampedModel.Meta):
-        abstract = True
-        ordering = ["value"]
-
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        # NB: we can't gate on ``cls._meta.abstract`` here — Django's ModelBase
-        # runs ``__init_subclass__`` with ``abstract`` still inherited as True
-        # from the parent, then rewrites it to False for concrete subclasses
-        # later. So this check runs for every AliasBase subclass, concrete or
-        # not. That's fine: any abstract intermediate can just declare
-        # ``alias_claim_field`` for its concrete descendants to inherit.
-        super().__init_subclass__(**kwargs)
-        if not getattr(cls, "alias_claim_field", None):
-            raise TypeError(
-                f"{cls.__name__} must declare a non-empty `alias_claim_field` "
-                'class attr (e.g. `alias_claim_field = "theme_alias"`)'
-            )
-
-    def __str__(self) -> str:
-        return self.value
-
-
 def field_not_blank(field_name: str) -> models.CheckConstraint:
     """CHECK constraint: field != ''. Use in concrete model Meta.constraints."""
     return models.CheckConstraint(
@@ -289,47 +248,6 @@ class MarkdownField(models.TextField[str, str]):
 def get_markdown_fields(model: type[models.Model]) -> list[str]:
     """Return field names of all MarkdownField instances on a model."""
     return [f.name for f in model._meta.get_fields() if isinstance(f, MarkdownField)]
-
-
-# Infrastructure fields exempt from claims on every model.
-_CLAIMS_EXEMPT_NAMES = frozenset(
-    {"id", "uuid", "created_at", "updated_at", "extra_data"}
-)
-
-
-def get_claim_fields(model_class: type[models.Model]) -> dict[str, str]:
-    """Discover claim-controlled fields by introspecting a Django model.
-
-    Returns ``{field_name: field_name}`` for every concrete field that is
-    claim-controlled.  Fields are excluded if they are:
-
-    * primary keys
-    * in ``_CLAIMS_EXEMPT_NAMES`` (infrastructure fields)
-    * listed in the model's ``claims_exempt`` class attribute
-    * GenericForeignKey helper columns (``content_type``, ``object_id``)
-
-    FK fields are included — the resolver handles slug lookup automatically.
-    """
-    per_model_exempt: frozenset[str] = getattr(
-        model_class, "claims_exempt", frozenset()
-    )
-    fields: dict[str, str] = {}
-    for f in model_class._meta.get_fields():
-        if not isinstance(f, models.Field):
-            continue
-        if not getattr(f, "concrete", False):
-            continue
-        if f.primary_key:
-            continue
-        if f.name in _CLAIMS_EXEMPT_NAMES:
-            continue
-        if f.name in per_model_exempt:
-            continue
-        # Skip GenericForeignKey helper columns (content_type_id, object_id).
-        if f.name in ("content_type", "object_id"):
-            continue
-        fields[f.name] = f.name
-    return fields
 
 
 # ---------------------------------------------------------------------------

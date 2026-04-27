@@ -27,13 +27,13 @@ from apps.catalog.models import (
     Theme,
     Title,
 )
-from apps.core.models import get_claim_fields
 from apps.provenance.models import (
     ChangeSet,
     ChangeSetAction,
     CitationInstance,
     Claim,
     ClaimControlledModel,
+    get_claim_fields,
 )
 from apps.provenance.schemas import CitationReferenceInputSchema
 from apps.provenance.validation import validate_claim_value
@@ -153,7 +153,7 @@ def raise_form_error(message: str) -> NoReturn:
 
 
 def plan_scalar_field_claims(
-    model_class: type[db_models.Model],
+    model_class: type[ClaimControlledModel],
     fields: dict[str, Any],
     *,
     entity: db_models.Model | None = None,
@@ -184,7 +184,7 @@ class FieldConstraintSchema(Schema):
 
 
 def get_field_constraints(
-    model_class: type[db_models.Model],
+    model_class: type[ClaimControlledModel],
 ) -> dict[str, FieldConstraintSchema]:
     """Extract min/max/step constraints from numeric claim fields.
 
@@ -228,7 +228,7 @@ def get_field_constraints(
 
 
 def validate_scalar_fields(
-    model_class: type[db_models.Model],
+    model_class: type[ClaimControlledModel],
     fields: dict[str, Any],
     *,
     entity: db_models.Model | None = None,
