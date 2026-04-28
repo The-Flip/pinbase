@@ -218,21 +218,20 @@ Two options worth weighing:
 - **Code-gen** alongside `make api-gen` — emit the wrapper files from `CATALOG_META`. Aligns with how `catalog-meta.ts` is already generated. Adds a generator to maintain.
 - **Lift the load into a shared `+layout.server.ts`** — the entity layout already runs `loadEntityDetail`; have it expose `loadEditHistory` / `loadSources` lazily so the subroute pages become a single `+page.svelte` referencing parent-layout data. Hits the SvelteKit caveat the existing test comment notes (parent-layout re-runs on subroute navigation), so this needs validation.
 
-### Tighten `delete-flow.ts` `DeleteEndpoint` against the schema
+### Rename JS-side `slug` parameter to `publicId`
 
-[`delete-flow.ts:39`](../../../frontend/src/lib/delete-flow.ts#L39) types the endpoint as `` `/api/${string}/{public_id}/delete/` `` and casts to `as never` because openapi-fetch can't accept a parameterized path string. The mapped-type pattern already used by [`SimpleTaxonomyClaimsPath`](../../../frontend/src/lib/components/editors/save-claims-shared.ts#L42) in `save-claims-shared.ts` solves this:
+Holdover from before the `{slug}` → `{public_id}` URL flip in c51bb3ca3. Several JS-side names still call the URL identifier `slug`, even though it carries `public_id` on the wire and is named `public_id_field` on the model. The route directory `[slug]` stays — the plan's per-site judgment list ([§Frontend call-sites to migrate](#frontend-call-sites-to-migrate)) keeps it because the value still IS a slug for shipped entities. The misalignment is only on the JS-side names.
 
-```ts
-type DeleteEndpoint = {
-  [K in keyof paths]: paths[K] extends {
-    post: { parameters: { path: { public_id: string } } };
-  }
-    ? K
-    : never;
-}[keyof paths];
-```
+Surfaces to rename:
 
-Drops both `as never` casts, makes new delete endpoints visible to typed callers automatically.
+- [`loadDeletePreview`](../../../frontend/src/lib/delete-preview-loader.ts) options: `slug` → `publicId`. Returned shape `{ preview, slug }` → `{ preview, publicId }`.
+- [`createDeleteSubmitter`](../../../frontend/src/lib/delete-flow.ts) returned `submit(slug, opts)` first arg → `publicId`.
+- 19 `+page.ts` files: `slug: params.slug` → `publicId: params.slug` (`params.slug` stays — directory is `[slug]`).
+- 19 `+page@.svelte` files: `let { preview, slug } = $derived(data)` → `publicId`, propagated to `submit(...)` calls and any `[slug]` props passed to `DeletePage`.
+- [`DeletePage.svelte`](../../../frontend/src/lib/components/DeletePage.svelte) `slug` prop → `publicId`.
+- Tests for both modules.
+
+Mechanical sweep on the JS-side names; SvelteKit-side names stay.
 
 ### Type `LinkTypeSchema.flow` as a `Literal` union on the backend
 
