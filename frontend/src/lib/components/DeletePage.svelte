@@ -13,9 +13,9 @@
   type Props = {
     entityLabel: string;
     entityName: string;
-    slug: string;
+    public_id: string;
     submit: (
-      slug: string,
+      public_id: string,
       opts: { note: string; citation: EditCitationSelection | null },
     ) => Promise<DeleteOutcome<TResponse>>;
     cancelHref: string;
@@ -30,7 +30,7 @@
   let {
     entityLabel,
     entityName,
-    slug,
+    public_id,
     submit,
     cancelHref,
     redirectAfterDelete,
@@ -55,7 +55,7 @@
     formError = '';
     submitting = true;
     try {
-      const outcome = await submit(slug, { note, citation });
+      const outcome = await submit(public_id, { note, citation });
       switch (outcome.kind) {
         case 'ok': {
           const name = entityName;
