@@ -8,7 +8,7 @@ from django.db import models
 
 from apps.core.models import (
     CatalogManager,
-    EntityStatusMixin,
+    LifecycleStatusModel,
     LinkableModel,
     TimeStampedModel,
 )
@@ -58,11 +58,11 @@ class AliasBase(TimeStampedModel):
         return self.value
 
 
-class CatalogModel(LinkableModel, EntityStatusMixin, ClaimControlledModel):
+class CatalogModel(LinkableModel, LifecycleStatusModel, ClaimControlledModel):
     """Abstract marker for top-level catalog entities.
 
     Combines URL-addressability (``LinkableModel``), claim-controlled
-    lifecycle status (``EntityStatusMixin``), and claim-driven display
+    lifecycle status (``LifecycleStatusModel``), and claim-driven display
     fields (``ClaimControlledModel``). Used to distinguish catalog-specific
     code paths (e.g. ``ingest_pinbase``, soft-delete wire format) that must
     not widen to other ``LinkableModel`` subclasses.
@@ -74,15 +74,16 @@ class CatalogModel(LinkableModel, EntityStatusMixin, ClaimControlledModel):
     defines its own ``Meta``.
     """
 
-    # Re-declare ``objects`` here (originally on ``EntityStatusMixin``) so
+    # Re-declare ``objects`` here (originally on ``LifecycleStatusModel``) so
     # ``Self`` rebinds at the catalog level. Without this, mypy resolves
     # ``model_cls.objects.active()`` (where ``model_cls: type[ModelT:
     # CatalogModel]``) by walking the type bound and binds ``Self`` to
-    # ``EntityStatusMixin`` — the class where the descriptor is declared —
+    # ``LifecycleStatusModel`` — the class where the descriptor is declared —
     # rather than ``ModelT``. Runtime is unaffected: same ``CatalogManager``
     # class, Django's ManagerDescriptor rebinds per concrete model anyway.
-    # ``EntityStatusMixin.objects`` stays put so ``Location`` (which uses
-    # the mixin without ``CatalogModel``) keeps its ``.active()`` queryset.
+    # ``LifecycleStatusModel.objects`` stays put so ``Location`` (which uses
+    # ``LifecycleStatusModel`` without ``CatalogModel``) keeps its ``.active()``
+    # queryset.
     objects: ClassVar[CatalogManager[Self]] = CatalogManager()
 
     class Meta:

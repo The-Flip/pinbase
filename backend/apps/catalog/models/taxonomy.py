@@ -332,7 +332,7 @@ class CreditRole(
     entity_type = "credit-role"
     entity_type_plural = "credit-roles"
     # Soft-delete is blocked by any active machine or series credited in this
-    # role. Credit itself has no EntityStatusMixin, so we expose two M2M
+    # role. Credit itself has no LifecycleStatusModel, so we expose two M2M
     # accessors through Credit and let the generic usage-blocker walker
     # (soft_delete._iter_usage_blockers) filter each via .active().
     soft_delete_usage_blockers: ClassVar[frozenset[str]] = frozenset(

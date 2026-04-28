@@ -10,9 +10,9 @@ __all__ = ["MediaSupported"]
 
 
 class MediaSupported(ClaimControlledModel):
-    """Mixin marking a model as a valid target for media attachments.
+    """Abstract base marking a model as a valid target for media attachments.
 
-    Any model that inherits this mixin can have EntityMedia rows pointing
+    Any model that inherits this base can have EntityMedia rows pointing
     at it via GenericFK. EntityMedia.clean() rejects content types that
     are not MediaSupported.
 

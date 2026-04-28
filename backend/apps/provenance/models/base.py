@@ -16,7 +16,7 @@ class ClaimControlledModel(models.Model):
     Declares the reverse-accessor to provenance claims and the typed ``slug``
     / ``name`` shape that claim-resolver helpers read generically.  Does NOT
     imply URL-addressability, globally-unique slugs, or status tracking —
-    those are ``LinkableModel`` / ``SluggedModel`` / ``EntityStatusMixin``
+    those are ``LinkableModel`` / ``SluggedModel`` / ``LifecycleStatusModel``
     concerns and are layered in independently at the concrete class.
 
     **Diamond-inheritance constraint — do not weaken without refactoring.**

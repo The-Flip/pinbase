@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models.functions import Lower
 
 from apps.core.models import (
-    EntityStatusMixin,
+    LifecycleStatusModel,
     LinkableModel,
     TimeStampedModel,
     field_not_blank,
@@ -27,7 +27,7 @@ __all__ = [
 
 
 class Location(
-    EntityStatusMixin, TimeStampedModel, ClaimControlledModel, LinkableModel
+    LifecycleStatusModel, TimeStampedModel, ClaimControlledModel, LinkableModel
 ):
     """A canonical geographic location at any level of the hierarchy.
 

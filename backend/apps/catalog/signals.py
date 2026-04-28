@@ -37,7 +37,7 @@ def _cache_invalidating_models() -> list[type[models.Model]]:
 
     Walks the catalog app registry for concrete ``CatalogModel`` subclasses,
     then appends explicit extras: ``Location`` (a catalog entity that predates
-    the ``CatalogModel`` base and inherits only ``EntityStatusMixin``) and the
+    the ``CatalogModel`` base and inherits only ``LifecycleStatusModel``) and the
     two through-rows (``CorporateEntityLocation``, ``Credit``) that surface in
     cached ``/all/`` payloads but aren't top-level entities.
     """
