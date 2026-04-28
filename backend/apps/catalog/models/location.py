@@ -127,7 +127,7 @@ class LocationAlias(AliasBase):
         ]
 
 
-class CorporateEntityLocation(models.Model):
+class CorporateEntityLocation(TimeStampedModel):
     """Associates a CorporateEntity with a canonical Location.
 
     One-to-many: a CE can have multiple locations.
