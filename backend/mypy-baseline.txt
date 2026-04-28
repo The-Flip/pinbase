@@ -25,7 +25,6 @@ apps/catalog/ingestion/opdb/records.py:0: error: Missing type arguments for gene
 apps/catalog/ingestion/opdb/records.py:0: error: Missing type arguments for generic type "dict"  [type-arg]
 apps/catalog/ingestion/ipdb/records.py:0: error: Missing type arguments for generic type "dict"  [type-arg]
 apps/core/markdown.py:0: error: Missing type arguments for generic type "Match"  [type-arg]
-apps/core/entity_types.py:0: error: Only concrete class can be given where "type[LinkableModel]" is expected  [type-abstract]
 apps/catalog/management/commands/validate_catalog.py:0: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]
 apps/catalog/management/commands/validate_catalog.py:0: error: Value of type "Person@AnnotatedWith[TypedDict({'lower_name': Any, 'cnt': int})]" is not indexable  [index]
 apps/catalog/management/commands/validate_catalog.py:0: error: Value of type "Person@AnnotatedWith[TypedDict({'lower_name': Any, 'cnt': int})]" is not indexable  [index]
