@@ -1,0 +1,28 @@
+name: Task
+description: Work that doesnt involve committing to the repo
+title: ""
+labels: ["task"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What needs to be done?
+      description: Describe the task or decision.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Add options, constraints, links, or background.
+    validations:
+      required: false
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      description: What has to be true before this can be closed?
+    validations:
+      required: false
