@@ -50,7 +50,7 @@ def _ipv4_only_getaddrinfo(
     return _orig_getaddrinfo(host, port, socket.AF_INET, *args, **kwargs)
 
 
-socket.getaddrinfo = _ipv4_only_getaddrinfo  # type: ignore[assignment]
+socket.getaddrinfo = _ipv4_only_getaddrinfo
 
 # Hard ceiling on every HTTP read. Without this, urlopen blocks indefinitely
 # on a stalled connection — the symptom that motivated the IPv4 forcing above.
