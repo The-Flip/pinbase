@@ -46,7 +46,6 @@ apps/catalog/ingestion/apply.py:0: error: Incompatible type for "content_type_id
 apps/catalog/ingestion/apply.py:0: error: Incompatible type for "object_id" of "Claim" (got "int | None", expected "float | int | str | Combinable")  [misc]
 apps/catalog/tests/test_db_constraints.py:0: error: Incompatible type for "title" of "MachineModel" (got "None", expected "Title | Combinable")  [misc]
 apps/catalog/management/commands/ingest_pinbase.py:0: error: Missing type arguments for generic type "dict"  [type-arg]
-apps/catalog/management/commands/ingest_pinbase.py:0: error: Only concrete class can be given where "type[CatalogModel]" is expected  [type-abstract]
 apps/catalog/management/commands/ingest_pinbase.py:0: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]
 apps/catalog/management/commands/ingest_pinbase.py:0: error: Function is missing a type annotation  [no-untyped-def]
 apps/catalog/management/commands/ingest_pinbase.py:0: error: Function is missing a type annotation  [no-untyped-def]
