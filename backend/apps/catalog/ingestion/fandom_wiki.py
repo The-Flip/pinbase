@@ -51,7 +51,7 @@ import requests
 
 FANDOM_API = "https://pinball.fandom.com/api.php"
 FANDOM_WIKI_BASE = "https://pinball.fandom.com/wiki"
-USER_AGENT = "Pinbase/1.0 (Project of The Flip pinball museum; contact via github.com/deanmoses/pinbase)"
+USER_AGENT = "Flipcommons/1.0 (Project of The Flip pinball museum; contact via github.com/The-Flip/flipcommons)"
 
 # Map of bold-label text in the infobox designer field → Credit.role value.
 # Keys are lowercase for case-insensitive matching.

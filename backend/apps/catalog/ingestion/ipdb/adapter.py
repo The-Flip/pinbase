@@ -164,7 +164,7 @@ def build_ipdb_plan(
     bad = validate_narrative_slugs(all_vocab_slugs)
     if bad:
         raise CommandError(
-            f"Narrative feature pattern slug(s) not found in pinbase vocabulary: "
+            f"Narrative feature pattern slug(s) not found in catalog vocabulary: "
             f"{', '.join(bad)}\n"
             "Update _NARRATIVE_FEATURE_PATTERNS to use valid slugs."
         )
@@ -369,7 +369,7 @@ def build_ipdb_plan(
     if unknown_mpu_strings:
         lines = "\n".join(f"  {s}" for s in sorted(unknown_mpu_strings))
         raise CommandError(
-            f"Unknown MPU strings not in pinbase systems:\n{lines}\n"
+            f"Unknown MPU strings not in catalog systems:\n{lines}\n"
             "Add mpu_strings entries to data/pinbase/systems/ and re-export before re-ingesting."
         )
 
@@ -592,7 +592,7 @@ def _process_corporate_entity(
             if not ce_paths:
                 raise CommandError(
                     f"IPDB mfr {mfr_id} ({ce.slug!r}): has location data but "
-                    f"this CE has no pinbase-curated location. "
+                    f"this CE has no curated location. "
                     f"Curate this CE in pindata first."
                 )
             compatible = any(
@@ -604,7 +604,7 @@ def _process_corporate_entity(
             if not compatible:
                 raise CommandError(
                     f"IPDB mfr {mfr_id}: location mismatch — "
-                    f"pinbase={ce_paths!r}, ipdb={resolved_path!r}. "
+                    f"curated={ce_paths!r}, ipdb={resolved_path!r}. "
                     f"Fix in pindata or add an IPDB override in parsers.py."
                 )
     else:
@@ -619,7 +619,7 @@ def _process_corporate_entity(
             raise CommandError(
                 f"IPDB mfr {mfr_id}: cannot resolve manufacturer brand for "
                 f"company={company!r}, trade={trade!r}. "
-                f"All manufacturers must pre-exist in pinbase."
+                f"All manufacturers must pre-exist in the catalog."
             )
         mfr = resolver.get_by_slug(slug)
         if mfr is None:

@@ -4,66 +4,11 @@
 
 # Development Guide
 
-This file provides guidance to AI programming agents when working with code in this repository.
-
-## Python Style — Non-Negotiable
-
-`except ExcType1, ExcType2:` is **valid Python 3** and is ruff-format's preferred style.
-Do NOT add parentheses. `except (ExcType1, ExcType2):` will be reverted by ruff-format every time. Stop trying to fix it.
-
-## Svelte, HTML, CSSS
-
-### You MUST use Svelte 5 — Non-Negotiable
-
-The frontend uses **Svelte 5 runes mode** (`runes: true` in compiler options). Do NOT use legacy Svelte 4 patterns:
-
-- `export let` → use `let { } = $props()`
-- `$:` reactive declarations → use `$derived` / `$derived.by()` / `$effect()`
-- `on:click` directive syntax → use `onclick` attribute
-- `createEventDispatcher` → use callback props
-- `<slot>` → use `{@render children()}` snippets
-- `$$props` / `$$restProps` → use `$props()` with rest syntax
-
-### CSS — Non-Negotiable
-
-NEVER use `:global` in Svelte component styles without explicit approval from the user. Scoped styles are the default and preferred approach. We rearchitect components rather than use `:global`.
-
-## ALL User-Inputted Catalog Fields MUST be Claims-Based — Non-Negotiable
-
-**Every user-inputted catalog field MUST be claims-based**: scalars, FKs, M2M, slugs, parents, aliases. This includes ingested data that goes into fields that users can input.
-
-**System-generated fields aren't claims-based**: `id`/`uuid`, timestamps, derived fields like `Location.location_path = f"{parent.location_path}/{slug}"`.
-
-The test is "could a user input this field?" If yes, claim it. If no, it's system-generated. There is no third category. See [docs/Provenance.md](Provenance.md) for the architecture.
-
-### Writing ChangeSets — `action` Is Required On User ChangeSets
-
-Every `ChangeSet` attributed to a user must carry an `action` value (`create`, `edit`, `delete`, or `revert`). Ingest ChangeSets never do — they're identified by the `ingest_run` FK. The DB enforces this via the `provenance_changeset_action_iff_user` check constraint, so forgetting means an `IntegrityError`, not a code-review catch.
-
-Prefer the factories over `ChangeSet.objects.create` in new code:
-
-- Application code: call `execute_claims(entity, specs, user=..., action=ChangeSetAction.EDIT)` — the action kwarg is required at the type level for readability, even though `EDIT` is the default. Revert writes use `ChangeSetAction.REVERT`. Create flows use `ChangeSetAction.CREATE`.
-- Test fixtures: use `from apps.provenance.test_factories import user_changeset, ingest_changeset` instead of constructing `ChangeSet` rows directly. The factories encode the constraint invariants so mistakes fail at call time, not at DB time.
+This file provides guidance to AI programming agents when working with the Flipcommons project, an interactive, collaborative database of pinball knowledge.
 
 ## Project Overview
 
 Flipcommons is a Django + SvelteKit monorepo. Django owns the data model, APIs (Django Ninja), and admin UI. SvelteKit handles the user-facing frontend with Node SSR for public pages and CSR for authenticated app pages.
-
-Catalog data and the DuckDB exploration database live in separate repos:
-
-- **[pindata](https://github.com/deanmoses/pindata)** — canonical catalog records (markdown files + JSON schemas)
-- **[pinexplore](https://github.com/deanmoses/pinexplore)** — DuckDB exploration/validation database
-
-Both publish to Cloudflare R2. This project pulls catalog JSON exports from R2 via `make pull-ingest`.
-
-See [DomainModel.md](DomainModel.md) for the catalog entity hierarchy (Title → Model, variants, remakes, manufacturers, taxonomy, etc.).
-
-**Key architectural decisions:**
-
-- Session-based auth via same-origin proxy/reverse proxy (no JWT, no CORS)
-- Auth gating in the SPA is UX-only; the backend is the source of truth for access control
-- OpenAPI types generated from Django Ninja schema (not committed, derived from backend)
-- Single domain: `/api/`, `/admin/`, `/media/`, and `/static/` route to Django, everything else to SvelteKit
 
 ## Requirements
 
@@ -116,6 +61,7 @@ docs/             Documentation source files
 ## Key Conventions
 
 - Backend dependencies managed with `uv`, frontend with `pnpm`
+- Session cookies for auth (no JWT, no CORS); SPA auth gates are UX-only — the backend is the source of truth for access control
 - CSRF: Django sets `csrftoken` cookie; the frontend `client.ts` reads it and sends `X-CSRFToken` on mutating requests
 - Vite dev server proxies `/api/`, `/admin/`, `/media/`, and `/static/` to Django at `127.0.0.1:8000`
 - For SSR route conventions, see [Svelte.md](Svelte.md). For API design — both endpoint shape (page-oriented vs resource) and schema design heuristics (when to consolidate, when to keep separate, inheritance smells) — see [ApiDesign.md](ApiDesign.md)
@@ -141,6 +87,53 @@ SvelteKit's `resolve()` from `$app/paths` is strongly typed and only accepts kno
 ```
 
 The `svelte/no-navigation-without-resolve` ESLint rule is disabled project-wide because it doesn't recognize the wrapper.
+
+## Critical Rules — Non-Negotiable
+
+These rules exist because agents have repeatedly gotten them wrong. Read them before writing code.
+
+### Python: `except A, B:` is correct
+
+`except ExcType1, ExcType2:` is **valid Python 3** and is ruff-format's preferred style.
+Do NOT add parentheses. `except (ExcType1, ExcType2):` will be reverted by ruff-format every time. Stop trying to fix it.
+
+### Svelte 5 runes mode only
+
+The frontend uses **Svelte 5 runes mode** (`runes: true` in compiler options). Do NOT use legacy Svelte 4 patterns:
+
+- `export let` → use `let { } = $props()`
+- `$:` reactive declarations → use `$derived` / `$derived.by()` / `$effect()`
+- `on:click` directive syntax → use `onclick` attribute
+- `createEventDispatcher` → use callback props
+- `<slot>` → use `{@render children()}` snippets
+- `$$props` / `$$restProps` → use `$props()` with rest syntax
+
+### No `:global` in Svelte styles
+
+NEVER use `:global` in Svelte component styles without explicit approval from the user. Scoped styles are the default and preferred approach. We rearchitect components rather than use `:global`.
+
+### All user-inputted catalog fields MUST be claims-based
+
+**Every user-inputted catalog field MUST be claims-based**: scalars, FKs, M2M, slugs, parents, aliases. This includes ingested data that goes into fields that users can input.
+
+**System-generated fields aren't claims-based**: `id`/`uuid`, timestamps, derived fields like `Location.location_path = f"{parent.location_path}/{slug}"`.
+
+The test is "could a user input this field?" If yes, claim it. If no, it's system-generated. There is no third category. See [docs/Provenance.md](Provenance.md) for the architecture.
+
+#### Writing ChangeSets — `action` is required on user ChangeSets
+
+Every `ChangeSet` attributed to a user must carry an `action` value (`create`, `edit`, `delete`, or `revert`). Ingest ChangeSets never do — they're identified by the `ingest_run` FK. The DB enforces this via the `provenance_changeset_action_iff_user` check constraint, so forgetting means an `IntegrityError`, not a code-review catch.
+
+Prefer the factories over `ChangeSet.objects.create` in new code:
+
+- Application code: call `execute_claims(entity, specs, user=..., action=ChangeSetAction.EDIT)` — the action kwarg is required at the type level for readability, even though `EDIT` is the default. Revert writes use `ChangeSetAction.REVERT`. Create flows use `ChangeSetAction.CREATE`.
+- Test fixtures: use `from apps.provenance.test_factories import user_changeset, ingest_changeset` instead of constructing `ChangeSet` rows directly. The factories encode the constraint invariants so mistakes fail at call time, not at DB time.
+
+### General rules
+
+- Don't silence linter warnings — fix the underlying issue
+- Never hardcode secrets — use environment variables via `.env`
+- Describe your approach before implementing non-trivial changes
 
 ## Tool Usage
 
@@ -189,6 +182,8 @@ For new behavior, include tests. Consider writing the test first, though sometim
 
 ## Data Modeling
 
+See [DomainModel.md](DomainModel.md) for the catalog entity hierarchy (Title → Model, variants, remakes, manufacturers, taxonomy, etc.).
+
 See [docs/DataModeling.md](DataModeling.md) for modeling principles, Django pitfalls, and constraint testing patterns. Key rules:
 
 - **Validate strictly** — start with the tightest constraint you can defend. Relaxing is a one-line migration; tightening requires auditing every row.
@@ -199,8 +194,14 @@ See [docs/DataModeling.md](DataModeling.md) for modeling principles, Django pitf
 
 When reviewing code or a PR, read [docs/Reviewing.md](Reviewing.md) first and follow its checklist.
 
-## Rules
+## Related Repos
 
-- Don't silence linter warnings — fix the underlying issue
-- Never hardcode secrets — use environment variables via `.env`
-- Describe your approach before implementing non-trivial changes
+This project has two sister projects:
+
+### Catalog seed records
+
+**[pindata](https://github.com/deanmoses/pindata)**: pre-launch seed canonical catalog records (markdown files + JSON schemas). It publishes the catalog as JSON to Cloudflare R2 and this project pulls it down from R2 via `make pull-ingest`.
+
+### Analytics DB over pinball data
+
+**[pinexplore](https://github.com/deanmoses/pinexplore)**: DuckDB exploration/validation database for exploring the Pindata data as well as other sources of pinball knowledge.

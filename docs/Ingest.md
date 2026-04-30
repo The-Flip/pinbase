@@ -1,6 +1,6 @@
 # Data Ingestion
 
-Pinbase is populated via Django management commands. The main pipeline
+This project is populated via Django management commands. The main pipeline
 (`ingest_all`) seeds internal data then imports external sources. Optional
 enrichment commands (Fandom, Wikidata) run separately.
 
@@ -8,7 +8,7 @@ enrichment commands (Fandom, Wikidata) run separately.
 
 Catalog data and external source files are maintained in the
 [pindata](https://github.com/deanmoses/pindata) repo and published to
-Cloudflare R2. Pinbase pulls them locally before running the ingest pipeline:
+Cloudflare R2. This project pulls them locally before running the ingest pipeline:
 
 ```bash
 make pull-ingest   # download R2 → local data/ingest_sources/
@@ -141,7 +141,7 @@ uv run python manage.py pull_and_ingest --dest ../data/ingest_sources
 ### 1. Pull data and run ingest
 
 ```bash
-railway ssh --service pinbase
+railway ssh --service flip-commons
 .venv/bin/python manage.py pull_and_ingest
 ```
 

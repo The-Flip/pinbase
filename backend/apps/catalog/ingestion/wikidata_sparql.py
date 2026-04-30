@@ -47,7 +47,7 @@ from typing import NamedTuple
 import requests
 
 SPARQL_ENDPOINT = "https://query.wikidata.org/sparql"
-USER_AGENT = "Pinbase/1.0 (Project of The Flip pinball museum; contact via github.com/deanmoses/pinbase)"
+USER_AGENT = "Flipcommons/1.0 (Project of The Flip pinball museum; contact via github.com/The-Flip/flipcommons)"
 
 # Wikidata property → Credit.role mapping.
 # Only properties that link humans to pinball machines and have meaningful

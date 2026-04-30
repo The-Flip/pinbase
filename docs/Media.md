@@ -1,12 +1,12 @@
 # Media System
 
-Pinbase hosts user-uploaded images in S3-compatible storage (Cloudflare R2). Uploads go through Django, which generates renditions synchronously and stores them directly in R2. The browser loads images straight from storage — Django is never in the serving path.
+This project hosts user-uploaded images in S3-compatible storage (Cloudflare R2). Uploads go through Django, which generates renditions synchronously and stores them directly in R2. The browser loads images straight from storage — Django is never in the serving path.
 
 ## Ownership Boundary
 
-The media system only handles media that Pinbase has a clear license to display: images uploaded by users (who grant Pinbase a license) or owned by The Flip Museum.
+The media system only handles media that this project has a clear license to display: images uploaded by users (who grant this project a license) or owned by The Flip Museum.
 
-Third-party media (OPDB, IPDB, Fandom, Wikidata) stays outside. Pinbase does not download, transcode, re-host, or proxy third-party files — there are legal issues with doing so. Third-party image references remain in `extra_data` where they came from.
+Third-party media (OPDB, IPDB, Fandom, Wikidata) stays outside. This project does not download, transcode, re-host, or proxy third-party files — there are legal issues with doing so. Third-party image references remain in `extra_data` where they came from.
 
 The API prefers uploaded media first, then falls back to third-party references when no uploads exist for a given entity.
 

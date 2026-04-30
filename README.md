@@ -1,8 +1,8 @@
 # Flipcommons
 
-This is the source code for https://flipcommons.org/, an interactive, collaborative database of pinball knowledge.
+This is the source code for [Flipcommons](https://flipcommons.org/), an interactive, collaborative database of pinball knowledge.
 
-It's sponsored and hosted by The Flip, Chicago's playable pinball museum.
+It's sponsored and hosted by [The Flip](https://www.theflip.museum/), Chicago's playable pinball museum.
 
 ## Architecture
 

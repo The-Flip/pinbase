@@ -242,9 +242,9 @@ _IPDB_NARRATIVE_FEATURE_SLUGS = [
 
 @pytest.fixture
 def ipdb_locations(db):
-    """Create Location records and pinbase-curated CE+CEL rows for the IPDB fixture.
+    """Create Location records and curated CE+CEL rows for the IPDB fixture.
 
-    IPDB validation requires CEs to already have pinbase-curated locations.
+    IPDB validation requires CEs to already have curated locations.
     The fixture covers the three manufacturers in ipdb_sample.json:
     Gottlieb (93) and Williams (351) in Chicago, Bally/Midway (349) in Franklin Park.
     """

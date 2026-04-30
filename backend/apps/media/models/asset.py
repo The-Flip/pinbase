@@ -1,4 +1,4 @@
-"""MediaAsset: one logical Pinbase-owned uploaded media item."""
+"""MediaAsset: one logical first-party uploaded media item."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class MediaAsset(TimeStampedModel):
-    """One logical Pinbase-owned uploaded media item (infrastructure)."""
+    """One logical first-party uploaded media item (infrastructure)."""
 
     renditions: models.Manager[MediaRendition]
 

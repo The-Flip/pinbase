@@ -1,6 +1,6 @@
 # Entity Naming
 
-Pinbase's linkable entities (titles, models, manufacturers, people, etc.) share one canonical name that spans the backend data model, API URLs, and frontend route segments. This doc is the single place that rule lives.
+This project's linkable entities (titles, models, manufacturers, people, etc.) share one canonical name that spans the backend data model, API URLs, and frontend route segments. This doc is the single place that rule lives.
 
 ## The rule
 

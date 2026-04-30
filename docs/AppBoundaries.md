@@ -1,6 +1,6 @@
 # Django App Boundaries
 
-This document defines the dependency rules and responsibilities of Pinbase's Django apps.
+This document defines the dependency rules and responsibilities of this project's Django apps.
 
 ## Apps
 

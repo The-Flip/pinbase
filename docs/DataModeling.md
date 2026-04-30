@@ -1,6 +1,6 @@
 # Data Modeling
 
-Principles and conventions for Django models in Pinbase.
+Principles and conventions for Django models in this project.
 
 ## Principles
 
