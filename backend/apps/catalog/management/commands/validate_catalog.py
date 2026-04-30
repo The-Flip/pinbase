@@ -441,18 +441,18 @@ def check_credits_without_matching_claims(result: ValidationResult) -> None:
 
 
 def check_uncurated_themes(result: ValidationResult) -> None:
-    """Themes that were auto-created during ingestion (no pinbase source claim)."""
+    """Themes that were auto-created during ingestion (no flipcommons-catalog source claim)."""
     from apps.provenance.models import Source
 
-    pinbase = Source.objects.filter(slug="pinbase").first()
-    if not pinbase:
+    flipcommons_catalog = Source.objects.filter(slug="flipcommons-catalog").first()
+    if not flipcommons_catalog:
         return
 
     ct = ContentType.objects.get_for_model(Theme)
     curated_theme_ids = set(
         Claim.objects.filter(
             content_type=ct,
-            source=pinbase,
+            source=flipcommons_catalog,
             field_name="name",
             is_active=True,
         ).values_list("object_id", flat=True)
@@ -461,7 +461,9 @@ def check_uncurated_themes(result: ValidationResult) -> None:
     uncurated = Theme.objects.exclude(pk__in=curated_theme_ids)
     count = uncurated.count()
     if count:
-        result.note(f"{count} theme(s) were auto-created (no pinbase name claim)")
+        result.note(
+            f"{count} theme(s) were auto-created (no flipcommons-catalog name claim)"
+        )
         for t in uncurated.order_by("name")[:10]:
             result.note(f"  {t.slug!r} ({t.name})")
         if count > 10:

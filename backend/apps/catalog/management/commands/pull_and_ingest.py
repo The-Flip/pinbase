@@ -59,7 +59,7 @@ class Command(BaseCommand):
         kwargs: dict[str, str | bool] = {
             "ipdb": f"{dest}/ipdb_xantari.json",
             "opdb": f"{dest}/opdb_export_machines.json",
-            "export_dir": f"{dest}/pinbase/",
+            "export_dir": f"{dest}/pindata/",
         }
         if write:
             kwargs["write"] = True

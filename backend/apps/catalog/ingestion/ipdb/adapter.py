@@ -370,7 +370,7 @@ def build_ipdb_plan(
         lines = "\n".join(f"  {s}" for s in sorted(unknown_mpu_strings))
         raise CommandError(
             f"Unknown MPU strings not in catalog systems:\n{lines}\n"
-            "Add mpu_strings entries to data/pinbase/systems/ and re-export before re-ingesting."
+            "Add mpu_strings entries to pindata's catalog/systems/*.md and re-export before re-ingesting."
         )
 
     # ── Step 8: Warnings ─────────────────────────────────────────

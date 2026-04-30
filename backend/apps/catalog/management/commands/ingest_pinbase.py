@@ -76,7 +76,7 @@ from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_EXPORT_DIR = Path(__file__).parents[5] / "data" / "explore" / "pinbase"
+DEFAULT_EXPORT_DIR = Path(__file__).parents[5] / "data" / "ingest_sources" / "pindata"
 
 
 def _parent_path(location_path: str) -> str | None:
@@ -233,19 +233,11 @@ class Command(BaseCommand):
         self.export_dir = Path(options["export_dir"])
 
         # Create sources used across phases.
-        self.pinbase_source, _ = Source.objects.get_or_create(
-            slug="pinbase",
+        self.flipcommons_source, _ = Source.objects.update_or_create(
+            slug="flipcommons-catalog",
             defaults={
-                "name": "Pinbase",
-                "source_type": Source.SourceType.EDITORIAL,
-                "priority": 300,
-                "description": "Pinbase curated data.",
-            },
-        )
-        self.editorial_source, _ = Source.objects.update_or_create(
-            slug="editorial",
-            defaults={
-                "name": "Editorial",
+                "name": "Flipcommons Catalog",
+                "description": "Flipcommons-curated pinball catalog data.",
                 "source_type": Source.SourceType.EDITORIAL,
                 "priority": 300,
             },
@@ -255,10 +247,14 @@ class Command(BaseCommand):
         # independently via is_enabled in admin.
         self._ai_desc_sources: dict[type[CatalogModel], Source] = {}
         for model_class, slug_suffix in _ai_desc_source_registry():
-            src, _ = Source.objects.get_or_create(
-                slug=f"pinbase-ai-desc-{slug_suffix}",
+            plural = str(
+                model_class._meta.verbose_name_plural or model_class.__name__
+            ).title()
+            src, _ = Source.objects.update_or_create(
+                slug=f"flipcommons-ai-desc-{slug_suffix}",
                 defaults={
-                    "name": f"Pinbase AI Descriptions ({model_class.__name__})",
+                    "name": f"Flipcommons AI Descriptions ({model_class.__name__})",
+                    "description": f"Flipcommons AI-generated descriptions for {plural}",
                     "source_type": Source.SourceType.EDITORIAL,
                     "priority": 300,
                 },
@@ -309,7 +305,7 @@ class Command(BaseCommand):
     ) -> dict[str, int]:
         """Assert claims, deferring description claims for later.
 
-        Non-description claims go to self.pinbase_source immediately.
+        Non-description claims go to self.flipcommons_source immediately.
         Description claims are stashed in ``_deferred_desc_claims`` and
         flushed at the end of the pipeline (after all entities exist)
         so that wikilink validation can resolve cross-references.
@@ -327,7 +323,7 @@ class Command(BaseCommand):
 
         if other_claims:
             s = Claim.objects.bulk_assert_claims(
-                self.pinbase_source, other_claims, **kwargs
+                self.flipcommons_source, other_claims, **kwargs
             )
             for k in stats:
                 stats[k] += s[k]
@@ -352,7 +348,7 @@ class Command(BaseCommand):
         for model_class, claims in by_model.items():
             ai_source = self._ai_desc_sources.get(model_class)
             if ai_source is None:
-                ai_source = self.pinbase_source
+                ai_source = self.flipcommons_source
             s = Claim.objects.bulk_assert_claims(ai_source, claims)
             total_created += s["created"]
             total_unchanged += s["unchanged"]
@@ -424,7 +420,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         ct = ContentType.objects.get_for_model(Location)
 
         # Sort by depth (path segments) so parents always precede children.
@@ -656,7 +652,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         ct = ContentType.objects.get_for_model(Theme)
 
         # --- Entity upsert ---
@@ -772,7 +768,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         ct = ContentType.objects.get_for_model(GameplayFeature)
 
         # --- Entity upsert ---
@@ -891,7 +887,7 @@ class Command(BaseCommand):
         if not rt_entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         rt_by_slug = {r.slug: r for r in RewardType.objects.all()}
         rt_ct_id = ContentType.objects.get_for_model(RewardType).pk
         rt_aliases_by_pk: dict[int, list[str]] = {}
@@ -920,7 +916,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.editorial_source
+        source = self.flipcommons_source
         existing_slugs = set(Manufacturer.objects.values_list("slug", flat=True))
 
         objs = [
@@ -1003,7 +999,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.editorial_source
+        source = self.flipcommons_source
         ct_id = ContentType.objects.get_for_model(CorporateEntity).pk
         mfr_by_slug = {m.slug: m for m in Manufacturer.objects.all()}
         existing_slugs = set(CorporateEntity.objects.values_list("slug", flat=True))
@@ -1281,7 +1277,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         ct_id = ContentType.objects.get_for_model(Person).pk
         existing_slugs = set(Person.objects.values_list("slug", flat=True))
 
@@ -1702,7 +1698,7 @@ class Command(BaseCommand):
         if not entries:
             return
 
-        source = self.pinbase_source
+        source = self.flipcommons_source
         ct_id = ContentType.objects.get_for_model(MachineModel).pk
 
         by_opdb_id: dict[str, MachineModel] = {
