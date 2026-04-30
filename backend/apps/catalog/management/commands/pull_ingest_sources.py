@@ -5,7 +5,7 @@ Uses only stdlib (urllib.request) so it works on Railway's slim Python image.
 The R2 bucket has two manifests:
   - manifest.json          — root-level ingest sources (IPDB, OPDB, etc.),
                              published by pinexplore.
-  - pinbase/manifest.json  — catalog export files, published by pindata.
+  - pindata/manifest.json  — catalog export files, published by pindata.
 
 This command fetches both and downloads the files the ingest pipeline needs.
 
@@ -72,10 +72,10 @@ _NEEDED_FILES = {
 
 # Manifests to fetch: (url_path, local_prefix)
 # - Root manifest entries are stored as-is under dest.
-# - pinbase/ manifest entries are stored under pinbase/ locally.
+# - pindata/ manifest entries are stored under pindata/ locally.
 _MANIFESTS = [
     ("manifest.json", ""),
-    ("pinbase/manifest.json", "pinbase/"),
+    ("pindata/manifest.json", "pindata/"),
 ]
 
 
@@ -100,7 +100,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--url",
             default=os.environ.get(
-                "R2_PUBLIC_URL", "https://pub-8f33ea1ac628450298edd0d3243ecf5a.r2.dev"
+                "R2_PUBLIC_URL", "https://pub-8a5220445534421c879b6ff9ede350f1.r2.dev"
             ),
             help="Base URL of the R2 public bucket (default: R2_PUBLIC_URL env var).",
         )
@@ -132,7 +132,7 @@ class Command(BaseCommand):
                 continue
 
             # Determine the base URL for files in this manifest.
-            # pinbase/manifest.json lists files relative to pinbase/.
+            # pindata/manifest.json lists files relative to pindata/.
             manifest_base = base_url
             if "/" in manifest_path:
                 manifest_base = f"{base_url}/{manifest_path.rsplit('/', 1)[0]}"

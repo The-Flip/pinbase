@@ -76,7 +76,7 @@ from apps.provenance.models import Claim, Source
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_EXPORT_DIR = Path(__file__).parents[5] / "data" / "explore" / "pinbase"
+DEFAULT_EXPORT_DIR = Path(__file__).parents[5] / "data" / "ingest_sources" / "pindata"
 
 
 def _parent_path(location_path: str) -> str | None:
@@ -255,10 +255,14 @@ class Command(BaseCommand):
         # independently via is_enabled in admin.
         self._ai_desc_sources: dict[type[CatalogModel], Source] = {}
         for model_class, slug_suffix in _ai_desc_source_registry():
-            src, _ = Source.objects.get_or_create(
-                slug=f"pinbase-ai-desc-{slug_suffix}",
+            plural = str(
+                model_class._meta.verbose_name_plural or model_class.__name__
+            ).title()
+            src, _ = Source.objects.update_or_create(
+                slug=f"flipcommons-ai-desc-{slug_suffix}",
                 defaults={
-                    "name": f"Pinbase AI Descriptions ({model_class.__name__})",
+                    "name": f"Flipcommons AI Descriptions ({model_class.__name__})",
+                    "description": f"Flipcommons AI-generated descriptions for {plural}",
                     "source_type": Source.SourceType.EDITORIAL,
                     "priority": 300,
                 },
