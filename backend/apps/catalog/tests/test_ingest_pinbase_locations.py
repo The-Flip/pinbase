@@ -15,14 +15,14 @@ from django.core.management import call_command
 from apps.catalog.models import Location, LocationAlias
 from apps.provenance.models import Source
 
-PINBASE_SOURCE_SLUG = "pinbase"
+PINBASE_SOURCE_SLUG = "flipcommons-catalog"
 
 
 @pytest.fixture
 def pinbase_source(db):
     return Source.objects.create(
         slug=PINBASE_SOURCE_SLUG,
-        name="Pinbase",
+        name="Flipcommons Catalog",
         source_type="editorial",
         priority=300,
     )

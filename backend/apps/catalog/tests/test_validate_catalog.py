@@ -54,9 +54,12 @@ def ipdb(db):
 
 
 @pytest.fixture
-def pinbase_source(db):
+def flipcommons_source(db):
     return Source.objects.create(
-        name="Pinbase", slug="pinbase", source_type="editorial", priority=300
+        name="Flipcommons Catalog",
+        slug="flipcommons-catalog",
+        source_type="editorial",
+        priority=300,
     )
 
 
@@ -201,8 +204,8 @@ class TestUnresolvedCreditClaims:
 
 
 class TestUncuratedThemes:
-    def test_auto_created_themes_noted(self, db, ipdb, pinbase_source, capsys):
-        # Curated theme — has a pinbase name claim.
+    def test_auto_created_themes_noted(self, db, ipdb, flipcommons_source, capsys):
+        # Curated theme — has a flipcommons-catalog name claim.
         curated = Theme.objects.create(name="Sports", slug="sports")
         from django.contrib.contenttypes.models import ContentType
 
@@ -210,13 +213,13 @@ class TestUncuratedThemes:
         Claim.objects.create(
             content_type=ct,
             object_id=curated.pk,
-            source=pinbase_source,
+            source=flipcommons_source,
             field_name="name",
             claim_key="name",
             value="Sports",
         )
 
-        # Uncurated theme — no pinbase claim.
+        # Uncurated theme — no flipcommons-catalog claim.
         Theme.objects.create(name="Basebal", slug="basebal")
 
         call_command("validate_catalog")

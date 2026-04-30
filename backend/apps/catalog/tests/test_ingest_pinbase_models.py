@@ -88,7 +88,7 @@ class TestIngestPinbaseModels:
 
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         claim = mm.claims.get(source=source, field_name="name", is_active=True)
         assert claim.value == "Foo (Limited Edition)"
 
@@ -124,7 +124,7 @@ class TestIngestPinbaseModels:
         call_command("ingest_pinbase", export_dir=export_dir)
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         assert (
             mm.claims.filter(source=source, field_name="name", is_active=True).count()
             == 1
@@ -162,7 +162,7 @@ class TestIngestPinbaseModels:
 
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         claim = mm.claims.get(source=source, field_name="display_type", is_active=True)
         assert claim.value == "alphanumeric"
 
@@ -187,7 +187,7 @@ class TestIngestPinbaseModels:
 
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         claim = child.claims.get(source=source, field_name="variant_of", is_active=True)
         assert claim.value == "parent-model"
 
@@ -317,7 +317,7 @@ class TestIngestPinbaseModels:
 
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         claim = conv_mm.claims.get(
             source=source, field_name="converted_from", is_active=True
         )
@@ -367,7 +367,7 @@ class TestIngestPinbaseModels:
 
         call_command("ingest_pinbase", export_dir=export_dir)
 
-        source = Source.objects.get(slug="pinbase")
+        source = Source.objects.get(slug="flipcommons-catalog")
         claim = mm.claims.get(source=source, field_name="title", is_active=True)
         assert claim.value == "test-title"
 
