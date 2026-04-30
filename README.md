@@ -1,10 +1,12 @@
-# Pinbase
+# Flipcommons
 
-An interactive, collaborative database of pinball knowledge.
+This is the source code for https://flipcommons.org/, an interactive, collaborative database of pinball knowledge.
+
+It's sponsored and hosted by The Flip, Chicago's playable pinball museum.
 
 ## Architecture
 
-Django + SvelteKit monorepo. Django owns the data model, APIs, and admin UI. SvelteKit handles the user-facing frontend.
+This is a Django + SvelteKit monorepo. SvelteKit handles the user-facing frontend. Django owns the backend: the database data model, APIs, and it also serves Django's admin UI.
 
 - **Backend**: Django + Django Ninja API at `/api/`, admin at `/admin/`
 - **Frontend**: SvelteKit with Node SSR for public routes and CSR-only authenticated app routes
@@ -12,7 +14,7 @@ Django + SvelteKit monorepo. Django owns the data model, APIs, and admin UI. Sve
 - **Dev proxy**: Vite proxies `/api/`, `/admin/`, `/media/`, and `/static/` to Django
 - **Production routing**: Caddy fronts SvelteKit SSR and Django inside one Railway service
 
-## Quickstart
+## Getting started
 
 **Requirements**: Python 3.14+, Node 24+, [uv](https://docs.astral.sh/uv/), [pnpm](https://pnpm.io/) (or enable via `corepack enable`)
 

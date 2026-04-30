@@ -41,7 +41,7 @@ As a nonprofit and a dedicated proponent of open source, The Flip wants to estab
 
 Most databases collapse every question down to a single stored answer. That makes the data easy to display, but it hides where the answer came from, makes disagreements hard to inspect, and makes later correction or comparison much harder.
 
-Pinbase treats [provenance](Provenance.md) as part of the product, not just as backend bookkeeping.
+This project treats [provenance](Provenance.md) as part of the product, not just as backend bookkeeping.
 
 - every important fact can carry attribution: who said it, where it came from, and when it entered the system
 - conflicting claims from different sources can coexist instead of forcing the system to pretend there was never a dispute
@@ -53,7 +53,7 @@ This matters for pinball because the subject is full of messy history, conflicti
 
 ## Why Openness Is A Differentiator
 
-Pinbase is being built as an open system, not a walled garden.
+This project is being built as an open system, not a walled garden.
 
 - the codebase is open source
 - the project is intended to make pinball knowledge easier to inspect, reuse, and build on
@@ -61,13 +61,13 @@ Pinbase is being built as an open system, not a walled garden.
 - APIs and exports make the data more useful to museums, researchers, hobbyists, and downstream tools
 - provenance and licensing make it easier to understand what can be reused, under what terms, and where it came from
 
-This does not mean every piece of information in Pinbase is automatically public domain or free of constraints. Some data originates from outside sources with their own licensing limits, and the project is still working through what the most permissive responsible approach can be in each area.
+This does not mean every piece of information in the project is automatically public domain or free of constraints. Some data originates from outside sources with their own licensing limits, and the project is still working through what the most permissive responsible approach can be in each area.
 
-But openness is still a core differentiator. The goal is for Pinbase to make pinball knowledge more available, more legible, and more reusable than systems where the data is difficult to access, difficult to verify, or effectively locked away.
+But openness is still a core differentiator. The goal is to make pinball knowledge more available, more legible, and more reusable than systems where the data is difficult to access, difficult to verify, or effectively locked away.
 
 ## Why The Domain Model Is A Differentiator
 
-Pinbase treats the structure of pinball knowledge as the most critical part of the product, via a rich [domain model](DomainModel.md),
+This project treats the structure of pinball knowledge as the most critical part of the product, via a rich [domain model](DomainModel.md),
 
 - games are modeled at multiple levels, including Titles, Models, variants, remakes, and conversions
 - makers are not treated as one flat name field; brands, manufacturers, corporate entities, and hardware systems can each be represented precisely
@@ -76,7 +76,7 @@ Pinbase treats the structure of pinball knowledge as the most critical part of t
 
 Most pinball sites are built by and for collectors and are oriented around the concept of a model. That works for learning all about that model, but it tends to flatten the domain and leave important distinctions implicit, inconsistent, or missing entirely.
 
-This is important because the public usually thinks in terms of titles, not specific moels within a title, while researchers and serious enthusiasts often need much more precision than a simple model lists can provide. By modeling the pinball world with more care, Pinbase can be easier to browse, more flexible to explore, and more accurate than systems that rely more heavily on free-form or flattened data.
+This is important because the public usually thinks in terms of titles, not specific moels within a title, while researchers and serious enthusiasts often need much more precision than a simple model lists can provide. By modeling the pinball world with more care, the site can be easier to browse, more flexible to explore, and more accurate than systems that rely more heavily on free-form or flattened data.
 
 ## Read Next
 

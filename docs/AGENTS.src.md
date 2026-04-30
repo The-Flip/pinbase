@@ -58,14 +58,14 @@ Prefer the factories over `ChangeSet.objects.create` in new code:
 
 ## Project Overview
 
-Django + SvelteKit monorepo. Django owns the data model, APIs (Django Ninja), and admin UI. SvelteKit handles the user-facing frontend with Node SSR for public pages and CSR for authenticated app pages.
+Flipcommons is a Django + SvelteKit monorepo. Django owns the data model, APIs (Django Ninja), and admin UI. SvelteKit handles the user-facing frontend with Node SSR for public pages and CSR for authenticated app pages.
 
 Catalog data and the DuckDB exploration database live in separate repos:
 
 - **[pindata](https://github.com/deanmoses/pindata)** — canonical catalog records (markdown files + JSON schemas)
 - **[pinexplore](https://github.com/deanmoses/pinexplore)** — DuckDB exploration/validation database
 
-Both publish to Cloudflare R2. Pinbase pulls catalog JSON exports from R2 via `make pull-ingest`.
+Both publish to Cloudflare R2. This project pulls catalog JSON exports from R2 via `make pull-ingest`.
 
 See [DomainModel.md](DomainModel.md) for the catalog entity hierarchy (Title → Model, variants, remakes, manufacturers, taxonomy, etc.).
 
