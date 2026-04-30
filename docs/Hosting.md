@@ -1,6 +1,6 @@
 # Deployment on Railway
 
-Pinbase runs as a **single [Railway](https://railway.com/) service**: one Docker container running Caddy, SvelteKit Node SSR, and Django/Gunicorn.
+This site runs as a **single [Railway](https://railway.com/) service**: one Docker container running Caddy, SvelteKit Node SSR, and Django/Gunicorn.
 
 This document is the operator-facing reference for production deployment, runtime processes, ports, and troubleshooting.
 
@@ -89,8 +89,8 @@ In the Railway service dashboard:
 | ----------------------- | ----------------------------------------------------------------------------- |
 | `SECRET_KEY`            | Random string: `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
 | `DEBUG`                 | `false`                                                                       |
-| `ALLOWED_HOSTS`         | Your Railway domain, e.g. `pinbase-production.up.railway.app`                 |
-| `CSRF_TRUSTED_ORIGINS`  | Full origin, e.g. `https://pinbase-production.up.railway.app`                 |
+| `ALLOWED_HOSTS`         | Comma-separated hosts, e.g. `flipcommons.org,www.flipcommons.org`             |
+| `CSRF_TRUSTED_ORIGINS`  | Full origins, e.g. `https://flipcommons.org,https://www.flipcommons.org`      |
 | `INTERNAL_API_BASE_URL` | `http://127.0.0.1:8000`                                                       |
 
 `DATABASE_URL` and `PORT` are set automatically by Railway.

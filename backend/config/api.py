@@ -13,7 +13,7 @@ from apps.catalog.api.edit_claims import (
 from apps.provenance.rate_limits import RateLimitExceededError
 
 api = NinjaAPI(
-    title="Pinbase API",
+    title="API",
     urls_namespace="api",
 )
 
@@ -122,7 +122,7 @@ def _handle_pydantic_validation_error(
     for err in exc.errors:
         loc = err.get("loc") or ()
         msg = err.get("msg", "Invalid value.")
-        # Use the last loc segment as the field key. Pinbase's per-field
+        # Use the last loc segment as the field key. The per-field
         # error renderer keys on bare names ("year", "slug") — matching
         # what application-thrown StructuredValidationError uses. Loc
         # paths from Pydantic include request source + nesting

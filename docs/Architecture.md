@@ -4,7 +4,7 @@ This documents the project's system architecture.
 
 ## High-Level Shape
 
-Pinbase is a Django + SvelteKit monorepo with a small number of clear subsystems.
+This project is a Django + SvelteKit monorepo with a small number of clear subsystems.
 
 - Django owns the backend: data model, provenance/claims logic, ingest pipeline, API, and admin UI.
 - SvelteKit owns the frontend.
