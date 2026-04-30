@@ -51,7 +51,7 @@ class _FetchOneResult(NamedTuple):
 # ---------------------------------------------------------------------------
 
 _MAX_REDIRECTS = 5
-_USER_AGENT = "Pinbase/1.0 (citation metadata lookup)"
+_USER_AGENT = "Flipcommons/1.0 (citation metadata lookup)"
 
 
 def _is_blocked(addr: str) -> bool:

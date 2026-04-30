@@ -89,7 +89,7 @@ def classify_input(raw: str) -> tuple[str, str] | None:
 _OL_TIMEOUT = 4  # seconds for edition request
 _WALL_CLOCK = 5  # total budget for all requests
 _CACHE_TTL = 60 * 60 * 24 * 7  # 7 days
-_USER_AGENT = "Pinbase/1.0 (citation metadata lookup)"
+_USER_AGENT = "Flipcommons/1.0 (citation metadata lookup)"
 
 
 def _parse_year(publish_date: str) -> int | None:

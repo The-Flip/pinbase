@@ -1,6 +1,6 @@
 # Development
 
-This document is the contributor-facing hub for working on the Pinbase codebase.
+This document is the contributor-facing hub for working on this project's codebase.
 
 It does not try to restate every project rule. Instead, it points to the more specific docs that define how work in this repository should be approached.
 
@@ -73,7 +73,7 @@ The important rule is: solve integration by designing a boundary, not by punchin
 
 As a contributor, keep these distinctions clear:
 
-- product and domain docs explain what Pinbase is modeling
+- product and domain docs explain what this project is modeling
 - architecture docs explain how the system is organized
 - development docs explain how to work safely in the codebase
 - plan docs in [plans/README.md](plans/README.md) are historical reference, not canonical current documentation

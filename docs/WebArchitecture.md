@@ -1,6 +1,6 @@
 # Web Architecture
 
-This document describes how Pinbase's web application behaves at runtime: how browser requests flow through the stack, how same-origin is preserved, and how SSR and CSR are split between routes.
+This document describes how this project's web application behaves at runtime: how browser requests flow through the stack, how same-origin is preserved, and how SSR and CSR are split between routes.
 
 For the top-level system map, see [Architecture.md](Architecture.md). For deployment and operator details, see [Hosting.md](Hosting.md).
 
@@ -31,7 +31,7 @@ The frontend does not own business truth. It renders and edits data through Djan
 
 ## Same-Origin Model
 
-Pinbase uses a same-origin model in both development and production.
+This project uses a same-origin model in both development and production.
 
 ### Why
 
@@ -81,7 +81,7 @@ See [Hosting.md](Hosting.md) for the production serving details.
 
 ## Rendering Model
 
-Pinbase uses both SSR and CSR, but not for the same kinds of routes.
+This project uses both SSR and CSR, but not for the same kinds of routes.
 
 - Public content-heavy routes should usually render meaningful HTML on the server.
 - Internal or highly interactive application routes may deliberately opt out with `ssr = false`.

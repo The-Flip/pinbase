@@ -264,7 +264,7 @@ def compute_fingerprint(opdb_path: str) -> str:
 
 
 def _manufacturer_diagnostics(machines: list[OpdbRecord]) -> list[str]:
-    """Return warnings for OPDB manufacturers not represented in pinbase."""
+    """Return warnings for OPDB manufacturers not represented in the catalog."""
     pinbase_opdb_mfr_ids = set(
         Manufacturer.objects.filter(
             opdb_manufacturer_id__isnull=False,
@@ -282,7 +282,7 @@ def _manufacturer_diagnostics(machines: list[OpdbRecord]) -> list[str]:
         return []
     names = [f"{opdb_mfr_by_id[mid]} (opdb_id={mid})" for mid in sorted(missing_ids)]
     return [
-        f"{len(missing_ids)} OPDB manufacturer(s) not in pinbase: " + ", ".join(names)
+        f"{len(missing_ids)} OPDB manufacturer(s) not in catalog: " + ", ".join(names)
     ]
 
 

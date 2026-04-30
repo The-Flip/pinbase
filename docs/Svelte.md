@@ -1,6 +1,6 @@
 # Svelte
 
-This document defines how to think about and develop SvelteKit pages in Pinbase.
+This document defines how to think about and develop SvelteKit pages in this project.
 
 ## Authoring Conventions
 

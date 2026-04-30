@@ -99,7 +99,7 @@ def extract_image_urls(
     """Return (thumbnail_url, hero_image_url).
 
     When *primary_media* (prefetched ``EntityMedia`` rows) contains uploaded
-    images, those are used unconditionally (no license gating — Pinbase owns
+    images, those are used unconditionally (no license gating — this project owns
     them).  Otherwise falls back to third-party images in *extra_data*,
     respecting the global Constance display threshold.
 

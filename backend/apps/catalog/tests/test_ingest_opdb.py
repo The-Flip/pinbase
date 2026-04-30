@@ -130,14 +130,14 @@ class TestIngestOpdb:
         ).exists()
 
     def test_no_title_claims(self):
-        """OPDB no longer asserts title claims — Pinbase owns title grouping."""
+        """OPDB no longer asserts title claims — curated catalog owns title grouping."""
         source = Source.objects.get(slug="opdb")
         assert not Claim.objects.filter(
             source=source, field_name="title", is_active=True
         ).exists()
 
     def test_no_variant_of_claims(self):
-        """OPDB no longer asserts variant_of claims — Pinbase owns relationships."""
+        """OPDB no longer asserts variant_of claims — curated catalog owns relationships."""
         source = Source.objects.get(slug="opdb")
         assert not Claim.objects.filter(
             source=source, field_name="variant_of", is_active=True

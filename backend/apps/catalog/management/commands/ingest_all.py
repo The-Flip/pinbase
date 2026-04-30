@@ -1,6 +1,6 @@
 """Orchestrate the full ingestion pipeline.
 
-Pinbase curated data is ingested first so it bootstraps the entities that
+Curated catalog data is ingested first so it bootstraps the entities that
 external sources (IPDB, OPDB) will match against and enrich:
 
 Runs: ingest_pinbase → ingest_ipdb → ingest_opdb →
@@ -28,7 +28,7 @@ from apps.catalog.management.commands.ingest_pinbase import (
 )
 
 STEPS = [
-    # Phase 1: Pinbase curated data — bootstrap entities.
+    # Phase 1: Curated catalog data — bootstrap entities.
     "ingest_pinbase",
     # Phase 2: External sources — match existing records, assert claims.
     "ingest_ipdb",
@@ -40,7 +40,7 @@ STEPS = [
 
 
 class Command(BaseCommand):
-    help = "Run the full ingestion pipeline: Pinbase, IPDB, OPDB, resolve."
+    help = "Run the full ingestion pipeline: curated, IPDB, OPDB, resolve."
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
@@ -56,7 +56,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--export-dir",
             default=DEFAULT_EXPORT_DIR,
-            help="Path to exported Pinbase JSON directory.",
+            help="Path to exported curated catalog JSON directory.",
         )
         parser.add_argument(
             "--write",

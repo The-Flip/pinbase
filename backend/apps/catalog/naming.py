@@ -24,7 +24,7 @@ Known limitation: NFKC compatibility decomposition expands some decorative
 codepoints into letters, so e.g. "Godzilla™" normalizes to "godzillatm"
 rather than "godzilla". This is an acceptable trade for the benefit of
 folding full-width and composed forms to their ASCII equivalents, which is
-the more common case in pinbase's catalog. Revisit if real titles surface
+the more common case in this project's catalog. Revisit if real titles surface
 with decorative marks.
 """
 

@@ -244,8 +244,8 @@ class TestRenderAllLinks:
 
     def test_render_with_base_url(self, manufacturer):
         text = f"See [[manufacturer:id:{manufacturer.pk}]]"
-        result = render_all_links(text, base_url="https://pinbase.app")
-        assert "https://pinbase.app/manufacturers/williams" in result
+        result = render_all_links(text, base_url="https://flipcommons.org")
+        assert "https://flipcommons.org/manufacturers/williams" in result
 
     def test_render_multiple_links(self, manufacturer, system):
         text = (

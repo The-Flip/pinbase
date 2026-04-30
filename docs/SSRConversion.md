@@ -1,6 +1,6 @@
 # SSR Conversion
 
-This document is the implementation checklist for converting an existing SvelteKit route subtree from CSR to SSR in Pinbase.
+This document is the implementation checklist for converting an existing SvelteKit route subtree from CSR to SSR in this project.
 
 For SSR philosophy and API design rules, read [Svelte.md](Svelte.md) and [ApiDesign.md](ApiDesign.md).
 

@@ -274,7 +274,7 @@ class TestIngestIpdbUnknownMpu:
 # IpdbIds are noted for traceability.
 # ---------------------------------------------------------------------------
 
-# Feature map drawn from the actual pinbase gameplay_feature vocabulary
+# Feature map drawn from the actual gameplay_feature vocabulary
 # (ref_feature_gameplay view in pinexplore).  Includes every term needed
 # by the test cases below.
 _FM = {
