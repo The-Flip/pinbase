@@ -60,7 +60,7 @@ Pinbase-authored entities each get their own file:
 ```text
 data/
   ingest_sources/                 # immutable third-party inputs
-  pinbase/
+  pindata/
     titles/
       medieval-madness.md
       attack-from-mars.md

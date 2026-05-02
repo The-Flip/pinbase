@@ -217,9 +217,9 @@ The plan/apply model fits IPDB, OPDB, Fandom, and Wikidata naturally. Each is an
 
 This does not fit cleanly into "one source adapter produces one plan, the apply layer executes it."
 
-The right approach is a **compound plan**: the pinbase adapter produces a plan with ordered sub-plans, one per entity type (or logical group). The apply layer executes them sequentially within one transaction, making each sub-plan's entities available to the next.
+The right approach is a **compound plan**: the pindata adapter produces a plan with ordered sub-plans, one per entity type (or logical group). The apply layer executes them sequentially within one transaction, making each sub-plan's entities available to the next.
 
-This is the only option that preserves full atomicity naturally — if any phase fails, the entire pinbase ingest rolls back. The alternatives (multiple independent plan/apply cycles, or a hybrid that applies each phase independently) reintroduce the non-atomicity problem unless wrapped in an outer transaction, which negates the benefit of separate cycles.
+This is the only option that preserves full atomicity naturally — if any phase fails, the entire pindata ingest rolls back. The alternatives (multiple independent plan/apply cycles, or a hybrid that applies each phase independently) reintroduce the non-atomicity problem unless wrapped in an outer transaction, which negates the benefit of separate cycles.
 
 The compound plan also maps most closely to the current phase structure, making migration straightforward: each `_ingest_*` method becomes a sub-plan builder rather than an imperative mutate-as-you-go method. The apply layer handles entity creation, claim persistence, and resolution for each sub-plan in sequence. Each sub-plan must not have direct ORM writes to claim-controlled fields, and entity creation must be explicit and provenance-backed.
 
@@ -438,14 +438,14 @@ This plan is successful when:
 - ✅ Entity existence is provenance-backed via a claim-controlled `status` field (`active`, `deleted`)
 - ✅ Entity rows are never hard-deleted; catalog queries filter on `status=active`
 - ✅ Relationship claims reference target entities by PK, not by slug
-- All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields (OPDB, IPDB done; Fandom, Wikidata, pinbase remain)
+- All catalog facts enter the system through claims — no direct ORM writes to claim-controlled fields (OPDB, IPDB done; Fandom, Wikidata, pindata remain)
 - ✅ Every ingest run is recorded as an IngestRun with structured run metadata
 - ✅ Every entity touched in an ingest run has a ChangeSet grouping its claims
 - ✅ Retractions are linked to ChangeSets via `retracted_by_changeset`
 - ✅ The apply layer is source-agnostic — it processes explicit operations with no source-specific logic
 - ✅ The planner is non-mutating — dry run produces a report without writing to the database
 - ✅ Running the same ingest twice produces identical database state (idempotency)
-- Source adapters replace the current imperative ingest commands (OPDB, IPDB done; Fandom, Wikidata, pinbase remain)
+- Source adapters replace the current imperative ingest commands (OPDB, IPDB done; Fandom, Wikidata, pindata remain)
 - `validate_catalog` and resolver guard rails have been reviewed and trimmed post-redesign
 - `assert_claim()` validates relationship targets
 - ✅ Range limits are defined as shared constants referenced by both field validators and `CheckConstraint`

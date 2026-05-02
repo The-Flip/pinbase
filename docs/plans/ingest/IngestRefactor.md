@@ -223,9 +223,9 @@ The plan/apply model fits IPDB, OPDB, Fandom, and Wikidata naturally. Each is an
 
 This does not fit cleanly into "one source adapter produces one plan, the apply layer executes it."
 
-The right approach is a **compound plan**: the pinbase adapter produces a plan with ordered sub-plans, one per entity type (or logical group). The apply layer executes them sequentially within one transaction, making each sub-plan's entities available to the next.
+The right approach is a **compound plan**: the pindata adapter produces a plan with ordered sub-plans, one per entity type (or logical group). The apply layer executes them sequentially within one transaction, making each sub-plan's entities available to the next.
 
-This is the only option that preserves full atomicity naturally — if any phase fails, the entire pinbase ingest rolls back. The alternatives (multiple independent plan/apply cycles, or a hybrid that applies each phase independently) reintroduce the non-atomicity problem unless wrapped in an outer transaction, which negates the benefit of separate cycles.
+This is the only option that preserves full atomicity naturally — if any phase fails, the entire pindata ingest rolls back. The alternatives (multiple independent plan/apply cycles, or a hybrid that applies each phase independently) reintroduce the non-atomicity problem unless wrapped in an outer transaction, which negates the benefit of separate cycles.
 
 The compound plan also maps most closely to the current phase structure, making migration straightforward: each `_ingest_*` method becomes a sub-plan builder rather than an imperative mutate-as-you-go method. The apply layer handles entity creation, claim persistence, and resolution for each sub-plan in sequence. Each sub-plan must not have direct ORM writes to claim-controlled fields, and entity creation must be explicit and provenance-backed.
 
