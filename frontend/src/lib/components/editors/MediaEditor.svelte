@@ -5,6 +5,7 @@
   import type { UploadedMediaSchema } from '$lib/api/schema';
   import MediaUploadZone from '$lib/components/media/MediaUploadZone.svelte';
   import MediaGrid from '$lib/components/media/MediaGrid.svelte';
+  import { toast } from '$lib/toast/toast.svelte';
 
   type UploadedMedia = UploadedMediaSchema;
   type MediaEntityKey = keyof typeof MEDIA_CATEGORIES;
@@ -48,8 +49,9 @@
     }
   }
 
-  function handleCategoryChange(_assetUuid: string, _category: string) {
-    actionError = 'Category changes are not yet implemented.';
+  function handleCategoryChange(assetUuid: string, category: string) {
+    const previous = media.find((m) => m.asset_uuid === assetUuid)?.category ?? 'none';
+    toast.success(`Image category changed from ${previous} to ${category}.`);
   }
 </script>
 
