@@ -10,6 +10,8 @@ import { matchDetailSubroute } from './detail-subroute-match';
  *   /:entity/:slug/delete                destructive confirmation
  *   /:entity/:slug/edit-history          audit: changeset history
  *   /:entity/:slug/sources               audit: source claims
+ *   /kiosk                               museum kiosk visitor grid
+ *   /kiosk/configure                     kiosk staff setup
  *
  * `edit`, `delete`, `edit-history`, and `sources` require a slug segment
  * before them so a catalog record with slug='edit' / 'sources' / etc. (e.g.
@@ -21,8 +23,11 @@ import { matchDetailSubroute } from './detail-subroute-match';
  */
 const FOCUS_SUBROUTES_NESTED = new Set(['edit']);
 const FOCUS_SUBROUTES_TERMINAL = new Set(['delete', 'edit-history', 'sources']);
+const FOCUS_EXACT_PATHS = new Set(['/kiosk', '/kiosk/configure']);
 
 export function isFocusModePath(pathname: string): boolean {
+  if (FOCUS_EXACT_PATHS.has(pathname)) return true;
+
   const segments = pathname.split('/').filter(Boolean);
   if (segments.length === 0) return false;
 

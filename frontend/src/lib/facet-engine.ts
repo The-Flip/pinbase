@@ -170,7 +170,20 @@ export function filtersToParams(f: FilterState, sp: URLSearchParams): URLSearchP
 
 type Predicate = (t: FacetedTitle) => boolean;
 
-function matchesQuery(t: FacetedTitle, q: string): boolean {
+/**
+ * Match a title against a normalized query string. Checks name, abbreviations,
+ * and manufacturer name. The parameter type is intentionally structural so
+ * callers can pass any schema with these fields (e.g. TitleListItemSchema).
+ * Reused by /titles/+page.svelte and /kiosk/configure.
+ */
+export function matchesQuery(
+  t: {
+    name: string;
+    abbreviations: string[];
+    manufacturer?: { name: string } | null;
+  },
+  q: string,
+): boolean {
   if (!q) return true;
   return (
     normalizeText(t.name).includes(q) ||
