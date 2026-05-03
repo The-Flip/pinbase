@@ -6,9 +6,13 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import { DEFAULT_IDLE_SECONDS, loadConfig } from './config';
 
   $effect(() => {
+    // Don't reset the configure page out from under staff who are mid-edit.
+    if (page.url.pathname.startsWith('/kiosk/configure')) return;
+
     const idleSeconds = loadConfig()?.idleSeconds ?? DEFAULT_IDLE_SECONDS;
     const idleMs = idleSeconds * 1000;
 

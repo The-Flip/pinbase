@@ -16,7 +16,7 @@ export const DEFAULT_IDLE_SECONDS = 180;
 export const HOOK_MAX_LENGTH = 80;
 
 export type KioskItem = {
-  modelSlug: string;
+  titleSlug: string;
   hook: string;
 };
 
@@ -25,14 +25,6 @@ export type KioskConfig = {
   idleSeconds: number;
   items: KioskItem[];
 };
-
-export function defaultConfig(): KioskConfig {
-  return {
-    title: DEFAULT_TITLE,
-    idleSeconds: DEFAULT_IDLE_SECONDS,
-    items: [],
-  };
-}
 
 export function loadConfig(): KioskConfig | null {
   if (typeof localStorage === 'undefined') return null;
@@ -49,7 +41,7 @@ export function loadConfig(): KioskConfig | null {
       items: Array.isArray(parsed.items)
         ? parsed.items.filter(
             (i): i is KioskItem =>
-              !!i && typeof i.modelSlug === 'string' && typeof i.hook === 'string',
+              !!i && typeof i.titleSlug === 'string' && typeof i.hook === 'string',
           )
         : [],
     };

@@ -3,8 +3,12 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import KioskMode from './KioskMode.svelte';
 
-const { goto } = vi.hoisted(() => ({ goto: vi.fn() }));
+const { goto, mockPage } = vi.hoisted(() => ({
+  goto: vi.fn(),
+  mockPage: { url: new URL('http://localhost/') },
+}));
 vi.mock('$app/navigation', () => ({ goto }));
+vi.mock('$app/state', () => ({ page: mockPage }));
 
 beforeAll(() => {
   const store = new Map<string, string>();
@@ -25,6 +29,7 @@ describe('KioskMode', () => {
     vi.useFakeTimers();
     localStorage.clear();
     goto.mockClear();
+    mockPage.url = new URL('http://localhost/');
   });
 
   afterEach(() => {
@@ -38,6 +43,16 @@ describe('KioskMode', () => {
 
     vi.advanceTimersByTime(5000);
     expect(goto).toHaveBeenCalledWith('/kiosk', { invalidateAll: true, replaceState: true });
+  });
+
+  it('does not arm the timer on /kiosk/configure', () => {
+    mockPage.url = new URL('http://localhost/kiosk/configure');
+    localStorage.setItem('kioskConfig', JSON.stringify({ title: 't', idleSeconds: 5, items: [] }));
+
+    render(KioskMode);
+
+    vi.advanceTimersByTime(60_000);
+    expect(goto).not.toHaveBeenCalled();
   });
 
   it('resets the timer when the user interacts', () => {

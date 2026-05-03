@@ -39,7 +39,7 @@ describe('kiosk config (localStorage)', () => {
     const config = {
       title: 'Test Title',
       idleSeconds: 60,
-      items: [{ modelSlug: 'gorgar', hook: 'Talks' }],
+      items: [{ titleSlug: 'gorgar', hook: 'Talks' }],
     };
     saveConfig(config);
     expect(loadConfig()).toEqual(config);
@@ -70,16 +70,16 @@ describe('kiosk config (localStorage)', () => {
         title: 'T',
         idleSeconds: 30,
         items: [
-          { modelSlug: 'a', hook: 'h' },
+          { titleSlug: 'a', hook: 'h' },
           null,
-          { modelSlug: 'b' },
-          { modelSlug: 'c', hook: 'k' },
+          { titleSlug: 'b' },
+          { titleSlug: 'c', hook: 'k' },
         ],
       }),
     );
     expect(loadConfig()?.items).toEqual([
-      { modelSlug: 'a', hook: 'h' },
-      { modelSlug: 'c', hook: 'k' },
+      { titleSlug: 'a', hook: 'h' },
+      { titleSlug: 'c', hook: 'k' },
     ]);
   });
 
