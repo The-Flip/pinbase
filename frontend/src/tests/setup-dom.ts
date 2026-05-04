@@ -9,7 +9,7 @@ Element.prototype.scrollIntoView ??= function () {};
 // to return false, which triggers MarkdownTextArea's manual fallback path.
 document.execCommand = () => false;
 
-// jsdom doesn't implement matchMedia. `createIsMobileFlag` reads it at
+// jsdom doesn't implement matchMedia. `createBelowBreakpointFlag` reads it at
 // module-eval time for a correct first-paint value, so any test that
 // touches a detail layout needs it defined.
 window.matchMedia ??= (() => ({

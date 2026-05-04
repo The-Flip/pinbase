@@ -8,14 +8,14 @@
 	`replaceState` hop on desktop.
 
 	Consumed by each entity's /edit/+page.svelte. The companion +page.ts sets
-	`ssr = false` so `createIsMobileFlag` can return the browser's synchronous
+	`ssr = false` so `createBelowBreakpointFlag` can return the browser's synchronous
 	`matchMedia` value on first render — no loading state needed.
 -->
 <script lang="ts">
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import { resolveHref } from '$lib/utils';
 
   let {
@@ -29,7 +29,7 @@
     publicId?: string;
   } = $props();
 
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived<boolean | null>(isMobileFlag.current);
 
   $effect(() => {

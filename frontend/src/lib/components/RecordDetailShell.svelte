@@ -92,12 +92,11 @@
 
 <style>
   /* Hide sidebar on mobile for the detail reader — the page body duplicates it. */
-  /* Keep in sync with LAYOUT_BREAKPOINT (52rem). */
   .desktop-only {
     display: none;
   }
 
-  @media (min-width: 52rem) {
+  @media (--breakpoint-wide) {
     .desktop-only {
       display: contents;
     }

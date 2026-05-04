@@ -148,12 +148,12 @@
 <RichTextReferencesAccordion richText={model.description} state={richTextState} />
 
 <style>
-  /* Mobile-only: visible below 52rem — keep in sync with LAYOUT_BREAKPOINT */
+  /* Mobile-only: hidden once the sidebar appears at the wide breakpoint. */
   .mobile-only {
     display: block;
   }
 
-  @media (min-width: 52rem) {
+  @media (--breakpoint-wide) {
     .mobile-only {
       display: none;
     }

@@ -7,12 +7,14 @@ export const SITE_NAME = 'Flipcommons';
 export const SITE_TITLE = 'Flipcommons Pinball Encyclopedia';
 
 /**
- * Breakpoint (in rem) where the layout switches from single-column (mobile)
- * to two-column (desktop). CSS media queries can't use JS constants, so
- * TwoColumnLayout.svelte and layout files duplicate this as `52rem` —
- * search for "LAYOUT_BREAKPOINT" to find all copies.
+ * Shared responsive breakpoints (in rem). Defined in `breakpoints.js` so
+ * `svelte.config.js` can import the same values it injects into the CSS
+ * `@custom-media` declarations.
+ *
+ * - NARROW_BREAKPOINT: viewport is narrow; tighten up.
+ * - WIDE_BREAKPOINT: viewport is wide; room for the two-column layout.
  */
-export const LAYOUT_BREAKPOINT = 52;
+export { NARROW_BREAKPOINT, WIDE_BREAKPOINT } from './breakpoints.js';
 
 /** Build a browser tab title like "Manufacturers — Flipcommons Pinball Encyclopedia". */
 export const pageTitle = (name: string) => `${name} — ${SITE_TITLE}`;

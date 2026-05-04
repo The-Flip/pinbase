@@ -32,8 +32,7 @@
 
 <style>
   /* Mobile-only: hidden at desktop breakpoint where the sidebar repeats this list. */
-  /* Keep in sync with LAYOUT_BREAKPOINT (52rem). */
-  @media (min-width: 52rem) {
+  @media (--breakpoint-wide) {
     .mobile-only {
       display: none;
     }

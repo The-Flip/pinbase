@@ -49,7 +49,7 @@
     font-size: var(--font-size-0);
   }
 
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .footer-inner {
       flex-direction: column;
       text-align: center;

@@ -255,10 +255,9 @@
     margin-top: var(--size-3);
   }
 
-  /* Keep in sync with LAYOUT_BREAKPOINT (52rem) — the breakpoint at which
-     TwoColumnLayout reveals the sidebar. Above it, the sidebar's button is
-     visible, so the in-main copy must hide. */
-  @media (min-width: 52rem) {
+  /* Above the wide breakpoint, TwoColumnLayout reveals the sidebar's button,
+     so the in-main copy must hide. */
+  @media (--breakpoint-wide) {
     .header-mobile {
       display: none;
     }

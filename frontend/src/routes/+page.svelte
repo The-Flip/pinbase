@@ -174,7 +174,7 @@
     gap: var(--size-4);
   }
 
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .recent-grid {
       grid-template-columns: 1fr;
     }

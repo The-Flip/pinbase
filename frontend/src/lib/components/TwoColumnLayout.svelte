@@ -26,8 +26,7 @@
     gap: var(--size-6);
   }
 
-  /* Keep in sync with LAYOUT_BREAKPOINT */
-  @media (min-width: 52rem) {
+  @media (--breakpoint-wide) {
     .two-col {
       grid-template-columns: 1fr 18rem;
     }

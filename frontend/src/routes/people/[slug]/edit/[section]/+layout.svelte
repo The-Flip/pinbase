@@ -10,8 +10,8 @@
     PERSON_EDIT_SECTIONS,
   } from '$lib/components/editors/person-edit-sections';
   import { setEditLayoutContext } from '$lib/components/editors/edit-layout-context';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
 
   let { children } = $props();
   let slug = $derived(page.params.slug);
@@ -20,7 +20,7 @@
     sectionSegment ? findPersonSectionBySegment(sectionSegment) : undefined,
   );
   let editorDirty = $state(false);
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT, null);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT, null);
   let isMobile = $derived(isMobileFlag.current);
 
   setEditLayoutContext({

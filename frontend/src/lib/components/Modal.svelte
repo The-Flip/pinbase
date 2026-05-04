@@ -259,7 +259,7 @@
     flex-shrink: 0;
   }
 
-  @media (max-width: 40rem) {
+  @media (--breakpoint-narrow) {
     .modal-backdrop {
       padding: 0;
     }

@@ -9,8 +9,8 @@
     locationEditSectionsFor,
   } from '$lib/components/editors/location-edit-sections';
   import { setEditLayoutContext } from '$lib/components/editors/edit-layout-context';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import { resolveHref } from '$lib/utils';
   import type { LocationDetailSchema } from '$lib/api/schema';
 
@@ -23,7 +23,7 @@
   );
   let visibleSections = $derived(locationEditSectionsFor(profile.location_type));
   let editorDirty = $state(false);
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT, null);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT, null);
   let isMobile = $derived(isMobileFlag.current);
 
   setEditLayoutContext({

@@ -9,10 +9,10 @@
   import MenuSectionHeader from './MenuSectionHeader.svelte';
   import MenuDivider from './MenuDivider.svelte';
   import Avatar from './Avatar.svelte';
-  import { SITE_NAME } from '$lib/constants';
+  import { SITE_NAME, NARROW_BREAKPOINT } from '$lib/constants';
   import { resolveHref } from '$lib/utils';
   import { auth } from '$lib/auth.svelte';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import { toast } from '$lib/toast/toast.svelte';
 
   const navItems = [
@@ -26,10 +26,10 @@
     return page.url.pathname.startsWith(href);
   }
 
-  // Matches the mobile CSS tier below: width <= 40rem (640px). Used to
-  // decide whether the hamburger menu duplicates the primary nav items —
-  // tablet keeps them in the bar, mobile collapses them in.
-  const isMobileFlag = createIsMobileFlag(40);
+  // Mirrors the `(--breakpoint-narrow)` CSS tier below. Used to decide
+  // whether the hamburger menu duplicates the primary nav items — tablet
+  // keeps them in the bar, mobile collapses them in.
+  const isMobileFlag = createBelowBreakpointFlag(NARROW_BREAKPOINT);
   const isMobile = $derived(isMobileFlag.current === true);
 
   $effect(() => {
@@ -371,17 +371,16 @@
     color: var(--header-ink);
   }
 
-  /* ── Three responsive tiers via Media Queries Level 4 range syntax ──
-     Mobile (≤ 40rem / 640px): only logo, search, hamburger.
-     Tablet (40rem–52rem / 641–831px): bar shows primary nav minus Changelog,
-       plus hamburger; account menu collapses into hamburger.
-     Desktop (≥ 52rem / 832px): full bar including Changelog and account menu;
-       hamburger hidden. */
+  /* ── Three responsive tiers ──
+     Narrow: only logo, search, hamburger.
+     Middle band: bar shows primary nav minus Changelog, plus hamburger;
+       account menu collapses into hamburger.
+     Wide: full bar including Changelog and account menu; hamburger hidden. */
   .hamburger {
     display: none;
   }
 
-  @media (width <= 40rem) {
+  @media (--breakpoint-narrow) {
     .primary-nav {
       display: none;
     }
@@ -393,7 +392,7 @@
     }
   }
 
-  @media (width > 40rem) and (width < 52rem) {
+  @media (not (--breakpoint-narrow)) and (not (--breakpoint-wide)) {
     .changelog-link {
       display: none;
     }

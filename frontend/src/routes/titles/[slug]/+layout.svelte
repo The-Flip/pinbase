@@ -17,7 +17,7 @@
   import TaxonomyLinkSidebarSection from '$lib/components/TaxonomyLinkSidebarSection.svelte';
   import NeedsReviewBanner from '$lib/components/NeedsReviewBanner.svelte';
   import { getMenuItemAction, type EditSectionMenuItem } from '$lib/components/edit-section-menu';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
   import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
   import { isFocusModePath } from '$lib/focus-mode';
   import { setEntityContext } from '$lib/entity-context';
@@ -27,7 +27,7 @@
   } from '$lib/components/editors/combined-edit-sections';
   import { modelHasTitleOwnedIdentity } from '$lib/catalog-rules';
   import { titleAreaEditActionContext } from '$lib/components/editors/edit-action-context';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import type { ModelEditSectionKey } from '$lib/components/editors/model-edit-sections';
   import type { TitleEditSectionKey } from '$lib/components/editors/title-edit-sections';
   import MediaEditor from '$lib/components/editors/MediaEditor.svelte';
@@ -57,8 +57,7 @@
     },
   });
 
-  // Mobile detection — matches TwoColumnLayout breakpoint (LAYOUT_BREAKPOINT)
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived(isMobileFlag.current);
 
   let metaDescription = $derived.by(() => {
