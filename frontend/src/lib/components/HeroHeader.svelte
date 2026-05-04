@@ -212,7 +212,7 @@
   }
 
   /* Responsive */
-  @media (max-width: 40rem) {
+  @media (--breakpoint-narrow) {
     .hero-banner {
       min-height: 10rem;
       max-height: 16rem;

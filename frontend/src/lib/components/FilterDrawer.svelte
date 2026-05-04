@@ -114,7 +114,7 @@
   }
 
   /* Mobile overrides */
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .filter-toggle {
       display: inline-flex;
       margin-bottom: var(--size-3);

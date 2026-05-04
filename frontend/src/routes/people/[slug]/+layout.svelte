@@ -16,11 +16,11 @@
     PERSON_EDIT_SECTIONS,
     type PersonEditSectionKey,
   } from '$lib/components/editors/person-edit-sections';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
   import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
   import { isFocusModePath } from '$lib/focus-mode';
   import { setEntityContext } from '$lib/entity-context';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import PersonEditorSwitch from './edit/PersonEditorSwitch.svelte';
 
   let { data, children } = $props();
@@ -42,7 +42,7 @@
       return resolve(`/people/${slug}`);
     },
   });
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived(isMobileFlag.current);
   let editing = $state<PersonEditSectionKey | null>(null);
   let syncEnabled = $derived(!isMobile && !isFocusMode);

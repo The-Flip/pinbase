@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { resolveHref } from '$lib/utils';
-  import { SITE_NAME, LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { SITE_NAME, WIDE_BREAKPOINT } from '$lib/constants';
   import { auth } from '$lib/auth.svelte';
   import MetaTags from '$lib/components/MetaTags.svelte';
   import PageActionBar from '$lib/components/PageActionBar.svelte';
@@ -19,7 +19,7 @@
   import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
   import { isFocusModePath } from '$lib/focus-mode';
   import { setEntityContext } from '$lib/entity-context';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
 
   type SectionDef = EditSectionDef<TKey> & { usesSectionEditorForm: boolean };
 
@@ -83,7 +83,7 @@
   let mode = $derived(resolveDetailSubrouteMode(page.url.pathname));
   let isDetail = $derived(mode === 'detail');
   let isFocusMode = $derived(isFocusModePath(page.url.pathname));
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived(isMobileFlag.current);
   let editing = $state<TKey | null>(null);
   let syncEnabled = $derived(!isMobile && !isFocusMode);

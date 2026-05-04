@@ -8,6 +8,15 @@
 @import 'open-props/normalize';
 
 /* ========================================
+   SHARED RESPONSIVE BREAKPOINTS
+   Component <style> blocks may reference `(--breakpoint-narrow)` and
+   `(--breakpoint-wide)`. Values come from NARROW_BREAKPOINT /
+   WIDE_BREAKPOINT in `lib/constants.ts`; svelte.config.js reads them
+   from there and injects matching `@custom-media` declarations into each
+   component's CSS so postcss-custom-media can resolve them.
+   ======================================== */
+
+/* ========================================
    TYPOGRAPHY
    ======================================== */
 :root {

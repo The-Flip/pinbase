@@ -86,8 +86,7 @@
     margin-left: auto;
   }
 
-  /* Keep in sync with LAYOUT_BREAKPOINT (52rem). */
-  @media (max-width: 52rem) {
+  @media not (--breakpoint-wide) {
     .back-text {
       display: none;
     }

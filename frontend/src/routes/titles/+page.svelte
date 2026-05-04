@@ -148,7 +148,7 @@
     padding: var(--size-6) 0;
   }
 
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .layout {
       grid-template-columns: 1fr;
     }

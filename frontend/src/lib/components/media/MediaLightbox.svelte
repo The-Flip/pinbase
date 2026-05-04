@@ -180,7 +180,7 @@
     color: var(--color-link);
   }
 
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .nav-btn--prev {
       left: 0.5rem;
     }

@@ -5,12 +5,12 @@
   import { resolveHref } from '$lib/utils';
   import Button from '$lib/components/Button.svelte';
   import SectionEditorForm from '$lib/components/SectionEditorForm.svelte';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
   import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
   import type { EditSectionDef } from '$lib/components/editors/edit-section-def';
   import { getEditLayoutContext } from '$lib/components/editors/edit-layout-context';
   import type { SaveMeta } from '$lib/components/editors/save-claims-shared';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
 
   type SectionDef = EditSectionDef<TKey> & { usesSectionEditorForm: boolean };
   type EditorRefBox = { current: SectionEditorHandle | undefined };
@@ -52,7 +52,7 @@
   let editorRef = $state<SectionEditorHandle>();
   let editError = $state('');
   let saveCounter = $state(0);
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT, null);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT, null);
   let isMobile = $derived(isMobileFlag.current);
 
   $effect(() => {

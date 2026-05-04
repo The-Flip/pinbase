@@ -556,7 +556,7 @@
     height: 1px;
   }
 
-  @media (max-width: 640px) {
+  @media (--breakpoint-narrow) {
     .filter-bar {
       flex-direction: column;
       align-items: stretch;

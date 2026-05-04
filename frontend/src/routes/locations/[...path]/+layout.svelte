@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { auth } from '$lib/auth.svelte';
-  import { LAYOUT_BREAKPOINT, pageTitle } from '$lib/constants';
+  import { WIDE_BREAKPOINT, pageTitle } from '$lib/constants';
   import { resolveHref } from '$lib/utils';
   import PageActionBar from '$lib/components/PageActionBar.svelte';
   import RecordDetailShell from '$lib/components/RecordDetailShell.svelte';
@@ -19,7 +19,7 @@
     type LocationEditSectionDef,
     type LocationEditSectionKey,
   } from '$lib/components/editors/location-edit-sections';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import { childrenHeading, newChildLabel, type LocationDetail } from './location-helpers';
   import LocationEditorSwitch from './edit/LocationEditorSwitch.svelte';
 
@@ -49,7 +49,7 @@
     return `There ${n === 1 ? 'has' : 'have'} been ${n} ${noun} in ${where}.`;
   });
 
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived(isMobileFlag.current);
   let editing = $state<LocationEditSectionKey | null>(null);
   let visibleSections = $derived<LocationEditSectionDef[]>(

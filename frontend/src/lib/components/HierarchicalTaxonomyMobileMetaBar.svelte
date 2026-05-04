@@ -44,7 +44,6 @@
 
 <style>
   /* Mobile-only: hidden at desktop breakpoint where the sidebar repeats this info. */
-  /* Keep in sync with LAYOUT_BREAKPOINT (52rem). */
   .meta-bar {
     display: flex;
     flex-wrap: wrap;
@@ -54,7 +53,7 @@
     margin: 0 0 var(--size-4);
   }
 
-  @media (min-width: 52rem) {
+  @media (--breakpoint-wide) {
     .meta-bar {
       display: none;
     }

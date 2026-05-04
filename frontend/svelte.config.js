@@ -1,12 +1,26 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { NARROW_BREAKPOINT, WIDE_BREAKPOINT } from './src/lib/breakpoints.js';
+
+// Inject @custom-media declarations into every component <style> block so
+// postcss-custom-media (which sees each block in isolation) can resolve
+// `(--breakpoint-*)` references. Kept on a single line so error line
+// numbers in component <style> blocks aren't shifted by the injection.
+const SHARED_CUSTOM_MEDIA =
+  `@custom-media --breakpoint-narrow (max-width: ${NARROW_BREAKPOINT}rem);` +
+  ` @custom-media --breakpoint-wide (min-width: ${WIDE_BREAKPOINT}rem); `;
+
+const injectCustomMedia = {
+  name: 'inject-custom-media',
+  style: ({ content }) => ({ code: SHARED_CUSTOM_MEDIA + content }),
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   compilerOptions: {
     runes: true,
   },
-  preprocess: vitePreprocess(),
+  preprocess: [injectCustomMedia, vitePreprocess()],
   kit: {
     adapter: adapter(),
     prerender: {

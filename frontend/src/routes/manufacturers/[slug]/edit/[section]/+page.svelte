@@ -3,14 +3,14 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import SectionEditorForm from '$lib/components/SectionEditorForm.svelte';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
   import type { SectionEditorHandle } from '$lib/components/editors/editor-contract';
   import { getEditLayoutContext } from '$lib/components/editors/edit-layout-context';
   import {
     defaultManufacturerSectionSegment,
     findManufacturerSectionBySegment,
   } from '$lib/components/editors/manufacturer-edit-sections';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import type { SaveMeta } from '$lib/components/editors/save-model-claims';
   import ManufacturerEditorSwitch from '../ManufacturerEditorSwitch.svelte';
 
@@ -27,7 +27,7 @@
   let editorRef = $state<SectionEditorHandle>();
   let editError = $state('');
   let saveCounter = $state(0);
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT, null);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT, null);
   let isMobile = $derived(isMobileFlag.current);
 
   $effect(() => {

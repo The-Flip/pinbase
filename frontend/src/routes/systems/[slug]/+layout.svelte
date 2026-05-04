@@ -18,11 +18,11 @@
     SYSTEM_EDIT_SECTIONS,
     type SystemEditSectionKey,
   } from '$lib/components/editors/system-edit-sections';
-  import { LAYOUT_BREAKPOINT } from '$lib/constants';
+  import { WIDE_BREAKPOINT } from '$lib/constants';
   import { resolveDetailSubrouteMode } from '$lib/detail-subroute-mode';
   import { isFocusModePath } from '$lib/focus-mode';
   import { setEntityContext } from '$lib/entity-context';
-  import { createIsMobileFlag } from '$lib/use-is-mobile.svelte';
+  import { createBelowBreakpointFlag } from '$lib/use-below-breakpoint.svelte';
   import SystemEditorSwitch from './edit/SystemEditorSwitch.svelte';
 
   let { data, children } = $props();
@@ -42,7 +42,7 @@
       return resolve(`/systems/${slug}`);
     },
   });
-  const isMobileFlag = createIsMobileFlag(LAYOUT_BREAKPOINT);
+  const isMobileFlag = createBelowBreakpointFlag(WIDE_BREAKPOINT);
   let isMobile = $derived(isMobileFlag.current);
   let editing = $state<SystemEditSectionKey | null>(null);
   let syncEnabled = $derived(!isMobile && !isFocusMode);
