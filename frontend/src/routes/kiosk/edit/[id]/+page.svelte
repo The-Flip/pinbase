@@ -37,6 +37,12 @@
   // here.
   // svelte-ignore state_referenced_locally
   const config = data.config;
+  // activeId comes from +page.server.ts (reads kioskConfigId cookie).
+  // Local mutable copy so exitKioskMode() can clear it without a full
+  // reload. Reading it server-side avoids an SSR/hydration flash.
+  // svelte-ignore state_referenced_locally
+  let activeId = $state<number | null>(data.activeId);
+  let isActive = $derived(activeId === config.id);
 
   type EditorItem = { titleSlug: string; titleName: string; hook: string };
 
@@ -211,6 +217,11 @@
     location.assign('/kiosk');
   }
 
+  function handleExit() {
+    clearKioskCookies();
+    activeId = null;
+  }
+
   async function deleteKiosk() {
     if (deleting) return;
     if (!confirm(`Delete kiosk ${idLabel}? This cannot be undone.`)) return;
@@ -255,7 +266,11 @@
         <Button variant="destructive" fullWidth onclick={deleteKiosk} disabled={deleting}>
           {deleting ? 'Deleting…' : 'Delete Kiosk'}
         </Button>
-        <Button variant="primary" fullWidth onclick={handleEnter}>Enter Kiosk Mode</Button>
+        {#if isActive}
+          <Button variant="primary" fullWidth onclick={handleExit}>Exit Kiosk Mode</Button>
+        {:else}
+          <Button variant="primary" fullWidth onclick={handleEnter}>Enter Kiosk Mode</Button>
+        {/if}
       </div>
 
       {#if errorMessage}
@@ -358,7 +373,11 @@
             </Button>
           </div>
           <div class="sidebar-action">
-            <Button variant="primary" fullWidth onclick={handleEnter}>Enter Kiosk Mode</Button>
+            {#if isActive}
+              <Button variant="primary" fullWidth onclick={handleExit}>Exit Kiosk Mode</Button>
+            {:else}
+              <Button variant="primary" fullWidth onclick={handleEnter}>Enter Kiosk Mode</Button>
+            {/if}
           </div>
         </SidebarSection>
       </div>

@@ -12,7 +12,7 @@ vi.mock('$lib/api/server', () => ({ createServerClient }));
 
 import { load } from './+page.server';
 
-function makeEvent(id: string) {
+function makeEvent(id: string, cookieJar: Record<string, string> = {}) {
   const url = new URL(`http://localhost/kiosk/edit/${id}`);
   const request = new Request(url, { headers: { cookie: 'sessionid=abc' } });
   return {
@@ -20,6 +20,7 @@ function makeEvent(id: string) {
     url,
     request,
     params: { id },
+    cookies: { get: (name: string) => cookieJar[name] },
   };
 }
 
@@ -35,5 +36,29 @@ describe('/kiosk/edit/[id]/+page.server.ts load', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await load(event as any);
     expect(createServerClient).toHaveBeenCalledWith(event.fetch, event.url, event.request);
+  });
+
+  it('returns activeId from kioskConfigId cookie when set', async () => {
+    GET.mockResolvedValue({ data: { id: 5 }, response: { status: 200 } });
+    const event = makeEvent('5', { kioskConfigId: '5' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await load(event as any);
+    expect(result).toEqual({ config: { id: 5 }, activeId: 5 });
+  });
+
+  it('returns activeId=null when kioskConfigId cookie is absent', async () => {
+    GET.mockResolvedValue({ data: { id: 5 }, response: { status: 200 } });
+    const event = makeEvent('5');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await load(event as any);
+    expect(result).toEqual({ config: { id: 5 }, activeId: null });
+  });
+
+  it('returns activeId=null when kioskConfigId cookie is malformed', async () => {
+    GET.mockResolvedValue({ data: { id: 5 }, response: { status: 200 } });
+    const event = makeEvent('5', { kioskConfigId: 'nope' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await load(event as any);
+    expect(result).toEqual({ config: { id: 5 }, activeId: null });
   });
 });
