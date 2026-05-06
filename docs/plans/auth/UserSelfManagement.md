@@ -38,7 +38,7 @@ The settings page is a single Flipcommons-rendered surface that exposes both, wi
 | **Avatar source**                         | Flipcommons        | Yes                     | Choice: "use the picture from my auth provider" (default) or "upload one." Stored as an enum + optional uploaded file.                                                  |
 | **Notification preferences**              | Flipcommons        | Yes                     | Forward-looking — at minimum a master "email me about activity on entities I edited" toggle.                                                                            |
 | **Privacy: show real name on edits**      | Flipcommons        | Yes                     | Toggle: edits attributed by handle vs. display name. Wikipedia-style pen-name mode.                                                                                     |
-| **Account deactivation**                  | Both               | Yes                     | Soft-delete on our side (`UserProfile.deactivated_at`); user separately closes the provider account if they want full removal.                                          |
+| **Account deletion**                      | Provider           | Yes (provider)          | User closes their account at the auth provider; the `user.deleted` webhook flips `is_active=False` on our side. See [Webhooks.md](Webhooks.md).                         |
 | Username (`User.username`)                | Flipcommons        | No (derived)            | Stays auto-generated from email at first login. We expose `handle` as the user-facing rename surface; `username` becomes an internal slug for things like Django admin. |
 
 ## Why the username / handle split
@@ -73,21 +73,11 @@ class UserProfile(TimeStampedModel):
 
 Render order: if `avatar_source == "UPLOADED"` and the file exists, use it. If `"PROVIDER"` and we have a URL, use that. Otherwise generate an initials-based avatar deterministically from the handle.
 
-## Account deactivation vs. deletion
+## Account deletion
 
-Two distinct concepts, which the settings page should not conflate:
+A user wanting to leave closes their account at the auth provider. The settings page deep-links to the provider's account-closure UI; we don't call a delete API on their behalf, so consent is unambiguous and provider-side.
 
-- **Deactivate on Flipcommons.** Sets `UserProfile.deactivated_at`, hides their public profile page, preserves all their contribution history attribution. They can reactivate by signing in again. Reversible. This is the soft-delete from [Webhooks.md](Webhooks.md), exposed as a user-driven action rather than only a provider-event reaction.
-- **Delete the auth-provider account.** Closes the account at WorkOS / Clerk / etc. They can't sign in anywhere using that account anymore. Triggers our `user.deleted` webhook handler.
-
-A user choosing "delete my account" probably wants both. The UX:
-
-1. Confirm with a strong dialog ("this can't be fully undone").
-2. Mark `UserProfile.deactivated_at` immediately.
-3. Provide a button that deep-links to the provider's account-closure UI for the auth-side step.
-4. The webhook (when it arrives) is the durable signal; the local mark is the immediate UX.
-
-We don't try to delete from the provider via API on their behalf — let the user complete that explicitly so consent is unambiguous.
+When the provider's `user.deleted` webhook arrives ([Webhooks.md](Webhooks.md)), we soft-delete on our side: `is_active=False`, `workos_user_id=None`, contribution history preserved with attribution. That's the only lifecycle state we track on our side — there's no separate self-service "deactivate but keep my account" mode. (Realistic intents — "stop emailing me," "hide my profile" — are covered by the notification and privacy toggles above.)
 
 ## What the settings page looks like
 
@@ -97,19 +87,19 @@ A single Flipcommons-rendered page at `/settings/`, organized into sections:
 - **Account** — email (read-only with "change at provider" link), connected logins (read-only with "manage at provider" link), password (button: "change password at provider").
 - **Notifications** — toggles, currently only one or two.
 - **Privacy** — show-real-name-on-edits toggle, "view my contribution history as the public sees it" link.
-- **Danger zone** — deactivate account, delete account.
+- **Danger zone** — delete account (deep-links to the provider's account-closure UI).
 
 All non-trivial mutations go through the same claims-based write path described in [Provenance.md](../../Provenance.md) — handle changes, bio changes, display-name overrides are all user-inputted catalog-_adjacent_ fields. _But_ they're metadata about the user, not about a catalog entity, so they probably aren't claims (claims are scoped to catalog entities). Worth a quick design check before implementation: do we want user-profile edits in the changeset audit log, or just on `UserProfile` directly with a simple `updated_at`? My instinct is the latter — user-profile edits aren't conflict-resolution-worthy data.
 
 ## Provider portability stays intact
 
-Nothing here depends on Clerk's `username` field, or Auth0's profile UI shape, or WorkOS's hosted account portal specifically. Each provider has _some_ user-portal URL that we deep-link to; the URL is the only provider-specific value. The owned data (handle, display-name override, bio, avatar choice, notification prefs, deactivation state) lives on `UserProfile` and migrates with the user (see [ProviderSwitching.md](ProviderSwitching.md)).
+Nothing here depends on Clerk's `username` field, or Auth0's profile UI shape, or WorkOS's hosted account portal specifically. Each provider has _some_ user-portal URL that we deep-link to; the URL is the only provider-specific value. The owned data (handle, display-name override, bio, avatar choice, notification prefs) lives on `User` and migrates with the user (see [ProviderSwitching.md](ProviderSwitching.md)).
 
 ## Open questions
 
 - **Handle history for redirects?** If a user renames `dean → midwaypin`, do we 301 the old `/users/dean` URL? Probably yes for SEO and link stability, but a separate small table.
 - **Reserved handles?** Block `admin`, `support`, `api`, `settings`, etc. — both for routing safety and impersonation prevention. Easy to enumerate; do it from day one.
-- **Profanity / abuse on handles?** Probably not worth a filter at our scale. Reactive moderation via the existing `is_banned` flag.
+- **Profanity / abuse on handles?** Probably not worth a filter at our scale. Reactive moderation via setting `is_active=False` (see [CustomUserModel.md](CustomUserModel.md)).
 - **Multiple connected logins?** Today our model assumes one provider. If we let Clerk users link Google + GitHub, we'd surface "connected accounts" with disconnect buttons — but the actual managing happens at the provider.
 - **Should bio support markdown?** Yes, but a restricted dialect (no images, no embeds, no HTML). Same renderer we'll eventually use for change-set notes.
 

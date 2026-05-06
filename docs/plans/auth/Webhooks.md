@@ -35,7 +35,7 @@ WorkOS signs webhook bodies with HMAC-SHA256 using a configured `WORKOS_WEBHOOK_
 | `user.updated`                  | Refresh `email`, `first_name`, `last_name`, `email_verified`, profile picture URL on the local user / `UserProfile`. |
 | `user.deleted`                  | Soft-delete the local user (`is_active = False`, clear `workos_user_id`, keep content attribution).                  |
 | `email_verification.created`    | (If Clerk) flip `UserProfile.email_verified = True` and lift the edit gate immediately.                              |
-| `user.banned` / `user.unbanned` | (Clerk-specific) mirror to `UserProfile.is_banned`; on ban, also flush the user's Django sessions.                   |
+| `user.banned` / `user.unbanned` | (Clerk-specific) flip `user.is_active` (false on ban, true on unban); on ban, also flush the user's Django sessions. |
 
 We **don't** handle `user.created` from the webhook. Local user creation stays login-driven — we only want to materialize a Django user when they actually arrive on our site, not when they're just sitting in the auth provider's DB. If we ever receive an updated/deleted event for a user we've never seen locally, we log and skip.
 
@@ -60,15 +60,17 @@ When `user.deleted` arrives, we can't `DELETE` the local user: their `id` is ref
 Instead:
 
 - `user.is_active = False` — Django's auth middleware already refuses login for inactive users.
-- `profile.workos_user_id = None` — breaks the link, frees up the `unique` slot if a different person ever signs up with the same email.
-- Optionally null out `User.email`, `first_name`, `last_name` — depends on how aggressive we want to be about GDPR-style erasure. Keeping the `username` (which we already derive from email) and contribution history attributed to a now-anonymous user is the wikipedia model, and probably what we want.
-- Add a `UserProfile.deleted_at` timestamp for audit.
+- `user.workos_user_id = None` — breaks the provider link so a returning user can re-bind to this row with a new `workos_user_id` (see [CustomUserModel.md](CustomUserModel.md) on reactivation).
+- **Do not clear `email`.** The reactivation path matches by email; clearing it would strand the user's contribution history forever. Same for `first_name` / `last_name` — keep them so the row stays recognizable. If we ever get a hard GDPR-erasure request, that's a separate management-command path that fully purges the row.
+- (`updated_at` on `User` already records "when the row last changed," which is enough audit for v1. A dedicated `deleted_at` timestamp can be added later if we need it.)
 
 We can layer a "fully purge" management command on top later if we ever get a hard erasure request.
 
 ### 5. Session invalidation on ban
 
-When a `user.banned` event arrives (Clerk only, today), in addition to setting `UserProfile.is_banned`, walk Django's `Session` table and delete any session whose `auth_user_id` equals this user. That's the difference between "banned" being meaningful in five seconds vs. five days.
+When a `user.banned` event arrives (Clerk only, today), in addition to setting `user.is_active = False`, walk Django's `Session` table and delete any session whose `auth_user_id` equals this user. That's the difference between "banned" being meaningful in five seconds vs. five days.
+
+For v1 we treat ban and provider-deletion identically on our side — both set `is_active=False`. The semantic difference (banned users shouldn't be able to re-register with the same email; deleted users can) doesn't matter until we have actual abusive users. See the note in [CustomUserModel.md](CustomUserModel.md).
 
 Helper:
 

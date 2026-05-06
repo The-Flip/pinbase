@@ -162,26 +162,34 @@ Authentik is a self-hosted identity provider. We'd run it ourselves on Railway a
 
 #### Build It Ourselves: django-allauth
 
-Rejected because I do not want to build and own an auth system ourselves.
+allauth is the mature batteries-included Django auth library — using it is "buy" in the sense of "drop in a debugged library," not "write auth from scratch." For a 100-user volunteer-led wiki, the operational and feature surface is genuinely small. So the rejection needs a real reason, not a category-level "I don't want to build auth."
 
-Create a dedicated Django auth service (or extend Flipfix) using django-allauth, which provides social login, email verification, forgot password, and account management as Django views and forms.
+**The actual reason: ongoing email-deliverability monitoring.**
 
-**Pros:**
+Auth that doesn't reliably deliver email isn't auth — verification links, password resets, MFA codes all become silent failures. With allauth that means:
 
-- Stays entirely within your existing tech stack — it's just Django
+- Setting up SPF / DKIM / DMARC (a one-time afternoon)
+- Picking a transactional provider — Postmark, SES, Mailgun (a one-time decision plus ~$15/mo)
+- Designing and maintaining branded email templates (one-time, then drift)
+- **Ongoing bounce/spam monitoring** — this is the killer. Inbox-placement decay, gradual sender-reputation erosion, "your mail is going to Promotions/Spam at the big providers" detection. WorkOS handles this entirely. We'd add a recurring operational concern that has nothing to do with the wiki.
+
+WorkOS sending from `workos-mail.com` removes that ongoing surface entirely. At our scale and with our staffing model (volunteer-led, no dedicated ops), that's the trade that decides it.
+
+**Reasons that look like rejections but aren't, on closer inspection:**
+
+- ~~OAuth credential management.~~ We'd have to register Google/Apple/GitHub OAuth apps eventually anyway if we ever migrate users to a new provider. Not a real allauth-specific cost.
+- ~~3am operational responsibility.~~ WorkOS is roughly as likely to break at 3am as our own Django stack — and if our Django stack is down, the wiki is down regardless of where auth lives. Auth being on the same failure domain as the rest of the site is a feature, not a bug, since the user-visible outcome is the same either way.
+- ~~Login UI lives at a Django route (brief detour from SvelteKit).~~ Acceptable UX cost. SvelteKit-routed-everything isn't a hard requirement.
+
+**Pros if we ever revisit:**
+
+- Stays entirely within our existing tech stack — it's just Django
 - Maximum control and customization over every flow and UI element
-- No external dependency or additional service to host (if built into Flipfix)
-- django-allauth is mature and widely used
 - No vendor costs at any scale
+- The "must be able to migrate to a new auth provider" hard requirement evaporates — there's nothing to migrate from
+- Long-lived sessions are trivial (`SESSION_COOKIE_AGE`); no juggling free-tier session limits
 
-**Cons:**
-
-- Most engineering effort of the three options — you're building auth UI, registration flows, and security hardening yourself
-- You still need email infrastructure (SMTP via Postmark, SES, etc.) — deliverability is your problem
-- Flipfix remains the IdP, preserving the coupling between a maintenance app and critical identity infrastructure — or you spin up yet another Django service
-- Account linking (email + social for same user) requires careful implementation
-- MFA, rate limiting, session management, and global logout all need to be built or wired up manually
-- Ongoing maintenance burden: security patches, keeping up with OAuth spec changes, social provider API changes
+**Reconsider when:** WorkOS pricing changes pinch us, or we already have working transactional-email infrastructure (e.g., shared from Flipfix) that absorbs the ongoing monitoring cost.
 
 ## How they Integrate
 

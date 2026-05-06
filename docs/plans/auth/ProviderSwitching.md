@@ -21,15 +21,15 @@ Some of it overlaps with [Verification.md](Verification.md) and [Webhooks.md](We
 
 Already covered in other docs, summarised here so the picture is whole:
 
-| Data                             | Source                             | Doc             | Why it helps a migration                                                                                       |
-| -------------------------------- | ---------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
-| `workos_user_id`                 | Today                              | —               | The current link. Becomes "legacy provider ID" on switch.                                                      |
-| Email, first / last name         | Today                              | —               | Primary re-link key (verified-email match against the new provider).                                           |
-| `email_verified`                 | [Verification.md](Verification.md) | Verification.md | New provider may distrust unknown users; we know they were verified.                                           |
-| Profile picture URL              | [Verification.md](Verification.md) | Verification.md | Continuity — UI doesn't go blank during the cutover.                                                           |
-| `(provider, provider_sub)` pairs | [Verification.md](Verification.md) | Verification.md | Stable Google/GitHub/Apple `sub` survives provider switches; re-link by `(google, sub)` even if email changed. |
-| `is_banned` (local)              | Webhooks.md                        | Webhooks.md     | Moderation state owned by us, not the provider — survives any switch.                                          |
-| Webhook-driven freshness         | Webhooks.md                        | Webhooks.md     | All of the above stay current between logins, so the migration snapshot is recent.                             |
+| Data                             | Source                             | Doc             | Why it helps a migration                                                                                                         |
+| -------------------------------- | ---------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `workos_user_id`                 | Today                              | —               | The current link. Becomes "legacy provider ID" on switch.                                                                        |
+| Email, first / last name         | Today                              | —               | Primary re-link key (verified-email match against the new provider).                                                             |
+| `email_verified`                 | [Verification.md](Verification.md) | Verification.md | New provider may distrust unknown users; we know they were verified.                                                             |
+| Profile picture URL              | [Verification.md](Verification.md) | Verification.md | Continuity — UI doesn't go blank during the cutover.                                                                             |
+| `(provider, provider_sub)` pairs | [Verification.md](Verification.md) | Verification.md | Stable Google/GitHub/Apple `sub` survives provider switches; re-link by `(google, sub)` even if email changed.                   |
+| `is_active` (local)              | Django built-in                    | Webhooks.md     | Moderation / lifecycle state owned by us — survives any switch. v1 uses one flag (see [CustomUserModel.md](CustomUserModel.md)). |
+| Webhook-driven freshness         | Webhooks.md                        | Webhooks.md     | All of the above stay current between logins, so the migration snapshot is recent.                                               |
 
 If those three docs land before any switch, the local `User` + `UserProfile` already carries every field we'd need to map a user to a new provider _by identity_. That's the easy half.
 

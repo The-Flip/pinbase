@@ -33,15 +33,11 @@ Verify that the person registering owns the email address. Otherwise you get spa
 
 If we're doing a system where people can also register with phone numbers, we'd need to verify the phone number. But I don't think we are... seems difficult?
 
-### Account deactivation / banning
+### Banning
 
-#### Admin-initiated deleting
+#### Admin-initiated banning
 
-If an admin of a property deactivates / bans a user, it only applies to that property. Deactivating a Flipfix staff account does not deactivate that person's this project account.
-
-Each property will have their own way of dealing with the deactivated user's contributions on that property.
-
-Deleting/banning a truly abusive user will take going to each property.
+Admins should be able to ban abusive users. Need to think through this, such as how to prevent re-registering?
 
 #### User-initiated deleting
 
