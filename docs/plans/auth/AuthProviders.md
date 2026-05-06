@@ -97,10 +97,37 @@ Its pricing is attractive: free for small apps, custom domain included, unlimite
 - **No standard Django integration path** — every Django + Clerk integration in the wild uses Clerk-specific JWT verification, not standard OIDC. Clerk has a Python SDK (`clerk-backend-api`) and a community `clerk-django` package, but both are vendor-specific. There are zero documented examples of anyone using a generic OIDC library with Clerk on Django.
 - Clerk is much more SDK- and component-centric than OIDC-centric; its sweet spot is Next.js / React, whereas our estate is a mix of Django, SvelteKit, Next.js, and Python
 - MFA, custom email templates, and custom session lifetime are paid features
-- Hobby plan session duration is fixed at 7 days; Pro plan max is not documented (practical ceiling is Chrome's 400-day cookie limit)
+- **Free-tier session lifetime is fixed at 7 days** (re-verified against Clerk's session-options docs in 2026). Production customization requires the Pro plan; only development mode allows changes on the free tier. Pro plan max is undocumented (practical ceiling is Chrome's 400-day cookie limit).
 - Multi-domain and advanced shared-session docs are heavily oriented around Clerk-managed frontend apps, which makes this feel like a less natural fit for Flipfix and Juice than a more conventional OIDC provider
 
 Clerk is interesting on price, but looks less aligned with our mixed-stack, standards-first integration needs than Auth0.
+
+### Managed Service: Kinde
+
+Kinde is a hosted auth, billing, and access-management platform aimed at modern SaaS products. Free-forever pricing with no card required, 10,500 MAU on the free tier, and a number of features (custom domain, MFA, customizable session duration, self-serve hash export) that competitors put behind paid plans.
+
+**Pros:**
+
+- 10,500 MAU on the free tier — comfortable headroom for our scale (more than Auth0's 25k is overkill, less than WorkOS's 1M, but plenty for a pinball wiki).
+- **Custom domain on the free tier** — matches Auth0, beats WorkOS's $99/mo, beats Clerk's $20/mo. We could host login at `auth.theflip.museum` without paying.
+- **MFA on the free tier** — supports authenticator apps and email; SMS is gated to 10 messages/month. Beats Auth0 ($35/mo) and Clerk ($20/mo); matches WorkOS.
+- **Customizable session duration on the free tier** — beats Auth0 (Enterprise-only) and Clerk (Pro-only); matches WorkOS.
+- **Self-serve password hash export** — supports bcrypt, sha256, md5, crypt, and wordpress hashes. Export file is encrypted with AES-256-CTR. Best-in-class for migration portability; matches Clerk's self-serve story without Clerk's OIDC oddities.
+- Self-serve bulk import via CSV/JSON, with documented hash formats. Importing existing Flipfix users with their PBKDF2 hashes would still need a conversion script (PBKDF2 isn't in Kinde's natively-supported list — you'd contact support to add it, or use a "lazy migration" hook).
+- Customizable email content and sender on the free tier.
+- Native multi-tenancy, RBAC, passkeys, and feature flags built into the auth layer — none of which we need today, but cheap to have available.
+- Pricing is honest: free forever for MAU; only direct cost is a 0.7% transaction fee if we ever use Kinde's billing features (we won't).
+
+**Cons:**
+
+- **No standard OIDC discovery confirmed** — Kinde's docs don't surface a `/.well-known/openid-configuration` endpoint or auto-discovery story. ID tokens are JWTs with standard `iss`/`sub`/`exp` claims, suggesting OIDC underneath, but we'd need to verify that `mozilla-django-oidc` or `authlib` can integrate cleanly. Worth a 30-minute spike before committing.
+- **Official Django integration is via the vendor-specific `kinde-python-sdk`**, not standard OIDC libraries. Same architectural smell as Clerk: `KindeApiClient` instances managed per-session, vendor-specific token-fetch and user-detail calls. The Kinde tutorial is an explicit "use our SDK" pattern, not a "drop in any OIDC client" pattern.
+- Official SDK examples and docs lean Flask / FastAPI; Django is supported but not first-class.
+- Smaller community than Auth0 / WorkOS / Clerk. Less battle-tested at scale, fewer Stack Overflow answers when something breaks.
+- Free tier MAU (10,500) is much smaller than WorkOS (1M) — we'd need to upgrade as growth happens. Paid plans aren't priced as a bare MAU rate (see Kinde pricing page); plan cost depends on which paid features you light up.
+- Email deliverability: Kinde sends auth emails on the free tier from a Kinde-owned domain (verifiable by inspecting the dashboard). Whether bringing a custom sending domain requires a paid tier is not clearly documented.
+
+Kinde looks attractive on the feature matrix — arguably the most generous free tier of any of the four if you weight custom-domain + MFA + long sessions equally — but the same standards-vs-SDK concern that ruled out Clerk applies here too. If we're already willing to live with a vendor SDK, Kinde's free-tier feature set is materially better than Clerk's. If standards-based integration is a hard requirement, both Kinde and Clerk fall behind WorkOS and Auth0.
 
 ### Rejected Options
 
@@ -174,24 +201,24 @@ The requirement for optionally knowing "this person is museum staff" across prop
 
 ## Comparison
 
-Only the three actively considered managed services are compared. ✅ = included on free tier, 💰 = paid, ❌ = not available.
+Only the four actively considered managed services are compared. ✅ = included on free tier, 💰 = paid, ❌ = not available.
 
-|                                                                         | Auth0             | WorkOS AuthKit    | Clerk                              |
-| ----------------------------------------------------------------------- | ----------------- | ----------------- | ---------------------------------- |
-| [Standard OIDC/OAuth2](Auth.md#ease-of-integration)                     | ✅                | ✅                | ❌❌❌ SDK-only, no OIDC discovery |
-| [Forgot password](Auth.md#forgot-password)                              | ✅                | ✅                | ✅                                 |
-| [Email verification](Auth.md#email-verification)                        | ✅                | ✅                | ✅                                 |
-| [Social login](Auth.md#social-login)                                    | ✅                | ✅                | ✅                                 |
-| [Account linking](Auth.md#email--social-logins-work-seamlessly)         | ✅                | ✅                | ✅                                 |
-| [MFA](Auth.md#security)                                                 | 💰 $35/mo         | ✅                | 💰 $20/mo                          |
-| [Long-lived sessions](Auth.md#sessions)                                 | 💰 Enterprise     | ✅ up to 365 days | 💰 $20/mo (free = 7 days)          |
-| [User metadata / staff flag](Auth.md#museum-staff-identity-across-apps) | ✅                | ✅                | ✅                                 |
-| [GDPR account deletion](Auth.md#user-initiated-deleting)                | ✅                | ✅                | ✅                                 |
-| [Rate limiting](Auth.md#security)                                       | ✅                | ✅                | ✅                                 |
-| [Hosted vendor](Auth.md#dont-build-it-ourselves)                        | ✅                | ✅                | ✅                                 |
-| [Cost](Auth.md#cost)                                                    | Free (25k MAU)    | Free (1M MAU)     | Free (50k MAU)                     |
-| [Initial user migration](Auth.md#initial-user-migration)                | PBKDF2 import ✅  | PBKDF2 import ✅  | PBKDF2 import ✅                   |
-| [Password hash export](Auth.md#ease-of-migrating-off)                   | 💰 support ticket | ❌                | ✅ self-service                    |
-| Custom domain                                                           | ✅ (free tier)    | 💰 $99/mo         | 💰 $20/mo                          |
-| Built-in email sending                                                  | ❌ testing only   | ✅                | ✅                                 |
-| Custom email templates                                                  | unclear           | Limited           | 💰 $20/mo                          |
+|                                                                         | Auth0             | WorkOS AuthKit    | Clerk                              | Kinde                                 |
+| ----------------------------------------------------------------------- | ----------------- | ----------------- | ---------------------------------- | ------------------------------------- |
+| [Standard OIDC/OAuth2](Auth.md#ease-of-integration)                     | ✅                | ✅                | ❌❌❌ SDK-only, no OIDC discovery | ⚠️ JWT-based but SDK-first; verify    |
+| [Forgot password](Auth.md#forgot-password)                              | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Email verification](Auth.md#email-verification)                        | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Social login](Auth.md#social-login)                                    | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Account linking](Auth.md#email--social-logins-work-seamlessly)         | ✅                | ✅                | ✅                                 | ✅                                    |
+| [MFA](Auth.md#security)                                                 | 💰 $35/mo         | ✅                | 💰 $20/mo                          | ✅ (SMS limited to 10/mo)             |
+| [Long-lived sessions](Auth.md#sessions)                                 | 💰 Enterprise     | ✅ up to 365 days | 💰 $20/mo (free = 7 days)          | ✅ customizable on free               |
+| [User metadata / staff flag](Auth.md#museum-staff-identity-across-apps) | ✅                | ✅                | ✅                                 | ✅                                    |
+| [GDPR account deletion](Auth.md#user-initiated-deleting)                | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Rate limiting](Auth.md#security)                                       | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Hosted vendor](Auth.md#dont-build-it-ourselves)                        | ✅                | ✅                | ✅                                 | ✅                                    |
+| [Cost](Auth.md#cost)                                                    | Free (25k MAU)    | Free (1M MAU)     | Free (50k MAU)                     | Free (10.5k MAU)                      |
+| [Initial user migration](Auth.md#initial-user-migration)                | PBKDF2 import ✅  | PBKDF2 import ✅  | PBKDF2 import ✅                   | bcrypt/sha256/md5; PBKDF2 via support |
+| [Password hash export](Auth.md#ease-of-migrating-off)                   | 💰 support ticket | ❌                | ✅ self-service                    | ✅ self-service (AES-256 encrypted)   |
+| Custom domain                                                           | ✅ (free tier)    | 💰 $99/mo         | 💰 $20/mo                          | ✅ (free tier)                        |
+| Built-in email sending                                                  | ❌ testing only   | ✅                | ✅                                 | ✅                                    |
+| Custom email templates                                                  | unclear           | Limited           | 💰 $20/mo                          | ✅                                    |
