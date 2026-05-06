@@ -52,7 +52,6 @@ WorkOS exposes standard OIDC/OAuth2 endpoints, so we can integrate with any OIDC
 
 **Pros:**
 
-- Hosted service with no auth infrastructure for us to run
 - 1 million MAU on the free tier (vastly more generous than Auth0's 25k)
 - Password auth, social login, email verification, forgot password, MFA, and account linking all included on the free tier (Auth0 charges $35/mo for MFA alone)
 - WorkOS sends auth emails itself by default — no separate email provider to configure
@@ -82,7 +81,6 @@ Its pricing is attractive: free for small apps, custom domain included, unlimite
 
 **Pros:**
 
-- Hosted service with no auth infrastructure to run
 - Custom domain available on Pro plan ($20–25/mo)
 - Unlimited applications on one account
 - Password auth, social login, automatic account linking, usernames, and user metadata are all supported
@@ -108,14 +106,13 @@ Kinde is a hosted auth, billing, and access-management platform aimed at modern 
 
 **Pros:**
 
-- 10,500 MAU on the free tier — comfortable headroom for our scale (more than Auth0's 25k is overkill, less than WorkOS's 1M, but plenty for a pinball wiki).
 - **Custom domain on the free tier** — matches Auth0, beats WorkOS's $99/mo, beats Clerk's $20/mo. We could host login at `auth.theflip.museum` without paying.
+- **One year (?) session duration on the free tier** — beats Auth0 (Enterprise-only) and Clerk (Pro-only); matches WorkOS. I signed up to Kinde and managed to set it to 1 year (31536000 seconds); dunno if the Kinde system will actually honor that.
 - **MFA on the free tier** — supports authenticator apps and email; SMS is gated to 10 messages/month. Beats Auth0 ($35/mo) and Clerk ($20/mo); matches WorkOS.
-- **Customizable session duration on the free tier** — beats Auth0 (Enterprise-only) and Clerk (Pro-only); matches WorkOS.
+- **10,500 MAU on the free tier** — comfortable headroom for our scale (more than Auth0's 25k is overkill, less than WorkOS's 1M, but plenty for a pinball wiki).
 - **Self-serve password hash export** — supports bcrypt, sha256, md5, crypt, and wordpress hashes. Export file is encrypted with AES-256-CTR. Best-in-class for migration portability; matches Clerk's self-serve story without Clerk's OIDC oddities.
-- Self-serve bulk import via CSV/JSON, with documented hash formats. Importing existing Flipfix users with their PBKDF2 hashes would still need a conversion script (PBKDF2 isn't in Kinde's natively-supported list — you'd contact support to add it, or use a "lazy migration" hook).
-- Customizable email content and sender on the free tier.
-- Native multi-tenancy, RBAC, passkeys, and feature flags built into the auth layer — none of which we need today, but cheap to have available.
+- **Self-serve bulk import** via CSV/JSON, with documented hash formats. Importing existing Flipfix users with their PBKDF2 hashes would still need a conversion script (PBKDF2 isn't in Kinde's natively-supported list — you'd contact support to add it, or use a "lazy migration" hook).
+- **Customizable email content and sender on the free tier**.
 - Pricing is honest: free forever for MAU; only direct cost is a 0.7% transaction fee if we ever use Kinde's billing features (we won't).
 
 **Cons:**

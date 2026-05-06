@@ -2,18 +2,18 @@
 
 ## Problem
 
-We're on Django's default `auth.User`. That decision was load-bearing back when Flipcommons was going to share an identity stack with The Flip's other properties (Flipfix, Juice, theflip.museum) — a custom user model under one app would have been awkward to share. Flipcommons has since evolved into its own thing on its own domain, and Django's default `User` is starting to bend under our requirements:
+We're on Django's default `auth.User`. That decision was load-bearing back when the project was going to share an identity stack with The Flip's other properties (Flipfix, Juice, theflip.museum) — a custom user model under one app would have been awkward to share. Flipcommons has since evolved into its own thing on its own domain, and Django's default `User` is starting to bend under our requirements:
 
 - **No way to enforce email uniqueness cleanly.** `auth.User.email` is `blank=True, unique=False`. The matching logic in `get_or_create_django_user()` (`apps/accounts/api.py:111`) compensates, but only when there's exactly 0 or 1 match — 2+ matches silently create a duplicate user. We need a partial-unique constraint that the default model can't carry.
 - **`UserProfile` is becoming an identity sidecar.** The proposed fields across [Verification.md](Verification.md), [Webhooks.md](Webhooks.md), and [UserSelfManagement.md](UserSelfManagement.md) (`workos_user_id`, `email_verified`, `is_banned`, `last_seen_at`, `deactivated_at`, `display_name_override`) are mostly identity, not preferences. The 1-1 split with `auth.User` is starting to feel arbitrary, and every read needs `select_related("profile")`.
 - **`username` is auto-derived from email and not user-editable.** With `USERNAME_FIELD = "email"` (proposed below), `username` loses its login-identifier role and is free to take over as the user-editable URL slug — but the default user model gives us no clean way to expose it for editing.
-- **Django's official guidance** is to define a custom user model from day one of any project. Doing it later is famously painful — but Flipcommons hasn't launched, so the migration cost is just "drop the dev DB and re-ingest," which the user has confirmed is acceptable.
+- **Django's official guidance** is to define a custom user model from day one of any project. Doing it later is famously painful — but the project hasn't launched, so the migration cost is just "drop the dev DB and re-ingest," which the user has confirmed is acceptable.
 
 This doc proposes the custom user model, the field split between `User` and `UserProfile`, and the migration path.
 
 ## Proposed model
 
-A new `accounts.User(AbstractUser)`. The split below assumes we're keeping `UserProfile` as a thinner sidecar — identity and auth state on `User`, display preferences on `UserProfile`. This decision is committed; arguments for full consolidation are noted in the open questions only for completeness.
+A new `accounts.User(AbstractUser)`. The split below assumes we're keeping `UserProfile` as a thinner sidecar — identity and auth state on `User`, display preferences on `UserProfile`.
 
 ### `accounts.User`
 

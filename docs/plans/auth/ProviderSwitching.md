@@ -2,18 +2,24 @@
 
 ## Problem
 
-We use WorkOS today. We may not always. Reasons we'd switch include pricing changes, feature gaps, an outage with poor remediation, or just finding a better fit (Clerk's free tier, Auth0's enterprise features, eventually self-hosted OIDC). The decision is independent of the technical pain of switching, and we want that pain to be small.
+This project uses WorkOS as an auth providers today. We may not always. Reasons we'd switch include pricing changes, feature gaps, an outage with poor remediation, or just finding a better fit (Clerk's free tier, Auth0's enterprise features, eventually self-hosted OIDC).
 
-Two failure modes shape this plan:
+If we switch, we need it to be possible and not have our user accounts held hostage.
 
-1. **The user-experience cliff.** A naive switch logs everyone out at once, forces every user to re-enter their password, and silently drops their MFA enrollment. For a wiki built on contributor goodwill, that's a meaningful churn event.
-2. **Data quality drift.** If the only place we know a user's email / verified status / linked Google account is the old provider, the migration window is also a "what does this user even look like?" window. Anything we already mirror locally is one less thing to extract under deadline.
+Failures we want to avoid:
 
-This doc captures what to store, _now_, to keep both small. Some of it overlaps with [Verification.md](Verification.md) and [Webhooks.md](Webhooks.md) — the goal here is to look at the same data through the migration lens and call out the gaps.
+1. **Not knowing who our users are**. If the only place we know a user's email / verified status / linked Google account is the old provider, we can't even hook up our existing users to a new provider. Unacceptable.
+2. **Forcing users to re-enter their password**
+3. **Dropping users MFA enrollment**
+4. **Requiring users to log in again.**
+
+This doc captures what to store, _now_.
+
+Some of it overlaps with [Verification.md](Verification.md) and [Webhooks.md](Webhooks.md) — the goal here is to look at the same data through the migration lens and call out the gaps.
 
 ## What we already plan to store
 
-Already covered in earlier docs, summarised here so the picture is whole:
+Already covered in other docs, summarised here so the picture is whole:
 
 | Data                             | Source                             | Doc             | Why it helps a migration                                                                                       |
 | -------------------------------- | ---------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
