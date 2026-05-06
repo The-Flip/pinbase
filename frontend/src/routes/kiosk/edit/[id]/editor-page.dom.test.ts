@@ -21,6 +21,7 @@ import { toast } from '$lib/toast/toast.svelte';
 
 function makeData(
   overrides: Partial<{ id: number; page_heading: string; idle_seconds: number }> = {},
+  activeId: number | null = null,
 ) {
   return {
     config: {
@@ -30,6 +31,7 @@ function makeData(
       items: [],
       ...overrides,
     },
+    activeId,
   };
 }
 
@@ -208,5 +210,44 @@ describe('/kiosk/edit/[id] editor — autosave on blur', () => {
 
     await waitFor(() => expect(PATCH).toHaveBeenCalled());
     await waitFor(() => expect(document.cookie).toContain('kioskIdleSeconds=120'));
+  });
+});
+
+describe('/kiosk/edit/[id] editor — Enter/Exit Kiosk Mode button', () => {
+  beforeEach(() => {
+    goto.mockReset().mockResolvedValue(undefined);
+    GET.mockReset().mockResolvedValue({ data: [] });
+    clearKioskCookies();
+  });
+
+  it('shows "Enter Kiosk Mode" when this device is not the active kiosk', () => {
+    render(Page, { data: makeData({}, null) });
+    expect(screen.getAllByRole('button', { name: 'Enter Kiosk Mode' }).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: 'Exit Kiosk Mode' })).toBeNull();
+  });
+
+  it('shows "Enter Kiosk Mode" when active kiosk is a different config', () => {
+    render(Page, { data: makeData({}, 99) });
+    expect(screen.getAllByRole('button', { name: 'Enter Kiosk Mode' }).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: 'Exit Kiosk Mode' })).toBeNull();
+  });
+
+  it('shows "Exit Kiosk Mode" when this config is active on this device', () => {
+    render(Page, { data: makeData({}, 7) });
+    expect(screen.getAllByRole('button', { name: 'Exit Kiosk Mode' }).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: 'Enter Kiosk Mode' })).toBeNull();
+  });
+
+  it('clicking "Exit Kiosk Mode" clears cookies and swaps the button to "Enter Kiosk Mode"', async () => {
+    const user = userEvent.setup();
+    setKioskCookies(7, 60);
+
+    render(Page, { data: makeData({}, 7) });
+    await user.click(screen.getAllByRole('button', { name: 'Exit Kiosk Mode' })[0]);
+
+    expect(document.cookie).not.toContain('kioskConfigId=7');
+    expect(document.cookie).not.toContain('mode=kiosk');
+    expect(screen.queryByRole('button', { name: 'Exit Kiosk Mode' })).toBeNull();
+    expect(screen.getAllByRole('button', { name: 'Enter Kiosk Mode' }).length).toBeGreaterThan(0);
   });
 });

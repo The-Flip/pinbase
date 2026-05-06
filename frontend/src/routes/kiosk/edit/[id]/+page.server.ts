@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import { createServerClient } from '$lib/api/server';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ fetch, url, request, params }) => {
+export const load: PageServerLoad = async ({ fetch, url, request, params, cookies }) => {
   const id = Number(params.id);
   if (!Number.isInteger(id) || id <= 0) throw error(404, 'Kiosk not found');
 
@@ -16,5 +16,9 @@ export const load: PageServerLoad = async ({ fetch, url, request, params }) => {
     throw error(response?.status || 500, 'Failed to load kiosk');
   }
 
-  return { config: data };
+  const rawId = cookies.get('kioskConfigId');
+  const parsed = rawId ? Number(rawId) : NaN;
+  const activeId = Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+
+  return { config: data, activeId };
 };
