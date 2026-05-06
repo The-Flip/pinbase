@@ -1,10 +1,8 @@
 # SSO Mail Provider
 
-This describes the mail provider requirements for authentication emails for The Flip's web properties.
+This describes the mail provider requirements for authentication emails.
 
 ## Background
-
-The Flip, Chicago's playable pinball musueum, is implementing SSO across all its web properties. See [Auth.md](Auth.md).
 
 Some hosted auth providers require a separate email provider for production auth mail. Others can send the auth emails themselves. WorkOS AuthKit, for example, can send auth emails by default from a WorkOS domain, which may let us avoid choosing a separate email provider for v1.
 
@@ -40,7 +38,7 @@ Ideally, somewhere between free and $5/mo. But we'll go higher if it makes our l
 
 ### Custom Domain
 
-We want the emails coming from a The Flip domain, something like `authmail.the-flip.museum`.
+We want the emails coming from `auth.flipcommons.org`.
 
 ### Ease
 

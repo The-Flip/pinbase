@@ -1,60 +1,25 @@
 # SSO
 
-This describes the authentication and authorization requirements and strategy for The Flip's web properties.
+This describes the authentication and authorization requirements for this project.
 
-## Background
+This project is an interactive, collaborative wiki-style catalog of all the pinball machines in existence. It hasn't gone live yet. It has public read-only access, public user registration, trusted museum staff roles, and Django superuser admin roles.
 
-The Flip, Chicago's playable pinball musueum, has a growing collection of web properties.
+- Lives at https://flipcommons.org/
+- I'd like the login page to be hosted at https://auth.flipcommons.org
+- **Django + Sveltekit**. Built in Django on the back end and Sveltekit on the front end
+- **Hosted on Railway**. It's currently hosted on Railway, which we like well enough, though we don't want to make decisions that lock us in to Railway.
 
-### The Properties
+## Requirements
 
-Right now they are:
+### Social Login
 
-#### WWW
+Register/login using your Google/Apple/Facebook/etc identity.
 
-The public website. So far it's entirely public, no login. Dunno if that will change or not.
+#### Email & social logins work seamlessly
 
-- Lives at https://www.theflip.museum/
-- Built in Next.js
-- Code a https://github.com/The-Flip/www.theflip.museum
+When someone registers with email/password, then later tries to log in with Google using the same email, that should be treated as the same account, and work seamlessly.
 
-#### Flipfix
-
-The web app used to coordinate maintenance. There are public read-only users, museum staff who can make edits, and Django superuser admins. Users are created by a superuser sending out an invite.
-
-- Lives at https://flipfix.theflip.museum/
-- Built in Django
-- Code at https://github.com/The-Flip/flipfix
-
-#### This project
-
-An interactive, collaborative wiki-style catalog of all pinball machines in existence. It hasn't gone live yet. It will have public read-only access, public user registration, trusted museum staff roles, and Django superuser admin roles.
-
-- Will live at something like https://flipcommons.org/
-- Built in Django on the back end and Sveltekit on the front end
-- Code at https://github.com/deanmoses/pindata/ but it will be moving under the The-Flip's account
-
-#### Juice
-
-An internal app used to monitor and reboot the pinball machines and other electronics in the musem. This is a tiny little internal application only available to the most trusted museum staff.
-
-- Lives at https://juice.theflip.museum/
-- Built in Python
-- Code at https://github.com/The-Flip/juice
-
-### Railway Hosting
-
-All of these are currently hosted on Railway, which we like well enough, though we don't want to make decisions that lock us in to Railway.
-
-## SSO Via Flipfix
-
-The first property to need authentication was Flipfix. We used the standard Djanog auth model. Now we need a single login to the other properties, so we implemented OAuth SSO on top of Flipfix; it serves as the OAuth provider right now. The Juice gets its identity through that.
-
-We're not locked in to this arrangement; if there's a better SSO system, we would consider migrating. There's maybe 30? users, it'd be a pain but we could do it.
-
-## The Challenge
-
-Now we need authentication and authorization for this project. Since the public can self-register, this involves a new set of requirements.
+They can they still log in with their password.
 
 ### Forgot password
 
@@ -68,67 +33,21 @@ Verify that the person registering owns the email address. Otherwise you get spa
 
 If we're doing a system where people can also register with phone numbers, we'd need to verify the phone number. But I don't think we are... seems difficult?
 
-### Social Login
+### Banning
 
-Register/login using your Google/Apple/Facebook/etc identity. I'd kind of like this for Flipfix too, but that's a nice to have.
+#### Admin-initiated banning
 
-#### Email & social logins work seamlessly
-
-When someone registers with email/password, then later tries to log in with Google using the same email, that should be treated as the same account, and work seamlessly.
-
-They can they still log in with their password.
-
-### Carry over Flipfix identity
-
-Nice to have: if you are already registered with Flipfix, you are already authenticated to this project and your username and full name are carried over.
-
-If someone already has a Flipfix account, is not logged in to the SSO system, then attempts to register on this project with the same email, it says 'account already taken'... just like it would on Flipfix.
-
-### Account deactivation / banning
-
-#### Admin-initiated deleting
-
-If an admin of a property deactivates / bans a user, it only applies to that property. Deactivating a Flipfix staff account does not deactivate that person's this project account.
-
-Each property will have their own way of dealing with the deactivated user's contributions on that property.
-
-Deleting/banning a truly abusive user will take going to each property.
+Admins should be able to ban abusive users. Need to think through this, such as how to prevent re-registering?
 
 #### User-initiated deleting
 
 We'd like to support GDPR-style "delete my account", but that may not be in scope for v1. Depends on how hard it is.
 
-### Username and display name
-
-Users should have the same username across all properties.
-
-Their display name should flow to each property, it's a nice to have to override that display name on a per-property basis.
-
 ### Authorization / Roles
 
 #### Newly registered public user
 
-When a member of the public registers, I imagine each site will put them in their lowest tier of capability.
-
-**this project**. Right now this project has categories for 'registered user', 'staff' (has access to admin) roles, and superuser. Publicly registered users would be assigned the 'registered user' role. It's up to this project what a registered user can do; that's not the scope of this doc.
-
-**Flipfix**. Will NOT allow any escalated privileges for publicly registered users; they will be treated like unregistered guests.
-
-**Juice**. Will NOT allow publicly registered users (or guest access) in any capacity.
-
-**www**. Has no authentication or authorization requirements at this time.
-
-#### Museum staff identity across apps
-
-If someone is staff on Flipfix, I'd like to be able to use that information on this project to give them escalated privileges. But the this project role model has not yet been figured out. I don't believe there should be a staff role that goes across all properties. If this creates a lot of complexity, I'll probably drop this requirement.
-
-#### Role escalation
-
-On this project, a self-registered user can only become more trusted via some sort of admin action. That will be internal to this project, not visible to the SSO system.
-
-#### No shared authorization
-
-Basically, we're saying is that we should have SSO -- one identity -- but not unified permissions. Unless it's somehow easy to flag a user as museum staff, to enable different properties to use that information in different ways.
+Newly registered users should not be able to make any changes until at least their email address is verified. Probably more. We need to think through this.
 
 ### Security
 
@@ -140,58 +59,37 @@ Basically, we're saying is that we should have SSO -- one identity -- but not un
 #### Sessions
 
 - **Session Duration**. Ideally sessions last months, unless that's really a security no-no
-- **User revocation**. Users seeing and revoking sessions is a nice to have. Probably not for v1.
-
-### Logout
-
-I don't have a strong opinion on how logout needs to work; either one of these is fine:
-
-- Logging out of one app logs you out of all apps.
-- Logging out of one app only logs you out of that app.
+- **User-initiated session revocation**. Users being able to see all of their login sessions and being able to revoke is a nice to have. Probably not for v1.
 
 ### Non-functional Requirements
 
 #### Don't build it ourselves
 
-Building a full SSO system sounds complicated; it's not our core competency; it's yet another service to keep running. My bias is to use a vendor for this, unless there's a good reason not to, or maybe unless there's an off-the-shelf system that is SUPER easy to run.
-
-#### Avoid Vendor Lock-in
-
-I'm nervous about picking a vendor and not being able to migrate. Meaning migrate the actual users with their authentication.
+Building an auth system sounds complicated; it's not our core competency; it's yet another service to keep running. My bias is to use a vendor for this, unless there's a good reason not to, or maybe unless there's an off-the-shelf system that is SUPER easy to run.
 
 #### Cost
 
-We don't want to spend a lot of ongoing money for this. A vendor with a free tier? $5/mo? Hopefully that's the ballpark we're talking about.
+Ideallly for the first year of perhaps 10,000 users, we want a vendor with a free tier or maybe $5-10/mo. The Flip is a registered nonprofit and all the software that SSO would integrate with is open source, if that changes the cost structure that vendors charge.
 
-The Flip is a registered Non Profit and all the software that SSO would integrate with is open source, if that changes the cost structure that vendors charge.
+#### Ease of Migrating to Another Auth Provider
 
-#### Initial User Migration
-
-How hard is the initial migration of ~30 Flipfix users into the new system?
-
-- It would be great if existing Flipfix users could keep their passwords... but if this means not using a hosted service provider, I'd drop the requirement.
-- Some providers have bulk import tools. That's a nice to have.
-
-#### Ease of Migrating Off
-
-How hard would it be to switch providers? Does the provider allow us to download the user data, including password seeds, so that we can upload them to a different system?
+It's a non-negotiable hard requirement: we MUST be able migrate to a new auth provider. We MUST be able carry all our users to the new auth provider, hopefully without them having to log in again.
 
 #### Ease of integration
 
 How easy is it to wire up each property?
 
-We strongly prefer a provider that exposes standard OIDC/OAuth2 endpoints (including `/.well-known/openid-configuration` discovery) so that each backend can integrate with a generic OIDC library (`mozilla-django-oidc`, `authlib`, etc.) rather than a vendor-specific SDK.
+We prefer a provider that exposes standard OIDC/OAuth2 endpoints (including `/.well-known/openid-configuration` discovery) so that our backend can integrate with a generic OIDC library (`mozilla-django-oidc`, `authlib`, etc.) rather than a vendor-specific SDK.
 
 Our architecture is session-based: the frontend redirects to the IdP, the IdP redirects back, and Django creates a server-side session. This is a standard OIDC authorization code flow. A provider that requires its own JavaScript SDK on the frontend — replacing the redirect flow with client-side JWT verification on every API call — would be a poor fit because:
 
 - It changes our auth model from server-side sessions to per-request JWT verification
 - It couples the frontend to the vendor (Clerk components, Clerk API calls) instead of a simple redirect
-- Every backend (Django, Python) needs vendor-specific token verification code instead of standard OIDC middleware
-- It's more integration surface area to get right across a mixed stack (Django, SvelteKit, Next.js, Python)
+- The backend needs vendor-specific token verification code instead of standard OIDC middleware
 
 #### Hosting location
 
-The properties are all hosted in US/East or US/Chicago, I'd prefer a SSO system that has services there, because perf/lantency.
+The website is hosted in US/East. The museum and many editors and end users are in US/Chicago, I'd prefer a SSO system that has services that work well with these regions, because perf/lantency.
 
 ### Non-Requirements
 
@@ -202,7 +100,7 @@ The properties are all hosted in US/East or US/Chicago, I'd prefer a SSO system 
 
 See [AuthProviders.md](AuthProviders.md)
 
-## The Decision
+## Provisional Decision
 
 I don't want to run an auth service ourselves:
 
