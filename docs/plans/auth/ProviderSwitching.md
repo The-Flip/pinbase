@@ -38,9 +38,11 @@ When we add the `ExternalIdentity(provider, provider_sub, ...)` table from [Veri
 - **Migration prioritisation.** During lazy migration (below), we can prioritise long-tenured users for early cutover and more aggressive notification.
 - **Trust signals.** A "this Google identity has been linked since 2024-03" datum is genuinely useful for anti-abuse independent of any switch.
 
-### `last_seen_at` on `UserProfile`
+### `last_seen_at` on `UserProfile` — **local-only, not from the provider**
 
-Django's `User.last_login` updates only on full sign-in, not on every authenticated request. For migration planning we want "active in the last 30 days" populated from request-time, not auth-time. A middleware that updates `UserProfile.last_seen_at` on authenticated requests (debounced to once per hour per user) is cheap. Use it during a switch to:
+Source: us, not the auth provider. The provider's `last_sign_in_at` is auth-time, and we already get an equivalent for free in Django's `User.last_login` (updated by `login()`). Neither captures "the user is actively using the site" — only "the user authenticated."
+
+For migration planning we want "active in the last 30 days" populated from request-time. A small middleware updates `UserProfile.last_seen_at` on authenticated requests (debounced to once per hour per user to keep write traffic minimal). No provider call, no webhook dependency — just our own session-level signal. Use it during a switch to:
 
 - Identify the active cohort (the people who'll feel a forced re-login).
 - Skip lazy-migration steps for accounts that haven't been seen in years.
