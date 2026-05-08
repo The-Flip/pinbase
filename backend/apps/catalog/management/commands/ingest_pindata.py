@@ -16,11 +16,11 @@ import argparse
 import json
 import logging
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, NotRequired, Protocol, TypedDict, cast
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand, CommandError
@@ -73,7 +73,6 @@ from apps.catalog.resolve import (
     resolve_theme_aliases,
     resolve_theme_parents,
 )
-from apps.core.types import JsonData
 from apps.core.validators import bulk_create_validated
 from apps.provenance.models import Claim, Source
 
@@ -89,11 +88,10 @@ def _parent_path(location_path: str) -> str | None:
 
 
 def _resolve_ce_location_path(
-    entry: JsonData, loc_by_path: dict[str, Location]
+    entry: PindataCorporateEntity, loc_by_path: dict[str, Location]
 ) -> str | None:
     """Return the canonical location_path for a CE entry, or None if absent."""
-    raw = entry.get("headquarters_location")
-    path = (raw if isinstance(raw, str) else "").strip()
+    path = entry.get("headquarters_location", "").strip()
     if not path:
         return None
     return path if path in loc_by_path else None
@@ -171,6 +169,186 @@ class _Writable(Protocol):
     pass either."""
 
     def write(self, msg: str, /) -> object: ...
+
+
+# ---------------------------------------------------------------------------
+# Pindata JSON file shapes
+# ---------------------------------------------------------------------------
+#
+# Each TypedDict mirrors one file in the pindata export. Required keys reflect
+# what the consuming phase reads as ``entry["foo"]``; ``NotRequired`` keys are
+# read as ``entry.get("foo", default)``. ``object`` is used for genuinely
+# free-form JSON values (``divisions``); a wider type would lose the
+# isinstance-narrow guarantee, a narrower one would not match the upstream
+# schema.
+
+
+class PindataLocation(TypedDict):
+    """One row in ``location.json``."""
+
+    location_path: str
+    slug: str
+    name: str
+    type: str
+    code: NotRequired[str]
+    short_name: NotRequired[str]
+    divisions: NotRequired[object | None]
+    aliases: NotRequired[list[str]]
+
+
+class PindataTaxonomy(TypedDict):
+    """One row in any taxonomy JSON file (technology_generation.json,
+    display_type.json, cabinet.json, …).
+
+    The optional parent-FK keys are present only on taxonomies that have
+    a ``ParentConfig`` (technology_subgeneration, display_subtype). They
+    are addressed dynamically via ``entry[parent.json_fk_key]`` in
+    ``_ingest_taxonomy``, so the field names are listed here as
+    ``NotRequired`` to keep the access typed.
+    """
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    display_order: NotRequired[int]
+    technology_generation_slug: NotRequired[str]
+    display_type_slug: NotRequired[str]
+
+
+class PindataTheme(TypedDict):
+    """One row in ``theme.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    parents: NotRequired[list[str]]
+    aliases: NotRequired[list[str]]
+
+
+class PindataGameplayFeature(TypedDict):
+    """One row in ``gameplay_feature.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    is_type_of: NotRequired[list[str]]
+    aliases: NotRequired[list[str]]
+
+
+class PindataRewardType(TypedDict):
+    """One row in ``reward_type.json``."""
+
+    slug: str
+    aliases: NotRequired[list[str]]
+
+
+class PindataManufacturer(TypedDict):
+    """One row in ``manufacturer.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    opdb_manufacturer_id: NotRequired[int | None]
+    aliases: NotRequired[list[str]]
+
+
+class PindataCorporateEntity(TypedDict):
+    """One row in ``corporate_entity.json``."""
+
+    name: str
+    manufacturer_slug: str
+    slug: NotRequired[str]
+    year_start: NotRequired[int | None]
+    year_end: NotRequired[int | None]
+    ipdb_manufacturer_id: NotRequired[int | None]
+    headquarters_location: NotRequired[str]
+    aliases: NotRequired[list[str]]
+
+
+class PindataSystem(TypedDict):
+    """One row in ``system.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    manufacturer_slug: NotRequired[str | None]
+    technology_subgeneration_slug: NotRequired[str | None]
+    mpu_strings: NotRequired[list[str]]
+
+
+class PindataPerson(TypedDict):
+    """One row in ``person.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    aliases: NotRequired[list[str]]
+
+
+class PindataCreditRef(TypedDict):
+    """One inline credit reference under ``series.json`` / ``model.json``."""
+
+    person_slug: NotRequired[str]
+    role: NotRequired[str]
+
+
+class PindataSeries(TypedDict):
+    """One row in ``series.json``."""
+
+    slug: str
+    name: str
+    description: NotRequired[str]
+    credit_refs: NotRequired[list[PindataCreditRef]]
+
+
+class PindataTitle(TypedDict):
+    """One row in ``title.json``."""
+
+    name: NotRequired[str]
+    slug: NotRequired[str]
+    opdb_group_id: NotRequired[str | None]
+    fandom_page_id: NotRequired[int | None]
+    description: NotRequired[str]
+    franchise_slug: NotRequired[str]
+    series_slug: NotRequired[str]
+    abbreviations: NotRequired[list[str]]
+
+
+class PindataModel(TypedDict, total=False):
+    """One row in ``model.json``.
+
+    ``total=False`` because the file is sparse — most entries set only a
+    handful of fields, and the consuming code relies on ``.get()`` for
+    every claim-shaped key.
+    """
+
+    name: str
+    slug: str
+    title_slug: str
+    opdb_id: str
+    ipdb_id: int
+    corporate_entity_slug: str
+    year: int
+    month: int
+    player_count: int
+    flipper_count: int
+    production_quantity: int
+    cabinet_slug: str
+    display_type_slug: str
+    display_subtype_slug: str
+    technology_generation_slug: str
+    technology_subgeneration_slug: str
+    system_slug: str
+    game_format_slug: str
+    description: str
+    converted_from: str
+    variant_of: str
+    remake_of: str
+    credit_refs: list[PindataCreditRef]
+    tag_slugs: list[str]
+    theme_slugs: list[str]
+    gameplay_feature_slugs: list[str]
+    reward_type_slugs: list[str]
 
 
 def validate_cross_entity_wikilinks(
@@ -418,14 +596,20 @@ class Command(BaseCommand):
             source, pending, sweep_field=field_name, authoritative_scope=scope
         )
 
-    def _load(self, filename: str) -> list[dict[str, Any]]:
+    def _load[T](self, filename: str) -> list[T]:
+        """Load a pindata JSON file as a list of typed entries.
+
+        ``T`` is the per-file ``Pindata*`` TypedDict. ``json.load`` returns
+        ``Any`` so we ``cast`` the result; pindata's pydantic-validated
+        export step is the upstream source of truth, which is why this
+        boundary is a cast rather than a runtime check.
+        """
         path = self.export_dir / filename
         if not path.exists():
             self.stderr.write(f"  Skipping {filename} (not found)")
             return []
         with open(path) as f:
-            data: list[dict[str, Any]] = json.load(f)
-            return data
+            return cast(list[T], json.load(f))
 
     # ------------------------------------------------------------------
     # Phase 0: Locations
@@ -437,7 +621,7 @@ class Command(BaseCommand):
         Runs before all other phases so that location_path lookups are
         available when corporate entities are ingested.
         """
-        entries = self._load("location.json")
+        entries: list[PindataLocation] = self._load("location.json")
         if not entries:
             return
 
@@ -565,7 +749,7 @@ class Command(BaseCommand):
 
     def _ingest_taxonomy(self) -> None:
         for taxonomy_entry in TAXONOMY_REGISTRY:
-            data = self._load(taxonomy_entry.json_file)
+            data: list[PindataTaxonomy] = self._load(taxonomy_entry.json_file)
             if not data:
                 continue
 
@@ -595,7 +779,12 @@ class Command(BaseCommand):
                     kwargs["display_order"] = display_order
 
                 if parent:
-                    parent_slug = entry[parent.json_fk_key]
+                    # Dynamic key on a TypedDict — TypedDict.__getitem__
+                    # requires a string literal, but parent.json_fk_key is
+                    # resolved at runtime from TAXONOMY_REGISTRY.  Cast to
+                    # Mapping[str, str] for the lookup; the runtime value
+                    # is always a slug string per the upstream JSON schema.
+                    parent_slug = cast(Mapping[str, str], entry)[parent.json_fk_key]
                     parent_obj = parent_lookup.get(parent_slug)
                     if parent_obj is None:
                         logger.warning(
@@ -647,7 +836,7 @@ class Command(BaseCommand):
                         Claim.for_object(
                             obj,
                             field_name=parent.fk_field,
-                            value=entry[parent.json_fk_key],
+                            value=cast(Mapping[str, str], entry)[parent.json_fk_key],
                         )
                     )
                 description = entry.get("description", "")
@@ -671,7 +860,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_themes(self) -> None:
-        entries = self._load("theme.json")
+        entries: list[PindataTheme] = self._load("theme.json")
         if not entries:
             return
 
@@ -787,7 +976,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_gameplay_features(self) -> None:
-        entries = self._load("gameplay_feature.json")
+        entries: list[PindataGameplayFeature] = self._load("gameplay_feature.json")
         if not entries:
             return
 
@@ -906,7 +1095,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _sync_reward_type_aliases(self) -> None:
-        rt_entries = self._load("reward_type.json")
+        rt_entries: list[PindataRewardType] = self._load("reward_type.json")
         if not rt_entries:
             return
 
@@ -935,7 +1124,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_manufacturers(self) -> None:
-        entries = self._load("manufacturer.json")
+        entries: list[PindataManufacturer] = self._load("manufacturer.json")
         if not entries:
             return
 
@@ -1018,7 +1207,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_corporate_entities(self) -> None:
-        entries = self._load("corporate_entity.json")
+        entries: list[PindataCorporateEntity] = self._load("corporate_entity.json")
         if not entries:
             return
 
@@ -1179,7 +1368,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_systems(self) -> None:
-        entries = self._load("system.json")
+        entries: list[PindataSystem] = self._load("system.json")
         if not entries:
             return
 
@@ -1296,7 +1485,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_people(self) -> None:
-        entries = self._load("person.json")
+        entries: list[PindataPerson] = self._load("person.json")
         if not entries:
             return
 
@@ -1367,7 +1556,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_series(self) -> None:
-        series_entries = self._load("series.json")
+        series_entries: list[PindataSeries] = self._load("series.json")
         if not series_entries:
             return
 
@@ -1434,7 +1623,11 @@ class Command(BaseCommand):
             if series_obj is None:
                 continue
             for ref in entry.get("credit_refs") or []:
-                person_obj = people_by_slug.get(ref.get("person_slug"))
+                person_slug = ref.get("person_slug")
+                if person_slug is None:
+                    credits_skipped += 1
+                    continue
+                person_obj = people_by_slug.get(person_slug)
                 if person_obj is None:
                     credits_skipped += 1
                     continue
@@ -1459,14 +1652,14 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _ingest_titles(self) -> None:
-        entries = self._load("title.json")
+        entries: list[PindataTitle] = self._load("title.json")
         if not entries:
             return
 
         with transaction.atomic():
             self._ingest_titles_body(entries)
 
-    def _ingest_titles_body(self, entries: list[dict[str, Any]]) -> None:
+    def _ingest_titles_body(self, entries: list[PindataTitle]) -> None:
         titles_by_opdb_id = {t.opdb_id: t for t in Title.objects.all()}
         titles_by_slug = {t.slug: t for t in Title.objects.all()}
         existing_slugs: set[str] = set(Title.objects.values_list("slug", flat=True))
@@ -1505,7 +1698,7 @@ class Command(BaseCommand):
         titles_by_slug = {t.slug: t for t in Title.objects.all()}
 
         # Pass 2 (collect): find each title, detect transforms — no claim building yet.
-        collected: list[tuple[Title, dict[str, Any]]] = []
+        collected: list[tuple[Title, PindataTitle]] = []
         pending_slugs: dict[int, str] = {}
         pending_fandom_updates: list[Title] = []
         skipped = 0
@@ -1717,7 +1910,7 @@ class Command(BaseCommand):
     }
 
     def _ingest_models(self) -> None:
-        entries = self._load("model.json")
+        entries: list[PindataModel] = self._load("model.json")
         if not entries:
             return
 
