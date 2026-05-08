@@ -28,7 +28,7 @@ This is the standard policy-based / capability-based authorization shape: call s
 ## Principles
 
 - **Object-level-ready signature from day one.** The policy signature is `check(user, activity, target=None, context=None)`. Launch rules don't use `target` or `context`, but having the parameters present means later rules that need them (e.g. "you can revert your own claim but not someone else's", or "respect the rate-limit state middleware just computed") can be added without touching call sites.
-- **Default-deny, single registry.** Unknown activities deny. Activities defined without a registered rule deny. The registry of activities lives in one importable module, so the route-inventory test, the capabilities endpoint, and humans reading the codebase all see the same authoritative set. A missing rule is a programming error, not a permission grant.
+- **Default-deny, single registry.** The registry of activities lives in one importable module, so the route-inventory test, the capabilities endpoint, and humans reading the codebase all see the same authoritative set. A missing rule is a programming error, not a permission grant: `check()` raises `LookupError` rather than returning `Deny`, so misconfiguration surfaces as a 500 with diagnostic context rather than a misleading 403. The registry-completeness test (`test_authz_registry_complete`) keeps that branch dead at runtime.
 - **Pure decisions; no I/O in the policy.** `check` is a pure function over its inputs. The policy reads attributes on already-loaded objects; it does not query the DB, hit the cache, or call out to other services. New data dependencies are assembled by the caller (or by middleware that builds `context`) before the call. This keeps decisions cheap, testable without fixtures, and replayable from logs. Enforced statically by per-rule target Protocols and dynamically by a dev/test recording proxy — see [Enforcing pure decisions](#enforcing-pure-decisions). Corollary: serializers that embed capability hints must prefetch the attributes the policy reads, so the embed loop doesn't lazy-load behind the policy's back.
 - **Decisions are structured, not boolean.** `check` returns either `Allow` or `Deny(code, context)` from the closed denial-code registry — never a bare bool. Throwing away the denial code at the boundary throws away the half of the answer that drives UX.
 - **Anonymous users go through the policy.** The policy is invoked for unauthenticated requests too; they deny with `auth_required`. This means `/me/capabilities` works for logged-out callers (returning everything false) and the SPA doesn't branch on "logged in" before asking what's allowed. HTTP 401 stays reserved for "your session is invalid," not "you're signed out."
@@ -59,7 +59,7 @@ The launch set. Each row is what the policy enforces today; later constraints (a
 | `media.edit`     | authenticated, active, email-verified | Upload, detach, set-primary, set-category — all media-attachment claim writes.                                  |
 | `kiosk.edit`     | authenticated, active, email-verified | Kiosk config CRUD. Also gated on `is_superuser` inline, parallel to the activity layer.                         |
 
-"Active" means the account is not disabled or banned. "Authenticated" means a logged-in session, not anonymous. The shared prerequisites (authenticated + active) live in one place in the policy module so each activity's rule is just the delta beyond them.
+"Active" means `is_active=True` — the account is not currently deactivated for any reason (self-deactivation, dormant cleanup, etc.). Banning, when it ships, will be a separate predicate with a separate denial code so the SPA can render different copy. "Authenticated" means a logged-in session, not anonymous. The shared prerequisites (authenticated + active) live in one place in the policy module so each activity's rule is just the delta beyond them.
 
 The four activities below the divider were added per "Add an activity when its call site is being built, not in advance" during the phase-1 inventory pass — same launch rules as the original four, separated only so each can tighten independently later.
 
@@ -88,6 +88,8 @@ Decision = Allow | Deny
 ```
 
 `Allow` and `Deny` are returned by the policy and serialized at the API boundary; the same shapes flow through both surfaces.
+
+Individual predicates also return `Decision`, not `bool`. Each predicate names its own failure code (`is_authenticated` denies with `auth_required`, `is_active` with `account_deactivated`), which is what makes the [denial-code priority](#denial-code-priority) rule work — when multiple predicates fail, the evaluator picks the highest-priority `Deny`. A `bool`-returning predicate would discard the code and force the evaluator to reverse-engineer it, which can't be done correctly when the same predicate could plausibly fail for different reasons.
 
 ## Module layout
 
@@ -124,7 +126,7 @@ Target-aware rules need to type-hint and read attributes from their app's models
 
 ## Enforcing pure decisions
 
-The "no I/O in the policy" principle is enforced at two layers: per-rule target Protocols (static) and a dev/test recording proxy (dynamic). Together they catch the bug class that convention alone won't — predicates that lazy-load relations and silently N+1 inside a hot serializer loop.
+The "no I/O in the policy" principle is enforced primarily by per-rule target Protocols + mypy: the predicate's parameter is typed as a narrow Protocol, so reading any attribute outside that Protocol is a static type error caught at definition time. Tests that need to verify a target-aware predicate doesn't trigger a query wrap the call in Django's `CaptureQueriesContext` and assert the count is zero. No bespoke runtime infrastructure.
 
 ### Per-rule target Protocols
 
@@ -136,16 +138,25 @@ from typing import Protocol
 
 class ClaimPolicyView(Protocol):
     """The Claim attributes this app's policy is allowed to read."""
-    id: int
-    author_id: int
-    is_locked: bool
+    @property
+    def id(self) -> int: ...
+    @property
+    def author_id(self) -> int: ...
+    @property
+    def is_locked(self) -> bool: ...
 
-def is_claim_author(user: PolicyUser, claim: ClaimPolicyView) -> bool:
-    return claim.author_id == user.id
+def is_claim_author(user: PolicyUser, claim: ClaimPolicyView, context) -> Decision:
+    if claim.author_id != user.id:
+        return Deny(DenialCode.ROLE_REQUIRED)
+    return Allow()
 
-def claim_not_locked(user: PolicyUser, claim: ClaimPolicyView) -> bool:
-    return not claim.is_locked
+def claim_not_locked(user: PolicyUser, claim: ClaimPolicyView, context) -> Decision:
+    if claim.is_locked:
+        return Deny(DenialCode.ROLE_REQUIRED)
+    return Allow()
 ```
+
+Attributes are declared as `@property`, not variable annotations. Variable annotations in a Protocol are settable and invariant, which means a class exposing the attribute as a read-only property — or as a `Literal` class constant, like `AnonymousUser.is_active = False` — fails the structural match. `@property` makes the surface read-only and covariant, which is what we actually want: the policy reads, never writes, and a `Literal[False]` must be acceptable where `bool` is declared. The same convention applies to `PolicyUser` in `core/authz/types.py`.
 
 Protocols are structural — `Claim` instances satisfy `ClaimPolicyView` automatically by having the right attributes — so the engine still passes real model instances at runtime; nothing about the call changes. The change is at the _predicate_ boundary: inside the predicate, the type checker sees only the Protocol's attributes. Writing `claim.author.is_moderator` is a static type error because `ClaimPolicyView` declares `author_id: int`, not `author: User`.
 
@@ -153,16 +164,24 @@ This makes "I want to traverse a relation" a visible policy decision: extending 
 
 The same pattern is used for `PolicyUser`: the engine declares the shared user surface (`is_authenticated`, `is_active`, `email_verified`); per-rule Protocols declare per-target surfaces.
 
-### Dev/test recording proxy
+### Verifying purity in tests
 
-Static checking misses two cases: dynamic attribute access (`getattr(claim, "author")` bypasses the Protocol), and a Protocol that _does_ declare a relation but the caller forgot to prefetch it (the type checker is happy; runtime still N+1s). A small recording proxy catches both.
+Static checking covers the typical mistake: reading an attribute outside the Protocol. It doesn't cover dynamic access (`getattr(claim, "author")` bypasses the type system) or a Protocol that declares a relation but the caller forgot to prefetch (the type checker is happy; runtime still N+1s).
 
-At test time, the engine wraps user/target in a proxy that:
+**Every target-aware predicate must have at least one test that wraps the call in `CaptureQueriesContext` and asserts zero queries.** This is a hard rule, not a recommendation — without bespoke proxy infrastructure, this assertion is the only thing standing between "convention says predicates are pure" and "production N+1 inside a serializer loop."
 
-- Raises `UndeclaredPolicyAttribute` on any attribute access not declared in the Protocol.
-- Raises `PolicyTriggeredQuery` if an attribute access increments `len(connection.queries)`.
+```python
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 
-The proxy is only active under a test fixture (and optionally under `DEBUG`); production forwards the raw object. So the runtime cost is zero in production, but every policy unit test exercises the discipline. A predicate that quietly N+1s becomes a failed test, not a production incident.
+def test_is_claim_author_is_pure(claim):
+    with CaptureQueriesContext(connection) as ctx:
+        decision = is_claim_author(user, claim, None)
+    assert len(ctx) == 0, f"predicate ran {len(ctx)} queries"
+    assert isinstance(decision, Allow)
+```
+
+`CaptureQueriesContext` is Django's canonical query-counting helper. The assertion documents the test's intent — "this predicate must be pure" — at the call site, rather than relying on a fixture that's easy to forget. When the first target-aware predicate lands, the diff should also introduce a small `assert_predicate_is_pure(predicate, user, target=None, context=None)` helper so subsequent predicates use one well-tested wrapper instead of re-implementing the assertion.
 
 ## Denial responses
 
@@ -181,15 +200,16 @@ HTTP 403
 
 ### Denial code priority
 
-Multiple predicates can fail simultaneously (unverified email and banned account). The policy returns one code, not a list. Codes have a fixed priority — most fundamental first, most recoverable last:
+Multiple predicates can fail simultaneously (unverified email and deactivated account). The policy returns one code, not a list. The priority order is sorted by **actionability** — the code that tells the user the most useful thing first wins:
 
 1. `auth_required` — user is anonymous
-2. `account_banned` — account is disabled or banned
-3. `verification_required` — email not verified
+2. `account_deactivated` — `is_active` is false (self-deactivated, dormant cleanup, etc.)
+3. `account_banned` — explicit ban (added when banning ships; separate from `account_deactivated` so the SPA can render different copy)
 4. `role_required` — moderator/admin needed
-5. `rate_limited` — soft, retry possible
+5. `verification_required` — email not verified
+6. `rate_limited` — soft, retry possible
 
-Telling a banned user to verify their email is the wrong UX; the priority order is what prevents that. The order is global to the registry, not per-activity.
+Telling a deactivated user to verify their email is the wrong UX; the priority order is what prevents that. The same logic puts `role_required` above `verification_required`: an unverified non-moderator who tries a moderator-only action should hear "moderator only," not "verify your email" — verifying won't grant them the access they're after, so the role message is the more useful one. The order is global to the registry, not per-activity.
 
 ### Audit logging
 
@@ -278,13 +298,27 @@ Keep the exhaustive route inventory in code or tests, not this document, so it c
 
 The design ships across a sequence of small PRs. Each is independently mergeable and produces no user-visible change until the last two.
 
-1. **✅ DONE: Inventory + markers (no enforcement).** Add `@requires`, `@gated_inline`, `@public_mutation` as marker-only no-ops in `core/authz/`. Apply across every mutating route. Land the route-inventory test that asserts every mutating operation carries one of the three markers. No engine module yet; no behavior change.
-2. **Engine module.** Build `core/authz/` proper: `Decision` / `Allow` / `Deny`, `DenialCode` enum, registry, predicate composition, `PolicyUser` Protocol, evaluator. Pure unit tests, no integration. `@requires` is still a no-op; `policy.check` exists but nothing calls it from a request path.
-3. **Enforcement flip.** Update `@requires` and `@gated_inline` bodies to call `policy.check` and raise a structured 403 on deny. Launch rules are still `authenticated + active`, so behavior is unchanged from today (every authenticated user passes). This is the moment "the gate is on" with zero user-visible diff.
-4. **Verification gate** ([Verification.md](Verification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
-5. **Frontend denial UX + capabilities.** Denial-code mapper, resend-verification UI, `/me/capabilities` endpoint, embedded resource hints. Each editor renders consistent copy from the closed-enum codes.
-
 Each PR's acceptance criterion is small enough to bisect cleanly: PR 1 is "inventory test passes," PR 2 is "engine unit tests pass," PR 3 is "every authenticated user can still do everything they could yesterday," and so on.
+
+### 1. ✅ DONE: Inventory + markers (no enforcement)
+
+Add `@requires`, `@gated_inline`, `@public_mutation` as marker-only no-ops in `core/authz/`. Apply across every mutating route. Land the route-inventory test that asserts every mutating operation carries one of the three markers. No engine module yet; no behavior change.
+
+### 2. ✅ DONE: Engine module
+
+Build `core/authz/` proper: `Decision` / `Allow` / `Deny`, `DenialCode` enum, registry, predicate composition, `PolicyUser` Protocol, evaluator, and per-app `authz.py` rule files registering each launch activity with `authenticated + active` rules. Pure unit tests, no integration. `@requires` is still a no-op; `policy.check` exists but nothing calls it from a request path.
+
+### 3. Enforcement flip
+
+Update `@requires`'s body to call `policy.check` and raise a structured 403 on deny. (`@gated_inline` stays stamp-only — its routes already call `check()` inline; flipping the marker would double-evaluate.) Launch rules are still `authenticated + active`, so behavior is unchanged from today (every authenticated user passes). This is the moment "the gate is on" with zero user-visible diff.
+
+### 4. Verification gate
+
+([Verification.md](Verification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
+
+### 5. Frontend denial UX + capabilities
+
+Denial-code mapper, resend-verification UI, `/me/capabilities` endpoint, embedded resource hints. Each editor renders consistent copy from the closed-enum codes.
 
 ## Deferred / non-goals
 

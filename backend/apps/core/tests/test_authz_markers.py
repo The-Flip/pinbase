@@ -1,10 +1,10 @@
-"""Unit tests for the phase-1 authz marker decorators.
+"""Unit tests for the authz marker decorators.
 
 The route-inventory test exercises `requires` and `gated_inline`
 indirectly via every classified route, but `public_mutation`'s
 validation logic only has the success path covered there. These tests
-lock the contract before phase 3 rewrites `requires` into a real
-wrapper.
+also lock the "marker returns the original callable" invariant so any
+future change to that contract fails loudly.
 """
 
 from __future__ import annotations
@@ -30,10 +30,9 @@ class TestRequires:
         assert getattr(view, ACTIVITY_ATTR) is Activity.CATALOG_EDIT
 
     def test_returns_original_callable_unchanged(self) -> None:
-        # Phase-1 contract: marker is a no-op stamp; the wrapped
-        # callable is the *same object* the caller passed in. Phase 3
-        # changes this — locking the invariant here means a phase-3
-        # diff will fail this test loudly.
+        # The marker is a stamp, not a wrapper — the wrapped callable
+        # is the *same object* the caller passed in. Locking the
+        # invariant here means any future change to it fails loudly.
         def view() -> None: ...
 
         assert requires(Activity.CATALOG_EDIT)(view) is view

@@ -1,10 +1,10 @@
 """Walk a NinjaAPI's routers and yield every registered operation.
 
-Used by the route-inventory test to enforce that every mutating route
-carries a phase-1 marker. The walker is single-source: `api._routers[0]`
-*is* `api.default_router`, so iterating both would double-count routes
-registered directly on the API (e.g. `@api.get(...)` decorations in
-config/api.py).
+Used by the route-inventory test to confirm every mutating route
+carries an authz marker. Iterates `api._routers` exactly once —
+`api._routers[0]` *is* `api.default_router`, so iterating both would
+double-count routes registered directly on the API (e.g. `@api.get(...)`
+decorations in `config/api.py`).
 """
 
 from __future__ import annotations

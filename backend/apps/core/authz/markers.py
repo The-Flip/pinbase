@@ -1,16 +1,18 @@
-"""Marker decorators for the activity-authorization layer.
+"""Marker decorators that classify mutating routes for the inventory test.
 
-Phase 1 of the Authz rollout (see docs/plans/auth/Authz.md). The three
-decorators here stamp metadata on the wrapped function and return it
-unchanged. They do not enforce anything — that's phase 3.
+`@requires` is the canonical gate: today it stamps an `Activity` on the
+view; once enforcement is wired in, its body will call `policy.check`
+and raise on deny. Either way, the marker is what the inventory walker
+sees.
 
-Phase-3 forward-compat note: when `requires` becomes a real wrapper
-in phase 3, the wrapper must use `functools.wraps` and re-stamp the
-marker attribute on the new wrapper. Ninja resolves `op.view_func` to
-whatever was passed into `router.post(...)`; the inventory walker reads
-markers off `op.view_func`, so the marker has to ride on whichever
-object Ninja keeps a reference to. Pinning this convention now saves a
-debug session in phase 3.
+`@gated_inline` is for routes that can't fit the single-decorator form
+(multiple activities, branch on decision, etc.) and call `policy.check`
+inline. The decorator stays stamp-only — it exists so the inventory
+test still recognizes the route as gated; the inline call is what
+enforces.
+
+`@public_mutation` declares a route as deliberately ungated, with the
+reason captured in the inventory output for later audit.
 """
 
 from __future__ import annotations
@@ -22,20 +24,20 @@ from .types import Activity
 
 F = TypeVar("F", bound=Callable[..., object])
 
-# Attribute names the inventory walker reads. Centralized here so the
-# walker, the markers, and any future forward-compat wrapper agree on
-# the wire.
+# Attribute names the inventory walker reads. Centralized so the walker,
+# the markers, and any forward-compat wrapper agree on the wire format.
 ACTIVITY_ATTR = "_authz_activity"
 GATED_INLINE_ATTR = "_authz_gated_inline"
 PUBLIC_ATTR = "_authz_public"
 
 
 def requires(activity: Activity) -> Callable[[F], F]:
-    """Phase 1: stamp the activity on the view; do not wrap.
+    """Stamp `activity` on the view and return it unchanged.
 
-    In phase 3 this becomes an enforcing wrapper that calls
-    `policy.check` and raises a structured 403 on deny. Call sites do
-    not change.
+    When this decorator becomes an enforcing wrapper, the wrapper must
+    use `functools.wraps` and re-stamp the marker — Ninja resolves
+    `op.view_func` to the callable passed into `router.<verb>(...)`,
+    and the inventory walker reads markers off that object.
     """
 
     def decorator(func: F) -> F:
@@ -48,9 +50,9 @@ def requires(activity: Activity) -> Callable[[F], F]:
 def gated_inline(activity: Activity) -> Callable[[F], F]:
     """Mark a view that calls `policy.check` inline in its body.
 
-    Stays stamp-only across all phases. The decorator's only job is to
-    declare the activity to the inventory test; the inline `check()`
-    call in the view body is what enforces.
+    Always stamp-only. The decorator's only job is to declare the
+    activity to the inventory test; the inline `check()` call in the
+    view body is what enforces.
     """
 
     def decorator(func: F) -> F:
@@ -63,9 +65,9 @@ def gated_inline(activity: Activity) -> Callable[[F], F]:
 def public_mutation(reason: str) -> Callable[[F], F]:
     """Declare a mutating route as deliberately ungated.
 
-    `reason` must be non-empty after `.strip()` — empty or whitespace
-    fails at decoration time so a missing rationale fails at import,
-    not silently in CI.
+    `reason` is required and must be non-empty after `.strip()` — an
+    empty or whitespace-only rationale fails at decoration time so a
+    missing reason can't slip into the inventory output.
     """
     if not isinstance(reason, str) or not reason.strip():
         raise ValueError(
