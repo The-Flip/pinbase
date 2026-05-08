@@ -18,40 +18,249 @@ Examples of activity names:
 - `catalog.create`
 - `catalog.delete`
 - `claim.revert`
-- `moderation.action`
 
 Backend write paths should depend on activity authorization, not directly on `email_verified`. For example, a catalog claim write should require `catalog.edit`; the policy for `catalog.edit` can initially require authentication, an active account, and verified email. Later, the same policy can add account-age, role, reputation, moderation, or rate-limit constraints without changing every catalog editor.
 
-The frontend should follow the same language but must not reimplement the policy. The backend exposes capabilities (e.g. a `/me/capabilities` endpoint, or per-resource hints embedded in resource responses) and the frontend reflects them for UX. Structured denial responses return stable blocker codes from a closed registry -- `verification_required`, `moderator_required`, etc. -- mapped to user-facing copy in one place, so shared UI can explain the problem without each editor knowing the underlying authorization rules.
+The frontend should follow the same language but must not reimplement the policy. The backend exposes capabilities through two surfaces, used together: a `/me/capabilities` endpoint for target-less activities (`catalog.create`), and per-resource capability hints embedded in resource responses for target-aware activities (`claim.revert` on a specific claim, `catalog.delete` on a specific entity). Both compute their answers via `policy.check`; neither is the sole source. Structured denial responses return stable blocker codes from a closed registry -- `verification_required`, `moderator_required`, etc. -- mapped to user-facing copy in one place, so shared UI can explain the problem without each editor knowing the underlying authorization rules.
 
 This is the standard policy-based / capability-based authorization shape: call sites request an action, central policy evaluates roles and attributes. For Flipcommons, a lightweight in-repo policy module is enough; adopting a full external authorization engine would be premature.
 
 ## Principles
 
-- **Object-level from day one.** The policy signature is `check(user, activity, target=None)`. Early rules may ignore `target`, but `claim.revert` and `catalog.delete` will need it soon, and retrofitting object-level later is the same costly audit this design is meant to avoid.
+- **Object-level-ready signature from day one.** The policy signature is `check(user, activity, target=None, context=None)`. Launch rules don't use `target` or `context`, but having the parameters present means later rules that need them (e.g. "you can revert your own claim but not someone else's", or "respect the rate-limit state middleware just computed") can be added without touching call sites.
+- **Default-deny, single registry.** Unknown activities deny. Activities defined without a registered rule deny. The registry of activities lives in one importable module, so the route-inventory test, the capabilities endpoint, and humans reading the codebase all see the same authoritative set. A missing rule is a programming error, not a permission grant.
+- **Pure decisions; no I/O in the policy.** `check` is a pure function over its inputs. The policy reads attributes on already-loaded objects; it does not query the DB, hit the cache, or call out to other services. New data dependencies are assembled by the caller (or by middleware that builds `context`) before the call. This keeps decisions cheap, testable without fixtures, and replayable from logs. Enforced statically by per-rule target Protocols and dynamically by a dev/test recording proxy — see [Enforcing pure decisions](#enforcing-pure-decisions). Corollary: serializers that embed capability hints must prefetch the attributes the policy reads, so the embed loop doesn't lazy-load behind the policy's back.
+- **Decisions are structured, not boolean.** `check` returns either `Allow` or `Deny(code, context)` from the closed denial-code registry — never a bare bool. Throwing away the denial code at the boundary throws away the half of the answer that drives UX.
+- **Anonymous users go through the policy.** The policy is invoked for unauthenticated requests too; they deny with `auth_required`. This means `/me/capabilities` works for logged-out callers (returning everything false) and the SPA doesn't branch on "logged in" before asking what's allowed. HTTP 401 stays reserved for "your session is invalid," not "you're signed out."
+- **Mutations always go through the policy; reads are public by default.** Catalog reads, lookups, and search don't run through `policy.check` — there is no `catalog.read` activity. Authenticated-only reads (`/me`, drafts, notifications) gate on `is_authenticated`, not the policy. The exception: a small, deliberate set of sensitive reads (e.g. moderation tooling, ban audit trails, abuse-report inboxes) may be named as activities and gated, but only when the read is genuinely privileged. The default for new read endpoints is "no activity gate."
 - **Backend is the source of truth; the frontend reflects.** Never mirror policy logic in JS. Two engines will drift.
 - **Activities are product-meaningful, not data-model-shaped.** Resist granularity like `catalog.edit.title.scalar` -- that leaks the schema into the policy namespace and dissolves the abstraction.
+- **Activities name acts, not actors.** Don't name an activity after the role currently allowed to do it (`moderation.action`, `admin.thing`). Roles change; acts don't. Name the act the call site is performing (`entity.merge`, `claim.override`, `account.ban`); let the policy decide who qualifies. Add an activity when its call site is being built, not in advance.
 - **Don't use Django's permission framework.** This activity layer is parallel to Django perms, not built on top. Per-model perms compose poorly with attribute checks (verified email, account age, rate limit), and we'd end up wrapping them anyway.
 - **Denial codes are a closed enum.** One registry, mapped to user-facing copy. No ad-hoc strings spelled differently across editors.
 - **Rate-limiting is policy-aware, not policy-owned.** Enforce early in the request path -- as early as the limit's scope allows (per-IP/per-user floods in middleware; activity- or target-scoped limits where the target is known). The policy may reflect rate-limit state for UX but is not the sole gate.
+
+## Anti-goal: NO PERMISSION CHANGES other than email-verified
+
+For the initial roll-out, the ONLY permission change we are making is requiring every CRUD operation to be email-verified. Do NOT change which users can do what, except for email-verified.
 
 ## Initial activities
 
 The launch set. Each row is what the policy enforces today; later constraints (account age, reputation, rate limits, moderation flags) layer in without changing call sites.
 
-| Activity            | Rules at launch                                     | Notes                                                                                                                                                                                                  |
-| ------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `catalog.edit`      | authenticated, active, email-verified               | The default gate for claim writes on existing entities.                                                                                                                                                |
-| `catalog.create`    | authenticated, active, email-verified               | Same bar as edit at launch; separated so creation can tighten independently (e.g. account age) without touching edit paths.                                                                            |
-| `catalog.delete`    | authenticated, active, email-verified, target-aware | Object-level: deletion of a populated entity should escalate (moderator role) before non-moderator deletes are allowed. Launch behavior may simply forbid non-moderator deletes of non-empty entities. |
-| `claim.revert`      | authenticated, active, email-verified, target-aware | Object-level: a user can revert their own claims; reverting another user's claim requires `moderation.action`.                                                                                         |
-| `moderation.action` | authenticated, active, moderator role               | The umbrella capability for moderator-only operations. Email verification is implied by being a moderator.                                                                                             |
+| Activity         | Rules at launch                       | Notes                                                                                                           |
+| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `catalog.edit`   | authenticated, active, email-verified | Writes on existing entities.                                                                                    |
+| `catalog.create` | authenticated, active, email-verified | Separated from edit so creation can tighten independently later (e.g. account age) without touching edit paths. |
+| `catalog.delete` | authenticated, active, email-verified | Separated from edit so deletion can tighten independently later without touching edit paths.                    |
+| `claim.revert`   | authenticated, active, email-verified | Separated from edit so revert can tighten independently later without touching edit paths.                      |
+| `changeset.undo` | authenticated, active, email-verified | Inverts a delete-changeset (post-delete Undo toast). Target-aware: today scoped to the changeset author.        |
+| `citation.edit`  | authenticated, active, email-verified | Citation-source CRUD plus citation-instance writes attached to claims.                                          |
+| `media.edit`     | authenticated, active, email-verified | Upload, detach, set-primary, set-category — all media-attachment claim writes.                                  |
+| `kiosk.edit`     | authenticated, active, email-verified | Kiosk config CRUD. Also gated on `is_superuser` inline, parallel to the activity layer.                         |
 
 "Active" means the account is not disabled or banned. "Authenticated" means a logged-in session, not anonymous. The shared prerequisites (authenticated + active) live in one place in the policy module so each activity's rule is just the delta beyond them.
 
-## Surfaces to classify before implementation
+The four activities below the divider were added per "Add an activity when its call site is being built, not in advance" during the phase-1 inventory pass — same launch rules as the original four, separated only so each can tighten independently later.
 
-Before implementing the policy layer, audit every authenticated mutating backend route and assign it to one activity, or explicitly mark it out of scope.
+## Decision shape
+
+The policy entry point and its return type:
+
+```python
+def check(
+    user: PolicyUser,              # Protocol covering both authenticated User and AnonymousUser
+    activity: Activity,            # closed enum of registered activity names
+    target: Model | None = None,   # a record of the domain object the activity acts on, when applicable
+    context: PolicyContext | None = None,  # caller-assembled ambient state (rate-limit, etc.)
+) -> Decision: ...
+
+
+@dataclass(frozen=True)
+class Allow: ...
+
+@dataclass(frozen=True)
+class Deny:
+    code: DenialCode             # closed enum
+    context: Mapping[str, Any]   # shape declared per code
+
+Decision = Allow | Deny
+```
+
+`Allow` and `Deny` are returned by the policy and serialized at the API boundary; the same shapes flow through both surfaces.
+
+## Module layout
+
+Per [AppBoundaries.md](../../AppBoundaries.md), the engine lives in `core` and per-app rule files register into a single central registry.
+
+```text
+backend/apps/core/authz/
+  types.py        # Activity StrEnum, Decision, Allow, Deny, DenialCode enum, PolicyUser Protocol
+  registry.py     # the activity registry + register() entry point
+  predicates.py   # is_authenticated, is_active, email_verified, base Predicate
+  evaluator.py    # check(user, activity, target, context) — the entry point
+```
+
+Per-app rule files declare each app's activities and rules:
+
+```text
+backend/apps/catalog/authz.py     # catalog.edit, catalog.create, catalog.delete
+backend/apps/provenance/authz.py  # claim.revert
+backend/apps/media/authz.py       # media.* activities
+# etc.
+```
+
+Each app's `apps.py: ready()` imports its `authz` module so registration happens at startup. The route-inventory test then walks the populated registry and asserts every mutating route is mapped to a registered activity.
+
+### Why `core`, not `accounts`
+
+`core` is the right home because the engine is project-wide infrastructure with no dependencies, and every middle- and top-tier app calls into it. Putting it in `accounts` would invert the dependency direction — `accounts` is a peer of `core`, not a foundation under the rest of the project, and nothing currently imports from `accounts` (apps use `AUTH_USER_MODEL` strings for FKs). Authz isn't account-specific behavior; it's a gate that _reads_ user attributes.
+
+The User-typing concern is handled by a small `PolicyUser` Protocol in `core/authz/types.py` declaring just the attributes the engine reads (`is_authenticated`, `is_active`, `email_verified`). The engine doesn't import the concrete `User` class.
+
+### Why per-app rule files
+
+Target-aware rules need to type-hint and read attributes from their app's models (a `Claim`, a `Title`, a `MediaAsset`). If those rules lived in `core`, `core` would have to import from every app above it, which the boundary rules forbid. Putting rules next to the models they care about — and registering them into a central registry — keeps `core` clean while the registry stays the single source of truth.
+
+## Enforcing pure decisions
+
+The "no I/O in the policy" principle is enforced at two layers: per-rule target Protocols (static) and a dev/test recording proxy (dynamic). Together they catch the bug class that convention alone won't — predicates that lazy-load relations and silently N+1 inside a hot serializer loop.
+
+### Per-rule target Protocols
+
+The engine's `target` parameter is generic (`Model | None`); each per-rule predicate declares its own narrower Protocol covering exactly the attributes that rule may read. The Protocol lives next to the predicate, in the consuming app:
+
+```python
+# apps/provenance/authz.py
+from typing import Protocol
+
+class ClaimPolicyView(Protocol):
+    """The Claim attributes this app's policy is allowed to read."""
+    id: int
+    author_id: int
+    is_locked: bool
+
+def is_claim_author(user: PolicyUser, claim: ClaimPolicyView) -> bool:
+    return claim.author_id == user.id
+
+def claim_not_locked(user: PolicyUser, claim: ClaimPolicyView) -> bool:
+    return not claim.is_locked
+```
+
+Protocols are structural — `Claim` instances satisfy `ClaimPolicyView` automatically by having the right attributes — so the engine still passes real model instances at runtime; nothing about the call changes. The change is at the _predicate_ boundary: inside the predicate, the type checker sees only the Protocol's attributes. Writing `claim.author.is_moderator` is a static type error because `ClaimPolicyView` declares `author_id: int`, not `author: User`.
+
+This makes "I want to traverse a relation" a visible policy decision: extending the Protocol is something a reviewer notices, and the diff shows the new attribute being added to the read surface. The Protocol also doubles as the contract for what serializers must `select_related` / `only(...)` when embedding capability hints — grep `ClaimPolicyView` to find the exact prefetch list.
+
+The same pattern is used for `PolicyUser`: the engine declares the shared user surface (`is_authenticated`, `is_active`, `email_verified`); per-rule Protocols declare per-target surfaces.
+
+### Dev/test recording proxy
+
+Static checking misses two cases: dynamic attribute access (`getattr(claim, "author")` bypasses the Protocol), and a Protocol that _does_ declare a relation but the caller forgot to prefetch it (the type checker is happy; runtime still N+1s). A small recording proxy catches both.
+
+At test time, the engine wraps user/target in a proxy that:
+
+- Raises `UndeclaredPolicyAttribute` on any attribute access not declared in the Protocol.
+- Raises `PolicyTriggeredQuery` if an attribute access increments `len(connection.queries)`.
+
+The proxy is only active under a test fixture (and optionally under `DEBUG`); production forwards the raw object. So the runtime cost is zero in production, but every policy unit test exercises the discipline. A predicate that quietly N+1s becomes a failed test, not a production incident.
+
+## Denial responses
+
+HTTP wire format on denial:
+
+```json
+HTTP 403
+{
+  "code": "verification_required",
+  "message": "Verify your email to start editing.",
+  "context": { "email": "alice@example.com" }
+}
+```
+
+`message` is an English fallback so the API is usable without the SPA. The SPA ignores it and renders its own copy from `code` via a single mapper module — one place per code maps to `{ title, body, primaryAction }`. Each code's `context` shape is part of the registry and part of the API contract; adding or removing a key is a breaking change.
+
+### Denial code priority
+
+Multiple predicates can fail simultaneously (unverified email and banned account). The policy returns one code, not a list. Codes have a fixed priority — most fundamental first, most recoverable last:
+
+1. `auth_required` — user is anonymous
+2. `account_banned` — account is disabled or banned
+3. `verification_required` — email not verified
+4. `role_required` — moderator/admin needed
+5. `rate_limited` — soft, retry possible
+
+Telling a banned user to verify their email is the wrong UX; the priority order is what prevents that. The order is global to the registry, not per-activity.
+
+### Audit logging
+
+Denials are logged at `info` with `(user_id, activity, code, target_id)`. Allows are logged at `debug` (mostly off in prod). Logging is the _caller's_ job — the policy returns a `Decision` and the calling middleware/decorator emits the log. Keeps the policy pure.
+
+## Integration surface
+
+The route-inventory test only works if there is one canonical way to gate a route. Static walking can see route signatures, dependencies, and decorators; it cannot see the body of a view function. If half the call sites use a Ninja dependency and half call `check()` inline, the inventory test is silently incomplete — which is the worst failure mode for a test whose job is catching missing gates.
+
+### Canonical form: `@requires` decorator
+
+Django Ninja does not have FastAPI-style dependency injection (`deps=` / `Depends`). The canonical gating form for this codebase is a Python decorator stacked directly under the route registration, the same shape Django's `@login_required` uses:
+
+```python
+# apps/catalog/api.py
+@router.patch("/entities/{id}", auth=session_auth)
+@requires(Activity.CATALOG_EDIT)
+def patch_entity(request, id: int, ...): ...
+```
+
+`@requires(activity)` lives once in `core/authz/` and is **staged across two PRs**. Call sites apply the decorator the same way in both phases — only the decorator's body changes:
+
+1. **Inventory phase**: `@requires` is a marker-only no-op. It stamps `_authz_activity = Activity.CATALOG_EDIT` on the wrapped view function so the inventory walker can see it without reading the body. No call into a policy module — the engine doesn't exist yet.
+2. **Enforcement phase** (a later PR): `@requires`'s body is updated to also run `policy.check(request.user, activity, target=None)` and raise a structured 403 on deny. The marker stays. No call site changes.
+
+This is what lets the inventory ship before the engine exists: applying the decorator everywhere is safe even when its body is a no-op, because the only side effect is the attribute stamp. See [Implementation phases](#implementation-phases) for the full PR sequence.
+
+The decorator order matters: `@requires` must be _inside_ `@router.patch` so Ninja registers the wrapped callable. Reverse the stack and the marker sits on the Ninja-wrapped operation, not on the function the walker reaches via `Operation.view_func`.
+
+### Documented exception: inline `check()`
+
+A small set of routes legitimately can't fit the single-decorator form — they evaluate multiple activities, branch on the decision, or need to run the check after mutation-context loading. These call `check()` inline, but **carry an explicit marker** so the inventory test still recognizes them as gated:
+
+```python
+@router.post("/claims/{id}/revert", auth=session_auth)
+@gated_inline(Activity.CLAIM_REVERT)
+def revert_claim(request, id: int, ...):
+    claim = get_object_or_404(Claim, id=id)
+    decision = check(request.user, Activity.CLAIM_REVERT, target=claim)
+    if isinstance(decision, Deny): raise PolicyDenied(decision)
+    ...
+```
+
+The `@gated_inline` decorator is informational — it does not run the policy itself (the inline `check()` does that). Its only job is to declare the activity to the inventory test. Inline gating is the exception, not the default; if a route can use `@requires()`, it should.
+
+### Public-mutation allowlist
+
+Some mutating routes legitimately have no activity gate — anonymous signup, password reset, contact form. Being ungated is a positive declaration, not the absence of one:
+
+```python
+@router.post("/auth/signup", auth=None)
+@public_mutation("anonymous account creation by design")
+def signup(request, ...): ...
+```
+
+`@public_mutation(reason)` records the route in the inventory as deliberately-public; the reason string is captured in the inventory output so a future reviewer can audit "do we still want this public?"
+
+### Route-inventory test
+
+A pytest walks every Ninja router in the project and classifies each mutating operation by the markers above:
+
+- `@requires(Activity.X)` decorator → gated, mapped to `X`
+- `@gated_inline(Activity.X)` decorator → gated, mapped to `X` (manual `check()` in body)
+- `@public_mutation(reason)` decorator → deliberately ungated, with reason captured
+- none of the above → **test failure**, with the route path in the message
+
+A mutating route that lacks any marker fails the test. There is no `# noqa`. The list of activities the test recognizes is read from the central registry, so the test and the policy share one source of truth.
+
+## Surfaces to classify
+
+Every authenticated mutating backend route must carry one of the markers above (`@requires`, `@gated_inline`, or `@public_mutation`). The inventory PR lands these markers as no-ops and the route-inventory test asserts the classification is exhaustive. Enforcement — flipping `@requires` from no-op to "call `policy.check` and raise on deny" — is a separate, later PR; until then, marker presence is the only commitment. See [Implementation phases](#implementation-phases) below.
 
 Known surfaces include:
 
@@ -64,3 +273,29 @@ Known surfaces include:
 - factory-registered CRUD routes
 
 Keep the exhaustive route inventory in code or tests, not this document, so it can be mechanically checked instead of going stale.
+
+## Implementation phases
+
+The design ships across a sequence of small PRs. Each is independently mergeable and produces no user-visible change until the last two.
+
+1. **✅ DONE: Inventory + markers (no enforcement).** Add `@requires`, `@gated_inline`, `@public_mutation` as marker-only no-ops in `core/authz/`. Apply across every mutating route. Land the route-inventory test that asserts every mutating operation carries one of the three markers. No engine module yet; no behavior change.
+2. **Engine module.** Build `core/authz/` proper: `Decision` / `Allow` / `Deny`, `DenialCode` enum, registry, predicate composition, `PolicyUser` Protocol, evaluator. Pure unit tests, no integration. `@requires` is still a no-op; `policy.check` exists but nothing calls it from a request path.
+3. **Enforcement flip.** Update `@requires` and `@gated_inline` bodies to call `policy.check` and raise a structured 403 on deny. Launch rules are still `authenticated + active`, so behavior is unchanged from today (every authenticated user passes). This is the moment "the gate is on" with zero user-visible diff.
+4. **Verification gate** ([Verification.md](Verification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
+5. **Frontend denial UX + capabilities.** Denial-code mapper, resend-verification UI, `/me/capabilities` endpoint, embedded resource hints. Each editor renders consistent copy from the closed-enum codes.
+
+Each PR's acceptance criterion is small enough to bisect cleanly: PR 1 is "inventory test passes," PR 2 is "engine unit tests pass," PR 3 is "every authenticated user can still do everything they could yesterday," and so on.
+
+## Deferred / non-goals
+
+- **Dry-run mode for rule changes.** Once the launch rules are in place, tightening one (e.g. adding an account-age requirement to `catalog.create`) risks 403'ing active users mid-session. The usual answer is a dry-run pass that returns the would-be decision in a header without enforcing, then flip after one deploy cycle. Not needed pre-launch; the pure-decision design makes this easy to add later.
+- **Bulk / batch evaluation API.** Per-target capability hints in list responses are 50× `policy.check` calls per render. With pure decisions and prefetched attributes that's cheap; if a profiler ever disagrees, add a `check_many` helper. Not worth designing speculatively.
+- **External authorization engine** (OPA, Cedar, Oso). The shape of this design is compatible with a future port, but the in-repo policy module is the right size for Flipcommons today.
+
+## Alternatives considered
+
+- **django-rules.** The closest existing fit in the Python/Django ecosystem: predicate-based, composable with `&` / `|` / `~`, default-deny, object-level support, pure-function model. Maps onto most of the principles above. Rejected because it returns `bool`, so the structured-decision contract — typed `Decision`, denial-code priority order, per-code `context` shape — would have to be built as a wrapper of comparable size to writing the engine ourselves. Secondary concern: the natural call site (`user.has_perm("catalog.edit")`) reads as Django's permission framework even though django-rules sidesteps the underlying `ContentType` machinery, which invites the confusion we're explicitly trying to avoid. A ~150-LOC in-repo module is the simpler answer at our scale.
+- **django-guardian.** Per-object permissions via DB rows. Wrong shape — our launch rules are attribute checks (verified email, active account), not row-level grants, and persisting per-(user, object) rows would be a denormalized mirror of attributes that already live on the user.
+- **Casbin / py-abac / Vakt.** General-purpose RBAC/ABAC engines with external policy files or DSLs. Heavier than the problem; the policy file becomes a second source of truth that has to stay in sync with the activity registry.
+- **Oso (open-source).** Was the obvious pick a few years ago; the company has deprioritized the OSS library in favor of a hosted product. Not a stable bet.
+- **Django's built-in permission framework + `ContentType` perms.** Already excluded by a principle above; restated here for completeness — per-model perms compose poorly with attribute checks, and we'd end up wrapping them.

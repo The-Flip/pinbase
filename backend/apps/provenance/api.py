@@ -22,6 +22,8 @@ from ninja.security import django_auth
 
 from apps.citation.models import CitationSource
 from apps.core.api_helpers import authed_user
+from apps.core.authz.markers import gated_inline, requires
+from apps.core.authz.types import Activity
 from apps.core.schemas import ErrorDetailSchema
 
 from .models import CitationInstance, ClaimControlledModel, Source
@@ -142,6 +144,7 @@ changesets_router = Router(tags=["changesets", "private"])
         422: ErrorDetailSchema,
     },
 )
+@gated_inline(Activity.CLAIM_REVERT)
 def revert_claim(
     request: HttpRequest, claim_id: int, data: RevertNoteSchema
 ) -> Status[None] | Status[ErrorDetailSchema]:
@@ -188,6 +191,7 @@ def revert_claim(
         422: ErrorDetailSchema,
     },
 )
+@gated_inline(Activity.CHANGESET_UNDO)
 def undo_changeset(
     request: HttpRequest, changeset_id: int, data: UndoChangeSetSchema
 ) -> UndoResultSchema | Status[ErrorDetailSchema]:
@@ -294,6 +298,7 @@ def batch_citation_instances(
     response={201: CitationInstanceSchema, 422: ErrorDetailSchema},
     auth=django_auth,
 )
+@requires(Activity.CITATION_EDIT)
 def create_citation_instance(
     request: HttpRequest, data: CitationInstanceCreateSchema
 ) -> Status[CitationInstanceSchema]:

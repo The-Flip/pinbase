@@ -37,6 +37,8 @@ from ninja.responses import Status
 from ninja.security import django_auth
 
 from apps.catalog.models import CatalogModel
+from apps.core.authz.markers import requires
+from apps.core.authz.types import Activity
 from apps.core.schemas import (
     ErrorDetailSchema,
     RateLimitErrorSchema,
@@ -210,6 +212,10 @@ def register_entity_delete_restore[ModelT: CatalogModel, SchemaT: Schema](
         )
 
     _delete.__name__ = f"{entity_label.lower()}_delete"
+    # Marker is a phase-1 no-op that stamps _authz_activity in place;
+    # phase 3 turns this into a real wrapper and the call flips back to
+    # `_delete = requires(...)(_delete)`. Bare statement here, not a typo.
+    requires(Activity.CATALOG_DELETE)(_delete)
     router.post(
         "/{path:public_id}/delete/",
         auth=django_auth,
@@ -255,6 +261,9 @@ def register_entity_delete_restore[ModelT: CatalogModel, SchemaT: Schema](
         return serialize_detail(refreshed)
 
     _restore.__name__ = f"{entity_label.lower()}_restore"
+    # Restore writes via execute_claims(action=EDIT), so the activity is
+    # CATALOG_EDIT, not a separate "restore" act.
+    requires(Activity.CATALOG_EDIT)(_restore)
     router.post(
         "/{path:public_id}/restore/",
         auth=django_auth,
@@ -481,6 +490,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
             return _do_create(request, data, parent=parent)
 
         _create_parented.__name__ = f"{entity_label.lower()}_create{op_id_suffix}"
+        requires(Activity.CATALOG_CREATE)(_create_parented)
         router.post(
             f"/{{path:parent_public_id}}/{route_suffix}/",
             auth=django_auth,
@@ -500,6 +510,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
             return _do_create(request, data)
 
         _create_unparented.__name__ = f"{entity_label.lower()}_create{op_id_suffix}"
+        requires(Activity.CATALOG_CREATE)(_create_unparented)
         router.post(
             "/",
             auth=django_auth,

@@ -22,6 +22,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
 from ninja import Router, Schema
 
+from apps.core.authz.markers import public_mutation
 from apps.core.schemas import ErrorDetailSchema
 from apps.core.types import EntityKey
 from apps.provenance.entity_resolution import batch_resolve_entities
@@ -352,6 +353,10 @@ def auth_callback(request: HttpRequest) -> HttpResponse:
 
 
 @auth_router.post("/logout/", response=AuthStatusSchema)
+@public_mutation(
+    "Session teardown — caller may already be partially logged out; "
+    "no editorial action is being authorized."
+)
 def auth_logout(request: HttpRequest) -> AuthStatusSchema:
     """End the current session."""
     logout(request)

@@ -18,6 +18,8 @@ from ninja.security import django_auth
 from apps.catalog.api.schemas import EntityRef
 from apps.catalog.models import Title
 from apps.core.api_helpers import authed_user
+from apps.core.authz.markers import requires
+from apps.core.authz.types import Activity
 from apps.core.schemas import ErrorDetailSchema
 from apps.kiosk.api.schemas import (
     KioskConfigDetailSchema,
@@ -86,6 +88,7 @@ def list_configs(request: HttpRequest) -> list[KioskConfigListItemSchema]:
     auth=django_auth,
     response={201: KioskConfigDetailSchema, 403: ErrorDetailSchema},
 )
+@requires(Activity.KIOSK_EDIT)
 def create_config(request: HttpRequest) -> Status[KioskConfigDetailSchema]:
     """Create an empty kiosk.
 
@@ -119,6 +122,7 @@ def get_config(request: HttpRequest, config_id: int) -> KioskConfigDetailSchema:
         422: ErrorDetailSchema,
     },
 )
+@requires(Activity.KIOSK_EDIT)
 def update_config(
     request: HttpRequest, config_id: int, data: KioskConfigPatchSchema
 ) -> KioskConfigDetailSchema:
@@ -182,6 +186,7 @@ def update_config(
     auth=django_auth,
     response={204: None, 404: ErrorDetailSchema},
 )
+@requires(Activity.KIOSK_EDIT)
 def delete_config(request: HttpRequest, config_id: int) -> Status[None]:
     _require_superuser(request)
     config = get_object_or_404(KioskConfig, pk=config_id)
