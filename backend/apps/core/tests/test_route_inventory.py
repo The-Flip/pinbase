@@ -36,10 +36,22 @@ MARKER_ATTRS = (ACTIVITY_ATTR, GATED_INLINE_ATTR, PUBLIC_ATTR)
 
 
 def test_every_mutating_route_is_classified() -> None:
+    # Canary: route_walker reaches into django-ninja internals
+    # (api._routers, path_view.operations, op.view_func). If a future
+    # ninja release renames any of those, the walker silently yields
+    # zero and every assertion below passes vacuously. The pin in
+    # backend/pyproject.toml (`django-ninja>=1.3,<2`) makes a major
+    # bump deliberate; this floor catches a structural change within
+    # the pinned range. Project had 97 mutating routes when this floor
+    # was set — bump if that drops legitimately.
+    mutating = [(m, p, v) for m, p, v in iter_operations(api) if m in MUTATING_METHODS]
+    assert len(mutating) >= 50, (
+        f"route_walker yielded only {len(mutating)} mutating routes — "
+        "django-ninja internals may have shifted. See route_walker.py."
+    )
+
     unclassified: list[str] = []
-    for method, path, view in iter_operations(api):
-        if method not in MUTATING_METHODS:
-            continue
+    for method, path, view in mutating:
         present = [name for name in MARKER_ATTRS if hasattr(view, name)]
         route_id = f"{method} {path} → {view.__module__}.{view.__qualname__}"
 
