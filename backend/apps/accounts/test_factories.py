@@ -3,10 +3,10 @@
 Kept outside ``tests/`` so test helpers can be imported across apps
 without circular dependencies or duplicated conftest fixtures.
 
-Reach for ``make_user`` when a test needs defaults, multiple distinct
-users in one test, or to opt into a future ``User`` field default
-(e.g. ``email_verified``). Tests that want a specific email value can
-keep calling ``User.objects.create_user`` directly.
+Always prefer ``make_user`` over ``User.objects.create_user`` in tests
+so every site picks up future ``User`` field defaults (e.g.
+``email_verified``) without per-call overrides. Pass ``email=...`` when
+the literal value is what the test asserts on.
 """
 
 from __future__ import annotations

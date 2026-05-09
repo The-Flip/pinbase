@@ -1,12 +1,10 @@
 """Tests for GET /api/pages/edit-history/{entity_type}/{public_id}/ endpoint."""
 
 import pytest
-from django.contrib.auth import get_user_model
 
+from apps.accounts.test_factories import make_user
 from apps.catalog.tests.conftest import make_machine_model
 from apps.provenance.models import Claim, Source
-
-User = get_user_model()
 
 
 @pytest.fixture
@@ -125,7 +123,7 @@ class TestEditHistoryMultipleFields:
 class TestEditHistoryMultiUser:
     def test_old_value_scoped_to_same_user(self, client, user, pm, db):
         """User B editing after User A should not show User A's value as old."""
-        user_b = User.objects.create_user(email="other@example.com")
+        user_b = make_user()
 
         client.force_login(user)
         client.patch(

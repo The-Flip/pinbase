@@ -1,15 +1,12 @@
 """Tests for GET /api/pages/user/{username}/ endpoint."""
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.test import Client
 
 from apps.accounts.test_factories import make_user
 from apps.catalog.models import Manufacturer
 from apps.catalog.tests.conftest import make_machine_model
 from apps.provenance.models import Claim, Source
-
-User = get_user_model()
 
 
 @pytest.fixture
@@ -192,7 +189,7 @@ class TestUserProfileWithEdits:
 class TestEditHistoryUserDisplayNull:
     """Verify that build_edit_history returns null for non-user changesets."""
 
-    def test_ingest_changeset_has_null_user_display(self, client, db):
+    def test_ingest_changeset_has_null_user_display(self, client, user):
         from apps.provenance.models import IngestRun
         from apps.provenance.test_factories import ingest_changeset, user_changeset
 
@@ -207,7 +204,6 @@ class TestEditHistoryUserDisplayNull:
         Claim.objects.assert_claim(pm, "year", 1979, source=source, changeset=ingest_cs)
 
         # Create a user changeset with a claim — this is the user path
-        user = User.objects.create_user(email="tester@example.com")
         user_cs = user_changeset(user)
         Claim.objects.assert_claim(
             pm,
@@ -219,8 +215,8 @@ class TestEditHistoryUserDisplayNull:
 
         resp = client.get(f"/api/pages/edit-history/model/{pm.slug}/")
         data = resp.json()
-        # Find entries by user_display to avoid ordering assumptions
-        user_entries = [e for e in data if e["user_display"] == "tester"]
+        # Partition by user_display: user-attributed vs ingest entries.
+        user_entries = [e for e in data if e["user_display"] is not None]
         ingest_entries = [e for e in data if e["user_display"] is None]
         assert len(user_entries) == 1
         assert len(ingest_entries) == 1

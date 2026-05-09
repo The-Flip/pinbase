@@ -304,8 +304,7 @@ def test_factory_crud_routes_carry_marker() -> None:
 
 @pytest.mark.django_db
 @override_settings(ROOT_URLCONF=__name__)
-def test_requires_allows_authenticated_active_user() -> None:
-    user = User.objects.create_user(email="active@example.com")
+def test_requires_allows_authenticated_active_user(user: User) -> None:
     client = Client()
     client.force_login(user)
     resp = client.get("/probe/probe")
@@ -317,9 +316,8 @@ def test_requires_allows_authenticated_active_user() -> None:
 @override_settings(ROOT_URLCONF=__name__)
 def test_requires_denies_with_structured_403_when_check_returns_deny(
     monkeypatch: pytest.MonkeyPatch,
+    user: User,
 ) -> None:
-    user = User.objects.create_user(email="patched@example.com")
-
     def _fake_check(
         user: object,
         activity: Activity,

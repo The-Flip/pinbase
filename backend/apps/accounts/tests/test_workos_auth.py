@@ -9,6 +9,7 @@ import pytest
 from django.test import Client
 
 from apps.accounts.models import User
+from apps.accounts.test_factories import make_user
 
 
 def _make_workos_user(
@@ -130,9 +131,7 @@ class TestAuthCallback:
         assert user.first_name == "Alice"
 
     def test_callback_recognizes_returning_user(self, client):
-        existing = User.objects.create_user(
-            email="alice@example.com", workos_user_id="user_01ABC"
-        )
+        existing = make_user(email="alice@example.com", workos_user_id="user_01ABC")
         self._do_callback(client)
 
         assert User.objects.filter(email="alice@example.com").count() == 1
@@ -141,7 +140,7 @@ class TestAuthCallback:
 
     def test_callback_first_time_link_for_unbound_active_user(self, client):
         """Active non-privileged local row with no workos_user_id gets linked."""
-        existing = User.objects.create_user(email="alice@example.com")
+        existing = make_user(email="alice@example.com")
         assert existing.workos_user_id is None
 
         resp = self._do_callback(client)
@@ -159,9 +158,10 @@ class TestAuthCallback:
         be bound deliberately — sign in via WorkOS as a regular user first,
         then tick is_staff/is_superuser on that row in Django admin.
         """
-        existing = User.objects.create_superuser(
+        existing = make_user(
             email="alice@example.com",
-            password="password",  # pragma: allowlist secret
+            is_staff=True,
+            is_superuser=True,
         )
         assert existing.workos_user_id is None
 
@@ -174,7 +174,7 @@ class TestAuthCallback:
 
     def test_callback_refuses_auto_link_for_staff_row(self, client):
         """Same protection applies to is_staff (not just is_superuser)."""
-        existing = User.objects.create_user(email="alice@example.com", is_staff=True)
+        existing = make_user(email="alice@example.com", is_staff=True)
 
         resp = self._do_callback(client)
         assert resp.status_code == 400
@@ -184,7 +184,7 @@ class TestAuthCallback:
 
     def test_callback_first_time_link_refuses_unverified_email(self, client):
         """Bootstrap link path also requires verified inbound email."""
-        User.objects.create_user(email="alice@example.com")
+        make_user(email="alice@example.com")
         workos_user = _make_workos_user(email_verified=False)
         resp = self._do_callback(client, workos_user=workos_user)
         assert resp.status_code == 400
@@ -195,14 +195,14 @@ class TestAuthCallback:
     def test_callback_email_collision_with_active_user_refused(self, client):
         """Two WorkOS accounts claiming the same local user is refused."""
         # Existing active user with a different workos_user_id.
-        User.objects.create_user(email="alice@example.com", workos_user_id="user_OTHER")
+        make_user(email="alice@example.com", workos_user_id="user_OTHER")
         resp = self._do_callback(client)
 
         assert resp.status_code == 400
         assert User.objects.filter(email="alice@example.com").count() == 1
 
     def test_callback_reactivates_soft_deleted_user_with_verified_email(self, client):
-        existing = User.objects.create_user(email="alice@example.com")
+        existing = make_user(email="alice@example.com")
         existing.is_active = False
         existing.workos_user_id = None
         existing.save()
@@ -216,7 +216,7 @@ class TestAuthCallback:
         assert User.objects.filter(email="alice@example.com").count() == 1
 
     def test_callback_refuses_reactivation_with_unverified_email(self, client):
-        existing = User.objects.create_user(email="alice@example.com")
+        existing = make_user(email="alice@example.com")
         existing.is_active = False
         existing.workos_user_id = None
         existing.save()
@@ -234,8 +234,8 @@ class TestAuthCallback:
         # Active workos_user_id match has email "old@example.com"; inbound
         # payload says email is now "alice@example.com" — but another local
         # row already has that email. Must refuse, not 500 on the unique index.
-        User.objects.create_user(email="old@example.com", workos_user_id="user_01ABC")
-        User.objects.create_user(email="alice@example.com", workos_user_id="user_OTHER")
+        make_user(email="old@example.com", workos_user_id="user_01ABC")
+        make_user(email="alice@example.com", workos_user_id="user_OTHER")
         resp = self._do_callback(client)
 
         assert resp.status_code == 400
@@ -245,7 +245,7 @@ class TestAuthCallback:
         ).exists()
 
     def test_callback_refreshes_mirrored_fields(self, client):
-        existing = User.objects.create_user(
+        existing = make_user(
             email="alice@example.com",
             workos_user_id="user_01ABC",
             first_name="OldFirst",
@@ -305,7 +305,7 @@ class TestAuthCallback:
 @pytest.mark.django_db
 class TestAuthLogout:
     def test_logout_clears_session(self, client):
-        user = User.objects.create_user(email="alice@example.com")
+        user = make_user(email="alice@example.com")
         client.force_login(user)
 
         resp = client.post("/api/auth/logout/")
@@ -325,7 +325,7 @@ class TestAuthMe:
         assert data["is_superuser"] is False
 
     def test_me_authenticated(self, client):
-        user = User.objects.create_user(
+        user = make_user(
             email="alice@example.com", first_name="Alice", last_name="Anderson"
         )
         client.force_login(user)
@@ -337,7 +337,7 @@ class TestAuthMe:
         assert data["last_name"] == "Anderson"
 
     def test_me_superuser(self, client):
-        user = User.objects.create_superuser(email="a@b.test")
+        user = make_user(email="a@b.test", is_staff=True, is_superuser=True)
         client.force_login(user)
         resp = client.get("/api/auth/me/")
         data = resp.json()
