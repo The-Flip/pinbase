@@ -244,7 +244,26 @@ Do NOT skip step 1. Do NOT write the fix first "to understand the problem" and b
 
 For new behavior, include tests. Consider writing the test first, though sometimes that's more trouble than it's worth.
 
-## Type Checking (backend)
+## Strong Typing (backend)
+
+Backend code should be as strongly typed as possible. Annotations are documentation the compiler enforces — `Any`, free-form dicts, and labelless tuples push that work onto the next reader and let bugs through review.
+
+### Smells that warrant a closer look
+
+Each of these is sometimes legitimate but is usually a sign the type can be tightened. Don't reach for them by default; if you write one, be ready to defend it.
+
+- `Any` or `object` in parameter or return annotations — name the real type (infer from attribute access in the body or the call site)
+- `cast(Any, ...)` — no legitimate use; cast to the real type or remove the cast
+- `dict[str, Any]` in signatures — define a TypedDict if the keys are known across callers
+- `tuple[...]` with three or more positional fields, or the same tuple shape repeated across modules — define a NamedTuple in the same module (or `apps/core/types.py` if cross-app)
+- `isinstance` on a value whose static type should already be the narrow one — usually means the upstream signature is too loose
+- `TYPE_CHECKING`-only imports paired with `cast` or stringified annotations — often hides a real architectural coupling that should be modeled, not papered over
+
+Prefer NamedTuple, dataclass, or TypedDict over labelless tuples and free-form dicts. A type alias (`type EntityKey = tuple[int, int]`) does **not** clear the tuple smell — callers still index by position; only a structure with named fields does.
+
+The full smell catalogue with legitimate exception shapes (Django management-command `**kwargs`, signal receivers, Ninja dispatch, JSON parse results, framework-owned callback surfaces) lives in [docs/plans/types/TypeFixing.md](plans/types/TypeFixing.md). Reintroducing `Any` parameters or returns in cleaned chunks is blocked by ruff's ANN401 rule (configured via `per-file-ignores` in [backend/pyproject.toml](../backend/pyproject.toml)); the other smells are caught at review.
+
+### Running mypy
 
 Run mypy via `./scripts/mypy` (not bare `mypy`, no file paths) — it filters against `backend/mypy-baseline.txt` so CI/pre-commit only fail on _new_ errors. If local disagrees with CI, the daemon is stale: `make mypy-restart`. For baseline sync syntax and the burn-down protocol, see [docs/plans/types/MypyFixing.md](plans/types/MypyFixing.md).
 

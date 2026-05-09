@@ -60,6 +60,21 @@ In particular:
 - those endpoints should usually be tagged `tags=["private"]`
 - avoid frontend fanout when the backend can return the page model directly
 
+### Type strength (backend)
+
+When a change touches Python signatures, return types, or data structures, check [docs/plans/types/TypeFixing.md](plans/types/TypeFixing.md) for the smell catalogue and the legitimate exception shapes.
+
+Treat each of these as a closer-look trigger, not an automatic finding:
+
+- `Any` or `object` in parameter or return annotations
+- `cast(Any, ...)` — no legitimate use
+- `dict[str, Any]` in non-test signatures where callers pass dict literals with consistent keys
+- `tuple[...]` with three or more positional fields, or the same tuple shape repeated across modules
+- `isinstance` checks on values whose upstream signature could be narrower
+- `TYPE_CHECKING`-only imports paired with `cast` or stringified annotations
+
+The fix is usually a NamedTuple, dataclass, or TypedDict — not a type alias, which leaves callers indexing by position. Don't flag a hit that TypeFixing.md lists as a legitimate exception (Django management `**kwargs`, signal receivers, Ninja dispatch, JSON parse results, framework-owned callback surfaces).
+
 ### Deployment/runtime assumptions
 
 When a change affects routing, SSR, startup, or runtime ports, check [Hosting.md](Hosting.md) and [WebArchitecture.md](WebArchitecture.md).
