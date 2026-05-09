@@ -36,6 +36,7 @@ from apps.core.authz import enforce
 from apps.core.authz.exceptions import _DENIAL_MESSAGE, PolicyDeniedError
 from apps.core.authz.markers import get_required_activity, requires
 from apps.core.authz.route_walker import iter_operations
+from apps.core.authz.test_factories import StubPolicyUser
 from apps.core.authz.types import Activity, DenialCode, Deny
 from apps.core.exceptions import StructuredApiError
 
@@ -97,32 +98,6 @@ def authz_logs() -> Iterator[list[CapturedAuthzLog]]:
         logger.setLevel(previous_level)
 
 
-# ── Fake users ───────────────────────────────────────────────────────
-
-
-class _FakeUser:
-    """Minimal `PolicyUser`-shaped stand-in.
-
-    Mirrors the predicate-test pattern in `test_authz_evaluator.py` —
-    `@property` matches Django's read-only `User.is_authenticated`.
-    """
-
-    def __init__(
-        self, *, is_authenticated: bool = True, is_active: bool = True, id: int = 1
-    ) -> None:
-        self.id = id
-        self._is_authenticated = is_authenticated
-        self._is_active = is_active
-
-    @property
-    def is_authenticated(self) -> bool:
-        return self._is_authenticated
-
-    @property
-    def is_active(self) -> bool:
-        return self._is_active
-
-
 # ── Shared exception handler ─────────────────────────────────────────
 
 
@@ -173,7 +148,7 @@ urlpatterns = [
 
 
 def test_enforce_allow_logs_at_debug(authz_logs: list[CapturedAuthzLog]) -> None:
-    enforce(_FakeUser(id=42), Activity.CATALOG_EDIT)
+    enforce(StubPolicyUser(id=42), Activity.CATALOG_EDIT)
 
     assert authz_logs == [
         CapturedAuthzLog(
@@ -193,7 +168,7 @@ def test_enforce_deny_raises_policy_denied_and_logs_at_info(
     # user 401s on session reload before the gate runs in production.
     # The unit-level test is the right level for the contract.
     with pytest.raises(PolicyDeniedError) as excinfo:
-        enforce(_FakeUser(is_active=False, id=7), Activity.CATALOG_EDIT)
+        enforce(StubPolicyUser(is_active=False, id=7), Activity.CATALOG_EDIT)
 
     assert excinfo.value.decision.code is DenialCode.ACCOUNT_DEACTIVATED
     assert authz_logs == [
@@ -434,6 +409,6 @@ def test_unregistered_activity_raises_lookup_error() -> None:
     misleading 403. Hitting `enforce` directly is what every caller
     of the policy actually observes.
     """
-    user = _FakeUser()
+    user = StubPolicyUser()
     with pytest.raises(LookupError, match="No rule registered"):
         enforce(user, _BogusActivity())  # type: ignore[arg-type]

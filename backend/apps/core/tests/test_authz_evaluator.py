@@ -11,28 +11,8 @@ import pytest
 
 from apps.core.authz.evaluator import check
 from apps.core.authz.predicates import is_active, is_authenticated
+from apps.core.authz.test_factories import StubPolicyUser
 from apps.core.authz.types import Activity, Allow, DenialCode, Deny
-
-
-class _FakeUser:
-    """Stand-in for a `PolicyUser`-shaped object.
-
-    Uses `@property` to mirror Django's `User`/`AnonymousUser` shape —
-    those expose `is_authenticated`/`is_active` as read-only properties,
-    not settable attributes, and `PolicyUser` is declared the same way.
-    """
-
-    def __init__(self, is_authenticated: bool, is_active: bool) -> None:
-        self._is_authenticated = is_authenticated
-        self._is_active = is_active
-
-    @property
-    def is_authenticated(self) -> bool:
-        return self._is_authenticated
-
-    @property
-    def is_active(self) -> bool:
-        return self._is_active
 
 
 def _always_deny(code: DenialCode):
@@ -50,13 +30,16 @@ def _always_allow(user, target, context):
 
 def test_allow_when_all_predicates_pass(empty_registry):
     empty_registry.register(Activity.CATALOG_EDIT, _always_allow, _always_allow)
-    decision = check(_FakeUser(True, True), Activity.CATALOG_EDIT)
+    decision = check(StubPolicyUser(), Activity.CATALOG_EDIT)
     assert isinstance(decision, Allow)
 
 
 def test_deny_when_predicate_fails(empty_registry):
     empty_registry.register(Activity.CATALOG_EDIT, is_authenticated, is_active)
-    decision = check(_FakeUser(False, True), Activity.CATALOG_EDIT)
+    decision = check(
+        StubPolicyUser(is_authenticated=False, is_active=True),
+        Activity.CATALOG_EDIT,
+    )
     assert isinstance(decision, Deny)
     assert decision.code is DenialCode.AUTH_REQUIRED
 
@@ -70,7 +53,10 @@ def test_priority_picks_most_fundamental_when_multiple_fail(empty_registry):
     in the priority order, so it wins when both fail.
     """
     empty_registry.register(Activity.CATALOG_EDIT, is_authenticated, is_active)
-    decision = check(_FakeUser(False, False), Activity.CATALOG_EDIT)
+    decision = check(
+        StubPolicyUser(is_authenticated=False, is_active=False),
+        Activity.CATALOG_EDIT,
+    )
     assert isinstance(decision, Deny)
     assert decision.code is DenialCode.AUTH_REQUIRED
 
@@ -87,11 +73,11 @@ def test_evaluator_does_not_short_circuit(empty_registry):
         _always_deny(DenialCode.RATE_LIMITED),
         _always_deny(DenialCode.ACCOUNT_DEACTIVATED),
     )
-    decision = check(_FakeUser(True, True), Activity.CATALOG_EDIT)
+    decision = check(StubPolicyUser(), Activity.CATALOG_EDIT)
     assert isinstance(decision, Deny)
     assert decision.code is DenialCode.ACCOUNT_DEACTIVATED
 
 
 def test_unregistered_activity_raises_lookup_error(empty_registry):
     with pytest.raises(LookupError, match="catalog.edit"):
-        check(_FakeUser(True, True), Activity.CATALOG_EDIT)
+        check(StubPolicyUser(), Activity.CATALOG_EDIT)
