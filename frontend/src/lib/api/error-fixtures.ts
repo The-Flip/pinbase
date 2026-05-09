@@ -4,7 +4,11 @@
  * discriminator or shape change is absorbed in one place.
  */
 
-import type { RateLimitErrorBodySchema, ValidationErrorBodySchema } from './schema';
+import type {
+  PolicyDeniedBodySchema,
+  RateLimitErrorBodySchema,
+  ValidationErrorBodySchema,
+} from './schema';
 
 export function validationErrorBody(args: {
   message: string;
@@ -29,5 +33,18 @@ export function rateLimitErrorBody(args: {
     message: args.message ?? 'Rate limit exceeded.',
     bucket: args.bucket,
     retry_after: args.retry_after,
+  };
+}
+
+export function policyDeniedBody(args: {
+  message?: string;
+  code: string;
+  context?: Record<string, unknown>;
+}): PolicyDeniedBodySchema {
+  return {
+    kind: 'policy_denied',
+    message: args.message ?? 'You cannot perform that action.',
+    code: args.code,
+    context: args.context ?? {},
   };
 }

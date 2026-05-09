@@ -1,6 +1,8 @@
 """Activity-based authorization engine."""
 
+from .enforce import enforce
 from .evaluator import check
+from .exceptions import PolicyDeniedError
 from .types import (
     DENIAL_PRIORITY,
     Activity,
@@ -20,6 +22,8 @@ __all__ = [
     "DenialCode",
     "Deny",
     "PolicyContext",
+    "PolicyDeniedError",
     "PolicyUser",
     "check",
+    "enforce",
 ]

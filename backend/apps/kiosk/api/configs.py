@@ -19,6 +19,7 @@ from apps.catalog.api.schemas import EntityRef
 from apps.catalog.models import Title
 from apps.core.api_helpers import authed_user
 from apps.core.authz.markers import requires
+from apps.core.authz.schemas import PolicyDeniedSchema
 from apps.core.authz.types import Activity
 from apps.core.schemas import ErrorDetailSchema
 from apps.kiosk.api.schemas import (
@@ -86,7 +87,10 @@ def list_configs(request: HttpRequest) -> list[KioskConfigListItemSchema]:
 @kiosk_configs_router.post(
     "configs/",
     auth=django_auth,
-    response={201: KioskConfigDetailSchema, 403: ErrorDetailSchema},
+    response={
+        201: KioskConfigDetailSchema,
+        403: PolicyDeniedSchema | ErrorDetailSchema,
+    },
 )
 @requires(Activity.KIOSK_EDIT)
 def create_config(request: HttpRequest) -> Status[KioskConfigDetailSchema]:

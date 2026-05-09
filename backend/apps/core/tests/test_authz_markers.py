@@ -3,8 +3,9 @@
 The route-inventory test exercises `requires` and `gated_inline`
 indirectly via every classified route, but `public_mutation`'s
 validation logic only has the success path covered there. These tests
-also lock the "marker returns the original callable" invariant so any
-future change to that contract fails loudly.
+also lock the marker contracts (`@requires` wraps and re-stamps;
+`@gated_inline` and `@public_mutation` stamp without wrapping) so any
+future change to those contracts fails loudly.
 """
 
 from __future__ import annotations
@@ -12,10 +13,10 @@ from __future__ import annotations
 import pytest
 
 from apps.core.authz.markers import (
-    ACTIVITY_ATTR,
-    GATED_INLINE_ATTR,
-    PUBLIC_ATTR,
     gated_inline,
+    get_gated_inline_activity,
+    get_public_reason,
+    get_required_activity,
     public_mutation,
     requires,
 )
@@ -25,17 +26,23 @@ from apps.core.authz.types import Activity
 class TestRequires:
     def test_stamps_activity_attribute(self) -> None:
         @requires(Activity.CATALOG_EDIT)
-        def view() -> None: ...
+        def view(request) -> None: ...
 
-        assert getattr(view, ACTIVITY_ATTR) is Activity.CATALOG_EDIT
+        assert get_required_activity(view) is Activity.CATALOG_EDIT
 
-    def test_returns_original_callable_unchanged(self) -> None:
-        # The marker is a stamp, not a wrapper — the wrapped callable
-        # is the *same object* the caller passed in. Locking the
-        # invariant here means any future change to it fails loudly.
-        def view() -> None: ...
+    def test_returns_wrapped_callable_with_marker(self) -> None:
+        # @requires now wraps and re-stamps; the returned object is a
+        # different callable carrying the marker. Ninja resolves
+        # `op.view_func` to this wrapped callable, so the inventory
+        # walker sees the marker on the right object.
+        def view(request) -> None: ...
 
-        assert requires(Activity.CATALOG_EDIT)(view) is view
+        wrapped = requires(Activity.CATALOG_EDIT)(view)
+        assert wrapped is not view
+        assert get_required_activity(wrapped) is Activity.CATALOG_EDIT
+        # `functools.wraps` preserves identity for Ninja's introspection.
+        assert wrapped.__wrapped__ is view  # type: ignore[attr-defined]
+        assert wrapped.__name__ == view.__name__
 
 
 class TestGatedInline:
@@ -43,7 +50,7 @@ class TestGatedInline:
         @gated_inline(Activity.CLAIM_REVERT)
         def view() -> None: ...
 
-        assert getattr(view, GATED_INLINE_ATTR) is Activity.CLAIM_REVERT
+        assert get_gated_inline_activity(view) is Activity.CLAIM_REVERT
 
     def test_returns_original_callable_unchanged(self) -> None:
         def view() -> None: ...
@@ -56,7 +63,7 @@ class TestPublicMutation:
         @public_mutation("session teardown")
         def view() -> None: ...
 
-        assert getattr(view, PUBLIC_ATTR) == "session teardown"
+        assert get_public_reason(view) == "session teardown"
 
     def test_returns_original_callable_unchanged(self) -> None:
         def view() -> None: ...

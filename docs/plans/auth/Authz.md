@@ -114,6 +114,20 @@ backend/apps/media/authz.py       # media.* activities
 
 Each app's `apps.py: ready()` imports its `authz` module so registration happens at startup. The route-inventory test then walks the populated registry and asserts every mutating route is mapped to a registered activity.
 
+### Reading markers off views
+
+The marker decorators (`@requires`, `@gated_inline`, `@public_mutation`) stamp string-keyed attributes (`_authz_activity`, etc.) on the view callable. Consumers must read those markers via the typed accessors in `core/authz/markers.py` rather than poking at the attributes directly:
+
+```python
+from apps.core.authz.markers import (
+    get_required_activity,        # @requires      → Activity | None
+    get_gated_inline_activity,    # @gated_inline  → Activity | None
+    get_public_reason,            # @public_mutation → str | None
+)
+```
+
+Each accessor wraps the `getattr(...)` lookup with an `isinstance` narrow, so the return type is genuinely correct (a hand-stamped `_authz_activity = "catalog.edit"` string returns `None` instead of silently impersonating an `Activity`). Future surfaces — `/me/capabilities` (Phase 5), embedded-hint serializers, capability pre-loaders — must use these accessors. The string constants `ACTIVITY_ATTR` / `GATED_INLINE_ATTR` / `PUBLIC_ATTR` are still exported for the route-inventory test, which legitimately enumerates marker names to detect double-stamping; nothing else should need them.
+
 ### Why `core`, not `accounts`
 
 `core` is the right home because the engine is project-wide infrastructure with no dependencies, and every middle- and top-tier app calls into it. Putting it in `accounts` would invert the dependency direction — `accounts` is a peer of `core`, not a foundation under the rest of the project, and nothing currently imports from `accounts` (apps use `AUTH_USER_MODEL` strings for FKs). Authz isn't account-specific behavior; it's a gate that _reads_ user attributes.
@@ -181,7 +195,9 @@ def test_is_claim_author_is_pure(claim):
     assert isinstance(decision, Allow)
 ```
 
-`CaptureQueriesContext` is Django's canonical query-counting helper. The assertion documents the test's intent — "this predicate must be pure" — at the call site, rather than relying on a fixture that's easy to forget. When the first target-aware predicate lands, the diff should also introduce a small `assert_predicate_is_pure(predicate, user, target=None, context=None)` helper so subsequent predicates use one well-tested wrapper instead of re-implementing the assertion.
+`CaptureQueriesContext` is Django's canonical query-counting helper. The assertion documents the test's intent — "this predicate must be pure" — at the call site, rather than relying on a fixture that's easy to forget.
+
+The `assert_predicate_is_pure(predicate, user, target=None, context=None)` helper lands with the **first target-aware predicate** (currently expected in the post-Phase-5 PR that introduces `is_claim_author` / `claim_not_locked`), not with Phase 4. Phase 4's only new predicate is `email_verified`, which is target-less; a target-less predicate's purity is already covered by the `is_authenticated` / `is_active` purity tests. Pre-extracting the helper in Phase 4 would design it for one shape (target-less), then need re-shaping when target-aware predicates arrive — better to defer.
 
 ## Denial responses
 
@@ -200,6 +216,8 @@ HTTP 403
 ```
 
 `message` is an English fallback so the API is usable without the SPA. The SPA ignores it and renders its own copy from `code` via a single mapper module — one place per code maps to `{ title, body, primaryAction }`. Each code's `context` shape is part of the registry and part of the API contract; adding or removing a key is a breaking change.
+
+The Phase-5 denial-code mapper layers _on top of_ the existing base-message extraction in `frontend/src/lib/api/parse-api-error.ts`, not in place of it. The parser already special-cases `validation_error` (it has field-level errors) and falls through to `plain(detail.message)` for every other structured error via the `StructuredErrorBodySchema` base contract. Phase 5 adds a separate `code → { title, body, primaryAction }` mapping that the SPA's render layer consults; the parser's job stays "extract a message string." A new structured error variant on the backend that's content with the base `message` requires zero changes to the parser — only the render mapper, and only when the code wants custom copy.
 
 All structured-detail flavors carry `kind` — `validation_error`, `rate_limit`, `policy_denied` — and the frontend extractor dispatches by `detail.kind`. New variants subclass `StructuredApiError` (declaring `kind` and `status` as class attributes plus a `to_body()` method) and declare a matching `kind` literal on their body schema; a single shared exception handler in `config/api.py` wraps the response.
 
@@ -221,6 +239,8 @@ Telling a deactivated user to verify their email is the wrong UX; the priority o
 ### Audit logging
 
 Denials are logged at `info` with `(user_id, activity, code, target_id)`. Allows are logged at `debug` (mostly off in prod). Logging is the _caller's_ job — the policy returns a `Decision` and the calling middleware/decorator emits the log. Keeps the policy pure.
+
+Tests that verify logging assert against a typed `CapturedAuthzLog` dataclass + pytest fixture in `apps/core/tests/test_authz_enforcement.py` — a small handler-based capture that pulls `extra=` keys off `LogRecord` into a typed shape. Phase-4 verification-predicate tests and any future per-activity audit-log assertions should reuse the existing `authz_logs` fixture rather than reaching into `caplog.records[0].__dict__["activity"]` (which works at runtime but is `Any`-typed, so mypy can't catch a renamed `extra` key). The fixture documents the contract — every authz log record carries `(message, level, user_id, activity, code)` — and a missing key fails at fixture-translation time, not silently in a test that happens not to read it.
 
 ## Integration surface
 
@@ -245,6 +265,33 @@ def patch_entity(request, id: int, ...): ...
 This is what lets the inventory ship before the engine exists: applying the decorator everywhere is safe even when its body is a no-op, because the only side effect is the attribute stamp. See [Implementation phases](#implementation-phases) for the full PR sequence.
 
 The decorator order matters: `@requires` must be _inside_ `@router.patch` so Ninja registers the wrapped callable. Reverse the stack and the marker sits on the Ninja-wrapped operation, not on the function the walker reaches via `Operation.view_func`.
+
+#### The `__globals__` trap (read this before writing another wrapping decorator)
+
+`@requires` does not — and cannot — use `@functools.wraps` directly. The reason is a sharp edge in Ninja's signature introspection that's invisible until you trip it.
+
+Ninja resolves forward-ref annotations via `getattr(view, "__globals__", {})` (see `ninja.signature.utils.get_typed_signature`). It uses the wrapper's `__globals__` for forward-ref resolution, not the wrapped function's. A vanilla `@functools.wraps` wrapper carries the _decorator module's_ globals (`core/authz/markers.py`), so Ninja then fails to resolve any annotation that lives in the wrapped function's module — most importantly, closure-scoped types in factory-built CRUD views (`data: request_body_schema` in `entity_crud.py`). The error surfaces as a pydantic `class-not-fully-defined` panic at OpenAPI generation, not at decoration time, so the decorator can sit in the codebase passing tests until the next `make api-gen`.
+
+The fix is to rebuild the wrapper as a `types.FunctionType` carrying the wrapped function's `__globals__` while preserving the closure cells the body needs:
+
+```python
+def template(request, *args, **kwargs):
+    _enforce(request.user, activity)   # closure cell
+    return func(request, *args, **kwargs)
+
+wrapper = types.FunctionType(
+    template.__code__,
+    func.__globals__,                   # the load-bearing swap
+    name=template.__name__,
+    argdefs=template.__defaults__,
+    closure=template.__closure__,
+)
+functools.update_wrapper(wrapper, func) # copies __wrapped__/__signature__/etc.
+```
+
+Module globals referenced by the body (like `enforce`) must be captured as closure cells (`_enforce = enforce` in the enclosing scope) — once `__globals__` is the wrapped function's, the body's `LOAD_GLOBAL` lookups happen against it, and `enforce` isn't there.
+
+**Any future wrapping decorator** (target-aware variant, async variant, dry-run mode, capability-hint pre-loader) must use the same pattern. A naive `@functools.wraps` will work for hand-written views and silently break factory-built ones. The existing wrapper in `markers.py:requires` is the reference implementation; if a second wrapping decorator lands, extract a shared `wrap_view_preserving_globals(template, func)` helper at that point. Don't pre-extract for one use site.
 
 ### Documented exception: inline `check()`
 
@@ -315,7 +362,7 @@ Add `@requires`, `@gated_inline`, `@public_mutation` as marker-only no-ops in `c
 
 Build `core/authz/` proper: `Decision` / `Allow` / `Deny`, `DenialCode` enum, registry, predicate composition, `PolicyUser` Protocol, evaluator, and per-app `authz.py` rule files registering each launch activity with `authenticated + active` rules. Pure unit tests, no integration. `@requires` is still a no-op; `policy.check` exists but nothing calls it from a request path.
 
-### 3. Enforcement flip
+### 3. ✅ DONE: Enforcement flip
 
 Update `@requires`'s body to call `policy.check` and raise a structured 403 on deny. (`@gated_inline` stays stamp-only — its routes already call `check()` inline; flipping the marker would double-evaluate.) Launch rules are still `authenticated + active`, so behavior is unchanged from today (every authenticated user passes). This is the moment "the gate is on" with zero user-visible diff.
 

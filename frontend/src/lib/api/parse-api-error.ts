@@ -3,19 +3,38 @@
  * per-field error map. Shared across every save / delete / create flow.
  */
 
-import type { RateLimitErrorBodySchema, ValidationErrorBodySchema } from './schema';
+import type {
+  PolicyDeniedBodySchema,
+  RateLimitErrorBodySchema,
+  ValidationErrorBodySchema,
+} from './schema';
 
 export type FieldErrors = Record<string, string>;
 
 type ParsedError = { message: string; fieldErrors: FieldErrors };
 
-type StructuredErrorBody = ValidationErrorBodySchema | RateLimitErrorBodySchema;
+/**
+ * Wire shape of any structured error body. Mirrors the backend's
+ * `StructuredErrorBodySchema` base in `apps/core/schemas.py`: every
+ * variant carries `{ kind, message }`, plus optional variant fields.
+ *
+ * Enumerated rather than expressed as "any subtype of the base"
+ * because TypeScript collapses `Specific | { kind: string; message:
+ * string }` to the wider variant — we'd lose narrowing for the
+ * special case (`validation_error`). A new backend error kind only
+ * needs to appear here if it requires custom parsing (field-level
+ * errors, retry hints, etc.); kinds that render via the base
+ * `message` alone fall through and need no addition.
+ */
+type StructuredErrorBody =
+  | ValidationErrorBodySchema
+  | RateLimitErrorBodySchema
+  | PolicyDeniedBodySchema;
 
 function isStructuredErrorBody(value: unknown): value is StructuredErrorBody {
-  if (typeof value !== 'object' || value === null || !('kind' in value)) return false;
-  // Defer the closed-set check to the switch's `satisfies never` default —
-  // the type system is the source of truth for which kinds are valid.
-  return typeof (value as { kind: unknown }).kind === 'string';
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as { kind?: unknown; message?: unknown };
+  return typeof v.kind === 'string' && typeof v.message === 'string';
 }
 
 function plain(message: string): ParsedError {
@@ -23,20 +42,23 @@ function plain(message: string): ParsedError {
 }
 
 /**
- * Structured error bodies are dispatched by `detail.kind` — a discriminator
- * emitted by every structured handler in `backend/config/api.py`. Cases:
+ * Structured error bodies share a base contract from
+ * `StructuredErrorBodySchema` in `backend/apps/core/schemas.py`: every
+ * variant carries `{ kind, message, ...variant_fields }`. The default
+ * extraction is `message` — only variants that need richer parsing
+ * (field-level errors, etc.) get a special case.
  *
- * - `kind: "validation_error"` — `{ message, field_errors, form_errors }`
- *   from `StructuredValidationError` and Ninja's malformed-body handler.
- *   The only branch that produces field-level errors.
- * - `kind: "rate_limit"` — `{ message, bucket, retry_after }` from
- *   `RateLimitExceededError`.
+ * Today the only special case is `validation_error`, which produces a
+ * field-level error map alongside the message. `rate_limit`,
+ * `policy_denied`, and any future variant fall through to the base
+ * `message` field — adding a new structured error on the backend
+ * requires no change here unless it has fields beyond the base.
  *
  * Plain-string `detail` from `HttpError(...)` and stock Ninja 401/404/etc.
- * remains supported as the unstructured fallback. Anything else (unknown
- * `kind`, structured detail without `kind`, raw arrays) falls through to
- * `JSON.stringify` — surfacing a backend/frontend mismatch loudly rather
- * than rendering garbage.
+ * remains supported as the unstructured fallback. Anything that fails
+ * the structured-body shape check (raw arrays, missing `kind`) falls
+ * through to `JSON.stringify` — surfacing a backend/frontend mismatch
+ * loudly rather than rendering garbage.
  */
 export function parseApiError(error: unknown): ParsedError {
   if (typeof error === 'object' && error !== null && 'detail' in error) {
@@ -45,27 +67,27 @@ export function parseApiError(error: unknown): ParsedError {
     if (typeof detail === 'string') return plain(detail);
 
     if (isStructuredErrorBody(detail)) {
-      switch (detail.kind) {
-        case 'validation_error': {
-          const { field_errors, form_errors, message } = detail;
-          const parts = [
-            ...form_errors,
-            ...Object.entries(field_errors).map(([k, v]) => `${k}: ${v}`),
-          ];
-          return {
-            message: parts.length > 0 ? parts.join(' ') : message,
-            fieldErrors: field_errors,
-          };
-        }
-        case 'rate_limit':
-          return plain(detail.message);
-        default:
-          // Exhaustiveness: adding a new kind to StructuredErrorBody without
-          // adding a case here fails to compile. Unknown kinds at runtime fall
-          // through to the outer JSON.stringify return.
-          detail satisfies never;
+      if (detail.kind === 'validation_error') {
+        const { field_errors, form_errors, message } = detail;
+        const parts = [
+          ...form_errors,
+          ...Object.entries(field_errors).map(([k, v]) => `${k}: ${v}`),
+        ];
+        return {
+          message: parts.length > 0 ? parts.join(' ') : message,
+          fieldErrors: field_errors,
+        };
       }
+      // Every non-validation variant of StructuredErrorBody inherits
+      // `{ kind, message }` from `StructuredErrorBodySchema`; the base
+      // contract is what makes this fall-through type-safe.
+      return plain(detail.message);
     }
+
+    // `detail` is something other than a string or a structured body —
+    // a raw array (the legacy Pydantic shape), an object missing `kind`,
+    // etc. Fall through to the bottom-of-function JSON.stringify so the
+    // whole envelope is surfaced loudly instead of rendering empty.
   }
 
   if (typeof error === 'string') return plain(error);

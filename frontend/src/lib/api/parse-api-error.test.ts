@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { rateLimitErrorBody, validationErrorBody } from './error-fixtures';
+import { policyDeniedBody, rateLimitErrorBody, validationErrorBody } from './error-fixtures';
 import { parseApiError } from './parse-api-error';
 
 describe('parseApiError', () => {
@@ -59,6 +59,18 @@ describe('parseApiError', () => {
     expect(result.message).toBe('count: Input should be a valid integer');
   });
 
+  it('extracts message from policy-denied error body', () => {
+    const result = parseApiError({
+      detail: policyDeniedBody({
+        message: 'Verify your email to continue.',
+        code: 'verification_required',
+        context: { email: 'alice@example.com' },
+      }),
+    });
+    expect(result.message).toBe('Verify your email to continue.');
+    expect(result.fieldErrors).toEqual({});
+  });
+
   it('extracts message from rate-limit error body', () => {
     // Regression: rate-limit bodies previously fell through to JSON.stringify
     // because they lacked field_errors. Now dispatched via kind discriminator.
@@ -69,14 +81,16 @@ describe('parseApiError', () => {
     expect(result.fieldErrors).toEqual({});
   });
 
-  it('falls back to JSON for an unknown kind', () => {
-    // A body with a kind the frontend doesn't recognize means the backend
-    // emitted a shape the frontend hasn't been updated for. Surface loudly.
+  it('renders the base message for an unrecognized kind', () => {
+    // `StructuredErrorBodySchema` guarantees every variant has a
+    // `message`, so an unknown kind from a future backend deploy still
+    // renders the human-readable message — no parser change required
+    // until a kind needs richer parsing than the base contract.
     const result = parseApiError({
       detail: { kind: 'unknown_future_thing', message: 'something' },
     });
+    expect(result.message).toBe('something');
     expect(result.fieldErrors).toEqual({});
-    expect(result.message).toContain('unknown_future_thing');
   });
 
   it('falls back to JSON for a structured detail with no kind', () => {
