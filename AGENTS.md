@@ -40,6 +40,8 @@ make bootstrap    # Install all deps, run migrations, generate API types
 make dev          # Start Django + SvelteKit dev servers
 make test         # Run pytest (backend) + vitest (frontend)
 make lint         # Run ruff (backend) + eslint/prettier (frontend)
+make mypy         # Run backend type checks (filtered against the baseline)
+make api-gen      # Regenerate frontend API types from the backend schema
 make pull-ingest  # Download catalog data from R2
 make ingest       # Run full ingestion pipeline
 make agent-docs   # Regenerate CLAUDE.md and AGENTS.md
@@ -66,9 +68,32 @@ docs/             Documentation source files
 - Vite dev server proxies `/api/`, `/admin/`, `/media/`, and `/static/` to Django at `127.0.0.1:8000`
 - For SSR route conventions, see [Svelte.md](Svelte.md). For API design — both endpoint shape (page-oriented vs resource) and schema design heuristics (when to consolidate, when to keep separate, inheritance smells) — see [ApiDesign.md](ApiDesign.md)
 
-### Generated Types — `schema.d.ts` is gitignored
+### Generated API Types
 
-`frontend/src/lib/api/schema.d.ts` is generated and **not committed**. Do not stage or commit it. After adding or changing any API endpoint, run `make api-gen` to regenerate it — the typed client will not see new endpoints until you do.
+The system generates frontend Typescript types from the backend Python API types.
+
+#### `schema.d.ts` is gitignored
+
+`frontend/src/lib/api/schema.d.ts` is generated and **not committed**. Do not stage or commit it.
+
+#### Run `make api-gen` to regenerate API types
+
+After adding or changing any API endpoint, run `make api-gen` to regenerate it — the typed client will not see new endpoints until you do.
+
+#### ALWAYS use named imports
+
+When importing a generated schema type, you MUST use the named export. NEVER use indexed access into `components`:
+
+```ts
+// Right
+import type { ValidationErrorBodySchema } from "$lib/api/schema";
+
+// Wrong — NEVER traverse the nested path
+import type { components } from "$lib/api/schema";
+type X = components["schemas"]["ValidationErrorBodySchema"];
+```
+
+`schema.d.ts` re-exports every component as a named alias precisely so consumers don't have to walk `components['schemas'][...]`. If a needed type isn't exported by name, that's a codegen-config bug to fix — not a license to use the indexed form.
 
 ### Frontend URLs and `resolve()`
 
