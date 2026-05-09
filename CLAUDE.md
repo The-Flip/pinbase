@@ -180,6 +180,10 @@ Do NOT skip step 1. Do NOT write the fix first "to understand the problem" and b
 
 For new behavior, include tests. Consider writing the test first, though sometimes that's more trouble than it's worth.
 
+## Type Checking (backend)
+
+Run mypy via `./scripts/mypy` (not bare `mypy`, no file paths) — it filters against `backend/mypy-baseline.txt` so CI/pre-commit only fail on _new_ errors. If local disagrees with CI, the daemon is stale: `make mypy-restart`. For baseline sync syntax and the burn-down protocol, see [docs/plans/types/MypyFixing.md](plans/types/MypyFixing.md).
+
 ## Data Modeling
 
 See [DomainModel.md](DomainModel.md) for the catalog entity hierarchy (Title → Model, variants, remakes, manufacturers, taxonomy, etc.).
