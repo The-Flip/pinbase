@@ -214,6 +214,7 @@ class TestCreateRateLimit:
         resp = _post(client, {"name": "Title six", "slug": "title-six"})
         assert resp.status_code == 429
         assert "Retry-After" in resp.headers
+        assert resp.json()["detail"]["kind"] == "rate_limit"
 
     def test_failed_validation_still_counts(self, client, user):
         client.force_login(user)

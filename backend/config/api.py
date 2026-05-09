@@ -94,6 +94,7 @@ def _structured_422_body(
 ) -> dict[str, object]:
     return {
         "detail": {
+            "kind": "validation_error",
             "message": message,
             "field_errors": field_errors,
             "form_errors": form_errors,
@@ -155,6 +156,7 @@ def _handle_rate_limit_exceeded(
     response = JsonResponse(
         {
             "detail": {
+                "kind": "rate_limit",
                 "message": "Rate limit exceeded.",
                 "bucket": exc.bucket,
                 "retry_after": exc.retry_after,

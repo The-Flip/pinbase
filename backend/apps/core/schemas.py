@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from ninja import Schema
 
 
@@ -18,6 +20,7 @@ class ErrorDetailSchema(Schema):
 
 
 class ValidationErrorBodySchema(Schema):
+    kind: Literal["validation_error"]
     message: str
     field_errors: dict[str, str]
     form_errors: list[str]
@@ -31,6 +34,7 @@ class ValidationErrorSchema(Schema):
 
 
 class RateLimitErrorBodySchema(Schema):
+    kind: Literal["rate_limit"]
     message: str
     bucket: str
     retry_after: int

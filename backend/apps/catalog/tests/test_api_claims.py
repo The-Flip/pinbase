@@ -92,7 +92,8 @@ class TestPatchClaimsValidation:
         assert resp.status_code == 422
         body = resp.json()
         detail = body["detail"]
-        assert set(detail.keys()) == {"message", "field_errors", "form_errors"}
+        assert set(detail.keys()) == {"kind", "message", "field_errors", "form_errors"}
+        assert detail["kind"] == "validation_error"
         # ``loc`` is ("body", "gameplay_features", 0, "count") — leaf wins.
         assert "count" in detail["field_errors"]
         assert "gameplay_features" not in detail["field_errors"]

@@ -185,18 +185,25 @@ def test_is_claim_author_is_pure(claim):
 
 ## Denial responses
 
-HTTP wire format on denial:
+HTTP wire format on denial — nested under `detail` to match the project's structured-error idiom (see `ValidationErrorSchema` / `RateLimitErrorSchema` in `apps/core/schemas.py`):
 
 ```json
 HTTP 403
 {
-  "code": "verification_required",
-  "message": "Verify your email to start editing.",
-  "context": { "email": "alice@example.com" }
+  "detail": {
+    "kind": "policy_denied",
+    "message": "Verify your email to start editing.",
+    "code": "verification_required",
+    "context": { "email": "alice@example.com" }
+  }
 }
 ```
 
 `message` is an English fallback so the API is usable without the SPA. The SPA ignores it and renders its own copy from `code` via a single mapper module — one place per code maps to `{ title, body, primaryAction }`. Each code's `context` shape is part of the registry and part of the API contract; adding or removing a key is a breaking change.
+
+All structured-detail flavors carry `kind` — `validation_error`, `rate_limit`, `policy_denied` — and the frontend extractor dispatches by `detail.kind`. New variants must declare a `kind` literal on their schema and emit it in the handler.
+
+Routes that emit denials declare `403: PolicyDeniedSchema`. Routes that emit both a policy denial _and_ a non-policy plain-string 403 (e.g. an inline `HttpError(403, "...")`) declare a union: `403: PolicyDeniedSchema | ErrorDetailSchema`. Ninja serializes the union per actual body shape; the frontend's denial mapper keys off `error.detail.code`.
 
 ### Denial code priority
 

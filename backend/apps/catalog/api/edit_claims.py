@@ -85,6 +85,7 @@ class StructuredValidationError(Exception):
 
         {
             "detail": {
+                "kind": "validation_error",
                 "message": "summary",
                 "field_errors": {"year": "Must be ≤ 2100."},
                 "form_errors": ["No changes provided."]

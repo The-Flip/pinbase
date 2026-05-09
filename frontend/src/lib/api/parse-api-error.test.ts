@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
+import { rateLimitErrorBody, validationErrorBody } from './error-fixtures';
 import { parseApiError } from './parse-api-error';
 
 describe('parseApiError', () => {
   it('handles structured validation error with field errors only', () => {
     const result = parseApiError({
-      detail: {
+      detail: validationErrorBody({
         message: 'This field cannot be cleared.',
         field_errors: { name: 'This field cannot be cleared.' },
-        form_errors: [],
-      },
+      }),
     });
     expect(result.message).toBe('name: This field cannot be cleared.');
     expect(result.fieldErrors).toEqual({ name: 'This field cannot be cleared.' });
@@ -17,11 +17,10 @@ describe('parseApiError', () => {
 
   it('handles structured validation error with form errors only', () => {
     const result = parseApiError({
-      detail: {
+      detail: validationErrorBody({
         message: 'No changes provided.',
-        field_errors: {},
         form_errors: ['No changes provided.'],
-      },
+      }),
     });
     expect(result.message).toBe('No changes provided.');
     expect(result.fieldErrors).toEqual({});
@@ -29,11 +28,11 @@ describe('parseApiError', () => {
 
   it('handles structured validation error with both field and form errors', () => {
     const result = parseApiError({
-      detail: {
+      detail: validationErrorBody({
         message: 'Multiple errors.',
         field_errors: { year: 'Must be ≤ 2100.' },
         form_errors: ['Unknown slugs: [foo]'],
-      },
+      }),
     });
     expect(result.message).toBe('Unknown slugs: [foo] year: Must be ≤ 2100.');
     expect(result.fieldErrors).toEqual({ year: 'Must be ≤ 2100.' });
@@ -51,14 +50,41 @@ describe('parseApiError', () => {
     // After the backend ValidationError override, malformed bodies arrive
     // in the structured envelope with field keys derived from `loc[-1]`.
     const result = parseApiError({
-      detail: {
+      detail: validationErrorBody({
         message: 'Invalid request.',
         field_errors: { count: 'Input should be a valid integer' },
-        form_errors: [],
-      },
+      }),
     });
     expect(result.fieldErrors).toEqual({ count: 'Input should be a valid integer' });
     expect(result.message).toBe('count: Input should be a valid integer');
+  });
+
+  it('extracts message from rate-limit error body', () => {
+    // Regression: rate-limit bodies previously fell through to JSON.stringify
+    // because they lacked field_errors. Now dispatched via kind discriminator.
+    const result = parseApiError({
+      detail: rateLimitErrorBody({ bucket: 'catalog-edits', retry_after: 30 }),
+    });
+    expect(result.message).toBe('Rate limit exceeded.');
+    expect(result.fieldErrors).toEqual({});
+  });
+
+  it('falls back to JSON for an unknown kind', () => {
+    // A body with a kind the frontend doesn't recognize means the backend
+    // emitted a shape the frontend hasn't been updated for. Surface loudly.
+    const result = parseApiError({
+      detail: { kind: 'unknown_future_thing', message: 'something' },
+    });
+    expect(result.fieldErrors).toEqual({});
+    expect(result.message).toContain('unknown_future_thing');
+  });
+
+  it('falls back to JSON for a structured detail with no kind', () => {
+    const result = parseApiError({
+      detail: { message: 'oops', field_errors: {}, form_errors: [] },
+    });
+    expect(result.fieldErrors).toEqual({});
+    expect(result.message).toContain('oops');
   });
 
   it('falls back to JSON for the legacy Pydantic-array shape', () => {
