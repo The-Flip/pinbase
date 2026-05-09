@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 from django.test import Client
 
-from apps.accounts.models import User
+from apps.accounts.test_factories import make_user
 from apps.catalog.tests.conftest import make_machine_model
 from apps.media.models import MediaAsset, MediaRendition
 
@@ -355,8 +355,8 @@ class TestUploadRateLimit:
         """Different users have independent limits."""
         from django.core.cache import cache
 
-        user1 = User.objects.create_user("user1@example.com")
-        user2 = User.objects.create_user("user2@example.com")
+        user1 = make_user()
+        user2 = make_user()
 
         cache.set(f"media_upload_count:{user1.pk}", 60, 3600)
 

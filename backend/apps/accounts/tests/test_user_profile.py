@@ -4,6 +4,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.test import Client
 
+from apps.accounts.test_factories import make_user
 from apps.catalog.models import Manufacturer
 from apps.catalog.tests.conftest import make_machine_model
 from apps.provenance.models import Claim, Source
@@ -172,7 +173,7 @@ class TestUserProfileWithEdits:
 
     def test_other_users_edits_not_included(self, client, user, model_a, db):
         """Only the requested user's edits appear."""
-        other = User.objects.create_user(email="other@example.com")
+        other = make_user()
         client.force_login(other)
         client.patch(
             f"/api/models/{model_a.slug}/claims/",

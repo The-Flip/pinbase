@@ -19,6 +19,18 @@ def user(db: None) -> User:
 
 
 @pytest.fixture
+def staff(db: None) -> User:
+    """Default staff test user."""
+    return make_user(is_staff=True)
+
+
+@pytest.fixture
+def superuser(db: None) -> User:
+    """Default superuser test user (also staff)."""
+    return make_user(is_staff=True, is_superuser=True)
+
+
+@pytest.fixture
 def credit_targets(db):
     """Seed Person + CreditRole rows commonly referenced by credit claim tests.
 

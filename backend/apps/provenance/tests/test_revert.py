@@ -1,14 +1,12 @@
 """Tests for per-field claim revert via POST /api/claims/{claim_id}/revert/."""
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 
+from apps.accounts.test_factories import make_user
 from apps.catalog.tests.conftest import make_machine_model
 from apps.provenance.models import ChangeSetAction, Claim, Source
 from apps.provenance.test_factories import user_changeset
-
-User = get_user_model()
 
 REVERT_URL = "/api/claims/{claim_id}/revert/"
 
@@ -221,7 +219,7 @@ class TestRevertAuth:
         _make_user_edit(client, user, pm, {"year": 2005})
         claim = _get_active_claim(pm, "year", user)
 
-        other = User.objects.create_user(email="newbie@example.com", password="pw")
+        other = make_user()
         client.force_login(other)
         resp = _revert(client, claim.pk, "Reverting you")
         assert resp.status_code == 403
@@ -232,7 +230,7 @@ class TestRevertAuth:
         _make_user_edit(client, user, pm, {"year": 2005})
         claim = _get_active_claim(pm, "year", user)
 
-        other = User.objects.create_user(email="veteran@example.com", password="pw")
+        other = make_user()
         # Create 5 changesets for other user
         for _ in range(5):
             user_changeset(other, note="edit")
@@ -329,7 +327,7 @@ class TestRevertMultiUser:
         """A:1998, C:2001, A:2002 → revert A:2002 → surfaces C:2001."""
         Claim.objects.assert_claim(pm, "year", 1998, source=source)
 
-        user_c = User.objects.create_user(email="charlie@example.com", password="pw")
+        user_c = make_user()
         _make_user_edit(client, user_c, pm, {"year": 2001})
         _make_user_edit(client, user, pm, {"year": 2002})
 

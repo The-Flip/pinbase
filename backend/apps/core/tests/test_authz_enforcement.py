@@ -26,21 +26,18 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
 from django.test import Client, override_settings
 from django.urls import path
 from ninja import NinjaAPI
 
+from apps.accounts.models import User
 from apps.core.authz import enforce
 from apps.core.authz.exceptions import _DENIAL_MESSAGE, PolicyDeniedError
 from apps.core.authz.markers import get_required_activity, requires
 from apps.core.authz.route_walker import iter_operations
 from apps.core.authz.types import Activity, DenialCode, Deny
 from apps.core.exceptions import StructuredApiError
-
-User = get_user_model()
-
 
 # ── Typed capture of authz log records ───────────────────────────────
 
@@ -387,6 +384,7 @@ def test_requires_denies_with_structured_403_when_check_returns_deny(
 
 @pytest.mark.django_db
 def test_real_route_emits_one_authz_allow_record(
+    superuser: User,
     authz_logs: list[CapturedAuthzLog],
 ) -> None:
     """End-to-end canary on a production `@requires` route.
@@ -400,9 +398,6 @@ def test_real_route_emits_one_authz_allow_record(
     only runs `_require_superuser` and a model insert; no fixtures or
     catalog plumbing required.
     """
-    superuser = User.objects.create_user(
-        email="root@example.com", is_superuser=True, is_staff=True
-    )
     client = Client()
     client.force_login(superuser)
 
