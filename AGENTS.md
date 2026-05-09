@@ -213,24 +213,19 @@ For new behavior, include tests. Consider writing the test first, though sometim
 
 ## Strong Typing (backend)
 
-Backend code should be as strongly typed as possible. Annotations are documentation the compiler enforces — `Any`, free-form dicts, and labelless tuples push that work onto the next reader and let bugs through review.
+Backend code should be as strongly typed as possible. Annotations are documentation the compiler enforces.
 
-### Smells that warrant a closer look
+Smells — sometimes legitimate, usually a sign the type can be tightened:
 
-Each of these is sometimes legitimate but is usually a sign the type can be tightened. Don't reach for them by default; if you write one, be ready to defend it.
+- `Any` / `object` in parameter or return annotations
+- `cast(Any, ...)`
+- `dict[str, Any]` in signatures
+- `tuple[...]` with 3+ positional fields, or the same tuple shape repeated across modules
+- `isinstance` on a value whose static type should already be narrow
+- `TYPE_CHECKING` imports paired with `cast` or stringified annotations
+- bare or unexplained `# type: ignore` / `# noqa`
 
-- `Any` or `object` in parameter or return annotations — name the real type (infer from attribute access in the body or the call site)
-- `cast(Any, ...)` — no legitimate use; cast to the real type or remove the cast
-- `dict[str, Any]` in signatures — define a TypedDict if the keys are known across callers
-- `tuple[...]` with three or more positional fields, or the same tuple shape repeated across modules — define a NamedTuple in the same module (or `apps/core/types.py` if cross-app)
-- `isinstance` on a value whose static type should already be the narrow one — usually means the upstream signature is too loose
-- `TYPE_CHECKING`-only imports paired with `cast` or stringified annotations — often hides a real architectural coupling that should be modeled, not papered over
-- `# type: ignore` — should be specific (`# type: ignore[<code>]`, never bare) and carry a one-line reason; bare or unexplained ignores are silencing a real signal
-- `# noqa` — must be specific (`# noqa: <code>`) and carry a one-line reason. ANN401 noqas are explicitly required by TypeFixing.md for the legitimate exception shapes (Django management `**kwargs`, signal receivers, Ninja dispatch, etc.) — those are correct. Unexplained, bare, or shotgun noqas are the smell.
-
-Prefer NamedTuple, dataclass, or TypedDict over labelless tuples and free-form dicts. A type alias (`type EntityKey = tuple[int, int]`) does **not** clear the tuple smell — callers still index by position; only a structure with named fields does.
-
-The full smell catalogue with legitimate exception shapes (Django management-command `**kwargs`, signal receivers, Ninja dispatch, JSON parse results, framework-owned callback surfaces) lives in [docs/plans/types/TypeFixing.md](plans/types/TypeFixing.md). Reintroducing `Any` parameters or returns in cleaned chunks is blocked by ruff's ANN401 rule (configured via `per-file-ignores` in [backend/pyproject.toml](../backend/pyproject.toml)); the other smells are caught at review.
+Prefer NamedTuple, dataclass, or TypedDict. Full catalogue, legitimate exception shapes (Django management `**kwargs`, signal receivers, Ninja dispatch, etc.), and the ruff ANN401 ratchet: [docs/plans/types/TypeFixing.md](plans/types/TypeFixing.md).
 
 ### Running mypy
 
