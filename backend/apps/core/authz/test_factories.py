@@ -27,12 +27,16 @@ class StubPolicyUser:
         is_authenticated: bool = True,
         is_active: bool = True,
         is_email_verified: bool = True,
+        is_staff: bool = False,
+        is_superuser: bool = False,
         id: int = 1,
     ) -> None:
         self.id = id
         self._is_authenticated = is_authenticated
         self._is_active = is_active
         self._is_email_verified = is_email_verified
+        self._is_staff = is_staff
+        self._is_superuser = is_superuser
 
     @property
     def is_authenticated(self) -> bool:
@@ -45,3 +49,11 @@ class StubPolicyUser:
     @property
     def email_verified(self) -> bool:
         return self._is_email_verified
+
+    @property
+    def is_staff(self) -> bool:
+        return self._is_staff
+
+    @property
+    def is_superuser(self) -> bool:
+        return self._is_superuser

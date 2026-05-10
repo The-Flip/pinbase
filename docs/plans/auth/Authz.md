@@ -35,7 +35,7 @@ This is the standard policy-based / capability-based authorization shape: call s
 - **Mutations always go through the policy; reads are public by default.** Catalog reads, lookups, and search don't run through `policy.check` — there is no `catalog.read` activity. Authenticated-only reads (`/me`, drafts, notifications) gate on `is_authenticated`, not the policy. The exception: a small, deliberate set of sensitive reads (e.g. moderation tooling, ban audit trails, abuse-report inboxes) may be named as activities and gated, but only when the read is genuinely privileged. The default for new read endpoints is "no activity gate."
 - **Backend is the source of truth; the frontend reflects.** Never mirror policy logic in JS. Two engines will drift.
 - **Activities are product-meaningful, not data-model-shaped.** Resist granularity like `catalog.edit.title.scalar` -- that leaks the schema into the policy namespace and dissolves the abstraction.
-- **Activities name acts, not actors.** Don't name an activity after the role currently allowed to do it (`moderation.action`, `admin.thing`). Roles change; acts don't. Name the act the call site is performing (`entity.merge`, `claim.override`, `account.ban`); let the policy decide who qualifies. Add an activity when its call site is being built, not in advance.
+- **Activities are named for what's being gated, not who can do it.** Don't name an activity after the role currently allowed (`moderation.action`, `admin.thing`) — roles change, the gated thing doesn't. The "thing" is usually an act the call site is performing (`entity.merge`, `claim.override`, `account.ban`), but it can also be a tooling surface (`django_admin.access`) or a user-state predicate (`rate_limit.exempt`); both are legitimate as long as the name describes what's gated, not the role permitted. Let the policy decide who qualifies. Add an activity when its call site is being built, not in advance.
 - **Don't use Django's permission framework.** This activity layer is parallel to Django perms, not built on top. Per-model perms compose poorly with attribute checks (verified email, account age, rate limit), and we'd end up wrapping them anyway.
 - **Denial codes are a closed enum.** One registry, mapped to user-facing copy. No ad-hoc strings spelled differently across editors.
 - **Rate-limiting is policy-aware, not policy-owned.** Enforce early in the request path -- as early as the limit's scope allows (per-IP/per-user floods in middleware; activity- or target-scoped limits where the target is known). The policy may reflect rate-limit state for UX but is not the sole gate.
@@ -48,16 +48,16 @@ For the initial roll-out, the ONLY permission change we are making is requiring 
 
 The launch set. Each row is what the policy enforces today; later constraints (account age, reputation, rate limits, moderation flags) layer in without changing call sites.
 
-| Activity         | Rules at launch                       | Notes                                                                                                           |
-| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `catalog.edit`   | authenticated, active, email-verified | Writes on existing entities.                                                                                    |
-| `catalog.create` | authenticated, active, email-verified | Separated from edit so creation can tighten independently later (e.g. account age) without touching edit paths. |
-| `catalog.delete` | authenticated, active, email-verified | Separated from edit so deletion can tighten independently later without touching edit paths.                    |
-| `claim.revert`   | authenticated, active, email-verified | Separated from edit so revert can tighten independently later without touching edit paths.                      |
-| `changeset.undo` | authenticated, active, email-verified | Inverts a delete-changeset (post-delete Undo toast). Target-aware: today scoped to the changeset author.        |
-| `citation.edit`  | authenticated, active, email-verified | Citation-source CRUD plus citation-instance writes attached to claims.                                          |
-| `media.edit`     | authenticated, active, email-verified | Upload, detach, set-primary, set-category — all media-attachment claim writes.                                  |
-| `kiosk.edit`     | authenticated, active, email-verified | Kiosk config CRUD. Also gated on `is_superuser` inline, parallel to the activity layer.                         |
+| Activity         | Rules at launch                                  | Notes                                                                                                           |
+| ---------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `catalog.edit`   | authenticated, active, email-verified            | Writes on existing entities.                                                                                    |
+| `catalog.create` | authenticated, active, email-verified            | Separated from edit so creation can tighten independently later (e.g. account age) without touching edit paths. |
+| `catalog.delete` | authenticated, active, email-verified            | Separated from edit so deletion can tighten independently later without touching edit paths.                    |
+| `claim.revert`   | authenticated, active, email-verified            | Separated from edit so revert can tighten independently later without touching edit paths.                      |
+| `changeset.undo` | authenticated, active, email-verified            | Inverts a delete-changeset (post-delete Undo toast). Target-aware: today scoped to the changeset author.        |
+| `citation.edit`  | authenticated, active, email-verified            | Citation-source CRUD plus citation-instance writes attached to claims.                                          |
+| `media.edit`     | authenticated, active, email-verified            | Upload, detach, set-primary, set-category — all media-attachment claim writes.                                  |
+| `kiosk.edit`     | authenticated, active, email-verified, superuser | Kiosk config CRUD.                                                                                              |
 
 - "Active" means `is_active=True` — the account is not currently deactivated for any reason (self-deactivation, dormant cleanup, etc.). Banning, when it ships, will be a separate predicate with a separate denial code so the SPA can render different copy.
 - "Authenticated" means a logged-in session, not anonymous.
@@ -127,7 +127,7 @@ from apps.core.authz.markers import (
 )
 ```
 
-Each accessor wraps the `getattr(...)` lookup with an `isinstance` narrow, so the return type is genuinely correct (a hand-stamped `_authz_activity = "catalog.edit"` string returns `None` instead of silently impersonating an `Activity`). Future surfaces — `/me/capabilities` (Phase 5), embedded-hint serializers, capability pre-loaders — must use these accessors. The string constants `ACTIVITY_ATTR` / `GATED_INLINE_ATTR` / `PUBLIC_ATTR` are still exported for the route-inventory test, which legitimately enumerates marker names to detect double-stamping; nothing else should need them.
+Each accessor wraps the `getattr(...)` lookup with an `isinstance` narrow, so the return type is genuinely correct (a hand-stamped `_authz_activity = "catalog.edit"` string returns `None` instead of silently impersonating an `Activity`). Future surfaces — `/me/capabilities` (Phase 7), embedded-hint serializers, capability pre-loaders — must use these accessors. The string constants `ACTIVITY_ATTR` / `GATED_INLINE_ATTR` / `PUBLIC_ATTR` are still exported for the route-inventory test, which legitimately enumerates marker names to detect double-stamping; nothing else should need them.
 
 ### Why `core`, not `accounts`
 
@@ -198,7 +198,7 @@ def test_is_claim_author_is_pure(claim):
 
 `CaptureQueriesContext` is Django's canonical query-counting helper. The assertion documents the test's intent — "this predicate must be pure" — at the call site, rather than relying on a fixture that's easy to forget.
 
-The `assert_predicate_is_pure(predicate, user, target=None, context=None)` helper lands with the **first target-aware predicate** (currently expected in the post-Phase-5 PR that introduces `is_claim_author` / `claim_not_locked`), not with Phase 4. Phase 4's only new predicate is `email_verified`, which is target-less; a target-less predicate's purity is already covered by the `is_authenticated` / `is_active` purity tests. Pre-extracting the helper in Phase 4 would design it for one shape (target-less), then need re-shaping when target-aware predicates arrive — better to defer.
+The `assert_predicate_is_pure(predicate, user, target=None, context=None)` helper lands with the **first target-aware predicate** (expected with the Phase 8 per-target rules — `is_claim_author` / `claim_not_locked`), not with Phase 4. Phase 4's only new predicate is `email_verified`, which is target-less; a target-less predicate's purity is already covered by the `is_authenticated` / `is_active` purity tests. Pre-extracting the helper in Phase 4 would design it for one shape (target-less), then need re-shaping when target-aware predicates arrive — better to defer.
 
 ## Denial responses
 
@@ -218,7 +218,7 @@ HTTP 403
 
 `message` is an English fallback so the API is usable without the SPA. The SPA ignores it and renders its own copy from `code` via a single mapper module — one place per code maps to `{ title, body, primaryAction }`. Each code's `context` shape is part of the registry and part of the API contract; adding or removing a key is a breaking change.
 
-The Phase-5 denial-code mapper layers _on top of_ the existing base-message extraction in `frontend/src/lib/api/parse-api-error.ts`, not in place of it. The parser already special-cases `validation_error` (it has field-level errors) and falls through to `plain(detail.message)` for every other structured error via the `StructuredErrorBodySchema` base contract. Phase 5 adds a separate `code → { title, body, primaryAction }` mapping that the SPA's render layer consults; the parser's job stays "extract a message string." A new structured error variant on the backend that's content with the base `message` requires zero changes to the parser — only the render mapper, and only when the code wants custom copy.
+The Phase-6 denial-code mapper layers _on top of_ the existing base-message extraction in `frontend/src/lib/api/parse-api-error.ts`, not in place of it. The parser already special-cases `validation_error` (it has field-level errors) and falls through to `plain(detail.message)` for every other structured error via the `StructuredErrorBodySchema` base contract. Phase 5 adds a separate `code → { title, body, primaryAction }` mapping that the SPA's render layer consults; the parser's job stays "extract a message string." A new structured error variant on the backend that's content with the base `message` requires zero changes to the parser — only the render mapper, and only when the code wants custom copy.
 
 All structured-detail flavors carry `kind` — `validation_error`, `rate_limit`, `policy_denied` — and the frontend extractor dispatches by `detail.kind`. New variants subclass `StructuredApiError` (declaring `kind` and `status` as class attributes plus a `to_body()` method) and declare a matching `kind` literal on their body schema; a single shared exception handler in `config/api.py` wraps the response.
 
@@ -241,7 +241,7 @@ Telling a deactivated user to verify their email is the wrong UX; the priority o
 
 Denials are logged at `info` with `(user_id, activity, code, target_id)`. Allows are logged at `debug` (mostly off in prod). Logging is the _caller's_ job — the policy returns a `Decision` and the calling middleware/decorator emits the log. Keeps the policy pure.
 
-Tests that verify logging assert against a typed `CapturedAuthzLog` dataclass + pytest fixture in `apps/core/tests/test_authz_enforcement.py` — a small handler-based capture that pulls `extra=` keys off `LogRecord` into a typed shape. Phase-4 verification-predicate tests and any future per-activity audit-log assertions should reuse the existing `authz_logs` fixture rather than reaching into `caplog.records[0].__dict__["activity"]` (which works at runtime but is `Any`-typed, so mypy can't catch a renamed `extra` key). The fixture documents the contract — every authz log record carries `(message, level, user_id, activity, code)` — and a missing key fails at fixture-translation time, not silently in a test that happens not to read it.
+Tests that verify logging assert against a typed `CapturedAuthzLog` dataclass + pytest fixture in `apps/core/tests/test_authz_enforcement.py` — a small handler-based capture that pulls `extra=` keys off `LogRecord` into a typed shape. Future per-activity audit-log assertions should reuse the existing `authz_logs` fixture rather than reaching into `caplog.records[0].__dict__["activity"]` (which works at runtime but is `Any`-typed, so mypy can't catch a renamed `extra` key). The fixture documents the contract — every authz log record carries `(message, level, user_id, activity, code)` — and a missing key fails at fixture-translation time, not silently in a test that happens not to read it.
 
 ## Integration surface
 
@@ -351,7 +351,7 @@ Keep the exhaustive route inventory in code or tests, not this document, so it c
 
 ## Implementation phases
 
-The design ships across a sequence of small PRs. Each is independently mergeable and produces no user-visible change until the last two.
+The design ships across a sequence of small PRs. Each is independently mergeable; the first three are intentionally no-ops on user-visible behavior, and from Phase 4 onward each phase lights up one specific user-facing change (email gate, denial copy, target-less affordances, per-row affordances).
 
 Each PR's acceptance criterion is small enough to bisect cleanly: PR 1 is "inventory test passes," PR 2 is "engine unit tests pass," PR 3 is "every authenticated user can still do everything they could yesterday," and so on.
 
@@ -367,13 +367,80 @@ Build `core/authz/` proper: `Decision` / `Allow` / `Deny`, `DenialCode` enum, re
 
 Update `@requires`'s body to call `policy.check` and raise a structured 403 on deny. (`@gated_inline` stays stamp-only — its routes already call `check()` inline; flipping the marker would double-evaluate.) Launch rules are still `authenticated + active`, so behavior is unchanged from today (every authenticated user passes). This is the moment "the gate is on" with zero user-visible diff.
 
-### 4. ✅ DONE: Verification gate
+### 4. ✅ DONE: Email verification gate
 
 ([Verification.md](Verification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
 
-### 5. Frontend denial UX + capabilities
+### 5. Denial-code mapper + resend-verification UI
 
-Denial-code mapper, resend-verification UI, `/me/capabilities` endpoint, embedded resource hints. Each editor renders consistent copy from the closed-enum codes.
+Frontend-only. Add the `code → { title, body, primaryAction }` mapper module that the SPA's render layer consults, layered on top of `parse-api-error.ts` (the parser keeps its job of "extract a message string"). Wire the resend-verification flow for the `verification_required` code. No new backend endpoints; this lights up consistent copy across every editor for failures already happening since Phase 4.
+
+**Scope: only `verification_required` gets real copy.** That's the only denial code the policy can actually surface as a 403 today. Every gated mutating route uses `auth=django_auth`, and Django's auth backend filters on `is_active=True` (see `apps/accounts/backends.py`), so an inactive user 401s before `@requires` runs — `account_deactivated` has no producer on a request path. `auth_required` likewise can only fire on a route whose `auth=` permits anonymous and then calls `policy.check`; no such route exists today. Both codes matter for `/me/capabilities` (Phase 7), not for 403 rendering, so their mapper entries land as stubs here (returning the backend's `message` fallback) and get real copy in Phase 7 when they start firing for real. `role_required` and `rate_limited` aren't emitted by any current call site, and `account_banned` doesn't exist yet; their mapper entries land with the phases that introduce them (6a/6c for the role and rate-limit codes, the future banning work for `account_banned`). Building the full table now would be premature — the copy needs review per code, and reviewing copy for codes nothing fires is wasted cycles.
+
+Pulled ahead of the role-predicate work so the highest-volume new denial code from Phase 4 stops falling through to the plain-message fallback as soon as possible.
+
+**Backend prerequisite: the resend-verification endpoint.** Phase 4 shipped the `email_verified` field and predicate but did not ship the resend endpoint that [Verification.md](Verification.md) names as its own — `apps/accounts/api.py` has no `send_verification_email` route today. The resend button in this phase has nothing to call without it, so this phase pulls in the endpoint: a session-authenticated POST that calls `client.user_management.send_verification_email(user_id=request.user.workos_user_id)` and returns 204. Frontend-only is therefore a misnomer for the PR as a whole; the SPA work is frontend-only, but the PR also ships the backend endpoint.
+
+### ✅ DONE: 6a. Role predicates
+
+Add `is_staff` and `is_superuser` predicates to `core/authz/predicates.py` with the `role_required` denial code (already in the priority list). Foundational only — no call sites consume them yet, so behavior is unchanged. Lands as its own commit so the predicate API can be reviewed without being bundled with the kiosk and rate-limit refactors that depend on it.
+
+### 6b. Kiosk: fold superuser check into the policy
+
+Fold `is_superuser` into `KIOSK_EDIT`'s rule; remove the inline `_require_superuser` helper from `apps/kiosk/api/configs.py`. Update row 60 of the activities table to drop the "also gated inline" footnote. Behavior unchanged — the policy verdict matches the inline helper.
+
+### 6c. Rate-limit exemption via the policy
+
+Add a `rate_limit.exempt` activity registered with `is_staff`. Update `provenance/rate_limits.py` to call `policy.check(user, Activity.RATE_LIMIT_EXEMPT)` instead of reading `user.is_staff` directly. After this, the rate limiter never reads role flags directly — the policy is the single source of truth for _who qualifies_.
+
+Update the module docstring at the top of `rate_limits.py` (currently "Staff (`user.is_staff`) bypass all limits") to describe the new mechanism — exemption is decided by `rate_limit.exempt`, which today resolves to `is_staff` but is no longer the file's concern. A reader who learns the mechanism from the docstring should not then go looking for `is_staff` reads in this file.
+
+`rate_limit.exempt` happens to have no route and no current UI consumer, but it's a plain Activity with no special-case flag. The route-inventory test walks routes → registry, not the reverse, so an activity without a route causes no failure. `/me/capabilities` returns it like any other; the SPA ignores capabilities it doesn't consult, and a future client could legitimately use this verdict to skip optimistic-throttle UI. If a future activity ever needs to be hidden from `/me/capabilities` for a substantive reason (e.g. a sensitive-moderation activity whose existence in the response would leak info), add the filter then.
+
+#### Scope notes for Phase 6 (a/b/c)
+
+`AuthStatusSchema.is_superuser` and the `is_superuser` redirect in `frontend/src/routes/kiosk/edit/+layout.server.ts` remain until Phase 7 lands `/me/capabilities` — removing them earlier would leave the SPA without a signal for the kiosk-edit affordance.
+
+Out of scope: the `is_staff`/`is_superuser` check in `accounts/api.py` WorkOS auto-link (a privilege-hijack safety guard, not a permission gate — stays as raw flag checks).
+
+### 7. /me/capabilities + AuthStatusSchema cleanup
+
+Backend + frontend changes for the target-less capabilities surface. Add `/me/capabilities` returning the verdict for each non-internal target-less activity. Anonymous callers get everything-false (per "anonymous users go through the policy").
+
+**New activity: `django_admin.access`** (rule: `is_staff`). Django admin's `/admin/` is staff-gated by the framework itself; this activity exists so the SPA can decide whether to render the "Django Admin" nav link without the schema needing to expose the underlying flag. The activity is named for the surface it gates, not the role permitted (see ["Activities are named for what's being gated, not who can do it"](#principles)).
+
+Migrate every frontend `is_superuser` consumer to a capability, then drop the field from `AuthStatusSchema` entirely:
+
+- `frontend/src/routes/kiosk/edit/+layout.server.ts` — switch the redirect to consult `kiosk.edit` from `/me/capabilities`.
+- `frontend/src/lib/components/Nav.svelte` — the desktop and mobile menus both gate an `adminSection` snippet on `auth.isSuperuser` to show a "Kiosks" link (→ `/kiosk/edit`) and a "Django Admin" link (→ `/admin/`). Migrate per-link: "Kiosks" reads `kiosk.edit`, "Django Admin" reads `django_admin.access`. The section as a whole renders if either is allowed. This is what makes `django_admin.access` worth introducing — without it, dropping `is_superuser` from the schema would force the Nav to keep reading some other flag for the Django admin row.
+- `frontend/src/lib/auth.svelte.ts` — the `auth` store's `isSuperuser` field and `set()` parameter both go away. Update before consumers so the type system catches missed call sites; the store is the _first_ file to edit, the schema field removal is the last.
+- `frontend/src/lib/components/Nav.dom.test.ts` and `frontend/src/routes/kiosk/edit/layout-server.test.ts` — update fixtures to drive capability state instead of `is_superuser`. Lockstep with the components they exercise.
+
+**Audit before removing the schema field.** After the named migrations land, grep `frontend/` once more for any remaining `is_superuser` / `isSuperuser` read; the audit's output (each found read + its disposition) is part of the PR description. The named migrations cover the consumers known today; the audit catches anything that's slipped in since this plan was written.
+
+This is the phase that lets target-less affordances (create buttons, top-level New entries, Nav rows) gate on policy verdicts instead of role flags or "are they logged in."
+
+### 8. Embedded per-resource capability hints
+
+The first phase that introduces target-aware rules. Adds per-resource capability fields to serializers for target-aware activities (e.g. `claim.revert` on a claim, `catalog.delete` on an entity). Ships:
+
+- The first per-target Protocols and predicates (`ClaimPolicyView`, `is_claim_author`, `claim_not_locked`).
+- The `assert_predicate_is_pure(predicate, user, target, context)` test helper, designed against the target-aware shape (see [Verifying purity in tests](#verifying-purity-in-tests)).
+- Embedded-hint fields on the affected resource serializers, reading verdicts via `policy.check(...)` per row.
+
+`changeset.undo` is target-aware (the activities table notes it's "scoped to the changeset author") but is **not** part of this phase. It rides along with the per-target work the next time the post-delete Undo flow needs touching, or sooner if a stakeholder asks for the per-row affordance — the embedded hint requires the same Protocol/prefetch pattern this phase establishes for `claim.revert`, so it's mechanical once the pattern is in place. Listed here so it doesn't get lost.
+
+**Each serializer audit must include a prefetch checklist.** The policy reads attributes off already-loaded objects, so any serializer that embeds a hint must `select_related` / `only(...)` the attributes the relevant `*PolicyView` Protocol declares, or the embed loop will N+1 behind the policy's back. Grep the Protocol to find the exact attribute list per target. A query-count regression test on each affected list endpoint is the dynamic backstop.
+
+### 9. Observability
+
+Stand up a denial-rate dashboard keyed off the audit-log records emitted since Phase 3 (`(user_id, activity, code, target_id)`). Group by `activity` and `code` so that an unexpected cohort hitting `verification_required`, a route that started 403'ing after a rule tightened, or a sudden `role_required` spike are all visible without trawling logs. Lands last because earlier phases are what _generate_ the signal worth watching; running this earlier would dashboard a near-empty stream.
+
+The dashboard is the on-call backstop for any future rule tightening (account-age, reputation, rate-limit-as-policy) — those changes are easier to ship safely once denial rates are observable in aggregate. This is also the natural place to revisit whether dry-run mode (currently deferred) is worth building before the next rule change.
+
+### 10. Documentation
+
+Document the authorization surface area for future contributors and agents. Likely a new `docs/Authz.md` covering the system as it exists post-rollout, plus targeted additions to `docs/AGENTS.src.md` (which regenerates `CLAUDE.md` / `AGENTS.md`). Scope to be fleshed out closer to implementation — by then, the shape of what's load-bearing vs. obvious-from-code will be clearer.
 
 ## Deferred / non-goals
 

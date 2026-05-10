@@ -400,6 +400,13 @@ def test_unverified_user_gets_structured_403_with_verification_required(
     The unit-level registry-completeness test proves `check()` denies; this
     proves the wire body actually carries the expected structure through
     Ninja, the exception handler, and the schema serializer.
+
+    Doubles as the no-superuser-bypass invariant: the user is is_superuser=
+    True, and the gate still denies. Anyone adding `if user.is_superuser:
+    return Allow()` to a predicate or the evaluator will fail this test.
+    The is_superuser flag is also what gets us past kiosk's inline
+    `_require_superuser` check so the policy gate is the only thing left
+    to fire.
     """
     from apps.accounts.test_factories import make_user
 

@@ -75,10 +75,13 @@ Decision = Allow | Deny
 
 
 class PolicyUser(Protocol):
-    """Attribute surface the engine reads on every check.
+    """Attribute surface the engine may read during a check.
 
-    Covers both authenticated `User` and `AnonymousUser` — the latter
-    already has `is_authenticated=False` and `is_active=False`.
+    `is_authenticated` / `is_active` / `email_verified` run for every
+    launch activity. `is_staff` / `is_superuser` only run when a rule
+    includes the matching role predicate. Covers both authenticated
+    `User` and `AnonymousUser` — the latter already has
+    `is_authenticated=False` and `is_active=False`.
 
     Attributes are declared as `@property` (not variable annotations) so
     mypy treats them as read-only. Variable annotations would reject
@@ -94,6 +97,12 @@ class PolicyUser(Protocol):
 
     @property
     def email_verified(self) -> bool: ...
+
+    @property
+    def is_staff(self) -> bool: ...
+
+    @property
+    def is_superuser(self) -> bool: ...
 
 
 @dataclass(frozen=True)
