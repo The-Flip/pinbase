@@ -12,7 +12,7 @@ Semantics:
   upstream).
 * Some users bypass all limits. Who qualifies is decided by the
   ``rate_limit.exempt`` activity in :mod:`apps.core.authz`, not by
-  this module — today that resolves to ``is_staff``, but the
+  this module — today that resolves to verified staff, but the
   predicate is no longer this file's concern. Look in
   ``core/authz/rules.py`` to change who is exempt.
 * Both successful and validation-rejected attempts consume a slot. The
@@ -27,12 +27,12 @@ from __future__ import annotations
 import math
 import time
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.core.cache import cache
 
-from apps.core.authz import Activity, Allow, PolicyUser, check
+from apps.core.authz import Activity, Allow, check, policy_user
 from apps.core.exceptions import StructuredApiError
 
 from .constants import (
@@ -109,9 +109,7 @@ def check_and_record(
     """
     if user is None or not user.is_authenticated:
         raise RateLimitExceededError(bucket=spec.bucket, retry_after=1)
-    # request.user is a concrete User after the is_authenticated guard;
-    # mypy can't narrow through AbstractBaseUser.
-    if isinstance(check(cast(PolicyUser, user), Activity.RATE_LIMIT_EXEMPT), Allow):
+    if isinstance(check(policy_user(user), Activity.RATE_LIMIT_EXEMPT), Allow):
         return
 
     now = time.time()

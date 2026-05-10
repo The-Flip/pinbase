@@ -21,7 +21,9 @@ from django.http import (
 from django.shortcuts import get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
 from ninja import Router, Schema
+from pydantic import Field
 
+from apps.core.authz import Activity, compute_capability_map, policy_user
 from apps.core.authz.markers import public_mutation
 from apps.core.schemas import ErrorDetailSchema
 from apps.core.types import EntityKey
@@ -44,9 +46,14 @@ class AuthStatusSchema(Schema):
     is_authenticated: bool
     id: int | None = None
     username: str | None = None
-    is_superuser: bool = False
     first_name: str = ""
     last_name: str = ""
+    # Verdict for every target-less registered activity. Anonymous
+    # callers get an all-false map (every rule's first predicate is
+    # `is_authenticated`). Target-aware activities (e.g. `claim.revert`)
+    # are excluded; those verdicts come from per-resource hints embedded
+    # in the resource's serializer.
+    capabilities: dict[Activity, bool] = Field(default_factory=dict)
 
 
 class EntityContributionSchema(Schema):
@@ -280,12 +287,15 @@ def auth_me(request: HttpRequest) -> AuthStatusSchema:
             is_authenticated=True,
             id=user.id,
             username=user.username,
-            is_superuser=user.is_superuser,
             first_name=user.first_name,
             last_name=user.last_name,
+            capabilities=compute_capability_map(policy_user(user)),
         )
     assert isinstance(user, AnonymousUser)
-    return AuthStatusSchema(is_authenticated=False)
+    return AuthStatusSchema(
+        is_authenticated=False,
+        capabilities=compute_capability_map(policy_user(user)),
+    )
 
 
 @auth_router.get("/login/", url_name="workos_login", include_in_schema=False)
@@ -362,7 +372,13 @@ def auth_callback(request: HttpRequest) -> HttpResponse:
 def auth_logout(request: HttpRequest) -> AuthStatusSchema:
     """End the current session."""
     logout(request)
-    return AuthStatusSchema(is_authenticated=False)
+    # `request.user` is `AnonymousUser` after `logout()`. Populate the
+    # capability map explicitly so the response shape matches `/me/`'s
+    # anonymous branch — both bodies represent the same state.
+    return AuthStatusSchema(
+        is_authenticated=False,
+        capabilities=compute_capability_map(policy_user(request.user)),
+    )
 
 
 @user_page_router.get(

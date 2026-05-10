@@ -27,6 +27,11 @@ class Activity(StrEnum):
     # User-state predicate, not a route-gated CRUD activity. Answers
     # "is this user exempt from per-user rate limits."
     RATE_LIMIT_EXEMPT = "rate_limit.exempt"
+    # Tooling-surface activity, not a route-gated CRUD activity. Answers
+    # "may this user reach the Django admin." Django itself gates `/admin/`
+    # on `is_staff`; this activity exists so the SPA can decide whether to
+    # render the nav link without the schema exposing the underlying flag.
+    DJANGO_ADMIN_ACCESS = "django_admin.access"
 
 
 class DenialCode(StrEnum):

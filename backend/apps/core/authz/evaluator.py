@@ -6,6 +6,9 @@ caller's job; the policy returns a `Decision` and stays I/O-free.
 
 from __future__ import annotations
 
+from typing import cast
+
+from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.db.models import Model
 
 from .registry import get_rule
@@ -52,3 +55,16 @@ def check(
         denials,
         key=lambda d: _PRIORITY_INDEX.get(d.code, _PRIORITY_FALLBACK),
     )
+
+
+def policy_user(user: AbstractBaseUser | AnonymousUser) -> PolicyUser:
+    """Boundary cast: Django's `request.user` → `PolicyUser`.
+
+    `request.user` is typed `AbstractBaseUser | AnonymousUser`. The
+    abstract parent doesn't structurally satisfy `PolicyUser` (it's
+    missing `email_verified` / `is_staff` / `is_superuser` as
+    `@property`), so mypy can't narrow it. Concrete `User` instances
+    and `AnonymousUser` both satisfy `PolicyUser` at runtime; this
+    helper centralizes the unavoidable cast at one site.
+    """
+    return cast(PolicyUser, user)

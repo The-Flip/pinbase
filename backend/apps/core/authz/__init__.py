@@ -1,7 +1,8 @@
 """Activity-based authorization engine."""
 
+from .capabilities import compute_capability_map
 from .enforce import enforce
-from .evaluator import check
+from .evaluator import check, policy_user
 from .exceptions import PolicyDeniedError
 from .types import (
     DENIAL_PRIORITY,
@@ -25,5 +26,7 @@ __all__ = [
     "PolicyDeniedError",
     "PolicyUser",
     "check",
+    "compute_capability_map",
     "enforce",
+    "policy_user",
 ]

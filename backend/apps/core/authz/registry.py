@@ -17,12 +17,24 @@ from .types import Activity
 class Rule:
     activity: Activity
     predicates: tuple[Predicate, ...]  # AND-conjunction; evaluated in order
+    # True if the rule's verdict depends on a per-resource target. The
+    # evaluator is unaffected (target is still passed through); the flag
+    # exists so surfaces that answer "what may this user do?" target-less
+    # — like `/me/capabilities` — can exclude these activities. A target-
+    # aware rule's target-less verdict would be accurate-but-incomplete
+    # (it's the floor across all targets), and consumers depending on
+    # that floor would break the day per-row hints land.
+    target_aware: bool = False
 
 
 _REGISTRY: dict[Activity, Rule] = {}
 
 
-def register(activity: Activity, *predicates: Predicate) -> None:
+def register(
+    activity: Activity,
+    *predicates: Predicate,
+    target_aware: bool = False,
+) -> None:
     """Register the rule for `activity`.
 
     Raises on duplicate registration. Raises on empty predicate list —
@@ -36,7 +48,9 @@ def register(activity: Activity, *predicates: Predicate) -> None:
         )
     if activity in _REGISTRY:
         raise RuntimeError(f"Rule for {activity!r} already registered")
-    _REGISTRY[activity] = Rule(activity=activity, predicates=predicates)
+    _REGISTRY[activity] = Rule(
+        activity=activity, predicates=predicates, target_aware=target_aware
+    )
 
 
 def get_rule(activity: Activity) -> Rule | None:

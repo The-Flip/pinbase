@@ -1,8 +1,8 @@
-# Editorial Activity Authorization
+# Authorization
 
 ## Problem
 
-We need to be able to put checks around editor and moderator activity without wiring every call site to one specific check.
+We need to be able to put checks around activity without wiring every call site to specific checks about who the user is.
 
 Email verification -- [Verification.md](Verification.md) -- is the first concrete case: catalog edits should require a verified email so disposable email-password accounts cannot immediately write claims. But the authorization decision should not be named or modeled as "email verification" at every Svelte editor, API endpoint, or claims write helper. That would make the next constraint -- moderator role, account age, rate limit state, reputation, abuse flag, scoped delete permission, etc. -- require another audit of every edit path.
 
@@ -117,7 +117,7 @@ Each app's `apps.py: ready()` imports its `authz` module so registration happens
 
 Core itself owns activities that aren't a single domain app's responsibility — user-state predicates like `rate_limit.exempt` and tooling-surface activities like `django_admin.access`. Because `core/authz/` is the engine package, those rules live in `core/authz/rules.py` (a sibling `apps/core/authz.py` would collide with the package) and `core/apps.py: ready()` imports it. New cross-cutting activities go there.
 
-User-state activities are exempt from the "every activity requires `email_verified`" pin in `test_authz_registry_complete.py` — they describe an attribute (`is staff`, `is exempt`) rather than gating a route an unverified user might call. New ones must be added to that test's `_USER_STATE_ACTIVITIES` set; the docstring on `core/authz/rules.py` points there.
+An activity registered without the `email_verified` predicate must add itself to `_ACTIVITIES_EXEMPT_FROM_EMAIL_VERIFIED` in `test_authz_registry_complete.py` with a per-activity comment explaining why; the docstring on `core/authz/rules.py` points there. The default is to require email verification — the policy module is the security boundary, and what it permits should be stated explicitly. The exemption list is short on purpose: today's only member is `django_admin.access`, which mirrors a Django-level gate that itself doesn't check email verification.
 
 ### Reading markers off views
 
@@ -403,22 +403,34 @@ Update the module docstring at the top of `rate_limits.py` (currently "Staff (`u
 
 Out of scope: the `is_staff`/`is_superuser` check in `accounts/api.py` WorkOS auto-link (a privilege-hijack safety guard, not a permission gate — stays as raw flag checks).
 
-### 7. /me/capabilities + AuthStatusSchema cleanup
+### ✅ DONE: 7. Sync capabilities to front end + AuthStatusSchema cleanup
 
-Backend + frontend changes for the target-less capabilities surface. Add `/me/capabilities` returning the verdict for each non-internal target-less activity. Anonymous callers get everything-false (per "anonymous users go through the policy").
+Backend + frontend changes for the target-less capabilities surface. Capabilities ride on the existing `AuthStatusSchema` returned by `/api/auth/me/` — adding a separate `/me/capabilities` endpoint was considered and rejected: one round-trip on cold start, one source of auth identity + verdicts, no new SSR plumbing. Anonymous callers get an all-false map (every rule's first predicate is `is_authenticated`, so the policy denies them naturally).
 
-**New activity: `django_admin.access`** (rule: `is_staff`). Django admin's `/admin/` is staff-gated by the framework itself; this activity exists so the SPA can decide whether to render the "Django Admin" nav link without the schema needing to expose the underlying flag. The activity is named for the surface it gates, not the role permitted (see ["Activities are named for what's being gated, not who can do it"](#principles)). Like `rate_limit.exempt`, this is a user-state/tooling activity and registers in `core/authz/rules.py`; it must also be added to `_USER_STATE_ACTIVITIES` in `test_authz_registry_complete.py` so the email-verified pin doesn't reject it (an unverified staff user is still staff and should still see the admin link).
+**Wire shape.** `AuthStatusSchema.capabilities: dict[Activity, bool]`, populated server-side by walking `iter_rules()` and skipping any rule marked `target_aware=True`. `Activity` is exported as a string-literal union in the generated TS schema. Codegen renders the field as `{ [key: string]: boolean }` (pydantic emits `additionalProperties: boolean`); the SPA stores it internally as `Partial<Record<Activity, boolean>>` so the call site `auth.can(activity)` keeps a typed-key check. New activities flow through automatically — adding to the `Activity` enum and registering a rule is the only change required.
 
-The endpoint walks the populated registry — `iter_rules()` plus the marker-attribute filter for "target-less" — rather than enumerating activities by name. New activities show up automatically; nothing about adding `account.something_new` should require a second edit to the capabilities surface.
+**Registry: `target_aware` flag.** A new `register(activity, *predicates, target_aware=False)` kwarg on the registry. `claim.revert` and `changeset.undo` are marked `target_aware=True` from day one — Phase 8 wires their per-row hints, but reserving the keys now keeps the wire shape stable across the boundary. `compute_capability_map(user)` (in `core/authz/capabilities.py`) is the helper that walks the registry and applies the filter; `/me/` calls it via `policy_user(request.user)`.
 
-Migrate every frontend `is_superuser` consumer to a capability, then drop the field from `AuthStatusSchema` entirely:
+**`policy_user()` boundary cast** (extracted in this phase per the "extract on second use" rule — see Phase 8's note below). Inline `check()` callers pass `request.user`, typed `AbstractBaseUser | AnonymousUser`, which doesn't structurally satisfy `PolicyUser`. The helper centralizes the unavoidable cast; `provenance/rate_limits.py` migrates off its inline `cast(PolicyUser, user)` to use it.
 
-- `frontend/src/routes/kiosk/edit/+layout.server.ts` — switch the redirect to consult `kiosk.edit` from `/me/capabilities`.
-- `frontend/src/lib/components/Nav.svelte` — the desktop and mobile menus both gate an `adminSection` snippet on `auth.isSuperuser` to show a "Kiosks" link (→ `/kiosk/edit`) and a "Django Admin" link (→ `/admin/`). Migrate per-link: "Kiosks" reads `kiosk.edit`, "Django Admin" reads `django_admin.access`. The section as a whole renders if either is allowed. This is what makes `django_admin.access` worth introducing — without it, dropping `is_superuser` from the schema would force the Nav to keep reading some other flag for the Django admin row.
-- `frontend/src/lib/auth.svelte.ts` — the `auth` store's `isSuperuser` field and `set()` parameter both go away. Update before consumers so the type system catches missed call sites; the store is the _first_ file to edit, the schema field removal is the last.
-- `frontend/src/lib/components/Nav.dom.test.ts` and `frontend/src/routes/kiosk/edit/layout-server.test.ts` — update fixtures to drive capability state instead of `is_superuser`. Lockstep with the components they exercise.
+**New activity: `django_admin.access`** (rule: `is_authenticated, is_staff`). Django admin's `/admin/` is staff-gated by the framework itself; this activity exists so the SPA can decide whether to render the "Django Admin" nav link without the schema needing to expose the underlying flag. The activity is named for the surface it gates, not the role permitted (see ["Activities are named for what's being gated, not who can do it"](#principles)). Registers in `core/authz/rules.py` and is listed in `_ACTIVITIES_EXEMPT_FROM_EMAIL_VERIFIED` in `test_authz_registry_complete.py` so the email-verified pin doesn't reject it — the SPA nav link mirrors what Django actually allows, and Django allows unverified staff to reach `/admin/`.
 
-**Audit before removing the schema field.** After the named migrations land, grep `frontend/` once more for any remaining `is_superuser` / `isSuperuser` read; the audit's output (each found read + its disposition) is part of the PR description. The named migrations cover the consumers known today; the audit catches anything that's slipped in since this plan was written.
+**Tightening `rate_limit.exempt`.** The Phase 6c registration was `is_staff`. Phase 7 tightens it to `is_authenticated, email_verified, is_staff`. The policy module is the security boundary; what it permits should be stated explicitly, not inferred from whatever upstream gate happens to fire first. Rate-limit exemption is a privilege we only grant to verified staff — say it. (`is_authenticated` is also added so anonymous surfaces `AUTH_REQUIRED` rather than `ROLE_REQUIRED` in the denial code; same convention applies to every rule in `core/authz/rules.py`.)
+
+**Frontend: capability-aware auth store.** `auth.svelte.ts` gains `capabilities`, `can(activity)`, and `refresh()`. `refresh()` re-fetches `/me/` bypassing the `loaded` gate that `load()` honours; concurrent calls de-dupe via an in-flight promise so a burst of `policy_denied` 403s on a list page fires one `/me/` round-trip, not N. `isSuperuser` and `set()`'s `is_superuser` parameter are removed.
+
+**403-as-invalidation.** An `onResponse` middleware in `client.ts` watches for `403` with `detail.kind === 'policy_denied'` and fires a registered callback — the auth store registers `auth.refresh()` at module init, browser-only. The middleware uses a registration setter (`registerOnPolicyDenied`) rather than a static import of `auth` to avoid a `client → auth → client` cycle. This catches the **allow→deny** drift direction only (capability tightened mid-session); the reverse direction (capability newly granted) is covered by explicit `auth.refresh()` calls in auth-mutation handlers (login, signup, email-verify). Cross-tab capability changes are not covered by either mechanism today; revisit with `BroadcastChannel` if Phase 9 telemetry shows it matters.
+
+**Frontend migrations.**
+
+- `frontend/src/routes/kiosk/edit/+layout.server.ts` — redirect now reads `data.capabilities?.['kiosk.edit']`. Anonymous redirect to `/login` stays unchanged.
+- `frontend/src/lib/components/Nav.svelte` — admin section split into per-link gates: `auth.can('kiosk.edit')` for "Kiosks", `auth.can('django_admin.access')` for "Django Admin"; section visibility on either. This is what makes `django_admin.access` worth introducing — without it, dropping `is_superuser` would force the Nav to keep reading some other flag for the admin row.
+- `frontend/src/lib/auth.svelte.ts` — `isSuperuser` and `set()`'s `is_superuser` removed. Migrated before the schema field so TypeScript flagged any straggling reader.
+- Test fixtures (`Nav.dom.test.ts`, `kiosk/edit/layout-server.test.ts`) drive capability state instead of `is_superuser`.
+
+**Audit before removing the schema field.** After the named migrations landed, grep on `frontend/` for `is_superuser` / `isSuperuser` reads returned zero hits. The named migrations covered every consumer.
+
+**OpenAPI naming allowlist.** Pydantic emits `Activity` as a top-level component schema (the `StrEnum` is referenced as a `dict[Activity, bool]` key), which trips the `*Schema`/`*Ref` suffix discipline. `Activity` is added to `ALLOWED_BARE_NAMES` in `test_openapi_boundaries.py` rather than renamed — `ActivitySchema` would lie about the type's role.
 
 This is the phase that lets target-less affordances (create buttons, top-level New entries, Nav rows) gate on policy verdicts instead of role flags or "are they logged in."
 

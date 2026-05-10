@@ -375,7 +375,7 @@ class TestAuthMe:
         resp = client.get("/api/auth/me/")
         data = resp.json()
         assert data["is_authenticated"] is False
-        assert data["is_superuser"] is False
+        # Capability verdicts are exercised in test_me_capabilities.py.
 
     def test_me_authenticated(self, client):
         user = make_user(
@@ -388,11 +388,3 @@ class TestAuthMe:
         assert data["username"] == "alice"
         assert data["first_name"] == "Alice"
         assert data["last_name"] == "Anderson"
-
-    def test_me_superuser(self, client):
-        user = make_user(email="a@b.test", is_staff=True, is_superuser=True)
-        client.force_login(user)
-        resp = client.get("/api/auth/me/")
-        data = resp.json()
-        assert data["is_authenticated"] is True
-        assert data["is_superuser"] is True
