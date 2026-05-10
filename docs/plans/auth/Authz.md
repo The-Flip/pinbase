@@ -115,6 +115,10 @@ backend/apps/media/authz.py       # media.* activities
 
 Each app's `apps.py: ready()` imports its `authz` module so registration happens at startup. The route-inventory test then walks the populated registry and asserts every mutating route is mapped to a registered activity.
 
+Core itself owns activities that aren't a single domain app's responsibility — user-state predicates like `rate_limit.exempt` and tooling-surface activities like `django_admin.access`. Because `core/authz/` is the engine package, those rules live in `core/authz/rules.py` (a sibling `apps/core/authz.py` would collide with the package) and `core/apps.py: ready()` imports it. New cross-cutting activities go there.
+
+User-state activities are exempt from the "every activity requires `email_verified`" pin in `test_authz_registry_complete.py` — they describe an attribute (`is staff`, `is exempt`) rather than gating a route an unverified user might call. New ones must be added to that test's `_USER_STATE_ACTIVITIES` set; the docstring on `core/authz/rules.py` points there.
+
 ### Reading markers off views
 
 The marker decorators (`@requires`, `@gated_inline`, `@public_mutation`) stamp string-keyed attributes (`_authz_activity`, etc.) on the view callable. Consumers must read those markers via the typed accessors in `core/authz/markers.py` rather than poking at the attributes directly:
@@ -245,6 +249,8 @@ Telling a deactivated user to verify their email is the wrong UX; the priority o
 
 Denials are logged at `info` with `(user_id, activity, code, target_id)`. Allows are logged at `debug` (mostly off in prod). Logging is the _caller's_ job — the policy returns a `Decision` and the calling middleware/decorator emits the log. Keeps the policy pure.
 
+Logging is `enforce()`'s job specifically, not `check()`'s. Hot-path read sites — `/me/capabilities`, per-row capability hints in serializers, the rate-limit exemption query — call `check()` directly so they don't flood the audit channel with a record per row per request. Only paths that actually gate a request (the `@requires` decorator and `@gated_inline` view bodies) go through `enforce()`. The Phase 9 dashboard is keyed off enforcement-path records only; hot-path reads are deliberately invisible to it.
+
 Tests that verify logging assert against a typed `CapturedAuthzLog` dataclass + pytest fixture in `apps/core/tests/test_authz_enforcement.py` — a small handler-based capture that pulls `extra=` keys off `LogRecord` into a typed shape. Future per-activity audit-log assertions should reuse the existing `authz_logs` fixture rather than reaching into `caplog.records[0].__dict__["activity"]` (which works at runtime but is `Any`-typed, so mypy can't catch a renamed `extra` key). The fixture documents the contract — every authz log record carries `(message, level, user_id, activity, code)` — and a missing key fails at fixture-translation time, not silently in a test that happens not to read it.
 
 ## Integration surface
@@ -355,9 +361,9 @@ Keep the exhaustive route inventory in code or tests, not this document, so it c
 
 ## Implementation phases
 
-The design ships across a sequence of small PRs. Each is independently mergeable; the first three are intentionally no-ops on user-visible behavior, and from Phase 4 onward each phase lights up one specific user-facing change (email gate, denial copy, target-less affordances, per-row affordances).
+The design ships across a sequence of small commits. Each is independently mergeable; the first three are intentionally no-ops on user-visible behavior, and from Phase 4 onward each phase lights up one specific user-facing change (email gate, denial copy, target-less affordances, per-row affordances).
 
-Each PR's acceptance criterion is small enough to bisect cleanly: PR 1 is "inventory test passes," PR 2 is "engine unit tests pass," PR 3 is "every authenticated user can still do everything they could yesterday," and so on.
+Each commit's acceptance criterion is small enough to bisect cleanly: commit 1 is "inventory test passes," commit 2 is "engine unit tests pass," commit 3 is "every authenticated user can still do everything they could yesterday," and so on.
 
 ### 1. ✅ DONE: Inventory + markers (no enforcement)
 
@@ -393,7 +399,7 @@ Add `is_staff` and `is_superuser` predicates to `core/authz/predicates.py` with 
 
 Fold `is_superuser` into `KIOSK_EDIT`'s rule; remove the inline `_require_superuser` helper from `apps/kiosk/api/configs.py`. Behavior unchanged — the policy verdict matches the inline helper.
 
-### 6c. Rate-limit exemption via the policy
+### ✅ DONE: 6c. Rate-limit exemption via the policy
 
 Add a `rate_limit.exempt` activity registered with `is_staff`. Update `provenance/rate_limits.py` to call `policy.check(user, Activity.RATE_LIMIT_EXEMPT)` instead of reading `user.is_staff` directly. After this, the rate limiter never reads role flags directly — the policy is the single source of truth for _who qualifies_.
 
@@ -411,7 +417,9 @@ Out of scope: the `is_staff`/`is_superuser` check in `accounts/api.py` WorkOS au
 
 Backend + frontend changes for the target-less capabilities surface. Add `/me/capabilities` returning the verdict for each non-internal target-less activity. Anonymous callers get everything-false (per "anonymous users go through the policy").
 
-**New activity: `django_admin.access`** (rule: `is_staff`). Django admin's `/admin/` is staff-gated by the framework itself; this activity exists so the SPA can decide whether to render the "Django Admin" nav link without the schema needing to expose the underlying flag. The activity is named for the surface it gates, not the role permitted (see ["Activities are named for what's being gated, not who can do it"](#principles)).
+**New activity: `django_admin.access`** (rule: `is_staff`). Django admin's `/admin/` is staff-gated by the framework itself; this activity exists so the SPA can decide whether to render the "Django Admin" nav link without the schema needing to expose the underlying flag. The activity is named for the surface it gates, not the role permitted (see ["Activities are named for what's being gated, not who can do it"](#principles)). Like `rate_limit.exempt`, this is a user-state/tooling activity and registers in `core/authz/rules.py`; it must also be added to `_USER_STATE_ACTIVITIES` in `test_authz_registry_complete.py` so the email-verified pin doesn't reject it (an unverified staff user is still staff and should still see the admin link).
+
+The endpoint walks the populated registry — `iter_rules()` plus the marker-attribute filter for "target-less" — rather than enumerating activities by name. New activities show up automatically; nothing about adding `account.something_new` should require a second edit to the capabilities surface.
 
 Migrate every frontend `is_superuser` consumer to a capability, then drop the field from `AuthStatusSchema` entirely:
 
@@ -435,6 +443,8 @@ The first phase that introduces target-aware rules. Adds per-resource capability
 `changeset.undo` is target-aware (the activities table notes it's "scoped to the changeset author") but is **not** part of this phase. It rides along with the per-target work the next time the post-delete Undo flow needs touching, or sooner if a stakeholder asks for the per-row affordance — the embedded hint requires the same Protocol/prefetch pattern this phase establishes for `claim.revert`, so it's mechanical once the pattern is in place. Listed here so it doesn't get lost.
 
 **Each serializer audit must include a prefetch checklist.** The policy reads attributes off already-loaded objects, so any serializer that embeds a hint must `select_related` / `only(...)` the attributes the relevant `*PolicyView` Protocol declares, or the embed loop will N+1 behind the policy's back. Grep the Protocol to find the exact attribute list per target. A query-count regression test on each affected list endpoint is the dynamic backstop.
+
+**`PolicyUser` boundary cast.** Inline `check()` callers pass `request.user`, which Django types as `AbstractBaseUser | AnonymousUser` — the abstract parent doesn't expose `is_active` / `email_verified` / `is_staff`, so mypy can't narrow it to `PolicyUser` even though the concrete `User` instance satisfies the Protocol structurally. `provenance/rate_limits.py` (the only inline caller before this phase) handles it with a one-line `cast(PolicyUser, user)` after the `is_authenticated` guard. With one inline site that was fine; Phase 8 introduces a cluster of them (one per embedded-hint serializer). Extract a tiny `policy_user(user) -> PolicyUser` helper alongside `check()` at the second site, not the first — same "extract on second use" rule as `wrap_view_preserving_globals`.
 
 ### 9. Observability
 

@@ -7,3 +7,4 @@ class CoreConfig(AppConfig):
 
     def ready(self) -> None:
         from . import checks  # noqa: F401 — registers system checks
+        from .authz import rules  # noqa: F401 — registers core-owned activities

@@ -24,6 +24,9 @@ class Activity(StrEnum):
     CITATION_EDIT = "citation.edit"
     MEDIA_EDIT = "media.edit"
     KIOSK_EDIT = "kiosk.edit"
+    # User-state predicate, not a route-gated CRUD activity. Answers
+    # "is this user exempt from per-user rate limits."
+    RATE_LIMIT_EXEMPT = "rate_limit.exempt"
 
 
 class DenialCode(StrEnum):

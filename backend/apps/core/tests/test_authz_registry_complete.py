@@ -36,7 +36,16 @@ def test_every_activity_has_a_registered_rule(activity: Activity) -> None:
     )
 
 
-@pytest.mark.parametrize("activity", list(Activity))
+# User-state activities that intentionally do not gate on email
+# verification. These are not route-gated CRUD activities; they answer
+# "what is true of this user" and the answer is the same regardless of
+# email-verified status (an unverified staff user is still staff).
+_USER_STATE_ACTIVITIES = frozenset({Activity.RATE_LIMIT_EXEMPT})
+
+
+@pytest.mark.parametrize(
+    "activity", [a for a in Activity if a not in _USER_STATE_ACTIVITIES]
+)
 def test_every_activity_requires_email_verified(activity: Activity) -> None:
     """An authenticated, active, unverified user must be denied with
     VERIFICATION_REQUIRED on every launch activity.
@@ -50,6 +59,10 @@ def test_every_activity_requires_email_verified(activity: Activity) -> None:
     activities that gate on a role still surface VERIFICATION_REQUIRED
     rather than ROLE_REQUIRED — the only failing predicate is the one
     this test exists to pin.
+
+    User-state activities (see `_USER_STATE_ACTIVITIES`) are exempt —
+    they describe a user attribute, not a route an unverified user
+    might try to call.
     """
     user = StubPolicyUser(
         is_authenticated=True,

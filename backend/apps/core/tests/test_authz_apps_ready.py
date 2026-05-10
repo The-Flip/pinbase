@@ -13,22 +13,24 @@ import sys
 
 import pytest
 
-# Apps that own at least one Activity. Update if a new app starts
-# registering rules.
-_APPS_WITH_AUTHZ = (
-    "apps.catalog",
-    "apps.provenance",
-    "apps.citation",
-    "apps.media",
-    "apps.kiosk",
+# Modules that register at least one Activity. Update if a new app
+# starts registering rules. Core uses `core/authz/` as the engine
+# package, so its rules live in `core/authz/rules.py` instead of the
+# usual `<app>/authz.py`.
+_AUTHZ_RULE_MODULES = (
+    "apps.core.authz.rules",
+    "apps.catalog.authz",
+    "apps.provenance.authz",
+    "apps.citation.authz",
+    "apps.media.authz",
+    "apps.kiosk.authz",
 )
 
 
-@pytest.mark.parametrize("app_module", _APPS_WITH_AUTHZ)
-def test_app_authz_module_is_imported(app_module: str) -> None:
-    authz_module = f"{app_module}.authz"
+@pytest.mark.parametrize("authz_module", _AUTHZ_RULE_MODULES)
+def test_app_authz_module_is_imported(authz_module: str) -> None:
     assert authz_module in sys.modules, (
-        f"{authz_module} not imported. Add `from . import authz` to "
-        f"the app's `apps.py: ready()` so registration runs at "
+        f"{authz_module} not imported. Ensure the owning app's "
+        f"`apps.py: ready()` imports it so registration runs at "
         f"startup."
     )

@@ -10,7 +10,11 @@ Semantics:
   each check.
 * Per user. Anonymous users never hit this code path (endpoints are auth-gated
   upstream).
-* Staff (``user.is_staff``) bypass all limits.
+* Some users bypass all limits. Who qualifies is decided by the
+  ``rate_limit.exempt`` activity in :mod:`apps.core.authz`, not by
+  this module — today that resolves to ``is_staff``, but the
+  predicate is no longer this file's concern. Look in
+  ``core/authz/rules.py`` to change who is exempt.
 * Both successful and validation-rejected attempts consume a slot. The
   consuming call is :func:`check_and_record` and endpoints invoke it once at
   the top of the request.
@@ -23,11 +27,12 @@ from __future__ import annotations
 import math
 import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.core.cache import cache
 
+from apps.core.authz import Activity, Allow, PolicyUser, check
 from apps.core.exceptions import StructuredApiError
 
 from .constants import (
@@ -99,11 +104,14 @@ def check_and_record(
 ) -> None:
     """Consume one slot in the user's bucket, or raise if the bucket is full.
 
-    Staff users bypass the check entirely and nothing is recorded for them.
+    Exempt users (per the ``rate_limit.exempt`` policy activity) bypass
+    the check entirely and nothing is recorded for them.
     """
     if user is None or not user.is_authenticated:
         raise RateLimitExceededError(bucket=spec.bucket, retry_after=1)
-    if getattr(user, "is_staff", False):
+    # request.user is a concrete User after the is_authenticated guard;
+    # mypy can't narrow through AbstractBaseUser.
+    if isinstance(check(cast(PolicyUser, user), Activity.RATE_LIMIT_EXEMPT), Allow):
         return
 
     now = time.time()
