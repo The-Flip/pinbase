@@ -1,9 +1,9 @@
 """End-to-end tests for the 8 simple-taxonomy entities' create/delete/restore.
 
-Covers representative entities per the Phase 2 plan: ``tag`` (parentless),
+Covers representative entity shapes: ``tag`` (parentless),
 ``technology-subgeneration`` (parented), ``technology-generation`` (parent
-with active-children blocking), and ``reward-type`` (shares the detail
-schema for PATCH but uses the shared ``TaxonomySchema`` on create).
+with active-children blocking), and ``reward-type`` (shared detail schema for
+PATCH but shared ``TaxonomySchema`` on create).
 """
 
 from __future__ import annotations

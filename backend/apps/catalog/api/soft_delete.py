@@ -1,8 +1,8 @@
 """Soft-delete planning and execution for user-deletable catalog entities.
 
 A user "delete" in this system is a ``status=deleted`` claim at user priority
-rather than a DB row removal. The walker below enforces the spec's cascade
-rules (see docs/plans/RecordCreateDelete.md §Cascade Behavior):
+rather than a DB row removal. See ``docs/RecordLifecycle.md`` for the policy.
+The walker below enforces these cascade rules:
 
 * CASCADE to an independent lifecycle entity — write ``status=deleted``
   claims for each active child in the same ChangeSet. Modeled here by an

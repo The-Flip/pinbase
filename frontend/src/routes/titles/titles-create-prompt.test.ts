@@ -77,9 +77,8 @@ describe('decideCreatePrompt', () => {
   });
 
   it('ignores other facets — a faceted filter cannot create a false positive', () => {
-    // Simulates the regression the plan called out: a "Williams" facet
-    // would hide a real Stern-manufactured Godzilla, and without this
-    // invariant the prompt would incorrectly offer to create one.
+    // A "Williams" facet would hide a real Stern-manufactured Godzilla, and
+    // without this invariant the prompt would incorrectly offer to create one.
     // decideCreatePrompt only takes query + authenticated, so the facet
     // state isn't even visible to it — the invariant is structural.
     const decision = decideCreatePrompt({

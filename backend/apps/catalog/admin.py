@@ -5,5 +5,3 @@
 #   - Source, Claim, ChangeSet  (provenance/admin.py)
 #   - License                   (core/admin.py)
 #   - User                      (accounts/admin.py)
-#
-# See docs/plans/ValidationFix.md for the rationale.

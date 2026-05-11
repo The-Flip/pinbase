@@ -834,8 +834,8 @@ def execute_claims(
     # The ``cast(User, user)`` at the ``create`` call is a django-stubs
     # workaround: the FK to ``settings.AUTH_USER_MODEL`` is typed against
     # ``auth.User`` while ``request.user`` is ``AbstractBaseUser |
-    # AnonymousUser``. Both the cast and the tripwire go away once we
-    # introduce a custom User model — see docs/plans/UserModel.md.
+    # AnonymousUser``. Both the cast and the tripwire go away if/when the
+    # project swaps in a custom User model that django-stubs can track directly.
     assert not isinstance(user, AnonymousUser)
     auth_user = cast(User, user)
     try:
@@ -885,8 +885,8 @@ def execute_multi_entity_claims(
     # The ``cast(User, user)`` at the ``create`` call is a django-stubs
     # workaround: the FK to ``settings.AUTH_USER_MODEL`` is typed against
     # ``auth.User`` while ``request.user`` is ``AbstractBaseUser |
-    # AnonymousUser``. Both the cast and the tripwire go away once we
-    # introduce a custom User model — see docs/plans/UserModel.md.
+    # AnonymousUser``. Both the cast and the tripwire go away if/when the
+    # project swaps in a custom User model that django-stubs can track directly.
     assert not isinstance(user, AnonymousUser)
     auth_user = cast(User, user)
     try:

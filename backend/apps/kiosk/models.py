@@ -75,8 +75,8 @@ class KioskConfig(TimeStampedModel):
 class KioskConfigItem(TimeStampedModel):
     """One Title slot in a KioskConfig, ordered by ``position``.
 
-    CASCADE on the Title FK is deliberate (operational data adapts to catalog
-    deletes — see plan, "Decisions → Items").
+    CASCADE on the Title FK is deliberate: operational kiosk slots adapt when
+    catalog titles are deleted.
     """
 
     config = models.ForeignKey(

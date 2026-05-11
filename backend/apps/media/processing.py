@@ -86,8 +86,8 @@ def validate_image(data: bytes) -> ImageInfo:
 
     Opens with Pillow and forces a full decode. Rejects degenerate
     dimensions (< MIN_IMAGE_DIMENSION or > MAX_IMAGE_DIMENSION).
-    Does NOT enforce the extension allowlist — that is the upload
-    endpoint's responsibility (Phase 3).
+    Does NOT enforce the extension allowlist; upload endpoints own that
+    policy because they can report field-specific validation errors.
 
     Raises InvalidImageError on any failure.
     """
@@ -188,8 +188,8 @@ def check_codec_support() -> dict[str, bool]:
     """Check availability of optional image codecs.
 
     Returns a dict mapping extension names to availability.
-    Phase 3's upload endpoint uses this to return specific
-    'format not supported' errors instead of generic decode failures.
+    Upload endpoints use this to return specific 'format not supported'
+    errors instead of generic decode failures.
     """
     heif_ok = False
     try:

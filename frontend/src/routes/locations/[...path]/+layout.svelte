@@ -95,8 +95,8 @@
       return [{ key: 'new', label: '+ New Country', href: resolveHref('/locations/new') }];
     }
     const childLabel = newChildLabel(profile);
-    // Name, parent, slug, and location_type are intentionally absent —
-    // see docs/plans/model_driven_metadata/LocationCrud.md §"Decisions".
+    // Name, parent, slug, and location_type are intentionally absent because
+    // they define the location's canonical path and hierarchy.
     const items: EditSectionMenuItem[] = visibleSections.map((section) =>
       isMobile
         ? {

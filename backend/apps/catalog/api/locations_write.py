@@ -160,10 +160,9 @@ class LocationPatchClaimSchema(ChangeSetInputSchema):
 
 
 # Fields that must never appear in a PATCH ``fields`` payload — Location's
-# parent / slug / location_type are immutable after create. Once the
-# model-level ``immutable_after_create`` enforcement (see plan
-# §"Out of Scope") lands, this set comes from the model and the explicit
-# guard below goes away.
+# parent / slug / location_type are immutable after create. Once model-level
+# immutable-field metadata exists, this set should come from the model and the
+# explicit guard below can go away.
 _IMMUTABLE_FIELDS = frozenset({"parent", "slug", "location_type"})
 
 

@@ -231,6 +231,8 @@ This is wrong. A source asserting "this machine exists" is no different from a s
 
 ### Entity status as a claim-controlled field
 
+Current catalog record lifecycle policy lives in [Record Lifecycle](../../RecordLifecycle.md#record-lifecycle).
+
 Every catalog entity gets a `status` field with two values:
 
 - **`active`** — the entity is live in the catalog (default)

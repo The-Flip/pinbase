@@ -1,7 +1,6 @@
 """Acceptance tests for the model-driven linkability contract.
 
-These tests are the executable form of the acceptance criteria in
-``docs/plans/model_driven_metadata/ModelDrivenLinkability.md``:
+These tests are the executable form of the model-driven linkability contract:
 
 1. Every concrete ``LinkableModel`` subclass routes its CRUD lifecycle
    through the shared factories — no per-entity duplication of

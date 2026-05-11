@@ -167,8 +167,8 @@ describe('locations layout — country', () => {
     const user = userEvent.setup();
     renderLayout(COUNTRY);
     await user.click(screen.getByRole('button', { name: 'Edit' }));
-    // Name / parent / slug / location_type are intentionally absent — see
-    // docs/plans/model_driven_metadata/LocationCrud.md §"Decisions".
+    // Name / parent / slug / location_type are intentionally absent because
+    // they define the location's canonical path and hierarchy.
     expect(screen.queryByRole('menuitem', { name: 'Name' })).toBeNull();
     expect(screen.queryByRole('menuitem', { name: 'Parent' })).toBeNull();
     expect(screen.getByRole('menuitem', { name: 'Description' })).toBeInTheDocument();

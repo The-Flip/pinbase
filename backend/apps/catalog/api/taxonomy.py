@@ -171,8 +171,8 @@ def _list_taxonomy_with_counts(  # noqa: UP047
 
 
 def _taxonomy_detail_qs(model_class: type[_TaxM]) -> QuerySet[_TaxM]:  # noqa: UP047
-    # Prefetch is generic but its type args vary per entry; see idiom in
-    # docs/plans/MypyFixing.md.
+    # This list mixes relation names with heterogeneous Prefetch instances, so
+    # the Prefetch type args are intentionally erased here.
     prefetches: list[str | Prefetch[Any, Any, Any]] = [claims_prefetch()]
     if model_class is RewardType:
         prefetches.append("aliases")

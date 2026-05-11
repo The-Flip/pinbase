@@ -418,8 +418,7 @@ def _active_credit_count(person: Person) -> int:
     perspective it's a PROTECT reference. We compute it here rather than
     teaching the walker to follow owned-child chains: Credit is the first
     case to hit this, and generalizing without a second example risks
-    designing for the wrong shape. See
-    docs/plans/RecordCreateDelete.md §Cascade Behavior for the policy.
+    designing for the wrong shape.
     """
     # Credit.model XOR Credit.series — exactly one side is non-null. The
     # null-inclusive ``active_status_q`` can't be used alone because

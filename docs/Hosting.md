@@ -107,7 +107,7 @@ In the Railway service dashboard:
 
 ### Cache backend — required for shared state across workers
 
-Per-user rate limits ([backend/apps/provenance/rate_limits.py](../backend/apps/provenance/rate_limits.py)) use `django.core.cache` as the shared store for sliding-window timestamps. In a multi-worker deployment (Gunicorn with more than one worker), the default `LocMemCache` backend is **per-process** — each worker keeps its own window, and a user can effectively send `N × limit` requests before any one worker decides to 429. Any other feature that starts using the cache for cross-request state has the same failure mode.
+Per-user rate limits ([backend/apps/provenance/rate_limits.py](../backend/apps/provenance/rate_limits.py)) use `django.core.cache` as the shared store for sliding-window timestamps. Lifecycle buckets and action semantics are described in [Rate Limits](RecordLifecycle.md#rate-limits). In a multi-worker deployment (Gunicorn with more than one worker), the default `LocMemCache` backend is **per-process** — each worker keeps its own window, and a user can effectively send `N × limit` requests before any one worker decides to 429. Any other feature that starts using the cache for cross-request state has the same failure mode.
 
 Use a shared backend in production. On Railway, the simplest options are:
 

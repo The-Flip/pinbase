@@ -29,7 +29,7 @@ Two prefixes are intentional, not drift:
 - `soft_delete_*` — data-layer / DB-mechanism declarations: how the cascade walks, what blocks the soft-delete write at the model layer. Lives in [ModelDrivenSoftDeleteMetadata.md](ModelDrivenSoftDeleteMetadata.md).
 - `delete_*` — API and presentation declarations: which routes to expose, what copy to render, where to redirect, what FK ties to the parent for breadcrumb / redirect. Lives in [ModelDrivenDeleteRoutes.md](ModelDrivenDeleteRoutes.md) and this doc.
 
-When in doubt, ask: is this a fact about the soft-delete cascade machinery, or a fact about the user-facing delete experience? The answer picks the prefix.
+When in doubt, ask: is this a fact about the soft-delete cascade machinery, or a fact about the API/presentation delete experience? The answer picks the prefix.
 
 ## Backend prerequisites
 

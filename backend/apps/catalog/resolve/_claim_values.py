@@ -6,8 +6,8 @@ in :mod:`apps.catalog.claims` — the consistency test in
 ``tests/test_claim_values.py`` enforces that mirror.
 
 Resolvers ``cast(<Shape>, claim.value)`` at the top of their loop body;
-reads stay on ``.get()`` until Step 5 of ResolveHardening flips required
-keys to subscript.
+reads stay on ``.get()`` until every required relationship-payload key is
+guaranteed by validation on historical and newly written claims.
 
 ``from __future__ import annotations`` is deliberately omitted — TypedDict
 computes ``__required_keys__`` at class-creation time and cannot see

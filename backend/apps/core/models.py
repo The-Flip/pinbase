@@ -240,10 +240,9 @@ class CatalogQuerySet(models.QuerySet[_LifecycleModel]):
     def active(self) -> CatalogQuerySet[_LifecycleModel]:
         """Return entities considered live in the catalog.
 
-        Includes ``status='active'`` and ``status IS NULL`` (transitional:
-        entities from ingest commands not yet converted to plan/apply don't
-        emit status claims).  Tighten to ``status='active'`` only after all
-        adapters are converted (Phase 5).
+        Includes ``status='active'`` and ``status IS NULL`` for legacy ingest
+        commands that do not emit status claims yet. Tighten to
+        ``status='active'`` only after every ingest path creates status claims.
         """
         return self.filter(
             models.Q(status=EntityStatus.ACTIVE) | models.Q(status__isnull=True)
@@ -261,8 +260,8 @@ def active_status_q(relation: str) -> models.Q:
 
         Count("machine_models", filter=Q(...) & active_status_q("machine_models"))
 
-    Null-inclusive for transitional compatibility — tighten alongside
-    ``CatalogQuerySet.active()`` after Phase 5.
+    Null-inclusive for legacy ingest compatibility — tighten alongside
+    ``CatalogQuerySet.active()`` once every ingest path creates status claims.
     """
     return models.Q(**{f"{relation}__status": EntityStatus.ACTIVE}) | models.Q(
         **{f"{relation}__status__isnull": True}

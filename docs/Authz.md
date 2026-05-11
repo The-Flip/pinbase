@@ -82,8 +82,3 @@ target state changed.
 The backend owns denial messages today. The frontend renders
 `detail.message`; do not add a frontend denial-code mapper unless product
 requirements grow beyond string messages.
-
-## Further Reading
-
-Design rationale, denial-code priority, phase history, and rejected
-alternatives: [`docs/plans/auth/Authz.md`](plans/auth/Authz.md).

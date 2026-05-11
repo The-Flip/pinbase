@@ -153,8 +153,8 @@ def extract_url(url: str) -> ExtractionResult:
                 "skip_locator": rec.child.skip_locator,
             }
         )
-    # Domain-only match (no child) is intentionally ignored here —
-    # see plan step 3 for rationale.
+    # Domain-only matches are intentionally ignored here: extraction needs a
+    # specific child source so it knows which locator rules apply.
 
     # 2. Cache check
     cache_key = f"extract:v1:url:{url}"

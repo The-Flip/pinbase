@@ -33,7 +33,7 @@ Two prefixes are intentional, not drift:
 - `soft_delete_*` — data-layer / DB-mechanism declarations: how the cascade walks, what blocks the soft-delete write at the model layer. Lives in [ModelDrivenSoftDeleteMetadata.md](ModelDrivenSoftDeleteMetadata.md).
 - `delete_*` — API and presentation declarations: which routes to expose, what copy to render, where to redirect, what FK ties to the parent for breadcrumb / redirect. Lives in this doc and [ModelDrivenDeletePage.md](ModelDrivenDeletePage.md).
 
-When in doubt, ask: is this a fact about the soft-delete cascade machinery, or a fact about the user-facing delete experience? The answer picks the prefix.
+When in doubt, ask: is this a fact about the soft-delete cascade machinery, or a fact about the API/presentation delete experience? The answer picks the prefix.
 
 The two prefix groups don't conflict on names — the data-layer pair (`soft_delete_cascade_relations`, `soft_delete_usage_blockers`) and the API-layer pair proposed here (`delete_active_children_relation`, `delete_parent_field`) are orthogonal axes. See [Open question: derivability](#open-question-is-delete_active_children_relation-derivable) for one place they touch.
 
