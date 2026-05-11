@@ -150,11 +150,11 @@ def raise_form_error(message: str) -> NoReturn:
     )
 
 
-def plan_scalar_field_claims(
-    model_class: type[ClaimControlledModel],
+def plan_scalar_field_claims[M: ClaimControlledModel](
+    model_class: type[M],
     fields: dict[str, Any],
     *,
-    entity: db_models.Model | None = None,
+    entity: M | None = None,
 ) -> list[ClaimSpec]:
     """Validate scalar fields and reject empty/no-op field payloads.
 
@@ -225,11 +225,11 @@ def get_field_constraints(
     return constraints
 
 
-def validate_scalar_fields(
-    model_class: type[ClaimControlledModel],
+def validate_scalar_fields[M: ClaimControlledModel](
+    model_class: type[M],
     fields: dict[str, Any],
     *,
-    entity: db_models.Model | None = None,
+    entity: M | None = None,
 ) -> list[ClaimSpec]:
     """Validate scalar fields and return ClaimSpecs.
 

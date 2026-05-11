@@ -13,9 +13,9 @@ from __future__ import annotations
 from collections.abc import Iterable, Mapping
 
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
 
 from apps.core.types import JsonBody
+from apps.media.models import MediaSupportedModel
 from apps.provenance.models import ClaimControlledModel, IdentityPart, make_claim_key
 from apps.provenance.validation import (
     RelationshipSchema,
@@ -58,7 +58,7 @@ def register_catalog_relationship_schemas() -> None:
         Theme,
         Title,
     )
-    from apps.media.models import MediaAsset, MediaSupportedModel
+    from apps.media.models import MediaAsset
 
     from ._alias_registry import discover_alias_types
 
@@ -317,7 +317,7 @@ def build_relationship_claim(
 
 
 def build_media_attachment_claim(
-    entity: models.Model,
+    entity: MediaSupportedModel,
     asset_pk: int,
     *,
     category: str | None = None,
@@ -331,12 +331,7 @@ def build_media_attachment_claim(
     All code paths that create ``media_attachment`` claims should use this
     helper so that category validation happens exactly once.
     """
-    from apps.media.models import MediaSupportedModel
-
     model_class = type(entity)
-    if not issubclass(model_class, MediaSupportedModel):
-        raise ValueError(f"{model_class.__name__} does not support media attachments.")
-
     allowed = model_class.MEDIA_CATEGORIES
     if category is not None:
         if not allowed:
@@ -358,7 +353,7 @@ def build_media_attachment_claim(
 
 
 def make_authoritative_scope(
-    model_class: type[models.Model],
+    model_class: type[ClaimControlledModel],
     object_ids: Iterable[int],
 ) -> set[tuple[int, int]]:
     """Build an authoritative_scope set from a model class and object IDs.
