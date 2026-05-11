@@ -4,7 +4,7 @@
 
 We need to be able to put checks around activity without wiring every call site to specific checks about who the user is.
 
-Email verification -- [Verification.md](Verification.md) -- is the first concrete case: catalog edits should require a verified email so disposable email-password accounts cannot immediately write claims. But the authorization decision should not be named or modeled as "email verification" at every Svelte editor, API endpoint, or claims write helper. That would make the next constraint -- moderator role, account age, rate limit state, reputation, abuse flag, scoped delete permission, etc. -- require another audit of every edit path.
+Email verification -- [EmailVerification.md](EmailVerification.md) -- is the first concrete case: catalog edits should require a verified email so disposable email-password accounts cannot immediately write claims. But the authorization decision should not be named or modeled as "email verification" at every Svelte editor, API endpoint, or claims write helper. That would make the next constraint -- moderator role, account age, rate limit state, reputation, abuse flag, scoped delete permission, etc. -- require another audit of every edit path.
 
 The product rule we care about is not "has verified email." It is "may perform this activity." Email verification is only one input into that decision.
 
@@ -400,7 +400,7 @@ Update `@requires`'s body to call `policy.check` and raise a structured 403 on d
 
 ### 4. ✅ DONE: Email verification gate
 
-([Verification.md](Verification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
+([EmailVerification.md](EmailVerification.md)). Add `email_verified` column to `User`, wire it into the mirrored-fields refresh, add the `email_verified` predicate to each launch activity's rule. Now the gate actually slows spam.
 
 ### ✅ DONE: 6a. Role predicates
 
