@@ -257,7 +257,7 @@ Multiple predicates can fail simultaneously (unverified email and deactivated ac
 
 1. `auth_required` — user is anonymous
 2. `account_deactivated` — `is_active` is false (self-deactivated, dormant cleanup, etc.)
-3. `account_banned` — explicit ban (added when banning ships; separate from `account_deactivated` so the SPA can render different copy)
+3. `account_banned` — _(future)_ explicit ban; not in the `DenialCode` enum yet. Will be added when banning ships, separate from `account_deactivated` so the SPA can render different copy. Listed here to reserve the priority slot.
 4. `role_required` — moderator/admin needed
 5. `owner_required` — target row belongs to another user (e.g. undoing someone else's changeset)
 6. `verification_required` — email not verified
@@ -552,16 +552,16 @@ The dashboard is the on-call backstop for any future rule tightening (account-ag
 
 Fix: after loading the `Claim`, add `enforce(policy_user(user), Activity.CLAIM_REVERT, target=claim)` to `revert_claim` (same shape as `undo_changeset` already does). Add a failing endpoint test for an unverified self-revert returning structured `verification_required` first, per the TDD rule.
 
-### ✅ DONE: Migrate frontend edit affordances off `auth.isAuthenticated`
+### ✅ DONE: Gate frontend edit affordances at the destination, not the affordance
 
-`docs/Svelte.md` says `auth.isAuthenticated` is for identity/login UI only — not an edit permission check — but several product affordances still gate on it directly:
+The original framing of this follow-up — "migrate `auth.isAuthenticated` edit-affordance gates to `auth.can(...)`" — was reversed in implementation (commits `ad6f091cd`, `ee6c9ebde`). The shipped design **shows affordances to all authenticated users for discoverability** and moves the policy gate to the click destination:
 
-- `frontend/src/routes/titles/new/+page.ts` — should check `catalog.create`
-- `frontend/src/lib/components/TaxonomyListPage.svelte` — `+ New X` action; should check the relevant create activity
-- `frontend/src/routes/titles/[slug]/+layout.svelte` — edit/delete menu; should check `catalog.edit` / `catalog.delete`
-- `frontend/src/lib/components/EditHistory.svelte` — Revert button; should check `auth.can('claim.revert')` (target-less for now; per-row hint when `claim.revert`'s embed slot is wired)
+- **Route loaders** (`*/edit`, `*/new`) call `requireCapability(fetch, activity)` — redirects unverified users to `/verify-email`, anonymous to `/login`. Edit gates live in `+layout.ts` so `[section]` subroutes are also covered on direct navigation.
+- **Inline action buttons** (e.g. `EditHistory`'s Revert) submit unconditionally and let the structured `policy_denied` 403 carry remediation copy. Target-aware activities like `claim.revert` are absent from `/me/` capabilities by design, so `auth.can()` would always return false and gate everyone.
 
-After the named four, grep `frontend/` for every `auth.isAuthenticated` usage and classify each as identity/login UI (keep) or edit affordance (migrate). Consider adding an ESLint rule that fails on `auth.isAuthenticated &&` patterns guarding mutation UI so this regression class can't recur.
+Under this design, `auth.isAuthenticated` is the correct visibility signal — it gates discoverability (anonymous users hide; their remediation is sign-up in `Nav`), not permission. See [docs/Svelte.md `## Authorization`](../../Svelte.md#authorization) for the contributor-facing rules.
+
+The originally-flagged regression-class concern (an ESLint guard against `auth.isAuthenticated &&` patterns) is moot under the shipped design — the pattern is now correct.
 
 ### Type-constrain `check()` / `enforce()` target to the activity's target Protocol
 
