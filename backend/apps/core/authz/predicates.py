@@ -9,20 +9,24 @@ when multiple predicates fail.
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
 from django.db.models import Model
 
 from .types import Allow, Decision, DenialCode, Deny, PolicyContext, PolicyUser
 
-# Per-app rules narrow `target` further via Protocol typing on the
-# predicate parameter; the registry-facing alias stays generic because
-# the registry holds rules for many target types.
-# Provisional. Target-aware predicates (e.g. `is_claim_author` taking
-# `target: ClaimPolicyView`) won't satisfy this signature — Protocol
-# isn't a Model subclass, and Callable params are contravariant. When
-# the first target-aware rule lands, replace this with a contravariant
-# Predicate Protocol.
-Predicate = Callable[[PolicyUser, Model | None, PolicyContext | None], Decision]
+# A predicate is a pure function `(user, target, context) -> Decision`.
+# The registry-facing alias intentionally types `target` as `Any` so per-
+# rule predicates can declare a narrow Protocol on the parameter
+# (`target: ChangeSetPolicyView`) and still satisfy this storage type —
+# `Callable` is contravariant in argument types, so a stricter parameter
+# would otherwise be incompatible. The narrow Protocol does the real
+# enforcement work: at predicate-definition time, mypy checks the body
+# against the declared Protocol, so reading any attribute outside the
+# Protocol is a static type error caught where it lives. The `Any` here
+# is a deliberate registry-level escape hatch, not a hole in the engine's
+# type discipline.
+Predicate = Callable[[PolicyUser, Any, PolicyContext | None], Decision]
 
 
 def is_authenticated(

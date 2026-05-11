@@ -21,7 +21,7 @@ Examples of activity names:
 
 Backend write paths should depend on activity authorization, not directly on `email_verified`. For example, a catalog claim write should require `catalog.edit`; the policy for `catalog.edit` can initially require authentication, an active account, and verified email. Later, the same policy can add account-age, role, reputation, moderation, or rate-limit constraints without changing every catalog editor.
 
-The frontend should follow the same language but must not reimplement the policy. The backend exposes capabilities through two surfaces, used together: a `/me/capabilities` endpoint for target-less activities (`catalog.create`), and per-resource capability hints embedded in resource responses for target-aware activities (`claim.revert` on a specific claim, `catalog.delete` on a specific entity). Both compute their answers via `policy.check`; neither is the sole source. Structured denial responses return stable blocker codes from a closed registry -- `verification_required`, `moderator_required`, etc. -- mapped to user-facing copy in one place, so shared UI can explain the problem without each editor knowing the underlying authorization rules.
+The frontend should follow the same language but must not reimplement the policy. The backend exposes capabilities through two surfaces, used together: a `/me/capabilities` endpoint for target-less activities (`catalog.create`), and per-resource capability hints embedded in resource responses for target-aware activities (`claim.revert` on a specific claim, `catalog.delete` on a specific entity). Both compute their answers via `policy.check`; neither is the sole source. Structured denial responses return stable blocker codes from a closed registry -- `verification_required`, `owner_required`, etc. -- with user-facing copy authored on the backend (in `core/authz/exceptions.py`) and rendered as-is by `parseApiError`. The wire shape (`code` + `context`) is structured so a future frontend mapper can override copy if product requirements ever justify one; today the backend is the single source for both decision and copy. See [Why no frontend mapper today](#why-no-frontend-mapper-today).
 
 This is the standard policy-based / capability-based authorization shape: call sites request an action, central policy evaluates roles and attributes. For Flipcommons, a lightweight in-repo policy module is enough; adopting a full external authorization engine would be premature.
 
@@ -220,17 +220,35 @@ HTTP 403
 }
 ```
 
-`message` is an English fallback so the API is usable without the SPA. The SPA ignores it and renders its own copy from `code` via a single mapper module — one place per code maps to `{ title, body, primaryAction }`. Each code's `context` shape is part of the registry and part of the API contract; adding or removing a key is a breaking change.
+`message` is the user-facing copy the SPA renders today. `code` and `context` are on the wire so a future SPA mapper module can override copy per-code, but **no such mapper exists yet, and Phase 8 deliberately doesn't build one.** Each code's `context` shape is still part of the registry and part of the API contract; adding or removing a key is a breaking change.
 
-The Phase-6 denial-code mapper layers _on top of_ the existing base-message extraction in `frontend/src/lib/api/parse-api-error.ts`, not in place of it. The parser already special-cases `validation_error` (it has field-level errors) and falls through to `plain(detail.message)` for every other structured error via the `StructuredErrorBodySchema` base contract. Phase 5 adds a separate `code → { title, body, primaryAction }` mapping that the SPA's render layer consults; the parser's job stays "extract a message string." A new structured error variant on the backend that's content with the base `message` requires zero changes to the parser — only the render mapper, and only when the code wants custom copy.
+### Why no frontend mapper today
+
+The original design imagined a SPA module mapping `code → { title, body, primaryAction }`, rendered in place of the backend's `message`. On reflection, the mapper isn't justified yet for this codebase:
+
+- **Single language.** No i18n requirements; the backend can author copy directly.
+- **Single frontend.** No mobile client or third-party API consumer that would benefit from machine-readable codes over English strings.
+- **No deploy-skew problem.** Backend and frontend ship together; copy changes don't need to outpace API changes.
+- **No per-(route, code) UX yet.** The original argument for a mapper was richer-than-string structure (title/body/action button) and per-context overrides. The SPA today renders a flat error string in a toast; nothing consumes the richer structure.
+- **Speculative scaffolding has a cost.** A mapper would duplicate the backend message registry, drift from it over time, and introduce a second source of truth for copy. CLAUDE.md is explicit about not building for hypothetical future requirements.
+
+The simpler path: when a denial code needs `context`-aware copy (e.g. `experience_required`'s "you need 5 edits, you have 3"), the backend builds the message from `Deny.context` in `core/authz/exceptions.py`. Codes without context data use static `_DENIAL_MESSAGE` strings. `parseApiError` renders `detail.message`.
+
+**When to revisit.** Build the mapper when at least one of these is true:
+
+- (a) i18n lands and needs message keys;
+- (b) the SPA grows richer-than-string error UI (action buttons, illustrated empty-states, per-context links) for at least two codes;
+- (c) a non-SPA consumer needs structured codes that the backend's English copy can't serve. Until then, the wire shape (`code`, `context`) stays ready, the backend owns the copy, and `parseApiError`'s fall-through is the contract.
+
+The parser's job stays "extract a message string." It already special-cases `validation_error` (which has field-level errors) and falls through to `plain(detail.message)` for every other structured error via the `StructuredErrorBodySchema` base contract. Adding a new structured error variant requires no parser change unless the variant has fields beyond the base.
 
 All structured-detail flavors carry `kind` — `validation_error`, `rate_limit`, `policy_denied` — and the frontend extractor dispatches by `detail.kind`. New variants subclass `StructuredApiError` (declaring `kind` and `status` as class attributes plus a `to_body()` method) and declare a matching `kind` literal on their body schema; a single shared exception handler in `config/api.py` wraps the response.
 
-Routes are not currently required to declare `403: PolicyDeniedSchema` specifically in their `response=` map. The global exception handler in `config/api.py` produces the structured body regardless, and `parse-api-error.ts` dispatches on `detail.kind` at runtime — so generic per-code copy (the Phase 5 mapper) works without typed knowledge of which operations can deny. The frontend's denial mapper keys off `error.detail.code`.
+Routes are not currently required to declare `403: PolicyDeniedSchema` specifically in their `response=` map. The global exception handler in `config/api.py` produces the structured body regardless, and `parse-api-error.ts` dispatches on `detail.kind` at runtime — so generic per-code rendering (today, the backend's `message` string) works without typed knowledge of which operations can deny.
 
 There is a related but orthogonal contract: `test_post_patch_delete_declare_4xx_responses` requires every mutating endpoint to declare _some_ 4xx response (token presence, not comprehensive enumeration). For routes with input validation or missing-object lookups, 422 / 404 declarations satisfy that test, and policy 403 is left undeclared. For routes whose only error mode is the policy gate (today, just `create_config` in `apps/kiosk/api/configs.py`), the policy 403 is the natural — and currently the only — 4xx to declare; the union `PolicyDeniedSchema | ErrorDetailSchema` is used so a future inline `HttpError(403, "...")` would still type-check. Both shapes are fine; the 4xx-presence test does not care _which_ 4xx is declared, only that one is.
 
-**Revisit after Phase 8.** Declaring `403` per route would buy a typed `error.detail.code` on the generated SvelteKit client, which only matters if the SPA grows _per-(route, code)_ special-casing — different copy or remediation for the same denial code depending on which operation produced it. Today the SPA has none of that, and the Phase 5 mapper deliberately keeps copy generic. Phase 8's embedded capability hints further reduce catch-and-react sites by letting the SPA disable affordances pre-emptively. After Phase 8, audit the SPA for per-(route, code) handling: if it has emerged, sweep all `@requires` routes to declare `403: PolicyDeniedSchema` (or the union `PolicyDeniedSchema | ErrorDetailSchema` where an inline `HttpError(403, "...")` also fires) and add a route-inventory-style test that walks `@requires` markers and asserts each operation's response map declares 403. Otherwise, leave the contract as-is. Watch Phase 5 for an early signal — if writing the denial-code mapper drives a reach for route-aware overrides, pull the decision forward.
+**Revisit if/when a frontend mapper lands.** Declaring `403` per route would buy a typed `error.detail.code` on the generated SvelteKit client, which only matters if the SPA grows _per-(route, code)_ special-casing — different copy or remediation for the same denial code depending on which operation produced it. Today the SPA has none of that. If the conditions in [Why no frontend mapper today](#why-no-frontend-mapper-today) flip and a mapper does ship, audit the SPA for per-(route, code) handling at that point: if it has emerged, sweep all `@requires` routes to declare `403: PolicyDeniedSchema` (or the union `PolicyDeniedSchema | ErrorDetailSchema` where an inline `HttpError(403, "...")` also fires) and add a route-inventory-style test that walks `@requires` markers and asserts each operation's response map declares 403. Otherwise, leave the contract as-is.
 
 ### Denial code priority
 
@@ -419,7 +437,7 @@ Backend + frontend changes for the target-less capabilities surface. Capabilitie
 
 **Frontend: capability-aware auth store.** `auth.svelte.ts` gains `capabilities`, `can(activity)`, and `refresh()`. `refresh()` re-fetches `/me/` bypassing the `loaded` gate that `load()` honours; concurrent calls de-dupe via an in-flight promise so a burst of `policy_denied` 403s on a list page fires one `/me/` round-trip, not N. `isSuperuser` and `set()`'s `is_superuser` parameter are removed.
 
-**403-as-invalidation.** An `onResponse` middleware in `client.ts` watches for `403` with `detail.kind === 'policy_denied'` and fires a registered callback — the auth store registers `auth.refresh()` at module init, browser-only. The middleware uses a registration setter (`registerOnPolicyDenied`) rather than a static import of `auth` to avoid a `client → auth → client` cycle. This catches the **allow→deny** drift direction only (capability tightened mid-session); the reverse direction (capability newly granted) is covered by explicit `auth.refresh()` calls in auth-mutation handlers (login, signup, email-verify). Cross-tab capability changes are not covered by either mechanism today; revisit with `BroadcastChannel` if Phase 9 telemetry shows it matters.
+**403-as-invalidation.** An `onResponse` middleware in `client.ts` watches for `403` with `detail.kind === 'policy_denied'` and fires a registered callback — the auth store registers `auth.refresh()` at module init, browser-only. The middleware uses a registration setter (`registerOnPolicyDenied`) rather than a static import of `auth` to avoid a `client → auth → client` cycle. This catches the **allow→deny** drift direction only (capability tightened mid-session). The reverse direction (capability newly granted) is covered today only by natural page reload after the WorkOS callback, which reinitializes the `auth` module singleton. There are no in-SPA login/signup/email-verify handlers in this codebase — those flows happen at WorkOS, and the user lands back via a server-side callback that creates a fresh session. If an in-app verify flow ever lands, it must call `auth.refresh()` to refresh the store mid-session. Cross-tab capability changes are not covered today; revisit with `BroadcastChannel` if Phase 9 telemetry shows it matters.
 
 **Frontend migrations.**
 
@@ -434,37 +452,99 @@ Backend + frontend changes for the target-less capabilities surface. Capabilitie
 
 This is the phase that lets target-less affordances (create buttons, top-level New entries, Nav rows) gate on policy verdicts instead of role flags or "are they logged in."
 
-### 8. Embedded per-resource capability hints
+### 8. Per-resource capabilities
 
-The first phase that introduces target-aware rules. Adds per-resource capability fields to serializers for target-aware activities (e.g. `claim.revert` on a claim, `catalog.delete` on an entity). Ships:
+This phase introduces target-aware rules by codifying one rule that already exists imperatively in the codebase: `changeset.undo`'s author scoping. **This is not a tightening or changing of what a user can do** — every user who can undo today can undo after Phase 8, with identical constraints. The change is structural: the rule moves from imperative code into the policy module, and the SPA gains per-row verdicts so it can render the Undo affordance correctly instead of showing it for changesets the user can't actually undo.
 
-- The first per-target Protocols and predicates (`ClaimPolicyView`, `is_claim_author`, `claim_not_locked`).
+`changeset.undo` is target-aware because the verdict depends on both the user and the specific changeset (you can undo your own; you can't undo someone else's). The activities table notes the rule is "scoped to the changeset author." Phase 8 expresses the author-scoping as a target-aware predicate (`is_changeset_author`) on top of `authenticated, active, email_verified`.
+
+#### `claim.revert`'s edit-count rule is deliberately not lifted
+
+`claim.revert` has a target-aware rule today — [`execute_revert` in `apps/provenance/revert.py`](../../../backend/apps/provenance/revert.py) raises a 403 when reverting another user's claim if the caller has fewer than `REVERT_OTHERS_MIN_EDITS = 5` prior edits, and reverting your own claim has no threshold. Phase 8 leaves this rule imperative. Two reasons:
+
+1. **Engine purity vs. premature trust design.** A `has_min_edits(n)` predicate would either query `ChangeSet.objects.filter(user=user).count()` (violates the [no-I/O principle](#principles)) or read a denormalized signal off the user — `is_established_editor` bool, `edit_count` int, cached `TrustProfile`, JSONField, etc. Picking among those requires committing to a trust-signal shape before there's enough product clarity to choose. The next trust-shaped rules (account age, voting weight, etc.) will tell us what the right storage and shape are; Phase 8 isn't the time to guess.
+2. **The 403 is a feature, not a bug.** Showing the Revert button to a user who hasn't yet earned the privilege — and explaining "you need 5 edits before you can revert others' changes — you have 3" through a structured denial whose copy is built from `context` on the backend — is a better UX than hiding the affordance. It surfaces what functionality exists, gives users a concrete target, and converts policy denials into engagement signals. This is the gamification shape the product wants.
+
+Revisit when a second trust-shaped rule lands. With two concrete signals to design against, the right answer for trust storage and predicate shape falls out of real requirements instead of being chosen speculatively. Until then, the imperative check in `revert.py` is the source of truth for the edit-count rule, and `claim.revert`'s policy stays at `authenticated, active, email_verified`.
+
+`claim.revert` stays registered with `target_aware=True` (per [Phase 7's wire-shape reservation](#-done-7-sync-capabilities-to-front-end--authstatusschema-cleanup)) even though its current policy rule reads no target attributes. This keeps `claim.revert` out of `/me/capabilities` and reserves a per-row slot in `ClaimSchema` against the future lift, so adding `is_claim_author` + a trust predicate later doesn't shift the wire shape. A reader checking "rule is target-less, why is the flag set?" should find that answer here, not change the flag.
+
+The lifted rule is existing behavior; the [anti-goal](#anti-goal-no-permission-changes-other-than-email-verified) ("ONLY permission change is email-verified") still holds.
+
+#### Structured denial for the imperative edit-count check
+
+The "the 403 is a feature" rationale above only pays off when the SPA can render specific copy — "you need 5 edits before you can revert others' changes — you have 3," not a generic "Forbidden" toast. The imperative check in `revert.py` today raises `HttpError(403, "...")` with no denial code and no `context`, and the rendered message is a flat string. Phase 8 closes the gap by making the wire structured and authoring the user-facing copy on the backend (see [Why no frontend mapper today](#why-no-frontend-mapper-today)):
+
+- Add `DenialCode.EXPERIENCE_REQUIRED` to the closed enum. The name describes the product concept (the user hasn't earned the privilege yet) rather than the mechanism (edit count), so a later rule change to "edits + account age + voting weight" doesn't force a rename.
+- Slot it into the [denial-code priority](#denial-code-priority) between `verification_required` and `rate_limited`. The actionability ladder: verify your email (immediate), earn the experience (sustained activity), wait out a rate limit (short-term).
+- Update `revert.py` to raise a structured `PolicyDenied(DenialCode.EXPERIENCE_REQUIRED, context={"required": REVERT_OTHERS_MIN_EDITS, "current": edit_count})` instead of bare `HttpError`. Same 403, same imperative location, structured shape.
+- In `core/authz/exceptions.py`, add a context-aware message builder for `EXPERIENCE_REQUIRED` so `parseApiError`'s `detail.message` renders "You need {required} edits before you can revert others' changes — you have {current}." The wire still carries `code` and `context` for a future SPA mapper, but the rendered copy lives with the backend decision.
+
+This is small (one enum value, one priority-list slot, one structured raise, one message-builder entry) but load-bearing for the gamification claim.
+
+#### Ships
+
+- The first per-target Protocol and predicate: `ChangeSetPolicyView` + `is_changeset_author` for `changeset.undo`. (`ClaimPolicyView` and claim-target predicates are deferred along with the edit-count rule above.)
 - The `assert_predicate_is_pure(predicate, user, target, context)` test helper, designed against the target-aware shape (see [Verifying purity in tests](#verifying-purity-in-tests)).
-- Embedded-hint fields on the affected resource serializers, reading verdicts via `policy.check(...)` per row.
+- The `target=` kwarg on `register()`, declaring each target-aware rule's Protocol type so a system check can validate schema/activity pairings at startup.
+- A `capabilities: dict[Activity, bool]` field on `ChangeSetSchema`, populated per row by calling `policy.check(user, Activity.CHANGESET_UNDO, target=cs)`. `ChangeSetPolicyView` reads only `id` and `user_id` (both columns on the row itself), so no prefetch helper is needed; the meta-test below catches it if a future Protocol change introduces a relation.
 
-`changeset.undo` is target-aware (the activities table notes it's "scoped to the changeset author") but is **not** part of this phase. It rides along with the per-target work the next time the post-delete Undo flow needs touching, or sooner if a stakeholder asks for the per-row affordance — the embedded hint requires the same Protocol/prefetch pattern this phase establishes for `claim.revert`, so it's mechanical once the pattern is in place. Listed here so it doesn't get lost.
+#### Wire shape
 
-**Each serializer audit must include a prefetch checklist.** The policy reads attributes off already-loaded objects, so any serializer that embeds a hint must `select_related` / `only(...)` the attributes the relevant `*PolicyView` Protocol declares, or the embed loop will N+1 behind the policy's back. Grep the Protocol to find the exact attribute list per target. A query-count regression test on each affected list endpoint is the dynamic backstop.
+The per-row field is named `capabilities`, mirroring `AuthStatusSchema.capabilities` from Phase 7 so the SPA learns one word for "policy verdicts" and applies it in two places. Its type is `dict[Activity, bool]`; the same TypeScript type as Phase 7. Example, on a changeset:
 
-**`PolicyUser` boundary cast.** Inline `check()` callers pass `request.user`, which Django types as `AbstractBaseUser | AnonymousUser` — the abstract parent doesn't expose `is_active` / `email_verified` / `is_staff`, so mypy can't narrow it to `PolicyUser` even though the concrete `User` instance satisfies the Protocol structurally. `provenance/rate_limits.py` (the only inline caller before this phase) handles it with a one-line `cast(PolicyUser, user)` after the `is_authenticated` guard. With one inline site that was fine; Phase 8 introduces a cluster of them (one per embedded-hint serializer). Extract a tiny `policy_user(user) -> PolicyUser` helper alongside `check()` at the second site, not the first — same "extract on second use" rule as `wrap_view_preserving_globals`.
+```json
+{
+  "id": 456,
+  "note": "...",
+  "capabilities": { "changeset.undo": true }
+}
+```
 
-### 9. Observability
+**Each schema declares its policy activities explicitly.** A schema lists the activities it embeds as `policy_activities: ClassVar[list[Activity]] = [Activity.CHANGESET_UNDO]`. `ClassVar` is required so pydantic doesn't sweep the attribute into the model's field set. That single list drives the verdict loop's wire output; pairing it with `policy_target_model: ClassVar[type[Model]] = ChangeSet` lets the system check validate Protocol/model conformance at startup. One grep-able source of truth per schema.
+
+The registry's job here is validation, not enumeration. The validation runs as a Django system check in `core/authz/checks.py` (registered with `@register(Tags.models)`, the same pattern as `check_linkable_models`), so it fires at `manage.py check` and at server boot. For each schema's `policy_activities` entry, the check asserts the activity's registered target Protocol is structurally satisfied by the schema's underlying model. Putting `Activity.CHANGESET_UNDO` on `TitleSchema` fails the check because Title has no `user_id`. The cost is one new kwarg on `register()`: `register(Activity.CHANGESET_UNDO, ..., target_aware=True, target=ChangeSetPolicyView)` — declaring the target Protocol explicitly is what makes the startup check possible.
+
+This is a presence check, not a semantic one. Structural Protocol matching verifies attribute _names and declared types_ on the model, not meaning — a model with an unrelated `user_id` field would pass. The real safety is the schema author explicitly declaring `policy_activities`; the system check is a coarse smoke test that catches gross mispairings (wrong schema, copy-paste error) at boot rather than at request time.
+
+We considered a "registry auto-matches by Protocol" approach (`iter_activities_for_target(T)` walking every registered target Protocol and returning matches) and rejected it. `runtime_checkable` Protocol matching checks attribute _presence_, not types or semantics, so any model with `id` and `user_id` structurally satisfies `ChangeSetPolicyView` — and the failure mode is a wrong verdict on the wire, which is the worst place for it. Phase 8 ships a single embedding schema; "register a new activity, add it to the schema's list" is rounding-error maintenance compared to killing the structural-match path.
+
+**Nested rows carry the same shape as standalone.** If a list endpoint returns changesets — top-level or nested under another resource — each row carries its own `capabilities` map populated by the same serializer logic. Same shape whether fetched top-level or embedded; the SPA reads `changeset.capabilities['changeset.undo']` either way. Per-row verdicts can legitimately differ across rows (you authored some changesets but not others) — aggregate summaries on the parent would collapse that information and defeat the point of target-aware rules.
+
+**Target-less activities never appear on rows.** A `Claim` row never carries `catalog.create`; that verdict lives only on `auth.capabilities` (Phase 7). One activity, one home. This prevents a target-less verdict from having two on-the-wire copies that can disagree if any one of them goes stale.
+
+#### Keeping prefetches in sync with the Protocol
+
+The policy reads attributes off already-loaded objects, so any serializer that embeds a hint must have the attributes the relevant `*PolicyView` Protocol declares loaded before the embed loop runs, or the loop will N+1 behind the policy's back. Two design pressures keep this honest at the call-site level:
+
+- **Protocols stay flat.** Target Protocols declare scalar attributes only — `author_id: int`, never `author: User`. Phase 8's `ChangeSetPolicyView` follows this convention. Flat attributes are columns on the row itself, so the default queryset already has them; no `select_related` is required. The same convention is what makes the [purity discipline](#enforcing-pure-decisions) statically checkable.
+- **Meta-test backstop.** A single pytest finds every serializer with a `capabilities` field, exercises its list endpoint at two different row counts (e.g. N=2 and N=20), and asserts `queries(N=20) - queries(N=2) == 0`. Scope is narrow on purpose: it catches the embed-loop N+1 (which is row-scaling by construction) and nothing else. Constant overhead — a fixed 47-query waste that's bad but doesn't grow with rows — is a different bug class and belongs in each endpoint's own query-count regression test, where the budget is meaningful and the failure message is actionable.
+
+A future Protocol that legitimately needs to traverse a relation will demand a prefetch helper. Phase 8 deliberately doesn't ship one speculatively — the first relation-traversing Protocol introduces the helper with a concrete API shaped by its real call site.
+
+#### Staleness
+
+Embedded hints reflect server state at response time only. User-state drift (the user's email got unverified, their account got deactivated) is caught by the Phase 7 403-as-invalidation middleware. Target-state drift (a claim got locked after the row was fetched, an entity got soft-deleted) is _not_ — the 403 still fires correctly when the user clicks the now-stale affordance, and the SPA's generic `policy_denied` toast is the user-facing fallback. Per-row invalidation (websocket push, refresh-on-focus) is out of scope for Phase 8; revisit if Phase 9 telemetry shows target-state drift produces a meaningful 403 rate. The embedded hint is a UX optimization; the 403 is the real gate.
+
+### 9. Documentation
+
+Document the authorization surface area for future contributors and agents. Likely a new `docs/Authz.md` covering the system as it exists post-rollout, plus targeted additions to `docs/AGENTS.src.md` (which regenerates `CLAUDE.md` / `AGENTS.md`). Details to be fleshed out when we get to this phase.
+
+### 10. Observability
 
 Stand up a denial-rate dashboard keyed off the audit-log records emitted since Phase 3 (`(user_id, activity, code, target_id)`). Group by `activity` and `code` so that an unexpected cohort hitting `verification_required`, a route that started 403'ing after a rule tightened, or a sudden `role_required` spike are all visible without trawling logs. Lands last because earlier phases are what _generate_ the signal worth watching; running this earlier would dashboard a near-empty stream.
 
 The dashboard is the on-call backstop for any future rule tightening (account-age, reputation, rate-limit-as-policy) — those changes are easier to ship safely once denial rates are observable in aggregate. This is also the natural place to revisit whether dry-run mode (currently deferred) is worth building before the next rule change.
 
-### 10. Documentation
-
-Document the authorization surface area for future contributors and agents. Likely a new `docs/Authz.md` covering the system as it exists post-rollout, plus targeted additions to `docs/AGENTS.src.md` (which regenerates `CLAUDE.md` / `AGENTS.md`). Scope to be fleshed out closer to implementation — by then, the shape of what's load-bearing vs. obvious-from-code will be clearer.
-
 ## Deferred / non-goals
 
 - **Dry-run mode for rule changes.** Once the launch rules are in place, tightening one (e.g. adding an account-age requirement to `catalog.create`) risks 403'ing active users mid-session. The usual answer is a dry-run pass that returns the would-be decision in a header without enforcing, then flip after one deploy cycle. Not needed pre-launch; the pure-decision design makes this easy to add later.
 - **Bulk / batch evaluation API.** Per-target capability hints in list responses are 50× `policy.check` calls per render. With pure decisions and prefetched attributes that's cheap; if a profiler ever disagrees, add a `check_many` helper. Not worth designing speculatively.
-- **External authorization engine** (OPA, Cedar, Oso). The shape of this design is compatible with a future port, but the in-repo policy module is the right size for Flipcommons today.
+- **3rd party authorization engine** (OPA, Cedar, Oso). The shape of this design is compatible with a future port, but the in-repo policy module is the right size for Flipcommons today.
 
 ## Alternatives considered
+
+Rather than building our own auth engine, we considered and rejected the following approaches:
 
 - **django-rules.** The closest existing fit in the Python/Django ecosystem: predicate-based, composable with `&` / `|` / `~`, default-deny, object-level support, pure-function model. Maps onto most of the principles above. Rejected because it returns `bool`, so the structured-decision contract — typed `Decision`, denial-code priority order, per-code `context` shape — would have to be built as a wrapper of comparable size to writing the engine ourselves. Secondary concern: the natural call site (`user.has_perm("catalog.edit")`) reads as Django's permission framework even though django-rules sidesteps the underlying `ContentType` machinery, which invites the confusion we're explicitly trying to avoid. A ~150-LOC in-repo module is the simpler answer at our scale.
 - **django-guardian.** Per-object permissions via DB rows. Wrong shape — our launch rules are attribute checks (verified email, active account), not row-level grants, and persisting per-(user, object) rows would be a denormalized mirror of attributes that already live on the user.
