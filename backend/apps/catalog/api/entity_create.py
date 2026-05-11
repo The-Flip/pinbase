@@ -150,9 +150,8 @@ def assert_name_available(
 
     When *model_cls* exposes an ``aliases`` reverse manager (Theme,
     GameplayFeature, RewardType, …), aliases of active parents also count
-    as collisions — the spec requires aliases to behave like alternate
-    names for duplicate-prevention purposes. See
-    docs/plans/RecordCreateDelete.md:115.
+    as collisions because aliases behave like alternate names for
+    duplicate-prevention purposes.
     """
     normalized = normalize(name)
     if not normalized:

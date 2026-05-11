@@ -1,7 +1,7 @@
 """Kiosk resource API — CRUD over KioskConfig.
 
-Plain Django models, no claims plumbing (kiosk configs are operational
-settings, not catalog claims). See plan and docs/Provenance.md.
+Plain Django models, no claims plumbing: kiosk configs are operational
+settings, not user-inputted catalog fields.
 
 All endpoints gate on ``Activity.KIOSK_EDIT``; the policy in
 ``apps/kiosk/authz.py`` owns the superuser predicate.

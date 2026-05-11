@@ -5,8 +5,8 @@ catalog records. All windows are rolling (not calendar-aligned), per-user,
 and applied to user-driven ChangeSets only. Ingest is not rate-limited.
 Staff accounts are exempt (enforced in :mod:`apps.provenance.rate_limits`).
 
-See :doc:`docs/plans/RecordCreateDelete.md` for the product-level policy.
-Change these values here — they are the single source of truth.
+See ``docs/RecordLifecycle.md`` for the product-level lifecycle policy. Change
+these values here — they are the single source of truth.
 """
 
 REVERT_OTHERS_MIN_EDITS = 5

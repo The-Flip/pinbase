@@ -99,7 +99,7 @@ class TestValidateClaimValue:
         result = validate_claim_value("needs_review", True, Title)
         assert result is True
 
-    # --- Validators added by field audit (step 7) ---
+    # --- Field-specific validators ---
 
     def test_wikidata_id_valid_format_passes(self):
         result = validate_claim_value("wikidata_id", "Q312897", Person)

@@ -263,8 +263,8 @@ def create_system(
     """Create a new System.
 
     Required fields: ``name``, ``slug``, ``manufacturer_slug``. Optional
-    ``technology_subgeneration`` is deferred to edit — not part of the
-    minimum-viable create per ``docs/plans/RecordCreateDelete.md``.
+    ``technology_subgeneration`` is deferred to edit rather than required for
+    minimum-viable create.
 
     Bespoke (rather than ``register_entity_create``) because System has a
     required non-URL-nested FK (manufacturer) which the shared registrar

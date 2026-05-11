@@ -201,7 +201,7 @@ A second example: a "review link" (external write-up about a machine) and a "cit
 
 ### When consolidation _is_ the right call
 
-Consolidate when one schema is provably a strict subset of another with identical semantics for the shared fields, and the call sites would benefit from a shared base for OpenAPI clarity or to enforce a shared invariant. The `DeletePreviewBase` hierarchy in [`backend/apps/catalog/api/schemas.py`](../backend/apps/catalog/api/schemas.py) is the pattern: a real shared base (entity ref + blocker info) with per-entity subclasses adding their own fields, not a shape-only parent that subclasses have to fight against.
+Consolidate when one schema is provably a strict subset of another with identical semantics for the shared fields, and the call sites would benefit from a shared base for OpenAPI clarity or to enforce a shared invariant. The `DeletePreviewBase` hierarchy in [`backend/apps/catalog/api/schemas.py`](../backend/apps/catalog/api/schemas.py) is the pattern: a real shared base (entity ref + blocker info) with per-entity subclasses adding their own fields, not a shape-only parent that subclasses have to fight against. For the lifecycle meaning of delete blockers and cascade impact, see [Cascade Rules](RecordLifecycle.md#cascade-rules).
 
 ### A subclass that re-narrows a parent's field type is usually a smell
 
@@ -213,7 +213,7 @@ The legitimate case for a shape-only base is when several endpoints need to reus
 
 ### Keep entity-specific scalars separate even when their type matches
 
-The same `int` shape can mean very different things to the consuming UI. `active_children_count`, `active_credit_count`, and `active_model_count` on the various delete-preview schemas are all `int`, but they mean different things — blocker count from one relationship, cascade-impact count, blocker count from a different relationship. Don't collapse them under a generic `count` field.
+The same `int` shape can mean very different things to the consuming UI. `active_children_count`, `active_credit_count`, and `active_model_count` on the various delete-preview schemas are all `int`, but they mean different things — blocker count from one relationship, cascade-impact count, blocker count from a different relationship. Don't collapse them under a generic `count` field. Those distinctions come from the lifecycle policy in [Cascade Rules](RecordLifecycle.md#cascade-rules).
 
 This is the inverse of the consolidation rule: don't merge separate scalars into a generic name just because their type matches.
 
@@ -269,4 +269,4 @@ Apply the rule that fits what your view body (and one level of helpers) can prod
 
 ### Known gap: body-validation 422s
 
-Ninja's body validation runs _before_ the view and produces `ValidationErrorSchema` on any body-accepting endpoint, regardless of whether the view explicitly raises 422. The rules above enumerate by what views raise, not by whether they accept a body, so endpoints whose only 422 path is body-validation are currently silent in the OpenAPI doc. Tracked in [`docs/plans/types/apiboundary/ApiSvelteBoundaryFollowups.md`](plans/types/apiboundary/ApiSvelteBoundaryFollowups.md). The convention above was established by [`ApiErrors.md`](plans/types/apiboundary/ApiErrors.md).
+Ninja's body validation runs _before_ the view and produces `ValidationErrorSchema` on any body-accepting endpoint, regardless of whether the view explicitly raises 422. The rules above enumerate by what views raise, not by whether they accept a body, so endpoints whose only 422 path is body-validation are currently silent in the OpenAPI doc. When this gap is closed, every body-accepting endpoint's declared 422 shape should include `ValidationErrorSchema`.

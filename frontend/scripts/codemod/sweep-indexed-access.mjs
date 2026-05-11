@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-// PR 0 of the API-boundary plan
-// (docs/plans/types/apiboundary/ApiSvelteBoundary.md):
-// rewrite every `components['schemas']['Name']` reference in frontend/src
-// into a named import + bare-name use against `$lib/api/schema`.
+// Rewrite every `components['schemas']['Name']` reference in frontend/src into
+// a named import + bare-name use against `$lib/api/schema`.
 //
 // Idempotent: a fully-converted tree produces zero rewrites.
 // Run from repo root or frontend/; resolves paths relative to the script.
@@ -39,7 +37,7 @@ const SCHEMA_IMPORT_RE =
 
 function listSourceFiles() {
   // git ls-files honors .gitignore, skips schema.d.ts (gitignored), and is
-  // fast. Filter to the extensions the plan covers.
+  // fast. Filter to source extensions this codemod supports.
   const out = execSync('git ls-files frontend/src', {
     cwd: resolve(FRONTEND, '..'),
     encoding: 'utf8',
@@ -68,7 +66,7 @@ function rewriteFile(path) {
   if (!INDEXED_RE.test(original)) return false;
   INDEXED_RE.lastIndex = 0;
 
-  // Phase 1: collapse self-named aliases (`type X = components[…]['X']`).
+  // First collapse self-named aliases (`type X = components[…]['X']`).
   // Non-exported aliases are removed entirely. Exported aliases turn into
   // `export type { X };` — the import-block update below brings `X` into
   // scope, and the bare re-export preserves the module's public surface
@@ -79,7 +77,7 @@ function rewriteFile(path) {
     return exp ? `${indent}export type { ${name} };\n` : '';
   });
 
-  // Phase 2: rewrite remaining `components['schemas']['X']` to bare `X`.
+  // Then rewrite remaining `components['schemas']['X']` to bare `X`.
   const rewritten = withoutSelfAliases.replace(INDEXED_RE, (_m, _q1, _q2, name) => {
     names.add(name);
     return name;
@@ -112,9 +110,9 @@ function rewriteFile(path) {
     const replacement = `${indent}import type {${formatSpecifiers(finalSpecs)}} from ${quote}${modulePath}${quote};`;
     next = rewritten.replace(SCHEMA_IMPORT_RE, replacement);
   } else {
-    // No existing import — insert one. The plan says greenfield, so this
-    // branch shouldn't fire on the current tree, but handle it for robustness
-    // (e.g. a future file added without the existing `components` import).
+    // No existing import — insert one. This branch should be uncommon on the
+    // current tree, but handle it for future files added without an existing
+    // `components` import.
     const finalSpecs = [...names].sort();
     const importLine = `import type { ${finalSpecs.join(', ')} } from '$lib/api/schema';\n`;
     if (path.endsWith('.svelte')) {

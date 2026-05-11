@@ -231,6 +231,8 @@ The compound plan also maps most closely to the current phase structure, making 
 
 ## Entity lifecycle
 
+Current catalog record lifecycle policy lives in [Record Lifecycle](../../RecordLifecycle.md#record-lifecycle).
+
 In the current system, entity creation is a direct ORM write with no provenance. Once a row exists, there is no claims-based mechanism to mark it as invalid, remove it, or record that it's a duplicate. Entity existence is ground truth that can't be disputed through the same system that manages everything else.
 
 This is wrong. A source asserting "this machine exists" is no different from a source asserting "this machine's year is 1992" — both are facts attributed to a source, and both should be disputable.

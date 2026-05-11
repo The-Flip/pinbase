@@ -63,7 +63,7 @@ class TestCatalogModelsNotInAdmin:
         for model in catalog_models:
             assert model not in registered, (
                 f"{model.__name__} is registered in Django admin — "
-                "catalog models must not be (see docs/plans/ValidationFix3.md)"
+                "catalog truth must stay in the claims/provenance write path"
             )
 
 

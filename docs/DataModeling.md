@@ -58,6 +58,11 @@ flowchart TD
 
 ## Conventions
 
+### Record Lifecycle
+
+For catalog record create, delete, restore, cascade, and duplicate-prevention
+policy across all write paths, see [Record Lifecycle](RecordLifecycle.md#record-lifecycle).
+
 ### GenericForeignKey
 
 Use `PositiveBigIntegerField` for `object_id` to match `BigAutoField` PKs. Use `on_delete=PROTECT` on the `ContentType` FK.

@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-// PR 1+ of the API-boundary plan
-// (docs/plans/types/apiboundary/ApiSvelteBoundary.md):
-// rename schema-name references in frontend/src after the backend Python
-// rename + `make api-gen` regenerates schema.d.ts.
+// Rename generated schema-name references in frontend/src after backend Python
+// schema classes are renamed and `make api-gen` regenerates schema.d.ts.
 //
 // Scope: word-boundary substitution of `OldName -> NewName` for each entry
 // in rename-table.json, excluding client.ts. For .svelte files only the

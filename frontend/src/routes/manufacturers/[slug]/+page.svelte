@@ -39,8 +39,8 @@
 
 <!-- "Create first corporate entity" CTA when the manufacturer has no active
      entities. Shown to all viewers, mirroring Title's `CreateFirstModelPrompt`
-     (see docs/plans/RecordCreateDelete.md). Anonymous users clicking through
-     get bounced to login by the create page's load guard. -->
+     for create-flow discoverability. Anonymous users clicking through get
+     bounced to login by the create page's load guard. -->
 {#if mfr.entities.length === 0}
   <CreateFirstCorporateEntityPrompt manufacturerSlug={mfr.slug} manufacturerName={mfr.name} />
 {/if}

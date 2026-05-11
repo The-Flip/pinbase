@@ -1,9 +1,8 @@
 """Cross-cutting boundary tests for the OpenAPI surface.
 
-These pin conventions defined in
-`docs/plans/types/apiboundary/ApiNamingRationalization.md` and the rename
-plan that followed it. Targets are the live OpenAPI doc and module
-introspection, not text-pattern checks against source files.
+These pin the live OpenAPI naming and schema-boundary conventions. Targets are
+the generated OpenAPI doc and module introspection, not text-pattern checks
+against source files.
 """
 
 from __future__ import annotations

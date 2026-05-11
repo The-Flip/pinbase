@@ -129,7 +129,7 @@ Use capabilities instead of reimplementing policy logic:
 
 ### Show affordances the user can earn
 
-Default to showing affordances when the denial has a self-service remediation (verify email, accumulate edits) — see [Authz.md principles](plans/auth/Authz.md#principles). Hiding them makes the SPA look logged-out and erases discoverability. Hide only when there is no path: staff-only actions, banned accounts.
+Default to showing affordances when the denial has a self-service remediation (verify email, accumulate edits). Hiding them makes the SPA look logged-out and erases discoverability. Hide only when there is no path: staff-only actions, banned accounts.
 
 That makes `auth.isAuthenticated` an identity/visibility signal, not a permission check:
 

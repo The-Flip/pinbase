@@ -482,7 +482,7 @@ class TestSlugConflictDetection:
 
     @pytest.fixture
     def title_fields_with_slug(self):
-        """Claim fields including slug (still exempt until Phase 2)."""
+        """Claim fields including slug, stated explicitly for these resolver tests."""
         fields = get_claim_fields(Title)
         fields["slug"] = "slug"
         return fields
@@ -546,7 +546,7 @@ class TestSlugConflictDetection:
         Claim.objects.assert_claim(t2, "name", "Challenger", source=opdb)
         Claim.objects.assert_claim(t2, "slug", "taken-slug", source=opdb)
 
-        # Use explicit fields so slug is included (still exempt until Phase 2).
+        # Use explicit fields so this test is independent of claim-field discovery.
         fields = get_claim_fields(Title)
         fields["slug"] = "slug"
         _resolve_single(t2, fields)

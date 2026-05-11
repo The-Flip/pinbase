@@ -10,8 +10,8 @@ whole table is applied (used in CI / one-shot runs; per-PR batches always
 pass the explicit list).
 
 Out of scope: string-literal references (fixture data, admin field configs,
-`extra_data` JSON). Those are caught by `make test` per the plan; libcst
-Name nodes don't span strings.
+`extra_data` JSON). Those are caught by `make test`; libcst Name nodes don't
+span strings.
 """
 
 from __future__ import annotations

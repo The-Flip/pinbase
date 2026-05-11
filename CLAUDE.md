@@ -155,7 +155,7 @@ The test is "could a user input this field?" If yes, claim it. If no, it's syste
 
 #### Writing ChangeSets — `action` is required on user ChangeSets
 
-Every `ChangeSet` attributed to a user must carry an `action` value (`create`, `edit`, `delete`, or `revert`). Ingest ChangeSets never do — they're identified by the `ingest_run` FK. The DB enforces this via the `provenance_changeset_action_iff_user` check constraint, so forgetting means an `IntegrityError`, not a code-review catch.
+Every `ChangeSet` attributed to a user must carry an `action` value (`create`, `edit`, `delete`, or `revert`). Ingest ChangeSets never do — they're identified by the `ingest_run` FK. The DB enforces this via the `provenance_changeset_action_iff_user` check constraint, so forgetting means an `IntegrityError`, not a code-review catch. For catalog record lifecycle semantics, see [docs/RecordLifecycle.md](RecordLifecycle.md#record-lifecycle).
 
 Prefer the factories over `ChangeSet.objects.create` in new code:
 

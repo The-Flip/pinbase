@@ -1,4 +1,4 @@
-"""Tests for the image processing module (Phase 2).
+"""Tests for the image processing module.
 
 Pure unit tests — no database, no Django models, no storage.
 """

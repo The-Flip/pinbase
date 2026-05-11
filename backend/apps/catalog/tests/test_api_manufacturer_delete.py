@@ -144,7 +144,7 @@ class TestDeletePROTECTBlockers:
 
     def test_deleted_referrers_do_not_block(self, client, user, bootstrap_source, mfr):
         """Soft-deleted referrers don't block — ``plan_soft_delete`` skips
-        them per docs/plans/RecordCreateDelete.md."""
+        them when walking usage references."""
         _make_ce(bootstrap_source, mfr, "zombie-ce", status="deleted")
         _make_system(bootstrap_source, mfr, "zombie-sys", status="deleted")
         client.force_login(user)

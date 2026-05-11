@@ -1,4 +1,4 @@
-"""Tests for entity lifecycle status field (Phase 3)."""
+"""Tests for the entity lifecycle status field."""
 
 from __future__ import annotations
 
