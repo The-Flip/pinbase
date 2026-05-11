@@ -26,9 +26,10 @@ from apps.core.authz.enforce import enforce
 from apps.core.authz.evaluator import policy_user
 from apps.core.authz.markers import gated_inline, requires
 from apps.core.authz.types import Activity
+from apps.core.models import LinkableModel
 from apps.core.schemas import ErrorDetailSchema
 
-from .models import CitationInstance, ClaimControlledModel, Source
+from .models import CitationInstance, Claim, ClaimControlledModel, Source
 from .page_endpoints import pages_router
 from .schemas import (
     CitationInstanceBatchSchema,
@@ -38,6 +39,7 @@ from .schemas import (
     CitationSourceSchema,
     RevertNoteSchema,
     ReviewClaimSchema,
+    ReviewLinkSchema,
     UndoChangeSetSchema,
     UndoResultSchema,
 )
@@ -52,14 +54,29 @@ def list_sources(request: HttpRequest) -> list[Source]:
     return list(Source.objects.all())
 
 
-def _build_claim_review_context(claim) -> tuple[list[dict], str | None]:
+def _subject_entity_type(claim: Claim) -> str:
+    """Return the canonical ``entity_type`` of a Claim's subject model.
+
+    ``ContentType.model_class()`` is typed ``type[Model] | None`` and ``Model``
+    doesn't carry ``entity_type``. By construction every Claim subject is a
+    concrete ``CatalogModel`` (which inherits ``LinkableModel``), so narrow.
+    """
+    model_cls = claim.content_type.model_class()
+    assert model_cls is not None
+    assert issubclass(model_cls, LinkableModel)
+    return model_cls.entity_type
+
+
+def _build_claim_review_context(
+    claim: Claim,
+) -> tuple[list[ReviewLinkSchema], str | None]:
     """Build review links and title slug for a group claim flagged for review.
 
     Returns (links, title_slug).
     """
     from apps.catalog.models import Title
 
-    links: list[dict] = []
+    links: list[ReviewLinkSchema] = []
     value = str(claim.value) if claim.value else ""
 
     # The claim value is a title's public_id (slug, for Title) — look it up.
@@ -76,12 +93,12 @@ def _build_claim_review_context(claim) -> tuple[list[dict], str | None]:
         .exclude(opdb_id__isnull=True)
     )
     for rt in related:
-        links.append({"label": rt.name, "url": rt.get_absolute_url()})
+        links.append(ReviewLinkSchema(label=rt.name, url=rt.get_absolute_url()))
         links.append(
-            {
-                "label": f"OPDB {rt.opdb_id}",
-                "url": f"https://opdb.org/machines/{rt.opdb_id}",
-            }
+            ReviewLinkSchema(
+                label=f"OPDB {rt.opdb_id}",
+                url=f"https://opdb.org/machines/{rt.opdb_id}",
+            )
         )
 
     return links, title.public_id
@@ -89,42 +106,40 @@ def _build_claim_review_context(claim) -> tuple[list[dict], str | None]:
 
 @review_router.get("/claims/", response=list[ReviewClaimSchema])
 @decorate_view(cache_control(no_cache=True))
-def list_review_claims(request):
+def list_review_claims(request: HttpRequest) -> list[ReviewClaimSchema]:
     """Return all active claims flagged for review."""
-    from .models import Claim
-
     claims = (
         Claim.objects.filter(is_active=True, needs_review=True)
         .select_related("source", "content_type")
         .order_by("-created_at")
     )
 
-    results = []
+    results: list[ReviewClaimSchema] = []
     for claim in claims:
         subject = claim.subject
+        # Claims only target ClaimControlledModel entities by construction; the
+        # generic FK's loose typing is the only reason this needs narrowing.
+        assert subject is None or isinstance(subject, ClaimControlledModel)
         subject_name = str(subject) if subject else "Unknown"
-        subject_slug = getattr(subject, "slug", None)
+        subject_slug = subject.slug if subject is not None else None
         if claim.field_name == "title":
             review_links, title_slug = _build_claim_review_context(claim)
         else:
             review_links, title_slug = [], None
         results.append(
-            {
-                "id": claim.pk,
-                "source_name": claim.source.name if claim.source else "User",
-                "field_name": claim.field_name,
-                "value": claim.value,
-                "needs_review_notes": claim.needs_review_notes,
-                "created_at": claim.created_at.isoformat(),
-                # ``model_class()`` is ``type[Model] | None`` and ``.entity_type``
-                # belongs to the deferred LinkableModel contract tracked in
-                # docs/plans/types/MypyFixing.md. Cleared when that lands.
-                "subject_type": claim.content_type.model_class().entity_type,  # type: ignore[union-attr]
-                "subject_name": subject_name,
-                "subject_slug": subject_slug,
-                "title_slug": title_slug,
-                "review_links": review_links,
-            }
+            ReviewClaimSchema(
+                id=claim.pk,
+                source_name=claim.source.name if claim.source else "User",
+                field_name=claim.field_name,
+                value=claim.value,
+                needs_review_notes=claim.needs_review_notes,
+                created_at=claim.created_at.isoformat(),
+                subject_type=_subject_entity_type(claim),
+                subject_name=subject_name,
+                subject_slug=subject_slug,
+                title_slug=title_slug,
+                review_links=review_links,
+            )
         )
     return results
 

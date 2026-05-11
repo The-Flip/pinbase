@@ -1,6 +1,2 @@
 apps/catalog/tests/test_models.py:0: error: Incompatible type for "manufacturer" of "System" (got "None", expected "Manufacturer | Combinable")  [misc]
 apps/catalog/tests/test_db_constraints.py:0: error: Incompatible type for "title" of "MachineModel" (got "None", expected "Title | Combinable")  [misc]
-apps/provenance/api.py:0: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]
-apps/provenance/api.py:0: error: Missing type arguments for generic type "dict"  [type-arg]
-apps/provenance/api.py:0: error: Missing type arguments for generic type "dict"  [type-arg]
-apps/provenance/api.py:0: error: Function is missing a type annotation  [no-untyped-def]
