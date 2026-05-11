@@ -52,6 +52,14 @@ def check(
         # The registry-completeness test keeps this branch dead.
         raise LookupError(f"No rule registered for {activity!r}")
 
+    if rule.target is not None and target is None:
+        # A target-aware rule called without a target is a programming
+        # error (the route forgot ``target=``), not a permission
+        # decision. Surfacing as a 500 is more informative than a
+        # misleading 403; centralizing the guard here means each
+        # target-aware predicate can take a bare (non-Optional) target.
+        raise TypeError(f"{activity!r} is target-aware; pass target=")
+
     denials: list[Deny] = []
     for predicate in rule.predicates:
         decision = predicate(user, target, context)

@@ -58,10 +58,10 @@ _ACTIVITIES_EXEMPT_FROM_EMAIL_VERIFIED = frozenset(
 def _target_less_activities() -> list[Activity]:
     """Activities whose rules can be evaluated with ``target=None``.
 
-    A rule that declares a ``target`` Protocol has at least one
-    predicate that reads attributes off the target; calling that
-    predicate with ``target=None`` is a programming error and raises
-    ``TypeError``. The launch-predicate completeness tests below run
+    A rule that declares a ``target`` Protocol can't be evaluated with
+    ``target=None`` — the evaluator raises ``TypeError`` before
+    reaching its predicates (see ``check()``'s guard). The
+    launch-predicate completeness tests below run
     ``check(user, activity)`` with no target, so activities whose
     rules declare a target Protocol are excluded — their launch
     behavior is exercised in app-specific tests with a concrete

@@ -5,13 +5,13 @@ from __future__ import annotations
 import logging
 import secrets
 from datetime import datetime
-from typing import Protocol, TypedDict
+from typing import ClassVar, Protocol, TypedDict
 
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError, transaction
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Model
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -23,7 +23,12 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from ninja import Router, Schema
 from pydantic import Field
 
-from apps.core.authz import Activity, compute_capability_map, policy_user
+from apps.core.authz import (
+    Activity,
+    compute_capability_map,
+    compute_row_capabilities,
+    policy_user,
+)
 from apps.core.authz.markers import public_mutation
 from apps.core.schemas import ErrorDetailSchema
 from apps.core.types import EntityKey
@@ -71,6 +76,10 @@ class UserChangeSetSchema(Schema):
     entity_href: str
     entity_name: str
     entity_type_label: str
+    capabilities: dict[Activity, bool] = Field(default_factory=dict)
+
+    policy_activities: ClassVar[list[Activity]] = [Activity.CHANGESET_UNDO]
+    policy_target_model: ClassVar[type[Model]] = ChangeSet
 
 
 class UserProfileSchema(Schema):
@@ -386,7 +395,7 @@ def auth_logout(request: HttpRequest) -> AuthStatusSchema:
 )
 def user_profile_page(request: HttpRequest, username: str) -> UserProfileSchema:
     """Page model for the user profile page: contribution history."""
-    _ = request
+    caller = policy_user(request.user)
     user = get_object_or_404(User, username=username)
 
     edit_count = ChangeSet.objects.filter(user=user).count()
@@ -472,6 +481,9 @@ def user_profile_page(request: HttpRequest, username: str) -> UserProfileSchema:
                 entity_href=meta["href"],
                 entity_name=meta["name"],
                 entity_type_label=meta["type_label"],
+                capabilities=compute_row_capabilities(
+                    caller, cs, UserChangeSetSchema.policy_activities
+                ),
             )
         )
 

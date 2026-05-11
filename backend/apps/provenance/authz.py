@@ -36,19 +36,15 @@ class ChangeSetPolicyView(Protocol):
 
 def is_changeset_author(
     user: PolicyUser,
-    changeset: ChangeSetPolicyView | None,
+    changeset: ChangeSetPolicyView,
     context: PolicyContext | None,
 ) -> Decision:
     """Allow when the caller authored ``changeset``; else ``OWNER_REQUIRED``.
 
-    A target-aware predicate called with ``changeset=None`` is a
-    programming error (the route forgot to pass ``target=``), not a
-    permission decision. Surface it as a ``TypeError`` so it becomes a
-    500 — same shape as the evaluator's ``LookupError`` on a missing
-    rule. Returning a Deny here would mask the bug as a misleading 403.
+    The defensive ``changeset is None`` guard lives in the evaluator
+    (``check()``), not here — any target-aware rule called without a
+    target raises ``TypeError`` before reaching its predicates.
     """
-    if changeset is None:
-        raise TypeError("is_changeset_author requires a target")
     if changeset.user_id != user.id:
         return Deny(DenialCode.OWNER_REQUIRED)
     return Allow()

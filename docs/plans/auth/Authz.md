@@ -536,9 +536,15 @@ Stand up a denial-rate dashboard keyed off the audit-log records emitted since P
 
 The dashboard is the on-call backstop for any future rule tightening (account-age, reputation, rate-limit-as-policy) — those changes are easier to ship safely once denial rates are observable in aggregate. This is also the natural place to revisit whether dry-run mode (currently deferred) is worth building before the next rule change.
 
-## Follow-ups identified during implementation
+## Follow-ups
 
-- **Make `Activity` generic over its target Protocol — `Activity[ChangeSetPolicyView]`.** Today `check()` and `enforce()` type `target` as `object | None` because `Activity` is a flat `StrEnum` with no type info — there's no way to say "this activity's target must satisfy `ChangeSetPolicyView`" at the engine boundary. Per-rule predicates narrow via their own Protocol parameter, but the engine can't statically constrain what callers pass. Parameterizing `Activity` would (a) let `check(activity: Activity[T], target: T)` reject wrong-shaped targets at mypy time, (b) make rule registration impossible without a matching Protocol declaration, (c) remove the `object | None` smell at the boundary. The redesign touches every Activity declaration and every call site, so the right time is after the per-resource phases have stabilized the shape of target Protocols, not during them.
+### Type-constrain `check()` / `enforce()` target to the activity's target Protocol
+
+Today both functions type `target` as `object | None` because `Activity` is a flat `StrEnum` with no type info — there's no way to say "this activity's target must satisfy `ChangeSetPolicyView`" at the engine boundary. Per-rule predicates narrow via their own Protocol parameter, but the engine can't statically constrain what callers pass. The fix would let `check(activity, target)` reject wrong-shaped targets at mypy time and remove the `object | None` smell at the boundary.
+
+**Don't design this with one Protocol.** As of this writing `ChangeSetPolicyView` is the only target Protocol in the codebase, and Python's `StrEnum` doesn't compose naturally with `Generic[T]` — the design space forks into meaningfully different shapes (parameterized `Activity[T]`, a sibling `TargetedActivity[T]`, a typed `register_for(T)` builder, a dataclass-valued enum, etc.), each with different implications for the wire `value` contract, audit-log shape, and the kinds of misuse mypy can catch. Picking among those on the basis of a single example would almost certainly produce an abstraction that doesn't fit the second case.
+
+**Trigger:** revisit when a second target Protocol concretely exists (e.g. `ClaimPolicyView` if the edit-count rule is ever lifted; some other per-resource Protocol from a future feature). Two concrete examples is the minimum sample size to make this design choice honestly.
 
 ## Deferred / non-goals
 

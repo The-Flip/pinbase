@@ -50,10 +50,14 @@ def test_ingest_changeset_user_id_none_denies_any_user():
 
 
 def test_target_none_raises_type_error():
-    """Missing ``target`` is a programming error — surface as TypeError, not 403."""
+    """Missing ``target`` is a programming error — surface as TypeError, not 403.
+
+    The guard lives in the evaluator so every target-aware rule gets it
+    for free; the predicate itself takes a bare (non-Optional) target.
+    """
     user = StubPolicyUser(id=7)
-    with pytest.raises(TypeError, match="requires a target"):
-        is_changeset_author(user, None, None)
+    with pytest.raises(TypeError, match="target-aware"):
+        check(user, Activity.CHANGESET_UNDO, target=None)
 
 
 # The `assert_predicate_is_pure` helper wraps the call in
