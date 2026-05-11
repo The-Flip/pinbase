@@ -73,6 +73,12 @@
   // Track the current anchor element so `floating` can reposition against it.
   let currentAnchor: HTMLElement | null = $state(null);
 
+  // Drop the anchor reference once the tooltip is hidden so we don't retain a
+  // pointer to a `<sup>` that may be replaced when the surrounding HTML rerenders.
+  $effect(() => {
+    if (tipState.activeId == null) currentAnchor = null;
+  });
+
   // Click outside handler
   $effect(() => {
     if (!tipState.pinned) return;

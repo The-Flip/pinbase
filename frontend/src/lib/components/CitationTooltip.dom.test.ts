@@ -130,6 +130,30 @@ describe('CitationTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
+  it('keeps the tooltip open when the pointer moves from anchor onto the tooltip', async () => {
+    renderTooltip('<p>Keep <sup data-cite-id="1" tabindex="0">[1]</sup>.</p>');
+    await vi.waitFor(() => expect(GET).toHaveBeenCalledTimes(1));
+
+    await fireEvent.mouseEnter(getCitation('1'));
+    const tooltip = await screen.findByRole('tooltip');
+
+    // User moves off the anchor (schedules hide) then onto the tooltip
+    // (must cancel the hide) before HIDE_DELAY elapses.
+    await fireEvent.mouseLeave(getCitation('1'));
+    await vi.advanceTimersByTimeAsync(50);
+    await fireEvent.mouseEnter(tooltip);
+
+    // Past the original hide delay, the tooltip must still be there —
+    // this is what makes clickable links inside the tooltip reachable.
+    await vi.advanceTimersByTimeAsync(200);
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    // Leaving the tooltip itself schedules and completes the hide.
+    await fireEvent.mouseLeave(tooltip);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
   it('shows on focus and closes on escape', async () => {
     renderTooltip('<p>Focus <sup data-cite-id="1" tabindex="0">[1]</sup>.</p>');
     await vi.waitFor(() => expect(GET).toHaveBeenCalledTimes(1));
