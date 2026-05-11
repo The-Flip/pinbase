@@ -17,11 +17,11 @@ import sys
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple, cast
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.management.base import BaseCommand
-from django.db.models import Count, Model, Q
+from django.core.management.base import BaseCommand, CommandParser
+from django.db.models import Count, F, Model, Q
 from django.db.models.functions import Lower
 
 from apps.catalog.models import (
@@ -40,14 +40,14 @@ from apps.provenance.models import Claim
 logger = logging.getLogger(__name__)
 
 
-def _winning_claims(content_type, field_name: str) -> list[Claim]:
+def _winning_claims(content_type: ContentType, field_name: str) -> list[Claim]:
     """Pick the winning claim per (object_id, claim_key) for a field.
 
     Replicates the resolver's winner-picking logic: highest source/user
     priority, then most recent created_at as tiebreaker.  Only the winning
     claim per claim_key per object is returned.
     """
-    from django.db.models import Case, F, IntegerField, Value, When
+    from django.db.models import Case, IntegerField, Value, When
 
     claims = (
         Claim.objects.filter(
@@ -156,13 +156,13 @@ def check_nameless_persons(result: ValidationResult) -> None:
 
 def check_self_referential_variant(result: ValidationResult) -> None:
     """variant_of and converted_from must not point to self."""
-    self_variant = MachineModel.objects.filter(variant_of=models_f("pk"))
+    self_variant = MachineModel.objects.filter(variant_of=F("pk"))
     for pm in self_variant:
         result.error(
             f"Model {pm.name!r} (pk={pm.pk}) has variant_of pointing to itself"
         )
 
-    self_converted = MachineModel.objects.filter(converted_from=models_f("pk"))
+    self_converted = MachineModel.objects.filter(converted_from=F("pk"))
     for pm in self_converted:
         result.error(
             f"Model {pm.name!r} (pk={pm.pk}) has converted_from pointing to itself"
@@ -202,7 +202,10 @@ def check_duplicate_persons(result: ValidationResult) -> None:
     count = dupes.count()
     if count:
         result.warn(f"{count} person name(s) appear more than once (case-insensitive)")
-        for d in dupes[:10]:
+        # django-stubs types chained .values().annotate() rows as
+        # AnnotatedWith[TypedDict] (non-indexable Person), but at runtime each
+        # row is a plain dict. Cast to the real shape at the iteration boundary.
+        for d in cast("list[dict[str, Any]]", list(dupes[:10])):
             persons = Person.objects.filter(name__iexact=d["lower_name"])
             slugs = ", ".join(p.slug for p in persons)
             result.warn(f"  {d['lower_name']!r} (×{d['cnt']}): {slugs}")
@@ -224,7 +227,9 @@ def check_duplicate_manufacturers(result: ValidationResult) -> None:
         result.warn(
             f"{count} manufacturer name(s) appear more than once (case-insensitive)"
         )
-        for d in dupes[:10]:
+        # See note in check_duplicate_persons: chained .values().annotate()
+        # rows are dicts at runtime but mistyped by django-stubs.
+        for d in cast("list[dict[str, Any]]", list(dupes[:10])):
             mfrs = Manufacturer.objects.filter(name__iexact=d["lower_name"])
             slugs = ", ".join(m.slug for m in mfrs)
             result.warn(f"  {d['lower_name']!r} (×{d['cnt']}): {slugs}")
@@ -331,8 +336,8 @@ def check_unresolved_credit_claims(result: ValidationResult) -> None:
     person_pks = set(Person.objects.values_list("pk", flat=True))
     role_pks = set(CreditRole.objects.values_list("pk", flat=True))
 
-    missing_persons: set = set()
-    missing_roles: set = set()
+    missing_persons: set[int] = set()
+    missing_roles: set[int] = set()
 
     for claim in _winning_claims(ct, "credit"):
         val = claim.value
@@ -381,7 +386,7 @@ def check_unresolved_m2m_claims(result: ValidationResult) -> None:
     for check in checks:
         valid_pks = set(check.model_class._default_manager.values_list("pk", flat=True))
 
-        missing: set = set()
+        missing: set[int] = set()
         for claim in _winning_claims(ct, check.field_name):
             val = claim.value
             if not isinstance(val, dict):
@@ -564,7 +569,7 @@ def check_golden_records(result: ValidationResult) -> None:
         result.note(f"All {checked} golden record(s) passed")
 
 
-def _get_golden_field(obj, field_name: str):
+def _get_golden_field(obj: Model, field_name: str) -> object:
     """Extract a field value from a model instance for golden record comparison.
 
     Handles FK slug lookups (e.g., manufacturer_slug → obj.manufacturer.slug).
@@ -575,13 +580,6 @@ def _get_golden_field(obj, field_name: str):
         related = getattr(obj, fk_attr, None)
         return related.slug if related is not None else None
     return getattr(obj, field_name, None)
-
-
-def models_f(name: str):
-    """Wrapper to avoid top-level import of F for self-referential lookups."""
-    from django.db.models import F
-
-    return F(name)
 
 
 # Registry of all checks, in execution order.
@@ -611,14 +609,14 @@ ALL_CHECKS = [
 class Command(BaseCommand):
     help = "Validate the resolved catalog for data quality issues."
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
             "--fail-on-warn",
             action="store_true",
             help="Exit with code 1 if warnings are found (not just errors).",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ANN401  # argparse-driven
         result = ValidationResult()
 
         for check_fn in ALL_CHECKS:
