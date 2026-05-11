@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from django.db.models import Model
-
 from apps.core.licensing import get_minimum_display_rank
 from apps.core.types import JsonData
 from apps.media.models import EntityMedia
@@ -46,7 +44,7 @@ def serialize_credit(credit: Credit) -> CreditSchema:
 
 
 def _intersect_facet_sets(
-    models: Iterable[Model], relation_name: str
+    models: Iterable[MachineModel], relation_name: str
 ) -> list[EntityRef]:
     """Return the intersection of a slug/name M2M across all *models*.
 

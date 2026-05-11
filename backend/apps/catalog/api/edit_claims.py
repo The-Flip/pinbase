@@ -30,6 +30,7 @@ from apps.catalog.models import (
     Title,
 )
 from apps.core.exceptions import StructuredApiError
+from apps.core.models import SluggedModel
 from apps.provenance.models import (
     ChangeSet,
     ChangeSetAction,
@@ -400,10 +401,10 @@ def plan_alias_claims(
 
 
 def plan_m2m_claims(
-    entity: db_models.Model,
+    entity: MachineModel,
     desired_slugs: set[str],
     *,
-    target_model: type[db_models.Model],
+    target_model: type[SluggedModel],
     claim_field_name: str,
     m2m_attr: str,
 ) -> list[ClaimSpec]:

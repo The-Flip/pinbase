@@ -129,7 +129,9 @@ def build_fk_info(
 # ------------------------------------------------------------------
 
 
-def _coerce(model_class: type[models.Model], attr: str, value: object) -> object:
+def _coerce(
+    model_class: type[ClaimControlledModel], attr: str, value: object
+) -> object:
     """Coerce a JSON claim value to the type expected by the model field."""
     if value is None or value == "":
         field = model_class._meta.get_field(attr)
@@ -208,7 +210,7 @@ def _annotate_priority(qs: QuerySet[Claim]) -> QuerySet[Claim]:
 
 
 def get_field_defaults(
-    model_class: type[models.Model],
+    model_class: type[ClaimControlledModel],
     direct_fields: dict[str, str],
 ) -> dict[str, Any]:
     """Compute reset values for direct fields by inspecting Django model metadata.
@@ -238,7 +240,7 @@ def get_field_defaults(
 
 
 def get_preserve_fields(
-    model_class: type[models.Model],
+    model_class: type[ClaimControlledModel],
     direct_fields: dict[str, str],
 ) -> set[str]:
     """Identify fields that must keep their existing value when no claim exists.
@@ -264,9 +266,9 @@ def get_preserve_fields(
 
 
 def resolve_unique_conflicts(
-    all_objs: Sequence[models.Model],
+    all_objs: Sequence[ClaimControlledModel],
     field_name: str,
-    model_class: type[models.Model],
+    model_class: type[ClaimControlledModel],
     pre_values: dict[int, Any] | None = None,
 ) -> None:
     """Detect and fix duplicate values for a UNIQUE field after resolution.
@@ -285,7 +287,7 @@ def resolve_unique_conflicts(
     inspection.
     """
     nullable = model_class._meta.get_field(field_name).null
-    seen: dict[Any, models.Model] = {}
+    seen: dict[Any, ClaimControlledModel] = {}
     for obj in all_objs:
         value = getattr(obj, field_name)
         if not value:
