@@ -30,7 +30,7 @@ The settings page is a single Flipcommons-rendered surface that exposes both, wi
 | Email                                     | Provider           | Yes (provider)          | Deep-link to provider's hosted UI. Webhook syncs change back to us ([Webhooks.md](Webhooks.md)).                                                                        |
 | Password                                  | Provider           | Yes (provider)          | Provider's UI. We never see it.                                                                                                                                         |
 | MFA / passkeys                            | Provider           | Yes (provider)          | Provider's UI. We don't mirror state.                                                                                                                                   |
-| Linked OAuth accounts (Google, GitHub, …) | Provider           | Yes (provider)          | Provider's UI. We mirror `(provider, sub)` pairs at login (see [Verification.md](Verification.md)).                                                                     |
+| Linked OAuth accounts (Google, GitHub, …) | Provider           | Yes (provider)          | Provider's UI. We mirror `(provider, sub)` pairs at login (see [EmailVerification.md](EmailVerification.md)).                                                           |
 | First / last name                         | Provider, mirrored | Yes (provider)          | Source of truth at provider; we sync. See "Display name override" below.                                                                                                |
 | **Handle** (`UserProfile.handle`)         | **Flipcommons**    | **Yes**                 | New field, ours. URL-safe slug. Defaults to the existing email-derived value.                                                                                           |
 | **Display name**                          | Flipcommons        | Yes (optional override) | Defaults to `first_name last_name`. User can set an override (pen name, "preferred name").                                                                              |
@@ -62,7 +62,7 @@ Solution: an optional `UserProfile.display_name_override` field. When set, it wi
 
 ## Avatar — "use provider" vs. "upload"
 
-The provider gives us a `profile_picture_url` ([Verification.md](Verification.md)). For most users that's fine. But a user who signed up with a corporate Google account may not want their work headshot on a hobby pinball wiki. Offer a choice:
+The provider gives us a `profile_picture_url` ([EmailVerification.md](EmailVerification.md)). For most users that's fine. But a user who signed up with a corporate Google account may not want their work headshot on a hobby pinball wiki. Offer a choice:
 
 ```python
 class UserProfile(TimeStampedModel):

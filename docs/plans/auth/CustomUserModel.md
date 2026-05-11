@@ -8,14 +8,14 @@ Implemented May 7 2026.
 
 ## Related work
 
-This is the first step of an auth-hardening sequence. After this lands, follow-on plans build on the model shape defined here: [Webhooks.md](Webhooks.md) + [Verification.md](Verification.md), then [UserSelfManagement.md](UserSelfManagement.md).
+This is the first step of an auth-hardening sequence. After this lands, follow-on plans build on the model shape defined here: [Webhooks.md](Webhooks.md) + [EmailVerification.md](EmailVerification.md), then [UserSelfManagement.md](UserSelfManagement.md).
 
 ## Problem
 
 This project is pre-launch, and we've deferred the question of how to manage users until now. We're on Django's default `auth.User`, but Django's default `User` is starting to bend under our requirements:
 
 - **No way to enforce email uniqueness cleanly.** `auth.User.email` is `blank=True, unique=False`. The matching logic in `get_or_create_django_user()` (`apps/accounts/api.py:111`) compensates, but only when there's exactly 0 or 1 match — 2+ matches silently create a duplicate user. We need a partial-unique constraint that the default model can't carry.
-- **The pending auth-hardening fields don't have a clean home.** [Verification.md](Verification.md) introduces `email_verified`; the provider-switching freshness signal `last_seen_at` needs somewhere to live too. With default `auth.User`, every such field has to land on the existing `UserProfile` sidecar — which makes every read of basic identity state go through `select_related("profile")`.
+- **The pending auth-hardening fields don't have a clean home.** [EmailVerification.md](EmailVerification.md) introduces `email_verified`; the provider-switching freshness signal `last_seen_at` needs somewhere to live too. With default `auth.User`, every such field has to land on the existing `UserProfile` sidecar — which makes every read of basic identity state go through `select_related("profile")`.
 
 ## Using a custom user model
 
@@ -103,7 +103,7 @@ Notes on the choices:
 - **Full-unique email + reactivation on signup.** One row per email, ever. When a returning user signs in via WorkOS — they got a new `workos_user_id` because they closed and recreated their auth account — `get_or_create_django_user()` matches the soft-deleted row by email and reactivates it (`is_active=True`, re-bind `workos_user_id`, update `last_seen_at`). They keep their contribution history; we don't silently fork their identity into a second row. The alternative (partial-unique on `is_active`) was considered and rejected: it lets the new signup quietly create a fresh row, stranding the old contributions on the soft-deleted row.
 - **Reactivation gate — required from day one.** Reactivation is a privilege escalation in disguise (it inherits the prior user's contribution history), so it must be gated. The check:
 
-  **`auth_response.user.email_verified` must be true.** Without this, an attacker registers victim@oldcompany.com via the email/password path and inherits Alice's history before WorkOS sends the verification email. We don't need the local `email_verified` field yet (that's deferred to [Verification.md](Verification.md)) — the inbound login already carries the verified flag on the WorkOS user object. It's a non-Optional `bool` on the SDK `User` model (`workos/types/user_management/user.py`), so present on every authenticated user; already read at `apps/accounts/api.py:129` in the existing flow. WorkOS sets it `True` after social-OAuth login (the upstream provider has verified) and `False` for password sign-ups until the verification email is clicked. Read it live; don't reactivate if false.
+  **`auth_response.user.email_verified` must be true.** Without this, an attacker registers victim@oldcompany.com via the email/password path and inherits Alice's history before WorkOS sends the verification email. We don't need the local `email_verified` field yet (that's deferred to [EmailVerification.md](EmailVerification.md)) — the inbound login already carries the verified flag on the WorkOS user object. It's a non-Optional `bool` on the SDK `User` model (`workos/types/user_management/user.py`), so present on every authenticated user; already read at `apps/accounts/api.py:129` in the existing flow. WorkOS sets it `True` after social-OAuth login (the upstream provider has verified) and `False` for password sign-ups until the verification email is clicked. Read it live; don't reactivate if false.
 
   Concretely, the reactivation predicate is `is_active=False AND inbound.email_verified=True`. If the clause fails, fall through to "refuse" — never silently reactivate.
 
@@ -164,8 +164,8 @@ Note on intermediate states: this is a single-PR migration. The tree won't compi
 
      Drop the `count() == 1` ambiguity path and the `_get_profile()` call.
 
-   - **Mirrored fields, explicitly.** "Refresh mirrored fields" means: `email`, `first_name`, `last_name` — copied verbatim from `auth_response.user`. That's the v1 list; `email_verified` joins it when [Verification.md](Verification.md) lands. Save with `update_fields=["email", "first_name", "last_name"]` so `last_login` (handled by Django's signal) and any future `updated_at` aren't disturbed.
-   - **Email-change re-verification.** When a webhook (or a future settings-page edit) changes a user's email, `email_verified` flips back to false until the new address is re-verified. Owned by [Verification.md](Verification.md); flagged here so it doesn't fall through.
+   - **Mirrored fields, explicitly.** "Refresh mirrored fields" means: `email`, `first_name`, `last_name` — copied verbatim from `auth_response.user`. That's the v1 list; `email_verified` joins it when [EmailVerification.md](EmailVerification.md) lands. Save with `update_fields=["email", "first_name", "last_name"]` so `last_login` (handled by Django's signal) and any future `updated_at` aren't disturbed.
+   - **Email-change re-verification.** When a webhook (or a future settings-page edit) changes a user's email, `email_verified` flips back to false until the new address is re-verified. Owned by [EmailVerification.md](EmailVerification.md); flagged here so it doesn't fall through.
    - `UserProfileSchema` and any `user.profile.X` reads collapse to fields on `user`.
    - `auth_me` and `user_profile_page` route by `username` — it's the public URL slug. `user_profile_page` accepts a `username` URL kwarg and looks up by that field.
 
@@ -199,7 +199,7 @@ We're not building a backwards path. Once migrations regenerate and the dev DB i
 
 Several in-flight plan docs assume the old shape (default `auth.User` + `UserProfile` sidecar). After landing this:
 
-- **[Verification.md](Verification.md)** — proposed `UserProfile.email_verified` lands as `User.email_verified`. The field is added by the Verification.md PR itself, not this one — it's read live from the provider on each login, so there's no accumulation reason to add it early. The `(provider, provider_sub)` external-identity table that Verification.md also proposed is split out and deferred — see [SocialAccountSync.md](SocialAccountSync.md).
+- **[EmailVerification.md](EmailVerification.md)** — proposed `UserProfile.email_verified` lands as `User.email_verified`. The field is added by the EmailVerification.md PR itself, not this one — it's read live from the provider on each login, so there's no accumulation reason to add it early. The `(provider, provider_sub)` external-identity table that EmailVerification.md also proposed is split out and deferred — see [SocialAccountSync.md](SocialAccountSync.md).
 - **[Webhooks.md](Webhooks.md)** — `profile.workos_user_id` collapses to `user.workos_user_id`. The proposed `is_banned` mirroring (Clerk-only `user.banned`/`user.unbanned` events) is deferred to [UserBanning.md](UserBanning.md); for v1 the webhook handler just sets `user.is_active=False`, with the same session-flush behavior. The flush-sessions helper still works (it walks `_auth_user_id`).
 - **[ProviderSwitching.md](ProviderSwitching.md)** — `last_seen_at` lands on `User`. The provider-switching playbook is otherwise unaffected.
 - **[UserSelfManagement.md](UserSelfManagement.md)** — the Field-by-Field Proposal table needs updating: the proposed `UserProfile.handle` collapses into the now-editable `User.username` (one slug, not two). All other proposed fields (`display_name_override`, `bio`, avatar fields, notification/privacy toggles) are out of scope for this PR — they land on `User` when UserSelfManagement.md actually ships, paired with the settings-page UI that consumes them. The "Why the username / handle split" section in that doc no longer applies and should be deleted in the follow-up sweep.

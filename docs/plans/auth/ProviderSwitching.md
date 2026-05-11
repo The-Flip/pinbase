@@ -15,21 +15,21 @@ Failures we want to avoid:
 
 This doc captures what to store, _now_.
 
-Some of it overlaps with [Verification.md](Verification.md) and [Webhooks.md](Webhooks.md) — the goal here is to look at the same data through the migration lens and call out the gaps.
+Some of it overlaps with [EmailVerification.md](EmailVerification.md) and [Webhooks.md](Webhooks.md) — the goal here is to look at the same data through the migration lens and call out the gaps.
 
 ## What we already plan to store
 
 Already covered in other docs, summarised here so the picture is whole:
 
-| Data                             | Source                             | Doc             | Why it helps a migration                                                                                                         |
-| -------------------------------- | ---------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `workos_user_id`                 | Today                              | —               | The current link. Becomes "legacy provider ID" on switch.                                                                        |
-| Email, first / last name         | Today                              | —               | Primary re-link key (verified-email match against the new provider).                                                             |
-| `email_verified`                 | [Verification.md](Verification.md) | Verification.md | New provider may distrust unknown users; we know they were verified.                                                             |
-| Profile picture URL              | [Verification.md](Verification.md) | Verification.md | Continuity — UI doesn't go blank during the cutover.                                                                             |
-| `(provider, provider_sub)` pairs | [Verification.md](Verification.md) | Verification.md | Stable Google/GitHub/Apple `sub` survives provider switches; re-link by `(google, sub)` even if email changed.                   |
-| `is_active` (local)              | Django built-in                    | Webhooks.md     | Moderation / lifecycle state owned by us — survives any switch. v1 uses one flag (see [CustomUserModel.md](CustomUserModel.md)). |
-| Webhook-driven freshness         | Webhooks.md                        | Webhooks.md     | All of the above stay current between logins, so the migration snapshot is recent.                                               |
+| Data                             | Source                                       | Doc                  | Why it helps a migration                                                                                                         |
+| -------------------------------- | -------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `workos_user_id`                 | Today                                        | —                    | The current link. Becomes "legacy provider ID" on switch.                                                                        |
+| Email, first / last name         | Today                                        | —                    | Primary re-link key (verified-email match against the new provider).                                                             |
+| `email_verified`                 | [EmailVerification.md](EmailVerification.md) | EmailVerification.md | New provider may distrust unknown users; we know they were verified.                                                             |
+| Profile picture URL              | [EmailVerification.md](EmailVerification.md) | EmailVerification.md | Continuity — UI doesn't go blank during the cutover.                                                                             |
+| `(provider, provider_sub)` pairs | [EmailVerification.md](EmailVerification.md) | EmailVerification.md | Stable Google/GitHub/Apple `sub` survives provider switches; re-link by `(google, sub)` even if email changed.                   |
+| `is_active` (local)              | Django built-in                              | Webhooks.md          | Moderation / lifecycle state owned by us — survives any switch. v1 uses one flag (see [CustomUserModel.md](CustomUserModel.md)). |
+| Webhook-driven freshness         | Webhooks.md                                  | Webhooks.md          | All of the above stay current between logins, so the migration snapshot is recent.                                               |
 
 If those three docs land before any switch, the local `User` + `UserProfile` already carries every field we'd need to map a user to a new provider _by identity_. That's the easy half.
 
@@ -39,7 +39,7 @@ Small additions specifically for migration ergonomics:
 
 ### `provider_account_created_at` on the external-identity row
 
-When we add the `ExternalIdentity(provider, provider_sub, ...)` table from [Verification.md](Verification.md), include a `provider_account_created_at` field populated from the provider's `created_at`. Two uses:
+When we add the `ExternalIdentity(provider, provider_sub, ...)` table from [EmailVerification.md](EmailVerification.md), include a `provider_account_created_at` field populated from the provider's `created_at`. Two uses:
 
 - **Migration prioritisation.** During lazy migration (below), we can prioritise long-tenured users for early cutover and more aggressive notification.
 - **Trust signals.** A "this Google identity has been linked since 2024-03" datum is genuinely useful for anti-abuse independent of any switch.
@@ -137,7 +137,7 @@ The point of all the upfront mirroring is that step 2 has nothing left to discov
 A small but real consideration: today the field is called `workos_user_id`. Two choices when we switch:
 
 - **Add a new column** (`clerk_user_id` etc.) and keep `workos_user_id` populated for the legacy read path. Fits the user's stated preference for provider-specific names. Migration code reads from `workos_user_id`, writes into the new column.
-- **Generalise into the `ExternalIdentity` table** from [Verification.md](Verification.md). This is where we'd land anyway once we want to track Google/GitHub/Apple `sub`s individually. The old WorkOS ID becomes one row among many.
+- **Generalise into the `ExternalIdentity` table** from [EmailVerification.md](EmailVerification.md). This is where we'd land anyway once we want to track Google/GitHub/Apple `sub`s individually. The old WorkOS ID becomes one row among many.
 
 Recommendation: do the second one, but only when there's a reason to (a second provider becomes real, or the migration is actually scheduled). Adding the table speculatively is YAGNI; having the design ready in this doc is not.
 

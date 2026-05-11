@@ -8,7 +8,7 @@ The events we currently miss:
 
 - **Email change.** A user updates their email at WorkOS. We keep showing the old one, and our email-fallback re-link branch (`api.py:129`) compares against stale data.
 - **Email verification flips.** A user clicks the verification link mid-session. They're still blocked from editing on our side until their session expires and they sign in fresh.
-- **Admin ban at the provider.** Once we mirror Clerk's `banned` flag (see [Verification.md](Verification.md)), this matters even more — a banned user with a live Django session cookie keeps editing until the cookie expires, because Clerk only refuses _new_ sign-ins.
+- **Admin ban at the provider.** Once we mirror Clerk's `banned` flag (see [EmailVerification.md](EmailVerification.md)), this matters even more — a banned user with a live Django session cookie keeps editing until the cookie expires, because Clerk only refuses _new_ sign-ins.
 - **Account deletion.** A user closes their account at the provider. We have no way to know, so their email/identity stays in our DB indefinitely. That's a GDPR / data-hygiene problem the moment we go live.
 - **Profile updates.** Name, picture URL, etc. — low stakes, but trivially fixable.
 

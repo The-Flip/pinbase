@@ -149,7 +149,7 @@ The reactivation predicate becomes `is_active=False AND banned_at IS NULL AND in
 ## Coordination with other auth plans
 
 - **[CustomUserModel.md](CustomUserModel.md)** — defines `User.workos_user_id` (managed-provider pointer) and the v1 reactivation guards (email_verified + banned_at). This doc adds the OAuth-layer identifiers that survive a managed-provider switch and tightens the reactivation guard.
-- **[Verification.md](Verification.md)** — originally proposed an external-identity table; this is that table, deferred until needed.
+- **[EmailVerification.md](EmailVerification.md)** — originally proposed an external-identity table; this is that table, deferred until needed.
 - **[ProviderSwitching.md](ProviderSwitching.md)** — depends on this data when re-linking users post-switch. If we ship a switch before this lands, the playbook is "force re-link via email" instead of "pre-link by `(provider, sub)`."
 
 ## Non-goals
