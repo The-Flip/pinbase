@@ -528,9 +528,14 @@ A future Protocol that legitimately needs to traverse a relation will demand a p
 
 Embedded hints reflect server state at response time only. User-state drift (the user's email got unverified, their account got deactivated) is caught by the Phase 7 403-as-invalidation middleware. Target-state drift (a claim got locked after the row was fetched, an entity got soft-deleted) is _not_ — the 403 still fires correctly when the user clicks the now-stale affordance, and the SPA's generic `policy_denied` toast is the user-facing fallback. Per-row invalidation (websocket push, refresh-on-focus) is out of scope for Phase 8; revisit if Phase 9 telemetry shows target-state drift produces a meaningful 403 rate. The embedded hint is a UX optimization; the 403 is the real gate.
 
-### 9. Documentation
+### ✅ DONE: 9. Documentation
 
-Document the authorization surface area for future contributors and agents. Likely a new `docs/Authz.md` covering the system as it exists post-rollout, plus targeted additions to `docs/AGENTS.src.md` (which regenerates `CLAUDE.md` / `AGENTS.md`). Details to be fleshed out when we get to this phase.
+Document the authorization surface area for future contributors and agents.
+The stable contributor reference is now [`docs/Authz.md`](../../Authz.md), with
+targeted guidance in [`docs/Svelte.md`](../../Svelte.md),
+[`docs/Reviewing.md`](../../Reviewing.md), [`docs/ApiDesign.md`](../../ApiDesign.md),
+and [`docs/AGENTS.src.md`](../../AGENTS.src.md) (regenerated into `CLAUDE.md` /
+`AGENTS.md`).
 
 ### 10. Observability
 

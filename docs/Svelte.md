@@ -113,3 +113,27 @@ When converting a route subtree to SSR, audit every child route and add `export 
 - is an authenticated editing or upload surface
 
 This is easy to miss because the children worked fine when the parent had `ssr = false` — the breakage only surfaces after the parent switches to SSR.
+
+## Authorization
+
+Frontend authorization is not authority. It covers UX — showing or hiding
+affordances and pre-empting navigation with redirects — but Django remains the
+source of truth. Every mutation must be enforced by the backend policy and may
+still return a structured `policy_denied` 403.
+
+Use capabilities instead of reimplementing policy logic:
+
+- For target-less actions, use `auth.can("activity.name")` from `$lib/auth.svelte`.
+- For row-specific actions, use the row's embedded `capabilities` map, such as `changeset.capabilities["changeset.undo"]`.
+- Do not check raw role or user-state fields (`is_staff`, `is_superuser`, `email_verified`) to decide whether a product action is allowed.
+- Use `auth.isAuthenticated` only for identity and login presentation: account menus, sign-in links, or anonymous-vs-signed-in copy. It is not an edit permission check.
+
+Capabilities are UX hints. Mutations are still enforced by the backend and can
+return `policy_denied`; render that through the normal API error path.
+
+For authenticated app routes that gate access before rendering, load
+`/api/auth/me/` server-side with `createServerClient` and `redirect()` when the
+relevant capability is false. See
+[`frontend/src/routes/kiosk/edit/+layout.server.ts`](../frontend/src/routes/kiosk/edit/+layout.server.ts)
+as the reference pattern. Do not import the browser auth store in server load
+files.

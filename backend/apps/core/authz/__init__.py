@@ -1,4 +1,4 @@
-"""Activity-based authorization engine."""
+"""Authorization engine."""
 
 from .capabilities import compute_capability_map, compute_row_capabilities
 from .enforce import enforce

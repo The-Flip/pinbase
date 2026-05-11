@@ -49,6 +49,19 @@ In particular:
 - changing a parent layout's SSR mode can silently change all child routes — audit child routes and add explicit `ssr = false` where needed
 - SSR routes must use `createServerClient` from `$lib/api/server`, not the browser client or ad hoc fetch
 
+### Authorization
+
+When a change touches mutating API routes, user-state gates, role checks,
+frontend affordances, or structured 403s, check [Authz.md](Authz.md).
+
+In particular:
+
+- every mutating route should be classified with `@requires`, `@gated_inline`, or `@public_mutation`
+- new product gates should use `Activity` and policy rules, not raw `is_staff`, `is_superuser`, or `email_verified` checks
+- frontend code should consume capabilities, not reimplement policy logic
+- target-aware predicates should use narrow Protocols and have zero-query tests
+- denial responses should use closed `DenialCode` values and backend-owned messages
+
 ### Page-oriented APIs
 
 When a change introduces or changes web-facing endpoints for pages, check [ApiDesign.md](ApiDesign.md).

@@ -137,6 +137,14 @@ The frontend uses **Svelte 5 runes mode** (`runes: true` in compiler options). D
 
 NEVER use `:global` in Svelte component styles without explicit approval from the user. Scoped styles are the default and preferred approach. We rearchitect components rather than use `:global`.
 
+### Authorization goes through activities
+
+Backend authorization gates product actions through `Activity` rules in `apps/core/authz/`; frontend auth checks are UX hints only. For mutating backend routes, use `@requires(Activity.X)`, `@gated_inline(Activity.X)`, or `@public_mutation("reason")` so the route inventory stays complete.
+
+Do NOT add new raw `is_staff`, `is_superuser`, or `email_verified` checks to decide whether a user may perform a product action. Add or use an `Activity` instead. Do NOT mirror policy logic in Svelte — use `auth.can("activity.name")` for target-less affordances and row `capabilities[...]` for target-aware affordances.
+
+For predicate design (purity, target Protocols, denial messages), see [docs/Authz.md](Authz.md).
+
 ### All user-inputted catalog fields MUST be claims-based
 
 **Every user-inputted catalog field MUST be claims-based**: scalars, FKs, M2M, slugs, parents, aliases. This includes ingested data that goes into fields that users can input.
