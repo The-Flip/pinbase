@@ -36,7 +36,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
-from typing import Any, cast
+from typing import TypeGuard, cast
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -95,14 +95,16 @@ class SoftDeletePlan:
         return bool(self.blockers)
 
 
-def _has_status(model_class: type[db_models.Model]) -> bool:
+def _has_status(
+    model_class: type[db_models.Model],
+) -> TypeGuard[type[LifecycleStatusModel]]:
     return issubclass(model_class, LifecycleStatusModel)
 
 
 def _is_active(entity: db_models.Model) -> bool:
     """An entity is active unless its resolved ``status`` is ``deleted``.
 
-    Null status is treated as active (matches ``CatalogQuerySet.active``).
+    Null status is treated as active (matches ``LifecycleQuerySet.active``).
     """
     status = getattr(entity, "status", None)
     return status != "deleted"
@@ -180,11 +182,7 @@ def _iter_protect_referrers(
             if not _has_status(remote_model):
                 continue
             fk_name = remote_field.name
-            qs = (
-                cast(Any, remote_model)
-                ._default_manager.active()
-                .filter(**{fk_name: entity})
-            )
+            qs = remote_model.objects.active().filter(**{fk_name: entity})
             for ref in qs:
                 yield ref, fk_name
         elif on_delete in (db_models.SET_NULL, db_models.SET_DEFAULT):
@@ -205,7 +203,7 @@ def _iter_usage_blockers(
     ``soft_delete_usage_blockers`` — M2M through-rows and self-ref hierarchy.
 
     Each manager name must resolve to a reverse manager that supports
-    ``.active()`` (i.e. whose remote model is a ``CatalogQuerySet`` user,
+    ``.active()`` (i.e. whose remote model is a ``LifecycleQuerySet`` user,
     via ``LifecycleStatusModel``). Yielded referrers are always active.
     """
     manager_names: Iterable[str] = getattr(

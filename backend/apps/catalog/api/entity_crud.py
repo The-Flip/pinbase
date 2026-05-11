@@ -27,7 +27,7 @@ its own.
 """
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, NamedTuple
 
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest
@@ -73,6 +73,21 @@ from .soft_delete import (
     plan_soft_delete,
     serialize_blocking_referrer,
 )
+
+
+class CreateExtras(NamedTuple):
+    """Return type of ``extra_create_fields_builder``.
+
+    *row_kwargs* are merged into the ``model_cls.objects.create`` call; field
+    set varies per caller (e.g. Location supplies ``location_type``,
+    ``divisions``, ``location_path``), so it stays as a kwargs dict at the
+    Django boundary. *claim_specs* are appended to the create ChangeSet's
+    claims.
+    """
+
+    row_kwargs: dict[str, Any]
+    claim_specs: list[ClaimSpec]
+
 
 # ---------------------------------------------------------------------------
 # Registrars
@@ -290,7 +305,7 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
     body_schema: type[EntityCreateInputSchema] | None = None,
     extra_create_fields_builder: Callable[
         [EntityCreateInputSchema, CatalogModel | None],
-        tuple[dict[str, Any], list[ClaimSpec]],
+        CreateExtras,
     ]
     | None = None,
     op_id_suffix: str = "",
@@ -436,11 +451,9 @@ def register_entity_create[ModelT: CatalogModel, SchemaT: Schema](
             )
 
         if extra_create_fields_builder is not None:
-            extra_row_kwargs, extra_claim_specs = extra_create_fields_builder(
-                data, parent
-            )
-            row_kwargs.update(extra_row_kwargs)
-            claim_specs.extend(extra_claim_specs)
+            extras = extra_create_fields_builder(data, parent)
+            row_kwargs.update(extras.row_kwargs)
+            claim_specs.extend(extras.claim_specs)
 
         # Pre-check the public-id column (slug for shipped models;
         # location_path for Location). Runs after extra_create_fields_builder
