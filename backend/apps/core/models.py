@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, ClassVar, TypeVar
+from typing import Any, ClassVar, Self, TypeVar
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -236,8 +236,8 @@ class EntityStatus(models.TextChoices):
 _LifecycleModel = TypeVar("_LifecycleModel", bound="LifecycleStatusModel")
 
 
-class CatalogQuerySet(models.QuerySet[_LifecycleModel]):
-    def active(self) -> CatalogQuerySet[_LifecycleModel]:
+class LifecycleQuerySet(models.QuerySet[_LifecycleModel]):
+    def active(self) -> LifecycleQuerySet[_LifecycleModel]:
         """Return entities considered live in the catalog.
 
         Includes ``status='active'`` and ``status IS NULL`` for legacy ingest
@@ -249,7 +249,7 @@ class CatalogQuerySet(models.QuerySet[_LifecycleModel]):
         )
 
 
-CatalogManager = models.Manager.from_queryset(CatalogQuerySet)
+LifecycleManager = models.Manager.from_queryset(LifecycleQuerySet)
 
 
 def active_status_q(relation: str) -> models.Q:
@@ -261,7 +261,7 @@ def active_status_q(relation: str) -> models.Q:
         Count("machine_models", filter=Q(...) & active_status_q("machine_models"))
 
     Null-inclusive for legacy ingest compatibility — tighten alongside
-    ``CatalogQuerySet.active()`` once every ingest path creates status claims.
+    ``LifecycleQuerySet.active()`` once every ingest path creates status claims.
     """
     return models.Q(**{f"{relation}__status": EntityStatus.ACTIVE}) | models.Q(
         **{f"{relation}__status__isnull": True}
@@ -287,6 +287,24 @@ class LifecycleStatusModel(models.Model):
         null=True,
         blank=True,
     )
+
+    # ``ClassVar[LifecycleManager[Self]]`` gets us both halves: the custom
+    # manager type (so ``.active()`` is visible) and per-subclass model
+    # binding (so ``Manufacturer.objects`` types as
+    # ``LifecycleManager[Manufacturer]``, not ``LifecycleManager[LifecycleStatusModel]``).
+    # Without ``Self``, django-types' default descriptor strips the custom
+    # manager class. ``CatalogModel`` redeclares this so ``Self`` rebinds at
+    # the catalog level — mypy walks the TypeVar bound, not the concrete class,
+    # so without the redeclaration ``model_cls.objects.active()`` (where
+    # ``model_cls: type[ModelT: CatalogModel]``) types as
+    # ``LifecycleManager[LifecycleStatusModel]``.
+    # pyright: ignore on the annotation — ``LifecycleManager`` is the result of
+    # ``models.Manager.from_queryset(...)``, which Pylance sees as a variable
+    # assignment rather than a class declaration (``reportInvalidTypeForm``).
+    # mypy + django-stubs accept it; converting to a ``class LifecycleManager(...)``
+    # statement either loses the ``[Self]`` subscript or crashes the django-stubs
+    # plugin under multiple inheritance, so we keep the assignment form.
+    objects: ClassVar[LifecycleManager[Self]] = LifecycleManager()  # pyright: ignore[reportInvalidTypeForm]
 
     class Meta:
         abstract = True

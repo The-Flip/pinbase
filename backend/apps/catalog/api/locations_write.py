@@ -54,7 +54,11 @@ from .edit_claims import (
     raise_form_error,
     validate_scalar_fields,
 )
-from .entity_crud import register_entity_create, register_entity_delete_restore
+from .entity_crud import (
+    CreateExtras,
+    register_entity_create,
+    register_entity_delete_restore,
+)
 from .locations import LocationDetailSchema, _get_location_detail
 from .schemas import EntityCreateInputSchema
 
@@ -189,19 +193,20 @@ def _top_level_scope(_data: EntityCreateInputSchema, _parent: CatalogModel | Non
 
 def _top_level_extras(
     data: EntityCreateInputSchema, _parent: CatalogModel | None
-) -> tuple[dict[str, Any], list[ClaimSpec]]:
+) -> CreateExtras:
     assert isinstance(data, LocationTopLevelCreateSchema)
     divisions = data.divisions
-    row_kwargs: dict[str, Any] = {
-        "location_type": "country",
-        "divisions": divisions,
-        "location_path": compute_location_path(None, data.slug),
-    }
-    claim_specs = [
-        ClaimSpec(field_name="location_type", value="country"),
-        ClaimSpec(field_name="divisions", value=divisions),
-    ]
-    return row_kwargs, claim_specs
+    return CreateExtras(
+        row_kwargs={
+            "location_type": "country",
+            "divisions": divisions,
+            "location_path": compute_location_path(None, data.slug),
+        },
+        claim_specs=[
+            ClaimSpec(field_name="location_type", value="country"),
+            ClaimSpec(field_name="divisions", value=divisions),
+        ],
+    )
 
 
 register_entity_create(
@@ -230,16 +235,17 @@ def _child_scope(_data: EntityCreateInputSchema, parent: CatalogModel | None) ->
 
 def _child_extras(
     data: EntityCreateInputSchema, parent: CatalogModel | None
-) -> tuple[dict[str, Any], list[ClaimSpec]]:
+) -> CreateExtras:
     assert parent is not None
     assert isinstance(parent, Location)
     location_type = derive_child_location_type(parent)
-    row_kwargs: dict[str, Any] = {
-        "location_type": location_type,
-        "location_path": compute_location_path(parent, data.slug),
-    }
-    claim_specs = [ClaimSpec(field_name="location_type", value=location_type)]
-    return row_kwargs, claim_specs
+    return CreateExtras(
+        row_kwargs={
+            "location_type": location_type,
+            "location_path": compute_location_path(parent, data.slug),
+        },
+        claim_specs=[ClaimSpec(field_name="location_type", value=location_type)],
+    )
 
 
 register_entity_create(

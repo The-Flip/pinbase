@@ -306,7 +306,7 @@ def _build_model_list_qs(
 
 def _serialize_model_list(
     pm: MachineModel, *, min_rank: int | None = None
-) -> dict[str, Any]:
+) -> ModelListItemSchema:
     thumbnail_url, _ = extract_image_urls(
         pm.extra_data or {}, primary_media(pm), min_rank=min_rank
     )
@@ -315,33 +315,33 @@ def _serialize_model_list(
         if pm.corporate_entity and pm.corporate_entity.manufacturer
         else None
     )
-    return {
-        "name": pm.name,
-        "slug": pm.slug,
-        "manufacturer": {"name": mfr.name, "slug": mfr.slug} if mfr else None,
-        "year": pm.year,
-        "technology_generation": (
-            {
-                "name": pm.technology_generation.name,
-                "slug": pm.technology_generation.slug,
-            }
+    # Note: technology_subgeneration not included in list view
+    return ModelListItemSchema(
+        name=pm.name,
+        slug=pm.slug,
+        manufacturer=EntityRef(name=mfr.name, slug=mfr.slug) if mfr else None,
+        year=pm.year,
+        technology_generation=(
+            EntityRef(
+                name=pm.technology_generation.name,
+                slug=pm.technology_generation.slug,
+            )
             if pm.technology_generation
             else None
         ),
-        "display_type": (
-            {"name": pm.display_type.name, "slug": pm.display_type.slug}
+        display_type=(
+            EntityRef(name=pm.display_type.name, slug=pm.display_type.slug)
             if pm.display_type
             else None
         ),
-        "ipdb_id": pm.ipdb_id,
-        # Note: technology_subgeneration not included in list view
-        "ipdb_rating": float(pm.ipdb_rating) if pm.ipdb_rating is not None else None,
-        "pinside_rating": float(pm.pinside_rating)
-        if pm.pinside_rating is not None
-        else None,
-        "themes": [{"name": t.name, "slug": t.slug} for t in pm.themes.all()],
-        "thumbnail_url": thumbnail_url,
-    }
+        ipdb_id=pm.ipdb_id,
+        ipdb_rating=float(pm.ipdb_rating) if pm.ipdb_rating is not None else None,
+        pinside_rating=(
+            float(pm.pinside_rating) if pm.pinside_rating is not None else None
+        ),
+        themes=[EntityRef(name=t.name, slug=t.slug) for t in pm.themes.all()],
+        thumbnail_url=thumbnail_url,
+    )
 
 
 def _serialize_model_detail(pm: MachineModel) -> ModelDetailSchema:
@@ -635,7 +635,7 @@ def list_models(
     year_max: int | None = None,
     person: str = "",
     ordering: str = "-year",
-) -> list[dict[str, Any]]:
+) -> list[ModelListItemSchema]:
     qs = _build_model_list_qs(
         manufacturer=manufacturer,
         type=type,

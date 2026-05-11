@@ -7,7 +7,7 @@ from typing import ClassVar, Self
 from django.db import models
 
 from apps.core.models import (
-    CatalogManager,
+    LifecycleManager,
     LifecycleStatusModel,
     LinkableModel,
 )
@@ -79,16 +79,21 @@ class CatalogModel(LinkableModel, LifecycleStatusModel, ClaimControlledModel):
     defines its own ``Meta``.
     """
 
-    # ``ClassVar[CatalogManager[Self]]`` gets us both halves: the custom
-    # manager type (so ``.active()`` is visible) and per-subclass model binding
-    # (so ``Manufacturer.objects`` types as ``CatalogManager[Manufacturer]``,
-    # not ``CatalogManager[CatalogModel]``). Without ``Self``, django-types'
-    # default descriptor strips the custom manager class. Declared here rather
-    # than on ``LifecycleStatusModel`` because every concrete
-    # ``LifecycleStatusModel`` subclass goes through ``CatalogModel`` —
-    # there's no consumer that needs ``.active()`` typed against the bare
-    # lifecycle base.
-    objects: ClassVar[CatalogManager[Self]] = CatalogManager()
+    # Redeclared from ``LifecycleStatusModel`` so ``Self`` rebinds at the
+    # catalog level — mypy walks the TypeVar bound, not the concrete class,
+    # so without this ``model_cls.objects.active()`` (where
+    # ``model_cls: type[ModelT: CatalogModel]``) types as
+    # ``LifecycleManager[LifecycleStatusModel]`` rather than
+    # ``LifecycleManager[ModelT]``.
+    # See LifecycleStatusModel.objects for why pyright is ignored here.
+    objects: ClassVar[LifecycleManager[Self]] = LifecycleManager()  # pyright: ignore[reportInvalidTypeForm]
+
+    # Soft-delete walker policy — see apps/catalog/api/soft_delete.py.
+    # Concrete subclasses override these frozensets when they need to
+    # cascade deletion to dependent entities or block deletion when M2M /
+    # self-ref usage exists. Empty defaults keep the walker generic.
+    soft_delete_cascade_relations: ClassVar[frozenset[str]] = frozenset()
+    soft_delete_usage_blockers: ClassVar[frozenset[str]] = frozenset()
 
     class Meta:
         abstract = True

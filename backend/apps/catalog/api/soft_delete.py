@@ -34,9 +34,9 @@ application layer".
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Any, cast
+from typing import TypeGuard
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -95,25 +95,29 @@ class SoftDeletePlan:
         return bool(self.blockers)
 
 
-def _has_status(model_class: type[db_models.Model]) -> bool:
+def _has_status(
+    model_class: type[db_models.Model],
+) -> TypeGuard[type[LifecycleStatusModel]]:
     return issubclass(model_class, LifecycleStatusModel)
 
 
-def _is_active(entity: db_models.Model) -> bool:
+def _is_active(entity: CatalogModel) -> bool:
     """An entity is active unless its resolved ``status`` is ``deleted``.
 
-    Null status is treated as active (matches ``CatalogQuerySet.active``).
+    Null status is treated as active (matches ``LifecycleQuerySet.active``).
     """
-    status = getattr(entity, "status", None)
-    return status != "deleted"
+    return entity.status != "deleted"
 
 
 def _entity_type(entity: db_models.Model) -> str:
     """Canonical hyphenated entity_type for wire-format serialization.
 
-    All soft-delete roots and blockers are CatalogModel subclasses today.
-    If that ever changes, add an explicit policy here rather than silently
-    leaking the Django-internal concatenated ``_meta.model_name``.
+    Roots reach this only as ``CatalogModel`` (statically enforced by the
+    walker's signatures). Blockers, however, come from the iterators as
+    ``db_models.Model`` — those need the runtime ``CatalogModel`` check so
+    we don't silently leak Django's concatenated ``_meta.model_name`` into
+    the wire format. If the iterators ever start yielding non-CatalogModel
+    referrers, add an explicit policy here.
     """
     cls = type(entity)
     if not issubclass(cls, CatalogModel):
@@ -128,7 +132,7 @@ def _entity_key(entity: db_models.Model) -> tuple[str, int]:
     return (entity._meta.label_lower, entity.pk)
 
 
-def _cascade_targets(root: db_models.Model) -> list[CatalogModel]:
+def _cascade_targets(root: CatalogModel) -> list[CatalogModel]:
     """Walk ``soft_delete_cascade_relations`` to produce the ordered cascade.
 
     Deterministic order (parent before children, siblings by pk) so the
@@ -136,7 +140,7 @@ def _cascade_targets(root: db_models.Model) -> list[CatalogModel]:
     """
     result: list[CatalogModel] = []
     seen: set[tuple[str, int]] = set()
-    stack: list[CatalogModel] = [cast(CatalogModel, root)]
+    stack: list[CatalogModel] = [root]
     while stack:
         entity = stack.pop(0)
         key = _entity_key(entity)
@@ -144,10 +148,7 @@ def _cascade_targets(root: db_models.Model) -> list[CatalogModel]:
             continue
         seen.add(key)
         result.append(entity)
-        relation_names: Iterable[str] = getattr(
-            type(entity), "soft_delete_cascade_relations", frozenset()
-        )
-        for rel_name in relation_names:
+        for rel_name in type(entity).soft_delete_cascade_relations:
             manager = getattr(entity, rel_name)
             qs = manager.active().order_by("pk")
             stack.extend(qs)
@@ -155,7 +156,7 @@ def _cascade_targets(root: db_models.Model) -> list[CatalogModel]:
 
 
 def _iter_protect_referrers(
-    entity: db_models.Model,
+    entity: CatalogModel,
 ) -> Iterator[tuple[db_models.Model, str]]:
     """Yield ``(referrer, relation_name)`` for active PROTECT referrers.
 
@@ -180,11 +181,7 @@ def _iter_protect_referrers(
             if not _has_status(remote_model):
                 continue
             fk_name = remote_field.name
-            qs = (
-                cast(Any, remote_model)
-                ._default_manager.active()
-                .filter(**{fk_name: entity})
-            )
+            qs = remote_model.objects.active().filter(**{fk_name: entity})
             for ref in qs:
                 yield ref, fk_name
         elif on_delete in (db_models.SET_NULL, db_models.SET_DEFAULT):
@@ -199,44 +196,35 @@ def _iter_protect_referrers(
 
 
 def _iter_usage_blockers(
-    entity: db_models.Model,
+    entity: CatalogModel,
 ) -> Iterator[tuple[db_models.Model, str]]:
     """Yield ``(referrer, manager_name)`` for active referrers reachable via
     ``soft_delete_usage_blockers`` — M2M through-rows and self-ref hierarchy.
 
     Each manager name must resolve to a reverse manager that supports
-    ``.active()`` (i.e. whose remote model is a ``CatalogQuerySet`` user,
+    ``.active()`` (i.e. whose remote model is a ``LifecycleQuerySet`` user,
     via ``LifecycleStatusModel``). Yielded referrers are always active.
     """
-    manager_names: Iterable[str] = getattr(
-        type(entity), "soft_delete_usage_blockers", frozenset()
-    )
-    for manager_name in manager_names:
+    for manager_name in type(entity).soft_delete_usage_blockers:
         manager = getattr(entity, manager_name)
         for ref in manager.active():
             yield ref, manager_name
 
 
-def plan_soft_delete(root: db_models.Model) -> SoftDeletePlan:
+def plan_soft_delete(root: CatalogModel) -> SoftDeletePlan:
     """Plan a soft-delete of *root* plus every active cascade child.
 
     Returns both the entities that would receive ``status=deleted`` claims
     and any active PROTECT or usage-M2M referrers that would block the
     delete.
     """
-    if not _has_status(type(root)):
-        raise TypeError(
-            f"{type(root).__name__} does not use LifecycleStatusModel; "
-            "soft-delete planning is not supported."
-        )
-
     cascade = _cascade_targets(root)
     cascade_keys = {_entity_key(e) for e in cascade}
 
     blockers: list[BlockingReferrer] = []
     seen_blockers: set[tuple[tuple[str, int], str]] = set()
 
-    def _record(ref: db_models.Model, relation: str, target: db_models.Model) -> None:
+    def _record(ref: db_models.Model, relation: str, target: CatalogModel) -> None:
         key = (_entity_key(ref), relation)
         if key in seen_blockers:
             return
@@ -296,7 +284,7 @@ class SoftDeleteBlockedError(Exception):
 
 
 def execute_soft_delete(
-    root: db_models.Model,
+    root: CatalogModel,
     *,
     user: _UserLike,
     note: str = "",

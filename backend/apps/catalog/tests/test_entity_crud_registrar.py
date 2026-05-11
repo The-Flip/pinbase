@@ -18,7 +18,7 @@ from django.test import RequestFactory
 from ninja import Router, Schema
 
 from apps.catalog.api.edit_claims import ClaimSpec
-from apps.catalog.api.entity_crud import register_entity_create
+from apps.catalog.api.entity_crud import CreateExtras, register_entity_create
 from apps.catalog.api.schemas import EntityCreateInputSchema
 from apps.catalog.models import Theme
 from apps.provenance.models import Claim
@@ -161,20 +161,19 @@ def test_scope_filter_builder_unparented_invoked(user):
 
 @pytest.mark.django_db
 def test_extra_create_fields_builder_row_kwargs_and_claims_reach_row(user):
-    """The tuple ``(row_kwargs, claim_specs)`` returned by the builder
-    is merged into row kwargs and appended to the claim list. Mirrors
-    the realistic Location pattern where ``location_type`` lands as both
-    a row column and a claim — without a matching claim, the post-create
-    claim resolver would reset the column to default. This test exercises
-    both halves at once: the row column survives resolution iff both
-    halves are wired correctly."""
+    """The ``CreateExtras`` returned by the builder is merged into row
+    kwargs and appended to the claim list. Mirrors the realistic Location
+    pattern where ``location_type`` lands as both a row column and a claim
+    — without a matching claim, the post-create claim resolver would reset
+    the column to default. This test exercises both halves at once: the
+    row column survives resolution iff both halves are wired correctly."""
 
     def _build_extras(data, parent):
         assert parent is None  # unparented Theme registration
         description = f"auto: {data.name}"
-        return (
-            {"description": description},
-            [ClaimSpec(field_name="description", value=description)],
+        return CreateExtras(
+            row_kwargs={"description": description},
+            claim_specs=[ClaimSpec(field_name="description", value=description)],
         )
 
     router = Router()
