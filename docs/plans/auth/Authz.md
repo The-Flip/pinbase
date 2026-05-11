@@ -545,6 +545,23 @@ The dashboard is the on-call backstop for any future rule tightening (account-ag
 
 ## Follow-ups
 
+### ✅ DONE: Enforce `claim.revert` policy in the route, not just `execute_revert`
+
+`apps/provenance/api.py:revert_claim` carries `@gated_inline(Activity.CLAIM_REVERT)` but never calls `enforce()`. The `auth=django_auth` layer covers `is_authenticated` + `is_active`, and `execute_revert` covers the imperative `experience_required` check, but **nothing enforces `email_verified`** — an unverified user can revert their own claims today, in violation of the [anti-goal](#anti-goal-no-permission-changes-other-than-email-verified) and of `claim.revert`'s registered rule.
+
+Fix: after loading the `Claim`, add `enforce(policy_user(user), Activity.CLAIM_REVERT, target=claim)` to `revert_claim` (same shape as `undo_changeset` already does). Add a failing endpoint test for an unverified self-revert returning structured `verification_required` first, per the TDD rule.
+
+### Migrate frontend edit affordances off `auth.isAuthenticated`
+
+`docs/Svelte.md` says `auth.isAuthenticated` is for identity/login UI only — not an edit permission check — but several product affordances still gate on it directly:
+
+- `frontend/src/routes/titles/new/+page.ts` — should check `catalog.create`
+- `frontend/src/lib/components/TaxonomyListPage.svelte` — `+ New X` action; should check the relevant create activity
+- `frontend/src/routes/titles/[slug]/+layout.svelte` — edit/delete menu; should check `catalog.edit` / `catalog.delete`
+- `frontend/src/lib/components/EditHistory.svelte` — Revert button; should check `auth.can('claim.revert')` (target-less for now; per-row hint when `claim.revert`'s embed slot is wired)
+
+After the named four, grep `frontend/` for every `auth.isAuthenticated` usage and classify each as identity/login UI (keep) or edit affordance (migrate). Consider adding an ESLint rule that fails on `auth.isAuthenticated &&` patterns guarding mutation UI so this regression class can't recur.
+
 ### Type-constrain `check()` / `enforce()` target to the activity's target Protocol
 
 Today both functions type `target` as `object | None` because `Activity` is a flat `StrEnum` with no type info — there's no way to say "this activity's target must satisfy `ChangeSetPolicyView`" at the engine boundary. Per-rule predicates narrow via their own Protocol parameter, but the engine can't statically constrain what callers pass. The fix would let `check(activity, target)` reject wrong-shaped targets at mypy time and remove the `object | None` smell at the boundary.

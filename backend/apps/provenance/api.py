@@ -175,6 +175,15 @@ def revert_claim(
 
     # By construction, any entity carrying a Claim is a ClaimControlledModel.
     assert isinstance(entity, ClaimControlledModel)
+
+    # `django_auth` covers `is_authenticated` + `is_active`, and
+    # `execute_revert` only enforces the experience-required check.
+    # Without this call, the rule's `email_verified` predicate would
+    # never fire — for others-revert the experience check at least
+    # surfaces a (different-code) 403, but self-revert would slip
+    # through entirely.
+    enforce(policy_user(user), Activity.CLAIM_REVERT, target=claim)
+
     try:
         execute_revert(entity, claim_id=claim_id, user=user, note=data.note)
     except RevertError as exc:

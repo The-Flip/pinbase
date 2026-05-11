@@ -14,10 +14,16 @@ at the view, where the reason lives next to the route.
 
 from __future__ import annotations
 
+import ast
+import inspect
+import textwrap
+from collections.abc import Callable
+
 from apps.core.authz.markers import (
     ACTIVITY_ATTR,
     GATED_INLINE_ATTR,
     PUBLIC_ATTR,
+    get_gated_inline_activity,
 )
 from apps.core.authz.route_walker import iter_operations
 from apps.core.authz.types import Activity
@@ -82,4 +88,93 @@ def test_every_mutating_route_is_classified() -> None:
     assert not unclassified, (
         "Unclassified mutating routes (each needs @requires, "
         "@gated_inline, or @public_mutation):\n  " + "\n  ".join(unclassified)
+    )
+
+
+# Names that, when called as bare identifiers from a `@gated_inline`
+# view body, count as the view fulfilling its enforcement contract.
+# `enforce()` is the canonical choice (logs + raises); `check()` is
+# acceptable when the route branches on the `Decision` (the documented
+# reason for the inline carve-out).
+#
+# Codebase convention is bare-name imports (`from apps.core.authz.
+# enforce import enforce`), so we only match `Name` calls — not
+# `Attribute` calls like `something.check(...)`. The latter would
+# match any object exposing a `.check()` method and silently pass
+# routes that don't actually invoke the policy.
+_POLICY_CALL_NAMES = frozenset({"enforce", "check"})
+
+
+def _calls_policy(view: Callable[..., object]) -> bool:
+    """True iff the view's source contains a bare call to enforce() or check().
+
+    AST-level rather than substring so a stray comment or string
+    literal mentioning ``enforce`` doesn't trick the check.
+
+    Known limits — acceptable because the test's job is catching the
+    obvious miss (the failure mode that produced the unverified-self-
+    revert bug), not proving enforcement holds:
+
+    1. **Indirection.** A view that delegates to a helper module which
+       then calls ``enforce`` slips through. Closing that gap requires
+       a runtime per-route 403 test.
+    2. **Shadowed bare names.** A view that imports something else as
+       ``check`` (e.g. ``from x import check``) and calls it would
+       pass the AST match without invoking the policy. ``enforce`` is
+       project-specific and unlikely to be shadowed; ``check`` is
+       generic and the reviewer's burden is to confirm it's the
+       policy ``check``.
+    """
+    try:
+        source = inspect.getsource(view)
+    except OSError, TypeError:
+        return False
+    # Top-level functions come back without leading indent; nested
+    # defs (none today, but cheap to handle) come back with it.
+    # Dedent so `ast.parse` accepts either shape.
+    source = textwrap.dedent(source)
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id in _POLICY_CALL_NAMES
+        ):
+            return True
+    return False
+
+
+def test_gated_inline_routes_call_enforce_or_check() -> None:
+    """Every `@gated_inline` view must actually invoke the policy.
+
+    `@gated_inline` is the documented carve-out for routes that load
+    the target before evaluating the policy or branch on the
+    `Decision`. Unlike `@requires`, the marker itself does NOT call
+    `enforce()` — the view body is responsible for it. The
+    route-inventory test above asserts the marker is present; this
+    one asserts the view body actually does the work.
+
+    Without this, a `@gated_inline` route can ship with no enforcement
+    at all (the failure mode that produced the unverified-self-revert
+    bug fixed alongside this test). The check is correct-but-coarse:
+    it catches the obvious case where the view body has no policy
+    call, and is blind to indirection through a helper module.
+    """
+    missing: list[str] = []
+    for method, path, view in iter_operations(api):
+        activity = get_gated_inline_activity(view)
+        if activity is None:
+            continue
+        if not _calls_policy(view):
+            missing.append(
+                f"{method} {path} → {view.__module__}.{view.__qualname__} "
+                f"(@gated_inline {activity.value})"
+            )
+    assert not missing, (
+        "@gated_inline routes whose body never calls enforce()/check() — "
+        "the marker is informational; the view body must invoke the "
+        "policy or the route is silently ungated:\n  " + "\n  ".join(missing)
     )

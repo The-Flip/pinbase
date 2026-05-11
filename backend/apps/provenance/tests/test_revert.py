@@ -248,6 +248,32 @@ class TestRevertAuth:
         resp = _revert(client, 999, "nope")
         assert resp.status_code == 401
 
+    def test_unverified_self_revert_returns_verification_required(
+        self, client, user, pm
+    ):
+        """`claim.revert`'s policy requires email_verified, and the route
+        must enforce it — `django_auth` covers auth/active but not
+        verification, and `execute_revert` only runs the experience-
+        required check (and only for others-revert)."""
+        _make_user_edit(client, user, pm, {"year": 2005})
+        claim = _get_active_claim(pm, "year", user)
+
+        unverified = make_user(email_verified=False)
+        # We can't create the claim *as* the unverified user via the
+        # API — the `catalog.edit` gate would 403 us at PATCH time.
+        # Create as the verified `user` fixture, then re-attribute so
+        # the revert path exercised is self-revert (which skips the
+        # experience-required check and isolates the email gate).
+        claim.user = unverified
+        claim.save(update_fields=["user"])
+
+        client.force_login(unverified)
+        resp = _revert(client, claim.pk, "Reverting my own claim")
+        assert resp.status_code == 403
+        detail = resp.json()["detail"]
+        assert detail["kind"] == "policy_denied"
+        assert detail["code"] == "verification_required"
+
 
 # ── Validation ───────────────────────────────────────────────────
 
