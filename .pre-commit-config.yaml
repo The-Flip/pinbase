@@ -52,8 +52,6 @@ repos:
       # Static type checking via mypy (with django-stubs plugin) in daemon mode.
       # dmypy holds the project type graph in memory across commits — cold start
       # is slow (~30-60s) but every subsequent run is fast and full-project.
-      # A baseline at backend/mypy-baseline.txt captures known-accepted findings;
-      # the hook only fails on *new* errors above baseline.
       # If the daemon gets out of sync: run `make mypy-restart`.
       - id: mypy
         name: mypy (dmypy)

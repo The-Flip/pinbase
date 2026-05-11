@@ -46,8 +46,7 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - name: mypy
-        working-directory: .
-        run: ./scripts/mypy
+        run: uv run mypy --config-file pyproject.toml .
       - run: uv run pytest
 
   frontend:

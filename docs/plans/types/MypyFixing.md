@@ -266,9 +266,7 @@ Inline-admin LSP note: django-stubs declares conflicting `obj` types on `BaseMod
 
 Baseline: 261 → 222.
 
-## Step 12: Ingestion and management commands
-
-These are last. The ingestion code may be completely rewritten, so refactoring for mypy could be a waste; I'm okay leaving the mypy errors grandfathered in.
+## Step 12: Ingestion and management commands - DONE
 
 Grouped because they share patterns (external I/O, command runners, bare dicts from JSON parsing):
 

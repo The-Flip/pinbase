@@ -40,7 +40,7 @@ make bootstrap    # Install all deps, run migrations, generate API types
 make dev          # Start Django + SvelteKit dev servers
 make test         # Run pytest (backend) + vitest (frontend)
 make lint         # Run ruff (backend) + eslint/prettier (frontend)
-make mypy         # Run backend type checks (filtered against the baseline)
+make mypy         # Run backend type checks
 make api-gen      # Regenerate frontend API types from the backend schema
 make pull-ingest  # Download catalog data from R2
 make ingest       # Run full ingestion pipeline
@@ -229,10 +229,6 @@ The following smells are _sometimes_ legitimate, but are usually a sign the type
 - `tuple[...]` with 3+ positional fields, or the same tuple shape repeated across modules
 
 Prefer NamedTuple, dataclass, or TypedDict. For the full catalogue and legitimate exceptions, see [docs/Python.md](Python.md).
-
-### Running mypy
-
-Run mypy via `./scripts/mypy` (not bare `mypy`, no file paths) — it filters against `backend/mypy-baseline.txt` so CI/pre-commit only fail on _new_ errors. If local disagrees with CI, the daemon is stale: `make mypy-restart`. For baseline sync syntax and the burn-down protocol, see [docs/plans/types/MypyFixing.md](plans/types/MypyFixing.md).
 
 ## Data Modeling
 
