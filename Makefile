@@ -35,11 +35,12 @@ pull-ingest:
 	./scripts/pull_ingest_sources.sh
 
 mypy:
-	./scripts/mypy
+	uv run --directory backend mypy --config-file pyproject.toml .
 
 # dmypy ergonomics. dmypy holds the project type graph in memory across runs;
 # `mypy-warm` pays the cold-start cost up front, `mypy-restart` is the recovery
-# lever when the daemon gets out of sync (after branch switches / rebases).
+# lever when the daemon gets out of sync (after branch switches / rebases —
+# symptom: local mypy result disagrees with CI).
 mypy-warm:
 	uv run --directory backend dmypy start -- --config-file pyproject.toml
 

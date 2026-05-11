@@ -46,8 +46,37 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from typing import Any, TypedDict
 
 import requests
+
+
+class FandomPage(TypedDict):
+    """One page entry produced by ``_fetch_category_pages()`` and stored in
+    ``--dump`` files."""
+
+    page_id: int
+    title: str
+    wikitext: str
+
+
+class FandomGameDump(TypedDict):
+    """``fetch_game_pages()`` return shape — also the dump-file shape."""
+
+    games: list[FandomPage]
+
+
+class FandomPersonDump(TypedDict):
+    """``fetch_person_pages()`` return shape — also the dump-file shape."""
+
+    persons: list[FandomPage]
+
+
+class FandomManufacturerDump(TypedDict):
+    """``fetch_manufacturer_pages()`` return shape — also the dump-file shape."""
+
+    manufacturers: list[FandomPage]
+
 
 FANDOM_API = "https://pinball.fandom.com/api.php"
 FANDOM_WIKI_BASE = "https://pinball.fandom.com/wiki"
@@ -141,7 +170,7 @@ class FandomManufacturer:
 # ---------------------------------------------------------------------------
 
 
-def fetch_game_pages(timeout: int = 10) -> dict:
+def fetch_game_pages(timeout: int = 10) -> FandomGameDump:
     """Fetch all game pages from Category:Machines and return a dump dict.
 
     The returned dict has shape ``{"games": [{"page_id", "title", "wikitext"}, ...]}``
@@ -152,7 +181,7 @@ def fetch_game_pages(timeout: int = 10) -> dict:
     return {"games": _fetch_category_pages("Machines", timeout)}
 
 
-def fetch_person_pages(timeout: int = 10) -> dict:
+def fetch_person_pages(timeout: int = 10) -> FandomPersonDump:
     """Fetch all person pages from Category:People and return a dump dict.
 
     Shape: ``{"persons": [{"page_id", "title", "wikitext"}, ...]}``.
@@ -160,7 +189,7 @@ def fetch_person_pages(timeout: int = 10) -> dict:
     return {"persons": _fetch_category_pages("People", timeout)}
 
 
-def fetch_manufacturer_pages(timeout: int = 10) -> dict:
+def fetch_manufacturer_pages(timeout: int = 10) -> FandomManufacturerDump:
     """Fetch all manufacturer pages from Category:Manufacturers and return a dump dict.
 
     Shape: ``{"manufacturers": [{"page_id", "title", "wikitext"}, ...]}``.
@@ -174,7 +203,7 @@ def fetch_manufacturer_pages(timeout: int = 10) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def parse_game_pages(data: dict) -> list[FandomGame]:
+def parse_game_pages(data: FandomGameDump) -> list[FandomGame]:
     """Parse the fetch_game_pages() dump into a list of FandomGame.
 
     ``data`` must have a ``"games"`` key containing a list of dicts with
@@ -201,7 +230,7 @@ def parse_game_pages(data: dict) -> list[FandomGame]:
     return sorted(games, key=lambda g: g.title.lower())
 
 
-def parse_person_pages(data: dict) -> list[FandomPerson]:
+def parse_person_pages(data: FandomPersonDump) -> list[FandomPerson]:
     """Parse the fetch_person_pages() dump into a list of FandomPerson.
 
     Redirect pages (wikitext starting with ``#REDIRECT``) are skipped.
@@ -227,7 +256,7 @@ def parse_person_pages(data: dict) -> list[FandomPerson]:
     return sorted(persons, key=lambda p: p.title.lower())
 
 
-def parse_manufacturer_pages(data: dict) -> list[FandomManufacturer]:
+def parse_manufacturer_pages(data: FandomManufacturerDump) -> list[FandomManufacturer]:
     """Parse the fetch_manufacturer_pages() dump into a list of FandomManufacturer.
 
     Redirect pages are skipped.  Pages without a ``{{Company}}`` template are
@@ -382,13 +411,13 @@ def _split_person_names(raw: str) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
-def _fetch_category_pages(category: str, timeout: int = 10) -> list[dict]:
+def _fetch_category_pages(category: str, timeout: int = 10) -> list[FandomPage]:
     """Fetch all pages in a Fandom wiki category via the MediaWiki API.
 
     Returns a list of ``{"page_id": int, "title": str, "wikitext": str}`` dicts.
     Pagination is handled automatically via the MediaWiki ``continue`` token.
     """
-    params: dict = {
+    params: dict[str, str] = {
         "action": "query",
         "generator": "categorymembers",
         "gcmtitle": f"Category:{category}",
@@ -401,7 +430,7 @@ def _fetch_category_pages(category: str, timeout: int = 10) -> list[dict]:
         "formatversion": "2",
     }
 
-    pages: list[dict] = []
+    pages: list[FandomPage] = []
 
     while True:
         resp = requests.get(
@@ -481,7 +510,7 @@ def _strip_templates(text: str) -> str:
     return "".join(result)
 
 
-def _parse_company_template(wikitext: str) -> dict | None:
+def _parse_company_template(wikitext: str) -> dict[str, Any] | None:
     """Extract fields from the ``{{Company}}`` template in wikitext.
 
     Returns a dict with keys ``year_start``, ``year_end``,

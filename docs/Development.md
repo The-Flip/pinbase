@@ -34,7 +34,7 @@ For testing expectations and strategy, read:
 
 ## Type Checking
 
-The backend uses **mypy** with the **django-stubs** plugin. Pre-commit runs mypy in daemon mode (`dmypy`) so full-project analysis stays fast on every commit. A baseline at `backend/mypy-baseline.txt` captures known-accepted findings; pre-commit and CI only fail on _new_ errors above the baseline.
+The backend uses **mypy** with the **django-stubs** plugin. Pre-commit runs mypy in daemon mode (`dmypy`) so full-project analysis stays fast on every commit. `strict = true` is global; pre-commit and CI fail on any error.
 
 **If local mypy disagrees with CI,** the daemon is likely out of sync (common after branch switches or rebases). Run:
 
@@ -43,8 +43,6 @@ make mypy-restart
 ```
 
 Other daemon commands: `make mypy-warm` (pays cold-start up front), `make mypy-status` (is the daemon alive?).
-
-To regenerate the baseline after fixing errors: `cd backend && uv run mypy --config-file pyproject.toml . | uv run mypy-baseline sync`.
 
 ## Domain-Specific System Docs
 

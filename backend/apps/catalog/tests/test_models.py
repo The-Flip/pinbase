@@ -144,7 +144,8 @@ class TestSystem:
 
     def test_explicit_null_manufacturer_rejected(self, db):
         with pytest.raises(IntegrityError), transaction.atomic():
-            System.objects.create(name="WPC-95", slug="wpc-95", manufacturer=None)
+            # Deliberate type violation to assert the DB rejects NULL.
+            System.objects.create(name="WPC-95", slug="wpc-95", manufacturer=None)  # type: ignore[misc]
 
 
 # --- MachineModel ---

@@ -63,7 +63,8 @@ class TestNonBlankConstraints:
     def test_machine_model_title_null_rejected(self, db):
         """MachineModel.title is NOT NULL — creating without one fails at the DB."""
         with pytest.raises(IntegrityError):
-            MachineModel.objects.create(name="No Title", slug="no-title", title=None)
+            # Deliberate type violation to assert the DB rejects NULL.
+            MachineModel.objects.create(name="No Title", slug="no-title", title=None)  # type: ignore[misc]
 
 
 # ---------------------------------------------------------------------------
