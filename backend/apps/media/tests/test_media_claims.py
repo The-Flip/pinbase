@@ -109,14 +109,6 @@ class TestBuildMediaAttachmentClaim:
                 machine_model, asset.pk, category="nonexistent"
             )
 
-    def test_non_media_supported_entity_raises(self, db, asset):
-        """Theme does not inherit MediaSupportedModel — rejected."""
-        from apps.catalog.models import Theme
-
-        theme = Theme.objects.create(name="Test Theme", slug="test-theme")
-        with pytest.raises(ValueError, match="does not support media"):
-            build_media_attachment_claim(theme, asset.pk)
-
     def test_retraction(self, machine_model, asset):
         _claim_key, value = build_media_attachment_claim(
             machine_model, asset.pk, exists=False

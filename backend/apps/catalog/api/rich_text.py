@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from django.db.models import Model
-
+from apps.catalog.models import CatalogModel
 from apps.core.markdown import convert_storage_to_authoring, render_markdown_field
 from apps.provenance.licensing import (
     build_source_field_license_map,
@@ -49,7 +48,7 @@ def _extract_description_attribution(
 
 
 def build_rich_text(
-    obj: Model,
+    obj: CatalogModel,
     field_name: str,
     active_claims: Iterable[Claim] | None = None,
 ) -> RichTextSchema:

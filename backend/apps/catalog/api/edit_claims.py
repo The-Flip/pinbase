@@ -30,6 +30,7 @@ from apps.catalog.models import (
     Title,
 )
 from apps.core.exceptions import StructuredApiError
+from apps.core.models import SluggedModel
 from apps.provenance.models import (
     ChangeSet,
     ChangeSetAction,
@@ -150,11 +151,11 @@ def raise_form_error(message: str) -> NoReturn:
     )
 
 
-def plan_scalar_field_claims(
-    model_class: type[ClaimControlledModel],
+def plan_scalar_field_claims[M: ClaimControlledModel](
+    model_class: type[M],
     fields: dict[str, Any],
     *,
-    entity: db_models.Model | None = None,
+    entity: M | None = None,
 ) -> list[ClaimSpec]:
     """Validate scalar fields and reject empty/no-op field payloads.
 
@@ -225,11 +226,11 @@ def get_field_constraints(
     return constraints
 
 
-def validate_scalar_fields(
-    model_class: type[ClaimControlledModel],
+def validate_scalar_fields[M: ClaimControlledModel](
+    model_class: type[M],
     fields: dict[str, Any],
     *,
-    entity: db_models.Model | None = None,
+    entity: M | None = None,
 ) -> list[ClaimSpec]:
     """Validate scalar fields and return ClaimSpecs.
 
@@ -400,10 +401,10 @@ def plan_alias_claims(
 
 
 def plan_m2m_claims(
-    entity: db_models.Model,
+    entity: MachineModel,
     desired_slugs: set[str],
     *,
-    target_model: type[db_models.Model],
+    target_model: type[SluggedModel],
     claim_field_name: str,
     m2m_attr: str,
 ) -> list[ClaimSpec]:
