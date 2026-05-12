@@ -1,7 +1,8 @@
-"""Typing protocols and named-tuple shapes for catalog API query plumbing."""
+"""Typing protocols and small typed shapes for catalog API query plumbing."""
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import NamedTuple, Protocol
 
 
@@ -46,3 +47,17 @@ class CreditPkKey(NamedTuple):
 
     person_pk: int
     role_pk: int
+
+
+@dataclass(frozen=True, slots=True)
+class GameplayFeatureAgreement:
+    """Per-feature agreement value in the agreed-specs intersection.
+
+    Keyed by feature slug in the surrounding dict; carries the display name
+    and per-model count (``None`` when counts disagree across models).
+    A frozen dataclass rather than a NamedTuple because the field name
+    ``count`` would shadow ``tuple.count``.
+    """
+
+    name: str
+    count: int | None

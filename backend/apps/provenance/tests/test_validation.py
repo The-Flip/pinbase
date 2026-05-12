@@ -22,6 +22,7 @@ from apps.provenance.validation import (
     EXTRA,
     RELATIONSHIP,
     UNRECOGNIZED,
+    FkClaim,
     classify_claim,
     validate_claim_value,
     validate_claims_batch,
@@ -276,19 +277,19 @@ class TestValidateFkClaimsBatch:
         claim = Claim.for_object(
             system, field_name="manufacturer", value=manufacturer.slug
         )
-        rejected = validate_fk_claims_batch([(claim, System)])
+        rejected = validate_fk_claims_batch([FkClaim(claim, System)])
         assert rejected == []
 
     def test_invalid_fk_rejected(self, system):
         claim = Claim.for_object(
             system, field_name="manufacturer", value="no-such-slug"
         )
-        rejected = validate_fk_claims_batch([(claim, System)])
+        rejected = validate_fk_claims_batch([FkClaim(claim, System)])
         assert len(rejected) == 1
 
     def test_empty_value_not_rejected(self, system):
         claim = Claim.for_object(system, field_name="manufacturer", value="")
-        rejected = validate_fk_claims_batch([(claim, System)])
+        rejected = validate_fk_claims_batch([FkClaim(claim, System)])
         assert rejected == []
 
     def test_batch_queries_once_per_group(
@@ -302,8 +303,8 @@ class TestValidateFkClaimsBatch:
         with django_assert_num_queries(1):
             rejected = validate_fk_claims_batch(
                 [
-                    (c1, System),
-                    (c2, System),
+                    FkClaim(c1, System),
+                    FkClaim(c2, System),
                 ]
             )
         assert len(rejected) == 1

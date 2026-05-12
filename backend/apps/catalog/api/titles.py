@@ -64,7 +64,7 @@ from ..models import (
     Title,
     TitleAbbreviation,
 )
-from ._typing import CreditKey, SlugName
+from ._typing import CreditKey, GameplayFeatureAgreement, SlugName
 from .constants import DEFAULT_PAGE_SIZE
 from .edit_claims import (
     ClaimSpec,
@@ -233,7 +233,7 @@ def _assert_title_name_available(name: str, *, exclude_pk: int | None = None) ->
 # ---------------------------------------------------------------------------
 
 
-def _dedup_facet_refs(items: Iterable[tuple[str, str]]) -> list[EntityRef]:
+def _dedup_facet_refs(items: Iterable[SlugName]) -> list[EntityRef]:
     """Deduplicate {slug, name} pairs preserving insertion order."""
     seen: set[str] = set()
     result: list[EntityRef] = []
@@ -245,7 +245,7 @@ def _dedup_facet_refs(items: Iterable[tuple[str, str]]) -> list[EntityRef]:
 
 
 def _dedup_facet_dicts(
-    items: Iterable[tuple[str, str]],
+    items: Iterable[SlugName],
 ) -> list[dict[str, str]]:
     """Like :func:`_dedup_facet_refs` but emits plain dicts.
 
@@ -274,36 +274,38 @@ def _serialize_title_list(
     machines = list(title.machine_models.all())
 
     # Collect facet data from all non-variant models
-    tech_gen_pairs: list[tuple[str, str]] = []
-    display_type_pairs: list[tuple[str, str]] = []
+    tech_gen_pairs: list[SlugName] = []
+    display_type_pairs: list[SlugName] = []
     player_counts_set: set[int] = set()
-    system_pairs: list[tuple[str, str]] = []
-    theme_pairs: list[tuple[str, str]] = []
-    gameplay_feature_pairs: list[tuple[str, str]] = []
-    reward_type_pairs: list[tuple[str, str]] = []
-    person_pairs: list[tuple[str, str]] = []
+    system_pairs: list[SlugName] = []
+    theme_pairs: list[SlugName] = []
+    gameplay_feature_pairs: list[SlugName] = []
+    reward_type_pairs: list[SlugName] = []
+    person_pairs: list[SlugName] = []
     years: list[int] = []
     ratings: list[float] = []
 
     for m in machines:
         if m.technology_generation:
             tech_gen_pairs.append(
-                (m.technology_generation.slug, m.technology_generation.name)
+                SlugName(m.technology_generation.slug, m.technology_generation.name)
             )
         if m.display_type:
-            display_type_pairs.append((m.display_type.slug, m.display_type.name))
+            display_type_pairs.append(
+                SlugName(m.display_type.slug, m.display_type.name)
+            )
         if m.player_count is not None:
             player_counts_set.add(m.player_count)
         if m.system:
-            system_pairs.append((m.system.slug, m.system.name))
+            system_pairs.append(SlugName(m.system.slug, m.system.name))
         for theme in m.themes.all():
-            theme_pairs.append((theme.slug, theme.name))
+            theme_pairs.append(SlugName(theme.slug, theme.name))
         for gf in m.gameplay_features.all():
-            gameplay_feature_pairs.append((gf.slug, gf.name))
+            gameplay_feature_pairs.append(SlugName(gf.slug, gf.name))
         for rt in m.reward_types.all():
-            reward_type_pairs.append((rt.slug, rt.name))
+            reward_type_pairs.append(SlugName(rt.slug, rt.name))
         for credit in m.credits.all():
-            person_pairs.append((credit.person.slug, credit.person.name))
+            person_pairs.append(SlugName(credit.person.slug, credit.person.name))
         if m.year is not None:
             years.append(m.year)
         if m.ipdb_rating is not None:
@@ -423,11 +425,13 @@ def _compute_agreed_specs(models: Sequence[MachineModel]) -> AgreedSpecsSchema:
         themes = [EntityRef(name=n, slug=s) for s, n in sorted(theme_sets[0])]
 
     # Gameplay features: intersection across all models (with count agreement).
-    gf_maps: list[dict[str, tuple[str, int | None]]] = []
+    gf_maps: list[dict[str, GameplayFeatureAgreement]] = []
     for m in models:
-        gf_map: dict[str, tuple[str, int | None]] = {}
+        gf_map: dict[str, GameplayFeatureAgreement] = {}
         for t in m.machinemodelgameplayfeature_set.all():
-            gf_map[t.gameplayfeature.slug] = (t.gameplayfeature.name, t.count)
+            gf_map[t.gameplayfeature.slug] = GameplayFeatureAgreement(
+                t.gameplayfeature.name, t.count
+            )
         gf_maps.append(gf_map)
 
     gameplay_features: list[GameplayFeatureRef] = []
@@ -437,8 +441,8 @@ def _compute_agreed_specs(models: Sequence[MachineModel]) -> AgreedSpecsSchema:
             common_slugs &= set(gf_map)
         if common_slugs:
             for slug in sorted(common_slugs):
-                name = gf_maps[0][slug][0]
-                counts = [gf_map[slug][1] for gf_map in gf_maps]
+                name = gf_maps[0][slug].name
+                counts = [gf_map[slug].count for gf_map in gf_maps]
                 count = counts[0] if all(c == counts[0] for c in counts) else None
                 gameplay_features.append(
                     GameplayFeatureRef(slug=slug, name=name, count=count)

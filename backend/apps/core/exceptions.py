@@ -15,7 +15,9 @@ against ``StructuredApiError`` routes every subclass through it.
 
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import ClassVar
+
+from apps.core.types import JsonBody
 
 
 class StructuredApiError(Exception):
@@ -34,7 +36,7 @@ class StructuredApiError(Exception):
         super().__init__(message)
         self.message = message
 
-    def to_body(self) -> dict[str, Any]:
+    def to_body(self) -> JsonBody:
         """Return variant-specific body fields. ``kind`` and ``message``
         are added by the handler; do not include them here."""
         return {}

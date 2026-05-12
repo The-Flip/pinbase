@@ -21,7 +21,7 @@ import logging
 import re
 import time
 from html import unescape
-from typing import Any
+from typing import Any, NamedTuple
 from urllib.parse import quote_plus, urljoin
 
 import requests
@@ -60,6 +60,13 @@ MANUAL_IMAGES: dict[str, list[str]] = {
         "https://www.pinballnews.com/site/wp-content/uploads/games/beetlejuice/006-beetlejuice.jpg",
     ],
 }
+
+
+class ImageSearchResult(NamedTuple):
+    """One successful image-search hit: which strategy produced the URLs."""
+
+    strategy: str
+    urls: list[str]
 
 
 def _has_images(extra_data: dict[str, object]) -> bool:
@@ -207,21 +214,21 @@ class Command(BaseCommand):
 
         found_count = 0
         for i, pm in enumerate(machines, 1):
-            strategy, urls = self._find_images(pm)
+            result = self._find_images(pm)
 
-            if urls:
+            if result is not None:
                 found_count += 1
                 if not dry_run:
                     Claim.objects.assert_claim(
                         pm,
                         field_name="image_urls",
-                        value=urls,
+                        value=result.urls,
                         source=source,
                     )
                     resolve_model(pm)
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"  [{i}/{total}] \u2713 {pm.name} [{pm.year}] \u2014 {strategy} ({len(urls)} URLs)"
+                        f"  [{i}/{total}] \u2713 {pm.name} [{pm.year}] \u2014 {result.strategy} ({len(result.urls)} URLs)"
                     )
                 )
             else:
@@ -241,27 +248,27 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"\nDone! {found_count}/{total} machines {action}.")
         )
 
-    def _find_images(self, pm: MachineModel) -> tuple[str | None, list[str] | None]:
-        """Try each strategy in order, return (strategy_name, urls) or (None, None)."""
+    def _find_images(self, pm: MachineModel) -> ImageSearchResult | None:
+        """Try each strategy in order; return the first hit, or ``None``."""
 
         if pm.opdb_id and pm.opdb_id in MANUAL_IMAGES:
-            return "manual", MANUAL_IMAGES[pm.opdb_id]
+            return ImageSearchResult("manual", MANUAL_IMAGES[pm.opdb_id])
 
         urls = _try_group_sibling(pm)
         if urls:
-            return "group sibling", urls
+            return ImageSearchResult("group sibling", urls)
 
         if pm.ipdb_id:
             time.sleep(REQUEST_DELAY)
             urls = _try_ipdb_scrape(pm.ipdb_id)
             if urls:
-                return "IPDB", urls
+                return ImageSearchResult("IPDB", urls)
 
         time.sleep(REQUEST_DELAY)
         year_part = f" {pm.year}" if pm.year else ""
         query = f'"{pm.name}" pinball{year_part}'
         urls = _try_bing_images(query)
         if urls:
-            return "Bing Images", urls
+            return ImageSearchResult("Bing Images", urls)
 
-        return None, None
+        return None

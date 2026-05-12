@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import cast
+from typing import NamedTuple, cast
 
 from django.core.cache import cache
 from django.db.models import Count, F, Prefetch, Q
@@ -112,15 +112,15 @@ class _LocationNode:
     divisions: tuple[str, ...] = ()
 
 
-_LocationTree = tuple[dict[str, _LocationNode], dict[str | None, list[str]]]
+class _LocationTree(NamedTuple):
+    """Cached location tree: node lookup plus parent-keyed child index."""
+
+    nodes: dict[str, _LocationNode]
+    children_index: dict[str | None, list[str]]
 
 
 def _get_location_tree() -> _LocationTree:
     """Build location data from Location + CorporateEntityLocation records.
-
-    Returns a tuple (nodes, children_index) where:
-    - nodes: dict[location_path, _LocationNode]
-    - children_index: dict[parent_path_or_None, list[location_path]]
 
     Results are cached; invalidated by ``invalidate_all()``.
     """
@@ -176,7 +176,7 @@ def _get_location_tree() -> _LocationTree:
         )
         children_index.setdefault(parent_path, []).append(loc.location_path)
 
-    tree = (nodes, children_index)
+    tree = _LocationTree(nodes, children_index)
     cache.set(locations_tree_key(), tree, timeout=None)
     return tree
 

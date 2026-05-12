@@ -27,13 +27,13 @@ from __future__ import annotations
 import math
 import time
 from dataclasses import dataclass
-from typing import Any
 
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.core.cache import cache
 
 from apps.core.authz import Activity, Allow, check, policy_user
 from apps.core.exceptions import StructuredApiError
+from apps.core.types import JsonBody
 
 from .constants import (
     CREATE_RATE_LIMIT,
@@ -61,7 +61,7 @@ class RateLimitExceededError(StructuredApiError):
         # ``message`` is the user-facing string set via ``super().__init__``.
         return f"Rate limit exceeded for bucket {self.bucket!r}"
 
-    def to_body(self) -> dict[str, Any]:
+    def to_body(self) -> JsonBody:
         return {"bucket": self.bucket, "retry_after": self.retry_after}
 
     def extra_headers(self) -> dict[str, str]:

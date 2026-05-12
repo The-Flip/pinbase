@@ -11,7 +11,7 @@ import logging
 import re
 import time
 from dataclasses import dataclass
-from typing import TypedDict, cast
+from typing import Literal, NamedTuple, TypedDict, cast
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -67,18 +67,26 @@ def normalize_isbn(raw: str) -> str | None:
     return None
 
 
-def classify_input(raw: str) -> tuple[str, str] | None:
+class ClassifiedInput(NamedTuple):
+    """Tagged classification of a citation input string."""
+
+    kind: Literal["isbn", "url"]
+    value: str
+
+
+def classify_input(raw: str) -> ClassifiedInput | None:
     """Determine what kind of evidence *raw* is.
 
-    Returns ``("isbn", normalized)``, ``("url", url)``, or ``None``.
-    ISBN always wins.  URL requires explicit ``http(s)://`` scheme.
+    Returns a :class:`ClassifiedInput` with ``kind`` of ``"isbn"`` or
+    ``"url"``, or ``None`` if neither matches. ISBN always wins; URL
+    requires an explicit ``http(s)://`` scheme.
     """
     isbn = normalize_isbn(raw)
     if isbn is not None:
-        return ("isbn", isbn)
+        return ClassifiedInput("isbn", isbn)
     stripped = raw.strip()
     if stripped.startswith(("http://", "https://")) and urlparse(stripped).hostname:
-        return ("url", stripped)
+        return ClassifiedInput("url", stripped)
     return None
 
 
