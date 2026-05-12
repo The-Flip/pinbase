@@ -6,7 +6,7 @@ import EntitySources from './EntitySources.test-harness.svelte';
 const sampleClaim = {
   source_name: 'IPDB',
   source_slug: 'ipdb',
-  user_display: null,
+  user_username: null,
   field_name: 'year',
   value: 1997,
   citation: '',
@@ -23,7 +23,7 @@ describe('EntitySources', () => {
         evidence: [
           {
             id: 1,
-            user_display: 'editor',
+            user_username: 'editor',
             note: 'Documented the flyer',
             created_at: '2026-04-08T00:00:00Z',
             fields: ['year', 'description'],

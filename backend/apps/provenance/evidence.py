@@ -29,7 +29,8 @@ class CitedCitation:
 class CitedChangeset:
     id: int
     user_id: int
-    user_display: str | None
+    user_username: str | None
+    user_display_name: str | None
     note: str
     created_at: str
     fields: list[str]
@@ -42,7 +43,8 @@ class _CitedChangesetBuilder:
 
     id: int
     user_id: int
-    user_display: str | None
+    user_username: str | None
+    user_display_name: str | None
     note: str
     created_at: str
     fields: list[str] = field(default_factory=list)
@@ -74,7 +76,8 @@ def build_cited_changesets(claims: Iterable[Claim]) -> list[CitedChangeset]:
             entry = _CitedChangesetBuilder(
                 id=changeset.pk,
                 user_id=changeset.user_id,
-                user_display=claim.user.username if claim.user else None,
+                user_username=claim.user.username if claim.user else None,
+                user_display_name=claim.user.display_name if claim.user else None,
                 note=changeset.note,
                 created_at=changeset.created_at.isoformat(),
             )
@@ -104,7 +107,8 @@ def build_cited_changesets(claims: Iterable[Claim]) -> list[CitedChangeset]:
         CitedChangeset(
             id=entry.id,
             user_id=entry.user_id,
-            user_display=entry.user_display,
+            user_username=entry.user_username,
+            user_display_name=entry.user_display_name,
             note=entry.note,
             created_at=entry.created_at,
             fields=entry.fields,

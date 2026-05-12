@@ -46,9 +46,13 @@ places and must stay consistent across them:
 The collapse is UI-only. The data model is unchanged: two entities, two sets
 of claims, two ChangeSet histories.
 
-## Description: the one field overlap
+## Which entity each editor section targets
 
-Both `Title` and `MachineModel` have a `description` field. No other catalog field exists on both entities.
+In the single-Model Title edit menu, as in every other edit menu, each editor section targets exactly one entity. Every section save is single-entity. No ChangeSet ever spans both Title and Model.
+
+### Field overlap: Description
+
+Both `Title` and `MachineModel` have a `description` field.
 
 For single-Model Titles, we use the **Model's** description; the read view shows the **Model's** description and the edit menu's Overview section edits the **Model's** description. The Title's
 description is dormant.
@@ -56,14 +60,21 @@ description is dormant.
 We use the Model's description for single-Model Titles because it stays correct after
 promotion to multi-Model; it still describes that Model. The Title's description is expected to be used for copy about the collection of Models that only makes sense once multiple Models exist.
 
-## Which entity each editor section targets
+### Field overlap: Name & Slug
 
-In the single-Model Title edit menu, each section targets exactly one entity. Which entity
-is encoded in the URL key (`edit=title:...` vs `edit=model:...`) but is not
-shown in menu labels, except where a section-key collision forces it (today:
-`External Data - Title` vs `External Data`).
+Both `Title` and `MachineModel` have `name` and `slug` fields.
 
-Every section save is single-entity. No ChangeSet ever spans both Title and Model.
+The single-Model Title edit menu uses the Title's version for both, because the Title is the public identity of the collapsed record.
+
+### Field overlap: Abbreviations
+
+Both `Title` and `MachineModel` have abbreviation records. The collapsed Name editor edits the **Title's** abbreviations; the Model's are dormant.
+
+This is because, even if the Title becomes multi-model, those abbreviations will identify the Title, not the Model.
+
+### Field overlap: External IDs
+
+The fields don't literally overlap one-to-one — Title has `opdb_id` and `fandom_page_id`; Model has `ipdb_id`, `opdb_id`, and `pinside_id` — but they're conceptually the same kind of data. The collapsed edit menu surfaces **both** sections side by side ("External Data" for the Model, "External Data - Title" for the Title), since each entity legitimately owns IDs the other doesn't.
 
 ## Edit history and sources
 

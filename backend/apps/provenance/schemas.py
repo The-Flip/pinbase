@@ -45,7 +45,10 @@ class ChangeSetBaseSchema(Schema):
     """Common fields for any read-side ChangeSet representation."""
 
     id: int
-    user_display: str | None = None
+    user_username: str | None = None  # username (for URL); null for ingest
+    user_display_name: str | None = None  # formatted name (User.display_name)
+    is_ingest: bool = False
+    source_name: str | None = None  # ingest source name when is_ingest=True
     note: str
     created_at: str
 
@@ -87,7 +90,8 @@ class ClaimSchema(Schema):
 
     source_name: str | None = None
     source_slug: str | None = None
-    user_display: str | None = None  # username for user-attributed claims
+    user_username: str | None = None  # username for user-attributed claims
+    user_display_name: str | None = None  # formatted name (User.display_name)
     field_name: str
     value: object
     citation: str

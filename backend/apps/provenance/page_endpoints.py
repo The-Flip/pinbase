@@ -45,8 +45,6 @@ from .schemas import (
 class ChangeSetWithEntitySchema(ChangeSetBaseSchema):
     """Adds the entity-link fields shown on the changes page list/detail."""
 
-    is_ingest: bool = False
-    source_name: str | None = None
     entity_href: str
     entity_name: str
     entity_type_label: str
@@ -179,7 +177,8 @@ def sources_page(
     evidence = [
         CitedChangeSetSchema(
             id=row.id,
-            user_display=row.user_display,
+            user_username=row.user_username,
+            user_display_name=row.user_display_name,
             note=row.note,
             created_at=row.created_at,
             fields=row.fields,
@@ -312,7 +311,8 @@ def list_changes(
         items.append(
             ChangeSetSummarySchema(
                 id=cs.pk,
-                user_display=cs.user.username if cs.user else None,
+                user_username=cs.user.username if cs.user else None,
+                user_display_name=cs.user.display_name if cs.user else None,
                 is_ingest=cs.ingest_run_id is not None,
                 source_name=cs.ingest_run.source.name if cs.ingest_run_id else None,
                 note=cs.note,
@@ -418,7 +418,8 @@ def change_detail(
     assert cs.pk is not None
     return ChangeSetDetailSchema(
         id=cs.pk,
-        user_display=cs.user.username if cs.user else None,
+        user_username=cs.user.username if cs.user else None,
+        user_display_name=cs.user.display_name if cs.user else None,
         is_ingest=ingest_run is not None,
         source_name=ingest_run.source.name if ingest_run is not None else None,
         note=cs.note,

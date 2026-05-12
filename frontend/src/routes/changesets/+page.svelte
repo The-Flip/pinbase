@@ -4,7 +4,7 @@
   import { CATALOG_META } from '$lib/api/catalog-meta';
   import { SITE_TITLE } from '$lib/constants';
   import { resolveHref } from '$lib/utils';
-  import SmartDate from '$lib/components/SmartDate.svelte';
+  import ChangeSetAttribution from '$lib/components/ChangeSetAttribution.svelte';
   import InlineDiff from '$lib/components/InlineDiff.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { isDiffable, formatValue } from '$lib/components/change-display';
@@ -200,19 +200,7 @@
               <span class="entity-type">{cs.entity_type_label}</span>
             </a>
             <span class="byline">
-              By
-              {#if cs.is_ingest}
-                {#if cs.source_name}
-                  {cs.source_name}
-                {:else}
-                  system
-                {/if}
-              {:else if cs.user_display}
-                <a href={resolveHref(`/users/${cs.user_display}`)}>{cs.user_display}</a>
-              {:else}
-                system
-              {/if}
-              &middot; <SmartDate iso={cs.created_at} />
+              By <ChangeSetAttribution {cs} />
             </span>
           </div>
 
@@ -380,15 +368,6 @@
     color: var(--color-text-muted);
     margin-left: auto;
     white-space: nowrap;
-  }
-
-  .byline a {
-    color: var(--color-link);
-    text-decoration: none;
-  }
-
-  .byline a:hover {
-    text-decoration: underline;
   }
 
   .entity-link {

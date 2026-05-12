@@ -120,7 +120,7 @@ class TestChangesList:
         data = resp.json()
         assert len(data["items"]) == 1
         item = data["items"][0]
-        assert item["user_display"] == user.username
+        assert item["user_username"] == user.username
         assert item["entity_name"] == "Medieval Madness"
         assert item["entity_type_label"] == "Model"
         assert item["changes_count"] >= 1

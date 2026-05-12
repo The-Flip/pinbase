@@ -215,8 +215,8 @@ class TestEditHistoryUserDisplayNull:
 
         resp = client.get(f"/api/pages/edit-history/model/{pm.slug}/")
         data = resp.json()
-        # Partition by user_display: user-attributed vs ingest entries.
-        user_entries = [e for e in data if e["user_display"] is not None]
-        ingest_entries = [e for e in data if e["user_display"] is None]
+        # Partition by user_username: user-attributed vs ingest entries.
+        user_entries = [e for e in data if e["user_username"] is not None]
+        ingest_entries = [e for e in data if e["user_username"] is None]
         assert len(user_entries) == 1
         assert len(ingest_entries) == 1

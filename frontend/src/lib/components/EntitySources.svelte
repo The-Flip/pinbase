@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { CitedChangeSetSchema, ClaimSchema } from '$lib/api/schema';
   import FocusContentShell from './FocusContentShell.svelte';
-  import UserBadge from './UserBadge.svelte';
+  import UserLink from './UserLink.svelte';
   import SmartDate from './SmartDate.svelte';
   import { getEntityContext } from '$lib/entity-context';
   import { groupSourcesByField } from './entity-sources';
@@ -21,7 +21,7 @@
   const entity = getEntityContext();
 
   function claimAttribution(claim: Claim): string {
-    return claim.source_name ?? (claim.user_display ? `@${claim.user_display}` : 'Unknown');
+    return claim.source_name ?? claim.user_display_name ?? claim.user_username ?? 'Unknown';
   }
 
   function formatValue(v: unknown): string {
@@ -31,8 +31,8 @@
 </script>
 
 {#snippet claimDetail(claim: Claim)}
-  {#if claim.user_display}
-    <UserBadge username={claim.user_display} />
+  {#if claim.user_username}
+    <UserLink username={claim.user_username} displayName={claim.user_display_name} />
   {:else}
     <span class="source-badge">{claim.source_name ?? 'Unknown'}</span>
   {/if}
@@ -58,11 +58,7 @@
   {#if sources.length > 0}
     {@const { conflicts, agreed, single } = sourceGroups}
     {@const contributorNames = [
-      ...new Set(
-        sources
-          .map((c) => c.source_name ?? (c.user_display ? `@${c.user_display}` : null))
-          .filter(Boolean),
-      ),
+      ...new Set(sources.map(claimAttribution).filter((n) => n !== 'Unknown')),
     ]}
     <section class="sources">
       {#if evidence.length > 0}
@@ -72,8 +68,11 @@
             {#each evidence as changeset (changeset.id)}
               <li class="changeset-card">
                 <div class="changeset-header">
-                  {#if changeset.user_display}
-                    <UserBadge username={changeset.user_display} />
+                  {#if changeset.user_username}
+                    <UserLink
+                      username={changeset.user_username}
+                      displayName={changeset.user_display_name}
+                    />
                   {:else}
                     <span class="source-badge">Unknown</span>
                   {/if}

@@ -6,11 +6,10 @@
   import { auth } from '$lib/auth.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
   import InlineDiff from './InlineDiff.svelte';
-  import UserBadge from './UserBadge.svelte';
+  import ChangeSetAttribution from './ChangeSetAttribution.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { getEntityContext } from '$lib/entity-context';
   import { isDiffable, formatValue } from './change-display';
-  import SmartDate from './SmartDate.svelte';
 
   type ChangeSet = ChangeSetSchema;
   type FieldChange = FieldChangeSchema;
@@ -24,7 +23,10 @@
   let revertLoading = $state(false);
 
   interface RetractionInfo {
-    user_display: string | null | undefined;
+    user_username: string | null | undefined;
+    user_display_name: string | null | undefined;
+    is_ingest: boolean | undefined;
+    source_name: string | null | undefined;
     created_at: string;
     note: string;
   }
@@ -39,7 +41,10 @@
     for (const cs of changesets) {
       for (const r of cs.retractions ?? []) {
         lookup.set(r.claim_id, {
-          user_display: cs.user_display,
+          user_username: cs.user_username,
+          user_display_name: cs.user_display_name,
+          is_ingest: cs.is_ingest,
+          source_name: cs.source_name,
           created_at: cs.created_at,
           note: cs.note,
         });
@@ -182,8 +187,7 @@
           {#if !isEmptyChangeset(cs)}
             <li class="changeset">
               <div class="changeset-header">
-                <UserBadge username={cs.user_display} />
-                <span class="timestamp"><SmartDate iso={cs.created_at} /></span>
+                By <ChangeSetAttribution {cs} />
               </div>
               {#if cs.note}
                 <p class="changeset-note">{cs.note}</p>
@@ -201,12 +205,7 @@
                       <dd>
                         <span class="reverted-badge">reverted</span>
                         {#if info}
-                          by {#if info.user_display}<a href="/users/{info.user_display}"
-                              >{info.user_display}</a
-                            >{:else}system{/if}
-                          on
-                          <span class="timestamp"><SmartDate iso={info.created_at} /></span
-                          >{#if info.note}:
+                          by <ChangeSetAttribution cs={info} />{#if info.note}:
                             {info.note}{/if}
                         {/if}
                       </dd>
@@ -294,12 +293,11 @@
 
   .changeset-header {
     display: flex;
-    align-items: center;
-    gap: var(--size-2);
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--size-1);
     margin-bottom: var(--size-2);
-  }
-
-  .timestamp {
     font-size: var(--font-size-0);
     color: var(--color-text-muted);
   }
