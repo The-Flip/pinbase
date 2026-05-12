@@ -180,6 +180,20 @@ describe('SectionEditorModal', () => {
     expect(screen.getByTestId('last-switched')).toHaveTextContent('technology');
   });
 
+  it('focuses Close on open even when the section switcher precedes it in DOM order', async () => {
+    const user = userEvent.setup();
+    render(SectionEditorModalFixture, {
+      props: { showSwitcher: true },
+    });
+
+    await user.click(screen.getByRole('button', { name: 'Open editor' }));
+
+    const closeButton = screen.getByRole('button', { name: 'Close' });
+    await vi.waitFor(() => {
+      expect(closeButton).toHaveFocus();
+    });
+  });
+
   it('disables the section switcher when switcherDisabled is true', async () => {
     const user = userEvent.setup();
     render(SectionEditorModalFixture, {

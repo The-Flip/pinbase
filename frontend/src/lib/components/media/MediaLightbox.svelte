@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolveHref } from '$lib/utils';
   import type { UploadedMediaSchema } from '$lib/api/schema';
+  import Dialog from '../Dialog.svelte';
 
   type UploadedMedia = UploadedMediaSchema;
 
@@ -21,6 +22,8 @@
 
   let item = $derived(media[index]);
 
+  let closeBtnEl: HTMLButtonElement | undefined = $state();
+
   function prev() {
     if (index > 0) index--;
   }
@@ -30,32 +33,28 @@
   }
 
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') onclose();
-    else if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowLeft') prev();
     else if (e.key === 'ArrowRight') next();
   }
-
-  // Lock body scroll while lightbox is open
-  $effect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  });
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="lightbox-backdrop">
-  <button type="button" class="backdrop-dismiss" aria-label="Dismiss media viewer" onclick={onclose}
-  ></button>
+<Dialog open={true} {onclose} ariaLabel="Media viewer" scrim="strong" initialFocus={closeBtnEl}>
+  <button class="close-btn" onclick={onclose} aria-label="Close" bind:this={closeBtnEl}
+    >&times;</button
+  >
 
-  <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Media viewer">
-    <button class="close-btn" onclick={onclose} aria-label="Close">&times;</button>
-
+  <div class="lightbox-content">
     {#if item}
       <img src={item.renditions.display} alt="" class="display-img" />
+
+      {#if index > 0}
+        <button class="nav-btn nav-btn--prev" onclick={prev} aria-label="Previous">&#8249;</button>
+      {/if}
+      {#if index < media.length - 1}
+        <button class="nav-btn nav-btn--next" onclick={next} aria-label="Next">&#8250;</button>
+      {/if}
 
       <div class="lightbox-footer">
         {#if item.category}
@@ -72,44 +71,19 @@
         <span class="counter">{index + 1} / {media.length}</span>
       </div>
     {/if}
-
-    {#if index > 0}
-      <button class="nav-btn nav-btn--prev" onclick={prev} aria-label="Previous">&#8249;</button>
-    {/if}
-    {#if index < media.length - 1}
-      <button class="nav-btn nav-btn--next" onclick={next} aria-label="Next">&#8250;</button>
-    {/if}
   </div>
-</div>
+</Dialog>
 
 <style>
-  .lightbox-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-modal);
-    background: var(--color-scrim-strong);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .backdrop-dismiss {
-    position: absolute;
-    inset: 0;
-    border: 0;
-    padding: 0;
-    background: transparent;
-    cursor: pointer;
-  }
-
   .lightbox-content {
-    position: relative;
-    z-index: 1;
-    max-width: 90vw;
-    max-height: 90vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: var(--size-2);
   }
 
   .display-img {
@@ -121,8 +95,8 @@
 
   .close-btn {
     position: absolute;
-    top: -2.5rem;
-    right: -0.5rem;
+    top: var(--size-3);
+    right: var(--size-3);
     background: none;
     border: none;
     color: var(--color-text-inverse);
@@ -171,7 +145,6 @@
     align-items: center;
     justify-content: center;
     gap: var(--size-3);
-    margin-top: var(--size-2);
     color: var(--color-text-inverse-muted);
     font-size: var(--font-size-1);
   }
