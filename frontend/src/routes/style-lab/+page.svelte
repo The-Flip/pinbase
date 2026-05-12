@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ActiveFilterChips from '$lib/components/ActiveFilterChips.svelte';
   import ActionMenu from '$lib/components/ActionMenu.svelte';
   import Button from '$lib/components/Button.svelte';
   import MenuDivider from '$lib/components/MenuDivider.svelte';
@@ -11,6 +12,7 @@
     type CardDistressType,
   } from '$lib/components/cards/Card.svelte';
   import MachineCard from '$lib/components/cards/MachineCard.svelte';
+  import { emptyFilterState, type FacetedTitle, type FilterState } from '$lib/facet-engine';
 
   const distressCases: {
     label: string;
@@ -26,6 +28,39 @@
     { label: 'Dog ear bottom left', type: 'dog-ear', corner: 'bl' },
     { label: 'Dog ear bottom right', type: 'dog-ear', corner: 'br' },
   ];
+
+  const filterTitles: FacetedTitle[] = [
+    {
+      name: 'Attack from Mars',
+      slug: 'attack-from-mars',
+      abbreviations: ['AFM'],
+      model_count: 1,
+      manufacturer: { slug: 'williams', name: 'Williams' },
+      year: 1995,
+      thumbnail_url: null,
+      tech_generations: [{ slug: 'solid-state', name: 'Solid state' }],
+      display_types: [{ slug: 'dot-matrix-display', name: 'Dot matrix display' }],
+      player_counts: [4],
+      systems: [{ slug: 'wpc-95', name: 'WPC-95' }],
+      themes: [{ slug: 'sci-fi', name: 'Science fiction' }],
+      gameplay_features: [{ slug: 'multiball', name: 'Multiball' }],
+      reward_types: [],
+      persons: [],
+      franchise: null,
+      series: null,
+      year_min: 1995,
+      year_max: 1995,
+      ipdb_rating_max: 8.4,
+    },
+  ];
+
+  let activeFilters = $state<FilterState>({
+    ...emptyFilterState(),
+    manufacturer: 'williams',
+    themes: ['sci-fi'],
+    yearMin: 1980,
+    yearMax: 1995,
+  });
 </script>
 
 <div class="lab-header">
@@ -105,6 +140,10 @@
       <div class="status-card success">Saved changes to manufacturer claims.</div>
       <div class="status-card warning">Three citations need locator details.</div>
       <div class="status-card error">Slug conflicts with an existing record.</div>
+      <div class="filter-state-card">
+        <div class="state-label">Active filters</div>
+        <ActiveFilterChips bind:filters={activeFilters} allTitles={filterTitles} />
+      </div>
       <div class="action-cluster">
         <Button variant="secondary">Cancel</Button>
         <Button>Save changes</Button>
@@ -226,6 +265,7 @@
   .search-panel,
   .record-panel,
   .sidebar-panel,
+  .filter-state-card,
   .status-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border-soft);
@@ -301,10 +341,10 @@
   }
 
   .chip-row span {
-    background: var(--color-accent-soft);
-    border: 1px solid var(--color-accent-border);
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-2);
-    color: var(--color-link);
+    color: var(--color-text);
     font-size: var(--font-size-0);
     font-weight: 600;
     padding: var(--size-1) var(--size-2);
@@ -339,6 +379,20 @@
   .status-card {
     padding: var(--size-4);
     font-weight: 600;
+  }
+
+  .filter-state-card {
+    display: grid;
+    gap: var(--size-2);
+    grid-column: 1 / -1;
+    padding: var(--size-4);
+  }
+
+  .state-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-0);
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .success {
