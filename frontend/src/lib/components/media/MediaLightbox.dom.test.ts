@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import MediaLightbox from './MediaLightbox.svelte';
 import { MEDIA_ITEMS } from './media-test-fixtures';
 
@@ -15,6 +15,10 @@ function renderLightbox(initialIndex = 0) {
 }
 
 describe('MediaLightbox', () => {
+  afterEach(() => {
+    document.body.style.overflow = '';
+  });
+
   it('locks body scroll while mounted and restores it on unmount', () => {
     const { unmount } = renderLightbox();
 
@@ -26,14 +30,16 @@ describe('MediaLightbox', () => {
 
   it('exposes dialog semantics and closes on Escape and backdrop dismiss', async () => {
     const user = userEvent.setup();
-    const { onclose } = renderLightbox();
+    const { container, onclose } = renderLightbox();
 
     expect(screen.getByRole('dialog', { name: /media viewer/i })).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
     expect(onclose).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByRole('button', { name: /dismiss media viewer/i }));
+    const backdrop = container.querySelector('.backdrop-dismiss');
+    expect(backdrop).toBeInTheDocument();
+    await user.click(backdrop as Element);
     expect(onclose).toHaveBeenCalledTimes(2);
   });
 
@@ -51,5 +57,33 @@ describe('MediaLightbox', () => {
 
     await fireEvent.keyDown(window, { key: 'ArrowLeft' });
     expect(screen.getByText('1 / 2')).toBeInTheDocument();
+  });
+
+  it('traps focus within the lightbox when tabbing forward and backward', async () => {
+    const user = userEvent.setup();
+    renderLightbox();
+
+    const closeBtn = screen.getByRole('button', { name: /close/i });
+    await vi.waitFor(() => {
+      expect(closeBtn).toHaveFocus();
+    });
+
+    // Forward through all focusables, then wrap back to close.
+    const next = screen.getByRole('button', { name: /next/i });
+    const uploaderLink = screen.getByRole('link');
+
+    await user.keyboard('{Tab}');
+    expect(next).toHaveFocus();
+
+    await user.keyboard('{Tab}');
+    expect(uploaderLink).toHaveFocus();
+
+    // From last focusable, Tab wraps back to close.
+    await user.keyboard('{Tab}');
+    expect(closeBtn).toHaveFocus();
+
+    // Shift+Tab from first wraps to last.
+    await user.keyboard('{Shift>}{Tab}{/Shift}');
+    expect(uploaderLink).toHaveFocus();
   });
 });

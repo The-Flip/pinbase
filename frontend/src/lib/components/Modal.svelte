@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { tick } from 'svelte';
   import type { Snippet } from 'svelte';
-  import { acquireScrollLock } from './scroll-lock';
+  import Dialog from './Dialog.svelte';
 
   let {
     title,
@@ -21,16 +20,6 @@
     children: Snippet;
   } = $props();
 
-  const FOCUSABLE_SELECTOR = [
-    'a[href]',
-    'button:not([disabled])',
-    'input:not([disabled])',
-    'select:not([disabled])',
-    'textarea:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])',
-  ].join(', ');
-
-  let dialogEl: HTMLDivElement | undefined = $state();
   let closeButtonEl: HTMLButtonElement | undefined = $state();
   const uid = $props.id();
   const titleId = `${uid}-title`;
@@ -39,147 +28,60 @@
   function close() {
     onclose();
   }
-
-  function getFocusableElements() {
-    if (!dialogEl) return [];
-    return Array.from(dialogEl.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-      (element) =>
-        !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true',
-    );
-  }
-
-  // Keyboard ownership and focus restoration still assume one active dialog,
-  // but scroll locking is delegated to a shared reference-counted manager so
-  // concurrent or switching modals can't leak the lock.
-  // Capture the element that had focus when the modal opened, move focus
-  // into the dialog, lock body scroll, and listen for Escape.
-  // Focus is restored in cleanup so it works for every close path,
-  // including parent-controlled closes.
-  $effect(() => {
-    if (!open) return;
-
-    const opener = document.activeElement as HTMLElement | undefined;
-
-    const releaseScrollLock = acquireScrollLock();
-
-    let cancelled = false;
-    void tick().then(() => {
-      if (cancelled) return;
-      if (closeButtonEl) closeButtonEl.focus();
-      else dialogEl?.focus();
-    });
-
-    function handleKeydown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        close();
-        return;
-      }
-
-      if (e.key !== 'Tab') return;
-
-      const focusableElements = getFocusableElements();
-      if (focusableElements.length === 0) {
-        e.preventDefault();
-        dialogEl?.focus();
-        return;
-      }
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-      const activeElement = document.activeElement;
-
-      if (e.shiftKey && activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
-      } else if (!e.shiftKey && activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    }
-
-    document.addEventListener('keydown', handleKeydown);
-
-    return () => {
-      cancelled = true;
-      releaseScrollLock();
-      document.removeEventListener('keydown', handleKeydown);
-      if (opener?.isConnected) {
-        opener.focus();
-      }
-    };
-  });
 </script>
 
-{#if open}
-  <div class="modal-backdrop">
-    <button type="button" class="backdrop-dismiss" tabindex="-1" aria-hidden="true" onclick={close}
-    ></button>
-
-    <div
-      class="modal-dialog"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      aria-describedby={bodyId}
-      tabindex="-1"
-      bind:this={dialogEl}
-    >
-      <header class="modal-header">
-        <div class="header-main">
-          <h2 id={titleId}>
-            {#if titleContent}
-              {@render titleContent()}
-            {:else}
-              {title}
-            {/if}
-          </h2>
-          {#if headerActions}
-            <div class="header-actions">
-              {@render headerActions()}
-            </div>
+<Dialog
+  {open}
+  {onclose}
+  ariaLabelledBy={titleId}
+  ariaDescribedBy={bodyId}
+  initialFocus={closeButtonEl}
+>
+  <div class="modal-dialog">
+    <header class="modal-header">
+      <div class="header-main">
+        <h2 id={titleId}>
+          {#if titleContent}
+            {@render titleContent()}
+          {:else}
+            {title}
           {/if}
-        </div>
-        <button
-          type="button"
-          class="close-btn"
-          aria-label="Close"
-          onclick={close}
-          bind:this={closeButtonEl}>&times;</button
-        >
-      </header>
-
-      <div class="modal-body" id={bodyId}>
-        {@render children()}
+        </h2>
+        {#if headerActions}
+          <div class="header-actions">
+            {@render headerActions()}
+          </div>
+        {/if}
       </div>
+      <button
+        type="button"
+        class="close-btn"
+        aria-label="Close"
+        onclick={close}
+        bind:this={closeButtonEl}>&times;</button
+      >
+    </header>
 
-      {#if footer}
-        <footer class="modal-footer">
-          {@render footer()}
-        </footer>
-      {/if}
+    <div class="modal-body" id={bodyId}>
+      {@render children()}
     </div>
+
+    {#if footer}
+      <footer class="modal-footer">
+        {@render footer()}
+      </footer>
+    {/if}
   </div>
-{/if}
+</Dialog>
 
 <style>
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-modal);
-    background: var(--color-scrim);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--size-4);
-  }
-
   .modal-dialog {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 48rem;
-    max-height: calc(100vh - var(--size-6) * 2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(48rem, calc(100vw - 2 * var(--size-4)));
+    max-height: calc(100vh - 2 * var(--size-4));
     background: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-3);
@@ -187,15 +89,6 @@
     flex-direction: column;
     box-shadow: var(--shadow-modal);
     overflow: hidden;
-  }
-
-  .backdrop-dismiss {
-    position: absolute;
-    inset: 0;
-    border: 0;
-    padding: 0;
-    background: transparent;
-    cursor: pointer;
   }
 
   .modal-header {
@@ -260,14 +153,13 @@
   }
 
   @media (--breakpoint-narrow) {
-    .modal-backdrop {
-      padding: 0;
-    }
-
     .modal-dialog {
-      max-width: none;
+      top: 0;
+      left: 0;
+      transform: none;
+      width: 100vw;
+      height: 100vh;
       max-height: none;
-      height: 100%;
       border-radius: 0;
       border: none;
     }
