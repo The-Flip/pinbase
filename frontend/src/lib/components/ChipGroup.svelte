@@ -83,7 +83,7 @@
   }
 
   .chip.active .chip-count {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-inverse-muted);
   }
 
   .chip:disabled {

@@ -15,7 +15,7 @@ import logging
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 from django.core.exceptions import (
     FieldDoesNotExist,
@@ -66,7 +66,7 @@ class ValueKeySpec:
     required: bool
     nullable: bool = False
     identity: str | None = None
-    fk_target: tuple[type[models.Model], str] | None = None
+    fk_target: FkTarget | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -76,6 +76,55 @@ class RelationshipSchema:
     namespace: str
     value_keys: tuple[ValueKeySpec, ...]
     valid_subjects: frozenset[type[ClaimControlledModel]]
+
+
+class FkClaim(NamedTuple):
+    """A direct FK claim paired with its subject model class.
+
+    Used to carry FK claims from ``validate_claims_batch`` into
+    ``validate_fk_claims_batch`` where target existence is checked.
+    """
+
+    claim: Claim
+    model_class: type[ClaimControlledModel]
+
+
+class RelationshipTargetKey(NamedTuple):
+    """Group key for batched relationship target existence checks."""
+
+    namespace: str
+    value_key: str
+
+
+class FkTarget(NamedTuple):
+    """A foreign-key target lookup: ``(model, lookup_field)``.
+
+    Used in two places: ``ValueKeySpec.fk_target`` declares the target of a
+    relationship value-key, and ``validate_relationship_claims_batch`` keys
+    its per-group existence query by this same pair.
+    """
+
+    model: type[models.Model]
+    lookup_field: str
+
+
+class BatchValidationResult(NamedTuple):
+    """Return value of :func:`validate_claims_batch`."""
+
+    valid: list[Claim]
+    rejected_count: int
+
+
+class RelationshipClaimRef(NamedTuple):
+    """A relationship claim paired with the referenced target value.
+
+    The ``ref`` is the value from the claim's value dict at the spec's
+    ``value_key`` (e.g. a person slug or role pk); its concrete type
+    depends on the target's lookup field.
+    """
+
+    claim: Claim
+    ref: object
 
 
 _relationship_schemas: dict[str, RelationshipSchema] = {}
@@ -447,8 +496,8 @@ def validate_claim_value(
 
 def validate_claims_batch(
     pending_claims: list[Claim],
-) -> tuple[list[Claim], int]:
-    """Validate claims in batch mode. Returns ``(valid_claims, rejected_count)``.
+) -> BatchValidationResult:
+    """Validate claims in batch mode.
 
     Invalid claims are logged and removed from the list.
     Valid scalar claims may have transformed values (e.g. markdown link
@@ -465,7 +514,7 @@ def validate_claims_batch(
     from django.contrib.contenttypes.models import ContentType
 
     rejected: list[Claim] = []
-    fk_claims: list[tuple[Claim, type[ClaimControlledModel]]] = []
+    fk_claims: list[FkClaim] = []
     rel_claims: list[Claim] = []
 
     # Cache model_class and claim_fields per content_type_id.
@@ -540,7 +589,7 @@ def validate_claims_batch(
         # DIRECT — determine scalar vs FK.
         field = model_class._meta.get_field(fn)
         if field.is_relation:
-            fk_claims.append((claim, model_class))
+            fk_claims.append(FkClaim(claim, model_class))
             continue
 
         # Scalar — validate value.
@@ -566,11 +615,11 @@ def validate_claims_batch(
 
     rejected_set = {id(c) for c in rejected}
     valid = [c for c in pending_claims if id(c) not in rejected_set]
-    return valid, len(rejected)
+    return BatchValidationResult(valid, len(rejected))
 
 
 def validate_fk_claims_batch(
-    fk_claims: list[tuple[Claim, type[ClaimControlledModel]]],
+    fk_claims: list[FkClaim],
 ) -> list[Claim]:
     """Batch-validate FK scalar claims. Returns list of rejected claims.
 
@@ -580,10 +629,10 @@ def validate_fk_claims_batch(
     """
     groups: dict[
         tuple[type[ClaimControlledModel], str],
-        list[tuple[Claim, type[ClaimControlledModel]]],
+        list[Claim],
     ] = defaultdict(list)
-    for claim, model_class in fk_claims:
-        groups[(model_class, claim.field_name)].append((claim, model_class))
+    for fk in fk_claims:
+        groups[(fk.model_class, fk.claim.field_name)].append(fk.claim)
 
     rejected: list[Claim] = []
     for (model_class, field_name), group in groups.items():
@@ -596,7 +645,7 @@ def validate_fk_claims_batch(
 
         # Collect all non-empty slug values, keyed by claim identity.
         slug_by_claim: dict[int, str] = {}
-        for claim, _mc in group:
+        for claim in group:
             v = claim.value
             if v is not None and v != "":
                 slug_by_claim[id(claim)] = str(v).strip()
@@ -611,7 +660,7 @@ def validate_fk_claims_batch(
             )
         )
 
-        for claim, _mc in group:
+        for claim in group:
             slug = slug_by_claim.get(id(claim))
             if slug is None:
                 continue
@@ -648,10 +697,8 @@ def validate_relationship_claims_batch(
     if not _relationship_schemas:
         return []
 
-    # (namespace, value_key) → [(claim, ref_value), ...]
-    groups: dict[tuple[str, str], list[tuple[Claim, object]]] = defaultdict(list)
-    # Track which (namespace, value_key) → (target_model, lookup_field)
-    group_meta: dict[tuple[str, str], tuple[type[models.Model], str]] = {}
+    groups: dict[RelationshipTargetKey, list[RelationshipClaimRef]] = defaultdict(list)
+    group_meta: dict[RelationshipTargetKey, FkTarget] = {}
 
     for claim in rel_claims:
         namespace = claim.field_name
@@ -671,38 +718,37 @@ def validate_relationship_claims_batch(
             ref = value.get(spec.name)
             if ref is None:
                 continue
-            target_model, lookup_field = spec.fk_target
-            key = (namespace, spec.name)
-            groups[key].append((claim, ref))
+            key = RelationshipTargetKey(namespace, spec.name)
+            groups[key].append(RelationshipClaimRef(claim, ref))
             if key not in group_meta:
-                group_meta[key] = (target_model, lookup_field)
+                group_meta[key] = spec.fk_target
 
     rejected: list[Claim] = []
     rejected_ids: set[int] = set()
 
     for key, group in groups.items():
-        target_model, lookup_field = group_meta[key]
-        namespace, _value_key = key
+        target = group_meta[key]
+        namespace = key.namespace
 
-        refs = {ref for _, ref in group}
+        refs = {r.ref for r in group}
         existing = set(
-            target_model._default_manager.filter(
-                **{f"{lookup_field}__in": refs}
-            ).values_list(lookup_field, flat=True)
+            target.model._default_manager.filter(
+                **{f"{target.lookup_field}__in": refs}
+            ).values_list(target.lookup_field, flat=True)
         )
 
-        for claim, ref in group:
-            if ref not in existing and id(claim) not in rejected_ids:
+        for r in group:
+            if r.ref not in existing and id(r.claim) not in rejected_ids:
                 logger.warning(
                     "Rejected relationship claim %s (object_id=%s): "
                     "target %s with %s=%r does not exist",
-                    claim.claim_key or namespace,
-                    claim.object_id,
-                    target_model.__name__,
-                    lookup_field,
-                    ref,
+                    r.claim.claim_key or namespace,
+                    r.claim.object_id,
+                    target.model.__name__,
+                    target.lookup_field,
+                    r.ref,
                 )
-                rejected.append(claim)
-                rejected_ids.add(id(claim))
+                rejected.append(r.claim)
+                rejected_ids.add(id(r.claim))
 
     return rejected

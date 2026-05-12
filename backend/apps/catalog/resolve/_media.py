@@ -61,6 +61,13 @@ class MediaRowState(NamedTuple):
     is_primary: bool
 
 
+class DesiredMediaAttachment(NamedTuple):
+    """Per-asset desired attachment state within an entity's desired-state map."""
+
+    category: str | None
+    is_primary: bool
+
+
 def resolve_media_attachments(
     *,
     content_type_id: int | None = None,
@@ -118,9 +125,9 @@ def resolve_media_attachments(
             _ct_cache[ct_id] = CtInfo(model_class, is_supported, categories)
         return _ct_cache[ct_id]
 
-    # Desired: {EntityKey: {asset_pk: (category, is_primary)}}
+    # Desired: {EntityKey: {asset_pk: DesiredMediaAttachment}}
     # Also track claim priority/created_at for primary enforcement.
-    desired_by_entity: dict[EntityKey, dict[int, tuple[str | None, bool]]] = {}
+    desired_by_entity: dict[EntityKey, dict[int, DesiredMediaAttachment]] = {}
     primary_candidates: dict[EntityCategoryKey, list[PrimaryCandidate]] = defaultdict(
         list
     )
@@ -140,7 +147,7 @@ def resolve_media_attachments(
             )
             continue
 
-        desired: dict[int, tuple[str | None, bool]] = {}
+        desired: dict[int, DesiredMediaAttachment] = {}
         for claim in claims_list:
             val = cast(MediaAttachmentClaimValue, claim.value)
             if not val.get("exists", True):
@@ -171,7 +178,7 @@ def resolve_media_attachments(
                 continue
 
             is_primary = bool(val.get("is_primary", False))
-            desired[asset_pk] = (category, is_primary)
+            desired[asset_pk] = DesiredMediaAttachment(category, is_primary)
 
             group_key = EntityCategoryKey(
                 entity_key.content_type_id, entity_key.object_id, category
@@ -208,8 +215,9 @@ def resolve_media_attachments(
 
         for candidate in candidates:
             if candidate.asset_pk != winner_asset_pk:
-                old_cat, _old_primary = desired[candidate.asset_pk]
-                desired[candidate.asset_pk] = (old_cat, False)
+                desired[candidate.asset_pk] = desired[candidate.asset_pk]._replace(
+                    is_primary=False
+                )
 
     # -- Auto-promotion ----------------------------------------------------
     # If no attachment in a (entity, category) group is primary, promote the
@@ -222,17 +230,16 @@ def resolve_media_attachments(
         desired = desired_by_entity[entity_key]
 
         has_primary = any(
-            primary
-            for _asset_pk, (cat, primary) in desired.items()
-            if cat == group_key.category
+            d.is_primary
+            for _asset_pk, d in desired.items()
+            if d.category == group_key.category
         )
         if has_primary:
             continue
 
         attachments.sort(key=lambda a: a.created_at)
         winner_asset_pk = attachments[0].asset_pk
-        old_cat, _ = desired[winner_asset_pk]
-        desired[winner_asset_pk] = (old_cat, True)
+        desired[winner_asset_pk] = desired[winner_asset_pk]._replace(is_primary=True)
 
     # -- Fetch existing EntityMedia rows ------------------------------------
 
@@ -263,21 +270,26 @@ def resolve_media_attachments(
         desired = desired_by_entity.get(entity_key, {})
         existing = existing_by_entity.get(entity_key, {})
 
-        for asset_pk, (cat, primary) in desired.items():
+        for asset_pk, d in desired.items():
             if asset_pk not in existing:
                 to_create.append(
                     EntityMedia(
                         content_type_id=entity_key.content_type_id,
                         object_id=entity_key.object_id,
                         asset_id=asset_pk,
-                        category=cat,
-                        is_primary=primary,
+                        category=d.category,
+                        is_primary=d.is_primary,
                     )
                 )
             else:
                 existing_row = existing[asset_pk]
-                if existing_row.category != cat or existing_row.is_primary != primary:
-                    to_update.append(MediaRowState(existing_row.row_pk, cat, primary))
+                if (
+                    existing_row.category != d.category
+                    or existing_row.is_primary != d.is_primary
+                ):
+                    to_update.append(
+                        MediaRowState(existing_row.row_pk, d.category, d.is_primary)
+                    )
 
         for asset_pk, existing_row in existing.items():
             if asset_pk not in desired:

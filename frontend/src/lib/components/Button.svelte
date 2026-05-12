@@ -47,7 +47,7 @@
 
   .btn-primary {
     background: var(--color-accent);
-    color: #fff;
+    color: var(--color-text-inverse);
     border: none;
   }
 
@@ -71,7 +71,7 @@
 
   .btn-destructive {
     background: var(--color-danger);
-    color: #fff;
+    color: var(--color-text-inverse);
     border: none;
   }
 

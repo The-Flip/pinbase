@@ -65,7 +65,7 @@
   .chip-remove {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-inverse-muted);
     cursor: pointer;
     padding: 0;
     font-size: var(--font-size-1);

@@ -9,9 +9,10 @@ without a per-class handler registration.
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from apps.core.exceptions import StructuredApiError
+from apps.core.types import JsonBody
 
 from .types import DenialCode, Deny
 
@@ -56,7 +57,7 @@ class PolicyDeniedError(StructuredApiError):
         super().__init__(_resolve_message(decision))
         self.decision = decision
 
-    def to_body(self) -> dict[str, Any]:
+    def to_body(self) -> JsonBody:
         return {
             "code": self.decision.code.value,
             "context": dict(self.decision.context),

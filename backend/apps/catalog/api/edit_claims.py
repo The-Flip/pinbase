@@ -31,6 +31,7 @@ from apps.catalog.models import (
 )
 from apps.core.exceptions import StructuredApiError
 from apps.core.models import SluggedModel
+from apps.core.types import JsonBody
 from apps.provenance.models import (
     ChangeSet,
     ChangeSetAction,
@@ -102,7 +103,7 @@ class StructuredValidationError(StructuredApiError):
         self.field_errors = field_errors or {}
         self.form_errors = form_errors or []
 
-    def to_body(self) -> dict[str, Any]:
+    def to_body(self) -> JsonBody:
         return {
             "field_errors": self.field_errors,
             "form_errors": self.form_errors,

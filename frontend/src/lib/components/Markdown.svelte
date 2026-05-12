@@ -176,7 +176,7 @@
 
   .content :global(.cite-highlight),
   :global(.cite-highlight) {
-    background-color: var(--color-highlight, #fff3cd);
+    background-color: var(--color-highlight-bg);
     transition: background-color 1.5s ease-out;
   }
 </style>
