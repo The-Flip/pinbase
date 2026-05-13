@@ -21,12 +21,22 @@ from .models.changeset import ChangeSet
 
 
 class FieldChangeSchema(Schema):
-    """A single field change within a ChangeSet (old -> new)."""
+    """A single field change within a ChangeSet (old -> new).
+
+    ``old_display`` / ``new_display`` are optional human-readable renderings
+    of relationship-claim values (e.g. ``"Pat Lawlor — Art"`` for a credit
+    claim whose raw ``new_value`` is ``{"person": 13, "role": 9, "exists":
+    true}``). Null when the backend can't produce a display label
+    (direct-field scalars, namespaces without a registered formatter) —
+    clients should fall back to rendering the raw value.
+    """
 
     field_name: str
     claim_key: str
     old_value: object | None = None
     new_value: object
+    old_display: str | None = None
+    new_display: str | None = None
     claim_id: int | None = None
     claim_user_id: int | None = None
     is_active: bool | None = None
@@ -39,6 +49,7 @@ class RetractionSchema(Schema):
     field_name: str
     claim_key: str
     old_value: object
+    old_display: str | None = None
 
 
 class ClaimAttributionSchema(Schema):

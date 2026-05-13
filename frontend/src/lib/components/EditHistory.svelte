@@ -119,6 +119,14 @@
   }
 </script>
 
+{#snippet oldValue(value: unknown, display: string | null | undefined)}
+  <span class="old-value"><ClaimValue {value} {display} /></span>
+{/snippet}
+
+{#snippet newValue(value: unknown, display: string | null | undefined)}
+  <span class="new-value"><ClaimValue {value} {display} /></span>
+{/snippet}
+
 {#snippet revertControls(change: FieldChange)}
   {#if canRevert(change)}
     <div class="revert-cell">
@@ -203,9 +211,7 @@
                         {/if}
                       </dd>
                       {#if isUnchanged(change)}
-                        <dd>
-                          <span class="old-value"><ClaimValue value={change.new_value} /></span>
-                        </dd>
+                        <dd>{@render oldValue(change.new_value, change.new_display)}</dd>
                       {:else if isDiffable(change)}
                         <dd>
                           <InlineDiff oldValue={change.old_value} newValue={change.new_value} />
@@ -213,26 +219,24 @@
                       {:else}
                         <dd>
                           {#if hasMeaningfulValue(change.old_value)}
-                            <span class="old-value"><ClaimValue value={change.old_value} /></span>
+                            {@render oldValue(change.old_value, change.old_display)}
                             <span class="arrow">&rarr;</span>
                           {/if}
-                          <span class="old-value"><ClaimValue value={change.new_value} /></span>
+                          {@render oldValue(change.new_value, change.new_display)}
                         </dd>
                       {/if}
                     </div>
                   {:else if isUnchanged(change)}
                     <div class="field-row">
                       <dt>{change.field_name}</dt>
-                      <dd>
-                        <span class="new-value"><ClaimValue value={change.new_value} /></span>
-                      </dd>
+                      <dd>{@render newValue(change.new_value, change.new_display)}</dd>
                       {@render revertControls(change)}
                     </div>
                   {:else if isDeletion(change)}
                     <div class="field-row">
                       <dt>{change.field_name}</dt>
                       <dd>
-                        <span class="old-value"><ClaimValue value={change.old_value} /></span>
+                        {@render oldValue(change.old_value, change.old_display)}
                         <span class="deleted-marker" aria-label="removed">&#x2715;</span>
                       </dd>
                       {@render revertControls(change)}
@@ -250,10 +254,10 @@
                       <dt>{change.field_name}</dt>
                       <dd>
                         {#if hasMeaningfulValue(change.old_value)}
-                          <span class="old-value"><ClaimValue value={change.old_value} /></span>
+                          {@render oldValue(change.old_value, change.old_display)}
                           <span class="arrow">&rarr;</span>
                         {/if}
-                        <span class="new-value"><ClaimValue value={change.new_value} /></span>
+                        {@render newValue(change.new_value, change.new_display)}
                       </dd>
                       {@render revertControls(change)}
                     </div>
@@ -266,7 +270,7 @@
                       <dt>{retraction.field_name}</dt>
                       <dd>
                         <span class="reverted-badge">reverted</span>
-                        <span class="old-value"><ClaimValue value={retraction.old_value} /></span>
+                        {@render oldValue(retraction.old_value, retraction.old_display)}
                       </dd>
                     </div>
                   {/if}
