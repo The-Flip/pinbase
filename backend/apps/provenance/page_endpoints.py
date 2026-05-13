@@ -25,6 +25,7 @@ from ninja.responses import Status
 
 from apps.core.authz import Activity, compute_row_capabilities, policy_user
 from apps.core.entity_types import get_linkable_model
+from apps.core.schemas import EntityLinkSchema
 from apps.core.types import EntityKey
 
 from .entity_resolution import batch_resolve_entities
@@ -36,6 +37,7 @@ from .schemas import (
     ChangeSetBaseSchema,
     ChangeSetSchema,
     CitationLinkSchema,
+    ClaimAttributionSchema,
     ClaimSchema,
     FieldChangeSchema,
     RetractionSchema,
@@ -43,13 +45,9 @@ from .schemas import (
 
 
 class ChangeSetWithEntitySchema(ChangeSetBaseSchema):
-    """Adds the entity-link fields shown on the changes page list/detail."""
+    """Adds the entity link shown on the changes page list/detail."""
 
-    is_ingest: bool = False
-    source_name: str | None = None
-    entity_href: str
-    entity_name: str
-    entity_type_label: str
+    entity: EntityLinkSchema
 
 
 class ChangeSetSummarySchema(ChangeSetWithEntitySchema):
@@ -179,9 +177,11 @@ def sources_page(
     evidence = [
         CitedChangeSetSchema(
             id=row.id,
-            user_display=row.user_display,
+            attribution=ClaimAttributionSchema(
+                user_username=row.user_username,
+                created_at=row.created_at,
+            ),
             note=row.note,
-            created_at=row.created_at,
             fields=row.fields,
             citations=[
                 CitedChangeSetCitationSchema(
@@ -312,16 +312,15 @@ def list_changes(
         items.append(
             ChangeSetSummarySchema(
                 id=cs.pk,
-                user_display=cs.user.username if cs.user else None,
-                is_ingest=cs.ingest_run_id is not None,
-                source_name=cs.ingest_run.source.name if cs.ingest_run_id else None,
+                attribution=ClaimAttributionSchema(
+                    user_username=cs.user.username if cs.user else None,
+                    source_name=cs.ingest_run.source.name if cs.ingest_run_id else None,
+                    created_at=cs.created_at.isoformat(),
+                ),
                 note=cs.note,
-                created_at=cs.created_at.isoformat(),
                 changes_count=len(claims) + retractions_count,
                 retractions_count=retractions_count,
-                entity_href=meta["href"],
-                entity_name=meta["name"],
-                entity_type_label=meta["type_label"],
+                entity=meta,
                 capabilities=compute_row_capabilities(
                     caller, cs, ChangeSetSummarySchema.policy_activities
                 ),
@@ -418,14 +417,13 @@ def change_detail(
     assert cs.pk is not None
     return ChangeSetDetailSchema(
         id=cs.pk,
-        user_display=cs.user.username if cs.user else None,
-        is_ingest=ingest_run is not None,
-        source_name=ingest_run.source.name if ingest_run is not None else None,
+        attribution=ClaimAttributionSchema(
+            user_username=cs.user.username if cs.user else None,
+            source_name=ingest_run.source.name if ingest_run is not None else None,
+            created_at=cs.created_at.isoformat(),
+        ),
         note=cs.note,
-        created_at=cs.created_at.isoformat(),
-        entity_href=meta["href"],
-        entity_name=meta["name"],
-        entity_type_label=meta["type_label"],
+        entity=meta,
         changes=changes,
         retractions=retractions,
         capabilities=compute_row_capabilities(

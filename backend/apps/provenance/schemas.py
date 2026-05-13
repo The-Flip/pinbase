@@ -41,13 +41,27 @@ class RetractionSchema(Schema):
     old_value: object
 
 
+class ClaimAttributionSchema(Schema):
+    """Who asserted a Claim and when.
+
+    User-attributed: ``user_username`` set, ``source_name`` null.
+    Ingest-attributed: ``source_name`` set, ``user_username`` null.
+
+    Reused for ChangeSet attribution — a ChangeSet inherits its attribution
+    from its (uniform-author) claims, so the shape is identical.
+    """
+
+    user_username: str | None = None
+    source_name: str | None = None
+    created_at: str
+
+
 class ChangeSetBaseSchema(Schema):
     """Common fields for any read-side ChangeSet representation."""
 
     id: int
-    user_display: str | None = None
+    attribution: ClaimAttributionSchema
     note: str
-    created_at: str
 
 
 class ChangeSetSchema(ChangeSetBaseSchema):
@@ -85,13 +99,10 @@ class ChangeSetSchema(ChangeSetBaseSchema):
 class ClaimSchema(Schema):
     """A single per-field claim as surfaced to the Sources UI."""
 
-    source_name: str | None = None
-    source_slug: str | None = None
-    user_display: str | None = None  # username for user-attributed claims
+    attribution: ClaimAttributionSchema
     field_name: str
     value: object
     citation: str
-    created_at: str
     is_winner: bool
     changeset_note: str | None = None
 

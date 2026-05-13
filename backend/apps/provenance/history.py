@@ -10,7 +10,12 @@ from django.db.models import Case, F, IntegerField, Model, Prefetch, Q, Value, W
 from apps.core.authz import PolicyUser, compute_row_capabilities
 
 from .models import ChangeSet, Claim
-from .schemas import ChangeSetSchema, FieldChangeSchema, RetractionSchema
+from .schemas import (
+    ChangeSetSchema,
+    ClaimAttributionSchema,
+    FieldChangeSchema,
+    RetractionSchema,
+)
 
 
 def _compute_winning_claim_ids(ct: ContentType, entity_pk: int) -> set[int]:
@@ -69,7 +74,7 @@ def build_edit_history(entity: Model, user: PolicyUser) -> list[ChangeSetSchema]
             )
         )
         .distinct()
-        .select_related("user")
+        .select_related("user", "ingest_run__source")
         .prefetch_related(
             Prefetch(
                 "claims",
@@ -87,22 +92,21 @@ def build_edit_history(entity: Model, user: PolicyUser) -> list[ChangeSetSchema]
         .order_by("-created_at")
     )
 
-    # 2. Fetch ALL user claims for this entity (active + inactive) to build
-    #    a history chain for old-value lookups.
-    all_user_claims = list(
+    # 2. Fetch ALL claims for this entity (active + inactive, any author) to
+    #    build a per-field history chain for old-value lookups. The "old
+    #    value" for a user edit is whatever the field's most recent prior
+    #    claim was — be it a previous user edit, ingest, or source.
+    all_claims = list(
         Claim.objects.filter(
             content_type=ct,
             object_id=entity.pk,
-            user__isnull=False,
-        ).order_by("claim_key", "user_id", "-created_at")
+        ).order_by("claim_key", "-created_at", "-pk")
     )
 
-    # Build lookup: (claim_key, user_id) → list of claims ordered newest-first.
-    history: dict[tuple[str, int], list[Claim]] = defaultdict(list)
-    for c in all_user_claims:
-        if c.user_id is None:
-            continue
-        history[(c.claim_key, c.user_id)].append(c)
+    # Build lookup: claim_key → list of claims ordered newest-first.
+    history: dict[str, list[Claim]] = defaultdict(list)
+    for c in all_claims:
+        history[c.claim_key].append(c)
 
     # 3. Compute winning claims for is_winning.
     winning_ids = _compute_winning_claim_ids(ct, entity.pk)
@@ -112,11 +116,7 @@ def build_edit_history(entity: Model, user: PolicyUser) -> list[ChangeSetSchema]
     for cs in changesets:
         changes: list[FieldChangeSchema] = []
         for claim in cs.claims.all():
-            chain = (
-                history.get((claim.claim_key, claim.user_id), [])
-                if claim.user_id is not None
-                else []
-            )
+            chain = history.get(claim.claim_key, [])
             old_value = None
             for i, c in enumerate(chain):
                 if c.pk == claim.pk and i + 1 < len(chain):
@@ -150,9 +150,12 @@ def build_edit_history(entity: Model, user: PolicyUser) -> list[ChangeSetSchema]
         result.append(
             ChangeSetSchema(
                 id=cs.pk,
-                user_display=cs.user.username if cs.user else None,
+                attribution=ClaimAttributionSchema(
+                    user_username=cs.user.username if cs.user else None,
+                    source_name=cs.ingest_run.source.name if cs.ingest_run else None,
+                    created_at=cs.created_at.isoformat(),
+                ),
                 note=cs.note,
-                created_at=cs.created_at.isoformat(),
                 changes=changes,
                 retractions=retractions,
                 capabilities=compute_row_capabilities(

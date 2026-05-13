@@ -2,15 +2,14 @@
   import { invalidateAll } from '$app/navigation';
   import client from '$lib/api/client';
   import { parseApiError } from '$lib/api/parse-api-error';
-  import type { ChangeSetSchema, FieldChangeSchema } from '$lib/api/schema';
+  import type { ChangeSetSchema, ClaimAttributionSchema, FieldChangeSchema } from '$lib/api/schema';
   import { auth } from '$lib/auth.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
   import InlineDiff from './InlineDiff.svelte';
-  import UserBadge from './UserBadge.svelte';
+  import ClaimAttribution from './ClaimAttribution.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { getEntityContext } from '$lib/entity-context';
   import { isDiffable, formatValue } from './change-display';
-  import SmartDate from './SmartDate.svelte';
 
   type ChangeSet = ChangeSetSchema;
   type FieldChange = FieldChangeSchema;
@@ -24,8 +23,7 @@
   let revertLoading = $state(false);
 
   interface RetractionInfo {
-    user_display: string | null | undefined;
-    created_at: string;
+    attribution: ClaimAttributionSchema;
     note: string;
   }
 
@@ -39,8 +37,7 @@
     for (const cs of changesets) {
       for (const r of cs.retractions ?? []) {
         lookup.set(r.claim_id, {
-          user_display: cs.user_display,
-          created_at: cs.created_at,
+          attribution: cs.attribution,
           note: cs.note,
         });
       }
@@ -182,8 +179,7 @@
           {#if !isEmptyChangeset(cs)}
             <li class="changeset">
               <div class="changeset-header">
-                <UserBadge username={cs.user_display} />
-                <span class="timestamp"><SmartDate iso={cs.created_at} /></span>
+                By <ClaimAttribution attribution={cs.attribution} />
               </div>
               {#if cs.note}
                 <p class="changeset-note">{cs.note}</p>
@@ -201,12 +197,7 @@
                       <dd>
                         <span class="reverted-badge">reverted</span>
                         {#if info}
-                          by {#if info.user_display}<a href="/users/{info.user_display}"
-                              >{info.user_display}</a
-                            >{:else}system{/if}
-                          on
-                          <span class="timestamp"><SmartDate iso={info.created_at} /></span
-                          >{#if info.note}:
+                          by <ClaimAttribution attribution={info.attribution} />{#if info.note}:
                             {info.note}{/if}
                         {/if}
                       </dd>
@@ -294,12 +285,11 @@
 
   .changeset-header {
     display: flex;
-    align-items: center;
-    gap: var(--size-2);
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--size-1);
     margin-bottom: var(--size-2);
-  }
-
-  .timestamp {
     font-size: var(--font-size-0);
     color: var(--color-text-muted);
   }

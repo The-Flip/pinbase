@@ -63,7 +63,7 @@ class TestEditHistoryBasic:
         assert len(data) == 1
 
         cs = data[0]
-        assert cs["user_display"] == user.username
+        assert cs["attribution"]["user_username"] == user.username
         assert cs["note"] == ""
         assert len(cs["changes"]) == 1
         assert cs["changes"][0]["field_name"] == "year"
@@ -121,8 +121,8 @@ class TestEditHistoryMultipleFields:
 
 @pytest.mark.django_db
 class TestEditHistoryMultiUser:
-    def test_old_value_scoped_to_same_user(self, client, user, pm, db):
-        """User B editing after User A should not show User A's value as old."""
+    def test_old_value_uses_any_prior_claim(self, client, user, pm, db):
+        """User B editing after User A should see User A's value as the old value."""
         user_b = make_user()
 
         client.force_login(user)
@@ -142,15 +142,32 @@ class TestEditHistoryMultiUser:
         data = resp.json()
         assert len(data) == 2
 
-        # User B's edit is newest — no old value because B never edited year before
-        assert data[0]["user_display"] == user_b.username
-        assert data[0]["changes"][0]["old_value"] is None
+        # User B's edit is newest — old value is User A's prior claim
+        assert data[0]["attribution"]["user_username"] == user_b.username
+        assert data[0]["changes"][0]["old_value"] == 1998
         assert data[0]["changes"][0]["new_value"] == 1999
 
-        # User A's edit — also no old value (first edit)
-        assert data[1]["user_display"] == user.username
+        # User A's edit — no prior claim, so no old value
+        assert data[1]["attribution"]["user_username"] == user.username
         assert data[1]["changes"][0]["old_value"] is None
         assert data[1]["changes"][0]["new_value"] == 1998
+
+    def test_old_value_uses_source_claim(self, client, user, pm, source):
+        """A user edit shows the prior source/ingest claim's value as old."""
+        Claim.objects.assert_claim(pm, "year", 1997, source=source)
+
+        client.force_login(user)
+        client.patch(
+            f"/api/models/{pm.slug}/claims/",
+            data='{"fields": {"year": 1999}}',
+            content_type="application/json",
+        )
+
+        resp = client.get(f"/api/pages/edit-history/model/{pm.slug}/")
+        data = resp.json()
+        assert len(data) == 1
+        assert data[0]["changes"][0]["old_value"] == 1997
+        assert data[0]["changes"][0]["new_value"] == 1999
 
 
 @pytest.mark.django_db

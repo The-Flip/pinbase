@@ -9,7 +9,7 @@ from django.db import models
 from django.db.models import Case, F, IntegerField, Prefetch, QuerySet, Value, When
 
 from .models import CitationInstance, Claim
-from .schemas import ClaimSchema
+from .schemas import ClaimAttributionSchema, ClaimSchema
 
 
 def claims_prefetch(
@@ -85,16 +85,17 @@ def build_sources(claims: Iterable[Claim]) -> list[ClaimSchema]:
             winners.add(claim.claim_key)
         sources.append(
             ClaimSchema(
-                source_name=claim.source.name if claim.source else None,
-                source_slug=claim.source.slug if claim.source else None,
-                user_display=claim.user.username if claim.user else None,
+                attribution=ClaimAttributionSchema(
+                    user_username=claim.user.username if claim.user else None,
+                    source_name=claim.source.name if claim.source else None,
+                    created_at=claim.created_at.isoformat(),
+                ),
                 field_name=claim.field_name,
                 value=claim.value,
                 citation=claim.citation,
-                created_at=claim.created_at.isoformat(),
                 is_winner=is_winner,
                 changeset_note=claim.changeset.note if claim.changeset else None,
             )
         )
-    sources.sort(key=lambda c: c.created_at, reverse=True)
+    sources.sort(key=lambda c: c.attribution.created_at, reverse=True)
     return sources

@@ -81,15 +81,15 @@ class TestUserProfileWithEdits:
         assert len(data["entities_edited"]) == 1
 
         entity = data["entities_edited"][0]
-        assert entity["entity_href"] == "/models/medieval-madness"
-        assert entity["entity_name"] == "Medieval Madness"
-        assert entity["entity_type_label"] == "Model"
+        assert entity["entity"]["href"] == "/models/medieval-madness"
+        assert entity["entity"]["name"] == "Medieval Madness"
+        assert entity["entity"]["type_label"] == "Model"
         assert entity["edit_count"] == 1
 
         assert len(data["recent_edits"]) == 1
         edit = data["recent_edits"][0]
-        assert edit["entity_href"] == "/models/medieval-madness"
-        assert edit["entity_name"] == "Medieval Madness"
+        assert edit["entity"]["href"] == "/models/medieval-madness"
+        assert edit["entity"]["name"] == "Medieval Madness"
 
     def test_multiple_entity_edits_ordered_by_recency(
         self, client, user, model_a, model_b
@@ -115,13 +115,13 @@ class TestUserProfileWithEdits:
         assert data["edit_count"] == 2
         assert len(data["entities_edited"]) == 2
         # Most recently edited first
-        assert data["entities_edited"][0]["entity_name"] == "Attack from Mars"
-        assert data["entities_edited"][1]["entity_name"] == "Medieval Madness"
+        assert data["entities_edited"][0]["entity"]["name"] == "Attack from Mars"
+        assert data["entities_edited"][1]["entity"]["name"] == "Medieval Madness"
 
         # Recent edits also newest first
         assert len(data["recent_edits"]) == 2
-        assert data["recent_edits"][0]["entity_name"] == "Attack from Mars"
-        assert data["recent_edits"][1]["entity_name"] == "Medieval Madness"
+        assert data["recent_edits"][0]["entity"]["name"] == "Attack from Mars"
+        assert data["recent_edits"][1]["entity"]["name"] == "Medieval Madness"
 
     def test_multiple_edits_same_entity(self, client, user, model_a):
         """Multiple edits to one entity count correctly."""
@@ -164,7 +164,7 @@ class TestUserProfileWithEdits:
 
         assert data["edit_count"] == 2
         assert len(data["entities_edited"]) == 2
-        entity_types = {e["entity_type_label"] for e in data["entities_edited"]}
+        entity_types = {e["entity"]["type_label"] for e in data["entities_edited"]}
         assert "Model" in entity_types
         assert "Manufacturer" in entity_types
 
@@ -186,10 +186,10 @@ class TestUserProfileWithEdits:
 
 
 @pytest.mark.django_db
-class TestEditHistoryUserDisplayNull:
-    """Verify that build_edit_history returns null for non-user changesets."""
+class TestEditHistoryIngestAttribution:
+    """Verify that build_edit_history attributes ingest changesets correctly."""
 
-    def test_ingest_changeset_has_null_user_display(self, client, user):
+    def test_ingest_and_user_changesets_attributed_correctly(self, client, user):
         from apps.provenance.models import IngestRun
         from apps.provenance.test_factories import ingest_changeset, user_changeset
 
@@ -198,12 +198,10 @@ class TestEditHistoryUserDisplayNull:
         )
         pm = make_machine_model(name="Gorgar", slug="gorgar", year=1979)
 
-        # Create an ingest changeset with a claim — this is the non-user path
         ingest_run = IngestRun.objects.create(source=source, input_fingerprint="abc123")
         ingest_cs = ingest_changeset(ingest_run)
         Claim.objects.assert_claim(pm, "year", 1979, source=source, changeset=ingest_cs)
 
-        # Create a user changeset with a claim — this is the user path
         user_cs = user_changeset(user)
         Claim.objects.assert_claim(
             pm,
@@ -215,8 +213,13 @@ class TestEditHistoryUserDisplayNull:
 
         resp = client.get(f"/api/pages/edit-history/model/{pm.slug}/")
         data = resp.json()
-        # Partition by user_display: user-attributed vs ingest entries.
-        user_entries = [e for e in data if e["user_display"] is not None]
-        ingest_entries = [e for e in data if e["user_display"] is None]
-        assert len(user_entries) == 1
-        assert len(ingest_entries) == 1
+        attributions = {e["id"]: e["attribution"] for e in data}
+        assert len(attributions) == 2
+
+        ingest_attr = attributions[ingest_cs.pk]
+        assert ingest_attr["user_username"] is None
+        assert ingest_attr["source_name"] == "IPDB"
+
+        user_attr = attributions[user_cs.pk]
+        assert user_attr["user_username"] == user.username
+        assert user_attr["source_name"] is None

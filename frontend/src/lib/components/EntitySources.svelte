@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { CitedChangeSetSchema, ClaimSchema } from '$lib/api/schema';
+  import ClaimAttribution from './ClaimAttribution.svelte';
+  import ClaimAuthor from './ClaimAuthor.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
-  import UserBadge from './UserBadge.svelte';
-  import SmartDate from './SmartDate.svelte';
   import { getEntityContext } from '$lib/entity-context';
   import { groupSourcesByField } from './entity-sources';
 
@@ -21,7 +21,7 @@
   const entity = getEntityContext();
 
   function claimAttribution(claim: Claim): string {
-    return claim.source_name ?? (claim.user_display ? `@${claim.user_display}` : 'Unknown');
+    return claim.attribution.source_name ?? claim.attribution.user_username ?? 'Unknown';
   }
 
   function formatValue(v: unknown): string {
@@ -31,11 +31,7 @@
 </script>
 
 {#snippet claimDetail(claim: Claim)}
-  {#if claim.user_display}
-    <UserBadge username={claim.user_display} />
-  {:else}
-    <span class="source-badge">{claim.source_name ?? 'Unknown'}</span>
-  {/if}
+  <ClaimAuthor attribution={claim.attribution} />
   {formatValue(claim.value)}
   {#if claim.is_winner}
     <span class="badge-used">used</span>
@@ -58,11 +54,7 @@
   {#if sources.length > 0}
     {@const { conflicts, agreed, single } = sourceGroups}
     {@const contributorNames = [
-      ...new Set(
-        sources
-          .map((c) => c.source_name ?? (c.user_display ? `@${c.user_display}` : null))
-          .filter(Boolean),
-      ),
+      ...new Set(sources.map(claimAttribution).filter((n) => n !== 'Unknown')),
     ]}
     <section class="sources">
       {#if evidence.length > 0}
@@ -72,12 +64,7 @@
             {#each evidence as changeset (changeset.id)}
               <li class="changeset-card">
                 <div class="changeset-header">
-                  {#if changeset.user_display}
-                    <UserBadge username={changeset.user_display} />
-                  {:else}
-                    <span class="source-badge">Unknown</span>
-                  {/if}
-                  <span class="timestamp"><SmartDate iso={changeset.created_at} /></span>
+                  <ClaimAttribution attribution={changeset.attribution} />
                 </div>
                 {#if changeset.note}
                   <p class="evidence-note">{changeset.note}</p>
@@ -233,11 +220,6 @@
     margin-bottom: var(--size-2);
   }
 
-  .timestamp {
-    font-size: var(--font-size-0);
-    color: var(--color-text-muted);
-  }
-
   .evidence-note {
     margin: 0 0 var(--size-2);
     font-size: var(--font-size-00, 0.7rem);
@@ -305,19 +287,6 @@
 
   .claim.used {
     opacity: 1;
-  }
-
-  .source-badge {
-    display: inline-block;
-    padding: 1px var(--size-2);
-    font-size: var(--font-size-00, 0.7rem);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border-radius: var(--radius-1);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border-soft);
-    color: var(--color-text-muted);
   }
 
   .badge-used {

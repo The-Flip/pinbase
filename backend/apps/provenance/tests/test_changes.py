@@ -120,11 +120,11 @@ class TestChangesList:
         data = resp.json()
         assert len(data["items"]) == 1
         item = data["items"][0]
-        assert item["user_display"] == user.username
-        assert item["entity_name"] == "Medieval Madness"
-        assert item["entity_type_label"] == "Model"
+        assert item["attribution"]["user_username"] == user.username
+        assert item["entity"]["name"] == "Medieval Madness"
+        assert item["entity"]["type_label"] == "Model"
         assert item["changes_count"] >= 1
-        assert item["is_ingest"] is False
+        assert item["attribution"]["source_name"] is None
 
     def test_excludes_ingest_by_default(self, client, source, pm):
         run = IngestRun.objects.create(
@@ -154,8 +154,8 @@ class TestChangesList:
         assert resp.status_code == 200
         items = resp.json()["items"]
         assert len(items) == 1
-        assert items[0]["is_ingest"] is True
-        assert items[0]["source_name"] == "IPDB"
+        assert items[0]["attribution"]["source_name"] == "IPDB"
+        assert items[0]["attribution"]["user_username"] is None
 
     def test_entity_type_filter(self, client, user, pm, mfr):
         client.force_login(user)
@@ -174,7 +174,7 @@ class TestChangesList:
         assert resp.status_code == 200
         items = resp.json()["items"]
         assert len(items) == 1
-        assert items[0]["entity_type_label"] == "Manufacturer"
+        assert items[0]["entity"]["type_label"] == "Manufacturer"
 
     def test_invalid_entity_type_returns_empty(self, client):
         resp = client.get("/api/pages/changesets/?entity_type=nonexistent")
@@ -256,7 +256,7 @@ class TestChangesDetail:
         resp = client.get(f"/api/pages/changesets/{cs_id}/")
         assert resp.status_code == 200
         data = resp.json()
-        assert data["entity_name"] == "Medieval Madness"
+        assert data["entity"]["name"] == "Medieval Madness"
         assert len(data["changes"]) >= 1
         year_change = next(c for c in data["changes"] if c["field_name"] == "year")
         assert year_change["new_value"] == 1998
