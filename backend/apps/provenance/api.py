@@ -112,6 +112,7 @@ def list_review_claims(request: HttpRequest) -> list[ReviewClaimSchema]:
     claims = list(
         Claim.objects.filter(is_active=True, needs_review=True)
         .select_related("source", "content_type")
+        .prefetch_related("subject")
         .order_by("-created_at")
     )
     labels = resolve_labels(FieldValue(c.field_name, c.value) for c in claims)
