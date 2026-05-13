@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { CitedChangeSetSchema, ClaimSchema } from '$lib/api/schema';
-  import ChangeSetAttribution from './ChangeSetAttribution.svelte';
+  import ClaimAttribution from './ClaimAttribution.svelte';
+  import ClaimAuthor from './ClaimAuthor.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
-  import UserLink from './UserLink.svelte';
   import { getEntityContext } from '$lib/entity-context';
   import { groupSourcesByField } from './entity-sources';
 
@@ -21,7 +21,7 @@
   const entity = getEntityContext();
 
   function claimAttribution(claim: Claim): string {
-    return claim.source_name ?? claim.user_username ?? 'Unknown';
+    return claim.attribution.source_name ?? claim.attribution.user_username ?? 'Unknown';
   }
 
   function formatValue(v: unknown): string {
@@ -31,11 +31,7 @@
 </script>
 
 {#snippet claimDetail(claim: Claim)}
-  {#if claim.user_username}
-    <UserLink username={claim.user_username} />
-  {:else}
-    <span class="source-badge">{claim.source_name ?? 'Unknown'}</span>
-  {/if}
+  <ClaimAuthor attribution={claim.attribution} />
   {formatValue(claim.value)}
   {#if claim.is_winner}
     <span class="badge-used">used</span>
@@ -68,7 +64,7 @@
             {#each evidence as changeset (changeset.id)}
               <li class="changeset-card">
                 <div class="changeset-header">
-                  <ChangeSetAttribution attribution={changeset.attribution} />
+                  <ClaimAttribution attribution={changeset.attribution} />
                 </div>
                 {#if changeset.note}
                   <p class="evidence-note">{changeset.note}</p>
@@ -291,19 +287,6 @@
 
   .claim.used {
     opacity: 1;
-  }
-
-  .source-badge {
-    display: inline-block;
-    padding: 1px var(--size-2);
-    font-size: var(--font-size-00, 0.7rem);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border-radius: var(--radius-1);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border-soft);
-    color: var(--color-text-muted);
   }
 
   .badge-used {

@@ -4,7 +4,7 @@
   import { CATALOG_META } from '$lib/api/catalog-meta';
   import { SITE_TITLE } from '$lib/constants';
   import { resolveHref } from '$lib/utils';
-  import ChangeSetAttribution from '$lib/components/ChangeSetAttribution.svelte';
+  import ClaimAttribution from '$lib/components/ClaimAttribution.svelte';
   import InlineDiff from '$lib/components/InlineDiff.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { isDiffable, formatValue } from '$lib/components/change-display';
@@ -200,7 +200,7 @@
               <span class="entity-type">{cs.entity.type_label}</span>
             </a>
             <span class="byline">
-              By <ChangeSetAttribution attribution={cs.attribution} />
+              By <ClaimAttribution attribution={cs.attribution} />
             </span>
           </div>
 

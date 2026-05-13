@@ -34,10 +34,10 @@ from .helpers import active_claims, build_sources, claims_prefetch
 from .history import build_edit_history
 from .models.changeset import ChangeSet
 from .schemas import (
-    ChangeSetAttributionSchema,
     ChangeSetBaseSchema,
     ChangeSetSchema,
     CitationLinkSchema,
+    ClaimAttributionSchema,
     ClaimSchema,
     FieldChangeSchema,
     RetractionSchema,
@@ -177,7 +177,7 @@ def sources_page(
     evidence = [
         CitedChangeSetSchema(
             id=row.id,
-            attribution=ChangeSetAttributionSchema(
+            attribution=ClaimAttributionSchema(
                 user_username=row.user_username,
                 created_at=row.created_at,
             ),
@@ -312,9 +312,8 @@ def list_changes(
         items.append(
             ChangeSetSummarySchema(
                 id=cs.pk,
-                attribution=ChangeSetAttributionSchema(
+                attribution=ClaimAttributionSchema(
                     user_username=cs.user.username if cs.user else None,
-                    is_ingest=cs.ingest_run_id is not None,
                     source_name=cs.ingest_run.source.name if cs.ingest_run_id else None,
                     created_at=cs.created_at.isoformat(),
                 ),
@@ -418,9 +417,8 @@ def change_detail(
     assert cs.pk is not None
     return ChangeSetDetailSchema(
         id=cs.pk,
-        attribution=ChangeSetAttributionSchema(
+        attribution=ClaimAttributionSchema(
             user_username=cs.user.username if cs.user else None,
-            is_ingest=ingest_run is not None,
             source_name=ingest_run.source.name if ingest_run is not None else None,
             created_at=cs.created_at.isoformat(),
         ),

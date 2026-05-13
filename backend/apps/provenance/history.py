@@ -11,8 +11,8 @@ from apps.core.authz import PolicyUser, compute_row_capabilities
 
 from .models import ChangeSet, Claim
 from .schemas import (
-    ChangeSetAttributionSchema,
     ChangeSetSchema,
+    ClaimAttributionSchema,
     FieldChangeSchema,
     RetractionSchema,
 )
@@ -150,9 +150,8 @@ def build_edit_history(entity: Model, user: PolicyUser) -> list[ChangeSetSchema]
         result.append(
             ChangeSetSchema(
                 id=cs.pk,
-                attribution=ChangeSetAttributionSchema(
+                attribution=ClaimAttributionSchema(
                     user_username=cs.user.username if cs.user else None,
-                    is_ingest=cs.ingest_run_id is not None,
                     source_name=cs.ingest_run.source.name if cs.ingest_run else None,
                     created_at=cs.created_at.isoformat(),
                 ),

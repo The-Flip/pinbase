@@ -218,10 +218,8 @@ class TestEditHistoryIngestAttribution:
 
         ingest_attr = attributions[ingest_cs.pk]
         assert ingest_attr["user_username"] is None
-        assert ingest_attr["is_ingest"] is True
         assert ingest_attr["source_name"] == "IPDB"
 
         user_attr = attributions[user_cs.pk]
         assert user_attr["user_username"] == user.username
-        assert user_attr["is_ingest"] is False
         assert user_attr["source_name"] is None

@@ -2,15 +2,11 @@
   import { invalidateAll } from '$app/navigation';
   import client from '$lib/api/client';
   import { parseApiError } from '$lib/api/parse-api-error';
-  import type {
-    ChangeSetAttributionSchema,
-    ChangeSetSchema,
-    FieldChangeSchema,
-  } from '$lib/api/schema';
+  import type { ChangeSetSchema, ClaimAttributionSchema, FieldChangeSchema } from '$lib/api/schema';
   import { auth } from '$lib/auth.svelte';
   import FocusContentShell from './FocusContentShell.svelte';
   import InlineDiff from './InlineDiff.svelte';
-  import ChangeSetAttribution from './ChangeSetAttribution.svelte';
+  import ClaimAttribution from './ClaimAttribution.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { getEntityContext } from '$lib/entity-context';
   import { isDiffable, formatValue } from './change-display';
@@ -27,7 +23,7 @@
   let revertLoading = $state(false);
 
   interface RetractionInfo {
-    attribution: ChangeSetAttributionSchema;
+    attribution: ClaimAttributionSchema;
     note: string;
   }
 
@@ -183,7 +179,7 @@
           {#if !isEmptyChangeset(cs)}
             <li class="changeset">
               <div class="changeset-header">
-                By <ChangeSetAttribution attribution={cs.attribution} />
+                By <ClaimAttribution attribution={cs.attribution} />
               </div>
               {#if cs.note}
                 <p class="changeset-note">{cs.note}</p>
@@ -201,7 +197,7 @@
                       <dd>
                         <span class="reverted-badge">reverted</span>
                         {#if info}
-                          by <ChangeSetAttribution attribution={info.attribution} />{#if info.note}:
+                          by <ClaimAttribution attribution={info.attribution} />{#if info.note}:
                             {info.note}{/if}
                         {/if}
                       </dd>
