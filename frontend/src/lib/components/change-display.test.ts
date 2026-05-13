@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   formatValue,
+  hasMeaningfulValue,
   isDeletion,
   isDiffable,
   isUnchanged,
@@ -179,6 +180,32 @@ describe('isUnchanged', () => {
   });
 });
 
+describe('hasMeaningfulValue', () => {
+  it('rejects null, undefined, and empty string', () => {
+    expect(hasMeaningfulValue(null)).toBe(false);
+    expect(hasMeaningfulValue(undefined)).toBe(false);
+    expect(hasMeaningfulValue('')).toBe(false);
+  });
+
+  it('rejects a bare retraction marker {exists: false}', () => {
+    expect(hasMeaningfulValue({ exists: false })).toBe(false);
+  });
+
+  it('accepts a positive relationship claim {value, exists: true}', () => {
+    expect(hasMeaningfulValue({ value: 'DW', exists: true })).toBe(true);
+  });
+
+  it('accepts a negative relationship claim with payload {value, exists: false}', () => {
+    expect(hasMeaningfulValue({ value: 'DW', exists: false })).toBe(true);
+  });
+
+  it('accepts ordinary scalars', () => {
+    expect(hasMeaningfulValue('solid-state')).toBe(true);
+    expect(hasMeaningfulValue(0)).toBe(true);
+    expect(hasMeaningfulValue(false)).toBe(true);
+  });
+});
+
 describe('isDeletion', () => {
   it('is true when old has a value and new is null', () => {
     expect(
@@ -231,6 +258,20 @@ describe('isDeletion', () => {
         claim_key: 'k',
         old_value: null,
         new_value: null,
+      }),
+    ).toBe(false);
+  });
+
+  it('is false when old is a bare retraction marker (no prior assertion)', () => {
+    // Repro for the display_subtype case: after delete-then-re-set, the
+    // backend supplies the prior retraction marker as old_value. That is
+    // not a real prior value, so this is a creation, not an edit.
+    expect(
+      isDeletion({
+        field_name: 'display_subtype',
+        claim_key: 'k',
+        old_value: { exists: false },
+        new_value: 'plasma-dmd',
       }),
     ).toBe(false);
   });

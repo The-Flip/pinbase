@@ -10,7 +10,7 @@
   import ClaimValue from './ClaimValue.svelte';
   import { SvelteMap, SvelteSet } from 'svelte/reactivity';
   import { getEntityContext } from '$lib/entity-context';
-  import { isDeletion, isDiffable, isUnchanged } from './change-display';
+  import { hasMeaningfulValue, isDeletion, isDiffable, isUnchanged } from './change-display';
 
   type ChangeSet = ChangeSetSchema;
   type FieldChange = FieldChangeSchema;
@@ -212,7 +212,7 @@
                         </dd>
                       {:else}
                         <dd>
-                          {#if change.old_value !== null && change.old_value !== undefined}
+                          {#if hasMeaningfulValue(change.old_value)}
                             <span class="old-value"><ClaimValue value={change.old_value} /></span>
                             <span class="arrow">&rarr;</span>
                           {/if}
@@ -249,7 +249,7 @@
                     <div class="field-row">
                       <dt>{change.field_name}</dt>
                       <dd>
-                        {#if change.old_value !== null && change.old_value !== undefined}
+                        {#if hasMeaningfulValue(change.old_value)}
                           <span class="old-value"><ClaimValue value={change.old_value} /></span>
                           <span class="arrow">&rarr;</span>
                         {/if}

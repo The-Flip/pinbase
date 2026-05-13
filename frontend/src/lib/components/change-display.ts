@@ -30,15 +30,30 @@ export function isUnchanged(change: FieldChange): boolean {
 }
 
 /**
- * True when a change deletes a scalar field — old had a value, new is null /
- * undefined / empty string. These should render as just the struck-through
- * old value with a removed indicator, not as `old → —`.
+ * True when a claim value represents an actual assertion — i.e. not null,
+ * undefined, empty string, or a bare retraction marker like `{exists: false}`
+ * with no other keys. Used to decide whether to render an `old → new`
+ * transition or treat the change as a creation / deletion.
+ */
+export function hasMeaningfulValue(v: unknown): boolean {
+  if (v === null || v === undefined || v === '') return false;
+  if (typeof v === 'object' && !Array.isArray(v)) {
+    const obj = v as Record<string, unknown>;
+    if (obj.exists === false) {
+      const otherKeys = Object.keys(obj).filter((k) => k !== 'exists');
+      if (otherKeys.length === 0) return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * True when a change deletes a value — old asserted something, new asserts
+ * nothing. These render as just the struck-through old value with a removed
+ * indicator, not as `old → —`.
  */
 export function isDeletion(change: FieldChange): boolean {
-  const { old_value, new_value } = change;
-  const hadValue = old_value !== null && old_value !== undefined && old_value !== '';
-  const hasValue = new_value !== null && new_value !== undefined && new_value !== '';
-  return hadValue && !hasValue;
+  return hasMeaningfulValue(change.old_value) && !hasMeaningfulValue(change.new_value);
 }
 
 /**
