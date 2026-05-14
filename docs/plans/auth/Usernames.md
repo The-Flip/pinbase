@@ -6,7 +6,7 @@ Instead, we want the user to choose their username. The username is their public
 
 - Exposing a portion of their email address without telling them is unacceptable.
 - Exposing PII like 'john.smith' that may be in their email address without telling them is unacceptable
-- They should be able to choose their public handle.
+- They should be able to choose their public username.
 
 We landed on username because that's the best practice used by comparable user-generated content sites like Wikipedia.
 
@@ -32,7 +32,7 @@ Same URL shape as the current derived usernames, but make it explicit:
   - Any longer and it causes problems for attribution chips, comment headers, and @mentions
   - 20 is what Reddit uses and they're doing all right
   - 30 is Instagram/Mastodon/Discord. We can relax later to here, but we can never tighten to 20.
-- collapse/normalization can be used for availability preview, but final submit must reject invalid input rather than silently changing the handle
+- collapse/normalization can be used for availability preview, but final submit must reject invalid input rather than silently changing the username
 
 ### Reserved usernames that connote authority
 
@@ -44,16 +44,16 @@ Stems (alone and in front of suffixes): flipcommons, flip-commons, flip, the-fli
 
 #### Matching rule
 
-The goal is to block obvious impersonation while not over-blocking legitimate handles that merely contain a reserved word as a substring.
+The goal is to block obvious impersonation while not over-blocking legitimate usernames that merely contain a reserved word as a substring.
 
 A candidate is reserved when, ignoring presentation tricks, it spells out a reserved word or a reserved combination. "Presentation tricks" covers:
 
-- **Case** — `Admin` and `admin` are the same handle for this purpose.
+- **Case** — `Admin` and `admin` are the same username for this purpose.
 - **Hyphens, underscores, and other punctuation** — `flip-commons` and `flipcommons` are the same.
 - **Letter-shaped digit substitution (homoglyphs)** — `m0derator` reads as `moderator`; `flipc0mmons` reads as `flipcommons`.
 - **Digit padding around a reserved word** — `admin99`, `flip2024`, `999admin`. A reserved word with extra digits at either end is still impersonation.
 
-The match is on **equality** of the cleaned-up form, not substring. That keeps short stems like `flip` from blocking legitimate handles like `flipperjones`, and short affixes like `mod` from blocking `modular`.
+The match is on **equality** of the cleaned-up form, not substring. That keeps short stems like `flip` from blocking legitimate usernames like `flipperjones`, and short affixes like `mod` from blocking `modular`.
 
 A candidate is also reserved if its cleaned-up form is a reserved stem joined with a reserved affix in either order (`flipadmin`, `adminflip`) — but not two affixes joined (`staffhelp` is allowed; that combination doesn't convey authority on its own).
 
@@ -92,7 +92,7 @@ When we do allow username changes in the future:
 
 - prevent users from renaming again in N hours/days, to prevent spoofing
 - probably redirect old user URLs to the new user URL, but that's TBD
-- we want new users to be able to take the old handle, but that requres careful design. TBD.
+- we want new users to be able to take the old username, but that requres careful design. TBD.
 
 ## Account deletion
 
@@ -194,7 +194,7 @@ A table would add a second identity-like lifecycle containing PII, cleanup seman
 
 As the user types a username, we check whether it's already taken without them having to click submit.
 
-If it's taken, the user must choose another: no silent suffixing for public handles, no automatic incrementing like myHandle1.
+If it's taken, the user must choose another: no silent suffixing for public usernames, no automatic incrementing like myUsername1.
 
 ### Submitting the chosen username
 
@@ -212,22 +212,22 @@ The live availability-check endpoint and the submit endpoint both run before any
 
 #### Race: availability preview said "free", submit collides
 
-The live check during typing is advisory. Between preview and submit, another user can claim the same handle. At submit time the DB unique constraint will raise `IntegrityError`. We catch it and return a form-level error ("just taken, pick another") that re-renders the onboarding page with the pending payload intact. No 500, no lost pending state.
+The live check during typing is advisory. Between preview and submit, another user can claim the same username. At submit time the DB unique constraint will raise `IntegrityError`. We catch it and return a form-level error ("just taken, pick another") that re-renders the onboarding page with the pending payload intact. No 500, no lost pending state.
 
 #### Race: double-submit or two-tab signup
 
 The frontend disables the submit button on first click and re-enables only on error response. That handles the common case (impatient double-click) cleanly. The backend race handling below is the correctness backstop for the cases the frontend can't cover: two tabs (each with its own button state), client-side retry after a network hiccup, or a buggy/hostile client.
 
-Two requests can still land near-simultaneously for the same `workos_user_id` — two tabs submitting different handles, or a retry after a timeout. The `User.workos_user_id` unique constraint prevents duplicate accounts at the DB level. On the second request:
+Two requests can still land near-simultaneously for the same `workos_user_id` — two tabs submitting different usernames, or a retry after a timeout. The `User.workos_user_id` unique constraint prevents duplicate accounts at the DB level. On the second request:
 
 1. Detect the `IntegrityError` on `workos_user_id` (distinct from the username-collision case above).
 2. Look up the existing `User` by `workos_user_id`, clear the pending payload, log them in, and redirect to `next_url`.
-3. The handle chosen in the losing request is discarded silently — the user is now logged in with the handle chosen in the winning request, which is acceptable because they just chose it themselves seconds earlier.
+3. The username chosen in the losing request is discarded silently — the user is now logged in with the username chosen in the winning request, which is acceptable because they just chose it themselves seconds earlier.
 
 ### Case handling and lookups
 
 The same rule applies at every backend input point — the live check endpoint, the submit endpoint, URL routing for `/users/<username>`, and any future rename flow:
 
 - The editor lowercases as the user types so they don't fight the form. This is UX comfort only.
-- The backend rejects any input containing uppercase — it does NOT silently lowercase. A curl/postman submit with `JohnDoe` is rejected, same principle as the format rules above (final submit must reject invalid input rather than silently change the handle).
+- The backend rejects any input containing uppercase — it does NOT silently lowercase. A curl/postman submit with `JohnDoe` is rejected, same principle as the format rules above (final submit must reject invalid input rather than silently change the username).
 - Lookups are strict, not case-folded. `/users/JohnDoe` returns 404, not a 301 to `/users/johndoe`. The validation rule and the lookup rule are the same rule: if it's not a valid username, it doesn't exist.

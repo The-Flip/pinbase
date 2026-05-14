@@ -143,6 +143,25 @@ class TestAuthCallback:
         assert payload["last_name"] == "Smith"
         assert payload["email_verified"] is True
 
+    def test_callback_signup_redirect_mints_csrftoken_cookie(self, client):
+        """The signup-branch redirect must carry a csrftoken cookie.
+
+        Regression: the matched-user branch calls `login()`, which calls
+        `rotate_token()` and mints csrftoken implicitly. The
+        put_pending+redirect-to-/signup branch does NOT call login(), so
+        without an explicit cookie-minting decorator on the callback view
+        the browser lands at /signup with no csrftoken. The first POST
+        (Continue or Not you?) then gets 403 from NinjaCsrfMiddleware
+        because client.ts only sends X-CSRFToken when the cookie exists.
+        """
+        resp = self._do_callback(client)
+        assert resp.status_code == 302
+        assert resp["Location"] == "/signup"
+        assert "csrftoken" in resp.cookies, (
+            "Callback response must Set-Cookie csrftoken so the signup "
+            "page's pre-auth POSTs can pass CSRF."
+        )
+
     def test_callback_new_user_unverified_still_stashes_pending(self, client):
         """Unverified email is fine at the pending stage.
 

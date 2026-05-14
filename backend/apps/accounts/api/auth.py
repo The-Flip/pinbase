@@ -15,6 +15,7 @@ from django.http import (
     HttpResponseRedirect,
 )
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.csrf import ensure_csrf_cookie
 from ninja import Router
 
 from apps.accounts.models import User
@@ -90,8 +91,20 @@ def auth_login(request: HttpRequest) -> HttpResponse:
 
 
 @auth_router.get("/callback/", url_name="workos_callback", include_in_schema=False)
+@ensure_csrf_cookie
 def auth_callback(request: HttpRequest) -> HttpResponse:
-    """Handle the OAuth callback from WorkOS."""
+    """Handle the OAuth callback from WorkOS.
+
+    The `@ensure_csrf_cookie` decorator mints a csrftoken cookie on the
+    response. Required for the no-match branch (put_pending + redirect to
+    /signup): that branch does NOT call `login()`, so it skips the
+    implicit `rotate_token()` call that login() performs. Without the
+    decorator the browser lands at /signup with only `sessionid`, and the
+    first pre-auth POST (Continue or Not you?) fails CSRF because
+    client.ts can't include `X-CSRFToken` without the cookie. The
+    matched-user branch still gets csrftoken via `login()` → the decorator
+    is harmless on that path.
+    """
     code = request.GET.get("code")
     state = request.GET.get("state")
     if not code or not state:
