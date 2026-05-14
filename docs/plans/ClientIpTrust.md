@@ -116,6 +116,7 @@ What this does and doesn't do:
 
 - **Strips `Forwarded`** — the one attacker-controlled channel the probe surfaced.
 - **Overwrites `X-Forwarded-For`** with the trusted `X-Real-IP` value so XFF becomes a meaningful scalar instead of Railway's rotating internal `100.64.0.X`. Defense in depth for any future XFF reader.
+- **Placeholder caveat:** `{http.request.header.X-Real-IP}` is the documented Caddy 2.x syntax for reading an incoming request header. It's safe here because we never strip or rewrite `X-Real-IP` ourselves; if a future edit adds `header_up -X-Real-IP` or `header_up X-Real-IP …` to the same block, the placeholder above may read a modified value (Caddy's reverse_proxy module doesn't fully copy the request before applying `header_up` operations). Keep `X-Real-IP` read-only at this layer.
 - **Does NOT add `trusted_proxies`, `trusted_proxies_strict`, or `header_up X-Real-IP`.** Railway's edge already populates `X-Real-IP` correctly and cannot be overridden by clients (verified by probe). Computing it ourselves from XFF would be strictly worse. If we later move off Railway, this is the first thing to revisit — `trusted_proxies` becomes relevant when the upstream stops being trustworthy by itself.
 
 **Verify after deploy:** spin the probe endpoint back up briefly (or check via a one-off Django shell + curl) to confirm `Forwarded` is absent at Django and XFF equals the real client IP, not `100.64.0.X`.
