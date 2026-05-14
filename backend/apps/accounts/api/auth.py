@@ -11,7 +11,6 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import (
     HttpRequest,
     HttpResponse,
-    HttpResponseBadRequest,
     HttpResponseRedirect,
 )
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -25,7 +24,8 @@ from apps.accounts.workos_client import get_workos_client
 from apps.core.authz import compute_capability_map, policy_user
 from apps.core.authz.markers import public_mutation
 
-from .workos_match import LoginRefusedError, _try_match_existing
+from .auth_codes import AuthErrorCode, LoginRefusedError
+from .workos_match import _try_match_existing
 
 log = logging.getLogger(__name__)
 
@@ -90,6 +90,17 @@ def auth_login(request: HttpRequest) -> HttpResponse:
     return HttpResponseRedirect(authorization_url)
 
 
+def _refuse(reason: AuthErrorCode, detail: str) -> HttpResponseRedirect:
+    """Log and redirect to the styled /auth/error page with a typed reason.
+
+    Centralizes the log-then-redirect pattern so every refusal path emits a
+    structured line (with the AuthErrorCode) rather than relying on web-server
+    access logs to recover the failure mode from a query string.
+    """
+    log.warning("Auth callback refused: reason=%s detail=%s", reason, detail)
+    return HttpResponseRedirect(f"/auth/error?reason={reason}")
+
+
 @auth_router.get("/callback/", url_name="workos_callback", include_in_schema=False)
 @ensure_csrf_cookie
 def auth_callback(request: HttpRequest) -> HttpResponse:
@@ -108,11 +119,11 @@ def auth_callback(request: HttpRequest) -> HttpResponse:
     code = request.GET.get("code")
     state = request.GET.get("state")
     if not code or not state:
-        return HttpResponseBadRequest("Missing code or state parameter.")
+        return _refuse("state_invalid", "Missing code or state parameter.")
 
     next_url = request.session.pop(f"auth_{state}", None)
     if next_url is None:
-        return HttpResponseBadRequest("Invalid or expired state parameter.")
+        return _refuse("state_invalid", "Invalid or expired state parameter.")
 
     try:
         client = get_workos_client()
@@ -120,16 +131,13 @@ def auth_callback(request: HttpRequest) -> HttpResponse:
             code=code,
         )
     except Exception:
-        log.exception("WorkOS code exchange failed")
-        return HttpResponseBadRequest(
-            "Authentication failed. The login link may have expired — please try again."
-        )
+        log.exception("WorkOS code exchange failed (reason=code_exchange_failed)")
+        return HttpResponseRedirect("/auth/error?reason=code_exchange_failed")
 
     try:
         user = _try_match_existing(auth_response.user)
     except LoginRefusedError as exc:
-        log.warning("Login refused: %s", exc)
-        return HttpResponseBadRequest(str(exc))
+        return _refuse(exc.code, str(exc))
     if user is not None:
         login(request, user, backend="apps.accounts.backends.WorkOSBackend")
         return HttpResponseRedirect(next_url)

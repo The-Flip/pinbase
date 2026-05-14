@@ -13,16 +13,9 @@ import logging
 from apps.accounts.models import User
 from apps.accounts.pending import WorkOSUser
 
+from .auth_codes import LoginRefusedError
+
 log = logging.getLogger(__name__)
-
-
-class LoginRefusedError(Exception):
-    """Raised when an inbound WorkOS login may not be honored.
-
-    Surfaced as a 4xx in auth_callback. Reasons include: account is inactive
-    and reactivation guards failed (e.g. unverified inbound email), or two
-    WorkOS accounts trying to claim the same local row.
-    """
 
 
 def _refresh_mirrored_fields(user: User, workos_user: WorkOSUser) -> list[str]:
@@ -68,7 +61,9 @@ def _refuse_active_email_collision(user: User, workos_user: WorkOSUser) -> None:
         user.workos_user_id,
         workos_user.id,
     )
-    raise LoginRefusedError("Account conflict; contact an administrator.")
+    raise LoginRefusedError(
+        "account_conflict", "Account conflict; contact an administrator."
+    )
 
 
 def _try_match_existing(workos_user: WorkOSUser) -> User | None:
@@ -90,7 +85,7 @@ def _try_match_existing(workos_user: WorkOSUser) -> User | None:
                 user.pk,
                 workos_user.id,
             )
-            raise LoginRefusedError("Account is disabled.")
+            raise LoginRefusedError("account_disabled", "Account is disabled.")
         dirty = _refresh_mirrored_fields(user, workos_user)
         if dirty:
             user.save(update_fields=dirty)
@@ -121,10 +116,13 @@ def _try_match_existing(workos_user: WorkOSUser) -> User | None:
                     workos_user.email,
                     workos_user.id,
                 )
-                raise LoginRefusedError("Account conflict; contact an administrator.")
+                raise LoginRefusedError(
+                    "account_conflict", "Account conflict; contact an administrator."
+                )
             if not workos_user.email_verified:
                 raise LoginRefusedError(
-                    "Please verify your email with the identity provider before signing in."
+                    "email_unverified",
+                    "Please verify your email with the identity provider before signing in.",
                 )
             user.workos_user_id = workos_user.id
             dirty = ["workos_user_id", *_refresh_mirrored_fields(user, workos_user)]
@@ -135,7 +133,8 @@ def _try_match_existing(workos_user: WorkOSUser) -> User | None:
         _refuse_active_email_collision(user, workos_user)
     if not workos_user.email_verified:
         raise LoginRefusedError(
-            "Please verify your email with the identity provider before signing in."
+            "email_unverified",
+            "Please verify your email with the identity provider before signing in.",
         )
     # Reactivate.
     user.is_active = True

@@ -217,7 +217,8 @@ class TestAuthCallback:
         assert existing.workos_user_id is None
 
         resp = self._do_callback(client)
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=account_conflict"
 
         existing.refresh_from_db()
         assert existing.workos_user_id is None
@@ -228,7 +229,8 @@ class TestAuthCallback:
         existing = make_user(email="alice@example.com", is_staff=True)
 
         resp = self._do_callback(client)
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=account_conflict"
 
         existing.refresh_from_db()
         assert existing.workos_user_id is None
@@ -238,7 +240,8 @@ class TestAuthCallback:
         make_user(email="alice@example.com")
         workos_user = _make_workos_user(email_verified=False)
         resp = self._do_callback(client, workos_user=workos_user)
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=email_unverified"
         # Row remains unbound.
         user = User.objects.get(email="alice@example.com")
         assert user.workos_user_id is None
@@ -249,7 +252,8 @@ class TestAuthCallback:
         make_user(email="alice@example.com", workos_user_id="user_OTHER")
         resp = self._do_callback(client)
 
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=account_conflict"
         assert User.objects.filter(email="alice@example.com").count() == 1
 
     def test_callback_reactivates_soft_deleted_user_with_verified_email(self, client):
@@ -275,7 +279,8 @@ class TestAuthCallback:
         workos_user = _make_workos_user(email_verified=False)
         resp = self._do_callback(client, workos_user=workos_user)
 
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=email_unverified"
         existing.refresh_from_db()
         assert existing.is_active is False
         assert User.objects.filter(email="alice@example.com").count() == 1
@@ -289,7 +294,8 @@ class TestAuthCallback:
         make_user(email="alice@example.com", workos_user_id="user_OTHER")
         resp = self._do_callback(client)
 
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=account_conflict"
         # Neither row mutated.
         assert User.objects.filter(
             email="old@example.com", workos_user_id="user_01ABC"
@@ -384,11 +390,13 @@ class TestAuthCallback:
 
     def test_callback_rejects_missing_code(self, client):
         resp = client.get("/api/auth/callback/")
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=state_invalid"
 
     def test_callback_rejects_invalid_state(self, client):
         resp = client.get("/api/auth/callback/?code=fake&state=bogus")
-        assert resp.status_code == 400
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=state_invalid"
 
     def test_callback_handles_code_exchange_failure(self, client):
         with patch("apps.accounts.api.auth.get_workos_client") as mock:
@@ -404,8 +412,8 @@ class TestAuthCallback:
             )
             resp = client.get(f"/api/auth/callback/?code=expired&state={state}")
 
-        assert resp.status_code == 400
-        assert b"please try again" in resp.content.lower()
+        assert resp.status_code == 302
+        assert resp["Location"] == "/auth/error?reason=code_exchange_failed"
 
 
 @pytest.mark.django_db

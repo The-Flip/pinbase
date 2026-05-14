@@ -24,7 +24,7 @@ const FOCUS_SUBROUTES_NESTED = new Set(['edit']);
 const FOCUS_SUBROUTES_TERMINAL = new Set(['delete', 'edit-history', 'sources']);
 const FOCUS_EXACT_PATHS = new Set(['/kiosk']);
 
-const MINIMAL_SHELL_EXACT_PATHS = new Set(['/signup']);
+const MINIMAL_SHELL_EXACT_PATHS = new Set(['/signup', '/auth/error']);
 
 /**
  * Minimal-shell routes render the brand header (site name only, no nav) and
