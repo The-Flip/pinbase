@@ -5,11 +5,25 @@ handle @www {
 	redir https://flipcommons.org{uri} permanent
 }
 
+# Strip the RFC 7239 Forwarded header. Railway passes client-supplied
+# values through verbatim, so it's attacker-controlled.
+request_header -Forwarded
+
+# XFF rewrite must live inside reverse_proxy: Caddy's reverse_proxy has
+# special handling for X-Forwarded-* headers and overrides any
+# site-level request_header mutations. header_up is proxy-aware and
+# wins. Duplicated across the two reverse_proxy blocks because Caddyfile
+# snippets must be defined at global scope (before any site address),
+# which is awkward to thread here for a single-line directive.
 @django path /api /api/* /admin /admin/* /media/* /static /static/*
 handle @django {
-	reverse_proxy 127.0.0.1:{$DJANGO_PORT:8000}
+	reverse_proxy 127.0.0.1:{$DJANGO_PORT:8000} {
+		header_up X-Forwarded-For {http.request.header.X-Real-IP}
+	}
 }
 
 handle {
-	reverse_proxy 127.0.0.1:{$NODE_PORT:3000}
+	reverse_proxy 127.0.0.1:{$NODE_PORT:3000} {
+		header_up X-Forwarded-For {http.request.header.X-Real-IP}
+	}
 }

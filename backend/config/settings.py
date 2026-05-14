@@ -107,10 +107,23 @@ CACHES = {
 
 AUTH_USER_MODEL = "accounts.User"
 
-# auth.W004: User.email is USERNAME_FIELD without unique=True. Uniqueness is
-# enforced case-insensitively via the Lower("email") UniqueConstraint on the
-# User model; adding unique=True would layer on a redundant case-sensitive one.
-SILENCED_SYSTEM_CHECKS = ["auth.W004"]
+# Suppressed deploy checks. Document the *why* for each entry so the
+# next reader can tell "deliberately disabled" from "we forgot."
+SILENCED_SYSTEM_CHECKS = [
+    # User.email is USERNAME_FIELD without unique=True. Uniqueness is
+    # enforced case-insensitively via the Lower("email") UniqueConstraint
+    # on the User model; adding unique=True would layer on a redundant
+    # case-sensitive one.
+    "auth.W004",
+    # SECURE_SSL_REDIRECT — Django-side HTTPS redirect. Not needed and
+    # actively harmful in our topology: Railway terminates TLS at its
+    # edge and only serves the domains over HTTPS externally, so Django
+    # never sees an HTTP request from a real client. The only HTTP
+    # traffic Django sees is Caddy → loopback, which we don't want to
+    # redirect. Enabling this without SECURE_PROXY_SSL_HEADER would
+    # cause an infinite redirect loop. See docs/Hosting.md.
+    "security.W008",
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -210,6 +223,16 @@ AUTHENTICATION_BACKENDS = [
     "apps.accounts.backends.WorkOSBackend",
     "django.contrib.auth.backends.ModelBackend",  # Django admin password login
 ]
+
+# ── Rate limiting ────────────────────────────────────────────────
+# Gate for trusting proxy-supplied client-IP headers in
+# ``apps.core.rate_limits._client_ip``. Default False so dev, tests, and
+# any unsanitized container key off REMOTE_ADDR. Production sets this to
+# True, asserting that Caddy has stripped Forwarded and that X-Real-IP
+# was populated by Railway's edge (see docs/plans/ClientIpTrust.md).
+RATE_LIMIT_TRUST_PROXY_HEADERS = os.environ.get(
+    "RATE_LIMIT_TRUST_PROXY_HEADERS", "false"
+).lower() in ("true", "1", "yes")
 
 # ── Sessions ─────────────────────────────────────────────────────
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 90  # 90 days

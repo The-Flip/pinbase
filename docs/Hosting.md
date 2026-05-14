@@ -38,9 +38,14 @@ Browser ──→ media.flipcommons.org       → Bunny CDN → iDrive e2 privat
    Bunny CDN on `media.flipcommons.org`, which pulls from the private iDrive e2
    bucket. Django is not in the production media-serving path.
 
-5. **Migrations on deploy**: Railway's `preDeployCommand` runs
-   `manage.py migrate` before the new container accepts traffic. If the
-   migration fails, the old container keeps serving.
+5. **Pre-deploy checks and migrations**: Railway's `preDeployCommand`
+   runs `manage.py check --deploy && manage.py migrate` before the new
+   container accepts traffic. `check --deploy` surfaces production-only
+   system checks (HSTS, SSL redirect, `core.W001` for missing
+   `RATE_LIMIT_TRUST_PROXY_HEADERS`, etc.); Error-level findings fail the
+   deploy, Warning-level findings are visible in logs but non-blocking.
+   If anything in the pre-deploy command fails, the old container keeps
+   serving.
 
 ## Process Model
 
@@ -75,6 +80,40 @@ This is acceptable for the current bootstrap phase because it is simple and fail
 | `GET /manufacturers/williams`  | Caddy → SvelteKit SSR                |
 | `GET /`                        | Caddy → SvelteKit SSR                |
 
+## Client IP trust
+
+Pre-auth rate limiters (signup flow, etc.) key off the caller's IP. Because Django sits behind two layers of proxy (Railway's edge, then Caddy), `REMOTE_ADDR` is always `127.0.0.1` — the real client IP has to come from a forwarded-header. Getting this right is security-relevant: a wrong choice silently makes IP-keyed rate limits either non-functional (every request shares one bucket) or bypassable (an attacker varies the header to spray buckets).
+
+### Header chain
+
+**Railway edge** (before Caddy sees the request):
+
+- Sets `X-Real-IP` to the real client public IP. Client-supplied values are overwritten; not spoofable. Verified empirically by the Client-IP-Trust probe.
+- Sets `X-Forwarded-For` to Railway's rotating internal IP (a `100.64.0.X` CGNAT address whose last octet rotates per request across Railway's internal proxy fabric). Reading this directly would bucket each request from one client into a different bucket.
+- Passes `Forwarded` (RFC 7239) through verbatim — **attacker-controlled** until Caddy strips it.
+
+**Caddy** ([Caddyfile](../Caddyfile)):
+
+- Strips `Forwarded` at site level (`request_header -Forwarded`) — closes the attacker-controlled channel.
+- Overwrites `X-Forwarded-For` with the trusted `X-Real-IP` value via `header_up` inside each `reverse_proxy` block. `header_up` is required (not site-level `request_header`) because Caddy's `reverse_proxy` has special handling for `X-Forwarded-*` headers that overrides any site-level mutations — site-level strips of XFF were verified empirically to be ignored. If `X-Real-IP` is absent (a state Railway never produces in practice), XFF becomes empty string; the deployment contract is that `X-Real-IP` is always populated at the proxy boundary.
+
+**Django** ([\_client_ip](../backend/apps/core/rate_limits.py)):
+
+- Reads `X-Real-IP`. Never reads `X-Forwarded-For` — XFF parsing (left-most vs. right-most, trusted-hop counting) has no failure mode that's safe under upstream drift; `X-Real-IP` fails closed if absent.
+
+### Trust gate (`RATE_LIMIT_TRUST_PROXY_HEADERS`)
+
+Django's `_client_ip` only reads proxy headers when `RATE_LIMIT_TRUST_PROXY_HEADERS=true`. The setting defaults to `false`, so dev, tests, and any container without a sanitizing proxy in front key off `REMOTE_ADDR=127.0.0.1` and degrade to "everyone shares one bucket" — observable, fixable, not a security bug.
+
+**Production must set `RATE_LIMIT_TRUST_PROXY_HEADERS=true`.** The trust assumption (Caddy has stripped `Forwarded`, Railway has populated `X-Real-IP`) is a deployment contract.
+
+This is the second fail-closed layer behind the X-Real-IP-only header choice. Both layers protect against the same drift: if the env var rolls back, or a future upstream stops setting `X-Real-IP`, the system degrades to one-shared-bucket rather than silently trusting attacker input.
+
+### When to revisit
+
+- **Moving off Railway, or adding a CDN.** The current scheme relies on Railway's edge to populate `X-Real-IP` and strip client-supplied versions of it. Any infra change to the proxy chain — different host, Cloudflare/Bunny in front, enabling Railway's CDN — invalidates that assumption and likely needs a Caddy `trusted_proxies` block plus a re-verification probe.
+- **A new code path reads `X-Forwarded-For`.** Don't. The function in `apps/core/rate_limits.py` is the single sanctioned reader of forwarded client IP. Adding analytics, geoip, or logging that reads XFF reintroduces the parsing-bug class this design deliberately deleted.
+
 ## Setup
 
 ### 1. Create Railway project
@@ -89,13 +128,14 @@ automatically via a reference variable.
 
 In the Railway service dashboard:
 
-| Variable                | Value                                                                         |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `SECRET_KEY`            | Random string: `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
-| `DEBUG`                 | `false`                                                                       |
-| `ALLOWED_HOSTS`         | Comma-separated hosts, e.g. `flipcommons.org,www.flipcommons.org`             |
-| `CSRF_TRUSTED_ORIGINS`  | Full origins, e.g. `https://flipcommons.org,https://www.flipcommons.org`      |
-| `INTERNAL_API_BASE_URL` | `http://127.0.0.1:8000`                                                       |
+| Variable                         | Value                                                                         |
+| -------------------------------- | ----------------------------------------------------------------------------- |
+| `SECRET_KEY`                     | Random string: `python -c "import secrets; print(secrets.token_urlsafe(50))"` |
+| `DEBUG`                          | `false`                                                                       |
+| `ALLOWED_HOSTS`                  | Comma-separated hosts, e.g. `flipcommons.org,www.flipcommons.org`             |
+| `CSRF_TRUSTED_ORIGINS`           | Full origins, e.g. `https://flipcommons.org,https://www.flipcommons.org`      |
+| `INTERNAL_API_BASE_URL`          | `http://127.0.0.1:8000`                                                       |
+| `RATE_LIMIT_TRUST_PROXY_HEADERS` | `true` — required in production. See [Client IP trust](#client-ip-trust).     |
 
 `DATABASE_URL` and `PORT` are set automatically by Railway.
 
@@ -125,8 +165,9 @@ Railway auto-injects `RAILWAY_GIT_COMMIT_SHA` as a Docker build arg for any depl
 ### 3. Deploy
 
 Push to `main`. Railway builds the Docker image and deploys. The
-`preDeployCommand` in `railway.toml` runs migrations before the new
-container starts accepting traffic.
+`preDeployCommand` in `railway.toml` runs `manage.py check --deploy`
+followed by `manage.py migrate` before the new container starts
+accepting traffic.
 
 ### 4. Create superuser (one-time)
 
@@ -161,9 +202,9 @@ Caddy may be up while the SvelteKit Node server failed to start or crashed.
 Check the container logs for Node startup errors and confirm the SSR process
 is listening on `127.0.0.1:3000`.
 
-**Bad migration**:
-`preDeployCommand` runs migrations before swapping containers. If a
-migration fails, the old container keeps serving and the deploy is marked
-as failed. Fix the migration and push again. Railway does not automatically
+**Bad migration or failed deploy check**:
+`preDeployCommand` runs `check --deploy` and migrations before swapping
+containers. If either fails, the old container keeps serving and the deploy
+is marked as failed. Fix and push again. Railway does not automatically
 roll back the database — if a migration partially applied, you may need to
 manually fix it via `railway run`.
