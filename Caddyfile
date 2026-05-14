@@ -12,28 +12,25 @@ handle @www {
 	redir https://flipcommons.org{uri} permanent
 }
 
-# Strip the RFC 7239 Forwarded header at site level. Railway passes
-# client-supplied values through verbatim, so it's attacker-controlled.
+# Strip the RFC 7239 Forwarded header. Railway passes client-supplied
+# values through verbatim, so it's attacker-controlled.
 request_header -Forwarded
 
-# Rewrite X-Forwarded-For inside each reverse_proxy block (not at site
-# level): Caddy's reverse_proxy has special handling for X-Forwarded-*
-# headers and overrides site-level request_header mutations. header_up
-# is proxy-aware and wins. Snippet shared across both upstreams to
-# prevent drift.
-(rewrite_xff_to_real_ip) {
-	header_up X-Forwarded-For {http.request.header.X-Real-IP}
-}
-
+# XFF rewrite must live inside reverse_proxy: Caddy's reverse_proxy has
+# special handling for X-Forwarded-* headers and overrides any
+# site-level request_header mutations. header_up is proxy-aware and
+# wins. Duplicated across the two reverse_proxy blocks because Caddyfile
+# snippets must be defined at global scope (before any site address),
+# which is awkward to thread here for a single-line directive.
 @django path /api /api/* /admin /admin/* /media/* /static /static/*
 handle @django {
 	reverse_proxy 127.0.0.1:{$DJANGO_PORT:8000} {
-		import rewrite_xff_to_real_ip
+		header_up X-Forwarded-For {http.request.header.X-Real-IP}
 	}
 }
 
 handle {
 	reverse_proxy 127.0.0.1:{$NODE_PORT:3000} {
-		import rewrite_xff_to_real_ip
+		header_up X-Forwarded-For {http.request.header.X-Real-IP}
 	}
 }
