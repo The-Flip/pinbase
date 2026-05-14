@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import secrets
 from datetime import datetime
 from typing import ClassVar, Protocol, TypedDict
@@ -237,6 +238,36 @@ def _try_match_existing(workos_user: WorkOSUser) -> User | None:
     return user
 
 
+def _derive_unique_username(email: str) -> str:
+    """Synthesize a placeholder username from an email's local part.
+
+    TEMPORARY (Session 1 of the user-chosen-username work). The WorkOS
+    callback will be rewritten in Session 2 to redirect new users to an
+    onboarding page instead of creating a User with a derived username.
+    Until then, this helper keeps the existing callback green by
+    producing a handle that satisfies `validate_username_format`.
+
+    Slug rules: lowercase the local part, swap `._+` for `-`, drop
+    anything outside `[a-z0-9-]`, collapse repeated hyphens, trim,
+    cap to 20 chars (with headroom for a `-N` collision suffix).
+    """
+    base = email.split("@", 1)[0].lower()
+    base = re.sub(r"[._+]", "-", base)
+    base = re.sub(r"[^a-z0-9-]", "", base)
+    base = re.sub(r"-+", "-", base).strip("-")
+    base = base[:17].rstrip("-") or "user"
+    # Pad to 3 chars if the local part collapsed to something shorter.
+    if len(base) < 3:
+        base = (base + "-usr")[:17].rstrip("-")
+    candidate = base
+    n = 1
+    while User.objects.filter(username=candidate).exists():
+        suffix = f"-{n}"
+        candidate = f"{base[: 20 - len(suffix)].rstrip('-')}{suffix}"
+        n += 1
+    return candidate
+
+
 def get_or_create_django_user(workos_user: WorkOSUser) -> User:
     """Match or create a local User from an inbound WorkOS user payload.
 
@@ -265,6 +296,7 @@ def get_or_create_django_user(workos_user: WorkOSUser) -> User:
             with transaction.atomic():
                 return User.objects.create_user(
                     email=workos_user.email,
+                    username=_derive_unique_username(workos_user.email),
                     first_name=workos_user.first_name or "",
                     last_name=workos_user.last_name or "",
                     workos_user_id=workos_user.id,

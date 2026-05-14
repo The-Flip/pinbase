@@ -44,9 +44,20 @@ Stems (alone and in front of suffixes): flipcommons, flip-commons, flip, the-fli
 
 #### Matching rule
 
-Normalize both the candidate username and each reserved entry the same way before comparing: lowercase, fold homoglyphs (`0`→`o`, `1`→`l`), strip non-letters. Reject if the normalized candidate **equals** any stem, any suffix, or any `stem+suffix` / `suffix+stem` concatenation.
+The goal is to block obvious impersonation while not over-blocking legitimate handles that merely contain a reserved word as a substring.
 
-Equality, not substring — otherwise a short stem like `flip` would block a legitimate handle like `flipperjones`. Normalizing both sides also means the source lists don't need literal homoglyph variants like `m0derator` or `flipc0mmons`; those fold into `moderator` and `flipcommons` automatically.
+A candidate is reserved when, ignoring presentation tricks, it spells out a reserved word or a reserved combination. "Presentation tricks" covers:
+
+- **Case** — `Admin` and `admin` are the same handle for this purpose.
+- **Hyphens, underscores, and other punctuation** — `flip-commons` and `flipcommons` are the same.
+- **Letter-shaped digit substitution (homoglyphs)** — `m0derator` reads as `moderator`; `flipc0mmons` reads as `flipcommons`.
+- **Digit padding around a reserved word** — `admin99`, `flip2024`, `999admin`. A reserved word with extra digits at either end is still impersonation.
+
+The match is on **equality** of the cleaned-up form, not substring. That keeps short stems like `flip` from blocking legitimate handles like `flipperjones`, and short affixes like `mod` from blocking `modular`.
+
+A candidate is also reserved if its cleaned-up form is a reserved stem joined with a reserved affix in either order (`flipadmin`, `adminflip`) — but not two affixes joined (`staffhelp` is allowed; that combination doesn't convey authority on its own).
+
+Mixed attacks count too: `flipc0mmons1` is blocked (trailing-digit padding plus interior homoglyph both apply).
 
 #### Deferred reserved usernames - FOLLOW-UP
 
@@ -106,15 +117,16 @@ WorkOS verifies the user's email before even sending them our way. We don't re-c
 
 ### Validation
 
-- **Format** (charset, length, hyphen rules) → DB CHECK constraint, per the project's "validate in the database" convention. This is what makes the admin/CLI path safe automatically.
 - **Uniqueness** → existing DB unique constraint, already in place.
-- **Reserved list** → can't be a DB constraint (it's policy data in code). Has to live in model clean() or the manager's create_user.
+- **Length** → DB CHECK constraint (min/max), per the project's "validate in the database" convention.
+- **Charset and hyphen rules** → **app-layer only**, because SQLite doesn't suport regex, and Django's per-connection `re`-backed registration doesn't extend to CHECK DDL. Instead, the format validator is wired as a Django field validator (so admin add-form, `createsuperuser`, and `full_clean()` paths run it) AND is invoked explicitly in the manager's `_create_user` (so every programmatic write path runs it — admin, factory, CLI, signup-submit). The manager is the chokepoint.
+- **Reserved list** → invoked **only** from the user-facing signup submit endpoint, not from the manager. Putting it in `_create_user` would also block the admin/CLI path, which is exempt from reserved-list enforcement
 
 ### No User record until username is chosen
 
-The user should not be a User in our system until they've chosen a username.
+The user should not be a User record in our system until they've chosen a username.
 
-I want User.username to remain required, non-nullable and unique at the DB level like it is now. When WorkOS hands us a user, we don't create the User record until they've chosen their username.
+User.username must remain required, non-nullable and unique at the DB level like it is now. When WorkOS hands us a user, we don't create the User record until they've chosen their username.
 
 This will require some rework, because currently the WorkOS callback immediately needs a Django User because it calls login(request, user, ...) after get_or_create_django_user(...). So holding off on creating the User record means adding a separate pending signup/onboarding state or something.
 
@@ -219,7 +231,3 @@ The same rule applies at every backend input point — the live check endpoint, 
 - The editor lowercases as the user types so they don't fight the form. This is UX comfort only.
 - The backend rejects any input containing uppercase — it does NOT silently lowercase. A curl/postman submit with `JohnDoe` is rejected, same principle as the format rules above (final submit must reject invalid input rather than silently change the handle).
 - Lookups are strict, not case-folded. `/users/JohnDoe` returns 404, not a 301 to `/users/johndoe`. The validation rule and the lookup rule are the same rule: if it's not a valid username, it doesn't exist.
-
-## Code pointers
-
-A WorkOS callback creates a local user via User.objects.create*user(...) without passing username in backend/apps/accounts/api.py (line 266). The manager then fills username from derive_unique_username(email) in backend/apps/accounts/models.py (line 76). derive_username() takes the email local-part before @, lowercases it, replaces ./*/+ with -, strips other chars, and uses that as the public username in backend/apps/accounts/models.py (line 15). The test explicitly verifies Alice.Smith+tag@example.com becomes alice-smith-tag in backend/apps/accounts/tests/test_models.py (line 19).

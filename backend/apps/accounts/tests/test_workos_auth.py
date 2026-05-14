@@ -379,7 +379,10 @@ class TestAuthMe:
 
     def test_me_authenticated(self, client):
         user = make_user(
-            email="alice@example.com", first_name="Alice", last_name="Anderson"
+            email="alice@example.com",
+            username="alice",
+            first_name="Alice",
+            last_name="Anderson",
         )
         client.force_login(user)
         resp = client.get("/api/auth/me/")
