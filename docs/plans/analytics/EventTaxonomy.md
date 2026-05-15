@@ -1,5 +1,7 @@
 # Event Taxonomy
 
+This was AI-generated and has NOT yet been reviewed by a human. It's probably wrong.
+
 ## Philosophy
 
 Events should be:
