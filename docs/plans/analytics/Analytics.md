@@ -25,10 +25,12 @@ No internal access tier above "maintainer"; no third-party data sharing.
 
 Aggregate, mostly-anonymous web traffic data.
 
-- pageviews and uniques
+- pageviews
 - referral sources (search engines, social, direct, inbound links)
 - popular content
 - aggregate discovery trends
+
+**Reach is measured by volume, not unique-person counts.** "Monthly Unique Visitors" is an ad-industry framing — useful for selling impressions, not for measuring whether a preservation database is serving its audience. Counting distinct people requires persistent identifiers and conflicts with the [privacy posture](#privacy) below. We read reach from pageview volume, referrer diversity, and (on the product side) search query diversity.
 
 ### Product Analytics
 
