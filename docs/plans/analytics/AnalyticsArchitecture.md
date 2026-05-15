@@ -129,6 +129,29 @@ Mapping to the [non-goals](Analytics.md#non-goals):
 | IP-based profiling        | `ip: false`, `disable_geoip = True`                          |
 | Engagement-addiction      | `disable_surveys: true`, no feature-flag SDK use             |
 
+## Pageviews
+
+PostHog's auto-pageview is off. Pageviews fire from a SvelteKit [`afterNavigate`](https://svelte.dev/docs/kit/$app-navigation#afterNavigate) hook in the root layout, so every client-side route change is captured — not just the initial SSR load:
+
+```svelte
+<!-- frontend/src/routes/+layout.svelte -->
+<script lang="ts">
+  import { afterNavigate } from "$app/navigation";
+  import { analytics } from "$lib/analytics";
+
+  afterNavigate(({ from, to }) => {
+    if (!to) return;
+    analytics.pageview(to.url.pathname, {
+      referrer: from?.url.pathname ?? null,
+    });
+  });
+</script>
+```
+
+`afterNavigate` fires after the initial load **and** after every subsequent CSR navigation, so a single hook covers the whole SPA. Without this, the SPA would look like a one-page-per-visit site to PostHog — pages-per-session would always be 1 and bounce rate would be 100%.
+
+No pageview is fired from `+layout.server.ts`: server-rendered HTML doesn't imply the user actually saw the page (bots, prefetches, etc.).
+
 ## Where Events Originate
 
 | Event                                     | Origin | Why                                                   |
