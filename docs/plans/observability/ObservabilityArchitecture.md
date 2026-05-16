@@ -1,4 +1,4 @@
-# Observability Architecture
+# Proposed Observability Architecture
 
 Also see:
 

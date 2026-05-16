@@ -1,4 +1,4 @@
-# Analytics Architecture
+# Proposed Analytics Architecture
 
 Also see:
 
