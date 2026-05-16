@@ -1,16 +1,16 @@
 # Analytics Frontend Plan
 
-Also see:
+This doc covers frontend implementation of [AnalyticsPlan.md](AnalyticsPlan.md).
 
-- [AnalyticsPlan.md](AnalyticsPlan.md) — orchestration and phase ordering
-- [AnalyticsArchitecture.md](AnalyticsArchitecture.md) — contracts (abstraction interface, privacy lockdown)
-- [AnalyticsBackendPlan.md](AnalyticsBackendPlan.md)
+Contracts live in [AnalyticsArchitecture.md](AnalyticsArchitecture.md).
 
-This doc covers frontend implementation phase by phase. Contracts live in the architecture doc. Specific events have not yet been designed; the candidate event names below are illustrative until the taxonomy review pass happens.
+Specific events have not yet been designed; the candidate event names below are illustrative.
 
-**Prerequisite:** Backend phase 2 ([AnalyticsBackendPlan.md § Phase 2](AnalyticsBackendPlan.md#phase-2-first-server-side-event)) must ship before frontend phase 3, because `identify()` consumes a pseudonym the backend puts in the page payload. Phases 1–2 of the frontend can proceed in parallel with backend work.
+## Prerequisite
 
-## Phase 1: Skeleton
+Do [AnalyticsBackendPlan.md](AnalyticsBackendPlan.md) first, because `identify()` consumes a pseudonym the backend puts in the page payload.
+
+## Phase: Skeleton
 
 Stand up `frontend/src/lib/analytics/` with the module structure from [AnalyticsArchitecture.md § Module Layout](AnalyticsArchitecture.md#module-layout). No events fire yet.
 
@@ -29,7 +29,7 @@ Stand up `frontend/src/lib/analytics/` with the module structure from [Analytics
 - An integration test (vitest) that imports `config.ts` and asserts every locked-down option matches the architecture doc. Weakening any option fails the test.
 - The dev-mode default adapter is `noop`, not PostHog. Confirm in a dev-run by inspecting the network tab — no requests to `eu.posthog.com`.
 
-## Phase 2: Pageviews
+## Phase: Pageviews
 
 PostHog's auto-pageview is off (`capture_pageview: false`); pageviews fire from a SvelteKit `afterNavigate` hook in the root layout, so every CSR route change is captured — not just the initial SSR load.
 
@@ -60,9 +60,9 @@ PostHog's auto-pageview is off (`capture_pageview: false`); pageviews fire from 
 - A vitest using `RecordingAnalytics` that simulates an initial load + two CSR navigations and asserts three pageview events with the expected pathnames and internal `referrer` properties.
 - Staging spot-check: load the homepage, click through a few links, find the events in PostHog. Confirm `$referrer` and `$referring_domain` are present (set by PostHog at session start from `document.referrer`), distinct from the internal `referrer` property which holds the previous in-SPA pathname.
 
-## Phase 3: identify() and reset()
+## Phase: identify() and reset()
 
-Connects authenticated journeys to the backend-derived pseudonym. Depends on the backend exposing pseudonym in the page payload — see [AnalyticsBackendPlan.md § Phase 2](AnalyticsBackendPlan.md#phase-2-first-server-side-event).
+Connects authenticated journeys to the backend-derived pseudonym. Depends on the backend exposing pseudonym in the page payload — see [AnalyticsBackendPlan.md § event 1](AnalyticsBackendPlan.md#phase-event-1-transactional).
 
 **Deliverables:**
 
@@ -76,7 +76,7 @@ Connects authenticated journeys to the backend-derived pseudonym. Depends on the
 - A vitest for logout: `identify(p)` → `reset()` → capture. Assert the post-reset event is anonymous (new heap-bound id, not `p`).
 - Staging spot-check: log in. In PostHog, confirm the pre-login pageviews are now attributed to the logged-in pseudonym (aliasing succeeded), and the pseudonym is not a recognizable encoding of `user.id`.
 
-## Phase 4: Client events
+## Phase: Client events
 
 Land client-side events as the features that emit them get built. Illustrative candidates (pending taxonomy review):
 
@@ -107,7 +107,7 @@ test("the action records the expected event", () => {
 });
 ```
 
-The PostHog adapter is never exercised in unit tests. The phase 1 integration test on `config.ts` covers it.
+The PostHog adapter is never exercised in unit tests. The skeleton-phase integration test on `config.ts` covers it.
 
 ## What this doc does NOT cover
 

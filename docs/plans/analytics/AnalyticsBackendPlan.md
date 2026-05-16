@@ -8,7 +8,7 @@ Also see:
 
 This doc covers backend implementation phase by phase. Contracts live in the architecture doc. Specific events have not yet been designed; the candidate event names below are illustrative until the taxonomy review pass happens.
 
-## Phase 1: Skeleton
+## Phase: Skeleton
 
 Stand up the `apps/analytics/` app with the module structure from [AnalyticsArchitecture.md § Module Layout](AnalyticsArchitecture.md#module-layout). No events fire yet.
 
@@ -30,7 +30,7 @@ Stand up the `apps/analytics/` app with the module structure from [AnalyticsArch
 - A unit test for middleware: authenticated request gets `request.analytics_pseudonym` set; anonymous gets `None`; middleware does not query the DB on anonymous requests.
 - One integration test asserts the backend SDK's `posthog.host` and `posthog.disable_geoip` are set as specified. Weakening either fails this test.
 
-## Phase 2: First server-side event
+## Phase: first transactional event
 
 The first event to land is a server-side transactional event. Signup conversion is the obvious candidate (must fire from inside the signup transaction, low volume, easy to verify the pseudonym round-trips cleanly without volume noise) — illustrative name: `account_registered`. The specific event, name, and properties get decided during taxonomy review.
 
@@ -46,9 +46,9 @@ The first event to land is a server-side transactional event. Signup conversion 
 - A staging/PostHog spot-check: trigger the flow, find the event in PostHog, inspect it. Confirm no `$ip`, no geoip-derived city/country, no `User.email` or `User.id`, only the pseudonym.
 - A SQL check on production-like data: `SELECT * FROM auth_user JOIN <anything> ON pseudonym` returns no rows because no such table or FK exists.
 
-## Phase 3: Second server-side event
+## Phase: first post-write event
 
-A second post-write event that fires inside a normal request cycle (not at signup). Purpose: prove the middleware-cached pseudonym is reused across multiple events in the same authenticated session, not re-derived. Illustrative candidate: `edit_saved`.
+A second event, post-write, that fires inside a normal request cycle (not at signup). Purpose: prove the middleware-cached pseudonym is reused across multiple events in the same authenticated session, not re-derived. Illustrative candidate: `edit_saved`.
 
 **Deliverables:**
 
@@ -60,7 +60,7 @@ A second post-write event that fires inside a normal request cycle (not at signu
 - A test that performs the action and asserts the event is captured with the expected properties.
 - A test that performs two of the action in the same authenticated session and asserts both events use the same pseudonym — proves the middleware cache is doing its job, not just luck of two HMACs agreeing.
 
-## Phase 4: Remaining server events
+## Phase: Remaining events
 
 Land additional server-side events as the relevant feature code is touched. Illustrative candidates include upload-completion and moderation events, but the actual list comes from the taxonomy review.
 
