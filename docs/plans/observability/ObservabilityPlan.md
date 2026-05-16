@@ -8,8 +8,8 @@ Also see:
 ## Phases
 
 - [Prerequisites](#prerequisites)
-- [ObservabilityBackendPlan.md](ObservabilityBackendPlan.md)
-- [ObservabilityFrontendPlan.md](ObservabilityFrontendPlan.md)
+- [ObservabilityBackendPlan.md](ObservabilityBackendPlan.md) — notify about server exceptions.
+- [ObservabilityFrontendPlan.md](ObservabilityFrontendPlan.md) — notify about browser & SSR exceptions
 
 Backend ships before frontend because frontend debug route depends on `Activity.OBSERVABILITY_DEBUG` being registered on the backend.
 

@@ -10,7 +10,7 @@ Also see:
 
 Each track answers a different slice of the questions in [AnalyticsQuestions.md](AnalyticsQuestions.md) using a different data source. Tracks are independent and ship as appetite allows.
 
-- **[AnalyticsUntypedEventsPlan.md](AnalyticsUntypedEventsPlan.md)** — SDK skeleton + pageview firehose from the browser. Privacy lockdown lives here. This is the launch path — "slap PostHog in and call it a day."
+- **[AnalyticsUntypedEventsPlan.md](AnalyticsUntypedEventsPlan.md)** — SDK skeleton + pageview firehose from the browser. Privacy lockdown lives here. This is the quick path — lightest weight, most value for the change.
 - **[AnalyticsTypedEventsPlan.md](AnalyticsTypedEventsPlan.md)** — typed, named events for questions the firehose can't answer. Strictly sequential internal phases: Backend Pseudonym → Backend Events → Frontend Events.
 - **[AnalyticsDbStatsPlan.md](AnalyticsDbStatsPlan.md)** — SQL against the production database for "what's in the system right now" stats (signups, edits, retention, the 80/20 editor curve). No PostHog involvement, no charting library.
 
