@@ -51,7 +51,7 @@ The abstraction buys us:
 
 ```text
 frontend/src/lib/analytics/
-  index.ts            Public API: capture(), pageview(), identify(), reset()
+  index.ts            Public API: pageview(), capture(), identify(), reset()
   events.ts           Typed event registry (frontend-emitted events)
   <vendor>.ts         Vendor adapter — the only file that imports the vendor SDK
   noop.ts             No-op adapter (dev, tests, opt-out)
@@ -76,7 +76,7 @@ Concrete adapter filenames are determined by the chosen provider — see [Provid
 
 ```ts
 export interface Analytics {
-  pageview(path: string, properties?: PageviewProperties): void;
+  pageview(path: string): void;
   capture<E extends EventName>(event: E, properties: EventProperties<E>): void;
   identify(pseudonym: string): void;
   reset(): void; // called on logout
@@ -100,6 +100,8 @@ class Analytics(Protocol):
     def identify(self, pseudonym: str) -> None: ...
 ```
 
+`EventName = keyof EventRegistry` and `EventProperties<E> = EventRegistry[E]`, both defined in `events.ts` alongside the registry (see [Typed registry](#typed-registry)).
+
 No `track()`, no `page()`, no provider-specific verbs. No raw properties dict that bypasses the typed registry.
 
 ### Where identify() runs
@@ -109,7 +111,9 @@ No `track()`, no `page()`, no provider-specific verbs. No raw properties dict th
 
 ### Testing
 
-Both sides use a `RecordingAnalytics` adapter as the default test fixture, capturing calls into an array for assertions. The vendor adapter is never exercised in unit tests — one integration test per side asserts the locked-down init config and nothing else.
+Both sides use a `RecordingAnalytics` adapter as the default test fixture, capturing calls into an array for assertions.
+
+The vendor SDK itself is never exercised — mock it at the module boundary. Adapter logic that _we_ wrote (state, property assembly, transforms) is fair game and should be tested. The locked-down init config gets its own integration test per side.
 
 Concrete test patterns live in [AnalyticsTypedEventsBackendPlan.md § Test patterns](AnalyticsTypedEventsBackendPlan.md#test-patterns) and [AnalyticsTypedEventsFrontendPlan.md § Test patterns](AnalyticsTypedEventsFrontendPlan.md#test-patterns).
 
@@ -285,7 +289,8 @@ posthog.init(PUBLIC_POSTHOG_KEY, {
   capture_pageleave: false,
   disable_session_recording: true,
   disable_surveys: true,
-  disable_external_dependency_loading: true,
+  disable_external_dependency_loading: true, // no runtime fetch of feature-flag/survey configs — reduces fingerprinting surface
+
   ip: false, // satisfies "no IP-based attribution"
   property_denylist: [
     "$ip", // belt-and-suspenders alongside ip: false
