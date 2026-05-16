@@ -4,6 +4,8 @@ This doc names the kinds of people who use the system.
 
 These are not roles in the authorizations; instead, auth uses [Activities](Authz.md).
 
+The core user is someone driven by curiosity and love of the subject, not by a transactional need. They're not here to price a machine or manage a route — they're here because pinball history is interesting and they want to go deeper. The tagline of The Flip museum is "Preserving the love of pinball for future generations" and this project is a plank of that.
+
 ## The Personas
 
 ### Reader
@@ -22,7 +24,7 @@ See [below](#contributor-profile) for their motivational picture.
 
 ### Maintainer
 
-A member of the [small team](../SmallTeam.md) running the project. They operate the site, respond to incidents, review activity, and shape the data and the product.
+A member of the [small team](SmallTeam.md) running the project. They operate the site, respond to incidents, review activity, and shape the data and the product.
 
 ## Future Personas
 
@@ -40,43 +42,41 @@ Other docs predate this one and use varying terms:
 | Contributor | Editor, Writer, "logged-in user"    |
 | Maintainer  | Admin, Staff, Superuser             |
 
-## Commonality among all personas
+## Reader Profile
 
-The core user is someone driven by curiosity and love of the subject, not by a transactional need. They're not here to price a machine or manage a route — they're here because pinball history is interesting and they want to go deeper. The tagline of The Flip museum is "Preserving the love of pinball for future generations" and this project is a plank of that.
+"I just played Medieval Madness and now I want to fall down a rabbit hole about Williams in the 90s." The casual fan, the museum visitor, the person just getting into pinball.
 
-This doc names the three personas in the system — **Reader**, **Contributor**, **Maintainer** — and describes who they are and what draws them in. Other docs should use these names.
+Readers come to read — they browse pages, look up models, follow links, search. Often arriving from search engine results, almost always unauthenticated.
 
-These are descriptive labels, not authorization primitives; backend gates use [Activities](../../Authz.md).
+### Who Readers are
 
-## Who They Are
-
-- Historians/archivists who care about preservation for its own sake.
 - People just getting into pinball and wanting the authoritative encyclopedia of all the concepts.
 - Casual fans who just played something cool at a bar and want to know more.
 - Collectors wanting to learn more about the history of their machines, their significance, the industry context, ideas for other machines to collect.
 - The general public of the museum, which is probably mostly casual fans, wanting to explore more about what they've seen, are seeing at the moment (via a kiosk at the museum or their phone) or are about to see before they come.
 
-## Who They Might Be In The Future
+### Who Readers might be in the future
 
 - Restorers looking for specs, schematics, parts info. We already have a public read-only version of the Flipfix maintenance site that we hope to grow into a deep resource of repair information for the particular models that the museum owns: the entire maintenance history and conversations around maintenance are public. So there's deep interest from the museum in supporting this community. Adding specs, schematics, parts info to this project would absolutely be right in the museum's mission. Dunno, though, whether we can improve on existing sites around this.
 
-## Who They Are Not
+### Who Readers are not
+
+The reading experience is not designed for:
 
 - Tournament players who care about rules, competition data.
 - Collectors wanting to value what they own.
 - Operators managing routes and tracking machine performance.
-
-## Reader Profile
-
-"I just played Medieval Madness and now I want to fall down a rabbit hole about Williams in the 90s." The casual fan, the museum visitor, the person just getting into pinball.
-
-Readers come to read — they browse pages, look up models, follow links, search. Often arriving from search engine results, almost always unauthenticated. The largest group, and the audience whose experience most of the public surface is designed around.
 
 ## Contributor Profile
 
 "I know things about pinball history that aren't captured anywhere, and I want to help build the definitive record." The historian/archivist and the museum-connected enthusiast.
 
 Contributors write descriptions and essays, upload photos and documents, edit catalog records, and steward the pages they care about. They must have an account.
+
+### Who Contributors are
+
+- Historians/archivists who care about preservation for its own sake.
+- Museum-connected enthusiasts with deep subject knowledge.
 
 ### The opportunity
 
@@ -102,28 +102,3 @@ Both ownership and reputation matter:
 - **Visibility**: The Pinside model. Contributors are recognized community members. Their name appears on their work, they build a visible contribution history, and the community acknowledges their expertise.
 
 The museum director's background at Wikipedia informs the approach: knowledge as a side-product of well-designed incentives, with stewardship as the foundation and reputation mechanics as reinforcement.
-
-## Maintainer
-
-The [small team](../../SmallTeam.md) running the project. Not a target user — Maintainers are us, the operators. They run the site, respond to incidents, review activity, and shape the data and the product.
-
-Maintainers receive production alerts (see [Observability.md](../observability/Observability.md#recipients)) and consume raw analytics and operational telemetry.
-
-## Aliases
-
-Other docs predate this one and use varying terms:
-
-| Persona     | Aliases found elsewhere                                                                 |
-| ----------- | --------------------------------------------------------------------------------------- |
-| Reader      | Visitor (Analytics, Observability), Explorer (older drafts), "casual fan", "the public" |
-| Contributor | Editor, Writer, Uploader, "logged-in user"                                              |
-| Maintainer  | Admin, Staff, Superuser, "the small team"                                               |
-
-New docs should use the canonical names. Existing docs will be reconciled opportunistically.
-
-## Future Personas
-
-Anticipated but not yet present:
-
-- **Moderator** — a Contributor with elevated review/revert capabilities, short of full Maintainer access. See [Authz.md](../../Authz.md) for the planned predicate hooks (moderator role, account age, reputation, abuse flag).
-- **Bot / Service account** — non-human Contributors for automated ingest or integrations.
