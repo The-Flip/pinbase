@@ -26,6 +26,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Anonymous events** — supports unidentified event capture (for search-gap analytics)
 - **Raw query storage** — string event properties retained, not stripped or hashed
 - **Cost** at 2.5k pageviews/mo launch, ramping to 400k/mo by Year 1 (ceiling $10/mo, free preferred)
+- **Multi-admin at the price point we'd actually pay** — multiple volunteers must each get their own login. Per [SmallTeam.md](../../SmallTeam.md#hosted-systems-must-be-multi-admin), this is a hard requirement, not a nice-to-have. Single-user-only vendors are disqualified at any tier we'd choose
 - **Managed / hosted** — no self-hosting
 - **Retention** — long retention without per-row fees
 - **Geography** — ingest reachable from US/Virginia without painful latency
@@ -33,13 +34,13 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 
 ## Comparison Matrix
 
-| Vendor                        | Covers traffic | Covers events | Cookieless | Funnels        | Retention / cohorts | Cost at 2.5k pv | Cost at 400k pv           | Maintenance |
-| ----------------------------- | -------------- | ------------- | ---------- | -------------- | ------------------- | --------------- | ------------------------- | ----------- |
-| [PostHog](#posthog-cloud)     | ✅             | ✅            | ✅         | ✅             | ✅                  | free            | free (under 1M events/mo) | medium      |
-| [Plausible](#plausible-cloud) | ✅             | ✅            | ✅         | ✅ (Business)  | ❌                  | ~$19/mo         | above ceiling             | low         |
-| [Pirsch](#pirsch)             | ✅             | ✅            | ✅         | ✅ (Plus tier) | ❌                  | ~$12/mo         | above ceiling             | low         |
-| [Umami Cloud](#umami-cloud)   | ✅             | ✅            | ✅         | ✅             | ✅                  | free            | $20/mo (Pro)              | low         |
-| [GoatCounter](#goatcounter)   | ✅             | ❌            | ✅         | ❌             | ❌                  | free            | free                      | trivial     |
+| Vendor                        | Covers traffic | Covers events | Cookieless | Funnels        | Retention / cohorts | Cost at 2.5k pv | Cost at 400k pv           | Multi-admin at our tier           | Maintenance |
+| ----------------------------- | -------------- | ------------- | ---------- | -------------- | ------------------- | --------------- | ------------------------- | --------------------------------- | ----------- |
+| [PostHog](#posthog-cloud)     | ✅             | ✅            | ✅         | ✅             | ✅                  | free            | free (under 1M events/mo) | ✅ unlimited on free              | medium      |
+| [Plausible](#plausible-cloud) | ✅             | ✅            | ✅         | ✅ (Business)  | ❌                  | ~$19/mo         | above ceiling             | ✅ 3 on Growth, 10 on Business    | low         |
+| [Pirsch](#pirsch)             | ✅             | ✅            | ✅         | ✅ (Plus tier) | ❌                  | ~$12/mo         | above ceiling             | ✅ on paid tiers                  | low         |
+| [Umami Cloud](#umami-cloud)   | ✅             | ✅            | ✅         | ✅             | ✅                  | free            | $20/mo (Pro)              | ❌ Hobby is single-user; Pro-only | low         |
+| [GoatCounter](#goatcounter)   | ✅             | ❌            | ✅         | ❌             | ❌                  | free            | free                      | ✅ free; users in Settings        | trivial     |
 
 ## Shortlist
 
@@ -52,6 +53,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Anonymous events**: yes
 - **Raw queries**: yes, arbitrary string properties
 - **Cost**: free tier covers 1M events/mo and 5k recordings/mo; product analytics alone stays free comfortably through Year 1 traffic
+- **Multi-admin**: unlimited team members on the free tier (confirmed on [pricing page](https://posthog.com/pricing))
 - **Hosting**: managed (US or EU region)
 - **Retention**: 1 year on free tier, 7 years on paid
 - **Geography**: US region available
@@ -71,6 +73,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Raw queries**: custom event properties are supported but the UI is geared toward low-cardinality dimensions; raw search-query storage works as event payload
 - **Funnels / retention**: funnels yes on Business; retention and cohorts not on the roadmap (per [GH discussion #364](https://github.com/plausible/analytics/discussions/364))
 - **Cost**: Starter is ~$9/mo for 10k pv, but funnels and custom properties require Business starting at ~$19/mo → **breaks the $10 ceiling on day one if product analytics features are required**
+- **Multi-admin**: yes — up to 3 members on Growth, 10 on Business (no free tier)
 - **Hosting**: managed (EU)
 - **Retention**: 3 years on Starter/Growth, 5 years on Business, 5+ years on Enterprise
 - **Geography**: EU only
@@ -90,6 +93,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Raw queries**: custom event properties supported
 - **Funnels / retention**: funnels yes (Plus only); retention not advertised
 - **Cost**: Standard starts at $6/mo for 10k pv; Plus starts at $12/mo with funnels — **Plus exceeds the $10 ceiling on day one**. Exact 400k pv pricing should be checked in the live pricing slider before committing
+- **Multi-admin**: yes — team members supported on paid plans (no free tier)
 - **Hosting**: managed (EU/Germany)
 - **Retention**: indefinite on paid plans
 - **Geography**: EU only
@@ -111,6 +115,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Session replay**: yes since v3.1.0, but as a _separately-loaded_ `recorder.js` script — must be deliberately added to the page (see [docs](https://docs.umami.is/docs/replays)). Not in the main tracker, not toggled by an SDK flag
 - **Auto-collection on by default**: the main tracker auto-collects pageviews (including screen dimensions — a fingerprinting concern flagged in [AnalyticsArchitecture.md](AnalyticsArchitecture.md#privacy-enforcement)). Disabled with `data-auto-track="false"` on the script tag (see [tracker functions](https://docs.umami.is/docs/tracker-functions)). Real but smaller surface than PostHog's autocapture
 - **Cost**: Hobby tier $0/mo (100K events/mo, 3 websites, 6-month retention, community support); Pro $20/mo (1M events/mo) → free covers launch; Pro is over the $10 ceiling but bounded
+- **Multi-admin**: ❌ **Hobby is single-user.** Teams is gated to the Pro plan (confirmed in the [Umami Cloud Teams docs](https://docs.umami.is/docs/cloud/teams): "Teams is available starting at the Pro plan"). To add a co-admin we'd have to pay $20/mo — and the only reason we'd pay $20/mo is to add a co-admin, since the event volume fits Hobby until Year 1
 - **Hosting**: managed (US)
 - **Retention**: 6 months on Hobby, longer on Pro
 - **Geography**: US-hosted
@@ -118,7 +123,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 
 **Case for**: Hobby tier covers ~80K pageviews/mo + product events for free; US-hosted (matches the stated geography preference); covers the same product-analytics surface area as PostHog for our use cases (funnels + retention + custom properties); main tracker doesn't ship the features we don't want — only replay is available, and only as a deliberately-added second script.
 
-**Case against**: Pro tier at $20/mo doubles the cost ceiling at Year 1 scale; 6-month free-tier retention is shorter than PostHog's 1 year; funnel/retention/cohort tier gating on Hobby still needs verification.
+**Case against**: **Hobby is single-user — fails the multi-admin requirement at the free tier**, and Pro at $20/mo is the only way to add a second volunteer. 6-month free-tier retention is shorter than PostHog's 1 year; funnel/retention/cohort tier gating on Hobby still needs verification.
 
 ### GoatCounter
 
@@ -129,6 +134,7 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Anonymous events**: limited
 - **Raw queries**: not really — designed for pageview counts
 - **Cost**: **free for reasonable public usage**, including personal websites and small-to-medium businesses; donations welcomed
+- **Multi-admin**: yes on the free tier (multiple users via Settings → Users)
 - **Hosting**: managed (EU); also open-source if we ever wanted to self-host
 - **Retention**: indefinite
 - **Geography**: EU only
@@ -149,11 +155,13 @@ Drawn from [Analytics.md](Analytics.md); not restated in full here.
 - **Self-hosted Plausible / Umami / PostHog / Matomo** — fails the [managed-service constraint](Analytics.md#operational); operational burden falls on a volunteer team.
 - **DIY: events table in Postgres + dashboards in Django admin or Metabase** — we are not writing our own analytics system. On paper it has real attractions: maximum privacy (product event payloads never leave our infrastructure), values alignment (no third-party SDK to lock down across upgrades), and an events table that's queryable with the SQL and Django ORM skills the team already uses daily. In practice the mental model isn't simpler than a hosted vendor, it's strictly larger: design the events schema, build a capture endpoint with auth and rate limiting, derive pseudonyms, write middleware, pick and stand up a dashboarding tool (Metabase Cloud, Django admin views, or custom), build each chart from scratch, manage retention, watch table growth and indexes. PostHog's mental model is "call `capture()`, look at charts." DIY's is everything above, forever. For a small volunteer team that contradiction with the [low-maintenance constraint](Analytics.md#operational) is decisive.
 
-## Recommendation: Umami over PostHog
+## Recommendation: PostHog over Umami
 
 PostHog and Umami are the only two real contenders — both cover traffic and product events, both have funnels and retention, both are cookieless, both have US-hosted options, both have free tiers that fit at launch. The others are dominated: Plausible and Pirsch lack retention and break the cost ceiling; GoatCounter is traffic-only.
 
-### Where Umami wins for this project
+The deciding factor is **multi-admin at the price point we'd actually pay**. PostHog's free tier includes unlimited team members; Umami's Hobby tier is single-user, with Teams gated to the Pro plan at $20/mo. Per [SmallTeam.md](../../SmallTeam.md#hosted-systems-must-be-multi-admin) this is a hard requirement, so the comparison narrows to: PostHog free vs Umami Pro ($20/mo). For the same multi-admin posture, PostHog gives us strictly more (1M events/mo free, 1 year retention free) than Umami Pro does at $20/mo. Paying for the smaller package is hard to defend.
+
+### Where Umami still wins for this project
 
 - **Vendor self-conception.** Umami positions itself as privacy-first analytics for developers and small operators. PostHog positions itself as an all-in-one product OS — funnels, replays, experimentation, feature flags, surveys, growth loops. The latter is powerful but carries goals this project explicitly does not share. The difference isn't what each tool can do; it's what each tool nudges you toward.
 - **Cleaner privacy story to explain publicly.** "We use privacy-focused analytics with auto-tracking off and explicit events only" is a one-sentence story. "We use a growth analytics suite but have disabled most of it" is a paragraph that invites scrutiny.
@@ -170,18 +178,20 @@ _Caveat on all of the above: cultural fit is not a substitute for technical cont
 
 ### Where PostHog wins
 
-- **Cost at Year 1 scale.** Free up to 1M events/mo. Umami's free tier is 100K events/mo; Pro is $20/mo for 1M events. At our Year 1 projection (~400K pv/mo + product events) we'd be on Umami's Pro tier, $10 over the ceiling. PostHog stays free.
+- **Multi-admin on the free tier.** Unlimited team members at $0. Umami Hobby is single-user; Teams requires Pro at $20/mo. This is the disqualifier for Umami at the free tier we'd actually use.
+- **Cost at Year 1 scale.** Free up to 1M events/mo. Umami's free tier is 100K events/mo; Pro is $20/mo for 1M events. At our Year 1 projection (~400K pv/mo + product events) we'd be on Umami's Pro tier anyway.
 - **Free-tier retention.** PostHog free is 1 year; Umami Hobby is 6 months. For indefinite retention either way you're paying.
 - **Maturity.** Bigger ecosystem, more documentation, more battle-tested SDKs.
 - **Richer UI.** Funnel-builder, retention curves, session paths are more polished.
 
-### Why Umami wins overall
+### Why PostHog wins overall
 
-The durable Umami arguments — vendor self-conception, public-story simplicity, narrower SDK surface, blast radius — are about _what the vendor is for_, which doesn't change with configuration. PostHog's cost advantage is real but bounded: Umami Pro at $20/mo is a $10/mo overrun, not an existential cost. The retention gap (6 months free vs 1 year free) matters less because [Analytics.md](Analytics.md#retention) calls for indefinite retention anyway — both require a paid tier for that.
+The durable Umami arguments — vendor self-conception, public-story simplicity, narrower SDK surface, blast radius — are real and don't disappear just because we picked the other vendor. They're the reason this is "PostHog with lock-down config," not "PostHog with defaults." But they're tradeoff arguments, and the multi-admin requirement isn't a tradeoff: per [SmallTeam.md](../../SmallTeam.md#hosted-systems-must-be-multi-admin), single-user hosted systems are disqualified.
 
-If the $20/mo Umami Pro tier is unacceptable, the right response is to amend the ceiling in [Analytics.md](Analytics.md#operational), not to pick PostHog to defend a $10 number. That said, PostHog with the lock-down init config is a perfectly defensible alternative — not one we'd be embarrassed by.
+Once multi-admin is the gating filter, the comparison stops being "PostHog free vs Umami Hobby free" and becomes "PostHog free vs Umami Pro at $20/mo." Umami Pro isn't unaffordable — [SmallTeam.md](../../SmallTeam.md#cheap) calls $20 "very expensive" but not out of the question — but we'd be paying $20/mo to get a strictly smaller package than PostHog gives us at $0 (100K vs 1M events/mo, 6mo vs 1yr retention, narrower SDK but at the cost of every durable advantage _also_ costing us $20). The lock-down work on PostHog is real but bounded; paying $20/mo indefinitely to avoid it is the larger cost.
 
 ### Caveats before committing
 
-1. **Verify Umami Hobby's tier gating for funnels, retention, and cohorts** — the pricing line shows Hobby's event/website/retention limits but not which analysis features are gated to Pro. Worth confirming before assuming Hobby is enough at launch.
-2. **Accept the $20/mo Pro cost as a Year 1 reality**, or amend the [cost ceiling in Analytics.md](Analytics.md#operational) to reflect it. PostHog stays free at the same scale; if the cost ceiling is hard, PostHog with the lock-down init config is the alternative.
+1. **Lock down the PostHog SDK init.** Autocapture, session replay, surveys, heatmaps, and feature flags all default-on. The hardening config and how to keep it stable across SDK upgrades belongs in [AnalyticsArchitecture.md](AnalyticsArchitecture.md#privacy-enforcement).
+2. **Document the public privacy story.** Because PostHog is a growth-analytics suite by default, the public-facing explanation of what we do and don't collect needs to be specific (which features are off, what data leaves the browser) rather than relying on vendor reputation. The Umami "we use a privacy-first analytics tool" one-liner doesn't apply here.
+3. **Treat the durable Umami arguments as a watchlist, not sunk cost.** If PostHog's defaults drift, if surveys/feature-flags creep into our usage, or if the small-team review burden becomes real, the case to revisit Umami Pro at $20/mo is open.

@@ -10,7 +10,9 @@ Generally owning a system is more complex than renting it.
 
 ## Cheap
 
-We aren't making money on this. Prefer systems that are free -- we're open source OSS so that helps someimes. If we do have to pay, a few bucks a month. $10 is expensive. $20 is very expensive.
+We aren't making money on this. Prefer systems that are free -- we're open source OSS so that helps someimes. If we _must_ pay, prefer a few bucks a month. $10 is expensive. $20 is very expensive.
+
+Each cost adds up. I don't want to turn around one day and find we're spending $500/mo on hosted services for a labor of love. Also, credit cards expire / get invalidated and it's one more point of failure.
 
 ## Low ongoing maintenance
 

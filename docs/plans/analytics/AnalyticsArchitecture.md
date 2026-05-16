@@ -11,11 +11,11 @@ Also see:
 
 [PostHog Cloud](https://posthog.com/) is the chosen analytics provider.
 
-PostHog ships several features that appear in our [non-goals](Analytics.md#non-goals) — autocapture, session replay, heatmaps, surveys, behavioral cohorts. These are disabled at the integration boundary (see [Privacy Enforcement](#privacy-enforcement)). The abstraction layer below is what keeps that discipline enforceable in code review.
+PostHog ships several features that appear in our [non-goals](Analytics.md#non-goals): autocapture, session replay, heatmaps, surveys, behavioral cohorts. These are disabled at the integration boundary (see [Privacy Enforcement](#privacy-enforcement)). The abstraction layer below is what keeps that discipline enforceable in code review.
 
 ## Tracking Scope
 
-**We deliberately track a user's journey across one HTTP instance of the SPA.** From the initial page load through every client-side route change, search, and contribution event, until the tab is closed or the document is replaced (hard refresh, external navigation). This is the product goal of analytics, not an incidental side-effect — we want to answer questions like:
+**We track a user's journey across one HTTP instance of the SPA.** From the initial page load through every client-side route change, search, and contribution event, until the tab is closed or the document is replaced (hard refresh, external navigation). This is the product goal of analytics, not an incidental side-effect — we want to answer questions like:
 
 - What do visitors read after the homepage?
 - Which entry pages lead to a search? To a contribution?
@@ -27,7 +27,7 @@ Within one SPA instance, every event is linked under a single id:
 - **Anonymous visitors** — a heap-bound `distinct_id`, regenerated for each new SPA instance. Not linked across instances (a hard refresh or new tab starts fresh).
 - **Logged-in users** — the per-user pseudonym (see [Identity & Pseudonymization](#identity--pseudonymization)). A contributor's journeys stitch together across instances via the pseudonym.
 
-What we explicitly do **not** do: link anonymous journeys across SPA instances, fingerprint, set cookies, or persist any identifier to storage.
+We do **not** link anonymous journeys across SPA instances, fingerprint, set cookies, or persist any identifier to storage.
 
 See [Pageviews](#pageviews) for the mechanism that turns CSR route changes into recorded events.
 
