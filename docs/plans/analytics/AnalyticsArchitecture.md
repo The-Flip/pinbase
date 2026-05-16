@@ -3,10 +3,12 @@
 Also see:
 
 - [Analytics.md](Analytics.md) — product motivation, goals, non-goals
+- [AnalyticsQuestions.md](AnalyticsQuestions.md) - what are we trying to answer with analytics
 - [AnalyticsVendors.md](AnalyticsVendors.md) — vendor comparison
 - [AnalyticsPlan.md](AnalyticsPlan.md) — phased rollout
-  - [AnalyticsBackendPlan.md](AnalyticsBackendPlan.md) — backend implementation plan
-  - [AnalyticsFrontendPlan.md](AnalyticsFrontendPlan.md) — frontend implementation plan
+  - [AnalyticsUntypedEventsPlan.md](AnalyticsUntypedEventsPlan.md) — SDK skeleton + pageview firehose (the launch path)
+  - [AnalyticsTypedEventsBackendPlan.md](AnalyticsTypedEventsBackendPlan.md) — typed-events backend implementation
+  - [AnalyticsTypedEventsFrontendPlan.md](AnalyticsTypedEventsFrontendPlan.md) — typed-events frontend implementation
 
 ## A note on code blocks
 
@@ -102,14 +104,14 @@ No `track()`, no `page()`, no provider-specific verbs. No raw properties dict th
 
 ### Where identify() runs
 
-- **Frontend** — the root layout calls `analytics.identify(pseudonym)` once auth state hydrates. The pseudonym arrives in the page payload alongside the user object. Logout calls `analytics.reset()`. Details in [AnalyticsFrontendPlan.md § Phase 3](AnalyticsFrontendPlan.md#phase-3-identify-and-reset).
-- **Backend** — `analytics.capture()` takes the pseudonym as a keyword argument. Middleware derives it once per request via `pseudonym_for(request.user.id)` and caches it on the request object so every view sees the same value. Details in [AnalyticsBackendPlan.md § Phase 1](AnalyticsBackendPlan.md#phase-1-skeleton).
+- **Frontend** — the root layout calls `analytics.identify(pseudonym)` once auth state hydrates. The pseudonym arrives in the page payload alongside the user object. Logout calls `analytics.reset()`. Details in [AnalyticsTypedEventsFrontendPlan.md § identify() and reset()](AnalyticsTypedEventsFrontendPlan.md#phase-identify-and-reset).
+- **Backend** — `analytics.capture()` takes the pseudonym as a keyword argument. Middleware derives it once per request via `pseudonym_for(request.user.id)` and caches it on the request object so every view sees the same value. Details in [AnalyticsTypedEventsBackendPlan.md § Skeleton](AnalyticsTypedEventsBackendPlan.md#phase-skeleton).
 
 ### Testing
 
 Both sides use a `RecordingAnalytics` adapter as the default test fixture, capturing calls into an array for assertions. The vendor adapter is never exercised in unit tests — one integration test per side asserts the locked-down init config and nothing else.
 
-Concrete test patterns live in [AnalyticsBackendPlan.md § Test patterns](AnalyticsBackendPlan.md#test-patterns) and [AnalyticsFrontendPlan.md § Test patterns](AnalyticsFrontendPlan.md#test-patterns).
+Concrete test patterns live in [AnalyticsTypedEventsBackendPlan.md § Test patterns](AnalyticsTypedEventsBackendPlan.md#test-patterns) and [AnalyticsTypedEventsFrontendPlan.md § Test patterns](AnalyticsTypedEventsFrontendPlan.md#test-patterns).
 
 ### Migration
 
@@ -183,7 +185,7 @@ The vendor integration must satisfy these constraints. The concrete knobs that i
 - Client IP stripped at ingest
 - Server-side geoip disabled
 
-**Pageviews are explicit, not auto-captured.** The vendor's auto-pageview is off; pageviews fire from a SvelteKit `afterNavigate` hook so every CSR route change is recorded — not just the initial SSR load. Implementation in [AnalyticsFrontendPlan.md § Phase 2](AnalyticsFrontendPlan.md#phase-2-pageviews).
+**Pageviews are explicit, not auto-captured.** The vendor's auto-pageview is off; pageviews fire from a SvelteKit `afterNavigate` hook so every CSR route change is recorded — not just the initial SSR load. Implementation in [AnalyticsUntypedEventsPlan.md § Pageviews](AnalyticsUntypedEventsPlan.md#phase-pageviews).
 
 Mapping to the [non-goals](Analytics.md#non-goals):
 
@@ -310,4 +312,4 @@ If we ever need to suppress PostHog's default anonymous-to-logged-in aliasing (s
 
 ### Integration test
 
-An integration test on each side asserts these options are wired up; weakening any of them fails the test. See [AnalyticsBackendPlan.md § Phase 1](AnalyticsBackendPlan.md#phase-1-skeleton) and [AnalyticsFrontendPlan.md § Phase 1](AnalyticsFrontendPlan.md#phase-1-skeleton).
+An integration test on each side asserts these options are wired up; weakening any of them fails the test. See [AnalyticsTypedEventsBackendPlan.md § Skeleton](AnalyticsTypedEventsBackendPlan.md#phase-skeleton) and [AnalyticsUntypedEventsPlan.md § Skeleton](AnalyticsUntypedEventsPlan.md#phase-skeleton).

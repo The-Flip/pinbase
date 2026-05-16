@@ -1,6 +1,21 @@
 # Potential questions to be answered by analytics
 
-A stimulus list, not a recommendation list. Each question is a candidate; the real event taxonomy comes from picking the small subset whose answers would actually change a decision in the next 6–12 months.
+Not all of these may be questions to be answered by [analytics](Analytics.md).
+
+## Root questions
+
+The subsequent sections try to answer these root questions in various ways.
+
+- Are we growing?
+- What's driving our growth?
+  - What external traffic sources
+  - What content of ours
+- Are our theses about why people will like our site being borne out? See [Overview.md](../../Overview.md) and [Personas.md](../../Personas.md)
+- Is our editor community healthy? Engaged? Growing?
+- Do we have the right features?
+  - Are our features being used?
+  - Are some features missing the mark / frustrating users?
+  - Are we missing features?
 
 ## Reach & discovery
 
@@ -26,13 +41,14 @@ How much are these features used? Do the people that use them use them frequentl
 - People page
 - Search on the various sub pages, meaning any search other than global search
 - Global search
+- Do people actually look at our privacy and term? Api docs?
 
 ## What people find vs. don't
 
 - A list of the most common on-site searches and which don't return results (= prioritized catalog gap list)
 - When a search has results, do people click one?
 - Which pages get visited via search vs. via direct navigation vs. via links from other pages on the site?
-- Are people coming to look at specific models (Pro, Premium, LE etc), or are they looking for titles? A thesis of ours is that the title-first market is under-served. See Overview.md, Why The Domain Model Is A Differentiator.
+- Are people coming to look at specific models (Pro, Premium, LE etc), or are they looking for titles? A thesis of ours is that the title-first market is under-served. See [Overview.md § Why The Domain Model Is A Differentiator](../../Overview.md#why-the-domain-model-is-a-differentiator).
 
 ## Content shape
 

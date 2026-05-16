@@ -1,12 +1,8 @@
-# Analytics Backend Plan
+# Analytics Typed Events Backend Plan
 
-Also see:
+This doc covers the backend side of the typed-events track of [AnalyticsPlan.md](AnalyticsPlan.md). Contracts live in [AnalyticsArchitecture.md](AnalyticsArchitecture.md).
 
-- [AnalyticsPlan.md](AnalyticsPlan.md) — orchestration and phase ordering
-- [AnalyticsArchitecture.md](AnalyticsArchitecture.md) — contracts (pseudonymization, privacy lockdown, abstraction interface)
-- [AnalyticsFrontendPlan.md](AnalyticsFrontendPlan.md)
-
-This doc covers backend implementation phase by phase. Contracts live in the architecture doc. Specific events have not yet been designed; the candidate event names below are illustrative until the taxonomy review pass happens.
+Specific events have not yet been designed; the candidate event names below are illustrative until the taxonomy review pass happens.
 
 ## Phase: Skeleton
 
@@ -86,5 +82,7 @@ The PostHog adapter itself is never exercised in unit tests. The one integration
 ## What this doc does NOT cover
 
 - The pseudonym mechanism, privacy lockdown, abstraction contract, naming conventions — those are architecture, see [AnalyticsArchitecture.md](AnalyticsArchitecture.md).
-- Frontend work — see [AnalyticsFrontendPlan.md](AnalyticsFrontendPlan.md).
-- Cross-cutting sequencing and handoffs — see [AnalyticsPlan.md](AnalyticsPlan.md).
+- Frontend work — see [AnalyticsTypedEventsFrontendPlan.md](AnalyticsTypedEventsFrontendPlan.md).
+- SDK setup and pageviews — see [AnalyticsUntypedEventsPlan.md](AnalyticsUntypedEventsPlan.md).
+- DB-derived stats — see [AnalyticsDbStatsPlan.md](AnalyticsDbStatsPlan.md).
+- Cross-cutting sequencing — see [AnalyticsPlan.md](AnalyticsPlan.md).

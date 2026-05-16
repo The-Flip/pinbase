@@ -2,6 +2,7 @@
 
 Also see:
 
+- [AnalyticsQuestions.md](AnalyticsQuestions.md) - what are we trying to answer with analytics
 - [AnalyticsArchitecture.md](AnalyticsArchitecture.md)
 - [AnalyticsVendors.md](AnalyticsVendors.md)
 - [AnalyticsPlan.md](AnalyticsPlan.md) — phased rollout
