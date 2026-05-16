@@ -47,6 +47,13 @@ Browser ──→ media.flipcommons.org       → Bunny CDN → iDrive e2 privat
    If anything in the pre-deploy command fails, the old container keeps
    serving.
 
+## Geography
+
+The Flip pinball museum and many editors and end users are in Chicago. Hosting reflects that:
+
+- The Railway-hosted website in Virginia. Railway does not have a Chicago presence.
+- The iDrive e2 media storage is in Chicago to optimize for cold reads through the Bunny.net CDN.
+
 ## Process Model
 
 The production container runs three long-lived processes:

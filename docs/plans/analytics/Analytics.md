@@ -13,7 +13,7 @@ Analytics is **not** observability. See [Operational Telemetry](#operational-tel
 
 ## Audiences
 
-- **Maintainers** — the [small team](../../SmallTeam.md) running the project. Primary consumers of product analytics.
+- **Maintainers** — the [small team](../../SmallTeam.md) running the project. Primary consumers of all analytics.
 - **Contributors** — community members, via [public dashboards](PublicDashboardIdeas.md). Consumers of curated aggregates only, never raw events.
 - **Visitors** — the public, via the same dashboards.
 
@@ -69,8 +69,9 @@ Analytics data is retained indefinitely. The pseudonymization posture above is w
 
 - **Low maintenance**. Maintainable by a [small team](../../SmallTeam.md) of volunteer developers.
 - **Managed/hosted service**. We do not want to operate an analytics service ourselves.
-- **Cost ceiling**: no more than $10/month, ideally free while the project is small.
+- **Cost ceiling**: no more than $10/month, ideally free while the project is small. Vendor pricing should be evaluated against the traffic and event volumes in [GrowthProjections.md](../GrowthProjections.md) — roughly 2.5k pageviews/month at launch, ramping toward 400k/month by Year 1.
 - **Vendor-neutral integration**: code calls our own abstraction, not a vendor SDK directly. See [AnalyticsArchitecture.md](AnalyticsArchitecture.md).
+- **Geography**. Near the Railway web servers which are in Virginia; the cross-country browser→server hop is async and invisible to users. See [Hosting.md#geography](../../Hosting.md#geography).
 
 ## Non-Goals
 
