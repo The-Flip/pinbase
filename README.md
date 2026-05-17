@@ -58,15 +58,10 @@ Makefile          Thin wrappers around scripts/
 
 ## Further Reading
 
-- [docs/Overview.md](docs/Overview.md)
-- [docs/Architecture.md](docs/Architecture.md)
-- [docs/WebArchitecture.md](docs/WebArchitecture.md)
-- [docs/AppBoundaries.md](docs/AppBoundaries.md)
-- [docs/DomainModel.md](docs/DomainModel.md)
-- [docs/Provenance.md](docs/Provenance.md)
-- [docs/Ingest.md](docs/Ingest.md)
-- [docs/Development.md](docs/Development.md)
-- [docs/Hosting.md](docs/Hosting.md)
+- [docs/README.md](docs/README.md) for the full documentation index
+- [docs/Overview.md](docs/Overview.md) for the product overview and rationale
+- [docs/Development.md](docs/Development.md) for contributor guidance
+- [docs/Architecture.md](docs/Architecture.md) for the top-level system map
 
 ## Contributing
 

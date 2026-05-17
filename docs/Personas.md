@@ -1,33 +1,82 @@
-# Who Are The Site's Target Users?
+# Personas
 
-The core user is someone driven by curiosity and love of the subject, not by a transactional need. They're not here to price a machine or manage a route — they're here because pinball history is interesting and they want to go deeper. The tagline of The Flip museum is "Preserving the love of pinball for future generations" and the this project project is a plank of that.
+This doc names the kinds of people who use the system.
 
-## Who They Are
+These are not roles in the authorizations; instead, auth uses [Activities](Authz.md).
 
-- Historians/archivists who care about preservation for its own sake.
+The core user is someone driven by curiosity and love of the subject, not by a transactional need. They're not here to price a machine or manage a route — they're here because pinball history is interesting and they want to go deeper. The tagline of The Flip museum is "Preserving the love of pinball for future generations" and this project is a plank of that.
+
+## The Personas
+
+### Reader
+
+People who come to read. They browse pages, look up models, follow links, search.
+
+This is by far the largest group, and the audience whose experience most of the public surface must first be optimized for - if we don't have Readers, we won't have Contributors either.
+
+See [below](#reader-profile) for their motivational picture.
+
+### Contributor
+
+People who add to and improve the site. They write descriptions and essays, upload photos and documents, edit catalog records, and steward the pages they care about.
+
+See [below](#contributor-profile) for their motivational picture.
+
+### Maintainer
+
+A member of the [small team](SmallTeam.md) running the project. They operate the site, respond to incidents, review activity, and shape the data and the product.
+
+## Future Personas
+
+Anticipated but not implemented:
+
+- **Moderator** — a Contributor with elevated privileges and responsibilities, that might police less-privileged contributors.
+
+## Aliases
+
+Other docs predate this one and use varying terms:
+
+| Role        | Aliases found elsewhere             |
+| ----------- | ----------------------------------- |
+| Reader      | Visitor, "casual fan", "the public" |
+| Contributor | Editor, Writer, "logged-in user"    |
+| Maintainer  | Admin, Staff, Superuser             |
+
+## Reader Profile
+
+"I just played Medieval Madness and now I want to fall down a rabbit hole about Williams in the 90s." The casual fan, the museum visitor, the person just getting into pinball.
+
+Readers come to read — they browse pages, look up models, follow links, search. Often arriving from search engine results, almost always unauthenticated.
+
+### Who Readers are
+
 - People just getting into pinball and wanting the authoritative encyclopedia of all the concepts.
 - Casual fans who just played something cool at a bar and want to know more.
 - Collectors wanting to learn more about the history of their machines, their significance, the industry context, ideas for other machines to collect.
 - The general public of the museum, which is probably mostly casual fans, wanting to explore more about what they've seen, are seeing at the moment (via a kiosk at the museum or their phone) or are about to see before they come.
 
-## Who They Might Be In The Future
+### Who Readers might be in the future
 
 - Restorers looking for specs, schematics, parts info. We already have a public read-only version of the Flipfix maintenance site that we hope to grow into a deep resource of repair information for the particular models that the museum owns: the entire maintenance history and conversations around maintenance are public. So there's deep interest from the museum in supporting this community. Adding specs, schematics, parts info to this project would absolutely be right in the museum's mission. Dunno, though, whether we can improve on existing sites around this.
 
-## Who They Are Not
+### Who Readers are not
+
+The reading experience is not designed for:
 
 - Tournament players who care about rules, competition data.
 - Collectors wanting to value what they own.
 - Operators managing routes and tracking machine performance.
 
-## The Two Profiles: Explore and Contribute
+## Contributor Profile
 
-Users roughly fall into two profiles:
+"I know things about pinball history that aren't captured anywhere, and I want to help build the definitive record." The historian/archivist and the museum-connected enthusiast.
 
-- **Explorer**: "I just played Medieval Madness and now I want to fall down a rabbit hole about Williams in the 90s." This is the casual fan, the museum visitor, the person just getting into pinball.
-- **Contributor**: "I know things about pinball history that aren't captured anywhere, and I want to help build the definitive record." This is the historian/archivist and the museum-connected enthusiasts.
+Contributors write descriptions and essays, upload photos and documents, edit catalog records, and steward the pages they care about. They must have an account.
 
-## The Contributors
+### Who Contributors are
+
+- Historians/archivists who care about preservation for its own sake.
+- Museum-connected enthusiasts with deep subject knowledge.
 
 ### The opportunity
 
