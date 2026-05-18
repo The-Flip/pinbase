@@ -7,7 +7,7 @@ import type { PostHogConfig } from 'posthog-js';
 // lockdown — weakening any of them fails the test. Reviewers should reject
 // any change here that isn't accompanied by an architecture-doc update.
 export const config: Partial<PostHogConfig> = {
-  api_host: 'https://eu.posthog.com',
+  api_host: 'https://us.posthog.com',
   persistence: 'memory', // satisfies "no persistent client-side identity"
   autocapture: false, // satisfies "no autocapture / implicit tracking"
   capture_pageview: 'history_change', // SPA-aware: initial load + every CSR navigation
