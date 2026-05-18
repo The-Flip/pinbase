@@ -99,6 +99,7 @@ In particular:
 - same-origin assumptions must remain coherent
 - Caddy, Django, and SvelteKit routing must agree
 - health checks should reflect real readiness, not only partial readiness
+- features that require new production env vars or configuration should have a deployment pre-flight check per [DeployChecks.md](DeployChecks.md) so a missing var fails the deploy instead of degrading silently
 
 ## Generated And Derived Artifacts
 
