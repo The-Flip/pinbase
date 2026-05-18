@@ -32,6 +32,7 @@ For setup and common commands, start with the repository [README](../README.md).
 - [Media.md](Media.md) media storage, uploads, claims, attachment resolution.
 - [Ingest.md](Ingest.md) external data sources and the ingest pipeline.
 - [Hosting.md](Hosting.md) Railway deployment topology.
+- [Observability.md](Observability.md) Error monitoring and alerting.
 - [DeployAutomation.md](DeployAutomation.md) philosophy behind the deploy safeguards (refuse-don't-warn, two refusal phases).
 - [BuildChecks.md](BuildChecks.md) build-phase refusal gate (Dockerfile, sourcemap upload, build-time secrets).
 - [DeployChecks.md](DeployChecks.md) preDeploy refusal gate (Django system checks).
