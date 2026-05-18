@@ -3,8 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { config } from './config';
 
 // Integration test for the locked-down PostHog init config. Each option below
-// is a contract — see docs/plans/analytics/AnalyticsArchitecture.md § Frontend
-// init lockdown. Weakening any option fails this test, which is the point.
+// is a contract — weakening any option fails this test, which is the point.
 describe('analytics config (locked-down PostHog init)', () => {
   it('uses the US API host', () => {
     expect(config.api_host).toBe('https://us.posthog.com');
