@@ -2,12 +2,13 @@ import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 
-// Mirror the Railway-injected commit SHA into the `PUBLIC_` namespace so the
-// browser bundle gets the same release tag SvelteKit's server and the
-// sourcemap upload below use. Single source of truth → the SHA Sentry stamps
-// on browser events, the SHA tagged on the uploaded sourcemap bundle, and
-// the SHA the SSR bundle reports are guaranteed equal by construction.
-// ??= leaves an explicitly-set value (e.g. local override) alone.
+// Mirror Railway's commit SHA into the PUBLIC_ namespace for the duration
+// of this build, so any consumer using `$env/static/public` (e.g. inlined
+// release tags) gets the same value the sourcemap upload below uses.
+// hooks.client.ts intentionally reads `$env/dynamic/public` — that's a
+// runtime lookup against the Node SSR process, not this build process,
+// so the matching mirror for the browser/SSR runtime lives in
+// scripts/start-production. ??= leaves an explicitly-set value alone.
 process.env.PUBLIC_RAILWAY_GIT_COMMIT_SHA ??= process.env.RAILWAY_GIT_COMMIT_SHA;
 
 export default defineConfig({

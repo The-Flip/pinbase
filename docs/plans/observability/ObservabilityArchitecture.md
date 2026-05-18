@@ -197,6 +197,14 @@ Three non-obvious init options worth knowing about when reading the file:
 
 Required build-time env: `SENTRY_AUTH_TOKEN` (org-scoped Railway secret — the only Sentry value that is actually secret; the DSN is a public write-only key by design), `SENTRY_ORG`, `SENTRY_PROJECT`, and `RAILWAY_GIT_COMMIT_SHA` (already wired through the Docker build).
 
+**Three consumers, one source of truth.** `RAILWAY_GIT_COMMIT_SHA` (set by Railway) is the only release-name input the operator manages. Three places consume it and they must all agree, or events tag with a release that doesn't match what sourcemaps were uploaded under, and stack traces show as minified:
+
+1. **Sourcemap upload** — `frontend/vite.config.ts` reads `process.env.RAILWAY_GIT_COMMIT_SHA` directly during `vite build`.
+2. **SSR runtime** — `frontend/src/instrumentation.server.ts` reads `RAILWAY_GIT_COMMIT_SHA` via `$env/dynamic/private` at SSR-process startup.
+3. **Browser** — `frontend/src/hooks.client.ts` reads `PUBLIC_RAILWAY_GIT_COMMIT_SHA` via `$env/dynamic/public`. Since Railway only injects the un-PUBLIC variant, this is derived by mirroring in two places: `frontend/vite.config.ts` at build time (for any `$env/static/public` consumers), and `scripts/start-production` at SSR-runtime (for the actual `$env/dynamic/public` lookup the browser bundle uses).
+
+If you find yourself "simplifying" one of those mirrors, the failure mode is silent — events still ship, sourcemap matching just stops working, and you only notice when a real prod stack trace lands in Sentry minified. The `core.E207` preflight check (`backend/apps/core/checks.py`) backs this by refusing to promote a deploy where `RAILWAY_GIT_COMMIT_SHA` is unset.
+
 ### Uptime monitor
 
 Sentry Uptime hosts the `/__health` check from [§ Uptime](#uptime). Uptime failures land in the same issue stream as exceptions. If the free uptime quota is ever exceeded, slot in a free [UptimeRobot](ObservabilityVendors.md#uptimerobot) check next to it — nothing else depends on which service answers the ping.
