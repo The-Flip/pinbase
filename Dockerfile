@@ -18,6 +18,23 @@ RUN pnpm install --frozen-lockfile
 # Railway the ARG falls back to "dev" and polling is disabled.
 ARG RAILWAY_GIT_COMMIT_SHA=dev
 ENV RAILWAY_GIT_COMMIT_SHA=$RAILWAY_GIT_COMMIT_SHA
+
+# Sentry sourcemap upload happens during `pnpm build` (sentrySvelteKit
+# plugin). The plugin's autoUploadSourceMaps gate in vite.config.ts is
+# truthy only when all three of these are non-empty, so without them the
+# build silently skips the upload and browser stack traces stay
+# minified in production. Multi-stage Docker doesn't inherit host env
+# vars into build stages; Railway passes service-scoped vars as build
+# args, but only for ARGs the Dockerfile declares — hence the explicit
+# declarations here. Defaults are empty so local/CI Docker builds without
+# Sentry secrets still succeed (the upload just no-ops).
+ARG SENTRY_AUTH_TOKEN=""
+ARG SENTRY_ORG=""
+ARG SENTRY_PROJECT=""
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
+    SENTRY_ORG=$SENTRY_ORG \
+    SENTRY_PROJECT=$SENTRY_PROJECT
+
 COPY frontend/ .
 RUN pnpm build
 # Keep only runtime dependencies for the Node SSR server we copy below.

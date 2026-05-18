@@ -195,7 +195,7 @@ Three non-obvious init options worth knowing about when reading the file:
 
 `@sentry/vite-plugin` (wrapped by `sentrySvelteKit`) handles sourcemap upload at build time, tagged with the release name from `RAILWAY_GIT_COMMIT_SHA`. The plugin's `sourcemaps.filesToDeleteAfterUpload` is configured explicitly so the maps don't ship to browsers (the plugin doesn't delete by default). Sentry resolves browser stack traces against the uploaded maps at issue time. The same SHA tags backend events at runtime, so events from both projects share a release name.
 
-Required build-time env: `SENTRY_AUTH_TOKEN` (org-scoped Railway secret — the only Sentry value that is actually secret; the DSN is a public write-only key by design), `SENTRY_ORG`, `SENTRY_PROJECT`, and `RAILWAY_GIT_COMMIT_SHA` (already wired through the Docker build).
+Required build-time env: `SENTRY_AUTH_TOKEN` (org-scoped Railway secret — the only Sentry value that is actually secret; the DSN is a public write-only key by design), `SENTRY_ORG`, `SENTRY_PROJECT`, and `RAILWAY_GIT_COMMIT_SHA`. All four are declared as `ARG`s in the frontend build stage of `Dockerfile` and `ENV`-promoted before `pnpm build` runs — multi-stage Docker doesn't inherit host env vars into build stages, so Railway's service vars only reach `vite build` for `ARG`s the Dockerfile explicitly declares. Forgetting one of those declarations silently produces a build with no sourcemaps uploaded.
 
 **Three consumers, one source of truth.** `RAILWAY_GIT_COMMIT_SHA` (set by Railway) is the only release-name input the operator manages. Three places consume it and they must all agree, or events tag with a release that doesn't match what sourcemaps were uploaded under, and stack traces show as minified:
 
