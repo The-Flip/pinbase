@@ -118,15 +118,14 @@ Add on-demand exception triggers so the verification checklist in [Observability
 
 **Deliverables:**
 
-- `/_sentry_test` SvelteKit route. The `+page.ts` load function calls `requireCapability({ fetch, url, activity: Activity.OBSERVABILITY_DEBUG })`, matching the pattern in [require-capability.ts](../../../frontend/src/lib/require-capability.ts). Non-staff get redirected to `/login` or `/verify-email` like any other gated route.
-- A sibling `+page.server.ts` load function with the same `requireCapability` gate, that throws when `url.searchParams.has('throw')`. `+page.server.ts` is unambiguously server-only — universal `+page.ts` loads only run on the server for the very first hit and on the browser for every subsequent client navigation, so it's not a reliable SSR trigger.
+- `/_sentry_test` SvelteKit route gated by a `+page.server.ts` load that calls `requireCapability({ fetch, url, activity: Activity.OBSERVABILITY_DEBUG })`, matching the pattern in [require-capability.ts](../../../frontend/src/lib/require-capability.ts). Non-staff get redirected to `/login` or `/verify-email` like any other gated route. The same load throws when `url.searchParams.has('throw')`, giving the SSR trigger; `+page.server.ts` is unambiguously server-only, unlike a universal `+page.ts` load (which runs on the server only for the first hit and in the browser for every SPA nav after).
+- **Server-only gate, no `+page.ts`.** Other gated routes pair a server gate with a universal gate so SPA navs skip the server round-trip. That pattern currently trips a latent project bug — direct URL hits to any `+page.ts` using `requireCapability` 500 in SSR because `openapi-fetch@0.17` reads `Content-Length` on every response and SvelteKit's hydration-serialization layer filters it out. Direct URL hits are the only path that matters for this route, so server-only gating sidesteps the bug without committing the project to broadening `filterSerializedResponseHeaders`. Fixing the broader issue is tracked separately.
 - The page contains two controls:
   1. **"Throw in SSR load"** — `<a href="/_sentry_test?throw=ssr-load" data-sveltekit-reload>`. `data-sveltekit-reload` forces a full document navigation so the request hits the server even when triggered from inside the SPA, which makes the `+page.server.ts` throw fire reliably. Covers SSR-load-time capture via `handleError`.
   2. **"Throw in browser"** — button, `throw`s in an `onclick` handler. Covers browser capture via `handleError` on the client.
 
 **Verification:**
 
-- Vitest for `+page.ts` load: non-staff session → expects the redirect; staff session → succeeds.
 - Vitest for `+page.server.ts` load: non-staff → redirect; staff without `?throw` → succeeds; staff with `?throw=ssr-load` → throws.
 - Manual post-deploy: hit `/_sentry_test` as staff, click both controls, confirm two events land in `flipcommons-frontend` (one SSR, one browser) within 30 seconds, both tagged with the deployed release.
 
