@@ -197,6 +197,57 @@ uv run python manage.py createsuperuser
 2. Update `ALLOWED_HOSTS` to include the domain
 3. Update `CSRF_TRUSTED_ORIGINS` to include `https://yourdomain.com`
 
+## Sentry
+
+We use [Sentry.io](https://sentry.io) for production error monitoring. See [Observability.md](Observability.md) for the contract (what we capture, privacy posture, code wiring).
+
+### Sentry Projects
+
+In Sentry, we have two projects:
+
+- `flipcommons-backend`: Python/Django
+- `flipcommons-frontend`: JavaScript/SvelteKit — both SSR and browser report here
+
+### Sentry env vars on Railway
+
+Local, CI, and test environments leave these unset. The empty-DSN guard at SDK init is the master switch.
+
+- `SENTRY_DSN` — backend runtime. Backend project DSN. Empty = Sentry off (master switch).
+- `PUBLIC_SENTRY_DSN` — frontend SSR + browser runtime. Frontend project DSN. Empty = Sentry off (master switch).
+- `SENTRY_AUTH_TOKEN` — frontend build (Docker `ARG` → `ENV`). Org-scoped, secret. The only Sentry value that's actually secret; DSNs are public-by-design write-only keys. Required for sourcemap upload.
+- `SENTRY_ORG` — frontend build. Org slug. Required for sourcemap upload.
+- `SENTRY_PROJECT` — frontend build. `flipcommons-frontend`. Required for sourcemap upload.
+
+All three `SENTRY_*` build-time vars are declared as `ARG`s in the frontend build stage of the [Dockerfile](../Dockerfile) and `ENV`-promoted before `pnpm build` — multi-stage Docker doesn't inherit host env vars into build stages, and forgetting one silently produces a build with no sourcemaps uploaded.
+
+### Sentry dashboard config
+
+#### Privacy config
+
+This part of our [Privacy.md](Privacy.md) contract is manually configured on the Sentry website:
+
+**Advanced Data Scrubbing** (Project Settings → Security & Privacy → Advanced Data Scrubbing). These are part of the privacy contract — without them, emails or IPs interpolated into log messages, or query strings carrying user input, would be stored.
+
+- `[Mask] [@email] from [$string]`
+- `[Mask] [@ip] from [$string]`
+- `[Remove] [$request.query_string]`
+
+#### Alert rules\*\*
+
+Mirrored across both projects:
+
+- **New issue** → alert all maintainers
+- **Regression of a resolved issue** → alert all maintainers
+  Default issue assignment: **unassigned**. Either founder may grab an issue.
+
+### Per-maintainer routing
+
+Each maintainer is an org member with their own destination (email or chat). Adding or removing a maintainer is a single membership change. Production alerts go to all maintainers as co-responders.
+
+### Sourcemaps
+
+`@sentry/vite-plugin` (wrapped by `sentrySvelteKit`) uploads at build time, tagged with `RAILWAY_GIT_COMMIT_SHA`. The plugin's `sourcemaps.filesToDeleteAfterUpload` is configured explicitly so maps don't ship to browsers (the plugin doesn't delete by default).
+
 ## Troubleshooting
 
 **Health check fails after deploy**:
