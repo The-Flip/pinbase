@@ -4,6 +4,16 @@
 # ── Stage 1: Build SvelteKit frontend ──────────────────────────────
 FROM node:24-slim AS frontend-build
 
+# node:*-slim variants ship without ca-certificates. Node's own HTTPS uses
+# its bundled CA roots and works fine, but tools that shell out to the OS
+# trust store (notably sentry-cli, invoked by sentrySvelteKit during
+# sourcemap upload) fail TLS verification with "unable to get local issuer
+# certificate" against ingest endpoints. Install ca-certificates so any
+# such tool can reach the public internet over HTTPS.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN corepack enable
 
 WORKDIR /frontend
