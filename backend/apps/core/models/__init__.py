@@ -1,0 +1,58 @@
+"""Re-exports for ``apps.core.models``.
+
+Implementation lives in submodules:
+
+- ``mixins`` — abstract bases (TimeStampedModel, SluggedModel,
+  LifecycleStatusModel, LinkableModel), the EntityStatus enum, and the
+  unique_slug helper.
+- ``constraints`` — CHECK / UNIQUE constraint factories used in concrete Meta.
+- ``license`` — the License model.
+- ``references`` — RecordReference graph + post_delete cleanup signal.
+"""
+
+from .constraints import (
+    field_lowercase,
+    field_not_blank,
+    meta_unique_fields,
+    nullable_id_not_empty,
+    slug_lowercase,
+    slug_not_blank,
+    status_valid,
+    unique_ci,
+)
+from .license import License
+from .mixins import (
+    EntityStatus,
+    LifecycleManager,
+    LifecycleQuerySet,
+    LifecycleStatusModel,
+    LinkableModel,
+    SluggedModel,
+    TimeStampedModel,
+    active_status_q,
+    unique_slug,
+)
+from .references import RecordReference, register_reference_cleanup
+
+__all__ = [
+    "EntityStatus",
+    "License",
+    "LifecycleManager",
+    "LifecycleQuerySet",
+    "LifecycleStatusModel",
+    "LinkableModel",
+    "RecordReference",
+    "SluggedModel",
+    "TimeStampedModel",
+    "active_status_q",
+    "field_lowercase",
+    "field_not_blank",
+    "meta_unique_fields",
+    "nullable_id_not_empty",
+    "register_reference_cleanup",
+    "slug_lowercase",
+    "slug_not_blank",
+    "status_valid",
+    "unique_ci",
+    "unique_slug",
+]
