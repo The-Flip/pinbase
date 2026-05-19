@@ -77,6 +77,18 @@ Cross-field constraints use `violation_error_code="cross_field"`.
 
 Define range bounds and enum values as module-level constants. Reference them from both validators and constraints so they can't drift apart. See `test_constraint_drift.py` for the meta-test that enforces this.
 
+### Text field length caps
+
+Every user-input text field must be have a max length. Use:
+
+- `CharField(max_length=N)` for identifier-like text
+- `BoundedTextField(max_length=N)` for prose
+- `MarkdownField(max_length=N)` for long-form markdown (default 10,000)
+
+Never use bare `TextField()` for user input.
+
+Cap values are module-level constants imported by the matching Ninja input schema.
+
 ### Storage keys
 
 Store relative paths, never full URLs. The storage prefix (e.g., `media/`) is enforced in application code, not DB constraints, so the storage location stays configurable without schema changes.

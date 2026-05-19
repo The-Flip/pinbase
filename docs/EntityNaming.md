@@ -4,7 +4,7 @@ This project's linkable entities (titles, models, manufacturers, people, etc.) s
 
 ## The rule
 
-Every [`LinkableModel`](../backend/apps/core/models.py) subclass declares an `entity_type` attribute: a **hyphenated singular** string (e.g. `title`, `corporate-entity`, `technology-subgeneration`).
+Every [`LinkableModel`](../backend/apps/core/models/mixins.py) subclass declares an `entity_type` attribute: a **hyphenated singular** string (e.g. `title`, `corporate-entity`, `technology-subgeneration`).
 
 From that one attribute:
 
