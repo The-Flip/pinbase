@@ -7,6 +7,7 @@ from typing import Any
 from django.db import models
 
 from apps.core.models import (
+    BoundedTextField,
     SluggedModel,
     TimeStampedModel,
     field_not_blank,
@@ -15,6 +16,8 @@ from apps.core.models import (
     unique_ci,
     unique_slug,
 )
+
+SOURCE_DESCRIPTION_MAX_LENGTH = 2_000
 
 
 class Source(SluggedModel, TimeStampedModel):
@@ -36,7 +39,7 @@ class Source(SluggedModel, TimeStampedModel):
         help_text="Higher priority wins when claims conflict.",
     )
     url = models.URLField(blank=True)
-    description = models.TextField(blank=True)
+    description = BoundedTextField(max_length=SOURCE_DESCRIPTION_MAX_LENGTH, blank=True)
     is_enabled = models.BooleanField(
         default=True,
         help_text="Disabled sources are excluded from claim resolution.",

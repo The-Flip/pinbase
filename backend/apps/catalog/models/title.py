@@ -9,6 +9,7 @@ from django.db import models
 
 from apps.core.markdown import MarkdownField
 from apps.core.models import (
+    BoundedTextField,
     SluggedModel,
     TimeStampedModel,
     field_not_blank,
@@ -25,6 +26,7 @@ from .base import CatalogModel
 __all__ = ["Title", "TitleAbbreviation"]
 
 EXTERNAL_ID_MIN = 1
+TITLE_NEEDS_REVIEW_NOTES_MAX_LENGTH = 2_000
 
 if TYPE_CHECKING:
     from .machine_model import MachineModel
@@ -97,7 +99,8 @@ class Title(
         default=False,
         help_text="Title was auto-generated and may need human review.",
     )
-    needs_review_notes = models.TextField(
+    needs_review_notes = BoundedTextField(
+        max_length=TITLE_NEEDS_REVIEW_NOTES_MAX_LENGTH,
         blank=True,
         help_text="Context for reviewers about why this title needs attention.",
         validators=[validate_no_mojibake],

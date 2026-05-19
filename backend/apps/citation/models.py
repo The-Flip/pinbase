@@ -6,7 +6,12 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from apps.core.models import TimeStampedModel, field_not_blank, nullable_id_not_empty
+from apps.core.models import (
+    BoundedTextField,
+    TimeStampedModel,
+    field_not_blank,
+    nullable_id_not_empty,
+)
 from apps.core.validators import validate_no_mojibake
 
 __all__ = ["CitationSource", "CitationSourceLink"]
@@ -14,6 +19,16 @@ __all__ = ["CitationSource", "CitationSourceLink"]
 YEAR_MIN, YEAR_MAX = 1800, 2100
 MONTH_MIN, MONTH_MAX = 1, 12
 DAY_MIN, DAY_MAX = 1, 31
+
+CITATION_SOURCE_NAME_MAX_LENGTH = 500
+CITATION_SOURCE_AUTHOR_MAX_LENGTH = 300
+CITATION_SOURCE_PUBLISHER_MAX_LENGTH = 300
+CITATION_SOURCE_DATE_NOTE_MAX_LENGTH = 200
+CITATION_SOURCE_ISBN_MAX_LENGTH = 20
+CITATION_SOURCE_IDENTIFIER_MAX_LENGTH = 200
+CITATION_SOURCE_DESCRIPTION_MAX_LENGTH = 5_000
+CITATION_SOURCE_LINK_URL_MAX_LENGTH = 2_000
+CITATION_SOURCE_LINK_LABEL_MAX_LENGTH = 200
 
 
 class CitationSource(TimeStampedModel):
@@ -33,13 +48,19 @@ class CitationSource(TimeStampedModel):
         MAGAZINE = "magazine", "Magazine"
         WEB = "web", "Web"
 
-    name = models.CharField(max_length=500, validators=[validate_no_mojibake])
+    name = models.CharField(
+        max_length=CITATION_SOURCE_NAME_MAX_LENGTH, validators=[validate_no_mojibake]
+    )
     source_type = models.CharField(max_length=20, choices=SourceType.choices)
     author = models.CharField(
-        max_length=300, blank=True, validators=[validate_no_mojibake]
+        max_length=CITATION_SOURCE_AUTHOR_MAX_LENGTH,
+        blank=True,
+        validators=[validate_no_mojibake],
     )
     publisher = models.CharField(
-        max_length=300, blank=True, validators=[validate_no_mojibake]
+        max_length=CITATION_SOURCE_PUBLISHER_MAX_LENGTH,
+        blank=True,
+        validators=[validate_no_mojibake],
     )
     year = models.PositiveSmallIntegerField(
         null=True,
@@ -57,10 +78,12 @@ class CitationSource(TimeStampedModel):
         validators=[MinValueValidator(DAY_MIN), MaxValueValidator(DAY_MAX)],
     )
     date_note = models.CharField(
-        max_length=200, blank=True, validators=[validate_no_mojibake]
+        max_length=CITATION_SOURCE_DATE_NOTE_MAX_LENGTH,
+        blank=True,
+        validators=[validate_no_mojibake],
     )
     isbn = models.CharField(
-        max_length=20,
+        max_length=CITATION_SOURCE_ISBN_MAX_LENGTH,
         null=True,
         blank=True,
         unique=True,
@@ -87,8 +110,12 @@ class CitationSource(TimeStampedModel):
         on_delete=models.SET_NULL,
         related_name="+",
     )
-    description = models.TextField(
-        blank=True, default="", db_default="", validators=[validate_no_mojibake]
+    description = BoundedTextField(
+        max_length=CITATION_SOURCE_DESCRIPTION_MAX_LENGTH,
+        blank=True,
+        default="",
+        db_default="",
+        validators=[validate_no_mojibake],
     )
 
     class IdentifierKey(models.TextChoices):
@@ -109,7 +136,7 @@ class CitationSource(TimeStampedModel):
     )
 
     identifier = models.CharField(
-        max_length=200,
+        max_length=CITATION_SOURCE_IDENTIFIER_MAX_LENGTH,
         blank=True,
         default="",
         db_default="",
@@ -240,9 +267,11 @@ class CitationSourceLink(TimeStampedModel):
         related_name="links",
     )
     link_type = models.CharField(max_length=20, choices=LinkType.choices)
-    url = models.URLField(max_length=2000)
+    url = models.URLField(max_length=CITATION_SOURCE_LINK_URL_MAX_LENGTH)
     label = models.CharField(
-        max_length=200, blank=True, validators=[validate_no_mojibake]
+        max_length=CITATION_SOURCE_LINK_LABEL_MAX_LENGTH,
+        blank=True,
+        validators=[validate_no_mojibake],
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

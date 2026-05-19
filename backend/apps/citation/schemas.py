@@ -2,8 +2,22 @@
 
 from __future__ import annotations
 
-from ninja import Schema
+from typing import Annotated
+
+from ninja import Field, Schema
 from pydantic import field_validator
+
+from .models import (
+    CITATION_SOURCE_AUTHOR_MAX_LENGTH,
+    CITATION_SOURCE_DATE_NOTE_MAX_LENGTH,
+    CITATION_SOURCE_DESCRIPTION_MAX_LENGTH,
+    CITATION_SOURCE_IDENTIFIER_MAX_LENGTH,
+    CITATION_SOURCE_ISBN_MAX_LENGTH,
+    CITATION_SOURCE_LINK_LABEL_MAX_LENGTH,
+    CITATION_SOURCE_LINK_URL_MAX_LENGTH,
+    CITATION_SOURCE_NAME_MAX_LENGTH,
+    CITATION_SOURCE_PUBLISHER_MAX_LENGTH,
+)
 
 NONNULLABLE_STR_FIELDS = (
     "name",
@@ -13,6 +27,18 @@ NONNULLABLE_STR_FIELDS = (
     "date_note",
     "description",
 )
+
+NameStr = Annotated[str, Field(max_length=CITATION_SOURCE_NAME_MAX_LENGTH)]
+AuthorStr = Annotated[str, Field(max_length=CITATION_SOURCE_AUTHOR_MAX_LENGTH)]
+PublisherStr = Annotated[str, Field(max_length=CITATION_SOURCE_PUBLISHER_MAX_LENGTH)]
+DateNoteStr = Annotated[str, Field(max_length=CITATION_SOURCE_DATE_NOTE_MAX_LENGTH)]
+IsbnStr = Annotated[str, Field(max_length=CITATION_SOURCE_ISBN_MAX_LENGTH)]
+DescriptionStr = Annotated[
+    str, Field(max_length=CITATION_SOURCE_DESCRIPTION_MAX_LENGTH)
+]
+IdentifierStr = Annotated[str, Field(max_length=CITATION_SOURCE_IDENTIFIER_MAX_LENGTH)]
+LinkUrlStr = Annotated[str, Field(max_length=CITATION_SOURCE_LINK_URL_MAX_LENGTH)]
+LinkLabelStr = Annotated[str, Field(max_length=CITATION_SOURCE_LINK_LABEL_MAX_LENGTH)]
 
 
 class CitationSourceSearchSchema(Schema):
@@ -59,21 +85,21 @@ class CitationSourceSearchResponseSchema(Schema):
 
 
 class CitationSourceCreateSchema(Schema):
-    name: str
+    name: NameStr
     source_type: str
-    author: str = ""
-    publisher: str = ""
+    author: AuthorStr = ""
+    publisher: PublisherStr = ""
     year: int | None = None
     month: int | None = None
     day: int | None = None
-    date_note: str = ""
-    isbn: str | None = None
-    description: str = ""
+    date_note: DateNoteStr = ""
+    isbn: IsbnStr | None = None
+    description: DescriptionStr = ""
     parent_id: int | None = None
-    identifier: str = ""
+    identifier: IdentifierStr = ""
     # Optional: atomically create a CitationSourceLink alongside the source.
-    url: str | None = None
-    link_label: str = ""
+    url: LinkUrlStr | None = None
+    link_label: LinkLabelStr = ""
     link_type: str = "homepage"
 
     @field_validator("isbn", mode="before")
@@ -84,16 +110,16 @@ class CitationSourceCreateSchema(Schema):
 
 
 class CitationSourceUpdateSchema(Schema):
-    name: str | None = None
+    name: NameStr | None = None
     source_type: str | None = None
-    author: str | None = None
-    publisher: str | None = None
+    author: AuthorStr | None = None
+    publisher: PublisherStr | None = None
     year: int | None = None
     month: int | None = None
     day: int | None = None
-    date_note: str | None = None
-    isbn: str | None = None
-    description: str | None = None
+    date_note: DateNoteStr | None = None
+    isbn: IsbnStr | None = None
+    description: DescriptionStr | None = None
 
     @field_validator(*NONNULLABLE_STR_FIELDS, mode="before")
     @classmethod
@@ -148,14 +174,14 @@ class CitationSourceDetailSchema(Schema):
 
 class CitationSourceLinkCreateSchema(Schema):
     link_type: str
-    url: str
-    label: str = ""
+    url: LinkUrlStr
+    label: LinkLabelStr = ""
 
 
 class CitationSourceLinkUpdateSchema(Schema):
     link_type: str | None = None
-    url: str | None = None
-    label: str | None = None
+    url: LinkUrlStr | None = None
+    label: LinkLabelStr | None = None
 
     @field_validator("label", mode="before")
     @classmethod

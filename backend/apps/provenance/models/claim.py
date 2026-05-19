@@ -10,12 +10,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
 from django.db.models.functions import Now
 
-from apps.core.models import field_not_blank
+from apps.core.models import BoundedTextField, field_not_blank
 from apps.core.types import ClaimIdentity
 
 from .base import ClaimControlledModel
 from .changeset import ChangeSet
 from .source import Source
+
+CLAIM_CITATION_MAX_LENGTH = 2_000
+CLAIM_NEEDS_REVIEW_NOTES_MAX_LENGTH = 2_000
 
 if TYPE_CHECKING:
     from apps.accounts.models import User
@@ -371,7 +374,12 @@ class Claim(models.Model):
         help_text="The changeset that deactivated this claim (user revert or full_sync retraction).",
     )
     value = models.JSONField()
-    citation = models.TextField(blank=True, default="", db_default="")
+    citation = BoundedTextField(
+        max_length=CLAIM_CITATION_MAX_LENGTH,
+        blank=True,
+        default="",
+        db_default="",
+    )
     license = models.ForeignKey(
         "core.License",
         on_delete=models.PROTECT,
@@ -390,7 +398,8 @@ class Claim(models.Model):
         db_default=False,
         help_text="Flag for low-confidence claims that need human review.",
     )
-    needs_review_notes = models.TextField(
+    needs_review_notes = BoundedTextField(
+        max_length=CLAIM_NEEDS_REVIEW_NOTES_MAX_LENGTH,
         blank=True,
         default="",
         db_default="",

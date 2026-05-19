@@ -19,7 +19,11 @@ from ninja import Field, Schema
 
 from apps.core.authz import Activity
 
-from .models.changeset import ChangeSet
+from .models import (
+    CHANGESET_NOTE_MAX_LENGTH,
+    CITATION_INSTANCE_LOCATOR_MAX_LENGTH,
+    ChangeSet,
+)
 
 ClaimDisplayIdentityState = Literal["resolved", "deleted", "missing"]
 """Discriminant for :class:`ClaimDisplayIdentityPartSchema`.
@@ -228,7 +232,7 @@ class CitationReferenceInputSchema(Schema):
 class ChangeSetInputSchema(Schema):
     """Base shape for any user-attributed mutation that produces a ChangeSet."""
 
-    note: str = ""
+    note: Annotated[str, Field(max_length=CHANGESET_NOTE_MAX_LENGTH)] = ""
     citation: CitationReferenceInputSchema | None = None
 
 
@@ -326,13 +330,13 @@ class ReviewClaimSchema(Schema):
 class RevertNoteSchema(Schema):
     """Input for reverting a single claim to a prior value. ``note`` is required."""
 
-    note: str
+    note: Annotated[str, Field(max_length=CHANGESET_NOTE_MAX_LENGTH)]
 
 
 class UndoChangeSetSchema(Schema):
     """Input for undoing an entire ChangeSet (a create/edit/delete grouping)."""
 
-    note: str = ""
+    note: Annotated[str, Field(max_length=CHANGESET_NOTE_MAX_LENGTH)] = ""
 
 
 class UndoResultSchema(Schema):
@@ -378,4 +382,4 @@ class CitationInstanceCreateSchema(Schema):
     """Input for creating a new CitationInstance against an existing source."""
 
     citation_source_id: int
-    locator: str = ""
+    locator: Annotated[str, Field(max_length=CITATION_INSTANCE_LOCATOR_MAX_LENGTH)] = ""
