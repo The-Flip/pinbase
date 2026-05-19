@@ -9,6 +9,8 @@ from django.db.models.functions import Now
 
 from apps.core.validators import validate_no_mojibake
 
+CITATION_INSTANCE_LOCATOR_MAX_LENGTH = 200
+
 
 class CitationInstance(models.Model):
     """A specific use of a CitationSource at a point in text, with a locator.
@@ -35,8 +37,12 @@ class CitationInstance(models.Model):
         null=True,
         blank=True,
     )
-    locator = models.TextField(
-        blank=True, default="", db_default="", validators=[validate_no_mojibake]
+    locator = models.CharField(
+        max_length=CITATION_INSTANCE_LOCATOR_MAX_LENGTH,
+        blank=True,
+        default="",
+        db_default="",
+        validators=[validate_no_mojibake],
     )
     created_at = models.DateTimeField(auto_now_add=True, db_default=Now())
 

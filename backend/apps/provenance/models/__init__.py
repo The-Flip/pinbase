@@ -5,8 +5,8 @@ continues to work unchanged.
 """
 
 from .base import ClaimControlledModel
-from .changeset import ChangeSet, ChangeSetAction
-from .citation_instance import CitationInstance
+from .changeset import CHANGESET_NOTE_MAX_LENGTH, ChangeSet, ChangeSetAction
+from .citation_instance import CITATION_INSTANCE_LOCATOR_MAX_LENGTH, CitationInstance
 from .claim import (
     Claim,
     ClaimManager,

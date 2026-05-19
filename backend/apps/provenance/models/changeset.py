@@ -8,8 +8,13 @@ from django.conf import settings
 from django.db import models
 from django.db.models.functions import Now
 
+from apps.core.models import BoundedTextField
+
 if TYPE_CHECKING:
     from .claim import Claim
+
+
+CHANGESET_NOTE_MAX_LENGTH = 1_000
 
 
 class ChangeSetAction(models.TextChoices):
@@ -64,7 +69,8 @@ class ChangeSet(models.Model):
             "Populated for every user ChangeSet; always NULL for ingest."
         ),
     )
-    note = models.TextField(
+    note = BoundedTextField(
+        max_length=CHANGESET_NOTE_MAX_LENGTH,
         blank=True,
         default="",
         help_text="Optional free-text note explaining the edit.",
